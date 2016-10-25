@@ -56,7 +56,7 @@ private struct AdjustSettings {
         #if DEBUG
             self.environment = AdjustEnvironment.sandbox
         #else
-            self.environment = AdjustEnvironment.release
+            self.environment = AdjustEnvironment.production
         #endif
         self.events = eventMappings
     }
