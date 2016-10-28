@@ -4,17 +4,11 @@
 /* Label displayed above toggles */
 "%@ improves privacy and may boost page load speed and lower your mobile data usage." = "%@ wzmacnia prywatność i może przyspieszyć czas wczytywania stron i zmniejszyć ilość przesyłanych danych.";
 
-/* Text displayed at the final step of the intro screen */
-"%@ is enabled!" = "%@ został włączony!";
-
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
 "%@ is not enabled." = "%@ nie został włączony.";
 
 /* About copy on the about page */
 "%@ is produced by Mozilla, the people behind the Firefox Web browser." = "%@ jest tworzony przez Mozillę, organizację stojącą za przeglądarką Firefox.";
-
-/* Notice label show on second introduction screen */
-"%@ must be enabled in Settings to work." = "%@ musi zostać włączony w Ustawieniach, aby zadziałać.";
 
 /* About copy on the about page */
 "%@ puts you in control and brings added privacy and performance to your mobile browsing experience." = "%@ daje większą kontrolę, zwiększa prywatność i wydajność przeglądania stron na urządzeniach przenośnych.";
@@ -41,20 +35,11 @@
 /* Alert message shown when toggling the Content blocker */
 "Blocking other content trackers may break some videos and Web pages." = "Blokowanie pozostałych elementów śledzących może uniemożliwiać oglądanie niektórych filmów i stron WWW.";
 
-/* Text displayed at the final step of the intro screen */
-"Checking installation…" = "Sprawdzanie instalacji…";
-
-/* Button at top of app that goes to the About screen */
-"Done" = "Gotowe";
-
 /* Label for instructions to enable shown on the second introduction screen */
 "Enable %@" = "Włącz %@";
 
-/* Instructions shown in main app when disabled in system settings */
-"Enable %@ in" = "Włącz %@ w";
-
-/* Button to close the intro screen */
-"Get Started" = "Zamknij";
+/* Button to open the system Settings, shown on the home screen and after tapping the URL bar */
+"Go to Settings" = "Przejdź do Ustawień";
 
 /* Label in About screen */
 "Help" = "Pomoc";
@@ -62,13 +47,13 @@
 /* Button label for accepting Content blocker alert */
 "I Understand" = "Rozumiem";
 
-/* Label for toggle on main screen */
+/* Label subtitle for toggle on main screen */
 "May break some videos and Web pages" = "Może uniemożliwiać oglądanie niektórych filmów i stron WWW.";
 
 /* Button label for declining Content blocker alert */
 "No, Thanks" = "Nie, dzięki";
 
-/* Button to open the system Settings, shown in the intro and main app when disabled */
+/* Button label to open settings screen */
 "Open Settings" = "Otwórz Ustawienia";
 
 /* Label for instructions to enable shown on the second introduction screen */
@@ -86,17 +71,41 @@
 /* Button on the about page */
 "Read more." = "Więcej informacji";
 
-/* Instructions shown in main app when disabled in system settings */
-"Settings → Safari → Content Blockers" = "Ustawienia → Safari → Blokady zawartości";
+/* Label displayed for search button when typing in the URL bar */
+"Search for %@" = "Szukaj „%@”";
 
-/* Label in About screen */
-"Setup Instructions" = "Instrukcje konfiguracji";
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "Integracja";
 
-/* Button at top of the last intro screen when the app is not enabled */
-"Skip" = "Pomiń";
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "Mozilla";
+
+/* Title for settings screen */
+"Settings.title" = "Ustawienia";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "Przesyłanie anonimowych danych o użyciu";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "Więcej informacji";
 
 /* Label for instructions to enable shown on the second introduction screen */
 "Tap Safari, then select Content Blockers" = "Stuknij Safari a następnie Blokady zawartości";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Anuluj";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "Usuń";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Historia przeglądania została usunięta.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Wprowadź adres lub szukaj";
 
 /* Text displayed under the wave on the first intro slide at launch */
 "Welcome" = "Witamy";
