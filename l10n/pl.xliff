@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xliff version="1.2"
+       xmlns="urn:oasis:names:tc:xliff:document:1.2"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd">
+ <file original="Blockzilla/Info.plist" source-language="en" datatype="plaintext" target-language="pl">
+  <header>
+   <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2.1" build-num="7C1002"/>
+  </header>
+  <body>
+   <trans-unit id="CFBundleName">
+    <source>$(PRODUCT_NAME)</source>
+    <target>$(PRODUCT_NAME)</target>
+   </trans-unit>
+   <trans-unit id="CFBundleShortVersionString">
+    <source>2.0</source>
+    <target>2.0</target>
+   </trans-unit>
+  </body>
+ </file>
+ <file original="Blockzilla/en.lproj/Localizable.strings" source-language="en" datatype="plaintext" target-language="pl">
+  <header>
+   <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2.1" build-num="7C1002"/>
+  </header>
+  <body>
+   <trans-unit id="%@ helps you improve the privacy and performance of your mobile browsing experience. You control what types of page content are allowed.">
+    <source>%@ helps you improve the privacy and performance of your mobile browsing experience. You control what types of page content are allowed.</source>
+    <target>%@ pomaga wzmocnić prywatność i zwiększyć wydajność przeglądania stron na urządzeniach przenośnych, dając kontrolę nad wczytywanymi typami treści.</target>
+    <note>Description text shown on the welcome slide of the tour</note>
+   </trans-unit>
+   <trans-unit id="%@ improves privacy and may boost page load speed and lower your mobile data usage.">
+    <source>%@ improves privacy and may boost page load speed and lower your mobile data usage.</source>
+    <target>%@ wzmacnia prywatność i może przyspieszyć czas wczytywania stron i zmniejszyć ilość przesyłanych danych.</target>
+    <note>Label displayed above toggles</note>
+   </trans-unit>
+   <trans-unit id="%@ is not enabled.">
+    <source>%@ is not enabled.</source>
+    <target>%@ nie został włączony.</target>
+    <note>Error label when the blocker is not enabled, shown in the intro and main app when disabled</note>
+   </trans-unit>
+   <trans-unit id="%@ is produced by Mozilla, the people behind the Firefox Web browser.">
+    <source>%@ is produced by Mozilla, the people behind the Firefox Web browser.</source>
+    <target>%@ jest tworzony przez Mozillę, organizację stojącą za przeglądarką Firefox.</target>
+    <note>About copy on the about page</note>
+   </trans-unit>
+   <trans-unit id="%@ puts you in control and brings added privacy and performance to your mobile browsing experience.">
+    <source>%@ puts you in control and brings added privacy and performance to your mobile browsing experience.</source>
+    <target>%@ daje większą kontrolę, zwiększa prywatność i wydajność przeglądania stron na urządzeniach przenośnych.</target>
+    <note>About copy on the about page</note>
+   </trans-unit>
+   <trans-unit id="About">
+    <source>About</source>
+    <target>O programie</target>
+    <note>Button at top of app that goes to the About screen
+          Title for the About screen</note>
+   </trans-unit>
+   <trans-unit id="Block Web fonts">
+    <source>Block Web fonts</source>
+    <target>Blokowanie czcionek siecowych</target>
+    <note>Label for toggle on main screen</note>
+   </trans-unit>
+   <trans-unit id="Block ad trackers">
+    <source>Block ad trackers</source>
+    <target>Blokowanie śledzących reklam</target>
+    <note>Label for toggle on main screen</note>
+   </trans-unit>
+   <trans-unit id="Block analytics trackers">
+    <source>Block analytics trackers</source>
+    <target>Blokowanie śledzących statystyk</target>
+    <note>Label for toggle on main screen</note>
+   </trans-unit>
+   <trans-unit id="Block other content trackers">
+    <source>Block other content trackers</source>
+    <target>Blokowanie pozostałych śledzących</target>
+    <note>Label for toggle on main screen</note>
+   </trans-unit>
+   <trans-unit id="Block social trackers">
+    <source>Block social trackers</source>
+    <target>Blokowanie śledzących społecznościowych</target>
+    <note>Label for toggle on main screen</note>
+   </trans-unit>
+   <trans-unit id="Blocking other content trackers may break some videos and Web pages.">
+    <source>Blocking other content trackers may break some videos and Web pages.</source>
+    <target>Blokowanie pozostałych elementów śledzących może uniemożliwiać oglądanie niektórych filmów i stron WWW.</target>
+    <note>Alert message shown when toggling the Content blocker</note>
+   </trans-unit>
+   <trans-unit id="Enable %@">
+    <source>Enable %@</source>
+    <target>Włącz %@</target>
+    <note>Label for instructions to enable shown on the second introduction screen</note>
+   </trans-unit>
+   <trans-unit id="Go to Settings">
+    <source>Go to Settings</source>
+    <target>Przejdź do Ustawień</target>
+    <note>Button to open the system Settings, shown on the home screen and after tapping the URL bar</note>
+   </trans-unit>
+   <trans-unit id="Help">
+    <source>Help</source>
+    <target>Pomoc</target>
+    <note>Label in About screen</note>
+   </trans-unit>
+   <trans-unit id="I Understand">
+    <source>I Understand</source>
+    <target>Rozumiem</target>
+    <note>Button label for accepting Content blocker alert</note>
+   </trans-unit>
+   <trans-unit id="May break some videos and Web pages">
+    <source>May break some videos and Web pages</source>
+    <target>Może uniemożliwiać oglądanie niektórych filmów i stron WWW.</target>
+    <note>Label subtitle for toggle on main screen</note>
+   </trans-unit>
+   <trans-unit id="No, Thanks">
+    <source>No, Thanks</source>
+    <target>Nie, dzięki</target>
+    <note>Button label for declining Content blocker alert</note>
+   </trans-unit>
+   <trans-unit id="Open Settings">
+    <source>Open Settings</source>
+    <target>Otwórz Ustawienia</target>
+    <note>Button label to open settings screen</note>
+   </trans-unit>
+   <trans-unit id="Open Settings App">
+    <source>Open Settings App</source>
+    <target>Otwórz aplikację Ustawienia</target>
+    <note>Label for instructions to enable shown on the second introduction screen</note>
+   </trans-unit>
+   <trans-unit id="Our mission is to foster a healthy, open Internet.">
+    <source>Our mission is to foster a healthy, open Internet.</source>
+    <target>Naszą misją jest wspieranie zdrowego i otwartego Internetu.</target>
+    <note>About copy on the about page</note>
+   </trans-unit>
+   <trans-unit id="PERFORMANCE">
+    <source>PERFORMANCE</source>
+    <target>Wydajność</target>
+    <note>Section label for performance toggles</note>
+   </trans-unit>
+   <trans-unit id="PRIVACY">
+    <source>PRIVACY</source>
+    <target>Prywatność</target>
+    <note>Section label for privacy toggles</note>
+   </trans-unit>
+   <trans-unit id="Read more.">
+    <source>Read more.</source>
+    <target>Więcej informacji</target>
+    <note>Button on the about page</note>
+   </trans-unit>
+   <trans-unit id="Search for %@">
+    <source>Search for %@</source>
+    <target>Szukaj „%@”</target>
+    <note>Label displayed for search button when typing in the URL bar</note>
+   </trans-unit>
+   <trans-unit id="Settings.sectionIntegration">
+    <source>INTEGRATION</source>
+    <target>Integracja</target>
+    <note>Label for Safari integration section</note>
+   </trans-unit>
+   <trans-unit id="Settings.sectionMozilla">
+    <source>MOZILLA</source>
+    <target>Mozilla</target>
+    <note>Section label for Mozilla toggles</note>
+   </trans-unit>
+   <trans-unit id="Settings.title">
+    <source>Settings</source>
+    <target>Ustawienia</target>
+    <note>Title for settings screen</note>
+   </trans-unit>
+   <trans-unit id="Settings.toggleSafari">
+    <source>Safari</source>
+    <target>Safari</target>
+    <note>Safari toggle label on settings screen</note>
+   </trans-unit>
+   <trans-unit id="Settings.toggleSendAnonymousUsageData">
+    <source>Send anonymous usage data</source>
+    <target>Przesyłanie anonimowych danych o użyciu</target>
+    <note>Label for Send Anonymous Usage Data toggle on main screen</note>
+   </trans-unit>
+   <trans-unit id="Settings.toggleSendAnonymousUsageDataSubtitle">
+    <source>Learn more</source>
+    <target>Więcej informacji</target>
+    <note>Subtitle for Send Anonymous Usage Data toggle on main screen</note>
+   </trans-unit>
+   <trans-unit id="Tap Safari, then select Content Blockers">
+    <source>Tap Safari, then select Content Blockers</source>
+    <target>Stuknij Safari a następnie Blokady zawartości</target>
+    <note>Label for instructions to enable shown on the second introduction screen</note>
+   </trans-unit>
+   <trans-unit id="URL.cancelLabel">
+    <source>Cancel</source>
+    <target>Anuluj</target>
+    <note>Label for cancel button shown when entering a URL or search</note>
+   </trans-unit>
+   <trans-unit id="URL.eraseButtonLabel">
+    <source>ERASE</source>
+    <target>Usuń</target>
+    <note>Erase button in the URL bar</note>
+   </trans-unit>
+   <trans-unit id="URL.eraseMessageLabel">
+    <source>We've erased your browsing history.</source>
+    <target>Historia przeglądania została usunięta.</target>
+    <note>Message shown after pressing the Erase button</note>
+   </trans-unit>
+   <trans-unit id="URL.placeholderText">
+    <source>Search or enter address</source>
+    <target>Wprowadź adres lub szukaj</target>
+    <note>Placeholder text shown in the URL bar before the user navigates to a page</note>
+   </trans-unit>
+   <trans-unit id="Welcome">
+    <source>Welcome</source>
+    <target>Witamy</target>
+    <note>Text displayed under the wave on the first intro slide at launch</note>
+   </trans-unit>
+   <trans-unit id="Your Rights">
+    <source>Your Rights</source>
+    <target>O prawach użytkownika</target>
+    <note>Label in About screen</note>
+   </trans-unit>
+  </body>
+ </file>
+ <file original="ContentBlocker/Info.plist" source-language="en" datatype="plaintext" target-language="pl">
+  <header>
+   <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2.1" build-num="7C1002"/>
+  </header>
+  <body>
+   <trans-unit id="CFBundleDisplayName">
+    <source>$(PRODUCT_NAME)</source>
+    <target>$(PRODUCT_NAME)</target>
+   </trans-unit>
+   <trans-unit id="CFBundleName">
+    <source>$(PRODUCT_NAME)</source>
+    <target>$(PRODUCT_NAME)</target>
+   </trans-unit>
+   <trans-unit id="CFBundleShortVersionString">
+    <source>2.0</source>
+    <target>2.0</target>
+   </trans-unit>
+  </body>
+ </file>
+</xliff>
