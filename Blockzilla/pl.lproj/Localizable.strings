@@ -38,11 +38,17 @@
 /* Label for instructions to enable shown on the second introduction screen */
 "Enable %@" = "Włącz %@";
 
-/* Button to open the system Settings, shown on the home screen and after tapping the URL bar */
-"Go to Settings" = "Przejdź do Ustawień";
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Spróbuj ponownie";
 
 /* Label in About screen */
 "Help" = "Pomoc";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "Proste i łatwe przeglądanie prywatne.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "Szukaj. Przeglądaj. Usuwaj. Powtórz.";
 
 /* Button label for accepting Content blocker alert */
 "I Understand" = "Rozumiem";

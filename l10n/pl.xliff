@@ -89,15 +89,25 @@
     <target>Włącz %@</target>
     <note>Label for instructions to enable shown on the second introduction screen</note>
    </trans-unit>
-   <trans-unit id="Go to Settings">
-    <source>Go to Settings</source>
-    <target>Przejdź do Ustawień</target>
-    <note>Button to open the system Settings, shown on the home screen and after tapping the URL bar</note>
+   <trans-unit id="Error.tryAgainButton">
+    <source>Try again</source>
+    <target>Spróbuj ponownie</target>
+    <note>Button label to reload the error page</note>
    </trans-unit>
    <trans-unit id="Help">
     <source>Help</source>
     <target>Pomoc</target>
     <note>Label in About screen</note>
+   </trans-unit>
+   <trans-unit id="Home.descriptionLabel1">
+    <source>Private browsing made easy.</source>
+    <target>Proste i łatwe przeglądanie prywatne.</target>
+    <note>First label for product description on the home screen</note>
+   </trans-unit>
+   <trans-unit id="Home.descriptionLabel2">
+    <source>Search. Browse. Erase. Repeat.</source>
+    <target>Szukaj. Przeglądaj. Usuwaj. Powtórz.</target>
+    <note>Second label for product description on the home screen</note>
    </trans-unit>
    <trans-unit id="I Understand">
     <source>I Understand</source>
