@@ -28,11 +28,6 @@
     <target>%@ pomaga wzmocnić prywatność i zwiększyć wydajność przeglądania stron na urządzeniach przenośnych, dając kontrolę nad wczytywanymi typami treści.</target>
     <note>Description text shown on the welcome slide of the tour</note>
    </trans-unit>
-   <trans-unit id="%@ improves privacy and may boost page load speed and lower your mobile data usage.">
-    <source>%@ improves privacy and may boost page load speed and lower your mobile data usage.</source>
-    <target>%@ wzmacnia prywatność i może przyspieszyć czas wczytywania stron i zmniejszyć ilość przesyłanych danych.</target>
-    <note>Label displayed above toggles</note>
-   </trans-unit>
    <trans-unit id="%@ is not enabled.">
     <source>%@ is not enabled.</source>
     <target>%@ nie został włączony.</target>
@@ -100,13 +95,13 @@
     <note>Label in About screen</note>
    </trans-unit>
    <trans-unit id="Home.descriptionLabel1">
-    <source>Private browsing made easy.</source>
+    <source>Private browsing made simple.</source>
     <target>Proste i łatwe przeglądanie prywatne.</target>
     <note>First label for product description on the home screen</note>
    </trans-unit>
    <trans-unit id="Home.descriptionLabel2">
-    <source>Search. Browse. Erase. Repeat.</source>
-    <target>Szukaj. Przeglądaj. Usuwaj. Powtórz.</target>
+    <source>Browse. Erase. Repeat.</source>
+    <target>Przeglądaj. Usuwaj. Powtórz.</target>
     <note>Second label for product description on the home screen</note>
    </trans-unit>
    <trans-unit id="I Understand">

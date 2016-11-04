@@ -1,9 +1,6 @@
 /* Description text shown on the welcome slide of the tour */
 "%@ helps you improve the privacy and performance of your mobile browsing experience. You control what types of page content are allowed." = "%@ pomaga wzmocnić prywatność i zwiększyć wydajność przeglądania stron na urządzeniach przenośnych, dając kontrolę nad wczytywanymi typami treści.";
 
-/* Label displayed above toggles */
-"%@ improves privacy and may boost page load speed and lower your mobile data usage." = "%@ wzmacnia prywatność i może przyspieszyć czas wczytywania stron i zmniejszyć ilość przesyłanych danych.";
-
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
 "%@ is not enabled." = "%@ nie został włączony.";
 
@@ -48,7 +45,7 @@
 "Home.descriptionLabel1" = "Proste i łatwe przeglądanie prywatne.";
 
 /* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Szukaj. Przeglądaj. Usuwaj. Powtórz.";
+"Home.descriptionLabel2" = "Przeglądaj. Usuwaj. Powtórz.";
 
 /* Button label for accepting Content blocker alert */
 "I Understand" = "Rozumiem";
