@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import WebKit
 
 protocol BrowserDelegate: class {
     func browserDidStartNavigation(_ browser: Browser)
@@ -19,7 +20,7 @@ class Browser: NSObject {
 
     let view = UIView()
 
-    fileprivate var webView: UIWebView!
+    fileprivate var webView: WKWebView!
 
     /// The main document of the latest request, which might be set before we've actually
     /// started loading the document.
@@ -44,12 +45,17 @@ class Browser: NSObject {
     }
 
     private func createWebView() {
-        webView = UIWebView()
-        webView.scalesPageToFit = true
-        webView.delegate = self
+        let configuration = WKWebViewConfiguration()
+        if #available(iOS 10.0, *) {
+            configuration.mediaTypesRequiringUserActionForPlayback = .all
+        }
+        
+        webView = WKWebView(frame: view.bounds, configuration: configuration)
+        webView.navigationDelegate = self
+        webView.allowsBackForwardNavigationGestures = true
         webView.scrollView.backgroundColor = UIConstants.colors.background
         webView.scrollView.contentInset.bottom = CGFloat(bottomInset)
-        webView.mediaPlaybackRequiresUserAction = true
+        
         view.addSubview(webView)
 
         webView.snp.makeConstraints { make in
@@ -58,7 +64,7 @@ class Browser: NSObject {
     }
 
     func reset() {
-        webView.delegate = nil
+        webView.navigationDelegate = nil
         webView.removeFromSuperview()
 
         isLoading = false
@@ -71,11 +77,11 @@ class Browser: NSObject {
     }
 
     func goBack() {
-        return webView.goBack()
+        webView.goBack()
     }
 
     func goForward() {
-        return webView.goForward()
+        webView.goForward()
     }
 
     func reload() {
@@ -84,7 +90,7 @@ class Browser: NSObject {
 
     func loadRequest(_ request: URLRequest) {
         isLoading = true
-        webView.loadRequest(request)
+        webView.load(request)
     }
 
     func stop() {
@@ -136,10 +142,10 @@ class Browser: NSObject {
     }
 }
 
-extension Browser: UIWebViewDelegate {
+extension Browser: WKNavigationDelegate {
     private static let supportedSchemes = ["http", "https", "about"]
 
-    func webViewDidStartLoad(_ webView: UIWebView) {
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         if estimatedProgress == 0 {
             estimatedProgress = 0.1
         }
@@ -147,9 +153,11 @@ extension Browser: UIWebViewDelegate {
         updateBackForwardStates(webView)
     }
 
-    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        
         // We don't currently support opening in external apps, so just ignore unsupported schemes.
-        guard let scheme = request.url?.scheme, Browser.supportedSchemes.contains(scheme.lowercased()) else { return false }
+        let request = navigationAction.request
+        guard let scheme = request.url?.scheme, Browser.supportedSchemes.contains(scheme.lowercased()) else { return decisionHandler(.cancel) }
 
         updateBackForwardStates(webView)
 
@@ -162,11 +170,11 @@ extension Browser: UIWebViewDelegate {
         // Instead, set a pending URL that we're expected to load, and update the URL when we receive
         // a response that matches this pending URL.
         pendingURL = request.mainDocumentURL
-
-        return true
+        
+        decisionHandler(.allow)
     }
 
-    func webViewDidFinishLoad(_ webView: UIWebView) {
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         if !webView.isLoading, isLoading {
             isLoading = false
             delegate?.browserDidFinishNavigation(self)
@@ -175,7 +183,7 @@ extension Browser: UIWebViewDelegate {
         updatePostLoad()
     }
 
-    func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         updatePostLoad()
 
         if !webView.isLoading, isLoading {
@@ -189,12 +197,12 @@ extension Browser: UIWebViewDelegate {
 
         // We'll usually get main document URL updates from LocalContentBlockerDelegate,
         // but certain events won't trigger a new page load (e.g., back/forward navigation).
-        if url != webView.request?.mainDocumentURL {
-            url = webView.request?.mainDocumentURL
+        if url != webView.url {
+            url = webView.url
         }
     }
 
-    func updateBackForwardStates(_ webView: UIWebView) {
+    func updateBackForwardStates(_ webView: WKWebView) {
         if canGoBack != webView.canGoBack {
             canGoBack = webView.canGoBack
         }
@@ -208,7 +216,7 @@ extension Browser: UIWebViewDelegate {
 extension Browser: LocalContentBlockerDelegate {
     func localContentBlocker(_ localContentBlocker: LocalContentBlocker, didReceiveDataForMainDocumentURL url: URL?) {
         // When we receive data for a URL, update the browser's URL if it changed and we were expecting this URL.
-        if self.pendingURL == url {
+        if pendingURL == url {
             self.url = url
         }
     }
