@@ -7,7 +7,7 @@ import SnapKit
 import UIKit
 import WebKit
 
-class AboutContentViewController: UIViewController, UIWebViewDelegate {
+class AboutContentViewController: UIViewController, WKNavigationDelegate {
     private let url: URL
 
     init(url: URL) {
@@ -24,16 +24,17 @@ class AboutContentViewController: UIViewController, UIWebViewDelegate {
 
         view.backgroundColor = UIConstants.colors.background
 
-        let webView = UIWebView()
+        let webView = WKWebView()
         webView.alpha = 0
+        webView.allowsBackForwardNavigationGestures = true
         view.addSubview(webView)
 
         webView.snp.remakeConstraints { make in
-            make.edges.equalTo(self.view)
+            make.edges.equalTo(view)
         }
 
-        webView.delegate = self
-        webView.loadRequest(URLRequest(url: url))
+        webView.navigationDelegate = self
+        webView.load(URLRequest(url: url))
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -45,18 +46,21 @@ class AboutContentViewController: UIViewController, UIWebViewDelegate {
         return UIStatusBarStyle.lightContent
     }
 
-    func webViewDidFinishLoad(_ webView: UIWebView) {
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         revealWebView(webView)
     }
 
-    func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        revealWebView(webView)
+    }
+    
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         revealWebView(webView)
     }
 
-    private func revealWebView(_ webView: UIWebView) {
+    private func revealWebView(_ webView: WKWebView) {
         // Add a small delay to allow the stylesheets to load and avoid flicker.
-        let delayTime = DispatchTime.now() + Double(Int64(200 * Double(NSEC_PER_MSEC))) / Double(NSEC_PER_SEC)
-        DispatchQueue.main.asyncAfter(deadline: delayTime) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             webView.animateHidden(false, duration: 0.3)
         }
     }
