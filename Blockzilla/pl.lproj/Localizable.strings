@@ -1,0 +1,118 @@
+/* Description text shown on the welcome slide of the tour */
+"%@ helps you improve the privacy and performance of your mobile browsing experience. You control what types of page content are allowed." = "%@ pomaga wzmocnić prywatność i zwiększyć wydajność przeglądania stron na urządzeniach przenośnych, dając kontrolę nad wczytywanymi typami treści.";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"%@ is not enabled." = "%@ nie został włączony.";
+
+/* About copy on the about page */
+"%@ is produced by Mozilla, the people behind the Firefox Web browser." = "%@ jest tworzony przez Mozillę, organizację stojącą za przeglądarką Firefox.";
+
+/* About copy on the about page */
+"%@ puts you in control and brings added privacy and performance to your mobile browsing experience." = "%@ daje większą kontrolę, zwiększa prywatność i wydajność przeglądania stron na urządzeniach przenośnych.";
+
+/* Button at top of app that goes to the About screen
+   Title for the About screen */
+"About" = "O programie";
+
+/* Label for toggle on main screen */
+"Block Web fonts" = "Blokowanie czcionek siecowych";
+
+/* Label for toggle on main screen */
+"Block ad trackers" = "Blokowanie śledzących reklam";
+
+/* Label for toggle on main screen */
+"Block analytics trackers" = "Blokowanie śledzących statystyk";
+
+/* Label for toggle on main screen */
+"Block other content trackers" = "Blokowanie pozostałych śledzących";
+
+/* Label for toggle on main screen */
+"Block social trackers" = "Blokowanie śledzących społecznościowych";
+
+/* Alert message shown when toggling the Content blocker */
+"Blocking other content trackers may break some videos and Web pages." = "Blokowanie pozostałych elementów śledzących może uniemożliwiać oglądanie niektórych filmów i stron WWW.";
+
+/* Label for instructions to enable shown on the second introduction screen */
+"Enable %@" = "Włącz %@";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Spróbuj ponownie";
+
+/* Label in About screen */
+"Help" = "Pomoc";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "Proste i łatwe przeglądanie prywatne.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "Przeglądaj. Usuwaj. Powtórz.";
+
+/* Button label for accepting Content blocker alert */
+"I Understand" = "Rozumiem";
+
+/* Label subtitle for toggle on main screen */
+"May break some videos and Web pages" = "Może uniemożliwiać oglądanie niektórych filmów i stron WWW.";
+
+/* Button label for declining Content blocker alert */
+"No, Thanks" = "Nie, dzięki";
+
+/* Button label to open settings screen */
+"Open Settings" = "Otwórz Ustawienia";
+
+/* Label for instructions to enable shown on the second introduction screen */
+"Open Settings App" = "Otwórz aplikację Ustawienia";
+
+/* About copy on the about page */
+"Our mission is to foster a healthy, open Internet." = "Naszą misją jest wspieranie zdrowego i otwartego Internetu.";
+
+/* Section label for performance toggles */
+"PERFORMANCE" = "Wydajność";
+
+/* Section label for privacy toggles */
+"PRIVACY" = "Prywatność";
+
+/* Button on the about page */
+"Read more." = "Więcej informacji";
+
+/* Label displayed for search button when typing in the URL bar */
+"Search for %@" = "Szukaj „%@”";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "Integracja";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "Mozilla";
+
+/* Title for settings screen */
+"Settings.title" = "Ustawienia";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "Przesyłanie anonimowych danych o użyciu";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "Więcej informacji";
+
+/* Label for instructions to enable shown on the second introduction screen */
+"Tap Safari, then select Content Blockers" = "Stuknij Safari a następnie Blokady zawartości";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Anuluj";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "Usuń";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Historia przeglądania została usunięta.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Wprowadź adres lub szukaj";
+
+/* Text displayed under the wave on the first intro slide at launch */
+"Welcome" = "Witamy";
+
+/* Label in About screen */
+"Your Rights" = "O prawach użytkownika";
+
