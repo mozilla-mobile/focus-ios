@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Telemetry
 
 class OpenUtils {
     private static let app = UIApplication.shared
@@ -18,16 +19,19 @@ class OpenUtils {
             return
         }
 
+        Telemetry.default.recordEvent(TelemetryEvent(category: "action", method: "open", object: "menu", value: "firefox"))
         AdjustIntegration.track(eventName: .openFirefox)
         app.openURL(firefoxURL)
     }
 
     private static func openFirefoxInstall() {
+        // TODO: Record as a TelemetryEvent?
         AdjustIntegration.track(eventName: .openFirefoxInstall)
         UIApplication.shared.openURL(AppInfo.config.firefoxAppStoreURL)
     }
 
     private static func openInSafari(url: URL) {
+        Telemetry.default.recordEvent(TelemetryEvent(category: "action", method: "open", object: "menu", value: "default"))
         AdjustIntegration.track(eventName: .openSafari)
         app.openURL(url)
     }
@@ -50,6 +54,7 @@ class OpenUtils {
         })
 
         alert.addAction(UIAlertAction(title: UIConstants.strings.openMore, style: .default) { _ in
+            Telemetry.default.recordEvent(TelemetryEvent(category: "action", method: "share", object: "menu"))
             AdjustIntegration.track(eventName: .openSystemShare)
 
             let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)

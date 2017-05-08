@@ -4,6 +4,7 @@
 
 import UIKit
 import AdjustSdk
+import Telemetry
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,6 +19,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             BuddyBuildSDK.setup()
         #endif
 
+        // Set up Telemetry
+        let telemetryConfig = Telemetry.default.configuration
+        telemetryConfig.appName = "Focus"
+        telemetryConfig.dataDirectory = .documentDirectory
+        telemetryConfig.userDefaultsSuiteName = AppInfo.sharedContainerIdentifier
+        
+        telemetryConfig.measureUserDefaultsSetting(forKey: "prefKeyEngine", withDefaultValue: SearchEngineManager(prefs: UserDefaults.standard).engines.first?.name)
+        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockAds.rawValue, withDefaultValue: Settings.getToggle(.blockAds))
+        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockAnalytics.rawValue, withDefaultValue: Settings.getToggle(.blockAnalytics))
+        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockSocial.rawValue, withDefaultValue: Settings.getToggle(.blockSocial))
+        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockOther.rawValue, withDefaultValue: Settings.getToggle(.blockOther))
+        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockFonts.rawValue, withDefaultValue: Settings.getToggle(.blockFonts))
+        
+        #if DEBUG
+            telemetryConfig.updateChannel = "debug"
+            telemetryConfig.isCollectionEnabled = false
+            telemetryConfig.isUploadEnabled = false
+        #else
+            telemetryConfig.updateChannel = "release"
+            telemetryConfig.isCollectionEnabled = true
+            telemetryConfig.isUploadEnabled = Settings.getToggle(.sendAnonymousUsageData)
+        #endif
+        
+        Telemetry.default.add(pingBuilderType: CorePingBuilder.self)
+        Telemetry.default.add(pingBuilderType: FocusEventPingBuilder.self)
+        
         // Always initialize Adjust, otherwise the SDK is in a bad state. We disable it
         // immediately so that no data is collected or sent.
         AdjustIntegration.applicationDidFinishLaunching()
@@ -97,10 +124,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillResignActive(_ application: UIApplication) {
         splashView?.animateHidden(false, duration: 0)
+        Telemetry.default.recordSessionEnd()
+        Telemetry.default.recordEvent(TelemetryEvent(category: "action", method: "background", object: "app"))
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         splashView?.animateHidden(true, duration: 0.25)
+        Telemetry.default.recordSessionStart()
+        Telemetry.default.recordEvent(TelemetryEvent(category: "action", method: "foreground", object: "app"))
+    }
+    
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        Telemetry.default.queue(pingType: CorePingBuilder.PingType)
+        Telemetry.default.queue(pingType: FocusEventPingBuilder.PingType)
+        Telemetry.default.scheduleUpload(pingType: CorePingBuilder.PingType)
+        Telemetry.default.scheduleUpload(pingType: FocusEventPingBuilder.PingType)
     }
 
     func application(_ application: UIApplication, shouldAllowExtensionPointIdentifier extensionPointIdentifier: UIApplicationExtensionPointIdentifier) -> Bool {
