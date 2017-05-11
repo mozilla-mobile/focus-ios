@@ -195,7 +195,7 @@ class BrowserViewController: UIViewController {
             })
         })
 
-        Telemetry.default.recordEvent(TelemetryEvent(category: "action", method: "click", object: "erase_button"))
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.eraseButton)
         AdjustIntegration.track(eventName: .clear)
     }
 
@@ -252,11 +252,11 @@ extension BrowserViewController: URLBarDelegate {
 
         var url = URIFixup.getURL(entry: text)
         if url == nil {
-            Telemetry.default.recordEvent(TelemetryEvent(category: "action", method: "type_query", object: "search_bar"))
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
             AdjustIntegration.track(eventName: .search)
             url = searchEngineManager.activeEngine.urlForQuery(text)
         } else {
-            Telemetry.default.recordEvent(TelemetryEvent(category: "action", method: "type_url", object: "search_bar"))
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
             AdjustIntegration.track(eventName: .browse)
         }
 
@@ -519,7 +519,7 @@ extension BrowserViewController: OverlayViewDelegate {
 
     func overlayView(_ overlayView: OverlayView, didSearchForQuery query: String) {
         if let url = searchEngineManager.activeEngine.urlForQuery(query) {
-            Telemetry.default.recordEvent(TelemetryEvent(category: "action", method: "type_query", object: "search_bar"))
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
             AdjustIntegration.track(eventName: .search)
             submit(url: url)
         }

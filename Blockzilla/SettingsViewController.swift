@@ -275,7 +275,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let toggle = toggles.filter { $0.toggle == sender }.first!
 
         func updateSetting() {
-            let telemetryEvent = TelemetryEvent(category: "action", method: "change", object: "setting", value: toggle.setting.rawValue)
+            let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: "setting", value: toggle.setting.rawValue)
             telemetryEvent.addExtra(key: "to", value: sender.isOn)
             Telemetry.default.recordEvent(telemetryEvent)
             

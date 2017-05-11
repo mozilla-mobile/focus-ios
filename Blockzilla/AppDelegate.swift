@@ -22,15 +22,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Set up Telemetry
         let telemetryConfig = Telemetry.default.configuration
         telemetryConfig.appName = "Focus"
-        telemetryConfig.dataDirectory = .documentDirectory
         telemetryConfig.userDefaultsSuiteName = AppInfo.sharedContainerIdentifier
+
+        // Since Focus always clears the caches directory and Telemetry files are
+        // excluded from iCloud backup, we store pings in documents.
+        telemetryConfig.dataDirectory = .documentDirectory
         
-        telemetryConfig.measureUserDefaultsSetting(forKey: "prefKeyEngine", withDefaultValue: SearchEngineManager(prefs: UserDefaults.standard).engines.first?.name)
-        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockAds.rawValue, withDefaultValue: Settings.getToggle(.blockAds))
-        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockAnalytics.rawValue, withDefaultValue: Settings.getToggle(.blockAnalytics))
-        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockSocial.rawValue, withDefaultValue: Settings.getToggle(.blockSocial))
-        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockOther.rawValue, withDefaultValue: Settings.getToggle(.blockOther))
-        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockFonts.rawValue, withDefaultValue: Settings.getToggle(.blockFonts))
+        let defaultSearchEngineProvider = SearchEngineManager(prefs: UserDefaults.standard).engines.first?.name ?? "unknown"
+        telemetryConfig.defaultSearchEngineProvider = defaultSearchEngineProvider
+        
+        telemetryConfig.measureUserDefaultsSetting(forKey: "prefKeyEngine", withDefaultValue: defaultSearchEngineProvider)
+        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockAds, withDefaultValue: Settings.getToggle(.blockAds))
+        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockAnalytics, withDefaultValue: Settings.getToggle(.blockAnalytics))
+        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockSocial, withDefaultValue: Settings.getToggle(.blockSocial))
+        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockOther, withDefaultValue: Settings.getToggle(.blockOther))
+        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockFonts, withDefaultValue: Settings.getToggle(.blockFonts))
         
         #if DEBUG
             telemetryConfig.updateChannel = "debug"
@@ -125,13 +131,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillResignActive(_ application: UIApplication) {
         splashView?.animateHidden(false, duration: 0)
         Telemetry.default.recordSessionEnd()
-        Telemetry.default.recordEvent(TelemetryEvent(category: "action", method: "background", object: "app"))
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.background, object: TelemetryEventObject.app)
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         splashView?.animateHidden(true, duration: 0.25)
         Telemetry.default.recordSessionStart()
-        Telemetry.default.recordEvent(TelemetryEvent(category: "action", method: "foreground", object: "app"))
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {

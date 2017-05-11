@@ -19,7 +19,7 @@ class OpenUtils {
             return
         }
 
-        Telemetry.default.recordEvent(TelemetryEvent(category: "action", method: "open", object: "menu", value: "firefox"))
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.menu, value: "firefox")
         AdjustIntegration.track(eventName: .openFirefox)
         app.openURL(firefoxURL)
     }
@@ -31,7 +31,7 @@ class OpenUtils {
     }
 
     private static func openInSafari(url: URL) {
-        Telemetry.default.recordEvent(TelemetryEvent(category: "action", method: "open", object: "menu", value: "default"))
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.menu, value: "default")
         AdjustIntegration.track(eventName: .openSafari)
         app.openURL(url)
     }
@@ -54,7 +54,7 @@ class OpenUtils {
         })
 
         alert.addAction(UIAlertAction(title: UIConstants.strings.openMore, style: .default) { _ in
-            Telemetry.default.recordEvent(TelemetryEvent(category: "action", method: "share", object: "menu"))
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.share, object: TelemetryEventObject.menu)
             AdjustIntegration.track(eventName: .openSystemShare)
 
             let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
