@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Set up Telemetry
         let telemetryConfig = Telemetry.default.configuration
-        telemetryConfig.appName = "Focus"
+        telemetryConfig.appName = AppInfo.productName
         telemetryConfig.userDefaultsSuiteName = AppInfo.sharedContainerIdentifier
 
         // Since Focus always clears the caches directory and Telemetry files are
@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let defaultSearchEngineProvider = SearchEngineManager(prefs: UserDefaults.standard).engines.first?.name ?? "unknown"
         telemetryConfig.defaultSearchEngineProvider = defaultSearchEngineProvider
         
-        telemetryConfig.measureUserDefaultsSetting(forKey: "prefKeyEngine", withDefaultValue: defaultSearchEngineProvider)
+        telemetryConfig.measureUserDefaultsSetting(forKey: SearchEngineManager.prefKeyEngine, withDefaultValue: defaultSearchEngineProvider)
         telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockAds, withDefaultValue: Settings.getToggle(.blockAds))
         telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockAnalytics, withDefaultValue: Settings.getToggle(.blockAnalytics))
         telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockSocial, withDefaultValue: Settings.getToggle(.blockSocial))
@@ -130,8 +130,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillResignActive(_ application: UIApplication) {
         splashView?.animateHidden(false, duration: 0)
-        Telemetry.default.recordSessionEnd()
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.background, object: TelemetryEventObject.app)
+        Telemetry.default.recordSessionEnd()
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
