@@ -20,6 +20,7 @@ class TelemetryEventMethod {
     public static let click = "click"
     public static let change = "change"
     public static let open = "open"
+    public static let openAppStore = "open_app_store"
     public static let share = "share"
 }
 

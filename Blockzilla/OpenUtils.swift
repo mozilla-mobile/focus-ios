@@ -25,7 +25,7 @@ class OpenUtils {
     }
 
     private static func openFirefoxInstall() {
-        // TODO: Record as a TelemetryEvent?
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openAppStore, object: TelemetryEventObject.menu, value: "firefox")
         AdjustIntegration.track(eventName: .openFirefoxInstall)
         UIApplication.shared.openURL(AppInfo.config.firefoxAppStoreURL)
     }
