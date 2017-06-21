@@ -5,6 +5,9 @@
 import UIKit
 import Telemetry
 
+private let WEBKIT_LOCAL_STORAGE_ENABLED_KEY = "WebKitLocalStorageEnabledPreferenceKey"
+private let WAS_TELEMETRY_SETTING_PERSISTED = "Wasv3.2TelemetrySettingPersisted"
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
@@ -63,7 +66,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Disable localStorage.
         // We clear the Caches directory after each Erase, but WebKit apparently maintains
         // localStorage in-memory (bug 1319208), so we just disable it altogether.
-        UserDefaults.standard.set(false, forKey: "WebKitLocalStorageEnabledPreferenceKey")
+        //
+        // HACK isFirstRun: since we disable local storage every time the app starts, if it hasn't
+        // been set yet, it must be first run.
+        let userDefaults = UserDefaults.standard
+        let isFirstRun = userDefaults.object(forKey: WEBKIT_LOCAL_STORAGE_ENABLED_KEY) as? Bool == nil // .bool returns false if key DNE so can't be used for existence queries.
+        userDefaults.set(false, forKey: WEBKIT_LOCAL_STORAGE_ENABLED_KEY)
+
+        maybePersistV3_2TelemetrySetting(isFirstRun: isFirstRun)
 
         // Set up our custom user agent.
         UserAgent.setup()
@@ -97,6 +107,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         return true
+    }
+
+    /// HACK: in v3.3, we removed Adjust from Klar and defaulted to opt-in telemetry for new Klar
+    /// users. For existing Klar users, we wish to honor their current telemetry setting - this
+    /// method is to persist their v3.2 telemetry value.
+    ///
+    /// There are three kinds of Klar users & three actions to take:
+    /// - New users: do nothing here & use the new default value in Settings.
+    /// - Existing users who have toggled the pref: do nothing here - their value is already persisted
+    /// - Existing users who have *not* toggled the pref: persist true here - the old default value
+    /// was opt-out
+    fileprivate func maybePersistV3_2TelemetrySetting(isFirstRun: Bool) {
+        let userDefaults = UserDefaults.standard
+
+        // If this is called a second time, new users will be considered existing
+        // users so we only run this once.
+        guard !userDefaults.bool(forKey: WAS_TELEMETRY_SETTING_PERSISTED) else { return }
+        defer { userDefaults.set(true, forKey: WAS_TELEMETRY_SETTING_PERSISTED) }
+
+        // Persist true for existing users who have not toggled the pref (see above).
+        if AppInfo.isKlar,
+            !isFirstRun, // i.e. an existing user
+            !Settings.isToggleValuePersisted(.sendAnonymousUsageData) { // never overriden by user.
+            Settings.set(true, forToggle: .sendAnonymousUsageData) // TODO: persists immediately?
+        }
     }
 
     fileprivate func displaySplashAnimation() {

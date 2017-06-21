@@ -37,4 +37,14 @@ struct Settings {
         prefs.set(value, forKey: toggle.rawValue)
         prefs.synchronize()
     }
+
+    /// Returns true if the toggle's value is persisted, false otherwise.
+    ///
+    /// This is can usually be used to indicate, "Has the user ever toggled this pref?". One
+    /// exception, for example, is that we persisted the default value for sendAnonymousUsageData
+    /// in some cases (see AppDelegate.maybePersistTelemetrySetting).
+    static func isToggleValuePersisted(_ toggle: SettingsToggle) -> Bool {
+        // prefs.bool cannot be used for existence queries because it returns false if the value DNE.
+        return prefs.object(forKey: toggle.rawValue) as? Bool != nil // TODO: need to be synchronized first?
+    }
 }
