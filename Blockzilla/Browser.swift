@@ -87,12 +87,12 @@ class Browser: NSObject {
     }
 
     func goBackByGesture() {
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.navigateBack, object: TelemetryEventObject.app)
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.swipeToNavigateBack, object: TelemetryEventObject.app)
         goBack()
     }
 
     func goForwardByGesture() {
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.navigateForward, object: TelemetryEventObject.app)
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.swipeToNavigateForward, object: TelemetryEventObject.app)
         goForward()
     }
 
