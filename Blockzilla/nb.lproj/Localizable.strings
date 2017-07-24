@@ -11,7 +11,7 @@
 "About.privateBullet2" = "Blokker sporere (eller oppdater innstillingene for å tillate sporere)";
 
 /* Label on About screen */
-"About.privateBullet3" = "Slett for å fjerne informasjonskapsler samt søk- og nettleserhistorikk";
+"About.privateBullet3" = "Slett for å fjerne infokapsler samt søk- og nettleserhistorikk";
 
 /* Label on About screen */
 "About.privateBulletHeader" = "Bruk den som en privat nettleser:";

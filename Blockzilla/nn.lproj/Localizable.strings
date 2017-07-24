@@ -170,7 +170,7 @@
 "Settings.toggleSendAnonymousUsageData" = "Send anonyme brukardata";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "Les mer";
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "Les meir";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Avbryt";

@@ -2,7 +2,7 @@
 "About.learnMoreButton" = "Issin ugar";
 
 /* Label on About screen */
-"About.missionLabel" = "%@ yegga-t Mozilla. Tuɣdaṭ nneɣ d aḥareb ɣef tulya akked tezmert yelhan n Internet.";
+"About.missionLabel" = "%@ yegga-t Mozilla. Tuɣdaṭ-nneɣ d aḥareb ɣef tulya akked tezmert yelhan n Internet.";
 
 /* Label on About screen */
 "About.privateBullet1" = "Nadi udiɣ inig seg usnas";
@@ -26,19 +26,19 @@
 "About.safariBullet1" = "Sewḥel inedfaṛen i ugar n tudert tusligt";
 
 /* Label on About screen */
-"About.safariBullet2" = "Sewḥ€l tisefsiyin web akken ad ifsusen isebtar";
+"About.safariBullet2" = "Sewḥel tisefsiyin web akken ad ifsusen isebtar";
 
 /* Label on About screen */
 "About.safariBulletHeader" = "Seqdec-it am usiɣzef Safari:";
 
 /* Title for the About screen */
-"About.screenTitle" = "Ɣef";
+"About.screenTitle" = "Γef";
 
 /* Label on About screen */
 "About.topLabel" = "%@ ak-d-yefk afus ad teqqimeḍ d aqeṛṛu.";
 
 /* Accessibility label for the back button */
-"Browser.backLabel" = "Ɣer deffir";
+"Browser.backLabel" = "Γer deffir";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Ɣer zdat";
