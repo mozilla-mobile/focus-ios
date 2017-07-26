@@ -77,7 +77,7 @@
 "ExternalLink.openMapsButton" = "Ouvrir Plans";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "OK, j’ai compris.";
+"FirstRun.buttonLabel" = "D’accord, j’ai compris.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Bloquez automatiquement les traqueurs lorsque vous naviguez. Appuyez ensuite sur le bouton Effacer pour supprimer les pages visitées, les recherches, les cookies et les mots de passe.";

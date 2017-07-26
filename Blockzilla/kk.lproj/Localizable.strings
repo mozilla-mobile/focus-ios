@@ -41,10 +41,10 @@
 "Browser.backLabel" = "Артқа";
 
 /* Accessibility label for the forward button */
-"Browser.forwardLabel" = "Forward";
+"Browser.forwardLabel" = "Алға";
 
 /* Accessibility label for the reload button */
-"Browser.reloadLabel" = "Қайта жүктеп алу";
+"Browser.reloadLabel" = "Қайта жүктеу";
 
 /* Accessibility label for the settings button */
 "Browser.settingsLabel" = "Баптаулар";
