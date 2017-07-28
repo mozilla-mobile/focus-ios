@@ -5,6 +5,7 @@
 import Foundation
 import AutocompleteTextField
 import SnapKit
+import Telemetry
 
 protocol URLBarDelegate: class {
     func urlBar(_ urlBar: URLBar, didEnterText text: String)
@@ -42,6 +43,8 @@ class URLBar: UIView {
     private var isEditingConstraints = [Constraint]()
     private var preActivationConstraints = [Constraint]()
     private var postActivationConstraints = [Constraint]()
+    
+    let menuController = UIMenuController.shared
 
     init() {
         super.init(frame: CGRect.zero)
@@ -252,10 +255,26 @@ class URLBar: UIView {
         centeredURLConstraints.forEach { $0.deactivate() }
         showToolsetConstraints.forEach { $0.deactivate() }
         postActivationConstraints.forEach { $0.deactivate() }
+        
+        addCustomMenu()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func pasteAndGo() {
+        delegate?.urlBar(self, didSubmitText: UIPasteboard.general.string!)
+
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.pasteAndGo)
+    }
+
+    //Adds Menu Item
+    func addCustomMenu() {
+        if UIPasteboard.general.string != nil {
+            let lookupMenu = UIMenuItem(title: UIConstants.strings.urlPasteAndGo, action: #selector(pasteAndGo))
+            UIMenuController.shared.menuItems = [lookupMenu]
+        }
     }
 
     var url: URL? = nil {
@@ -487,7 +506,6 @@ class URLBar: UIView {
             components?.password = nil
             displayURL = components?.url?.absoluteString
         }
-
         urlText.text = displayURL
     }
 }

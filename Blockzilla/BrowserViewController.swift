@@ -202,6 +202,8 @@ class BrowserViewController: UIViewController {
         let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager)
         navigationController!.pushViewController(settingsViewController, animated: true)
         navigationController!.setNavigationBarHidden(false, animated: true)
+
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.settingsButton)
     }
 
     fileprivate func submit(url: URL) {
@@ -256,9 +258,10 @@ extension BrowserViewController: URLBarDelegate {
         } else {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
         }
-
-        submit(url: url!)
-        urlBar.url = url
+        if let urlBarURL = url {
+            submit(url: urlBarURL)
+            urlBar.url = urlBarURL
+        }
         urlBar.dismiss()
     }
 
@@ -520,6 +523,26 @@ extension BrowserViewController: OverlayViewDelegate {
             submit(url: url)
         }
 
+        urlBar.dismiss()
+    }
+    func overlayView(_ overlayView: OverlayView, didSubmitText text: String) {
+        let text = text.trimmingCharacters(in: .whitespaces)
+        guard !text.isEmpty else {
+            urlBar.url = browser.url
+            return
+        }
+        
+        var url = URIFixup.getURL(entry: text)
+        if url == nil {
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
+            url = searchEngineManager.activeEngine.urlForQuery(text)
+        } else {
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
+        }
+        if let overlayURL = url {
+            submit(url: overlayURL)
+            urlBar.url = overlayURL
+        }
         urlBar.dismiss()
     }
 }

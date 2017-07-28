@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Telemetry
 
 protocol BrowserDelegate: class {
     func browserDidStartNavigation(_ browser: Browser)
@@ -51,6 +52,12 @@ class Browser: NSObject {
         webView.scrollView.layer.masksToBounds = false
         webView.scrollView.delegate = self
         webView.delegate = self
+        let swipeLeftRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(goForwardByGesture))
+        swipeLeftRecognizer.direction = .left
+        let swipeRightRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(goBackByGesture))
+        swipeRightRecognizer.direction = .right
+        webView.addGestureRecognizer(swipeLeftRecognizer)
+        webView.addGestureRecognizer(swipeRightRecognizer)
         view.addSubview(webView)
 
         webView.snp.makeConstraints { make in
@@ -77,6 +84,16 @@ class Browser: NSObject {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.createWebView()
         }
+    }
+
+    func goBackByGesture() {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.swipeToNavigateBack, object: TelemetryEventObject.app)
+        goBack()
+    }
+
+    func goForwardByGesture() {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.swipeToNavigateForward, object: TelemetryEventObject.app)
+        goForward()
     }
 
     func goBack() {

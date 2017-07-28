@@ -10,6 +10,7 @@ struct UIConstants {
         static let background = UIColor(rgb: 0x221F1F)
         static let buttonHighlight = UIColor(rgb: 0x333333)
         static let cellSelected = UIColor(rgb: 0x2C6EC8)
+        static let copyButtonBorder = UIColor(rgb: 0x5F6368, alpha: 0.8)
         static let defaultFont = UIColor(rgb: 0xE1E5EA)
         static let deleteButtonBackground = UIColor(white: 1, alpha: 0.2)
         static let deleteButtonBorder = UIColor(white: 1, alpha: 0.5)
@@ -56,6 +57,8 @@ struct UIConstants {
     struct fonts {
         static let aboutText = UIFont.systemFont(ofSize: 14)
         static let cancelButton = UIFont.systemFont(ofSize: 15)
+        static let copyButton = UIFont.systemFont(ofSize: 15)
+        static let copyButtonQuery = UIFont.boldSystemFont(ofSize: 15)
         static let deleteButton = UIFont.systemFont(ofSize: 11)
         static let firstRunButton = UIFont.systemFont(ofSize: 14, weight: UIFontWeightMedium)
         static let firstRunDisclaimer = UIFont.systemFont(ofSize: 14)
@@ -75,6 +78,7 @@ struct UIConstants {
     struct layout {
         static let browserToolbarDisabledOpacity: CGFloat = 0.3
         static let browserToolbarHeight: CGFloat = 44
+        static let copyButtonAnimationDuration: TimeInterval = 0.1
         static let deleteAnimationDuration: TimeInterval = 0.15
         static let lockIconInset: Float = 6
         static let navigationDoneOffset: Float = -10
@@ -161,5 +165,8 @@ struct UIConstants {
         static let toggleSafari = NSLocalizedString("Settings.toggleSafari", value: "Safari", comment: "Safari toggle label on settings screen")
         static let urlBarCancel = NSLocalizedString("URL.cancelLabel", value: "Cancel", comment: "Label for cancel button shown when entering a URL or search")
         static let urlTextPlaceholder = NSLocalizedString("URL.placeholderText", value: "Search or enter address", comment: "Placeholder text shown in the URL bar before the user navigates to a page")
+        static let shareMenuOpenInFocus = NSLocalizedString("ShareMenu.OpenInFocus", value: "Open in Focus", comment: "Text for the share menu option when a user wants to open a page in Focus.")
+        static let shareMenuGetTheFirefoxApp = NSLocalizedString("ShareMenu.GetFirefox", value: "Get the Firefox App", comment: "Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed.")
+        static let urlPasteAndGo = NSLocalizedString("URL.contextMenu", value: "Paste & Go", comment: "Text for the URL context menu when a user long presses on the URL bar with clipboard contents.")
     }
 }
