@@ -7,8 +7,9 @@ import AutocompleteTextField
 
 class DomainCompletion: AutocompleteTextFieldCompletionSource {
     private lazy var topDomains: [String] = {
-        let filePath = Bundle.main.path(forResource: "topdomains", ofType: "txt")
-        return try! String(contentsOfFile: filePath!).components(separatedBy: "\n")
+        let localeLang = Bundle.main.preferredLocalizations[0]
+        var fileName = localeLang != "en" ? "topdomains-" + localeLang : "topdomains"
+        return try! String(contentsOfFile: Bundle.main.path(forResource: fileName, ofType: "txt")!).components(separatedBy: "\n")
     }()
 
     func autocompleteTextFieldCompletionSource(_ autocompleteTextField: AutocompleteTextField, forText text: String) -> String? {
