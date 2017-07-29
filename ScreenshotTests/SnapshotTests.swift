@@ -22,11 +22,11 @@ class SnapshotTests: XCTestCase {
 
         app.buttons["URLBar.activateButton"].tap()
         snapshot("02LocationBarEmptyState")
-        app.textFields["URLBar.urlText"].typeText("people-mozilla.org")
+        app.textFields["URLBar.urlText"].typeText("mozilla.org")
         snapshot("03SearchFor")
 
         app.typeText("\n")
-        waitForValueContains(element: app.textFields["URLBar.urlText"], value: "https://people-mozilla.org/")
+        waitForValueContains(element: app.textFields["URLBar.urlText"], value: "https://www.mozilla.org/")
         snapshot("04EraseButton")
 
         app.buttons["URLBar.deleteButton"].tap()
@@ -61,8 +61,8 @@ class SnapshotTests: XCTestCase {
     func test04ShareMenu() {
         let app = XCUIApplication()
         app.buttons["URLBar.activateButton"].tap()
-        app.textFields["URLBar.urlText"].typeText("people-mozilla.org\n")
-        waitForValueContains(element: app.textFields["URLBar.urlText"], value: "https://people-mozilla.org/")
+        app.textFields["URLBar.urlText"].typeText("mozilla.org\n")
+        waitForValueContains(element: app.textFields["URLBar.urlText"], value: "https://www.mozilla.org/")
         app.buttons["BrowserToolset.sendButton"].tap()
         snapshot("12ShareMenu")
     }
