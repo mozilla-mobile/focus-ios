@@ -142,7 +142,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(_ application: UIApplication) {
         splashView?.animateHidden(true, duration: 0.25)
     }
-    
+
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        return true
+    }
+
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Start a new telemetry session and record an event indicating that we have entered the
         // foreground. This only gets called for subsequent foregrounds after the initial launch.
