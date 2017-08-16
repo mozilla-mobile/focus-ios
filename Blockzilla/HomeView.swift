@@ -10,6 +10,9 @@ protocol HomeViewDelegate: class {
 
 class HomeView: UIView {
     weak var delegate: HomeViewDelegate?
+    let description1 = UILabel()
+    let description2 = UILabel()
+    let settingsButton = UIButton()
 
     init() {
         super.init(frame: CGRect.zero)
@@ -18,7 +21,6 @@ class HomeView: UIView {
         let textLogo = UIImageView(image: wordmark)
         addSubview(textLogo)
 
-        let description1 = UILabel()
         description1.textColor = .white
         description1.font = UIConstants.fonts.homeLabel
         description1.textAlignment = .center
@@ -26,7 +28,6 @@ class HomeView: UIView {
         description1.numberOfLines = 0
         addSubview(description1)
 
-        let description2 = UILabel()
         description2.textColor = .white
         description2.font = UIConstants.fonts.homeLabel
         description2.textAlignment = .center
@@ -34,7 +35,6 @@ class HomeView: UIView {
         description2.numberOfLines = 0
         addSubview(description2)
 
-        let settingsButton = UIButton()
         settingsButton.setImage(#imageLiteral(resourceName: "icon_settings"), for: .normal)
         settingsButton.contentEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         settingsButton.addTarget(self, action: #selector(didPressSettings), for: .touchUpInside)
@@ -49,7 +49,7 @@ class HomeView: UIView {
 
         description1.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
-            make.top.equalTo(snp.centerY).offset(50)
+            make.top.equalTo(textLogo.snp.bottom).offset(30)
         }
 
         description2.snp.makeConstraints { make in
