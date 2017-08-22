@@ -160,6 +160,8 @@ class BrowserViewController: UIViewController {
 
         }
         topURLBarConstraints.forEach { $0.deactivate() }
+
+        urlBar.becomeFirstResponder()
     }
 
     fileprivate func resetBrowser() {
