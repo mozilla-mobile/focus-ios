@@ -14,10 +14,8 @@ protocol OverlayViewDelegate: class {
 
 class OverlayView: UIView {
     weak var delegate: OverlayViewDelegate?
-    fileprivate let settingsButton = UIButton()
     private let searchButton = InsetButton()
     private let searchBorder = UIView()
-    private var bottomConstraint: Constraint!
     private var presented = false
     private var searchQuery = ""
     private let copyButton = InsetButton()
@@ -67,17 +65,6 @@ class OverlayView: UIView {
             make.top.equalTo(copyButton.snp.bottom)
             make.height.equalTo(1)
         }
-        
-        settingsButton.setImage(#imageLiteral(resourceName: "icon_settings"), for: .normal)
-        settingsButton.contentEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
-        settingsButton.addTarget(self, action: #selector(didPressSettings), for: .touchUpInside)
-        settingsButton.accessibilityLabel = UIConstants.strings.browserSettings
-        addSubview(settingsButton)
-        
-        settingsButton.snp.makeConstraints { make in
-            make.trailing.equalTo(self)
-            bottomConstraint = make.bottom.equalTo(self).constraint
-        }
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -118,7 +105,7 @@ class OverlayView: UIView {
         searchQuery = query
         let query = query.trimmingCharacters(in: .whitespaces)
         
-        if let pasteBoard = UIPasteboard.general.string {
+        if false, let pasteBoard = UIPasteboard.general.string {
             if let pasteURL = URL(string: pasteBoard), pasteURL.isWebPage() {
                 let attributedURL = NSAttributedString(string: pasteURL.absoluteString, attributes: [NSForegroundColorAttributeName: UIColor.white])
                     copyButton.setAttributedTitle(attributedURL, for: .normal)
@@ -138,6 +125,7 @@ class OverlayView: UIView {
         updateCopyConstraint()
     }
     fileprivate func updateCopyConstraint() {
+        return
         if UIPasteboard.general.string != nil {
             copyButton.isHidden = false
             copyBorder.isHidden = false
@@ -157,14 +145,6 @@ class OverlayView: UIView {
             copyButton.isHidden = true
             copyBorder.isHidden = true
         }
-    }
-
-    fileprivate func animateWithKeyboard(keyboardState: KeyboardState) {
-        UIView.animate(withDuration: keyboardState.animationDuration, animations: {
-            let keyboardHeight = keyboardState.intersectionHeightForView(view: self)
-            self.bottomConstraint.update(offset: -keyboardHeight)
-            self.layoutIfNeeded()
-        })
     }
 
     @objc private func didPressSearch() {
@@ -195,8 +175,8 @@ class OverlayView: UIView {
     func present() {
         setSearchQuery(query: "", animated: false)
         self.isUserInteractionEnabled = false
-        copyButton.isHidden = false
-        copyBorder.isHidden = false
+        copyButton.isHidden = true
+        copyBorder.isHidden = true
         animateHidden(false, duration: UIConstants.layout.overlayAnimationDuration) {
             self.isUserInteractionEnabled = true
         }
@@ -213,14 +193,8 @@ extension URL {
 }
 
 extension OverlayView: KeyboardHelperDelegate {
-    public func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
-        animateWithKeyboard(keyboardState: state)
-    }
-
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
-        animateWithKeyboard(keyboardState: state)
-    }
-
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {}
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {}
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {}
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {}
 }
