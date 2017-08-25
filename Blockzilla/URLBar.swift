@@ -31,7 +31,7 @@ class URLBar: UIView {
 
     private let toolset = BrowserToolset()
     private let urlTextContainer = UIView()
-    private let urlText = URLTextField()
+    fileprivate let urlText = URLTextField()
     private let truncatedUrlText = UITextView()
     private let lockIcon = UIImageView(image: #imageLiteral(resourceName: "icon_https"))
     private let smallLockIcon = UIImageView(image: #imageLiteral(resourceName: "icon_https_small"))
@@ -588,8 +588,9 @@ extension URLBar: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
         // shouldBeginEditing is fired out-of-band from the touch event, so check the user interaction
         // flag here to make sure it hasn't changed.
-        guard isUserInteractionEnabled else { return false }
-
+        guard let urlText = urlText.text, isUserInteractionEnabled && urlText.characters.count > 0 else { return false }
+        print(urlText)
+        print("should begin editing")
         present()
         autocompleteTextField.highlightAll()
         return true
