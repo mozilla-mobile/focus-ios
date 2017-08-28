@@ -20,7 +20,7 @@ class SearchProviderTest: BaseTestCase {
     func testSearchProvider() {
 		let app = XCUIApplication()
         // Removing Twitter since it seems to be blocked from BB devices
-		let searchEngines = ["Google", "Yahoo", "DuckDuckGo", "Wikipedia", "Amazon.com"]
+		let searchEngines = ["Google", "Yahoo", "DuckDuckGo", "Wikipedia", "Amazon.com", "Startpage"]
 		
 		for searchEngine in searchEngines {
 			changeSearchProvider(provider: searchEngine)
@@ -56,7 +56,7 @@ class SearchProviderTest: BaseTestCase {
 		switch provider {
 			case "Google":
 				waitForValueContains(element: urlbarUrltextTextField, value: "https://www.google")
-				waitForValueContains(element: app.otherElements["Search"], value: searchWord)
+//				waitForValueContains(element: app.otherElements["Search"], value: searchWord)
 		    case "Yahoo":
 				waitForValueContains(element: urlbarUrltextTextField, value: "https://search.yahoo.com")
                 if !iPad() {
@@ -72,6 +72,8 @@ class SearchProviderTest: BaseTestCase {
             case "Amazon.com":
 				waitForValueContains(element: urlbarUrltextTextField, value: "https://www.amazon")
 				waitForValueContains(element: app.textFields["Search"], value: searchWord)
+            case "Startpage":
+                waitForValueContains(element: urlbarUrltextTextField, value: "https://www.startpage.com/do/dsearch?query=mozilla")
 			default:
 				XCTFail("Invalid Search Provider")
 		}
