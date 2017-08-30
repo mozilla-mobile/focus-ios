@@ -44,7 +44,8 @@ class AsianLocaleTest: BaseTestCase {
 		searchOrEnterAddressTextField.typeText(searchWord)
 		waitforExistence(element: app.buttons["Search for " + searchWord])
 		app.buttons["Search for " + searchWord].tap()
-		
+		waitforExistence(element: app.webViews.otherElements["Search"])
+        
 		// Check the correct site is reached
 		waitForValueContains(element: app.webViews.otherElements["Search"], value: searchWord)
 		

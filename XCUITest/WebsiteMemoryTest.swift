@@ -24,6 +24,7 @@ class WebsiteMemoryTest: BaseTestCase {
         // Enter 'google' on the search field to go to google site
         searchOrEnterAddressTextField.typeText("google\r")
         waitForValueContains(element: searchOrEnterAddressTextField, value: "https://www.google")
+        waitforExistence(element: app.webViews.otherElements["Search"])
         
         // type 'mozilla' (typing doesn't work cleanly with UIWebview, so had to paste from clipboard)
         let searchElement = app.webViews.otherElements["Search"]
@@ -41,7 +42,8 @@ class WebsiteMemoryTest: BaseTestCase {
         waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
         searchOrEnterAddressTextField.typeText("google\r")
         waitForValueContains(element: searchOrEnterAddressTextField, value: "https://www.google")
-        waitforExistence(element: app.webViews.otherElements["Search"])
+        waitforExistence(element: app.otherElements["Search"])
+                
         app.webViews.otherElements["Search"].tap()
         
         // check the world 'mozilla' does not appear in the list of autocomplete
