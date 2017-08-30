@@ -26,7 +26,7 @@ class WebsiteMemoryTest: BaseTestCase {
         waitForValueContains(element: searchOrEnterAddressTextField, value: "https://www.google")
         
         // type 'mozilla' (typing doesn't work cleanly with UIWebview, so had to paste from clipboard)
-        let searchElement = app.otherElements["Search"]
+        let searchElement = app.webViews.otherElements["Search"]
         searchElement.tap()
         searchElement.press(forDuration: 1.5)
         waitforExistence(element: app.menuItems["Paste"])
@@ -41,11 +41,11 @@ class WebsiteMemoryTest: BaseTestCase {
         waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
         searchOrEnterAddressTextField.typeText("google\r")
         waitForValueContains(element: searchOrEnterAddressTextField, value: "https://www.google")
-        waitforExistence(element: app.otherElements["Search"])
-        app.otherElements["Search"].tap()
+        waitforExistence(element: app.webViews.otherElements["Search"])
+        app.webViews.otherElements["Search"].tap()
         
         // check the world 'mozilla' does not appear in the list of autocomplete
         sleep(1) // give time
-        waitforNoExistence(element: app.otherElements["mozilla"])
+        waitforNoExistence(element: app.webViews.otherElements["mozilla"])
     }    
 }

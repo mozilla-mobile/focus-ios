@@ -26,7 +26,6 @@ class AsianLocaleTest: BaseTestCase {
 		app.tables.staticTexts["Google"].tap()
 		app.navigationBars["Settings"].children(matching: .button).matching(identifier: "Back").element(boundBy: 0).tap()
 		
-		
 		// Enter 'mozilla' on the search field
 		search(searchWord: "모질라")
 		search(searchWord: "モジラ")
@@ -47,7 +46,7 @@ class AsianLocaleTest: BaseTestCase {
 		app.buttons["Search for " + searchWord].tap()
 		
 		// Check the correct site is reached
-		waitForValueContains(element: app.otherElements["Search"], value: searchWord)
+		waitForValueContains(element: app.webViews.otherElements["Search"], value: searchWord)
 		
 		// Erase the history
 		app.buttons["ERASE"].tap()

@@ -56,7 +56,7 @@ class SearchProviderTest: BaseTestCase {
 		switch provider {
 			case "Google":
 				waitForValueContains(element: urlbarUrltextTextField, value: "https://www.google")
-				waitForValueContains(element: app.otherElements["Search"], value: searchWord)
+				waitForValueContains(element: app.webViews.otherElements["Search"], value: searchWord)
 		    case "Yahoo":
 				waitForValueContains(element: urlbarUrltextTextField, value: "https://search.yahoo.com")
                 if !iPad() {
