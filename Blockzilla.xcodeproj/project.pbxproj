@@ -1349,14 +1349,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		A89766DC1F57DCA9008183C5 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A89766DB1F57DCA9008183C5 /* es-AR */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		D343DCC41C44356500D7EEE8 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
