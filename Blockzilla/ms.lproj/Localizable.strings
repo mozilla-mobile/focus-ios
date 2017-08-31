@@ -38,7 +38,7 @@
 "About.topLabel" = "%@ meletakkan anda dalam kawalan.";
 
 /* Accessibility label for the back button */
-"Browser.backLabel" = "Kembali";
+"Browser.backLabel" = "Undur";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Hadapan";
