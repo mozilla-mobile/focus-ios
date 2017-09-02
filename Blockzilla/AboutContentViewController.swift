@@ -10,6 +10,12 @@ import WebKit
 class AboutContentViewController: UIViewController, UIWebViewDelegate {
     private let url: URL
 
+    private lazy var webView : UIWebView = {
+        let view = UIWebView()
+        view.alpha = 0
+        return view
+    }()
+
     init(url: URL) {
         self.url = url
         super.init(nibName: nil, bundle: nil)
@@ -24,16 +30,7 @@ class AboutContentViewController: UIViewController, UIWebViewDelegate {
 
         view.backgroundColor = UIConstants.colors.background
 
-        let webView = UIWebView()
-        webView.alpha = 0
-        view.addSubview(webView)
-
-        webView.snp.remakeConstraints { make in
-            make.edges.equalTo(self.view)
-        }
-
-        webView.delegate = self
-        webView.loadRequest(URLRequest(url: url))
+        configureWebView()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -51,6 +48,17 @@ class AboutContentViewController: UIViewController, UIWebViewDelegate {
 
     func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
         revealWebView(webView)
+    }
+
+    private func configureWebView() {
+        view.addSubview(webView)
+
+        webView.snp.remakeConstraints { make in
+            make.edges.equalTo(self.view)
+        }
+
+        webView.delegate = self
+        webView.loadRequest(URLRequest(url: url))
     }
 
     private func revealWebView(_ webView: UIWebView) {
