@@ -233,10 +233,10 @@ extension Browser: UIWebViewDelegate {
     func webViewDidFinishLoad(_ webView: UIWebView) {
         if !webView.isLoading, isLoading {
             isLoading = false
+            webView.stringByEvaluatingJavaScript(from: contextMenuJs)
             delegate?.browserDidFinishNavigation(self)
         }
 
-        webView.stringByEvaluatingJavaScript(from: contextMenuJs)
         updatePostLoad()
     }
 
