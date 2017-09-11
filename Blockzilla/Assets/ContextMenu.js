@@ -164,6 +164,7 @@ addEventListener("touchstart", function(event) {
       clearTimeout(longPressTimeout);
       longPressTimeout = null;
       longPressTimeout = setTimeout(function() {
+        if (longPressTimeout == null) { return }
         touchHandled = true;
         cancelClick = true;
         cancel();
