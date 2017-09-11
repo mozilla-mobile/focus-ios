@@ -162,6 +162,7 @@ addEventListener("touchstart", function(event) {
       touchDownY = touch.screenY;
 
       longPressTimeout = setTimeout(function() {
+        if (longPressTimeout == null) { return }
         touchHandled = true;
         cancelClick = true;
         cancel();
