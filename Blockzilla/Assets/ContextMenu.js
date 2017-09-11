@@ -160,7 +160,7 @@ addEventListener("touchstart", function(event) {
       var touch = event.touches[0];
       touchDownX = touch.screenX;
       touchDownY = touch.screenY;
-     
+
       clearTimeout(longPressTimeout);
       longPressTimeout = null;
       longPressTimeout = setTimeout(function() {
@@ -179,7 +179,7 @@ addEventListener("touchstart", function(event) {
         }
 
         window.location = "focusmessage://" + url;
-      }, 500);
+      }, 1000);
       window.location = "focusmessage://?handled=true";
     }
   });
