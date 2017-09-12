@@ -233,7 +233,8 @@ extension Browser: UIWebViewDelegate {
     func webViewDidFinishLoad(_ webView: UIWebView) {
         if !webView.isLoading, isLoading {
             isLoading = false
-            webView.stringByEvaluatingJavaScript(from: contextMenuJs)
+            // Disable Save/Copy Image Until Further Notice
+            // webView.stringByEvaluatingJavaScript(from: contextMenuJs)
             delegate?.browserDidFinishNavigation(self)
         }
 
