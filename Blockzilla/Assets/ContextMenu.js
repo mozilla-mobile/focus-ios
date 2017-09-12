@@ -7,18 +7,20 @@
 
 var MAX_RADIUS = 9;
 
-var longPressTimeout = null;
+var longPressTimeouts = [];
 var touchDownX = 0;
 var touchDownY = 0;
 var highlightDiv = null;
 var touchHandled = false;
 var cancelClick = false;
 var linkElement = null;
+var shouldOpenContextMenu = false;
 
 function cancel() {
-  if (longPressTimeout) {
-    clearTimeout(longPressTimeout);
-    longPressTimeout = null;
+  shouldOpenContextMenu = false;
+  if (longPressTimeouts.length > 0) {
+    longPressTimeouts.forEach(clearTimeout)
+    longPressTimeouts = [];
 
     if (highlightDiv) {
       document.body.removeChild(highlightDiv);
@@ -73,7 +75,7 @@ function handleClick(event) {
 }
 
 function handleTouchMove(event) {
-  if (longPressTimeout) {
+  if (longPressTimeouts.length > 0) {
     var {
       screenX,
       screenY
@@ -143,7 +145,7 @@ addEventListener("touchstart", function(event) {
         // the highlight flashing twice.
         var linkElement = element;
         setTimeout(function() {
-          if (longPressTimeout) {
+          if (longPressTimeouts.length > 0) {
             createHighlightOverlay(linkElement);
           }
         }, 100);
@@ -161,10 +163,15 @@ addEventListener("touchstart", function(event) {
       touchDownX = touch.screenX;
       touchDownY = touch.screenY;
 
-      clearTimeout(longPressTimeout);
-      longPressTimeout = null;
-      longPressTimeout = setTimeout(function() {
-        if (longPressTimeout == null) { return }
+      if (longPressTimeouts) {
+        longPressTimeouts.forEach(clearTimeout);
+        longPressTimeouts = [];
+      }
+
+      var temp = {}
+      shouldOpenContextMenu = true;
+      var longPressTimeout = setTimeout(function() {
+        if (!shouldOpenContextMenu) { return; }
         touchHandled = true;
         cancelClick = true;
         cancel();
@@ -179,7 +186,9 @@ addEventListener("touchstart", function(event) {
         }
 
         window.location = "focusmessage://" + url;
-      }, 1000);
+      }, 500);
+      temp.timeoutId = longPressTimeout
+      longPressTimeouts.push(longPressTimeout);
       window.location = "focusmessage://?handled=true";
     }
   });
