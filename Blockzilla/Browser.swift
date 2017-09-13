@@ -232,11 +232,11 @@ extension Browser: UIWebViewDelegate {
 
     func webViewDidFinishLoad(_ webView: UIWebView) {
         if !webView.isLoading, isLoading {
+            webView.stringByEvaluatingJavaScript(from: contextMenuJs)
             isLoading = false
             delegate?.browserDidFinishNavigation(self)
         }
 
-        webView.stringByEvaluatingJavaScript(from: contextMenuJs)
         updatePostLoad()
     }
 
