@@ -52,7 +52,7 @@
   function ImageFinder() {
     function find(element) {
       var element = element;
-      data = {}
+      var data = {}
       do {
         if (!data.link && element.localName === "a") {
           data.link = element.href;
@@ -114,8 +114,10 @@
         _cancelClick = false;
       }
 
-      _linkElement.removeEventListener("click", handleClick);
-      _linkElement = null;
+      if (_linkElement) {
+        _linkElement.removeEventListener("click", handleClick);
+        _linkElement = null;
+      }
     }
 
     function handleTouchEnd(event) {
@@ -174,7 +176,9 @@
       element.addEventListener("touchmove", handleTouchMove);
 
       _linkElement = data.linkElement;
-      _linkElement.addEventListener("click", handleClick);
+      if (_linkElement) {
+        _linkElement.addEventListener("click", handleClick);
+      }
 
       _longPressTimeout = setTimeout(function() {
         _cancelClick = true;
