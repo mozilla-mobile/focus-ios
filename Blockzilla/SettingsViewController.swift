@@ -112,6 +112,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         for i in 1..<(indexPath as NSIndexPath).section {
             index += tableView.numberOfRows(inSection: i)
         }
+        
         return toggles[index]
     }
 
@@ -185,6 +186,15 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             let backgroundColorView = UIView()
             backgroundColorView.backgroundColor = UIConstants.colors.cellSelected
             cell.selectedBackgroundView = backgroundColorView
+        case 5:
+            cell = UITableViewCell(style: .subtitle, reuseIdentifier: "autocomplete")
+            cell.textLabel?.text = UIConstants.strings.settingsAutocomplete
+            cell.accessoryType = .disclosureIndicator
+            cell.accessibilityIdentifier = "SettingsViewController.autocompleteCell"
+            
+            let backgroundColorView = UIView()
+            backgroundColorView.backgroundColor = UIConstants.colors.cellSelected
+            cell.selectedBackgroundView = backgroundColorView
         default:
             if indexPath.section == 4 && indexPath.row == 1 {
                 cell = UITableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
@@ -216,7 +226,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case 1: return 1 // Integration.
         case 2: return 4 // Privacy.
         case 3: return 1 // Performance.
-        case 4: return 2 // Mozilla.
+        case 4: return 1 // Mozilla.
+        case 5: return 1 // Assistance
         default:
             assertionFailure("Invalid section")
             return 0
@@ -224,12 +235,14 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 5
+        return 6
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         // Height for the Search Engine and Learn More row.
-        if indexPath.section == 0 || (indexPath.section == 4 && indexPath.row == 1) {
+        if indexPath.section == 0 ||
+            indexPath.section == 5 ||
+            (indexPath.section == 4 && indexPath.row == 1) {
             return 44
         }
 
@@ -267,6 +280,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case 2: labelText = UIConstants.strings.toggleSectionPrivacy
         case 3: labelText = UIConstants.strings.toggleSectionPerformance
         case 4: labelText = UIConstants.strings.toggleSectionMozilla
+        case 5: labelText = UIConstants.strings.toggleSectionAssistance
         default: return nil
         }
 
@@ -321,6 +335,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             if indexPath.row == 1 {
                 aboutClicked()
             }
+        case 5:
+            let autcompleteSettingViewController = AutocompleteSettingViewController(enabled: Settings.getToggle(.enableDomainAutocomplete), domains: Settings.getCustomDomainSetting(), delegate: self)
+            navigationController?.pushViewController(autcompleteSettingViewController, animated: true)
         default: break
         }
     }
@@ -393,13 +410,20 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 }
 
+extension SettingsViewController: AutocompleteSettingDelegate {
+    func autocompleteSettingViewController(_ autoCompleteSettingViewController: AutocompleteSettingViewController, enabled: Bool, didUpdateDomains domains: [String]) {
+        Settings.setCustomDomainSetting(domains: domains)
+    }
+
+}
+
 extension SettingsViewController: SearchSettingsViewControllerDelegate {
     func searchSettingsViewController(_ searchSettingsViewController: SearchSettingsViewController, didSelectEngine engine: SearchEngine) {
         tableView.cellForRow(at: IndexPath(row: 0, section: 0))?.textLabel?.text = engine.name
     }
 }
 
-private class PaddedSwitch: UIView {
+class PaddedSwitch: UIView {
     private static let Padding: CGFloat = 8
 
     init(switchView: UISwitch) {
