@@ -46,12 +46,8 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         view.backgroundColor = UIConstants.colors.background
         
         title = UIConstants.strings.settingsAutocomplete
-        
-        let navigationBar = navigationController!.navigationBar
-        navigationBar.isTranslucent = false
-        navigationBar.barTintColor = UIConstants.colors.background
-        navigationBar.tintColor = UIConstants.colors.navigationButton
-        navigationBar.titleTextAttributes = [.foregroundColor: UIConstants.colors.navigationTitle]
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.edit, style: .plain, target: self, action: #selector(AutocompleteSettingViewController.toggleEditing))
 
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
@@ -62,37 +58,17 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         tableView.delegate = self
         tableView.backgroundColor = UIConstants.colors.background
         tableView.layoutMargins = UIEdgeInsets.zero
+        tableView.separatorColor = UIConstants.colors.settingsSeparator
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let labelText = section == 0 ? " " : UIConstants.strings.settingsCustomDomain
         
         let cell = UITableViewCell()
-        cell.textLabel?.text = " "
+        cell.textLabel?.text = labelText
+        cell.textLabel?.textColor = UIConstants.colors.tableSectionHeader
+        cell.textLabel?.font = UIConstants.fonts.tableSectionHeader
         cell.backgroundColor = UIConstants.colors.background
-        
-        let label = UILabel()
-        label.text = labelText
-        label.textColor = UIConstants.colors.tableSectionHeader
-        label.font = UIConstants.fonts.tableSectionHeader
-        cell.contentView.addSubview(label)
-        
-        label.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(cell.textLabel!)
-            make.centerY.equalTo(cell.textLabel!).offset(3)
-        }
-        
-        // Hack to cover header separator line
-        let footer = UIView()
-        footer.backgroundColor = UIConstants.colors.background
-        
-        cell.addSubview(footer)
-        
-        footer.snp.makeConstraints { make in
-            make.height.equalTo(1)
-            make.bottom.equalToSuperview().offset(1)
-            make.leading.trailing.equalToSuperview()
-        }
         
         return cell
     }
@@ -101,11 +77,15 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         return 30
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 44
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell
         if (indexPath.section == 0) {
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: "enableCell")
-            cell.textLabel?.text = "Enable Domain Autocomplete"
+            cell.textLabel?.text = UIConstants.strings.settingsEnableAutocomplete
             
             let toggle = UISwitch()
             toggle.addTarget(self, action: #selector(toggleSwitched(_:)), for: .valueChanged)
@@ -119,18 +99,13 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             } else {
                 cell = UITableViewCell(style: .subtitle, reuseIdentifier: "newDomainCell")
                 cell.accessoryType = .disclosureIndicator
-                cell.textLabel?.text = "Add Domain"
+                cell.textLabel?.text = UIConstants.strings.settingsAddDomain
             }
         }
-        
-        let backgroundColorView = UIView()
-        backgroundColorView.backgroundColor = UIConstants.colors.cellSelected
-        cell.selectedBackgroundView = backgroundColorView
         
         cell.backgroundColor = UIConstants.colors.background
         cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
         cell.layoutMargins = UIEdgeInsets.zero
-        cell.detailTextLabel?.textColor = UIConstants.colors.settingsDetailLabel
         
         return cell
     }
@@ -149,10 +124,35 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         return nil
     }
     
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if indexPath.section == 0 || !tableView.isEditing {
+            return false
+        }
+        
+        return indexPath.row < domains.count
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            tableView.beginUpdates()
+            domains.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            tableView.endUpdates()
+        }
+    }
+    
     @objc private func toggleSwitched(_ sender: UISwitch) {
         enabled = sender.isOn
         Settings.set(enabled, forToggle: .enableDomainAutocomplete)
         tableView.reloadData()
+    }
+    
+    @objc func toggleEditing() {
+        navigationItem.rightBarButtonItem?.title = tableView.isEditing ? UIConstants.strings.edit : UIConstants.strings.done
+        if tableView.isEditing {
+            delegate.autocompleteSettingViewController(self, enabled: enabled, didUpdateDomains: domains)
+        }
+        tableView.setEditing(!tableView.isEditing, animated: true)
     }
 }
 

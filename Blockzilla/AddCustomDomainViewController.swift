@@ -23,7 +23,7 @@ class AddCustomDomainViewController: UIViewController, UITextViewDelegate {
     }
     
     override func viewDidLoad() {
-        title = UIConstants.strings.settingsCustomDomain
+        title = UIConstants.strings.settingsAddDomain
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(AddCustomDomainViewController.cancelTapped))
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(AddCustomDomainViewController.doneTapped))
         
