@@ -24,7 +24,7 @@ class BlockerEnabledDetector: NSObject {
 }
 
 private class BlockerEnabledDetector9: BlockerEnabledDetector, SFSafariViewControllerDelegate {
-    private let server = GCDWebServer()!
+    private let server = GCDWebServer()
 
     private var svc: SFSafariViewController!
     private var callback: ((Bool) -> ())!
@@ -33,7 +33,7 @@ private class BlockerEnabledDetector9: BlockerEnabledDetector, SFSafariViewContr
     override init() {
         super.init()
 
-        server.addHandler(forMethod: "GET", path: "/enabled-detector", request: GCDWebServerRequest.self) { [weak self] request -> GCDWebServerResponse! in
+        server?.addHandler(forMethod: "GET", path: "/enabled-detector", request: GCDWebServerRequest.self) { [weak self] request -> GCDWebServerResponse! in
             if let loadedBlockedPage = request?.query["blocked"] as? String , loadedBlockedPage == "1" {
                 // Second page loaded, so we aren't blocked.
                 self?.enabled = false
@@ -46,7 +46,7 @@ private class BlockerEnabledDetector9: BlockerEnabledDetector, SFSafariViewContr
             return GCDWebServerDataResponse(html: "<html><head><meta http-equiv=\"refresh\" content=\"0; url=/enabled-detector?blocked=1\"></head></html>")
         }
 
-        server.start(withPort: 0, bonjourName: nil)
+        server?.start(withPort: 0, bonjourName: nil)
     }
 
     override func detectEnabled(_ parentView: UIView, callback: @escaping EnabledCallback) {
@@ -55,7 +55,7 @@ private class BlockerEnabledDetector9: BlockerEnabledDetector, SFSafariViewContr
         enabled = true
         self.callback = callback
 
-        let detectURL = URL(string: "http://localhost:\(server.port)/enabled-detector")!
+        let detectURL = URL(string: "http://localhost:\(server?.port)/enabled-detector")!
         svc = SFSafariViewController(url: detectURL)
         svc.delegate = self
         parentView.addSubview(svc.view)
@@ -74,7 +74,7 @@ private class BlockerEnabledDetector9: BlockerEnabledDetector, SFSafariViewContr
     }
 
     deinit {
-        server.stop()
+        server?.stop()
     }
 }
 
