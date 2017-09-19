@@ -8,7 +8,10 @@ import SnapKit
 import Telemetry
 
 class BrowserViewController: UIViewController {
+    private let webViewController = WebViewController()
+
     fileprivate var browser = Browser()
+    fileprivate let webViewContainer = UIView(frame: .zero)
     fileprivate let browserToolbar = BrowserToolbar()
     fileprivate var homeView: HomeView?
     fileprivate let overlayView = OverlayView()
@@ -67,9 +70,9 @@ class BrowserViewController: UIViewController {
 
         view.addSubview(homeViewContainer)
 
-        browser.view.isHidden = true
-        browser.delegate = self
-        view.addSubview(browser.view)
+        webViewContainer.isHidden = true
+        webViewContainer.backgroundColor = .yellow
+        view.addSubview(webViewContainer)
 
         urlBarContainer.alpha = 0
         view.addSubview(urlBarContainer)
@@ -108,7 +111,7 @@ class BrowserViewController: UIViewController {
             homeViewBottomConstraint.activate()
         }
 
-        browser.view.snp.makeConstraints { make in
+        webViewContainer.snp.makeConstraints { make in
             make.top.equalTo(urlBarContainer.snp.bottom).priority(500)
             make.bottom.equalTo(view).priority(500)
             browserBottomConstraint = make.bottom.equalTo(browserToolbar.snp.top).priority(1000).constraint
@@ -127,6 +130,7 @@ class BrowserViewController: UIViewController {
 
         showsToolsetInURLBar = UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.orientation.isLandscape
 
+        containWebView()
         createHomeView()
         createURLBar()
 
@@ -151,6 +155,16 @@ class BrowserViewController: UIViewController {
         }
 
         super.viewWillAppear(animated)
+    }
+    
+    private func containWebView() {
+        addChildViewController(webViewController)
+        webViewContainer.addSubview(webViewController.view)
+        webViewController.didMove(toParentViewController: self)
+        
+        webViewController.view.snp.makeConstraints { make in
+            make.edges.equalTo(webViewContainer.snp.edges)
+        }
     }
 
     private func createHomeView() {
@@ -210,7 +224,7 @@ class BrowserViewController: UIViewController {
 
         // Reset the views. These changes won't be immediately visible since they'll be under the screenshot.
         browser.reset()
-        browser.view.isHidden = true
+        webViewContainer.isHidden = true
         browserToolbar.isHidden = true
         urlBar.removeFromSuperview()
         urlBarContainer.alpha = 0
@@ -271,8 +285,8 @@ class BrowserViewController: UIViewController {
         // If this is the first navigation, show the browser and the toolbar.
         guard isViewLoaded else { initialUrl = url; return }
 
-        if browser.view.isHidden {
-            browser.view.isHidden = false
+        if webViewContainer.isHidden {
+            webViewContainer.isHidden = false
             homeView?.removeFromSuperview()
             homeView = nil
             urlBar.inBrowsingMode = true
@@ -282,7 +296,7 @@ class BrowserViewController: UIViewController {
             }
         }
 
-        browser.loadRequest(URLRequest(url: url))
+        webViewController.load(URLRequest(url: url))
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
