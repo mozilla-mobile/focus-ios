@@ -64,6 +64,7 @@ class BrowserViewController: UIViewController {
         super.viewDidLoad()
 
         photoManager.delegate = self
+        webViewController.delegate = self
 
         let background = GradientBackgroundView(alpha: 0.7, startPoint: CGPoint.zero, endPoint: CGPoint(x: 1, y: 1))
         view.addSubview(background)
@@ -156,12 +157,12 @@ class BrowserViewController: UIViewController {
 
         super.viewWillAppear(animated)
     }
-    
+
     private func containWebView() {
         addChildViewController(webViewController)
         webViewContainer.addSubview(webViewController.view)
         webViewController.didMove(toParentViewController: self)
-        
+
         webViewController.view.snp.makeConstraints { make in
             make.edges.equalTo(webViewContainer.snp.edges)
         }
@@ -567,7 +568,7 @@ extension BrowserViewController: BrowserDelegate {
         guard let scrollView = browser.scrollView else { return }
 
         scrollBarState = .animating
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: { 
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: {
             self.urlBar.collapseUrlBar(expandAlpha: 1, collapseAlpha: 0)
             self.urlBarTopConstraint.update(offset: 0)
             self.toolbarBottomConstraint.update(inset: 0)
@@ -583,7 +584,7 @@ extension BrowserViewController: BrowserDelegate {
         guard let scrollView = browser.scrollView else { return }
 
         scrollBarState = .animating
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: { 
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: {
             self.urlBar.collapseUrlBar(expandAlpha: 0, collapseAlpha: 1)
             self.urlBarTopConstraint.update(offset: -UIConstants.layout.urlBarHeight + UIConstants.layout.collapsedUrlBarHeight)
             self.toolbarBottomConstraint.update(offset: UIConstants.layout.browserToolbarHeight)
@@ -624,6 +625,74 @@ extension BrowserViewController: BrowserDelegate {
     }
 }
 
+extension BrowserViewController: WebControllerDelegate {
+    func webController(_ controller: WebController, scrollViewWillBeginDragging scrollView: UIScrollView) {
+        lastScrollOffset = scrollView.contentOffset
+        lastScrollTranslation = scrollView.panGestureRecognizer.translation(in: scrollView)
+    }
+
+    func webController(_ controller: WebController, scrollViewDidEndDragging scrollView: UIScrollView) {
+        snapToolbars(scrollView: scrollView)
+    }
+
+    func webController(_ controller: WebController, scrollViewDidScroll scrollView: UIScrollView) {
+        let translation = scrollView.panGestureRecognizer.translation(in: scrollView)
+        let isDragging = scrollView.panGestureRecognizer.state != .possible
+
+        // This will be 0 if we're moving but not dragging (i.e., gliding after dragging).
+        let dragDelta = translation.y - lastScrollTranslation.y
+
+        // This will match dragDelta unless the URL bar is transitioning.
+        let offsetDelta = scrollView.contentOffset.y - lastScrollOffset.y
+
+        lastScrollOffset = scrollView.contentOffset
+        lastScrollTranslation = translation
+
+        guard scrollBarState != .animating, !scrollView.isZooming else { return }
+
+        guard scrollView.contentOffset.y + scrollView.frame.height < scrollView.contentSize.height && (scrollView.contentOffset.y > 0 || scrollBarOffsetAlpha > 0) else {
+            // We're overscrolling, so don't do anything.
+            return
+        }
+
+        if !isDragging && offsetDelta < 0 {
+            // We're gliding up after dragging, so fully show the toolbars.
+            showToolbars()
+            return
+        }
+
+        let pageExtendsBeyondScrollView = scrollView.frame.height + UIConstants.layout.browserToolbarHeight + UIConstants.layout.urlBarHeight < scrollView.contentSize.height
+        let toolbarsHiddenAtTopOfPage = scrollView.contentOffset.y <= 0 && scrollBarOffsetAlpha > 0
+
+        guard isDragging, (dragDelta < 0 && pageExtendsBeyondScrollView) || toolbarsHiddenAtTopOfPage || scrollBarState == .transitioning else { return }
+
+        let lastOffsetAlpha = scrollBarOffsetAlpha
+        scrollBarOffsetAlpha = (0 ... 1).clamp(scrollBarOffsetAlpha - dragDelta / UIConstants.layout.urlBarHeight)
+        switch scrollBarOffsetAlpha {
+        case 0:
+            scrollBarState = .expanded
+        case 1:
+            scrollBarState = .collapsed
+        default:
+            scrollBarState = .transitioning
+        }
+        self.urlBar.collapseUrlBar(expandAlpha: max(0, (1 - scrollBarOffsetAlpha * 2)), collapseAlpha: max(0, -(1 - scrollBarOffsetAlpha * 2)))
+        self.urlBarTopConstraint.update(offset: -scrollBarOffsetAlpha * (UIConstants.layout.urlBarHeight - UIConstants.layout.collapsedUrlBarHeight))
+        self.toolbarBottomConstraint.update(offset: scrollBarOffsetAlpha * UIConstants.layout.browserToolbarHeight)
+        scrollView.bounds.origin.y += (lastOffsetAlpha - scrollBarOffsetAlpha) * UIConstants.layout.urlBarHeight
+        lastScrollOffset = scrollView.contentOffset
+    }
+
+    func webControllerShouldScrollToTop(_ controller: WebController) -> Bool {
+        guard scrollBarOffsetAlpha == 0 else {
+            showToolbars()
+            return false
+        }
+
+        return true
+    }
+}
+
 extension BrowserViewController: HomeViewDelegate {
     func homeViewDidPressSettings(homeView: HomeView) {
         showSettings()
@@ -654,7 +723,7 @@ extension BrowserViewController: OverlayViewDelegate {
             urlBar.url = browser.url
             return
         }
-        
+
         var url = URIFixup.getURL(entry: text)
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
@@ -675,7 +744,7 @@ extension BrowserViewController: PhotoManagerDelegate {
         let didSucceed = error == nil
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.saveImage, value: nil, extras: ["didSucceed": didSucceed])
-        
+
         guard !didSucceed else { return }
 
         let accessDenied = UIAlertController(title: String(format: UIConstants.strings.photosPermissionTitle, AppInfo.productName), message: UIConstants.strings.photosPermissionDescription, preferredStyle: UIAlertControllerStyle.alert)
