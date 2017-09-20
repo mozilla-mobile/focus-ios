@@ -51,11 +51,12 @@ private class BlockerEnabledDetector9: BlockerEnabledDetector, SFSafariViewContr
 
     override func detectEnabled(_ parentView: UIView, callback: @escaping EnabledCallback) {
         guard self.svc == nil && self.callback == nil else { return }
-
+        guard let server = server else { return }
+        
         enabled = true
         self.callback = callback
 
-        let detectURL = URL(string: "http://localhost:\(server?.port)/enabled-detector")!
+        let detectURL = URL(string: "http://localhost:\(server.port)/enabled-detector")!
         svc = SFSafariViewController(url: detectURL)
         svc.delegate = self
         parentView.addSubview(svc.view)
