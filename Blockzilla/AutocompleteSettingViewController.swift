@@ -48,6 +48,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         title = UIConstants.strings.settingsAutocomplete
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.edit, style: .plain, target: self, action: #selector(AutocompleteSettingViewController.toggleEditing))
+        navigationItem.rightBarButtonItem?.accessibilityIdentifier = "edit"
 
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
@@ -89,16 +90,20 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             
             let toggle = UISwitch()
             toggle.addTarget(self, action: #selector(toggleSwitched(_:)), for: .valueChanged)
+            toggle.accessibilityIdentifier = "toggleAutocompleteSwitch"
             toggle.isOn = enabled
             cell.accessoryView = PaddedSwitch(switchView: toggle)
             
         } else {
             if indexPath.row < domains.count {
+                let domain = domains[indexPath.row]
                 cell = UITableViewCell(style: .subtitle, reuseIdentifier: "domainCell")
-                cell.textLabel?.text = domains[indexPath.row]
+                cell.textLabel?.text = domain
+                cell.accessibilityIdentifier = domain
             } else {
                 cell = UITableViewCell(style: .subtitle, reuseIdentifier: "newDomainCell")
                 cell.accessoryType = .disclosureIndicator
+                cell.accessibilityIdentifier = "newDomainCell"
                 cell.textLabel?.text = UIConstants.strings.settingsAddDomain
             }
         }

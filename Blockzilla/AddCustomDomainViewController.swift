@@ -26,6 +26,7 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
         title = UIConstants.strings.settingsAddDomain
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(AddCustomDomainViewController.cancelTapped))
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(AddCustomDomainViewController.doneTapped))
+        self.navigationItem.rightBarButtonItem?.accessibilityIdentifier = "doneButton"
         
         setupUI()
     }
@@ -52,6 +53,7 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
         textInput.textColor = UIColor.white
         textInput.delegate = self
         textInput.placeholder = "mozilla.org"
+        textInput.accessibilityIdentifier = "urlInput"
         textInput.becomeFirstResponder()
         
         container.snp.makeConstraints { (make) in
