@@ -154,6 +154,7 @@ class URLBar: UIView {
         cancelButton.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         cancelButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         cancelButton.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
+        cancelButton.accessibilityIdentifier = "URLBar.cancelButton"
         addSubview(cancelButton)
 
         deleteButton.isHidden = true
