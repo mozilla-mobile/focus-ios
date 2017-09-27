@@ -59,15 +59,7 @@ class WebViewController: UIViewController, WebController {
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)
-        browserView.allowsBackForwardNavigationGestures = true
-        browserView.allowsLinkPreview = false
-        browserView.scrollView.delegate = self
-        browserView.navigationDelegate = self
-
-        progressObserver = browserView.observe(\WKWebView.estimatedProgress) { (webView, value) in
-            print(webView.estimatedProgress)
-            self.delegate?.webController(self, didUpdateEstimatedProgress: webView.estimatedProgress)
-        }
+        setupWebview()
     }
 
 
@@ -78,12 +70,7 @@ class WebViewController: UIViewController, WebController {
     func reset() {
         browserView.load(URLRequest(url: URL(string: "about:blank")!))
         browserView.navigationDelegate = nil
-
-        browserView = WKWebView()
-        browserView.allowsBackForwardNavigationGestures = true
-        browserView.allowsLinkPreview = false
-        browserView.scrollView.delegate = self
-        browserView.navigationDelegate = self
+        setupWebview()
         self.view = browserView
     }
 
@@ -93,6 +80,18 @@ class WebViewController: UIViewController, WebController {
     func goForward() { browserView.goForward() }
     func reload() { browserView.reload() }
     func stop() { browserView.stopLoading() }
+
+
+    private func setupWebview() {
+        browserView.allowsBackForwardNavigationGestures = true
+        browserView.allowsLinkPreview = false
+        browserView.scrollView.delegate = self
+        browserView.navigationDelegate = self
+        progressObserver = browserView.observe(\WKWebView.estimatedProgress) { (webView, value) in
+            self.delegate?.webController(self, didUpdateEstimatedProgress: webView.estimatedProgress)
+        }
+
+    }
 }
 
 extension WebViewController: UIScrollViewDelegate {
