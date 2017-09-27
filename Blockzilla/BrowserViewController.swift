@@ -703,6 +703,37 @@ extension BrowserViewController: OverlayViewDelegate {
 }
 
 extension BrowserViewController: WebControllerDelegate {
+    func webControllerDidStartNavigation(_ controller: WebController) {
+        urlBar.isLoading = true
+        browserToolbar.isLoading = true
+        urlBarContainer.isBright = false
+        showToolbars()
+    }
+
+    func webControllerDidFinishNavigation(_ controller: WebController) {
+        urlBar.url = browser.url
+        urlBar.isLoading = false
+        browserToolbar.isLoading = false
+        urlBarContainer.isBright = !urlBar.isEditing
+        urlBar.progressBar.hideProgressBar()
+    }
+
+    func webController(_ controller: WebController, didUpdateEstimatedProgress estimatedProgress: Double) {
+        // Don't update progress if the home view is visible. This prevents the centered URL bar
+        // from catching the global progress events.
+        print("updating")
+        guard homeView == nil else { return }
+        print(estimatedProgress)
+
+        if estimatedProgress == 0.1 {
+            urlBar.progressBar.animateHidden(false, duration: UIConstants.layout.progressVisibilityAnimationDuration)
+            urlBar.progressBar.animateGradient()
+            return
+        }
+
+        urlBar.progressBar.setProgress(Float(estimatedProgress), animated: true)
+    }
+
     func webController(_ controller: WebController, scrollViewWillBeginDragging scrollView: UIScrollView) {
         lastScrollOffset = scrollView.contentOffset
         lastScrollTranslation = scrollView.panGestureRecognizer.translation(in: scrollView)

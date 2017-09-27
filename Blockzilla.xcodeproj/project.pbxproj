@@ -866,8 +866,8 @@
 		E4BF2DD51BACE8CA00DA9D68 /* Blockzilla */ = {
 			isa = PBXGroup;
 			children = (
-				B3AFC2B91F7C0B66001AEF38 /* Modules */,
 				B36DB6E01F4CE74500E8604C /* Assets */,
+				B3AFC2B91F7C0B66001AEF38 /* Modules */,
 				D3E54FD41DEFB25B003E1AFF /* SearchPlugins */,
 				D30179C51BCD78E1009AD388 /* Blockzilla-Bridging-Header.h */,
 				D3DA778B1DC2C60E009C114E /* errorPage.html */,

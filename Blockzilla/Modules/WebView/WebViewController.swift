@@ -21,32 +21,63 @@ protocol WebController {
 }
 
 protocol WebControllerDelegate: class {
+    func webControllerDidStartNavigation(_ controller: WebController)
+    func webControllerDidFinishNavigation(_ controller: WebController)
+    func webController(_ controller: WebController, didUpdateEstimatedProgress estimatedProgress: Double)
     func webController(_ controller: WebController, scrollViewWillBeginDragging scrollView: UIScrollView)
     func webController(_ controller: WebController, scrollViewDidEndDragging scrollView: UIScrollView)
     func webController(_ controller: WebController, scrollViewDidScroll scrollView: UIScrollView)
     func webController(_ controller: WebController, stateDidChange state: BrowserState)
     func webControllerShouldScrollToTop(_ controller: WebController) -> Bool
+
+
+//    func browserDidStartNavigation(_ browser: Browser)
+//    func browserDidFinishNavigation(_ browser: Browser)
+//    func browser(_ browser: Browser, didFailNavigationWithError error: Error)
+//    func browser(_ browser: Browser, didUpdateCanGoBack canGoBack: Bool)
+//    func browser(_ browser: Browser, didUpdateCanGoForward canGoForward: Bool)
+//    func browser(_ browser: Browser, didUpdateEstimatedProgress estimatedProgress: Float)
+//    func browser(_ browser: Browser, didUpdateURL url: URL?)
+//    func browser(_ browser: Browser, didLongPressImage path: String?, link: String?)
+//    func browser(_ browser: Browser, shouldStartLoadWith request: URLRequest) -> Bool
+//    func browser(_ browser: Browser, scrollViewWillBeginDragging scrollView: UIScrollView)
+//    func browser(_ browser: Browser, scrollViewDidEndDragging scrollView: UIScrollView)
+//    func browser(_ browser: Browser, scrollViewDidScroll scrollView: UIScrollView)
+//    func browserShouldScrollToTop(_ browser: Browser) -> Bool
 }
+
+
 
 class WebViewController: UIViewController, WebController {
     weak var delegate: WebControllerDelegate?
 
     private let browserView = WKWebView()
+    private var progressObserver: NSKeyValueObservation?
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)
         browserView.allowsBackForwardNavigationGestures = true
         browserView.allowsLinkPreview = false
         browserView.scrollView.delegate = self
+        browserView.navigationDelegate = self
+
+        progressObserver = browserView.observe(\WKWebView.estimatedProgress) { (webView, value) in
+            print(webView.estimatedProgress)
+            self.delegate?.webController(self, didUpdateEstimatedProgress: webView.estimatedProgress)
+        }
     }
+
 
     override func loadView() {
         self.view = browserView
     }
 
-    func load(_ request: URLRequest) {
-        browserView.load(request)
-    }
+    // Browser proxy methods
+    func load(_ request: URLRequest) { browserView.load(request) }
+    func goBack() { browserView.goBack() }
+    func goForward() { browserView.goForward() }
+    func reload() { browserView.reload() }
+    func stop() { browserView.stopLoading() }
 }
 
 extension WebViewController: UIScrollViewDelegate {
@@ -68,7 +99,13 @@ extension WebViewController: UIScrollViewDelegate {
 }
 
 extension WebViewController: WKNavigationDelegate {
+    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
+        delegate?.webControllerDidStartNavigation(self)
+    }
 
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        delegate?.webControllerDidFinishNavigation(self)
+    }
 }
 
 extension WebViewController: BrowserState {
