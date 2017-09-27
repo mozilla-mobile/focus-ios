@@ -350,15 +350,15 @@ class BrowserViewController: UIViewController {
     }
     
     @objc private func reload() {
-        browser.reload()
+        webViewController.reload()
     }
     
     @objc private func goBack() {
-        browser.goBack()
+        webViewController.goBack()
     }
     
     @objc private func goForward() {
-        browser.goForward()
+        webViewController.goForward()
     }
     
     override var keyCommands: [UIKeyCommand]? {
@@ -380,7 +380,7 @@ extension BrowserViewController: URLBarDelegate {
         let text = text.trimmingCharacters(in: .whitespaces)
 
         guard !text.isEmpty else {
-            urlBar.url = browser.url
+            urlBar.url = webViewController.url
             return
         }
 
@@ -400,7 +400,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidDismiss(_ urlBar: URLBar) {
         overlayView.dismiss()
-        urlBarContainer.isBright = !browser.isLoading
+        urlBarContainer.isBright = !webViewController.isLoading
     }
 
     func urlBarDidPressDelete(_ urlBar: URLBar) {
@@ -432,26 +432,26 @@ extension BrowserViewController: URLBarDelegate {
 extension BrowserViewController: BrowserToolsetDelegate {
     func browserToolsetDidPressBack(_ browserToolset: BrowserToolset) {
         urlBar.dismiss()
-        browser.goBack()
+        webViewController.goBack()
     }
 
     func browserToolsetDidPressForward(_ browserToolset: BrowserToolset) {
         urlBar.dismiss()
-        browser.goForward()
+        webViewController.goForward()
     }
 
     func browserToolsetDidPressReload(_ browserToolset: BrowserToolset) {
         urlBar.dismiss()
-        browser.reload()
+        webViewController.reload()
     }
 
     func browserToolsetDidPressStop(_ browserToolset: BrowserToolset) {
         urlBar.dismiss()
-        browser.stop()
+        webViewController.stop()
     }
 
     func browserToolsetDidPressSend(_ browserToolset: BrowserToolset) {
-        guard let url = browser.url else { return }
+        guard let url = webViewController.url else { return }
         present(OpenUtils.buildShareViewController(url: url, anchor: browserToolset.sendButton), animated: true, completion: nil)
     }
 
@@ -596,7 +596,7 @@ extension BrowserViewController: BrowserDelegate {
     }
 
     private func showToolbars() {
-        guard let scrollView = browser.scrollView else { return }
+        let scrollView = webViewController.scrollView
 
         scrollBarState = .animating
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: { 
@@ -612,7 +612,7 @@ extension BrowserViewController: BrowserDelegate {
     }
 
     private func hideToolbars() {
-        guard let scrollView = browser.scrollView else { return }
+        let scrollView = webViewController.scrollView
 
         scrollBarState = .animating
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: { 
@@ -683,7 +683,7 @@ extension BrowserViewController: OverlayViewDelegate {
     func overlayView(_ overlayView: OverlayView, didSubmitText text: String) {
         let text = text.trimmingCharacters(in: .whitespaces)
         guard !text.isEmpty else {
-            urlBar.url = browser.url
+            urlBar.url = webViewController.url
             return
         }
         
@@ -711,7 +711,7 @@ extension BrowserViewController: WebControllerDelegate {
     }
 
     func webControllerDidFinishNavigation(_ controller: WebController) {
-        urlBar.url = browser.url
+        urlBar.url = webViewController.url
         urlBar.isLoading = false
         browserToolbar.isLoading = false
         urlBarContainer.isBright = !urlBar.isEditing

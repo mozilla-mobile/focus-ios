@@ -7,6 +7,7 @@ import WebKit
 
 protocol BrowserState {
     var url: URL? { get }
+    var isLoading: Bool { get }
     var canGoBack: Bool { get }
     var canGoForward: Bool { get }
     var estimatedProgress: Double { get }
@@ -53,6 +54,8 @@ class WebViewController: UIViewController, WebController {
 
     private let browserView = WKWebView()
     private var progressObserver: NSKeyValueObservation?
+
+    var scrollView: UIScrollView { return browserView.scrollView }
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)
@@ -111,7 +114,8 @@ extension WebViewController: WKNavigationDelegate {
 extension WebViewController: BrowserState {
     var canGoBack: Bool { return browserView.canGoBack }
     var canGoForward: Bool { return browserView.canGoForward }
-    var url: URL? { return browserView.url }
     var estimatedProgress: Double { return browserView.estimatedProgress }
+    var isLoading: Bool { return browserView.isLoading }
+    var url: URL? { return browserView.url }
 }
 
