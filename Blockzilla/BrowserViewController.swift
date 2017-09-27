@@ -225,7 +225,7 @@ class BrowserViewController: UIViewController {
         }
 
         // Reset the views. These changes won't be immediately visible since they'll be under the screenshot.
-        browser.reset()
+        webViewController.reset()
         webViewContainer.isHidden = true
         browserToolbar.isHidden = true
         urlBar.removeFromSuperview()

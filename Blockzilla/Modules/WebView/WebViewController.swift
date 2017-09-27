@@ -52,7 +52,7 @@ protocol WebControllerDelegate: class {
 class WebViewController: UIViewController, WebController {
     weak var delegate: WebControllerDelegate?
 
-    private let browserView = WKWebView()
+    private var browserView = WKWebView()
     private var progressObserver: NSKeyValueObservation?
 
     var scrollView: UIScrollView { return browserView.scrollView }
@@ -72,6 +72,18 @@ class WebViewController: UIViewController, WebController {
 
 
     override func loadView() {
+        self.view = browserView
+    }
+
+    func reset() {
+        browserView.load(URLRequest(url: URL(string: "about:blank")!))
+        browserView.navigationDelegate = nil
+
+        browserView = WKWebView()
+        browserView.allowsBackForwardNavigationGestures = true
+        browserView.allowsLinkPreview = false
+        browserView.scrollView.delegate = self
+        browserView.navigationDelegate = self
         self.view = browserView
     }
 
