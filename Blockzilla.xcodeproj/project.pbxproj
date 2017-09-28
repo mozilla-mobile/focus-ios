@@ -39,6 +39,7 @@
 		B36DB6E21F4CE75600E8604C /* ContextMenu.js in Resources */ = {isa = PBXBuildFile; fileRef = B36DB6E11F4CE75600E8604C /* ContextMenu.js */; };
 		B37F83041F3B90CE00F242EB /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37F83021F3B90CE00F242EB /* CacheManager.swift */; };
 		B37F83051F3B90CE00F242EB /* PhotoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37F83031F3B90CE00F242EB /* PhotoManager.swift */; };
+		B3AFC2BC1F7C0B9F001AEF38 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AFC2BB1F7C0B9F001AEF38 /* WebViewController.swift */; };
 		D00A44111EB8F80A00DB0218 /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D00A44101EB8F80A00DB0218 /* Telemetry.framework */; };
 		D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0967A801EC50002009D937F /* TelemetryIntegration.swift */; };
 		D30179071BC6CB19009AD388 /* BlockerEnabledDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */; };
@@ -288,6 +289,7 @@
 		B36DB6E11F4CE75600E8604C /* ContextMenu.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ContextMenu.js; path = Assets/ContextMenu.js; sourceTree = "<group>"; };
 		B37F83021F3B90CE00F242EB /* CacheManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
 		B37F83031F3B90CE00F242EB /* PhotoManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoManager.swift; sourceTree = "<group>"; };
+		B3AFC2BB1F7C0B9F001AEF38 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		BC16C41C8D4A74C79A493D42 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		C652A61E213D254A86DF5736 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		D00A440E1EB8F40A00DB0218 /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
@@ -718,6 +720,22 @@
 			name = Assets;
 			sourceTree = "<group>";
 		};
+		B3AFC2B91F7C0B66001AEF38 /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				B3AFC2BA1F7C0B92001AEF38 /* WebView */,
+			);
+			path = Modules;
+			sourceTree = "<group>";
+		};
+		B3AFC2BA1F7C0B92001AEF38 /* WebView */ = {
+			isa = PBXGroup;
+			children = (
+				B3AFC2BB1F7C0B9F001AEF38 /* WebViewController.swift */,
+			);
+			path = WebView;
+			sourceTree = "<group>";
+		};
 		D30179C41BCD78BF009AD388 /* SCSiriWaveformView */ = {
 			isa = PBXGroup;
 			children = (
@@ -849,6 +867,7 @@
 			isa = PBXGroup;
 			children = (
 				B36DB6E01F4CE74500E8604C /* Assets */,
+				B3AFC2B91F7C0B66001AEF38 /* Modules */,
 				D3E54FD41DEFB25B003E1AFF /* SearchPlugins */,
 				D30179C51BCD78E1009AD388 /* Blockzilla-Bridging-Header.h */,
 				D3DA778B1DC2C60E009C114E /* errorPage.html */,
@@ -1274,6 +1293,7 @@
 				D34E70351DA874AA00BABDCC /* StringExtensions.swift in Sources */,
 				B37F83051F3B90CE00F242EB /* PhotoManager.swift in Sources */,
 				D30179C31BCC6F65009AD388 /* AboutViewController.swift in Sources */,
+				B3AFC2BC1F7C0B9F001AEF38 /* WebViewController.swift in Sources */,
 				D3426AEB1DB7F8AA0016DA5A /* OverlayView.swift in Sources */,
 				746BD9241F758FDA00BE8DB9 /* Bytes.swift in Sources */,
 				D3E54FCF1DEFAE80003E1AFF /* OpenSearchParser.swift in Sources */,

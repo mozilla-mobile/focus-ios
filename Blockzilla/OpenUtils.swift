@@ -56,7 +56,7 @@ class OpenUtils {
         app.openURL(url)
     }
 
-    static func buildShareViewController(url: URL, browser: Browser, anchor: UIView) -> UIActivityViewController {
+    static func buildShareViewController(url: URL, printFormatter: UIPrintFormatter?, anchor: UIView) -> UIActivityViewController {
         var activities = [UIActivity]()
         var activityItems: [Any] = [url]
 
@@ -70,7 +70,7 @@ class OpenUtils {
 
         activities.append(OpenInSafariActivity(url: url))
         
-        if let printFormatter = browser.getPrintFormatter() {
+        if let printFormatter = printFormatter {
             let printInfo = UIPrintInfo(dictionary: nil)
             printInfo.jobName = url.absoluteString
             printInfo.outputType = .general
