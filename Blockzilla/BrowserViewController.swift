@@ -452,7 +452,7 @@ extension BrowserViewController: BrowserToolsetDelegate {
 
     func browserToolsetDidPressSend(_ browserToolset: BrowserToolset) {
         guard let url = webViewController.url else { return }
-        present(OpenUtils.buildShareViewController(url: url, anchor: browserToolset.sendButton), animated: true, completion: nil)
+        present(OpenUtils.buildShareViewController(url: url, title: webViewController.title, anchor: browserToolset.sendButton), animated: true, completion: nil)
     }
 
     func browserToolsetDidPressSettings(_ browserToolbar: BrowserToolset) {
