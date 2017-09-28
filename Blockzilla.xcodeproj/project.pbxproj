@@ -712,6 +712,22 @@
 			path = OpenInFocus;
 			sourceTree = "<group>";
 		};
+		B31DAAC71F7D87E800A11A74 /* Lib */ = {
+			isa = PBXGroup;
+			children = (
+				B31DAAC81F7D87EF00A11A74 /* RequestHandler */,
+			);
+			path = Lib;
+			sourceTree = "<group>";
+		};
+		B31DAAC81F7D87EF00A11A74 /* RequestHandler */ = {
+			isa = PBXGroup;
+			children = (
+				D33E9B231E1D93DD00A39A44 /* RequestHandler.swift */,
+			);
+			path = RequestHandler;
+			sourceTree = "<group>";
+		};
 		B36DB6E01F4CE74500E8604C /* Assets */ = {
 			isa = PBXGroup;
 			children = (
@@ -868,6 +884,7 @@
 			children = (
 				B36DB6E01F4CE74500E8604C /* Assets */,
 				B3AFC2B91F7C0B66001AEF38 /* Modules */,
+				B31DAAC71F7D87E800A11A74 /* Lib */,
 				D3E54FD41DEFB25B003E1AFF /* SearchPlugins */,
 				D30179C51BCD78E1009AD388 /* Blockzilla-Bridging-Header.h */,
 				D3DA778B1DC2C60E009C114E /* errorPage.html */,
@@ -905,7 +922,6 @@
 				D36C1BA91DB02EBB0073C1AB /* OpenUtils.swift */,
 				D3426AEA1DB7F8AA0016DA5A /* OverlayView.swift */,
 				B37F83031F3B90CE00F242EB /* PhotoManager.swift */,
-				D33E9B231E1D93DD00A39A44 /* RequestHandler.swift */,
 				D3E251E81DAD714C005918DC /* SafariInstructionsViewController.swift */,
 				D3426AF51DB84E7A0016DA5A /* SearchEngine.swift */,
 				D3E54FD01DEFB063003E1AFF /* SearchEngineManager.swift */,
