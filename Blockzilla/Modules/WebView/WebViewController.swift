@@ -96,7 +96,7 @@ class WebViewController: UIViewController, WebController {
             self.delegate?.webController(self, didUpdateEstimatedProgress: webView.estimatedProgress)
         }
 
-        ContentBlockerHelper.shared.getBlockLists { lists in
+        ContentBlockerHelper.getBlockLists { lists in
             lists.forEach(self.browserView.configuration.userContentController.add)
         }
     }
