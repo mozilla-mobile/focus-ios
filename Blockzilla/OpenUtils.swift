@@ -56,10 +56,9 @@ class OpenUtils {
         app.openURL(url)
     }
 
-    static func buildShareViewController(url: URL, printFormatter: UIPrintFormatter?, anchor: UIView) -> UIActivityViewController {
+    static func buildShareViewController(url: URL, title: String? = nil, printFormatter: UIPrintFormatter?, anchor: UIView) -> UIActivityViewController {
         var activities = [UIActivity]()
         var activityItems: [Any] = [url]
-
         if canOpenInFirefox {
             activities.append(OpenInFirefoxActivity(url: url))
         }
@@ -80,6 +79,12 @@ class OpenUtils {
             renderer.addPrintFormatter(printFormatter, startingAtPageAt: 0)
             activityItems.append(renderer)
         }
+
+        if let title = title {
+            activityItems.append(TitleActivityItemProvider(title: title))
+        }
+        
+        activityItems.append(url as AnyObject)
 
         let shareController = UIActivityViewController(activityItems: activityItems, applicationActivities: activities)
 
