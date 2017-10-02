@@ -21,26 +21,27 @@ class ContentBlockerHelper {
         // If we already have a list, return it
         let enabledList = Utils.getEnabledLists()
         var returnList = [WKContentRuleList]()
+        let dispatchGroup = DispatchGroup()
         let listStore = WKContentRuleListStore.default()
 
         for list in enabledList {
+            dispatchGroup.enter()
+
             listStore?.lookUpContentRuleList(forIdentifier: list) { (ruleList, error) in
                 if let ruleList = ruleList {
                     returnList.append(ruleList)
-                    if returnList.count == enabledList.count {
-                        callback(returnList)
-                        return
-                    }
+                    dispatchGroup.leave()
                 } else {
                     ContentBlockerHelper.compileItem(item: list) { ruleList in
                         returnList.append(ruleList)
-                        if returnList.count == enabledList.count {
-                            callback(returnList)
-                            return
-                        }
+                        dispatchGroup.leave()
                     }
                 }
             }
+        }
+
+        dispatchGroup.notify(queue: .global()) {
+            callback(returnList)
         }
     }
 }
