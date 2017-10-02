@@ -29,9 +29,6 @@ class BrowserViewController: UIViewController {
     fileprivate var scrollBarOffsetAlpha: CGFloat = 0
     fileprivate var scrollBarState: URLBarScrollState = .expanded
 
-    fileprivate let photoManager = PhotoManager()
-    fileprivate let urlCacheManager = URLCacheManeger()
-
     fileprivate enum URLBarScrollState {
         case collapsed
         case expanded
@@ -63,8 +60,6 @@ class BrowserViewController: UIViewController {
         super.viewDidLoad()
 
         webViewController.delegate = self
-
-        photoManager.delegate = self
 
         let background = GradientBackgroundView(alpha: 0.7, startPoint: CGPoint.zero, endPoint: CGPoint(x: 1, y: 1))
         view.addSubview(background)
@@ -647,24 +642,6 @@ extension BrowserViewController: WebControllerDelegate {
         } else {
             hideToolbars()
         }
-    }
-}
-
-extension BrowserViewController: PhotoManagerDelegate {
-    func photoManager(_ photoManager: PhotoManager, didFinishSavingWithError error: Error?) {
-        let didSucceed = error == nil
-
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.saveImage, value: nil, extras: ["didSucceed": didSucceed])
-        
-        guard !didSucceed else { return }
-
-        let accessDenied = UIAlertController(title: String(format: UIConstants.strings.photosPermissionTitle, AppInfo.productName), message: UIConstants.strings.photosPermissionDescription, preferredStyle: UIAlertControllerStyle.alert)
-        accessDenied.addAction(UIAlertAction(title: UIConstants.strings.cancel, style: UIAlertActionStyle.default, handler: nil))
-        accessDenied.addAction(UIAlertAction(title: UIConstants.strings.openSettingsButtonTitle, style: UIAlertActionStyle.default ) { (action: UIAlertAction!) -> Void in
-            UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
-        })
-
-        self.present(accessDenied, animated: true, completion: nil)
     }
 }
 
