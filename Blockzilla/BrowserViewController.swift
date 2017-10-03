@@ -510,7 +510,9 @@ extension BrowserViewController: WebControllerDelegate {
     }
 
     func webControllerDidFinishNavigation(_ controller: WebController) {
-        urlBar.url = webViewController.url
+        if webViewController.url?.absoluteString != "about:blank" {
+            urlBar.url = webViewController.url
+        }
         urlBar.isLoading = false
         browserToolbar.isLoading = false
         urlBarContainer.isBright = !urlBar.isEditing

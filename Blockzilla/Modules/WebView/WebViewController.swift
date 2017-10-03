@@ -97,7 +97,9 @@ class WebViewController: UIViewController, WebController {
         }
 
         ContentBlockerHelper.getBlockLists { lists in
-            lists.forEach(self.browserView.configuration.userContentController.add)
+            DispatchQueue.main.async {
+                lists.forEach(self.browserView.configuration.userContentController.add)
+            }
         }
     }
 }
