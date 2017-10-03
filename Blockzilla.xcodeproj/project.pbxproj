@@ -36,7 +36,6 @@
 		746D78FB1F4E0095002EB522 /* ShareSheetActivities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746D78FA1F4E0095002EB522 /* ShareSheetActivities.swift */; };
 		A57245250F88CCA4993E55B2 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4C4943B406FCA9B74B4E186 /* CoreText.framework */; };
 		A89766DA1F57DCA9008183C5 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		B36DB6E21F4CE75600E8604C /* ContextMenu.js in Resources */ = {isa = PBXBuildFile; fileRef = B36DB6E11F4CE75600E8604C /* ContextMenu.js */; };
 		B3AFC2BC1F7C0B9F001AEF38 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AFC2BB1F7C0B9F001AEF38 /* WebViewController.swift */; };
 		D00A44111EB8F80A00DB0218 /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D00A44101EB8F80A00DB0218 /* Telemetry.framework */; };
 		D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0967A801EC50002009D937F /* TelemetryIntegration.swift */; };
@@ -283,7 +282,6 @@
 		A89766D61F57DCA9008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A89766D71F57DCA9008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		AAB8E622E994545108473554 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		B36DB6E11F4CE75600E8604C /* ContextMenu.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ContextMenu.js; path = Assets/ContextMenu.js; sourceTree = "<group>"; };
 		B3AFC2BB1F7C0B9F001AEF38 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		BC16C41C8D4A74C79A493D42 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		C652A61E213D254A86DF5736 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -722,14 +720,6 @@
 			path = RequestHandler;
 			sourceTree = "<group>";
 		};
-		B36DB6E01F4CE74500E8604C /* Assets */ = {
-			isa = PBXGroup;
-			children = (
-				B36DB6E11F4CE75600E8604C /* ContextMenu.js */,
-			);
-			name = Assets;
-			sourceTree = "<group>";
-		};
 		B3AFC2B91F7C0B66001AEF38 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
@@ -876,7 +866,6 @@
 		E4BF2DD51BACE8CA00DA9D68 /* Blockzilla */ = {
 			isa = PBXGroup;
 			children = (
-				B36DB6E01F4CE74500E8604C /* Assets */,
 				B3AFC2B91F7C0B66001AEF38 /* Modules */,
 				B31DAAC71F7D87E800A11A74 /* Lib */,
 				D3E54FD41DEFB25B003E1AFF /* SearchPlugins */,
@@ -1156,7 +1145,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3B3232E1BD16A0F00B0EEE4 /* licenses.html in Resources */,
-				B36DB6E21F4CE75600E8604C /* ContextMenu.js in Resources */,
 				E4BF2DDE1BACE8CA00DA9D68 /* Assets.xcassets in Resources */,
 				6616A36F1BD17EFA00C7E493 /* style.css in Resources */,
 				D3C047BD1DCBD8ED00402FFB /* SearchEngines.plist in Resources */,
