@@ -24,27 +24,15 @@ protocol WebController {
 protocol WebControllerDelegate: class {
     func webControllerDidStartNavigation(_ controller: WebController)
     func webControllerDidFinishNavigation(_ controller: WebController)
+    func webController(_ controller: WebController, didFailNavigationWithError error: Error)
+    func webController(_ controller: WebController, didUpdateCanGoBack canGoBack: Bool)
+    func webController(_ controller: WebController, didUpdateCanGoForward canGoForward: Bool)
     func webController(_ controller: WebController, didUpdateEstimatedProgress estimatedProgress: Double)
     func webController(_ controller: WebController, scrollViewWillBeginDragging scrollView: UIScrollView)
     func webController(_ controller: WebController, scrollViewDidEndDragging scrollView: UIScrollView)
     func webController(_ controller: WebController, scrollViewDidScroll scrollView: UIScrollView)
     func webController(_ controller: WebController, stateDidChange state: BrowserState)
     func webControllerShouldScrollToTop(_ controller: WebController) -> Bool
-
-
-//    func browserDidStartNavigation(_ browser: Browser)
-//    func browserDidFinishNavigation(_ browser: Browser)
-//    func browser(_ browser: Browser, didFailNavigationWithError error: Error)
-//    func browser(_ browser: Browser, didUpdateCanGoBack canGoBack: Bool)
-//    func browser(_ browser: Browser, didUpdateCanGoForward canGoForward: Bool)
-//    func browser(_ browser: Browser, didUpdateEstimatedProgress estimatedProgress: Float)
-//    func browser(_ browser: Browser, didUpdateURL url: URL?)
-//    func browser(_ browser: Browser, didLongPressImage path: String?, link: String?)
-//    func browser(_ browser: Browser, shouldStartLoadWith request: URLRequest) -> Bool
-//    func browser(_ browser: Browser, scrollViewWillBeginDragging scrollView: UIScrollView)
-//    func browser(_ browser: Browser, scrollViewDidEndDragging scrollView: UIScrollView)
-//    func browser(_ browser: Browser, scrollViewDidScroll scrollView: UIScrollView)
-//    func browserShouldScrollToTop(_ browser: Browser) -> Bool
 }
 
 
@@ -102,6 +90,11 @@ class WebViewController: UIViewController, WebController {
             }
         }
     }
+
+    fileprivate func updateBackForwardState(webView: WKWebView) {
+        delegate?.webController(self, didUpdateCanGoBack: canGoBack)
+        delegate?.webController(self, didUpdateCanGoForward: canGoForward)
+    }
 }
 
 extension WebViewController: UIScrollViewDelegate {
@@ -125,10 +118,15 @@ extension WebViewController: UIScrollViewDelegate {
 extension WebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         delegate?.webControllerDidStartNavigation(self)
+        updateBackForwardState(webView: webView)
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        delegate?.webControllerDidFinishNavigation(self)
+        delegate?.webControllerDidFinishNavigation(self)    
+    }
+
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        delegate?.webController(self, didFailNavigationWithError: error)
     }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {

@@ -519,6 +519,23 @@ extension BrowserViewController: WebControllerDelegate {
         urlBar.progressBar.hideProgressBar()
     }
 
+    func webController(_ controller: WebController, didFailNavigationWithError error: Error) {
+        urlBar.url = webViewController.url
+        urlBar.isLoading = false
+        browserToolbar.isLoading = false
+        urlBarContainer.isBright = true
+    }
+
+    func webController(_ controller: WebController, didUpdateCanGoBack canGoBack: Bool) {
+        urlBar.canGoBack = canGoBack
+        browserToolbar.canGoBack = canGoBack
+    }
+
+    func webController(_ controller: WebController, didUpdateCanGoForward canGoForward: Bool) {
+        urlBar.canGoForward = canGoForward
+        browserToolbar.canGoForward = canGoForward
+    }
+
     func webController(_ controller: WebController, didUpdateEstimatedProgress estimatedProgress: Double) {
         // Don't update progress if the home view is visible. This prevents the centered URL bar
         // from catching the global progress events.
