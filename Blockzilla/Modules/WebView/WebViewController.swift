@@ -55,10 +55,6 @@ class WebViewController: UIViewController, WebController {
     override func loadView() {
         self.view = browserView
     }
-//
-//    override func viewPrintFormatter() {
-//        return browserView.viewPrintFormatter()
-//    }
 
     func reset() {
         browserView.load(URLRequest(url: URL(string: "about:blank")!))

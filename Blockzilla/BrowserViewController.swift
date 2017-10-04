@@ -67,7 +67,6 @@ class BrowserViewController: UIViewController {
         view.addSubview(homeViewContainer)
 
         webViewContainer.isHidden = true
-        webViewContainer.backgroundColor = .yellow
         view.addSubview(webViewContainer)
 
         urlBarContainer.alpha = 0
@@ -539,9 +538,7 @@ extension BrowserViewController: WebControllerDelegate {
     func webController(_ controller: WebController, didUpdateEstimatedProgress estimatedProgress: Double) {
         // Don't update progress if the home view is visible. This prevents the centered URL bar
         // from catching the global progress events.
-        print("updating")
         guard homeView == nil else { return }
-        print(estimatedProgress)
 
         if estimatedProgress == 0.1 {
             urlBar.progressBar.animateHidden(false, duration: UIConstants.layout.progressVisibilityAnimationDuration)
