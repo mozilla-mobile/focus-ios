@@ -15,6 +15,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private let browserViewController = BrowserViewController()
     private var queuedUrl: URL?
     private var queuedString: String?
+    static let prefWhatsNewDone = "WhatsNewDone"
+    static let prefWhatsNewCounter = "WhatsNewCounter"
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         #if BUDDYBUILD
@@ -100,7 +102,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         displaySplashAnimation()
         KeyboardHelper.defaultHelper.startObserving()
 
-        if UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone) < AppDelegate.prefIntroVersion {
+        let prefIntroDone = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone)
+        if prefIntroDone < AppDelegate.prefIntroVersion {
 
             // Show the first run UI asynchronously to avoid the "unbalanced calls to begin/end appearance transitions" warning.
             DispatchQueue.main.async {
@@ -111,8 +114,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 rootViewController.present(firstRunViewController, animated: false, completion: nil)
             }
         }
+        
+        if prefIntroDone != 0 && UserDefaults.standard.string(forKey: AppDelegate.prefWhatsNewDone) != AppInfo.shortVersion {
+            let counter = UserDefaults.standard.integer(forKey: AppDelegate.prefWhatsNewCounter)
+            switch counter {
+                case 0:
+                    // No counter set
+                    UserDefaults.standard.set(4, forKey: AppDelegate.prefWhatsNewCounter)
+                case 1:
+                    // Shown three times, remove counter
+                    didShowWhatsNew()
+                default:
+                    // Show highlight
+                    UserDefaults.standard.set(counter-1, forKey: AppDelegate.prefWhatsNewCounter)
+            }
+        }
 
         return true
+    }
+    
+    func shouldShowWhatsNew() -> Bool {
+        let counter = UserDefaults.standard.integer(forKey: AppDelegate.prefWhatsNewCounter)
+        return counter != 0
+    }
+    
+    func didShowWhatsNew() {
+        UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
+        UserDefaults.standard.removeObject(forKey: AppDelegate.prefWhatsNewCounter)
     }
 
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {

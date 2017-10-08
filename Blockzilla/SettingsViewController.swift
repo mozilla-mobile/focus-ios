@@ -16,7 +16,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     private var isSafariEnabled = false
     private let searchEngineManager: SearchEngineManager
-
+    private var highlightsButton: UIBarButtonItem?
     private let toggles = [
         BlockerToggle(label: UIConstants.strings.toggleSafari, setting: SettingsToggle.safari),
         BlockerToggle(label: UIConstants.strings.labelBlockAds, setting: SettingsToggle.blockAds, subtitle: UIConstants.strings.labelBlockAdsDescription),
@@ -54,10 +54,14 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         navigationBar.tintColor = UIConstants.colors.navigationButton
         navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIConstants.colors.navigationTitle]
 
-        let aboutButton = UIBarButtonItem(title: UIConstants.strings.aboutTitle, style: .plain, target: self, action: #selector(aboutClicked))
-        aboutButton.image = #imageLiteral(resourceName: "about_icon")
-        aboutButton.accessibilityIdentifier = "SettingsViewController.aboutButton"
-        navigationItem.rightBarButtonItem = aboutButton
+        highlightsButton = UIBarButtonItem(title: UIConstants.strings.whatsNewTitle, style: .plain, target: self, action: #selector(whatsNewClicked))
+        highlightsButton?.image = UIImage(named: "highlight")
+        highlightsButton?.accessibilityIdentifier = "SettingsViewController.whatsNewButton"
+        navigationItem.rightBarButtonItem = highlightsButton
+        
+        if getAppDelegate().shouldShowWhatsNew() {
+            highlightsButton?.tintColor = UIConstants.colors.settingsLink
+        }
 
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
@@ -154,14 +158,19 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             backgroundColorView.backgroundColor = UIConstants.colors.cellSelected
             cell.selectedBackgroundView = backgroundColorView
         default:
-            cell = UITableViewCell(style: .subtitle, reuseIdentifier: "toggleCell")
-            let toggle = toggleForIndexPath(indexPath)
-            cell.textLabel?.text = toggle.label
-            cell.textLabel?.numberOfLines = 0
-            cell.accessoryView = PaddedSwitch(switchView: toggle.toggle)
-            cell.detailTextLabel?.text = toggle.subtitle
-            cell.detailTextLabel?.numberOfLines = 0
-            cell.selectionStyle = .none
+            if indexPath.section == 4 && indexPath.row == 1 {
+                cell = UITableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
+                cell.textLabel?.text = UIConstants.strings.aboutTitle
+            } else {
+                cell = UITableViewCell(style: .subtitle, reuseIdentifier: "toggleCell")
+                let toggle = toggleForIndexPath(indexPath)
+                cell.textLabel?.text = toggle.label
+                cell.textLabel?.numberOfLines = 0
+                cell.accessoryView = PaddedSwitch(switchView: toggle.toggle)
+                cell.detailTextLabel?.text = toggle.subtitle
+                cell.detailTextLabel?.numberOfLines = 0
+                cell.selectionStyle = .none
+            }
         }
 
         cell.backgroundColor = UIConstants.colors.background
@@ -178,7 +187,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case 1: return 1 // Integration.
         case 2: return 4 // Privacy.
         case 3: return 1 // Performance.
-        case 4: return 1 // Mozilla.
+        case 4: return 2 // Mozilla.
         default:
             assertionFailure("Invalid section")
             return 0
@@ -278,6 +287,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             let searchSettingsViewController = SearchSettingsViewController(searchEngineManager: searchEngineManager)
             searchSettingsViewController.delegate = self
             navigationController?.pushViewController(searchSettingsViewController, animated: true)
+            break
+        case 4:
+            if indexPath.row == 1 {
+                aboutClicked()
+            }
         default: break
         }
     }
@@ -296,6 +310,14 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     @objc private func aboutClicked() {
         navigationController!.pushViewController(AboutViewController(), animated: true)
+    }
+    
+    @objc private func whatsNewClicked() {
+        getAppDelegate().didShowWhatsNew()
+        highlightsButton?.tintColor = UIColor.white
+        
+        guard let url = URL(string: "https://support.mozilla.org/en-US/kb/focus") else { return }
+        navigationController?.pushViewController(AboutContentViewController(url: url), animated: true)
     }
 
     @objc private func toggleSwitched(_ sender: UISwitch) {
@@ -337,6 +359,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         default:
             updateSetting()
         }
+    }
+    
+    private func getAppDelegate() -> AppDelegate {
+        return UIApplication.shared.delegate as! AppDelegate
     }
 }
 
