@@ -7,7 +7,23 @@ import UIKit
 import SnapKit
 import Telemetry
 
-class BrowserViewController: UIViewController {
+class BrowserViewController: UIViewController, UIDragInteractionDelegate {
+    
+    func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
+        if let url = urlBar.url {
+            let path = String(describing: url)
+            let stringItemProvider = NSItemProvider(object: path as NSString)
+            return [
+                UIDragItem(itemProvider: stringItemProvider)
+            ]
+        } else {
+            let stringItemProvider = NSItemProvider(object: "" as NSString)
+            return [
+                UIDragItem(itemProvider: stringItemProvider)
+            ]
+        }
+    }
+
     private let webViewController = WebViewController()
     private let webViewContainer = UIView()
 
@@ -58,7 +74,6 @@ class BrowserViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         webViewController.delegate = self
 
         let background = GradientBackgroundView(alpha: 0.7, startPoint: CGPoint.zero, endPoint: CGPoint(x: 1, y: 1))
@@ -189,6 +204,9 @@ class BrowserViewController: UIViewController {
         urlBar.shrinkFromView = urlBarContainer
         urlBar.showToolset = showsToolsetInURLBar
         view.insertSubview(urlBar, aboveSubview: urlBarContainer)
+
+        let dragInteraction = UIDragInteraction(delegate: self)
+        urlBar.addInteraction(dragInteraction)
 
         urlBar.snp.makeConstraints { make in
             urlBarTopConstraint = make.top.equalTo(topLayoutGuide.snp.bottom).constraint
@@ -364,7 +382,7 @@ class BrowserViewController: UIViewController {
             UIKeyCommand(input: "l", modifierFlags: .command, action: #selector(BrowserViewController.selectLocationBar), discoverabilityTitle: UIConstants.strings.selectLocationBarTitle),
             UIKeyCommand(input: "r", modifierFlags: .command, action: #selector(BrowserViewController.reload), discoverabilityTitle: UIConstants.strings.browserReload),
             UIKeyCommand(input: "[", modifierFlags: .command, action: #selector(BrowserViewController.goBack), discoverabilityTitle: UIConstants.strings.browserBack),
-            UIKeyCommand(input: "]", modifierFlags: .command, action: #selector(BrowserViewController.goForward), discoverabilityTitle: UIConstants.strings.browserForward),
+            UIKeyCommand(input: "]", modifierFlags: .command, action: #selector(BrowserViewController.goForward), discoverabilityTitle: UIConstants.strings.browserForward)
         ]
     }
 }
