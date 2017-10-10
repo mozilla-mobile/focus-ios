@@ -129,18 +129,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     UserDefaults.standard.set(counter-1, forKey: AppDelegate.prefWhatsNewCounter)
             }
         }
+        
+        browserViewController.whatsNew = self
 
         return true
-    }
-    
-    func shouldShowWhatsNew() -> Bool {
-        let counter = UserDefaults.standard.integer(forKey: AppDelegate.prefWhatsNewCounter)
-        return counter != 0
-    }
-    
-    func didShowWhatsNew() {
-        UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
-        UserDefaults.standard.removeObject(forKey: AppDelegate.prefWhatsNewCounter)
     }
 
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
@@ -290,6 +282,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Telemetry.default.queue(pingType: FocusEventPingBuilder.PingType)
         Telemetry.default.scheduleUpload(pingType: CorePingBuilder.PingType)
         Telemetry.default.scheduleUpload(pingType: FocusEventPingBuilder.PingType)
+    }
+}
+
+protocol WhatsNewDelegate {
+    func shouldShowWhatsNew() -> Bool
+    func didShowWhatsNew() -> Void
+}
+
+extension AppDelegate: WhatsNewDelegate {
+    func shouldShowWhatsNew() -> Bool {
+        let counter = UserDefaults.standard.integer(forKey: AppDelegate.prefWhatsNewCounter)
+        return counter != 0
+    }
+    
+    func didShowWhatsNew() {
+        UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
+        UserDefaults.standard.removeObject(forKey: AppDelegate.prefWhatsNewCounter)
     }
 }
 

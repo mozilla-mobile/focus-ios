@@ -17,6 +17,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     private var isSafariEnabled = false
     private let searchEngineManager: SearchEngineManager
     private var highlightsButton: UIBarButtonItem?
+    private let whatsNew: WhatsNewDelegate?
+    
+    private let whatsNewUrl = "https://support.mozilla.org/en-US/kb/focus"
+    
     private let toggles = [
         BlockerToggle(label: UIConstants.strings.toggleSafari, setting: SettingsToggle.safari),
         BlockerToggle(label: UIConstants.strings.labelBlockAds, setting: SettingsToggle.blockAds, subtitle: UIConstants.strings.labelBlockAdsDescription),
@@ -34,8 +38,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         return cell
     }()
 
-    init(searchEngineManager: SearchEngineManager) {
+    init(searchEngineManager: SearchEngineManager, whatsNew: WhatsNewDelegate?) {
         self.searchEngineManager = searchEngineManager
+        self.whatsNew = whatsNew
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -59,8 +64,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         highlightsButton?.accessibilityIdentifier = "SettingsViewController.whatsNewButton"
         navigationItem.rightBarButtonItem = highlightsButton
         
-        if getAppDelegate().shouldShowWhatsNew() {
-            highlightsButton?.tintColor = UIConstants.colors.settingsLink
+        if let whatsNew = whatsNew {
+            if whatsNew.shouldShowWhatsNew() {
+                highlightsButton?.tintColor = UIConstants.colors.settingsLink
+            }
         }
 
         view.addSubview(tableView)
@@ -313,11 +320,14 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     @objc private func whatsNewClicked() {
-        getAppDelegate().didShowWhatsNew()
         highlightsButton?.tintColor = UIColor.white
         
-        guard let url = URL(string: "https://support.mozilla.org/en-US/kb/focus") else { return }
+        guard let url = URL(string: whatsNewUrl) else { return }
         navigationController?.pushViewController(AboutContentViewController(url: url), animated: true)
+        
+        if let whatsNew = whatsNew {
+            whatsNew.didShowWhatsNew()
+        }
     }
 
     @objc private func toggleSwitched(_ sender: UISwitch) {
@@ -359,10 +369,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         default:
             updateSetting()
         }
-    }
-    
-    private func getAppDelegate() -> AppDelegate {
-        return UIApplication.shared.delegate as! AppDelegate
     }
 }
 

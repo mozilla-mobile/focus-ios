@@ -19,6 +19,7 @@ class BrowserViewController: UIViewController {
     fileprivate var urlBar: URLBar!
     fileprivate var topURLBarConstraints = [Constraint]()
     fileprivate let requestHandler = RequestHandler()
+    var whatsNew: WhatsNewDelegate?
 
     fileprivate var toolbarBottomConstraint: Constraint!
     fileprivate var urlBarTopConstraint: Constraint!
@@ -50,12 +51,12 @@ class BrowserViewController: UIViewController {
 
     private var shouldEnsureBrowsingMode = false
     private var initialUrl: URL?
-
+    
     convenience init() {
         self.init(nibName: nil, bundle: nil)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -258,7 +259,7 @@ class BrowserViewController: UIViewController {
 
     fileprivate func showSettings() {
         urlBar.shouldPresent = false
-        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager)
+        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: whatsNew)
         navigationController!.pushViewController(settingsViewController, animated: true)
         navigationController!.setNavigationBarHidden(false, animated: true)
 
