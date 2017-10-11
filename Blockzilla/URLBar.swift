@@ -543,7 +543,7 @@ class URLBar: UIView {
             var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
             components?.user = nil
             components?.password = nil
-            displayURL = components?.url?.absoluteString
+            displayURL = urlText.text
             truncatedURL = components?.host
         }
         urlText.text = displayURL
