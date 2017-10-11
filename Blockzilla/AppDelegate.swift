@@ -46,7 +46,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         displaySplashAnimation()
         KeyboardHelper.defaultHelper.startObserving()
 
-        if UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone) < AppDelegate.prefIntroVersion {
+        let needToShowFirstRunExperience = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone) < AppDelegate.prefIntroVersion
+        if  needToShowFirstRunExperience {
 
             // Show the first run UI asynchronously to avoid the "unbalanced calls to begin/end appearance transitions" warning.
             DispatchQueue.main.async {
