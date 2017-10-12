@@ -17,7 +17,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     private var isSafariEnabled = false
     private let searchEngineManager: SearchEngineManager
     private var highlightsButton: UIBarButtonItem?
-    private let whatsNew: WhatsNewDelegate?
+    private let whatsNew: WhatsNewDelegate
     
     private let whatsNewUrl = "https://support.mozilla.org/en-US/kb/focus"
     
@@ -38,7 +38,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         return cell
     }()
 
-    init(searchEngineManager: SearchEngineManager, whatsNew: WhatsNewDelegate?) {
+    init(searchEngineManager: SearchEngineManager, whatsNew: WhatsNewDelegate) {
         self.searchEngineManager = searchEngineManager
         self.whatsNew = whatsNew
         super.init(nibName: nil, bundle: nil)
@@ -64,10 +64,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         highlightsButton?.accessibilityIdentifier = "SettingsViewController.whatsNewButton"
         navigationItem.rightBarButtonItem = highlightsButton
         
-        if let whatsNew = whatsNew {
-            if whatsNew.shouldShowWhatsNew() {
-                highlightsButton?.tintColor = UIConstants.colors.settingsLink
-            }
+        if whatsNew.shouldShowWhatsNew() {
+            highlightsButton?.tintColor = UIConstants.colors.settingsLink
         }
 
         view.addSubview(tableView)
@@ -325,9 +323,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         guard let url = URL(string: whatsNewUrl) else { return }
         navigationController?.pushViewController(AboutContentViewController(url: url), animated: true)
         
-        if let whatsNew = whatsNew {
-            whatsNew.didShowWhatsNew()
-        }
+        whatsNew.didShowWhatsNew()
     }
 
     @objc private func toggleSwitched(_ sender: UISwitch) {
