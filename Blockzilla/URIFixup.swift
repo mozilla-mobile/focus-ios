@@ -28,10 +28,13 @@ class URIFixup {
         if trimmed.range(of: " ") != nil {
             return nil
         }
+        
+        // If the input url has a prefix http or https, don't append again
+        let finalurl = escaped.hasPrefix("http://") || escaped.hasPrefix("https://") ? escaped : "http://\(escaped)"
 
         // If there is a ".", prepend "http://" and try again. Since this
         // is strictly an "http://" URL, we also require a host.
-        if let url = URL(string: "http://\(escaped)"), url.host != nil {
+        if let url = URL(string: finalurl), url.host != nil {
             return url
         }
 
