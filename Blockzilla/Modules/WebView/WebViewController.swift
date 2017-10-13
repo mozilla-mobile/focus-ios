@@ -51,17 +51,12 @@ class WebViewController: UIViewController, WebController {
         setupWebview()
     }
 
-
-    override func loadView() {
-        self.view = browserView
-    }
-
     func reset() {
         browserView.load(URLRequest(url: URL(string: "about:blank")!))
         browserView.navigationDelegate = nil
+        browserView.removeFromSuperview()
         browserView = WKWebView()
         setupWebview()
-        self.view = browserView
     }
 
     // Browser proxy methods
@@ -85,6 +80,11 @@ class WebViewController: UIViewController, WebController {
             DispatchQueue.main.async {
                 lists.forEach(self.browserView.configuration.userContentController.add)
             }
+        }
+
+        view.addSubview(browserView)
+        browserView.snp.makeConstraints { make in
+            make.edges.equalTo(view.snp.edges)
         }
     }
 
