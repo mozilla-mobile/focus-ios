@@ -7,36 +7,7 @@ import UIKit
 import SnapKit
 import Telemetry
 
-class BrowserViewController: UIViewController, UIDragInteractionDelegate {
-
-    func dragInteraction(_ interaction: UIDragInteraction, sessionDidMove session: UIDragSession) {
-        for item in session.items {
-            item.previewProvider = {
-                if let url = self.urlBar.url {
-                    return UIDragPreview(for: url)
-                }
-
-                let imageView = UIImageView(image: #imageLiteral(resourceName: "open_in_firefox_icon"))
-                return UIDragPreview(view: imageView)
-            }
-        }
-    }
-
-
-    func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
-        if let url = urlBar.url {
-            let path = String(describing: url)
-            let stringItemProvider = NSItemProvider(object: path as NSString)
-            return [
-                UIDragItem(itemProvider: stringItemProvider)
-            ]
-        } else {
-            let stringItemProvider = NSItemProvider(object: "" as NSString)
-            return [
-                UIDragItem(itemProvider: stringItemProvider)
-            ]
-        }
-    }
+class BrowserViewController: UIViewController {
 
     private let webViewController = WebViewController()
     private let webViewContainer = UIView()
@@ -695,6 +666,38 @@ extension BrowserViewController: WebControllerDelegate {
             showToolbars()
         } else {
             hideToolbars()
+        }
+    }
+}
+
+extension BrowserViewController: UIDragInteractionDelegate {
+
+    func dragInteraction(_ interaction: UIDragInteraction, sessionDidMove session: UIDragSession) {
+        for item in session.items {
+            item.previewProvider = {
+                if let url = self.urlBar.url {
+                    return UIDragPreview(for: url)
+                }
+
+                let imageView = UIImageView(image: #imageLiteral(resourceName: "open_in_firefox_icon"))
+                return UIDragPreview(view: imageView)
+            }
+        }
+    }
+
+
+    func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
+        if let url = urlBar.url {
+            let path = String(describing: url)
+            let stringItemProvider = NSItemProvider(object: path as NSString)
+            return [
+                UIDragItem(itemProvider: stringItemProvider)
+            ]
+        } else {
+            let stringItemProvider = NSItemProvider(object: "" as NSString)
+            return [
+                UIDragItem(itemProvider: stringItemProvider)
+            ]
         }
     }
 }
