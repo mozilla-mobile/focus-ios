@@ -10,10 +10,12 @@ class URIFixup {
         guard let escaped = trimmed.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlAllowed) else {
             return nil
         }
-
+        
         // Check if the URL includes a scheme. This will handle
         // all valid requests starting with "http://", "about:", etc.
-        if let url = URL(string: entry), url.scheme != nil {
+        // Also check with a regular expression if there is a port in the url
+        // this will be handle later in this function adding http prefix
+        if let url = URL(string: entry), url.scheme != nil, trimmed.range(of: ":") == nil, trimmed.range(of:"\\b:[0-9]{1,5}", options: .regularExpression) == nil {
             return url
         }
 
