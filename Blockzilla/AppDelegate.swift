@@ -16,8 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var queuedUrl: URL?
     private var queuedString: String?
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {        
         setupContinuousDeploymentTooling()
         setupErrorTracking()
         setupTelemetry()
@@ -222,12 +221,9 @@ extension AppDelegate {
     }
     
     func setupErrorTracking() {
-        // Only set up to be in Beta build until we get approval to put Sentry in release
-        if AppInfo.isBetaBuild {
-            // Set up Sentry
-            let sendUsageData = Settings.getToggle(.sendAnonymousUsageData)
-            SentryIntegration.shared.setup(sendUsageData: sendUsageData)
-        }
+        // Set up Sentry
+        let sendUsageData = Settings.getToggle(.sendAnonymousUsageData)
+        SentryIntegration.shared.setup(sendUsageData: sendUsageData)
     }
     
     func setupTelemetry() {
