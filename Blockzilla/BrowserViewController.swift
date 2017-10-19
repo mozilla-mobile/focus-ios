@@ -50,7 +50,7 @@ class BrowserViewController: UIViewController {
 
     private var shouldEnsureBrowsingMode = false
     private var initialUrl: URL?
-    
+
     convenience init() {
         self.init(nibName: nil, bundle: nil)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)

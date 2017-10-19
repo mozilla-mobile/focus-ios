@@ -68,9 +68,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             let counter = UserDefaults.standard.integer(forKey: AppDelegate.prefWhatsNewCounter)
             switch counter {
-                case 0:
-                    // No counter set
-                    UserDefaults.standard.set(1, forKey: AppDelegate.prefWhatsNewCounter)
                 case 4:
                     // Shown three times, remove counter
                     UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
