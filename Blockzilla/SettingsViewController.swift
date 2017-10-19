@@ -335,6 +335,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             Telemetry.default.recordEvent(telemetryEvent)
 
             Settings.set(sender.isOn, forToggle: toggle.setting)
+            ContentBlockerHelper.shared.reload()
             Utils.reloadSafariContentBlocker()
         }
 

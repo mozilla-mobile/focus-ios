@@ -49,18 +49,15 @@ class WebViewController: UIViewController, WebController {
     convenience init() {
         self.init(nibName: nil, bundle: nil)
         setupWebview()
-    }
-
-
-    override func loadView() {
-        self.view = browserView
+        ContentBlockerHelper.shared.handler = reloadBlockers(_:)
     }
 
     func reset() {
         browserView.load(URLRequest(url: URL(string: "about:blank")!))
         browserView.navigationDelegate = nil
+        browserView.removeFromSuperview()
+        browserView = WKWebView()
         setupWebview()
-        self.view = browserView
     }
 
     // Browser proxy methods
@@ -70,20 +67,30 @@ class WebViewController: UIViewController, WebController {
     func reload() { browserView.reload() }
     func stop() { browserView.stopLoading() }
 
-
     private func setupWebview() {
         browserView.allowsBackForwardNavigationGestures = true
         browserView.allowsLinkPreview = false
         browserView.scrollView.delegate = self
         browserView.navigationDelegate = self
+        browserView.uiDelegate = self
         progressObserver = browserView.observe(\WKWebView.estimatedProgress) { (webView, value) in
             self.delegate?.webController(self, didUpdateEstimatedProgress: webView.estimatedProgress)
         }
 
-        ContentBlockerHelper.getBlockLists { lists in
-            DispatchQueue.main.async {
-                lists.forEach(self.browserView.configuration.userContentController.add)
-            }
+        ContentBlockerHelper.shared.getBlockLists { lists in
+            self.reloadBlockers(lists)
+        }
+
+        view.addSubview(browserView)
+        browserView.snp.makeConstraints { make in
+            make.edges.equalTo(view.snp.edges)
+        }
+    }
+
+    @objc private func reloadBlockers(_ blockLists: [WKContentRuleList]) {
+        DispatchQueue.main.async {
+            self.browserView.configuration.userContentController.removeAllContentRuleLists()
+            blockLists.forEach(self.browserView.configuration.userContentController.add)
         }
     }
 
@@ -140,3 +147,12 @@ extension WebViewController: BrowserState {
     var url: URL? { return browserView.url }
 }
 
+extension WebViewController: WKUIDelegate {
+    func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+        if navigationAction.targetFrame == nil {
+            browserView.load(navigationAction.request)
+        }
+
+        return nil
+    }
+}
