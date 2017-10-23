@@ -45,20 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         displaySplashAnimation()
         KeyboardHelper.defaultHelper.startObserving()
-
-        let needToShowFirstRunExperience = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone) < AppDelegate.prefIntroVersion
-        if  needToShowFirstRunExperience {
-
-            // Show the first run UI asynchronously to avoid the "unbalanced calls to begin/end appearance transitions" warning.
-            DispatchQueue.main.async {
-                // Set the prefIntroVersion viewed number in the same context as the presentation.
-                UserDefaults.standard.set(AppDelegate.prefIntroVersion, forKey: AppDelegate.prefIntroDone)
-
-                let firstRunViewController = FirstRunViewController()
-                rootViewController.present(firstRunViewController, animated: false, completion: nil)
-            }
-        }
-
+        
         return true
     }
 
