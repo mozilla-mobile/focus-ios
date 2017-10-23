@@ -34,14 +34,14 @@ And the root view controller of the Navigation Controller is an instance of ```B
 
 ## FirstRunViewController
 
-![FirstRunViewController](/images/00-firstrunVC.png)  
+![FirstRunViewController](images/00-firstrunVC.png)  
 
 If it’s the first run of the app, an instance of ```FirstRunViewController``` is presented.
 
 
 ## BrowserViewController - no web page loaded
 
-![BrowserViewController and the OverlayView](/images/01-browserVC-OverlayView.png)  
+![BrowserViewController and the OverlayView](images/01-browserVC-OverlayView.png)  
 
 
 ```BrowserViewController``` works by  displaying an instance of ```HomeView``` (when no web page is loaded). 
@@ -63,7 +63,7 @@ When the user enters input in the ```URLBar```, an ```OverlayView``` is presente
 
 ## BrowserViewController - web page loaded
 
-![BrowserViewController showing a web page](/images/02-browserVC-showing-webpage.png)  
+![BrowserViewController showing a web page](images/02-browserVC-showing-webpage.png)  
 
 
 ```BrowserViewController``` will display its ```WebViewContainer``` once it has a valid URL or a search to perform.
@@ -73,12 +73,12 @@ When the user enters input in the ```URLBar```, an ```OverlayView``` is presente
 
 ## Other ViewControllers
 
-![SettingsViewController](/images/03-settingsVC.png)  
+![SettingsViewController](images/03-settingsVC.png)  
 
 ---
 
-![SearchSettingsViewController](/images/04-searchsettingsVC.png)  
+![SearchSettingsViewController](images/04-searchsettingsVC.png)  
 
 ---
 
-![AboutViewController](/images/05-aboutVC.png)
+![AboutViewController](images/05-aboutVC.png)
