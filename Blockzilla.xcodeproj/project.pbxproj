@@ -108,6 +108,7 @@
 		D3E54FD51DEFB25B003E1AFF /* SearchPlugins in Resources */ = {isa = PBXBuildFile; fileRef = D3E54FD41DEFB25B003E1AFF /* SearchPlugins */; };
 		D3E54FDE1DF0E0D7003E1AFF /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E54FDD1DF0E0D6003E1AFF /* UIImageExtensions.swift */; };
 		D3E54FE01DF0E221003E1AFF /* SearchSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E54FDF1DF0E221003E1AFF /* SearchSettingsViewController.swift */; };
+		D597608C1F9FEFB300A2D212 /* TrackingProtection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D597608B1F9FEFB300A2D212 /* TrackingProtection.swift */; };
 		E40AFB101DC9014700DA5651 /* UserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40AFB0F1DC9014700DA5651 /* UserAgent.swift */; };
 		E40AFB141DC939FF00DA5651 /* SupportUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40AFB131DC939FF00DA5651 /* SupportUtils.swift */; };
 		E40AFC741DDDE96D00DA5651 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E40AFC761DDDE96D00DA5651 /* InfoPlist.strings */; };
@@ -358,6 +359,7 @@
 		D3E54FD41DEFB25B003E1AFF /* SearchPlugins */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SearchPlugins; path = Search/SearchPlugins; sourceTree = SOURCE_ROOT; };
 		D3E54FDD1DF0E0D6003E1AFF /* UIImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtensions.swift; sourceTree = "<group>"; };
 		D3E54FDF1DF0E221003E1AFF /* SearchSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSettingsViewController.swift; sourceTree = "<group>"; };
+		D597608B1F9FEFB300A2D212 /* TrackingProtection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtection.swift; sourceTree = "<group>"; };
 		E402FFE21E57643000B45AFF /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E402FFE31E57643100B45AFF /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E402FFE41E57643100B45AFF /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -706,6 +708,7 @@
 		B31DAAC71F7D87E800A11A74 /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				D597608A1F9FEF7100A2D212 /* TrackingProtection */,
 				B31DAAC81F7D87EF00A11A74 /* RequestHandler */,
 			);
 			path = Lib;
@@ -788,6 +791,14 @@
 				D3B323511BD1A7EE00B0EEE4 /* web-fonts.json */,
 			);
 			name = Blocklists;
+			sourceTree = "<group>";
+		};
+		D597608A1F9FEF7100A2D212 /* TrackingProtection */ = {
+			isa = PBXGroup;
+			children = (
+				D597608B1F9FEFB300A2D212 /* TrackingProtection.swift */,
+			);
+			path = TrackingProtection;
 			sourceTree = "<group>";
 		};
 		D77FE464056F274978E025ED /* Frameworks */ = {
@@ -1283,6 +1294,7 @@
 				E4BF2E111BAD8AC500DA9D68 /* Settings.swift in Sources */,
 				D30179C81BCD78E2009AD388 /* SCSiriWaveformView.m in Sources */,
 				D3E54FDE1DF0E0D7003E1AFF /* UIImageExtensions.swift in Sources */,
+				D597608C1F9FEFB300A2D212 /* TrackingProtection.swift in Sources */,
 				D34E70351DA874AA00BABDCC /* StringExtensions.swift in Sources */,
 				D30179C31BCC6F65009AD388 /* AboutViewController.swift in Sources */,
 				B3AFC2BC1F7C0B9F001AEF38 /* WebViewController.swift in Sources */,
