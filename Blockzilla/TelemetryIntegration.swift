@@ -33,6 +33,7 @@ class TelemetryEventMethod {
     public static let share = "share"
     public static let swipeToNavigateBack = "swipe_to_navigate_back"
     public static let swipeToNavigateForward = "swipe_to_navigate_forward"
+    public static let customDomainAdded = "custom_domain_added"
 }
 
 class TelemetryEventObject {

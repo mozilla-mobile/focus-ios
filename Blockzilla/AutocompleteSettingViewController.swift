@@ -8,6 +8,7 @@
 //
 
 import Foundation
+import Telemetry
 
 protocol AutocompleteSettingDelegate {
     func autocompleteSettingViewController(_ autocompleteSettingViewController: AutocompleteSettingViewController, enabled: Bool, didUpdateDomains domains: [String])
@@ -163,6 +164,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
 
 extension AutocompleteSettingViewController: AddCustomDomainDelegate {
     func addCustomDomainViewController(_ addCustomDomainViewController: AddCustomDomainViewController, domain: String) {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.customDomainAdded, object: TelemetryEventObject.setting)
         domains.append(domain)
         tableView.reloadData()
         Settings.setCustomDomainSetting(domains: domains)
