@@ -59,7 +59,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 UserDefaults.standard.set(AppDelegate.prefIntroVersion, forKey: AppDelegate.prefIntroDone)
                 UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
 
-                let firstRunViewController = FirstRunViewController()
+                let firstRunViewController = IntroViewController()
                 rootViewController.present(firstRunViewController, animated: false, completion: nil)
             }
         }
