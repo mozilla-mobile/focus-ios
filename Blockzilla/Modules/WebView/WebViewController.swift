@@ -74,6 +74,9 @@ class WebViewController: UIViewController, WebController {
         browserView.scrollView.delegate = self
         browserView.navigationDelegate = self
         browserView.uiDelegate = self
+        let source = try! String(contentsOf: Bundle.main.url(forResource: "ajax", withExtension: "js")!)
+        let script = WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true)
+        browserView.configuration.userContentController.addUserScript(script)
         progressObserver = browserView.observe(\WKWebView.estimatedProgress) { (webView, value) in
             self.delegate?.webController(self, didUpdateEstimatedProgress: webView.estimatedProgress)
         }
@@ -157,3 +160,4 @@ extension WebViewController: WKUIDelegate {
         return nil
     }
 }
+
