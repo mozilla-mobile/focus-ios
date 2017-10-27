@@ -19,7 +19,6 @@ class TrackingProtection: BlockListChecker {
     private init() { }
     
     func isBlocked(url: URL) -> BlockLists.List? {
-        print(Utils.getEnabledLists())
         let enabledLists = Utils.getEnabledLists().flatMap(BlockLists.List.init(rawValue:))
         return blockLists.urlIsInList(url).flatMap { return enabledLists.contains($0) ? $0 : nil }
     }

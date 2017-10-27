@@ -39,17 +39,36 @@ protocol WebControllerDelegate: class {
 
 class WebViewController: UIViewController, WebController {
     weak var delegate: WebControllerDelegate?
-
+    private var counterView = UILabel()
     private var browserView = WKWebView()
     private var progressObserver: NSKeyValueObservation?
+    private var trackingcounter = 0 {
+        didSet {
+            counterView.text = String(trackingcounter)
+        }
+    }
+    private var urlsChecked: Set<String> = []
 
     var printFormatter: UIPrintFormatter { return browserView.viewPrintFormatter() }
     var scrollView: UIScrollView { return browserView.scrollView }
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)
+        counterView.textColor = .green
+        counterView.font = .systemFont(ofSize: 19)
+        counterView.text = "0"
+        counterView.layer.shadowColor = UIColor.black.cgColor
+        counterView.layer.shadowRadius = 3
+        counterView.layer.shadowOpacity = 1.0
+        counterView.layer.shadowOffset = .zero
+        view.addSubview(counterView)
         setupWebview()
         ContentBlockerHelper.shared.handler = reloadBlockers(_:)
+
+        counterView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(10)
+            make.right.equalToSuperview().offset(-10)
+        }
     }
 
     func reset() {
@@ -74,6 +93,7 @@ class WebViewController: UIViewController, WebController {
         browserView.scrollView.delegate = self
         browserView.navigationDelegate = self
         browserView.uiDelegate = self
+        browserView.configuration.userContentController.add(self, name: "focusTrackingProtection")
         let source = try! String(contentsOf: Bundle.main.url(forResource: "ajax", withExtension: "js")!)
         let script = WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true)
         browserView.configuration.userContentController.addUserScript(script)
@@ -85,7 +105,7 @@ class WebViewController: UIViewController, WebController {
             self.reloadBlockers(lists)
         }
 
-        view.addSubview(browserView)
+        view.insertSubview(browserView, belowSubview: counterView)
         browserView.snp.makeConstraints { make in
             make.edges.equalTo(view.snp.edges)
         }
@@ -125,11 +145,24 @@ extension WebViewController: UIScrollViewDelegate {
 extension WebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         delegate?.webControllerDidStartNavigation(self)
+        trackingcounter = 0
+        urlsChecked = []
+
         updateBackForwardState(webView: webView)
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        delegate?.webControllerDidFinishNavigation(self)    
+        delegate?.webControllerDidFinishNavigation(self)
+
+        let js = "Array.prototype.map.call(document.scripts, function(t) { return t.src })"
+        webView.evaluateJavaScript(js) { scripts, error in
+            guard let scripts = scripts as? [String] else { return }
+
+            self.trackingcounter += scripts.lazy.filter({ !$0.isEmpty })
+                .flatMap(URL.init(string:))
+                .flatMap(TrackingProtection.shared.isBlocked(url:))
+                .count
+        }
     }
 
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
@@ -161,3 +194,22 @@ extension WebViewController: WKUIDelegate {
     }
 }
 
+
+extension WebViewController: WKScriptMessageHandler {
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        guard let body = message.body as? [String: String],
+              let urlString = body["url"] else { return }
+
+        guard !urlsChecked.contains(urlString) else { return }
+        urlsChecked.insert(urlString)
+
+        guard var components = URLComponents(string: urlString) else { return }
+        components.scheme = "http"
+        guard let url = components.url else { return }
+
+        if TrackingProtection.shared.isBlocked(url: url) != nil {
+            print("detected: \(url.absoluteString)")
+            trackingcounter += 1
+        }
+    }
+}
