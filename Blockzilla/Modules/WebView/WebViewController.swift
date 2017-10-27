@@ -33,18 +33,49 @@ protocol WebControllerDelegate: class {
     func webController(_ controller: WebController, scrollViewDidScroll scrollView: UIScrollView)
     func webController(_ controller: WebController, stateDidChange state: BrowserState)
     func webControllerShouldScrollToTop(_ controller: WebController) -> Bool
+    func webController(_ controller: WebController, didUpdateTrackingInformation trackingInformation: TrackingInformation)
 }
 
+struct TrackingInformation {
+    let adCount: Int
+    let analyticCount: Int
+    let contentCount: Int
+    let socialCount: Int
 
+    var total: Int { return adCount + socialCount + analyticCount + contentCount }
+
+    init() {
+        adCount = 0
+        analyticCount = 0
+        contentCount = 0
+        socialCount = 0
+    }
+
+    private init(adCount: Int, analyticCount: Int, contentCount: Int, socialCount: Int) {
+        self.adCount = adCount
+        self.analyticCount = analyticCount
+        self.contentCount = contentCount
+        self.socialCount = socialCount
+    }
+
+    func create(byAddingListItem listItem: BlockLists.List) -> TrackingInformation {
+        switch listItem {
+        case .advertising: return TrackingInformation(adCount: adCount + 1, analyticCount: analyticCount, contentCount: contentCount, socialCount: socialCount)
+        case .analytics: return TrackingInformation(adCount: adCount, analyticCount: analyticCount + 1, contentCount: contentCount, socialCount: socialCount)
+        case .content: return TrackingInformation(adCount: adCount, analyticCount: analyticCount, contentCount: contentCount + 1, socialCount: socialCount)
+        case .social: return TrackingInformation(adCount: adCount, analyticCount: analyticCount, contentCount: contentCount, socialCount: socialCount + 1)
+        }
+    }
+}
 
 class WebViewController: UIViewController, WebController {
     weak var delegate: WebControllerDelegate?
-    private var counterView = UILabel()
+
     private var browserView = WKWebView()
     private var progressObserver: NSKeyValueObservation?
-    private var trackingcounter = 0 {
+    private var trackingInformation = TrackingInformation() {
         didSet {
-            counterView.text = String(trackingcounter)
+            delegate?.webController(self, didUpdateTrackingInformation: trackingInformation)
         }
     }
 
@@ -53,22 +84,8 @@ class WebViewController: UIViewController, WebController {
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)
-        print(Utils.getEnabledLists())
-        counterView.textColor = .green
-        counterView.font = .systemFont(ofSize: 19)
-        counterView.text = "0"
-        counterView.layer.shadowColor = UIColor.black.cgColor
-        counterView.layer.shadowRadius = 3
-        counterView.layer.shadowOpacity = 1.0
-        counterView.layer.shadowOffset = .zero
-        view.addSubview(counterView)
         setupWebview()
         ContentBlockerHelper.shared.handler = reloadBlockers(_:)
-
-        counterView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(10)
-            make.right.equalToSuperview().offset(-10)
-        }
     }
 
     func reset() {
@@ -111,7 +128,7 @@ class WebViewController: UIViewController, WebController {
             self.reloadBlockers(lists)
         }
 
-        view.insertSubview(browserView, belowSubview: counterView)
+        view.addSubview(browserView)
         browserView.snp.makeConstraints { make in
             make.edges.equalTo(view.snp.edges)
         }
@@ -151,7 +168,7 @@ extension WebViewController: UIScrollViewDelegate {
 extension WebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         delegate?.webControllerDidStartNavigation(self)
-        trackingcounter = 0
+        trackingInformation = TrackingInformation()
 
         updateBackForwardState(webView: webView)
     }
@@ -199,9 +216,8 @@ extension WebViewController: WKScriptMessageHandler {
         components.scheme = "http"
         guard let url = components.url else { return }
 
-        if TrackingProtection.shared.isBlocked(url: url) != nil {
-            print("blocked: \(urlString)")
-            trackingcounter += 1
+        if let listItem = TrackingProtection.shared.isBlocked(url: url) {
+            trackingInformation = trackingInformation.create(byAddingListItem: listItem)
         }
     }
 }

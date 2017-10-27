@@ -630,6 +630,10 @@ extension BrowserViewController: WebControllerDelegate {
 
     func webController(_ controller: WebController, stateDidChange state: BrowserState) {}
 
+    func webController(_ controller: WebController, didUpdateTrackingInformation trackingInformation: TrackingInformation) {
+        print(trackingInformation)
+    }
+
     private func showToolbars() {
         let scrollView = webViewController.scrollView
 
