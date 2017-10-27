@@ -54,6 +54,7 @@ class WebViewController: UIViewController, WebController {
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)
+        print(Utils.getEnabledLists())
         counterView.textColor = .green
         counterView.font = .systemFont(ofSize: 19)
         counterView.text = "0"
@@ -158,10 +159,12 @@ extension WebViewController: WKNavigationDelegate {
         webView.evaluateJavaScript(js) { scripts, error in
             guard let scripts = scripts as? [String] else { return }
 
-            self.trackingcounter += scripts.lazy.filter({ !$0.isEmpty })
-                .flatMap(URL.init(string:))
-                .flatMap(TrackingProtection.shared.isBlocked(url:))
-                .count
+            for script in scripts {
+                guard !script.isEmpty, let url = URL(string: script) else { continue }
+                if TrackingProtection.shared.isBlocked(url: url) != nil {
+                    self.trackingcounter += 1
+                }
+            }
         }
     }
 
@@ -202,13 +205,12 @@ extension WebViewController: WKScriptMessageHandler {
 
         guard !urlsChecked.contains(urlString) else { return }
         urlsChecked.insert(urlString)
-
+        
         guard var components = URLComponents(string: urlString) else { return }
         components.scheme = "http"
         guard let url = components.url else { return }
 
         if TrackingProtection.shared.isBlocked(url: url) != nil {
-            print("detected: \(url.absoluteString)")
             trackingcounter += 1
         }
     }

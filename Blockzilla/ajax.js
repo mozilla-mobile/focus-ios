@@ -11,7 +11,6 @@
   };
 
   xhrProto.send = function(body) {
-      console.log("sending url: ", this._url)
       messageHandler.postMessage({ url: this._url })
       return originalSend.apply(this, arguments)
   };
@@ -23,20 +22,18 @@
       return originalImageSrc.get.call(this);
     },
     set: function(value) {
-      console.log("sending url on image: ", value)
       messageHandler.postMessage({ url: value })
       originalImageSrc.set.call(this, value);
     }
   });
 
-  var originalElementSrc = Object.getOwnPropertyDescriptor(Element.prototype, 'src');
-  delete Element.prototype.src;
-  Object.defineProperty(Element.prototype, 'src', {
+  var originalElementSrc = Object.getOwnPropertyDescriptor(HTMLScriptElement.prototype, 'src');
+  delete HTMLScriptElement.prototype.src;
+  Object.defineProperty(HTMLScriptElement.prototype, 'src', {
     get: function() {
       return originalElementSrc.get.call(this);
     },
     set: function(value) {
-      console.log("sending url on Element: ", value)
       messageHandler.postMessage({ url: value })
       originalElementSrc.set.call(this, value);
     }
