@@ -40,5 +40,19 @@
   });
 
 
+  // Observer
+  var observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      mutation.addedNodes.forEach(function(node) {
+        if (node.tagName === 'SCRIPT') {
+          console.log('<script> added!');
+        }
+      });
+    });
+  });
 
+  observer.observe(document.documentElement, {
+    childList: true,
+    subtree: true
+  });
 })();

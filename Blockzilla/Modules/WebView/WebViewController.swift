@@ -95,9 +95,15 @@ class WebViewController: UIViewController, WebController {
         browserView.navigationDelegate = self
         browserView.uiDelegate = self
         browserView.configuration.userContentController.add(self, name: "focusTrackingProtection")
-        let source = try! String(contentsOf: Bundle.main.url(forResource: "ajax", withExtension: "js")!)
+        let source = try! String(contentsOf: Bundle.main.url(forResource: "preload", withExtension: "js")!)
         let script = WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true)
         browserView.configuration.userContentController.addUserScript(script)
+
+        browserView.configuration.userContentController.add(self, name: "focusTrackingProtectionPostLoad")
+        let source2 = try! String(contentsOf: Bundle.main.url(forResource: "postload", withExtension: "js")!)
+        let script2 = WKUserScript(source: source2, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
+        browserView.configuration.userContentController.addUserScript(script2)
+
         progressObserver = browserView.observe(\WKWebView.estimatedProgress) { (webView, value) in
             self.delegate?.webController(self, didUpdateEstimatedProgress: webView.estimatedProgress)
         }
@@ -155,17 +161,17 @@ extension WebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         delegate?.webControllerDidFinishNavigation(self)
 
-        let js = "Array.prototype.map.call(document.scripts, function(t) { return t.src })"
-        webView.evaluateJavaScript(js) { scripts, error in
-            guard let scripts = scripts as? [String] else { return }
-
-            for script in scripts {
-                guard !script.isEmpty, let url = URL(string: script) else { continue }
-                if TrackingProtection.shared.isBlocked(url: url) != nil {
-                    self.trackingcounter += 1
-                }
-            }
-        }
+//        let js = ""
+//        webView.evaluateJavaScript(js) { scripts, error in
+//            guard let scripts = scripts as? [String] else { return }
+//
+//            for script in scripts {
+//                guard !script.isEmpty, let url = URL(string: script) else { continue }
+//                if TrackingProtection.shared.isBlocked(url: url) != nil {
+//                    self.trackingcounter += 1
+//                }
+//            }
+//        }
     }
 
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
@@ -203,6 +209,7 @@ extension WebViewController: WKScriptMessageHandler {
         guard let body = message.body as? [String: String],
               let urlString = body["url"] else { return }
 
+        print(message.name, urlString)
         guard !urlsChecked.contains(urlString) else { return }
         urlsChecked.insert(urlString)
         
