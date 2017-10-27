@@ -47,7 +47,6 @@ class WebViewController: UIViewController, WebController {
             counterView.text = String(trackingcounter)
         }
     }
-    private var urlsChecked: Set<String> = []
 
     var printFormatter: UIPrintFormatter { return browserView.viewPrintFormatter() }
     var scrollView: UIScrollView { return browserView.scrollView }
@@ -153,25 +152,12 @@ extension WebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         delegate?.webControllerDidStartNavigation(self)
         trackingcounter = 0
-        urlsChecked = []
 
         updateBackForwardState(webView: webView)
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         delegate?.webControllerDidFinishNavigation(self)
-
-//        let js = ""
-//        webView.evaluateJavaScript(js) { scripts, error in
-//            guard let scripts = scripts as? [String] else { return }
-//
-//            for script in scripts {
-//                guard !script.isEmpty, let url = URL(string: script) else { continue }
-//                if TrackingProtection.shared.isBlocked(url: url) != nil {
-//                    self.trackingcounter += 1
-//                }
-//            }
-//        }
     }
 
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
@@ -209,15 +195,12 @@ extension WebViewController: WKScriptMessageHandler {
         guard let body = message.body as? [String: String],
               let urlString = body["url"] else { return }
 
-        print(message.name, urlString)
-        guard !urlsChecked.contains(urlString) else { return }
-        urlsChecked.insert(urlString)
-        
         guard var components = URLComponents(string: urlString) else { return }
         components.scheme = "http"
         guard let url = components.url else { return }
 
         if TrackingProtection.shared.isBlocked(url: url) != nil {
+            print("blocked: \(urlString)")
             trackingcounter += 1
         }
     }

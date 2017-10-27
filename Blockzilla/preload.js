@@ -27,17 +27,17 @@
     }
   });
 
-  var originalElementSrc = Object.getOwnPropertyDescriptor(HTMLScriptElement.prototype, 'src');
-  delete HTMLScriptElement.prototype.src;
-  Object.defineProperty(HTMLScriptElement.prototype, 'src', {
-    get: function() {
-      return originalElementSrc.get.call(this);
-    },
-    set: function(value) {
-      messageHandler.postMessage({ url: value })
-      originalElementSrc.set.call(this, value);
-    }
-  });
+  // var originalElementSrc = Object.getOwnPropertyDescriptor(HTMLScriptElement.prototype, 'src');
+  // delete HTMLScriptElement.prototype.src;
+  // Object.defineProperty(HTMLScriptElement.prototype, 'src', {
+  //   get: function() {
+  //     return originalElementSrc.get.call(this);
+  //   },
+  //   set: function(value) {
+  //     messageHandler.postMessage({ url: value })
+  //     originalElementSrc.set.call(this, value);
+  //   }
+  // });
 
 
   // Observer
