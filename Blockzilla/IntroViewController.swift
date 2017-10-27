@@ -11,7 +11,7 @@ struct IntroViewControllerUX {
     static let SyncButtonTopPadding = 5
     static let MinimumFontScale: CGFloat = 0.5
     
-    static let CardSlides = ["tour-Welcome", "tour-Search"]
+    static let CardSlides = ["onboarding_1", "onboarding_2"]
     static let NumberOfCards = CardSlides.count
     
     static let PagerCenterOffsetFromScrollViewBottom = UIScreen.main.bounds.width <= 320 ? 20 : 30
@@ -25,11 +25,11 @@ struct IntroViewControllerUX {
     static let CardTitleHeight = 50
     
     
-    static let CardTitleWelcome = NSLocalizedString("Intro.Slides.Welcome.Title", tableName: "Intro", value: "Thanks for choosing Firefox!", comment: "Title for the first panel 'Welcome' in the First Run tour.")
+    static let CardTitleWelcome = NSLocalizedString("Intro.Slides.Welcome.Title", tableName: "Intro", value: "Power up your privacy", comment: "Title for the first panel 'Welcome' in the First Run tour.")
     static let CardTitleSearch = NSLocalizedString("Intro.Slides.Search.Title", tableName: "Intro", value: "Your search, your way", comment: "Title for the second  panel 'Search' in the First Run tour.")
     
-    static let CardTextWelcome = NSLocalizedString("Intro.Slides.Welcome.Description", tableName: "Intro", value: "A modern mobile browser from Mozilla, the non-profit committed to a free and open web.", comment: "Description for the 'Welcome' panel in the First Run tour.")
-    static let CardTextSearch = NSLocalizedString("Intro.Slides.Search.Description", tableName: "Intro", value: "Searching for something different? Choose another default search engine (or add your own) in Settings.", comment: "Description for the 'Favorite Search Engine' panel in the First Run tour.")
+    static let CardTextWelcome = NSLocalizedString("Intro.Slides.Welcome.Description", tableName: "Intro", value: "Take private browsing to the next level. Block ads and other content that can track you across sites and bog down page load times.", comment: "Description for the 'Welcome' panel in the First Run tour.")
+    static let CardTextSearch = NSLocalizedString("Intro.Slides.Search.Description", tableName: "Intro", value: "Searching for something different? Choose a different search engine.", comment: "Description for the 'Favorite Search Engine' panel in the First Run tour.")
     
     static let FadeDuration = 0.25
 }
@@ -72,7 +72,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         }
         
         for slideName in IntroViewControllerUX.CardSlides {
-            slides.append(#imageLiteral(resourceName: "about_icon"))
+            slides.append(UIImage(named: slideName)!)
         }
         
         startBrowsingButton = UIButton()
