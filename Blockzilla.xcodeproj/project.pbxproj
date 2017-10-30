@@ -110,7 +110,6 @@
 		D3E54FD51DEFB25B003E1AFF /* SearchPlugins in Resources */ = {isa = PBXBuildFile; fileRef = D3E54FD41DEFB25B003E1AFF /* SearchPlugins */; };
 		D3E54FDE1DF0E0D7003E1AFF /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E54FDD1DF0E0D6003E1AFF /* UIImageExtensions.swift */; };
 		D3E54FE01DF0E221003E1AFF /* SearchSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E54FDF1DF0E221003E1AFF /* SearchSettingsViewController.swift */; };
-		D519CDE11FA3D1EA000B7925 /* DrawerContainerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D519CDE01FA3D1EA000B7925 /* DrawerContainerController.swift */; };
 		D597608C1F9FEFB300A2D212 /* TrackingProtection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D597608B1F9FEFB300A2D212 /* TrackingProtection.swift */; };
 		E40AFB101DC9014700DA5651 /* UserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40AFB0F1DC9014700DA5651 /* UserAgent.swift */; };
 		E40AFB141DC939FF00DA5651 /* SupportUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40AFB131DC939FF00DA5651 /* SupportUtils.swift */; };
@@ -364,7 +363,6 @@
 		D3E54FD41DEFB25B003E1AFF /* SearchPlugins */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SearchPlugins; path = Search/SearchPlugins; sourceTree = SOURCE_ROOT; };
 		D3E54FDD1DF0E0D6003E1AFF /* UIImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtensions.swift; sourceTree = "<group>"; };
 		D3E54FDF1DF0E221003E1AFF /* SearchSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSettingsViewController.swift; sourceTree = "<group>"; };
-		D519CDE01FA3D1EA000B7925 /* DrawerContainerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawerContainerController.swift; sourceTree = "<group>"; };
 		D597608B1F9FEFB300A2D212 /* TrackingProtection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtection.swift; sourceTree = "<group>"; };
 		E402FFE21E57643000B45AFF /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E402FFE31E57643100B45AFF /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -714,7 +712,6 @@
 		B31DAAC71F7D87E800A11A74 /* Lib */ = {
 			isa = PBXGroup;
 			children = (
-				D519CDDF1FA3D1D1000B7925 /* DrawerContainer */,
 				D597608A1F9FEF7100A2D212 /* TrackingProtection */,
 				B31DAAC81F7D87EF00A11A74 /* RequestHandler */,
 			);
@@ -798,14 +795,6 @@
 				D3B323511BD1A7EE00B0EEE4 /* web-fonts.json */,
 			);
 			name = Blocklists;
-			sourceTree = "<group>";
-		};
-		D519CDDF1FA3D1D1000B7925 /* DrawerContainer */ = {
-			isa = PBXGroup;
-			children = (
-				D519CDE01FA3D1EA000B7925 /* DrawerContainerController.swift */,
-			);
-			path = DrawerContainer;
 			sourceTree = "<group>";
 		};
 		D597608A1F9FEF7100A2D212 /* TrackingProtection */ = {
@@ -1340,7 +1329,6 @@
 				E47F9AEE1DB9338600A93285 /* AdjustIntegration.swift in Sources */,
 				D3E54FD11DEFB063003E1AFF /* SearchEngineManager.swift in Sources */,
 				D392881D1BC5CF180016A9A0 /* UIColorExtensions.swift in Sources */,
-				D519CDE11FA3D1EA000B7925 /* DrawerContainerController.swift in Sources */,
 				D3E3CA7D1DA827AD0079C94B /* HomeView.swift in Sources */,
 				D3E251EB1DAD714C005918DC /* SafariInstructionsViewController.swift in Sources */,
 				D35A0E021E26C94F00297884 /* ClosedRangeExtensions.swift in Sources */,
