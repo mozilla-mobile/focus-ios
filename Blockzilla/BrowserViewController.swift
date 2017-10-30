@@ -14,6 +14,7 @@ class BrowserViewController: UIViewController {
 
     private let mainContainerView = UIView(frame: .zero)
     private let drawerContainerView = DrawerView(frame: .zero)
+    private let drawerOverlayView = UIView()
     
     private let webViewController = WebViewController()
     private let webViewContainer = UIView()
@@ -70,6 +71,15 @@ class BrowserViewController: UIViewController {
 
         view.addSubview(mainContainerView)
         view.addSubview(drawerContainerView)
+
+        drawerOverlayView.backgroundColor = UIColor(white: 0, alpha: 0.8)
+        drawerOverlayView.layer.opacity = 0
+        drawerOverlayView.isHidden = true
+        drawerOverlayView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hide_drawer)))
+        view .addSubview(drawerOverlayView)
+        drawerOverlayView.snp.makeConstraints { make in
+            make.edges.equalTo(mainContainerView.snp.edges)
+        }
 
         mainContainerView.snp.makeConstraints { make in
             make.top.equalToSuperview()
@@ -239,6 +249,25 @@ class BrowserViewController: UIViewController {
             make.trailing.equalTo(homeView.settingsButton.snp.leading).offset(-8).priority(500)
         }
         topURLBarConstraints.forEach { $0.deactivate() }
+    }
+
+    @objc fileprivate func hide_drawer() {
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .curveEaseIn, animations: {
+            self.drawerConstraint.deactivate()
+            self.drawerOverlayView.layer.opacity = 0
+            self.view.layoutIfNeeded()
+        }, completion: { completed in
+            self.drawerOverlayView.isHidden = true
+        })
+    }
+
+    fileprivate func show_drawer() {
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .curveEaseIn, animations: {
+            self.drawerConstraint.activate()
+            self.drawerOverlayView.isHidden = false
+            self.drawerOverlayView.layer.opacity = 1
+            self.view.layoutIfNeeded()
+        }, completion: nil)
     }
 
     fileprivate func resetBrowser() {
@@ -463,10 +492,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidTapShield(_ urlBar: URLBar) {
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .curveEaseIn, animations: {
-            self.drawerConstraint.activate()
-            self.view.layoutIfNeeded()
-        }, completion: nil)
+        show_drawer()
     }
 }
 
