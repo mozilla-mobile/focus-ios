@@ -461,6 +461,13 @@ extension BrowserViewController: URLBarDelegate {
             self.view.layoutIfNeeded()
         }
     }
+
+    func urlBarDidTapShield(_ urlBar: URLBar) {
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .curveEaseIn, animations: {
+            self.drawerConstraint.activate()
+            self.view.layoutIfNeeded()
+        }, completion: nil)
+    }
 }
 
 extension BrowserViewController: BrowserToolsetDelegate {

@@ -78,6 +78,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     UserDefaults.standard.set(counter+1, forKey: AppDelegate.prefWhatsNewCounter)
             }
         }
+
+        let url = URL(string: "https://google.com")!
+        browserViewController.ensureBrowsingMode()
+        browserViewController.submit(url: url)
         
         return true
     }
