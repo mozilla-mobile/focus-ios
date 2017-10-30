@@ -53,6 +53,9 @@ struct UIConstants {
         static let urlTextHighlight = UIColor(rgb: 0xB5007F)
         static let urlTextPlaceholder = UIColor(white: 1, alpha: 0.4)
         static let urlTextShadow = UIColor.black
+
+        static let trackingProtectionPrimary = UIColor(rgb: 0xFFFFFF)
+        static let trackingProtectionSecondary = UIColor(rgb: 0xB2B2B2)
     }
 
     struct fonts {
