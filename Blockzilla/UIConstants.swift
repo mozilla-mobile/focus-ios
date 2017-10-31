@@ -56,6 +56,7 @@ struct UIConstants {
 
         static let trackingProtectionPrimary = UIColor(rgb: 0xFFFFFF)
         static let trackingProtectionSecondary = UIColor(rgb: 0xB2B2B2)
+        static let trackingProtectionBreakdownBackground = UIColor(rgb: 0x414146)
     }
 
     struct fonts {
