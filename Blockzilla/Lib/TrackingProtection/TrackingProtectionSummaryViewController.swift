@@ -4,8 +4,41 @@
 
 import UIKit
 
-class TrackingProtectionToggleView: UIView {
+private extension BlockLists.List {
+    var labelText: String {
+        switch self {
+        case .advertising: return UIConstants.strings.adTrackerLabel
+        case .analytics: return UIConstants.strings.analyticTrackerLabel
+        case .social: return UIConstants.strings.socialTrackerLabel
+        case .content: return UIConstants.strings.contentTrackerLabel
+        }
+    }
 
+    var color: UIColor {
+        switch self {
+        case .advertising: return UIColor(rgb: 0x8000D7)
+        case .analytics: return UIColor(rgb: 0xED00B5)
+        case .social: return UIColor(rgb: 0xD7B600)
+        case .content: return UIColor(rgb: 0x414146)
+        }
+    }
+}
+
+class TrackingProtectionBreakdownVisualizer: UIView {
+    private let adSection = CALayer()
+    private let analyticSection = CALayer()
+    private let socialSection = CALayer()
+    private let contentSection = CALayer()
+}
+
+class TrackingProtectionBreakdownView: UIView {
+    private let titleLabel = UILabel()
+    private let counterLabel = UILabel()
+    private let breakdown = TrackingProtectionBreakdownVisualizer()
+    private let breakdownList = UIStackView()
+}
+
+class TrackingProtectionToggleView: UIView {
     private let cell = UITableViewCell()
     private let icon = UIImageView(image: #imageLiteral(resourceName: "trackingprotection"))
     private let label = UILabel(frame: .zero)
@@ -100,7 +133,6 @@ class TrackingProtectionSummaryView: UIView {
 }
 
 class TrackingProtectionSummaryViewController: UIViewController {
-
     override func loadView() {
         self.view = TrackingProtectionSummaryView()
     }

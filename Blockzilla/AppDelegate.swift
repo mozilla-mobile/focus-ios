@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         window = UIWindow(frame: UIScreen.main.bounds)
 
-        let rootViewController = UINavigationController(rootViewController: browserViewController)
+        let rootViewController = TrackingProtectionSummaryViewController() // UINavigationController(rootViewController: browserViewController)
         window?.rootViewController = rootViewController
         window?.makeKeyAndVisible()
 
