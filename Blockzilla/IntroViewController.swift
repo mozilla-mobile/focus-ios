@@ -46,8 +46,6 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
     var slides = [UIImage]()
     var cards = [UIImageView]()
     var introViews = [UIView]()
-    var titleLabels = [UILabel]()
-    var textLabels = [UILabel]()
     
     var startBrowsingButton: UIButton!
     var introView: UIView?
@@ -61,7 +59,11 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
     var slideVerticalScaleFactor: CGFloat = 1.0
     
     override func viewDidLoad() {
-        view.backgroundColor = UIColor.white
+        let background = GradientBackgroundView(alpha: 0.7)
+        view.addSubview(background)
+        background.snp.makeConstraints { make in
+            make.edges.equalTo(view.snp.edges)
+        }
         
         // scale the slides down for iPhone 4S
         if view.frame.height <=  480 {
@@ -83,10 +85,6 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         startBrowsingButton.accessibilityIdentifier = "IntroViewController.startBrowsingButton"
         
         view.addSubview(startBrowsingButton)
-        startBrowsingButton.snp.makeConstraints { (make) -> Void in
-            make.left.right.bottom.equalTo(self.view)
-            make.height.equalTo(IntroViewControllerUX.StartBrowsingButtonHeight)
-        }
         
         scrollView = IntroOverlayScrollView()
         scrollView.backgroundColor = UIColor.clear
@@ -99,36 +97,45 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         scrollView.accessibilityIdentifier = "IntroViewController.scrollView"
         view.addSubview(scrollView)
         
-        slideContainer = UIView()
-        for i in 0..<IntroViewControllerUX.NumberOfCards {
-            let imageView = UIImageView(frame: CGRect(x: CGFloat(i)*scaledWidthOfSlide, y: 0, width: scaledWidthOfSlide, height: scaledHeightOfSlide))
-            imageView.image = slides[i]
-            slideContainer.addSubview(imageView)
-        }
-        
-        scrollView.addSubview(slideContainer)
-        scrollView.snp.makeConstraints { (make) -> Void in
-            make.left.right.top.equalTo(self.view)
-            make.bottom.equalTo(startBrowsingButton.snp.top)
-        }
-        self.view.layoutIfNeeded()
-        self.scrollView.layoutIfNeeded()
-        
         pageControl = UIPageControl()
         pageControl.pageIndicatorTintColor = UIColor.black.withAlphaComponent(0.3)
         pageControl.currentPageIndicatorTintColor = UIColor.black
         pageControl.numberOfPages = IntroViewControllerUX.NumberOfCards
         pageControl.accessibilityIdentifier = "IntroViewController.pageControl"
         pageControl.addTarget(self, action: #selector(IntroViewController.changePage), for: UIControlEvents.valueChanged)
-        
         view.addSubview(pageControl)
+        
+//        scrollView.addSubview(slideContainer)
+        scrollView.snp.makeConstraints { (make) -> Void in
+            make.left.right.top.bottom.equalTo(self.view)
+        }
+        self.view.layoutIfNeeded()
+        self.scrollView.layoutIfNeeded()
+   
         pageControl.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(self.scrollView)
-            make.centerY.equalTo(self.startBrowsingButton.snp.top).offset(-IntroViewControllerUX.PagerCenterOffsetFromScrollViewBottom)
+            make.bottom.equalTo(view).offset(-15)
         }
         
-        func addCard(title: String, text: String, introView: UIView) {
+        startBrowsingButton.snp.makeConstraints { (make) -> Void in
+            make.left.right.equalTo(self.view)
+            make.height.equalTo(IntroViewControllerUX.StartBrowsingButtonHeight)
+            make.bottom.equalTo(pageControl.snp.top).offset(-15)
+        }
+        
+        func addCard(title: String, text: String, introView: UIView, image: UIImageView) {
             self.introViews.append(introView)
+            
+            introView.backgroundColor = .white
+            introView.layer.shadowRadius = 3
+            introView.layer.shadowOpacity = 0.5
+            introView.layer.cornerRadius = 5
+
+            introView.addSubview(image)
+            image.snp.makeConstraints { make in
+                make.top.equalTo(introView)
+                make.centerX.equalTo(introView)
+            }
             
             let titleLabel = UILabel()
             titleLabel.numberOfLines = 2
@@ -136,10 +143,11 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
             titleLabel.minimumScaleFactor = IntroViewControllerUX.MinimumFontScale
             titleLabel.textAlignment = NSTextAlignment.center
             titleLabel.text = title
-            titleLabels.append(titleLabel)
+            titleLabel.font = UIConstants.fonts.firstRunTitle
+
             introView.addSubview(titleLabel)
             titleLabel.snp.makeConstraints { (make ) -> Void in
-                make.top.equalTo(introView).offset(20)
+                make.top.equalTo(image.snp.bottom)
                 make.centerX.equalTo(introView)
                 make.height.equalTo(IntroViewControllerUX.CardTitleHeight)
                 make.width.equalTo(IntroViewControllerUX.CardTextWidth)
@@ -151,7 +159,8 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
             textLabel.adjustsFontSizeToFitWidth = true
             textLabel.minimumScaleFactor = IntroViewControllerUX.MinimumFontScale
             textLabel.lineBreakMode = .byTruncatingTail
-            textLabels.append(textLabel)
+            textLabel.font = UIConstants.fonts.firstRunMessage
+
             introView.addSubview(textLabel)
             textLabel.snp.makeConstraints({ (make) -> Void in
                 make.top.equalTo(titleLabel.snp.bottom).offset(20)
@@ -159,38 +168,42 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
                 make.width.equalTo(IntroViewControllerUX.CardTextWidth)
             })
         }
-        addCard(title: IntroViewControllerUX.CardTitleWelcome, text: IntroViewControllerUX.CardTextWelcome, introView: UIView())
-        addCard(title: IntroViewControllerUX.CardTitleSearch, text: IntroViewControllerUX.CardTextSearch, introView: UIView())
         
-        let syncCardView = UIView()
-        // introViews.append(syncCardView)
-        
-        // We need a reference to the sync pages textlabel so we can adjust the constraints
-        if let index = introViews.index(of: syncCardView), index < textLabels.count {
-            let syncTextLabel = textLabels[index]
-            syncTextLabel.snp.makeConstraints { make in
-//                make.bottom.equalTo(signInButton.snp.top).offset(-IntroViewControllerUX.SyncButtonTopPadding)
-            }
+        for i in 0..<IntroViewControllerUX.NumberOfCards {
+            //            if let imageView = slideContainer.subviews[i] as? UIImageView {
+            //                imageView.frame = CGRect(x: CGFloat(i)*scaledWidthOfSlide, y: 0, width: scaledWidthOfSlide, height: scaledHeightOfSlide)
+            //                imageView.contentMode = UIViewContentMode.scaleAspectFit
+            //            }
         }
+        
+        addCard(title: IntroViewControllerUX.CardTitleWelcome, text: IntroViewControllerUX.CardTextWelcome, introView: UIView(), image: UIImageView(image: slides[0]))
+        addCard(title: IntroViewControllerUX.CardTitleSearch, text: IntroViewControllerUX.CardTextSearch, introView: UIView(), image: UIImageView(image: slides[1]))
+        
         // Add all the cards to the view, make them invisible with zero alpha
         for introView in introViews {
             introView.alpha = 0
             self.view.addSubview(introView)
+            
             introView.snp.makeConstraints { (make) -> Void in
-                make.top.equalTo(self.slideContainer.snp.bottom)
-                make.bottom.equalTo(self.startBrowsingButton.snp.top)
-                make.left.right.equalTo(self.view)
+                make.center.equalTo(self.view)
+                make.width.equalTo(self.view.frame.width/1.2)
+                make.height.equalTo(self.view.frame.height/1.3)
             }
+        }
+        
+        slideContainer = UIView()
+        slideContainer.backgroundColor = UIColor.red
+        for i in 0..<IntroViewControllerUX.NumberOfCards {
+            let imageView = UIImageView(frame: CGRect(x: CGFloat(i)*scaledWidthOfSlide, y: 0, width: scaledWidthOfSlide, height: scaledHeightOfSlide))
+            imageView.image = slides[i]
+            slideContainer.addSubview(imageView)
         }
         
         // Make whole screen scrollable by bringing the scrollview to the top
         view.bringSubview(toFront: scrollView)
-        view.sendSubview(toBack: pageControl)
-        scrollView?.bringSubview(toFront: syncCardView)
         
         // Activate the first card
         setActiveIntroView(introViews[0], forPage: 0)
-        setupDynamicFonts()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -199,27 +212,16 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
     }
-    
-    func SELDynamicFontChanged(_ notification: Notification) {
-        setupDynamicFonts()
-    }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         scrollView.snp.remakeConstraints { (make) -> Void in
-            make.left.right.top.equalTo(self.view)
-            make.bottom.equalTo(self.startBrowsingButton.snp.top)
+            make.left.right.top.bottom.equalTo(self.view)
         }
         
-        for i in 0..<IntroViewControllerUX.NumberOfCards {
-            if let imageView = slideContainer.subviews[i] as? UIImageView {
-                imageView.frame = CGRect(x: CGFloat(i)*scaledWidthOfSlide, y: 0, width: scaledWidthOfSlide, height: scaledHeightOfSlide)
-                imageView.contentMode = UIViewContentMode.scaleAspectFit
-            }
-        }
-        slideContainer.frame = CGRect(x: 0, y: 0, width: scaledWidthOfSlide * CGFloat(IntroViewControllerUX.NumberOfCards), height: scaledHeightOfSlide)
-        scrollView.contentSize = CGSize(width: slideContainer.frame.width, height: slideContainer.frame.height)
+//        slideContainer.frame = CGRect(x: 0, y: 0, width: scaledWidthOfSlide * CGFloat(IntroViewControllerUX.NumberOfCards), height: scaledHeightOfSlide)
+//        scrollView.contentSize = CGSize(width: slideContainer.frame.width, height: slideContainer.frame.height)
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -352,19 +354,6 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         let string = NSMutableAttributedString(string: text)
         string.addAttribute(NSAttributedStringKey.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: string.length))
         return string
-    }
-    
-    fileprivate func setupDynamicFonts() {
-//        startBrowsingButton.titleLabel?.font = UIFont(name: "FiraSans-Regular", size: DynamicFontHelper.defaultHelper.IntroStandardFontSize)
-//        signInButton.titleLabel?.font = UIFont(name: "FiraSans-Regular", size: DynamicFontHelper.defaultHelper.IntroBigFontSize)
-//
-//        for titleLabel in titleLabels {
-//            titleLabel.font = UIFont(name: "FiraSans-Medium", size: DynamicFontHelper.defaultHelper.IntroBigFontSize)
-//        }
-//
-//        for label in textLabels {
-//            label.font = UIFont(name: "FiraSans-UltraLight", size: DynamicFontHelper.defaultHelper.IntroStandardFontSize)
-//        }
     }
 }
 
