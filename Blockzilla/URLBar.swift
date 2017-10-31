@@ -33,7 +33,7 @@ class URLBar: UIView {
     private let urlTextContainer = UIView()
     private let urlText = URLTextField()
     private let truncatedUrlText = UITextView()
-    private let shieldIcon = UIImageView(image: #imageLiteral(resourceName: "trackingprotection"))
+    private let shieldIcon = TrackingProtectionBadge()
     private let lockIcon = UIImageView(image: #imageLiteral(resourceName: "icon_https"))
     private let smallLockIcon = UIImageView(image: #imageLiteral(resourceName: "icon_https_small"))
     private let urlBarBackgroundView = UIView()
@@ -206,6 +206,7 @@ class URLBar: UIView {
 
         shieldIcon.snp.makeConstraints { make in
             make.top.bottom.leading.equalTo(urlTextContainer)
+            make.width.equalTo(lockIcon)
 
             hideShieldConstraints.append(contentsOf:[
                 make.width.equalTo(0).constraint
@@ -670,5 +671,40 @@ private class URLTextField: AutocompleteTextField {
 
     override fileprivate func rightViewRect(forBounds bounds: CGRect) -> CGRect {
         return super.rightViewRect(forBounds: bounds).offsetBy(dx: -UIConstants.layout.urlBarWidthInset, dy: 0)
+    }
+}
+
+class TrackingProtectionBadge: UIView {
+    let counterLabel = UILabel()
+    let trackingProtectionOff = UIImageView(image: #imageLiteral(resourceName: "tracking_protection_off"))
+    let trackingProtectionCounter = UIImageView(image: #imageLiteral(resourceName: "tracking_protection_counter"))
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        trackingProtectionCounter.tintColor = .white
+        counterLabel.backgroundColor = UIColor.black
+        counterLabel.textColor = UIColor.white
+        
+        updateCounter(int: 20)
+        addSubview(trackingProtectionCounter)
+        addSubview(counterLabel)
+        bringSubview(toFront: trackingProtectionCounter)
+        trackingProtectionCounter.snp.makeConstraints { make in
+            make.center.equalTo(self.snp.center)
+        }
+        
+        counterLabel.snp.makeConstraints { make in
+            make.leading.bottom.equalTo(trackingProtectionCounter)
+            make.width.equalTo(30)
+        }
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func updateCounter(int: Int) {
+        counterLabel.text = String(int)
     }
 }
