@@ -47,16 +47,16 @@ class SnapshotTests: XCTestCase {
         app.switches["BlockerToggle.BlockOther"].tap()
         snapshot("09SettingsBlockOtherContentTrackers")
     }
-
+    
     func test03About() {
         let app = XCUIApplication()
         app.buttons["HomeView.settingsButton"].tap()
-        app.buttons["SettingsViewController.aboutButton"].tap()
+        app.cells["settingsViewController.about"].tap()
         snapshot("10About")
         app.swipeUp()
         snapshot("11About")
     }
-
+    
     func test04ShareMenu() {
         let app = XCUIApplication()
         app.textFields["URLBar.urlText"].typeText("bugzilla.mozilla.org\n")
