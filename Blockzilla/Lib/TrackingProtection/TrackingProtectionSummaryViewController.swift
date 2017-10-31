@@ -61,6 +61,11 @@ class TrackingProtectionBreakdownVisualizer: UIView {
 
         setupConstraints()
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        resizeVisualizerSegmetns()
+    }
 
     private func render(status: TrackingProtectionStatus) {
         switch status {
@@ -69,7 +74,7 @@ class TrackingProtectionBreakdownVisualizer: UIView {
             analyticSection.isHidden = false
             socialSection.isHidden = false
             contentSection.isHidden = false
-
+            resizeVisualizerSegmetns()
         case .off:
             adSection.isHidden = true
             analyticSection.isHidden = true
@@ -77,35 +82,45 @@ class TrackingProtectionBreakdownVisualizer: UIView {
             contentSection.isHidden = true
         }
     }
-
+    
+    private func resizeVisualizerSegmetns() {
+        guard case .on(let info) = trackingProtectionStatus else { return }
+        let total = CGFloat(info.total)
+        let width = frame.width
+        adWidth.update(offset: width * (CGFloat(info.adCount) / total))
+        analyticWidth.update(offset: width * (CGFloat(info.analyticCount) / total))
+        contentWidth.update(offset: width * (CGFloat(info.contentCount) / total))
+        socialWidth.update(offset: width * (CGFloat(info.socialCount) / total))
+    }
+ 
     private func setupConstraints() {
         adSection.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.height.equalToSuperview()
-            self.adWidth = make.width.equalToSuperview().multipliedBy(0.25).constraint
+            self.adWidth = make.width.equalTo(0).constraint
             make.leading.equalToSuperview()
         }
 
         analyticSection.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.height.equalToSuperview()
-            self.analyticWidth = make.width.equalToSuperview().multipliedBy(0.25).constraint
+            self.analyticWidth = make.width.equalTo(0).constraint
             make.leading.equalTo(adSection.snp.trailing)
         }
 
         socialSection.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.height.equalToSuperview()
-            self.socialWidth = make.width.equalToSuperview().multipliedBy(0.25).constraint
+            self.socialWidth = make.width.equalTo(0).constraint
             make.leading.equalTo(analyticSection.snp.trailing)
         }
 
         contentSection.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.height.equalToSuperview()
-            self.contentWidth = make.width.equalToSuperview().multipliedBy(0.25).constraint
+            self.contentWidth = make.width.equalTo(0).constraint
             make.leading.equalTo(socialSection.snp.trailing)
-            make.trailing.equalToSuperview()
+            make.trailing.equalToSuperview().priority(500)
         }
     }
 }
@@ -118,6 +133,11 @@ class TrackingProtectionBreakdownView: UIView {
     var trackingProtectionStatus = TrackingProtectionStatus.off {
         didSet {
             breakdown.trackingProtectionStatus = trackingProtectionStatus
+            if case .on(let info) = trackingProtectionStatus {
+                counterLabel.text = String(info.total)
+            } else {
+                counterLabel.text = ""
+            }
         }
     }
 
@@ -129,8 +149,10 @@ class TrackingProtectionBreakdownView: UIView {
         titleLabel.text = UIConstants.strings.trackersBlocked
         addSubview(titleLabel)
 
-
+        counterLabel.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        counterLabel.textColor = UIConstants.colors.trackingProtectionPrimary
         addSubview(counterLabel)
+        
         addSubview(breakdown)
 
         setupConstraints()
@@ -278,7 +300,13 @@ class TrackingProtectionSummaryViewController: UIViewController {
     private let trackingProtectionView = TrackingProtectionView()
 
     override func loadView() {
-        self.trackingProtectionStatus  = .on(TrackingInformation().create(byAddingListItem: .advertising).create(byAddingListItem: .content).create(byAddingListItem: .advertising))
+        self.trackingProtectionStatus  = .on(TrackingInformation()
+            .create(byAddingListItem: .advertising)
+            .create(byAddingListItem: .content)
+            .create(byAddingListItem: .advertising)
+            .create(byAddingListItem: .social)
+            .create(byAddingListItem: .social)
+            .create(byAddingListItem: .analytics))
         self.view = trackingProtectionView
     }
 }
