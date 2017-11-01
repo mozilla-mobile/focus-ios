@@ -111,6 +111,7 @@
 		D3E54FDE1DF0E0D7003E1AFF /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E54FDD1DF0E0D6003E1AFF /* UIImageExtensions.swift */; };
 		D3E54FE01DF0E221003E1AFF /* SearchSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E54FDF1DF0E221003E1AFF /* SearchSettingsViewController.swift */; };
 		D597608C1F9FEFB300A2D212 /* TrackingProtection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D597608B1F9FEFB300A2D212 /* TrackingProtection.swift */; };
+		D5F72FB31FA7D1C50071DD9B /* TrackingProtectionSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F72FB21FA7D1C50071DD9B /* TrackingProtectionSummaryViewController.swift */; };
 		E40AFB101DC9014700DA5651 /* UserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40AFB0F1DC9014700DA5651 /* UserAgent.swift */; };
 		E40AFB141DC939FF00DA5651 /* SupportUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40AFB131DC939FF00DA5651 /* SupportUtils.swift */; };
 		E40AFC741DDDE96D00DA5651 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E40AFC761DDDE96D00DA5651 /* InfoPlist.strings */; };
@@ -364,6 +365,7 @@
 		D3E54FDD1DF0E0D6003E1AFF /* UIImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtensions.swift; sourceTree = "<group>"; };
 		D3E54FDF1DF0E221003E1AFF /* SearchSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSettingsViewController.swift; sourceTree = "<group>"; };
 		D597608B1F9FEFB300A2D212 /* TrackingProtection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtection.swift; sourceTree = "<group>"; };
+		D5F72FB21FA7D1C50071DD9B /* TrackingProtectionSummaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionSummaryViewController.swift; sourceTree = "<group>"; };
 		E402FFE21E57643000B45AFF /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E402FFE31E57643100B45AFF /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E402FFE41E57643100B45AFF /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -801,6 +803,7 @@
 			isa = PBXGroup;
 			children = (
 				D597608B1F9FEFB300A2D212 /* TrackingProtection.swift */,
+				D5F72FB21FA7D1C50071DD9B /* TrackingProtectionSummaryViewController.swift */,
 			);
 			path = TrackingProtection;
 			sourceTree = "<group>";
@@ -1311,6 +1314,7 @@
 				D3E54FCF1DEFAE80003E1AFF /* OpenSearchParser.swift in Sources */,
 				E40AFB101DC9014700DA5651 /* UserAgent.swift in Sources */,
 				74584E351FA1077000AF2582 /* SettingsContentViewController.swift in Sources */,
+				D5F72FB31FA7D1C50071DD9B /* TrackingProtectionSummaryViewController.swift in Sources */,
 				7460BD671F58B1B10096B745 /* GradientProgressBar.swift in Sources */,
 				D3E54FE01DF0E221003E1AFF /* SearchSettingsViewController.swift in Sources */,
 				D33E9B241E1D93DD00A39A44 /* RequestHandler.swift in Sources */,
