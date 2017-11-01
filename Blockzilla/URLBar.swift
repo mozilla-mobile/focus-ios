@@ -629,6 +629,13 @@ class URLBar: UIView {
         smallLockIcon.alpha = visible ? collapseAlpha : 0
         self.layoutIfNeeded()
     }
+    
+    func updateTrackingProtectionBadge(trackingInformation: TrackingInformation) {
+        shieldIcon.updateState(isActive: Tracking)
+        shieldIcon.updateCounter(int: trackingInformation.total)
+        collapsedTrackingProtectionBadge.updateState(isActive: false)
+        collapsedTrackingProtectionBadge.updateCounter(int: trackingInformation.total)
+    }
 }
 
 extension URLBar: AutocompleteTextFieldDelegate {

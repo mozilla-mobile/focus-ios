@@ -695,6 +695,7 @@ extension BrowserViewController: WebControllerDelegate {
 
     func webController(_ controller: WebController, didUpdateTrackingInformation trackingInformation: TrackingInformation) {
         print(trackingInformation)
+        urlBar.updateTrackingProtectionBadge(trackingInformation: trackingInformation)
     }
 
     private func showToolbars() {
