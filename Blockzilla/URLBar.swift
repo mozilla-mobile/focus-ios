@@ -15,6 +15,7 @@ protocol URLBarDelegate: class {
     func urlBarDidFocus(_ urlBar: URLBar)
     func urlBarDidDismiss(_ urlBar: URLBar)
     func urlBarDidPressDelete(_ urlBar: URLBar)
+    func urlBarDidTapShield(_ urlBar: URLBar)
 }
 
 class URLBar: UIView {
@@ -75,6 +76,13 @@ class URLBar: UIView {
         shieldIcon.contentMode = .center
         shieldIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         shieldIcon.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+
+        let gestureRecognizer = UITapGestureRecognizer()
+        gestureRecognizer.numberOfTapsRequired = 1
+        gestureRecognizer.cancelsTouchesInView = true
+        gestureRecognizer.addTarget(self, action: #selector(didTapShieldIcon))
+        shieldIcon.isUserInteractionEnabled = true
+        shieldIcon.addGestureRecognizer(gestureRecognizer)
 
         lockIcon.isHidden = true
         lockIcon.alpha = 0
@@ -350,6 +358,7 @@ class URLBar: UIView {
             if !urlText.isEditing {
                 setTextToURL()
                 updateLockIcon()
+                updateShieldIcon()
             }
         }
     }
@@ -568,6 +577,10 @@ class URLBar: UIView {
         urlText.text = nil
         urlText.rightView?.isHidden = true
         delegate?.urlBar(self, didEnterText: "")
+    }
+
+    @objc private func didTapShieldIcon() {
+        delegate?.urlBarDidTapShield(self)
     }
 
     private func deactivate() {

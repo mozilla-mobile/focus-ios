@@ -36,38 +36,6 @@ protocol WebControllerDelegate: class {
     func webController(_ controller: WebController, didUpdateTrackingInformation trackingInformation: TrackingInformation)
 }
 
-struct TrackingInformation {
-    let adCount: Int
-    let analyticCount: Int
-    let contentCount: Int
-    let socialCount: Int
-
-    var total: Int { return adCount + socialCount + analyticCount + contentCount }
-
-    init() {
-        adCount = 0
-        analyticCount = 0
-        contentCount = 0
-        socialCount = 0
-    }
-
-    private init(adCount: Int, analyticCount: Int, contentCount: Int, socialCount: Int) {
-        self.adCount = adCount
-        self.analyticCount = analyticCount
-        self.contentCount = contentCount
-        self.socialCount = socialCount
-    }
-
-    func create(byAddingListItem listItem: BlockLists.List) -> TrackingInformation {
-        switch listItem {
-        case .advertising: return TrackingInformation(adCount: adCount + 1, analyticCount: analyticCount, contentCount: contentCount, socialCount: socialCount)
-        case .analytics: return TrackingInformation(adCount: adCount, analyticCount: analyticCount + 1, contentCount: contentCount, socialCount: socialCount)
-        case .content: return TrackingInformation(adCount: adCount, analyticCount: analyticCount, contentCount: contentCount + 1, socialCount: socialCount)
-        case .social: return TrackingInformation(adCount: adCount, analyticCount: analyticCount, contentCount: contentCount, socialCount: socialCount + 1)
-        }
-    }
-}
-
 class WebViewController: UIViewController, WebController {
     weak var delegate: WebControllerDelegate?
 
