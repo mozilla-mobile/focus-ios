@@ -706,17 +706,21 @@ class TrackingProtectionBadge: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+        updateState(isActive: true)
+        updateCounter(int: 1323)
+        setupViews()
+    }
+
+    func setupViews() {
         counterLabel.backgroundColor = .clear
         counterLabel.textColor = UIColor.white
         counterLabel.adjustsFontSizeToFitWidth = true
         counterLabel.textAlignment = .left
         counterLabel.font = UIFont.boldSystemFont(ofSize: 10)
         
-        updateCounter(text: "5")
         addSubview(trackingProtectionCounter)
         addSubview(counterLabel)
-        bringSubview(toFront: trackingProtectionCounter)
+
         trackingProtectionCounter.snp.makeConstraints { make in
             make.center.equalTo(self.snp.center)
         }
@@ -732,8 +736,8 @@ class TrackingProtectionBadge: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func updateCounter(text: String) {
-        counterLabel.text = text
+    func updateCounter(int: Int) {
+        counterLabel.text = int > 99 ? "+99" : String(int)
     }
     
     func updateState(isActive: Bool) {
@@ -743,14 +747,14 @@ class TrackingProtectionBadge: UIView {
     }
 }
 
-class CollapsedTrackingProtectionBadge: UIView {
-    let counterLabel = UILabel()
-    let trackingProtectionOff = UIImageView(image: #imageLiteral(resourceName: "tracking_protection_off"))
+class CollapsedTrackingProtectionBadge: TrackingProtectionBadge {
     let trackingProtection = UIImageView(image: #imageLiteral(resourceName: "tracking_protection"))
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+    }
+    
+    override func setupViews() {
         addSubview(trackingProtectionOff)
         addSubview(trackingProtection)
         addSubview(counterLabel)
@@ -763,8 +767,6 @@ class CollapsedTrackingProtectionBadge: UIView {
             make.center.equalTo(self.snp.center)
         }
         
-        updateCounter(text: "5")
-        updateState(isActive: true)
         counterLabel.backgroundColor = .clear
         counterLabel.textColor = UIColor.white
         counterLabel.font = UIFont.boldSystemFont(ofSize: 12)
@@ -775,11 +777,7 @@ class CollapsedTrackingProtectionBadge: UIView {
         }
     }
     
-    func updateCounter(text: String) {
-        counterLabel.text = text
-    }
-    
-    func updateState(isActive: Bool) {
+    override func updateState(isActive: Bool) {
         trackingProtectionOff.alpha = isActive ? 0 : 1
         trackingProtection.alpha = isActive ? 1 : 0
         counterLabel.alpha = isActive ? 1 : 0
