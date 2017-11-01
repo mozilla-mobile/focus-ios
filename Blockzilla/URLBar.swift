@@ -630,11 +630,9 @@ class URLBar: UIView {
         self.layoutIfNeeded()
     }
     
-    func updateTrackingProtectionBadge(trackingInformation: TrackingInformation) {
-        shieldIcon.updateState(isActive: Tracking)
-        shieldIcon.updateCounter(int: trackingInformation.total)
-        collapsedTrackingProtectionBadge.updateState(isActive: false)
-        collapsedTrackingProtectionBadge.updateCounter(int: trackingInformation.total)
+    func updateTrackingProtectionBadge(trackingStatus: TrackingProtectionStatus) {
+        shieldIcon.updateState(trackingStatus: trackingStatus)
+        collapsedTrackingProtectionBadge.updateState(trackingStatus: trackingStatus)
     }
 }
 
@@ -713,8 +711,7 @@ class TrackingProtectionBadge: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        updateState(isActive: true)
-        updateCounter(int: 1323)
+//        updateState(trackingStatus: : true)
         setupViews()
     }
 
@@ -743,14 +740,18 @@ class TrackingProtectionBadge: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func updateCounter(int: Int) {
-        counterLabel.text = int > 99 ? "+99" : String(int)
-    }
-    
-    func updateState(isActive: Bool) {
-        trackingProtectionOff.alpha = isActive ? 0 : 1
-        trackingProtectionCounter.alpha = isActive ? 1 : 0
-        counterLabel.alpha = isActive ? 1 : 0
+    func updateState(trackingStatus: TrackingProtectionStatus) {
+        switch trackingStatus {
+        case .on(let info):
+            trackingProtectionOff.alpha = 0
+            trackingProtectionCounter.alpha = 1
+            counterLabel.alpha = 1
+            counterLabel.text = info.total > 99 ? "+99" : String(info.total)
+        default:
+            trackingProtectionOff.alpha = 1
+            trackingProtectionCounter.alpha = 0
+            counterLabel.alpha = 0
+        }
     }
 }
 
@@ -784,10 +785,18 @@ class CollapsedTrackingProtectionBadge: TrackingProtectionBadge {
         }
     }
     
-    override func updateState(isActive: Bool) {
-        trackingProtectionOff.alpha = isActive ? 0 : 1
-        trackingProtection.alpha = isActive ? 1 : 0
-        counterLabel.alpha = isActive ? 1 : 0
+    override func updateState(trackingStatus: TrackingProtectionStatus) {
+        switch trackingStatus {
+        case .on(let info):
+            trackingProtectionOff.alpha = 0
+            trackingProtection.alpha = 1
+            counterLabel.alpha = 1
+            counterLabel.text = info.total > 99 ? "+99" : String(info.total)
+        default:
+            trackingProtectionOff.alpha = 1
+            trackingProtection.alpha = 0
+            counterLabel.alpha = 0
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

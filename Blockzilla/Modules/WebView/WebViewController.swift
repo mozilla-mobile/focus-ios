@@ -33,7 +33,7 @@ protocol WebControllerDelegate: class {
     func webController(_ controller: WebController, scrollViewDidScroll scrollView: UIScrollView)
     func webController(_ controller: WebController, stateDidChange state: BrowserState)
     func webControllerShouldScrollToTop(_ controller: WebController) -> Bool
-    func webController(_ controller: WebController, didUpdateTrackingInformation trackingInformation: TrackingInformation)
+    func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus)
 }
 
 class WebViewController: UIViewController, WebController {
@@ -43,7 +43,7 @@ class WebViewController: UIViewController, WebController {
     private var progressObserver: NSKeyValueObservation?
     private var trackingInformation = TrackingInformation() {
         didSet {
-            delegate?.webController(self, didUpdateTrackingInformation: trackingInformation)
+            delegate?.webController(self, didUpdateTrackingProtectionStatus: .on(trackingInformation))
         }
     }
 
