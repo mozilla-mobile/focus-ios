@@ -1,12 +1,46 @@
-//
-//  BlockList.swift
-//  Blockzilla
-//
-//  Created by Jeff Boek on 10/24/17.
-//  Copyright © 2017 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+
+enum TrackingProtectionStatus {
+    case on(TrackingInformation)
+    case off
+}
+
+struct TrackingInformation {
+    let adCount: Int
+    let analyticCount: Int
+    let contentCount: Int
+    let socialCount: Int
+
+    var total: Int { return adCount + socialCount + analyticCount + contentCount }
+
+    init() {
+        adCount = 0
+        analyticCount = 0
+        contentCount = 0
+        socialCount = 0
+    }
+
+    private init(adCount: Int, analyticCount: Int, contentCount: Int, socialCount: Int) {
+        self.adCount = adCount
+        self.analyticCount = analyticCount
+        self.contentCount = contentCount
+        self.socialCount = socialCount
+    }
+
+    func create(byAddingListItem listItem: BlockLists.List) -> TrackingInformation {
+        switch listItem {
+        case .advertising: return TrackingInformation(adCount: adCount + 1, analyticCount: analyticCount, contentCount: contentCount, socialCount: socialCount)
+        case .analytics: return TrackingInformation(adCount: adCount, analyticCount: analyticCount + 1, contentCount: contentCount, socialCount: socialCount)
+        case .content: return TrackingInformation(adCount: adCount, analyticCount: analyticCount, contentCount: contentCount + 1, socialCount: socialCount)
+        case .social: return TrackingInformation(adCount: adCount, analyticCount: analyticCount, contentCount: contentCount, socialCount: socialCount + 1)
+        }
+    }
+}
+
 
 protocol BlockListChecker {
     func isBlocked(url: URL) -> BlockLists.List?
