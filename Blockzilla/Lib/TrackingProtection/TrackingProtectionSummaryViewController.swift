@@ -183,7 +183,7 @@ class TrackingProtectionBreakdownView: UIView {
 
 class TrackingProtectionToggleView: UIView {
     private let cell = UITableViewCell()
-    private let icon = UIImageView(image: #imageLiteral(resourceName: "trackingprotection"))
+    private let icon = UIImageView(image: #imageLiteral(resourceName: "tracking_protection"))
     private let label = UILabel(frame: .zero)
     private let toggle = UISwitch()
     private let borderView = UIView()
