@@ -693,8 +693,8 @@ extension BrowserViewController: WebControllerDelegate {
 
     func webController(_ controller: WebController, stateDidChange state: BrowserState) {}
 
-    func webController(_ controller: WebController, didUpdateTrackingInformation trackingInformation: TrackingInformation) {
-        print(trackingInformation)
+    func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus) {
+        print(trackingStatus)
     }
 
     private func showToolbars() {
