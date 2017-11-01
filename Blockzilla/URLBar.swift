@@ -39,6 +39,7 @@ class URLBar: UIView {
     private let urlBarBackgroundView = UIView()
     private let textAndLockContainer = UIView()
     private let collapsedUrlAndLockWrapper = UIView()
+    private let collapsedTrackingProtectionBadge = CollapsedTrackingProtectionBadge()
 
     private var fullWidthURLTextConstraints = [Constraint]()
     private var centeredURLConstraints = [Constraint]()
@@ -98,9 +99,13 @@ class URLBar: UIView {
         truncatedUrlText.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         truncatedUrlText.isScrollEnabled = false
         truncatedUrlText.accessibilityIdentifier = "Collapsed.truncatedUrlText"
+        
+        collapsedTrackingProtectionBadge.alpha = 0
+        collapsedTrackingProtectionBadge.tintColor = .white
 
         collapsedUrlAndLockWrapper.addSubview(smallLockIcon)
         collapsedUrlAndLockWrapper.addSubview(truncatedUrlText)
+        collapsedUrlAndLockWrapper.addSubview(collapsedTrackingProtectionBadge)
         addSubview(collapsedUrlAndLockWrapper)
 
         // UITextField doesn't allow customization of the clear button, so we create
@@ -289,6 +294,12 @@ class URLBar: UIView {
             hideLockConstraints.append(contentsOf: [
                 make.width.equalTo(0).constraint
             ])
+        }
+        
+        collapsedTrackingProtectionBadge.snp.makeConstraints { make in
+            make.leading.equalTo(self).offset(20)
+            make.width.equalTo(smallLockIcon)
+            make.bottom.top.equalTo(smallLockIcon)
         }
 
         truncatedUrlText.snp.makeConstraints { make in
@@ -599,6 +610,7 @@ class URLBar: UIView {
         toolset.forwardButton.alpha = expandAlpha
         toolset.stopReloadButton.alpha = expandAlpha
         toolset.sendButton.alpha = expandAlpha
+        collapsedTrackingProtectionBadge.alpha = collapseAlpha
         // updating the small lock icon status here in order to prevent the icon from flashing on start up
         let visible = !isEditing && (url?.scheme == "https")
         smallLockIcon.alpha = visible ? collapseAlpha : 0
@@ -682,11 +694,13 @@ class TrackingProtectionBadge: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        trackingProtectionCounter.tintColor = .white
-        counterLabel.backgroundColor = UIColor.black
+        counterLabel.backgroundColor = .clear
         counterLabel.textColor = UIColor.white
+        counterLabel.adjustsFontSizeToFitWidth = true
+        counterLabel.textAlignment = .left
+        counterLabel.font = UIFont.boldSystemFont(ofSize: 10)
         
-        updateCounter(int: 20)
+        updateCounter(text: "5")
         addSubview(trackingProtectionCounter)
         addSubview(counterLabel)
         bringSubview(toFront: trackingProtectionCounter)
@@ -695,8 +709,9 @@ class TrackingProtectionBadge: UIView {
         }
         
         counterLabel.snp.makeConstraints { make in
-            make.leading.bottom.equalTo(trackingProtectionCounter)
-            make.width.equalTo(30)
+            make.bottom.equalTo(trackingProtectionCounter).offset(-3)
+            make.trailing.equalTo(trackingProtectionCounter).offset(2)
+            make.width.equalTo(12)
         }
     }
     
@@ -704,7 +719,60 @@ class TrackingProtectionBadge: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func updateCounter(int: Int) {
-        counterLabel.text = String(int)
+    func updateCounter(text: String) {
+        counterLabel.text = text
+    }
+    
+    func updateState(isActive: Bool) {
+        trackingProtectionOff.alpha = isActive ? 0 : 1
+        trackingProtectionCounter.alpha = isActive ? 1 : 0
+        counterLabel.alpha = isActive ? 1 : 0
+    }
+}
+
+class CollapsedTrackingProtectionBadge: UIView {
+    let counterLabel = UILabel()
+    let trackingProtectionOff = UIImageView(image: #imageLiteral(resourceName: "tracking_protection_off"))
+    let trackingProtection = UIImageView(image: #imageLiteral(resourceName: "tracking_protection"))
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        addSubview(trackingProtectionOff)
+        addSubview(trackingProtection)
+        addSubview(counterLabel)
+        
+        trackingProtection.snp.makeConstraints { make in
+            make.center.equalTo(self.snp.center)
+        }
+        
+        trackingProtectionOff.snp.makeConstraints { make in
+            make.center.equalTo(self.snp.center)
+        }
+        
+        updateCounter(text: "5")
+        updateState(isActive: true)
+        counterLabel.backgroundColor = .clear
+        counterLabel.textColor = UIColor.white
+        counterLabel.font = UIFont.boldSystemFont(ofSize: 12)
+        counterLabel.textAlignment = .center
+        counterLabel.snp.makeConstraints { make in
+            make.leading.equalTo(trackingProtection.snp.trailing).offset(4)
+            make.centerY.equalTo(trackingProtection)
+        }
+    }
+    
+    func updateCounter(text: String) {
+        counterLabel.text = text
+    }
+    
+    func updateState(isActive: Bool) {
+        trackingProtectionOff.alpha = isActive ? 0 : 1
+        trackingProtection.alpha = isActive ? 1 : 0
+        counterLabel.alpha = isActive ? 1 : 0
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
