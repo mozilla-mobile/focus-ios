@@ -110,6 +110,8 @@ class URLBar: UIView {
         
         collapsedTrackingProtectionBadge.alpha = 0
         collapsedTrackingProtectionBadge.tintColor = .white
+        collapsedTrackingProtectionBadge.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        collapsedTrackingProtectionBadge.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
 
         collapsedUrlAndLockWrapper.addSubview(smallLockIcon)
         collapsedUrlAndLockWrapper.addSubview(truncatedUrlText)
@@ -219,7 +221,7 @@ class URLBar: UIView {
 
         shieldIcon.snp.makeConstraints { make in
             make.top.bottom.leading.equalTo(urlTextContainer)
-            make.width.equalTo(lockIcon)
+            make.width.greaterThanOrEqualTo(lockIcon)
 
             hideShieldConstraints.append(contentsOf:[
                 make.width.equalTo(0).constraint
@@ -305,8 +307,8 @@ class URLBar: UIView {
         }
         
         collapsedTrackingProtectionBadge.snp.makeConstraints { make in
-            make.leading.equalTo(self).offset(20)
-            make.width.equalTo(smallLockIcon)
+            make.leading.equalTo(self).offset(10)
+            make.width.height.equalTo(smallLockIcon)
             make.bottom.top.equalTo(smallLockIcon)
         }
 
@@ -711,28 +713,31 @@ class TrackingProtectionBadge: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-//        updateState(trackingStatus: : true)
         setupViews()
     }
 
     func setupViews() {
         counterLabel.backgroundColor = .clear
         counterLabel.textColor = UIColor.white
-        counterLabel.adjustsFontSizeToFitWidth = true
         counterLabel.textAlignment = .left
         counterLabel.font = UIFont.boldSystemFont(ofSize: 10)
         
+        addSubview(trackingProtectionOff)
         addSubview(trackingProtectionCounter)
         addSubview(counterLabel)
 
+        trackingProtectionOff.snp.makeConstraints { make in
+            make.leading.centerY.equalTo(self)
+        }
+
         trackingProtectionCounter.snp.makeConstraints { make in
-            make.center.equalTo(self.snp.center)
+            make.leading.centerY.equalTo(self)
         }
         
         counterLabel.snp.makeConstraints { make in
             make.bottom.equalTo(trackingProtectionCounter).offset(-3)
-            make.trailing.equalTo(trackingProtectionCounter).offset(2)
-            make.width.equalTo(12)
+            make.leading.equalTo(trackingProtectionCounter).offset(15)
+            make.trailing.equalTo(self)
         }
     }
     
@@ -746,7 +751,8 @@ class TrackingProtectionBadge: UIView {
             trackingProtectionOff.alpha = 0
             trackingProtectionCounter.alpha = 1
             counterLabel.alpha = 1
-            counterLabel.text = info.total > 99 ? "+99" : String(info.total)
+            counterLabel.text = String(info.total)
+            counterLabel.sizeToFit()
         default:
             trackingProtectionOff.alpha = 1
             trackingProtectionCounter.alpha = 0
@@ -768,11 +774,13 @@ class CollapsedTrackingProtectionBadge: TrackingProtectionBadge {
         addSubview(counterLabel)
         
         trackingProtection.snp.makeConstraints { make in
-            make.center.equalTo(self.snp.center)
+            make.leading.centerY.equalTo(self)
+            make.width.height.equalTo(18)
         }
-        
+
         trackingProtectionOff.snp.makeConstraints { make in
-            make.center.equalTo(self.snp.center)
+            make.leading.centerY.equalTo(self)
+            make.width.height.equalTo(18)
         }
         
         counterLabel.backgroundColor = .clear
@@ -791,7 +799,7 @@ class CollapsedTrackingProtectionBadge: TrackingProtectionBadge {
             trackingProtectionOff.alpha = 0
             trackingProtection.alpha = 1
             counterLabel.alpha = 1
-            counterLabel.text = info.total > 99 ? "+99" : String(info.total)
+            counterLabel.text = String(info.total)
         default:
             trackingProtectionOff.alpha = 1
             trackingProtection.alpha = 0
