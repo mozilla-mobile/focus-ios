@@ -801,5 +801,16 @@ extension BrowserViewController: TrackingProtectionSummaryDelegate {
     func trackingProtectionSummaryControllerDidTapClose(_ controller: TrackingProtectionSummaryViewController) {
         hideDrawer()
     }
+
+    func trackingProtectionSummaryControllerDidToggleTrackingProtection(_ enabled: Bool) {
+        if enabled {
+            webViewController.enableTrackingProtection()
+        } else {
+            webViewController.disableTrackingProtection()
+        }
+
+        webViewController.reload()
+        hideDrawer()
+    }
 }
 

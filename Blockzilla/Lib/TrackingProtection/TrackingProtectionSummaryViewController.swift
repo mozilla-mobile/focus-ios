@@ -26,6 +26,7 @@ private extension BlockLists.List {
 }
 
 protocol TrackingProtectionSummaryDelegate: class {
+    func trackingProtectionSummaryControllerDidToggleTrackingProtection(_ enabled: Bool)
     func trackingProtectionSummaryControllerDidTapClose(_ controller: TrackingProtectionSummaryViewController)
 }
 
@@ -256,7 +257,7 @@ class TrackingProtectionBreakdownView: UIView {
 class TrackingProtectionToggleView: UIView {
     private let icon = UIImageView(image: #imageLiteral(resourceName: "tracking_protection"))
     private let label = UILabel(frame: .zero)
-    private let toggle = UISwitch()
+    let toggle = UISwitch()
     private let borderView = UIView()
     private let descriptionLabel = UILabel()
 
@@ -334,6 +335,7 @@ class TrackingProtectionView: UIView {
     fileprivate let toggleView = TrackingProtectionToggleView()
     fileprivate let breakdownView = TrackingProtectionBreakdownView()
 
+    var toggle: UISwitch { return toggleView.toggle }
     var trackingProtectionStatus = TrackingProtectionStatus.off {
         didSet {
             toggleView.trackingProtectionStatus = trackingProtectionStatus
@@ -396,10 +398,15 @@ class TrackingProtectionSummaryViewController: UIViewController {
     convenience init() {
         self.init(nibName: nil, bundle: nil)
         trackingProtectionView.closeButton.addTarget(self, action: #selector(didTapClose), for: .touchUpInside)
+        trackingProtectionView.toggle.addTarget(self, action: #selector(didToggle(sender:)), for: .touchUpInside)
     }
 
     override func loadView() {
         self.view = trackingProtectionView
+    }
+
+    @objc private func didToggle(sender: UISwitch) {
+        delegate?.trackingProtectionSummaryControllerDidToggleTrackingProtection(sender.isOn)
     }
 
     @objc private func didTapClose() {
