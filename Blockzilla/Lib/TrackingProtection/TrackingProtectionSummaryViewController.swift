@@ -297,6 +297,7 @@ class TrackingProtectionToggleView: UIView {
         descriptionLabel.text = String(format: UIConstants.strings.trackingProtectionToggleDescription, AppInfo.productName)
         descriptionLabel.font = UIFont.systemFont(ofSize: 14)
         descriptionLabel.textColor = UIConstants.colors.trackingProtectionSecondary
+        descriptionLabel.numberOfLines = 0
         addSubview(descriptionLabel)
         setupConstraints()
     }
