@@ -110,6 +110,8 @@ class URLBar: UIView {
         
         collapsedTrackingProtectionBadge.alpha = 0
         collapsedTrackingProtectionBadge.tintColor = .white
+        collapsedTrackingProtectionBadge.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        collapsedTrackingProtectionBadge.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
 
         collapsedUrlAndLockWrapper.addSubview(smallLockIcon)
         collapsedUrlAndLockWrapper.addSubview(truncatedUrlText)
@@ -219,7 +221,7 @@ class URLBar: UIView {
 
         shieldIcon.snp.makeConstraints { make in
             make.top.bottom.leading.equalTo(urlTextContainer)
-            make.width.equalTo(lockIcon)
+            make.width.greaterThanOrEqualTo(lockIcon)
 
             hideShieldConstraints.append(contentsOf:[
                 make.width.equalTo(0).constraint
@@ -305,8 +307,8 @@ class URLBar: UIView {
         }
         
         collapsedTrackingProtectionBadge.snp.makeConstraints { make in
-            make.leading.equalTo(self).offset(20)
-            make.width.equalTo(smallLockIcon)
+            make.leading.equalTo(self).offset(10)
+            make.width.height.equalTo(smallLockIcon)
             make.bottom.top.equalTo(smallLockIcon)
         }
 
@@ -629,6 +631,11 @@ class URLBar: UIView {
         smallLockIcon.alpha = visible ? collapseAlpha : 0
         self.layoutIfNeeded()
     }
+    
+    func updateTrackingProtectionBadge(trackingStatus: TrackingProtectionStatus) {
+        shieldIcon.updateState(trackingStatus: trackingStatus)
+        collapsedTrackingProtectionBadge.updateState(trackingStatus: trackingStatus)
+    }
 }
 
 extension URLBar: AutocompleteTextFieldDelegate {
@@ -706,25 +713,31 @@ class TrackingProtectionBadge: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+        setupViews()
+    }
+
+    func setupViews() {
         counterLabel.backgroundColor = .clear
         counterLabel.textColor = UIColor.white
-        counterLabel.adjustsFontSizeToFitWidth = true
         counterLabel.textAlignment = .left
         counterLabel.font = UIFont.boldSystemFont(ofSize: 10)
         
-        updateCounter(text: "5")
+        addSubview(trackingProtectionOff)
         addSubview(trackingProtectionCounter)
         addSubview(counterLabel)
-        bringSubview(toFront: trackingProtectionCounter)
+
+        trackingProtectionOff.snp.makeConstraints { make in
+            make.leading.centerY.equalTo(self)
+        }
+
         trackingProtectionCounter.snp.makeConstraints { make in
-            make.center.equalTo(self.snp.center)
+            make.leading.centerY.equalTo(self)
         }
         
         counterLabel.snp.makeConstraints { make in
             make.bottom.equalTo(trackingProtectionCounter).offset(-3)
-            make.trailing.equalTo(trackingProtectionCounter).offset(2)
-            make.width.equalTo(12)
+            make.leading.equalTo(trackingProtectionCounter).offset(15)
+            make.trailing.equalTo(self)
         }
     }
     
@@ -732,39 +745,44 @@ class TrackingProtectionBadge: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func updateCounter(text: String) {
-        counterLabel.text = text
-    }
-    
-    func updateState(isActive: Bool) {
-        trackingProtectionOff.alpha = isActive ? 0 : 1
-        trackingProtectionCounter.alpha = isActive ? 1 : 0
-        counterLabel.alpha = isActive ? 1 : 0
+    func updateState(trackingStatus: TrackingProtectionStatus) {
+        switch trackingStatus {
+        case .on(let info):
+            trackingProtectionOff.alpha = 0
+            trackingProtectionCounter.alpha = 1
+            counterLabel.alpha = 1
+            counterLabel.text = String(info.total)
+            counterLabel.sizeToFit()
+        default:
+            trackingProtectionOff.alpha = 1
+            trackingProtectionCounter.alpha = 0
+            counterLabel.alpha = 0
+        }
     }
 }
 
-class CollapsedTrackingProtectionBadge: UIView {
-    let counterLabel = UILabel()
-    let trackingProtectionOff = UIImageView(image: #imageLiteral(resourceName: "tracking_protection_off"))
+class CollapsedTrackingProtectionBadge: TrackingProtectionBadge {
     let trackingProtection = UIImageView(image: #imageLiteral(resourceName: "tracking_protection"))
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+    }
+    
+    override func setupViews() {
         addSubview(trackingProtectionOff)
         addSubview(trackingProtection)
         addSubview(counterLabel)
         
         trackingProtection.snp.makeConstraints { make in
-            make.center.equalTo(self.snp.center)
+            make.leading.centerY.equalTo(self)
+            make.width.height.equalTo(18)
         }
-        
+
         trackingProtectionOff.snp.makeConstraints { make in
-            make.center.equalTo(self.snp.center)
+            make.leading.centerY.equalTo(self)
+            make.width.height.equalTo(18)
         }
         
-        updateCounter(text: "5")
-        updateState(isActive: true)
         counterLabel.backgroundColor = .clear
         counterLabel.textColor = UIColor.white
         counterLabel.font = UIFont.boldSystemFont(ofSize: 12)
@@ -775,14 +793,18 @@ class CollapsedTrackingProtectionBadge: UIView {
         }
     }
     
-    func updateCounter(text: String) {
-        counterLabel.text = text
-    }
-    
-    func updateState(isActive: Bool) {
-        trackingProtectionOff.alpha = isActive ? 0 : 1
-        trackingProtection.alpha = isActive ? 1 : 0
-        counterLabel.alpha = isActive ? 1 : 0
+    override func updateState(trackingStatus: TrackingProtectionStatus) {
+        switch trackingStatus {
+        case .on(let info):
+            trackingProtectionOff.alpha = 0
+            trackingProtection.alpha = 1
+            counterLabel.alpha = 1
+            counterLabel.text = String(info.total)
+        default:
+            trackingProtectionOff.alpha = 1
+            trackingProtection.alpha = 0
+            counterLabel.alpha = 0
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
