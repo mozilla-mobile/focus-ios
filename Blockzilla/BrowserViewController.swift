@@ -141,8 +141,8 @@ class BrowserViewController: UIViewController {
         }
 
         browserToolbar.snp.makeConstraints { make in
+
             make.leading.trailing.equalTo(mainContainerView)
-            make.height.equalTo(UIConstants.layout.browserToolbarHeight)
             toolbarBottomConstraint = make.bottom.equalTo(mainContainerView).constraint
         }
 
@@ -259,7 +259,7 @@ class BrowserViewController: UIViewController {
 
             // Initial centered constraints, which will effectively be deactivated when
             // the top constraints are active because of their reduced priorities.
-            make.leading.equalTo(mainContainerView).priority(500)
+            make.leading.equalTo(mainContainerView.safeAreaLayoutGuide).priority(500)
             make.top.equalTo(homeView).priority(500)
 
             // Note: this padding here is in addition to the 8px that’s already applied for the Cancel action
@@ -676,7 +676,7 @@ extension BrowserViewController: WebControllerDelegate {
             return
         }
 
-        let pageExtendsBeyondScrollView = scrollView.frame.height + UIConstants.layout.browserToolbarHeight + UIConstants.layout.urlBarHeight < scrollView.contentSize.height
+        let pageExtendsBeyondScrollView = scrollView.frame.height + (UIConstants.layout.browserToolbarHeight + view.safeAreaInsets.bottom) + UIConstants.layout.urlBarHeight < scrollView.contentSize.height
         let toolbarsHiddenAtTopOfPage = scrollView.contentOffset.y <= 0 && scrollBarOffsetAlpha > 0
 
         guard isDragging, (dragDelta < 0 && pageExtendsBeyondScrollView) || toolbarsHiddenAtTopOfPage || scrollBarState == .transitioning else { return }
@@ -694,8 +694,9 @@ extension BrowserViewController: WebControllerDelegate {
 
         self.urlBar.collapseUrlBar(expandAlpha: max(0, (1 - scrollBarOffsetAlpha * 2)), collapseAlpha: max(0, -(1 - scrollBarOffsetAlpha * 2)))
         self.urlBarTopConstraint.update(offset: -scrollBarOffsetAlpha * (UIConstants.layout.urlBarHeight - UIConstants.layout.collapsedUrlBarHeight))
-        self.toolbarBottomConstraint.update(offset: scrollBarOffsetAlpha * UIConstants.layout.browserToolbarHeight)
+        self.toolbarBottomConstraint.update(offset: scrollBarOffsetAlpha * (UIConstants.layout.browserToolbarHeight + view.safeAreaInsets.bottom))
         scrollView.bounds.origin.y += (lastOffsetAlpha - scrollBarOffsetAlpha) * UIConstants.layout.urlBarHeight
+
         lastScrollOffset = scrollView.contentOffset
     }
 
