@@ -25,6 +25,10 @@ private extension BlockLists.List {
     }
 }
 
+protocol TrackingProtectionSummaryDelegate: class {
+    func trackingProtectionSummaryControllerDidTapClose(_ controller: TrackingProtectionSummaryViewController)
+}
+
 class TrackingProtectionBreakdownVisualizer: UIView {
     private let adSection = UIView()
     private let analyticSection = UIView()
@@ -74,7 +78,7 @@ class TrackingProtectionBreakdownVisualizer: UIView {
             analyticSection.isHidden = false
             socialSection.isHidden = false
             contentSection.isHidden = false
-//            resizeVisualizerSegmetns()
+            resizeVisualizerSegmetns()
         case .off:
             adSection.isHidden = true
             analyticSection.isHidden = true
@@ -85,12 +89,13 @@ class TrackingProtectionBreakdownVisualizer: UIView {
     
     private func resizeVisualizerSegmetns() {
         guard case .on(let info) = trackingProtectionStatus else { return }
-        let total = max(CGFloat(info.total), 1)
-        let width = max(frame.width, 1)
-        adWidth.update(offset: width * (max(CGFloat(info.adCount), 1) / total))
-        analyticWidth.update(offset: width * (max(CGFloat(info.analyticCount), 1) / total))
-        contentWidth.update(offset: width * (max(CGFloat(info.contentCount), 1) / total))
-        socialWidth.update(offset: width * (max(CGFloat(info.socialCount), 1) / total))
+        let total = CGFloat(info.total)
+        guard total > 0 else { return }
+        let width = frame.width
+        adWidth.update(offset: width * (CGFloat(info.adCount) / total))
+        analyticWidth.update(offset: width * (CGFloat(info.analyticCount) / total))
+        contentWidth.update(offset: width * (CGFloat(info.contentCount) / total))
+        socialWidth.update(offset: width * (CGFloat(info.socialCount) / total))
     }
  
     private func setupConstraints() {
@@ -225,7 +230,7 @@ class TrackingProtectionBreakdownView: UIView {
         titleLabel.snp.makeConstraints { make in
             make.height.equalTo(56)
             make.top.equalToSuperview()
-            make.leading.equalToSuperview().offset(16)
+            make.leading.equalTo(safeAreaLayoutGuide).offset(16)
             make.trailing.equalTo(counterLabel.snp.leading)
         }
 
@@ -237,13 +242,13 @@ class TrackingProtectionBreakdownView: UIView {
 
         breakdown.snp.makeConstraints { make in
             make.height.equalTo(3)
-            make.leading.trailing.equalToSuperview()
+            make.leading.trailing.equalTo(safeAreaLayoutGuide)
             make.top.equalTo(titleLabel.snp.bottom)
         }
 
         stackView?.snp.makeConstraints { make in
             make.top.equalTo(breakdown.snp.bottom).offset(8)
-            make.leading.trailing.equalToSuperview()
+            make.leading.trailing.equalTo(safeAreaLayoutGuide)
             make.bottom.equalToSuperview()
         }
 
@@ -299,7 +304,7 @@ class TrackingProtectionToggleView: UIView {
     private func setupConstraints() {
         icon.snp.makeConstraints { make in
             make.height.width.equalTo(24)
-            make.leading.equalToSuperview().offset(16)
+            make.leading.equalTo(safeAreaLayoutGuide).offset(16)
             make.centerY.equalToSuperview()
         }
 
@@ -312,7 +317,7 @@ class TrackingProtectionToggleView: UIView {
 
         toggle.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-16)
+            make.trailing.equalTo(safeAreaLayoutGuide).offset(-16)
         }
 
         borderView.snp.makeConstraints { make in
@@ -322,7 +327,7 @@ class TrackingProtectionToggleView: UIView {
         }
 
         descriptionLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(16)
+            make.leading.equalTo(safeAreaLayoutGuide).offset(16)
             make.trailing.equalToSuperview().offset(-16)
             make.top.equalTo(borderView.snp.bottom).offset(8)
         }
@@ -374,6 +379,8 @@ class TrackingProtectionView: UIView {
 }
 
 class TrackingProtectionSummaryViewController: UIViewController {
+    weak var delegate: TrackingProtectionSummaryDelegate?
+    
     var trackingProtectionStatus = TrackingProtectionStatus.on(TrackingInformation()) {
         didSet {
             trackingProtectionView.trackingProtectionStatus = trackingProtectionStatus
@@ -381,8 +388,17 @@ class TrackingProtectionSummaryViewController: UIViewController {
     }
 
     private let trackingProtectionView = TrackingProtectionView()
+    
+    convenience init() {
+        self.init(nibName: nil, bundle: nil)
+        trackingProtectionView.closeButton.addTarget(self, action: #selector(didTapClose), for: .touchUpInside)
+    }
 
     override func loadView() {
         self.view = trackingProtectionView
+    }
+
+    @objc private func didTapClose() {
+        delegate?.trackingProtectionSummaryControllerDidTapClose(self)
     }
 }

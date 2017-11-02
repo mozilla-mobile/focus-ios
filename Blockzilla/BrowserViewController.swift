@@ -77,7 +77,7 @@ class BrowserViewController: UIViewController {
         drawerOverlayView.backgroundColor = UIColor(white: 0, alpha: 0.8)
         drawerOverlayView.layer.opacity = 0
         drawerOverlayView.isHidden = true
-        drawerOverlayView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hide_drawer)))
+        drawerOverlayView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hideDrawer)))
         view .addSubview(drawerOverlayView)
         drawerOverlayView.snp.makeConstraints { make in
             make.edges.equalTo(mainContainerView.snp.edges)
@@ -103,6 +103,7 @@ class BrowserViewController: UIViewController {
         }
         self.drawerConstraint.deactivate()
 
+        trackingProtectionSummaryController.delegate = self
         containTrackingProtectionDrawer()
 
         webViewController.delegate = self
@@ -267,7 +268,7 @@ class BrowserViewController: UIViewController {
         topURLBarConstraints.forEach { $0.deactivate() }
     }
 
-    @objc fileprivate func hide_drawer() {
+    @objc fileprivate func hideDrawer() {
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .curveEaseIn, animations: {
             self.drawerConstraint.deactivate()
             self.drawerOverlayView.layer.opacity = 0
@@ -792,6 +793,12 @@ extension BrowserViewController: WhatsNewDelegate {
     func didShowWhatsNew() {
         UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
         UserDefaults.standard.removeObject(forKey: AppDelegate.prefWhatsNewCounter)
+    }
+}
+
+extension BrowserViewController: TrackingProtectionSummaryDelegate {
+    func trackingProtectionSummaryControllerDidTapClose(_ controller: TrackingProtectionSummaryViewController) {
+        hideDrawer()
     }
 }
 
