@@ -35,11 +35,6 @@ class TrackingProtectionBreakdownVisualizer: UIView {
     private let socialSection = UIView()
     private let contentSection = UIView()
 
-    private var adWidth: Constraint!
-    private var analyticWidth: Constraint!
-    private var socialWidth: Constraint!
-    private var contentWidth: Constraint!
-
     var trackingProtectionStatus = TrackingProtectionStatus.off {
         didSet {
             render(status: trackingProtectionStatus)
@@ -62,69 +57,67 @@ class TrackingProtectionBreakdownVisualizer: UIView {
 
         contentSection.backgroundColor = BlockLists.List.content.color
         addSubview(contentSection)
-
-        setupConstraints()
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        resizeVisualizerSegmetns()
     }
 
     private func render(status: TrackingProtectionStatus) {
+        updateConstraints()
+
         switch status {
-        case .on(let info):
-            adSection.isHidden = false
-            analyticSection.isHidden = false
-            socialSection.isHidden = false
-            contentSection.isHidden = false
-            resizeVisualizerSegmetns()
-        case .off:
-            adSection.isHidden = true
-            analyticSection.isHidden = true
-            socialSection.isHidden = true
-            contentSection.isHidden = true
+        case .on: showSections()
+        case .off: hideSections()
         }
     }
-    
-    private func resizeVisualizerSegmetns() {
-        guard case .on(let info) = trackingProtectionStatus else { return }
-        let total = CGFloat(info.total)
-        guard total > 0 else { return }
-        let width = frame.width
-        adWidth.update(offset: width * (CGFloat(info.adCount) / total))
-        analyticWidth.update(offset: width * (CGFloat(info.analyticCount) / total))
-        contentWidth.update(offset: width * (CGFloat(info.contentCount) / total))
-        socialWidth.update(offset: width * (CGFloat(info.socialCount) / total))
+
+    private func showSections() {
+        adSection.isHidden = false
+        analyticSection.isHidden = false
+        socialSection.isHidden = false
+        contentSection.isHidden = false
     }
- 
-    private func setupConstraints() {
-        adSection.snp.makeConstraints { make in
+
+
+    private func hideSections() {
+        adSection.isHidden = true
+        analyticSection.isHidden = true
+        socialSection.isHidden = true
+        contentSection.isHidden = true
+    }
+
+    override func updateConstraints() {
+        super.updateConstraints()
+        guard case .on(let info) = trackingProtectionStatus else { hideSections(); return }
+        let calculateMultiplier: (Int) -> Double = { return $0 > 0 ? Double($0) / Double(info.total) : 0 }
+
+        adSection.snp.remakeConstraints { make in
             make.top.equalToSuperview()
             make.height.equalToSuperview()
-            self.adWidth = make.width.equalTo(0).constraint
+            make.width.equalToSuperview().multipliedBy(calculateMultiplier(info.adCount))
             make.leading.equalToSuperview()
         }
 
-        analyticSection.snp.makeConstraints { make in
+        analyticSection.snp.remakeConstraints { make in
             make.top.equalToSuperview()
             make.height.equalToSuperview()
-            self.analyticWidth = make.width.equalTo(0).constraint
+            make.width.equalToSuperview().multipliedBy(calculateMultiplier(info.analyticCount))
             make.leading.equalTo(adSection.snp.trailing)
         }
 
-        socialSection.snp.makeConstraints { make in
+        socialSection.snp.remakeConstraints { make in
             make.top.equalToSuperview()
             make.height.equalToSuperview()
-            self.socialWidth = make.width.equalTo(0).constraint
+            make.width.equalToSuperview().multipliedBy(calculateMultiplier(info.socialCount))
             make.leading.equalTo(analyticSection.snp.trailing)
         }
 
-        contentSection.snp.makeConstraints { make in
+        contentSection.snp.remakeConstraints { make in
             make.top.equalToSuperview()
             make.height.equalToSuperview()
-            self.contentWidth = make.width.equalTo(0).constraint
-            make.leading.equalTo(socialSection.snp.trailing)
+            make.width.equalTo(0)
+            make.width.equalToSuperview().multipliedBy(calculateMultiplier(info.contentCount))
             make.trailing.equalToSuperview().priority(500)
         }
     }
@@ -156,7 +149,7 @@ class TrackingProtectionBreakdownItem: UIView {
         indicatorView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview().offset(-4)
-            make.width.equalTo(8)
+            make.width.equalTo(4)
         }
 
         titleLabel.snp.makeConstraints { make in
