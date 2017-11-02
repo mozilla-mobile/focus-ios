@@ -330,6 +330,7 @@ class TrackingProtectionToggleView: UIView {
 
 class TrackingProtectionView: UIView {
     fileprivate let closeButton = UIButton()
+    fileprivate let scrollView = UIScrollView()
     fileprivate let toggleView = TrackingProtectionToggleView()
     fileprivate let breakdownView = TrackingProtectionBreakdownView()
 
@@ -346,8 +347,10 @@ class TrackingProtectionView: UIView {
 
         closeButton.setImage(#imageLiteral(resourceName: "icon_stop_menu"), for: .normal)
         addSubview(closeButton)
-        addSubview(toggleView)
-        addSubview(breakdownView)
+        addSubview(scrollView)
+
+        scrollView.addSubview(toggleView)
+        scrollView.addSubview(breakdownView)
 
         setupConstraints()
     }
@@ -359,15 +362,22 @@ class TrackingProtectionView: UIView {
             make.right.equalToSuperview().offset(-16)
         }
 
+        scrollView.snp.makeConstraints { make in
+            make.top.equalTo(safeAreaLayoutGuide).offset(UIConstants.layout.urlBarHeight)
+            make.width.equalToSuperview()
+            make.left.right.bottom.equalToSuperview()
+        }
+
         toggleView.snp.makeConstraints { make in
             make.height.equalTo(44)
-            make.top.equalTo(safeAreaLayoutGuide).offset(76)
-            make.left.right.equalToSuperview()
+            make.top.equalToSuperview().offset(76 - UIConstants.layout.urlBarHeight)
+            make.leading.trailing.equalTo(self)
         }
 
         breakdownView.snp.makeConstraints { make in
             make.top.equalTo(toggleView.snp.bottom).offset(40)
-            make.leading.trailing.equalToSuperview()
+            make.leading.trailing.equalTo(self)
+            make.bottom.equalToSuperview()
         }
     }
 }
