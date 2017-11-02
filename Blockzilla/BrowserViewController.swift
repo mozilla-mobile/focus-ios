@@ -19,6 +19,8 @@ class BrowserViewController: UIViewController {
     private let webViewController = WebViewController()
     private let webViewContainer = UIView()
 
+    private let trackingProtectionSummaryController = TrackingProtectionSummaryViewController()
+
     fileprivate let browserToolbar = BrowserToolbar()
     fileprivate var homeView: HomeView?
     fileprivate let overlayView = OverlayView()
@@ -81,6 +83,8 @@ class BrowserViewController: UIViewController {
             make.edges.equalTo(mainContainerView.snp.edges)
         }
 
+
+
         mainContainerView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.width.equalToSuperview()
@@ -98,6 +102,8 @@ class BrowserViewController: UIViewController {
             self.drawerConstraint = make.leading.equalToSuperview().constraint
         }
         self.drawerConstraint.deactivate()
+
+        containTrackingProtectionDrawer()
 
         webViewController.delegate = self
 
@@ -205,6 +211,16 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    private func containTrackingProtectionDrawer() {
+        addChildViewController(trackingProtectionSummaryController)
+        drawerContainerView.addSubview(trackingProtectionSummaryController.view)
+        trackingProtectionSummaryController.didMove(toParentViewController: self)
+
+        trackingProtectionSummaryController.view.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+    }
+
     private func createHomeView() {
         let homeView = HomeView()
         homeView.delegate = self
@@ -261,7 +277,7 @@ class BrowserViewController: UIViewController {
         })
     }
 
-    fileprivate func show_drawer() {
+    fileprivate func showDrawer() {
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .curveEaseIn, animations: {
             self.drawerConstraint.activate()
             self.drawerOverlayView.isHidden = false
@@ -492,7 +508,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidTapShield(_ urlBar: URLBar) {
-        show_drawer()
+        showDrawer()
     }
 }
 
@@ -695,6 +711,7 @@ extension BrowserViewController: WebControllerDelegate {
 
     func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus) {
         print(trackingStatus)
+        trackingProtectionSummaryController.trackingProtectionStatus = trackingStatus
     }
 
     private func showToolbars() {

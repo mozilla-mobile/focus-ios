@@ -74,7 +74,7 @@ class TrackingProtectionBreakdownVisualizer: UIView {
             analyticSection.isHidden = false
             socialSection.isHidden = false
             contentSection.isHidden = false
-            resizeVisualizerSegmetns()
+//            resizeVisualizerSegmetns()
         case .off:
             adSection.isHidden = true
             analyticSection.isHidden = true
@@ -85,12 +85,12 @@ class TrackingProtectionBreakdownVisualizer: UIView {
     
     private func resizeVisualizerSegmetns() {
         guard case .on(let info) = trackingProtectionStatus else { return }
-        let total = CGFloat(info.total)
-        let width = frame.width
-        adWidth.update(offset: width * (CGFloat(info.adCount) / total))
-        analyticWidth.update(offset: width * (CGFloat(info.analyticCount) / total))
-        contentWidth.update(offset: width * (CGFloat(info.contentCount) / total))
-        socialWidth.update(offset: width * (CGFloat(info.socialCount) / total))
+        let total = max(CGFloat(info.total), 1)
+        let width = max(frame.width, 1)
+        adWidth.update(offset: width * (max(CGFloat(info.adCount), 1) / total))
+        analyticWidth.update(offset: width * (max(CGFloat(info.analyticCount), 1) / total))
+        contentWidth.update(offset: width * (max(CGFloat(info.contentCount), 1) / total))
+        socialWidth.update(offset: width * (max(CGFloat(info.socialCount), 1) / total))
     }
  
     private func setupConstraints() {
@@ -356,13 +356,13 @@ class TrackingProtectionView: UIView {
     private func setupConstraints() {
         closeButton.snp.makeConstraints { make in
             make.height.width.equalTo(24)
-            make.top.equalToSuperview().offset(16)
+            make.top.equalTo(safeAreaLayoutGuide).offset(16)
             make.right.equalToSuperview().offset(-16)
         }
 
         toggleView.snp.makeConstraints { make in
             make.height.equalTo(44)
-            make.top.equalToSuperview().offset(76)
+            make.top.equalTo(safeAreaLayoutGuide).offset(76)
             make.left.right.equalToSuperview()
         }
 
@@ -383,13 +383,6 @@ class TrackingProtectionSummaryViewController: UIViewController {
     private let trackingProtectionView = TrackingProtectionView()
 
     override func loadView() {
-        self.trackingProtectionStatus  = .on(TrackingInformation()
-            .create(byAddingListItem: .advertising)
-            .create(byAddingListItem: .content)
-            .create(byAddingListItem: .advertising)
-            .create(byAddingListItem: .social)
-            .create(byAddingListItem: .social)
-            .create(byAddingListItem: .analytics))
         self.view = trackingProtectionView
     }
 }
