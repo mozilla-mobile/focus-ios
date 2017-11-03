@@ -166,6 +166,12 @@ class TrackingProtectionBreakdownItem: UIView {
 
     func setCounter(to value: Int) {
         counterLabel.text = String(value)
+        counterLabel.textColor = UIConstants.colors.trackingProtectionPrimary
+    }
+
+    func disable() {
+        counterLabel.text = "--"
+        counterLabel.textColor = UIConstants.colors.trackingProtectionBreakdownBackground
     }
 }
 
@@ -193,6 +199,11 @@ class TrackingProtectionBreakdownView: UIView {
             } else {
                 titleLabel.text = UIConstants.strings.trackingProtectionDisabledLabel
                 counterLabel.text = ""
+
+                adItem.disable()
+                analyticItem.disable()
+                contentItem.disable()
+                socialItem.disable()
             }
         }
     }
