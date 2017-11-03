@@ -158,7 +158,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     @objc func tappedTrackingProtectionLearnMoreFooter(sender: UIGestureRecognizer) {
-        guard let url = SupportUtils.URLForTopic(topic: "usage-data") else { return }
+        guard let url = SupportUtils.URLForTopic(topic: "tracking-protection-focus-ios") else { return }
         let contentViewController = SettingsContentViewController(url: url)
         navigationController?.pushViewController(contentViewController, animated: true)
     }

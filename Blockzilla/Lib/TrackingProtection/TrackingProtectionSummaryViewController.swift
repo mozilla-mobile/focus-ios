@@ -184,8 +184,8 @@ class TrackingProtectionBreakdownView: UIView {
     private let contentItem = TrackingProtectionBreakdownItem(text: UIConstants.strings.contentTrackerLabel, color: BlockLists.List.content.color)
     private let socialItem = TrackingProtectionBreakdownItem(text: UIConstants.strings.socialTrackerLabel, color: BlockLists.List.social.color)
     private var stackView: UIStackView?
-    private var learnMoreWrapper = UIView()
-    private var learnMoreButton = UIButton()
+    private let learnMoreWrapper = UIView()
+    fileprivate let learnMoreButton = UIButton()
 
     var trackingProtectionStatus = TrackingProtectionStatus.off {
         didSet {
@@ -367,6 +367,8 @@ class TrackingProtectionView: UIView {
     fileprivate let breakdownView = TrackingProtectionBreakdownView()
 
     var toggle: UISwitch { return toggleView.toggle }
+    var learnMoreButton: UIButton { return breakdownView.learnMoreButton }
+
     var trackingProtectionStatus = TrackingProtectionStatus.off {
         didSet {
             toggleView.trackingProtectionStatus = trackingProtectionStatus
@@ -430,10 +432,31 @@ class TrackingProtectionSummaryViewController: UIViewController {
         self.init(nibName: nil, bundle: nil)
         trackingProtectionView.closeButton.addTarget(self, action: #selector(didTapClose), for: .touchUpInside)
         trackingProtectionView.toggle.addTarget(self, action: #selector(didToggle(sender:)), for: .touchUpInside)
+        trackingProtectionView.learnMoreButton.addTarget(self, action: #selector(didTapLearnMore(sender:)), for: .touchUpInside)
     }
 
     override func loadView() {
         self.view = trackingProtectionView
+    }
+
+    @objc private func didTapLearnMore(sender: UIButton) {
+        guard let url = SupportUtils.URLForTopic(topic: "tracking-protection-focus-ios") else { return }
+        let contentViewController = SettingsContentViewController(url: url)
+        let navigationController = UINavigationController(rootViewController: contentViewController)
+        let navigationBar = navigationController.navigationBar
+        navigationBar.isTranslucent = false
+        navigationBar.barTintColor = UIConstants.colors.background
+        navigationBar.tintColor = UIConstants.colors.navigationButton
+        navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIConstants.colors.navigationTitle]
+
+        let button = UIBarButtonItem(image: #imageLiteral(resourceName: "icon_stop_menu"), landscapeImagePhone: #imageLiteral(resourceName: "icon_stop_menu"), style: .done, target: self, action: #selector(closeModal))
+
+        contentViewController.navigationItem.rightBarButtonItem = button
+        present(navigationController, animated: true, completion: nil)
+    }
+
+    @objc private func closeModal() {
+        dismiss(animated: true, completion: nil)
     }
 
     @objc private func didToggle(sender: UISwitch) {
