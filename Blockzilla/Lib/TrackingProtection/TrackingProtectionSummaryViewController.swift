@@ -150,7 +150,7 @@ class TrackingProtectionBreakdownItem: UIView {
         indicatorView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview().offset(-4)
-            make.width.equalTo(4)
+            make.width.equalTo(8)
         }
 
         titleLabel.snp.makeConstraints { make in
@@ -184,6 +184,8 @@ class TrackingProtectionBreakdownView: UIView {
     private let contentItem = TrackingProtectionBreakdownItem(text: UIConstants.strings.contentTrackerLabel, color: BlockLists.List.content.color)
     private let socialItem = TrackingProtectionBreakdownItem(text: UIConstants.strings.socialTrackerLabel, color: BlockLists.List.social.color)
     private var stackView: UIStackView?
+    private var learnMoreWrapper = UIView()
+    private var learnMoreButton = UIButton()
 
     var trackingProtectionStatus = TrackingProtectionStatus.off {
         didSet {
@@ -225,8 +227,16 @@ class TrackingProtectionBreakdownView: UIView {
         let stackView = UIStackView(arrangedSubviews: [adItem, analyticItem, socialItem, contentItem])
         stackView.axis = .vertical
         stackView.spacing = 8
+        stackView.alignment = .leading
         addSubview(stackView)
         self.stackView = stackView
+
+        learnMoreButton.setTitle("Learn More", for: .normal)
+        learnMoreButton.setTitleColor(UIConstants.colors.trackingProtectionLearnMore, for: .normal)
+        learnMoreButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        learnMoreButton.contentHorizontalAlignment = .leading
+        learnMoreWrapper.addSubview(learnMoreButton)
+        stackView.addArrangedSubview(learnMoreWrapper)
 
         setupConstraints()
     }
@@ -261,6 +271,16 @@ class TrackingProtectionBreakdownView: UIView {
             view.snp.makeConstraints { make in
                 make.width.equalToSuperview()
             }
+        }
+
+        learnMoreWrapper.snp.makeConstraints { make in
+            make.height.equalTo(56)
+            make.leading.trailing.equalToSuperview()
+        }
+
+        learnMoreButton.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(16)
+            make.top.trailing.bottom.equalToSuperview()
         }
     }
 }
