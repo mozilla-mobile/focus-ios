@@ -72,6 +72,7 @@ class IntroViewController: UIViewController {
     }
     
     @objc func didTapSkipButton(sender: UIButton) {
+        background.removeFromSuperview()
         dismiss(animated: true, completion: nil)
     }
 }
