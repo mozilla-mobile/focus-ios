@@ -47,6 +47,13 @@ class BrowserViewController: UIViewController {
         case animating
     }
 
+    private var trackingProtectionStatus: TrackingProtectionStatus = .on(TrackingInformation()) {
+        didSet {
+            trackingProtectionSummaryController.trackingProtectionStatus = trackingProtectionStatus
+            urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus)
+        }
+    }
+
     private var homeViewContainer = UIView()
 
     fileprivate var showsToolsetInURLBar = false {
@@ -480,7 +487,11 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidDismiss(_ urlBar: URLBar) {
         overlayView.dismiss()
-        urlBarContainer.isBright = !webViewController.isLoading
+        if case .on = trackingProtectionStatus {
+            urlBarContainer.isBright = !webViewController.isLoading
+        } else {
+            urlBarContainer.isBright = false
+        }
     }
 
     func urlBarDidPressDelete(_ urlBar: URLBar) {
@@ -605,7 +616,11 @@ extension BrowserViewController: WebControllerDelegate {
         }
         urlBar.isLoading = false
         browserToolbar.isLoading = false
-        urlBarContainer.isBright = !urlBar.isEditing
+        if case .on = trackingProtectionStatus {
+            urlBarContainer.isBright = !urlBar.isEditing
+        } else {
+            urlBarContainer.isBright = false
+        }
         urlBar.progressBar.hideProgressBar()
     }
 
@@ -613,7 +628,11 @@ extension BrowserViewController: WebControllerDelegate {
         urlBar.url = webViewController.url
         urlBar.isLoading = false
         browserToolbar.isLoading = false
-        urlBarContainer.isBright = true
+        if case .on = trackingProtectionStatus {
+            urlBarContainer.isBright = true
+        } else {
+            urlBarContainer.isBright = false
+        }
         urlBar.progressBar.hideProgressBar()
     }
 
@@ -712,9 +731,7 @@ extension BrowserViewController: WebControllerDelegate {
     func webController(_ controller: WebController, stateDidChange state: BrowserState) {}
 
     func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus) {
-
-        trackingProtectionSummaryController.trackingProtectionStatus = trackingStatus
-        urlBar.updateTrackingProtectionBadge(trackingStatus: trackingStatus)
+        trackingProtectionStatus = trackingStatus
     }
 
     private func showToolbars() {
