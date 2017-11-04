@@ -85,12 +85,10 @@ class BrowserViewController: UIViewController {
         drawerOverlayView.layer.opacity = 0
         drawerOverlayView.isHidden = true
         drawerOverlayView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hideDrawer)))
-        view .addSubview(drawerOverlayView)
+        view.addSubview(drawerOverlayView)
         drawerOverlayView.snp.makeConstraints { make in
             make.edges.equalTo(mainContainerView.snp.edges)
         }
-
-
 
         mainContainerView.snp.makeConstraints { make in
             make.top.equalToSuperview()
@@ -111,7 +109,7 @@ class BrowserViewController: UIViewController {
         self.drawerConstraint.deactivate()
 
         trackingProtectionSummaryController.delegate = self
-        containTrackingProtectionDrawer()
+        containTrackingProtectionSummary()
 
         webViewController.delegate = self
 
@@ -219,7 +217,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    private func containTrackingProtectionDrawer() {
+    private func containTrackingProtectionSummary() {
         addChildViewController(trackingProtectionSummaryController)
         drawerContainerView.addSubview(trackingProtectionSummaryController.view)
         trackingProtectionSummaryController.didMove(toParentViewController: self)
@@ -447,6 +445,14 @@ class BrowserViewController: UIViewController {
     @objc private func goForward() {
         webViewController.goForward()
     }
+
+    private func toggleUrlBar(isBright: Bool) {
+        if case .on = trackingProtectionStatus {
+            urlBarContainer.isBright = isBright
+        } else {
+            urlBarContainer.isBright = false
+        }
+    }
     
     override var keyCommands: [UIKeyCommand]? {
         return [
@@ -487,11 +493,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidDismiss(_ urlBar: URLBar) {
         overlayView.dismiss()
-        if case .on = trackingProtectionStatus {
-            urlBarContainer.isBright = !webViewController.isLoading
-        } else {
-            urlBarContainer.isBright = false
-        }
+        toggleUrlBar(isBright: !webViewController.isLoading)
     }
 
     func urlBarDidPressDelete(_ urlBar: URLBar) {
@@ -500,7 +502,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidFocus(_ urlBar: URLBar) {
         overlayView.present()
-        urlBarContainer.isBright = false
+        toggleUrlBar(isBright: false)
     }
 
     func urlBarDidActivate(_ urlBar: URLBar) {
@@ -606,7 +608,7 @@ extension BrowserViewController: WebControllerDelegate {
     func webControllerDidStartNavigation(_ controller: WebController) {
         urlBar.isLoading = true
         browserToolbar.isLoading = true
-        urlBarContainer.isBright = false
+        toggleUrlBar(isBright: false)
         showToolbars()
     }
 
@@ -616,11 +618,7 @@ extension BrowserViewController: WebControllerDelegate {
         }
         urlBar.isLoading = false
         browserToolbar.isLoading = false
-        if case .on = trackingProtectionStatus {
-            urlBarContainer.isBright = !urlBar.isEditing
-        } else {
-            urlBarContainer.isBright = false
-        }
+        toggleUrlBar(isBright: !urlBar.isEditing)
         urlBar.progressBar.hideProgressBar()
     }
 
@@ -628,11 +626,7 @@ extension BrowserViewController: WebControllerDelegate {
         urlBar.url = webViewController.url
         urlBar.isLoading = false
         browserToolbar.isLoading = false
-        if case .on = trackingProtectionStatus {
-            urlBarContainer.isBright = true
-        } else {
-            urlBarContainer.isBright = false
-        }
+        toggleUrlBar(isBright: true)
         urlBar.progressBar.hideProgressBar()
     }
 

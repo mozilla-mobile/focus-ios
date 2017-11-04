@@ -728,6 +728,15 @@
 			path = RequestHandler;
 			sourceTree = "<group>";
 		};
+		B338B5701FAD39730084960D /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				B3F4A3161FA136E60029A6F2 /* preload.js */,
+				B3D23BEE1FA3A9E500D9C50F /* postload.js */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
 		B3AFC2B91F7C0B66001AEF38 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
@@ -802,6 +811,7 @@
 		D597608A1F9FEF7100A2D212 /* TrackingProtection */ = {
 			isa = PBXGroup;
 			children = (
+				B338B5701FAD39730084960D /* Assets */,
 				D597608B1F9FEFB300A2D212 /* TrackingProtection.swift */,
 				D5F72FB21FA7D1C50071DD9B /* TrackingProtectionSummaryViewController.swift */,
 			);
@@ -946,8 +956,6 @@
 				746D78FA1F4E0095002EB522 /* ShareSheetActivities.swift */,
 				746BD9251F75C43C00BE8DB9 /* DataExtensions.swift */,
 				746BD9271F75C45A00BE8DB9 /* DictionaryExtensions.swift */,
-				B3F4A3161FA136E60029A6F2 /* preload.js */,
-				B3D23BEE1FA3A9E500D9C50F /* postload.js */,
 			);
 			path = Blockzilla;
 			sourceTree = "<group>";
