@@ -45,7 +45,7 @@
     mutations.forEach(function(mutation) {
       mutation.addedNodes.forEach(function(node) {
         if (node.tagName === 'SCRIPT') {
-          console.log('<script> added!');
+          messageHandler.postMessage({ url: node.src })
         }
       });
     });
