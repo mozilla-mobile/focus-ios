@@ -190,6 +190,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
+
         splashView?.animateHidden(true, duration: 0.25)
         if let url = queuedUrl {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openedFromExtension, object: TelemetryEventObject.app)
@@ -204,12 +206,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             queuedString = nil
         }
 
-    }
-    
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        // Start a new telemetry session and record an event indicating that we have entered the
-        // foreground. This only gets called for subsequent foregrounds after the initial launch.
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
