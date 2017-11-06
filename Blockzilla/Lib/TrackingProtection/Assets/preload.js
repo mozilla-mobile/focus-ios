@@ -1,6 +1,13 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 (function(){
   var messageHandler = window.webkit.messageHandlers.focusTrackingProtection
 
+ // -------------------------------------------------
+ // Send ajax requests URLs to the host application
+ // -------------------------------------------------
   var xhrProto = XMLHttpRequest.prototype,
   originalOpen = xhrProto.open,
   originalSend = xhrProto.send;
@@ -15,6 +22,9 @@
       return originalSend.apply(this, arguments)
   };
 
+ // -------------------------------------------------
+ // Detect when new sources get set on Image and send them to the host application
+ // -------------------------------------------------
   var originalImageSrc = Object.getOwnPropertyDescriptor(Image.prototype, 'src');
   delete Image.prototype.src;
   Object.defineProperty(Image.prototype, 'src', {
@@ -27,20 +37,10 @@
     }
   });
 
-  // var originalElementSrc = Object.getOwnPropertyDescriptor(HTMLScriptElement.prototype, 'src');
-  // delete HTMLScriptElement.prototype.src;
-  // Object.defineProperty(HTMLScriptElement.prototype, 'src', {
-  //   get: function() {
-  //     return originalElementSrc.get.call(this);
-  //   },
-  //   set: function(value) {
-  //     messageHandler.postMessage({ url: value })
-  //     originalElementSrc.set.call(this, value);
-  //   }
-  // });
-
-
-  // Observer
+ // -------------------------------------------------
+ // Listen to when new <script> elements get added to the dom
+ // and send the source to the host application
+ // -------------------------------------------------
   var observer = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
       mutation.addedNodes.forEach(function(node) {
