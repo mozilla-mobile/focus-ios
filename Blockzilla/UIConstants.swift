@@ -213,5 +213,13 @@ struct UIConstants {
         static let CardTextWelcome = NSLocalizedString("Intro.Slides.Welcome.Description", tableName: "Intro", value: "Take private browsing to the next level. Block ads and other content that can track you across sites and bog down page load times.", comment: "Description for the 'Welcome' panel in the First Run tour.")
         static let CardTextSearch = NSLocalizedString("Intro.Slides.Search.Description", tableName: "Intro", value: "Searching for something different? Choose a different search engine.", comment: "Description for the 'Favorite Search Engine' panel in the First Run tour.")
         static let SkipIntroButtonTitle = NSLocalizedString("Intro.Slides.Skip.Button", tableName: "Intro", value: "SKIP", comment: "Button to skip onboarding in Focus")
+        static let AddSearchEngineButton = NSLocalizedString("Settings.Search.AddSearchEngineButton", value: "+ Add Another Search Engine", comment: "Text for button to add another search engine in settings")
+        static let AddSearchEngineTitle = NSLocalizedString("Settings.Search.AddSearchEngineTitle", value: "Add Search Engine", comment: "Title on add search engine settings screen")
+        static let Save = NSLocalizedString("Save", value: "Save", comment: "Save button label")
+        static let NameToDisplay = NSLocalizedString("Settings.Search.NameToDisplay", value: "Name To Display", comment: "Label for input field for the name of the search engine to be added")
+        static let AddSearchEngineName = NSLocalizedString("Settings.Search.SearchEngineName", value: "Search engine name", comment: "Placeholder text for input of new search engine name")
+        static let AddSearchEngineTemplate = NSLocalizedString("Settings.Search.SearchTemplate", value: "Search string to use", comment: "Label for input of search engine template")
+        static let AddSearchEngineTemplatePlaceholder = NSLocalizedString("Settings.Search.SearchTemplatePlaceholder", value: "Paste or enter search string. If Necessary, replace search term with: %s.", comment: "Placeholder text for input of new search engine template")
+        static let AddSearchEngineTemplateExample = NSLocalizedString("settings.Search.SearchTemplateExample", value: "Example: searchengine.com/search/?q=%s", comment: "Text displayed as an example of the template to add a search engine.")
     }
 }
