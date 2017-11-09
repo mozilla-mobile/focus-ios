@@ -172,8 +172,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Stankañ an heulierien bruderezh";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "Bruderezhioù 'zo a heul ho kweladennoù war al lec'hiennoù, ha pa ne glikfec'h ket war ar bruderezhioù zoken";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "Stankañ an heulierien stadegoù";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "Implijet evit dastum, analizañ ha muzuliañ an oberiadennoù evel pouezañ ha dibunañ";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Stankañ an nodrezhoù web";
@@ -181,8 +187,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "Stankañ an heulierien endalc'hadoù all";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "Gweredekaat a c'hallfe degas un darn a gudennoù war pajennoù 'zo";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "Stankañ an heulierien kevredadel";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "Enkorfet el lec'hiennoù evit heuliañ ho weladennoù ha diskouez keweriusterioù evel an afelloù rannañ";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Gallout a ra mirout videoioù ha pajennadoù web da vont en-dro en un doare dereat";
@@ -223,6 +235,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Digeriñ e %@";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Diuzañ ar varrenn lec'hiadur";
+
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "Ereoù eilet ganeoc'h: %@";
 
@@ -249,4 +264,28 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "Fellout a ra da “%@” haeziñ ho skeudennoù";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Heulieroù bruderezh";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Heulieroù digejañ";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Heulieroù endalc'had";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Diweredekaet eo ar gware heuliañ";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Heulieroù kevredadel";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "Diweredekaat betek ma vo serret %@ pe stoket DILEMEL.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Gwarez heuliañ";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "Dibab ma vo stanked an heulieroù bruderezh, digejañ, kevredadel hag all gant %@.";
 

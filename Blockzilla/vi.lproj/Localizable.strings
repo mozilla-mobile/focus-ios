@@ -1,0 +1,291 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Tìm hiểu thêm";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ được sản xuất bởi Mozilla. Nhiệm vụ của chúng tôi là thúc đẩy một Internet lành mạnh, cởi mở.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Tìm kiếm và duyệt ngay trong ứng dụng";
+
+/* Label on About screen */
+"About.privateBullet2" = "Chặn trình theo dõi (hoặc cập nhật cài đặt để cho phép trình theo dõi)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Xóa cookie cũng như lịch sử tìm kiếm và duyệt web khi xong phiên làm việc";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Sử dụng nó như trình duyệt riêng tư:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Trợ giúp";
+
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "Chính sách riêng tư";
+
+/* Label for row in About screen */
+"About.rowRights" = "Quyền lợi của bạn";
+
+/* Label on About screen */
+"About.safariBullet1" = "Chặn trình theo dõi để cải thiện sự riêng tư";
+
+/* Label on About screen */
+"About.safariBullet2" = "Chặn phông chữ Web để giảm kích thước trang";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Sử dụng nó như phần mở rộng của Safari:";
+
+/* Title for the About screen */
+"About.screenTitle" = "Giới thiệu";
+
+/* Label on About screen */
+"About.topLabel" = "%@ giúp bạn kiểm soát.";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Quay lại";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Tiếp theo";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Tải lại";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Thiết lập";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "Chia sẻ";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Dừng";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Thử lại";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "Hủy bỏ";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@ muốn mở Ứng dụng khác";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "Mở";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "Gọi";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Hủy bỏ";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "Thư điện tử";
+
+/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitleWithPlaceholder" = "Bạn đang rời khỏi %@.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "Mở App Store";
+
+/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"ExternalLink.openAppStoreTitle" = "%@ muốn mở App Store.";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "Mở Bản đồ";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "Đã hiểu!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "Tự động chặn các trình theo dõi trực tuyến trong khi duyệt web. Sau đó chạm để xóa các trang đã ghé thăm, tìm kiếm, cookie và mật khẩu từ thiết bị của bạn.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Duyệt như không ai xem.";
+
+/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
+"Focus.handoffSyncing" = "Apple Handoff đang đồng bộ";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "Duyệt web riêng tư.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "Duyệt. Xóa. Lặp lại.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "Hủy bỏ";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (Duyệt Web riêng tư)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "Thêm";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Chạm Safari, rồi chọn Chặn nội dung";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "Bật %@";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ không được bật.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Mở Cài đặt";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Chặn các trình theo dõi nội dung khác có thể dẫn đến việc không xem được một vài video và trang web.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "Không, cảm ơn";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "Tôi hiểu";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla chỉ thu thập những gì chúng tôi cần cung cấp và cải tiến %@ cho tất cả mọi người.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Tìm hiểu thêm.";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Cài đặt";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "SEARCH ENGINE";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "Công cụ tìm kiếm";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "INTEGRATION";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "PERFORMANCE";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "PRIVACY";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "Chặn trình theo dõi quảng cáo";
+
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "Một vài quảng cáo theo dõi lượt truy cập trang, ngay cả khi bạn không nhấp vào quảng cáo";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "Chặn trình theo dõi phân tích";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "Được sử dụng để thu thập, phân tích và đo lường các hoạt động như chạm và di chuyển";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Chặn phông chữ trang Web";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "Chặn trình theo dõi nội dung khác";
+
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "Kích hoạt có thể khiến một số trang không hoạt động như mong đợi";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "Chặn trình theo dõi xã hội";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "Được nhúng vào các trang web để theo dõi lượt truy cập của bạn và để hiển thị chức năng như các nút chia sẻ";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "Có thể không phát được một số video và trang Web";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "Gửi dữ liệu sử dụng";
+
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
+"ShareMenu.GetFirefox" = "Tải ứng dụng Firefox";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "Mở trong %@";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Hủy bỏ";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Dán & Mở đường dẫn";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "ERASE";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Lịch sử duyệt web của bạn đã bị xóa.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Tìm kiếm hoặc nhập địa chỉ";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Tìm kiếm cho %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Theo dõi bị chặn";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Mở trong %@";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Chọn thanh địa chỉ";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "Liên kết bạn sao chép: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "Sao chép ảnh";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Sao chép liên kết";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "Lưu ảnh";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "Chia sẻ liên kết";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ muốn mở %2$@";
+
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "Điều này cho phép bạn lưu ảnh đến Camera Roll của bạn";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "Mở Cài đặt";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@” muốn truy cập vào ảnh của bạn";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Trình theo dõi quảng cáo";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Trình theo dõi phân tích";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Trình theo dõi nội dung";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Chống theo dõi tắt";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Trình theo dõi xã hội";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "Vô hiệu hóa cho đến khi bạn đóng %@ hoặc chạm ERASE.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Chống theo dõi";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "Chọn xem %@ ngăn chặn các trình theo dõi quảng cáo, phân tích, xã hội và các trình theo dõi khác.";
+

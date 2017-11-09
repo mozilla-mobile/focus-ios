@@ -1,0 +1,291 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Deprendi más";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ produzlu Mozilla. La nuesa misión ye fomentar un internet sano y abierto.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Gueta y restola na aplicación";
+
+/* Label on About screen */
+"About.privateBullet2" = "Bloquia los rastrexadores (o anueva los axustes pa permítilos)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Balera les cookies amás del to historial de restolar y gueta";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Úsalu como restolador priváu:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Ayuda";
+
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "Avisu de privacidá";
+
+/* Label for row in About screen */
+"About.rowRights" = "Los tos drechos";
+
+/* Label on About screen */
+"About.safariBullet1" = "Bloquia rastrexadores pa una privacidá ameyorada";
+
+/* Label on About screen */
+"About.safariBullet2" = "Bloquia les fontes web p'amenorgar el tamañu de la páxina";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Úsalu como estensión de Safari:";
+
+/* Title for the About screen */
+"About.screenTitle" = "Tocante a";
+
+/* Label on About screen */
+"About.topLabel" = "%@ date'l control.";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Atrás";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Avanzar";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Recargar";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Axustes";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "Compartir";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Atrás";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Tentar de nueves";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "Encaboxar";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@ quier abrir otra aplicación";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "Abrir";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "Llamar";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Encaboxar";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "Corréu";
+
+/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitleWithPlaceholder" = "Tas colando de %@.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "Abrir App Store";
+
+/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"ExternalLink.openAppStoreTitle" = "%@ quier abrir l'App Store.";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "Abrir Mapes";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "¡VAL, ENTENDÍLO!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "Bloquia automáticamente los rastrexadores en llinia mentanto restoles. Dempués calca pa desaniciar les páxines visitaes, guetes, cookies y contraseñes del to preséu.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Restola como si naide nun te viere.";
+
+/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
+"Focus.handoffSyncing" = "Apple Handoff ta sincronizando";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "Restolar privao automático.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "Restola. Balera. Repiti.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "Encaboxar";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (Restolar en privao)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "Más";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Calca en Safari, dempués esbilla Bloquiadores de conteníu";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "Activar %@";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ nun s'activó.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Abrir aplicación d'axustes";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Bloquiar el conteníu de los rastrexadores podría romper delles páxines web y videos.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "Non, gracies";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "Entiéndolo";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla esfuérciase en recoyer namái lo que precisa pa fornir y ameyorar %@ pa tol mundu.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Deprendi más.";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Axustes";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "MOTOR DE GUETA";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "Motor de gueta";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "INTEGRACIÓN";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "RINDIMIENTU";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "PRIVACIDÁ";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "Bloquiar rastrexadores d'anuncios";
+
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "Dellos anuncios rastrexen les visites a sitios magar que nun calcares nellos";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "Bloquiar rastrexadores d'analítiques";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "Úsase pa recoyer, analizar y midir les actividaes como calcos y desplazamientos";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Bloquiar fontes web";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "Bloquiar otros rastrexadores";
+
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "Activalo causaría que delles páxines se comporten de mou inesperáu";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "Bloquiar rastrexadores sociales";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "Intégrense en sitios pa rastrexar les tos visites y amosar funcionalidaes como botones de compartición";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "Quiciabes ruempa delles páxines web y vídeos";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "Unviar datos d'usu";
+
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
+"ShareMenu.GetFirefox" = "Consiguir Firefox";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "Abrir en %@";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Encaboxar";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Apegar y dir";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "BALERAR";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Baleróse'l to historial de gueta.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Gueta o introduz una direición";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Guetar %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Rastrexadores bloquiaos";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Abrir en %@";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Esbillar barra d'allugamientos";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "L'enllaz que copiesti: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "Copiar imaxe";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Copiar enllaz";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "Guardar imaxe";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "Compartir imaxe";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ quier abrir %2$@";
+
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "Esto déxate guardar les imáxenes nel to Carrete";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "Abrir axustes";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "A «%@» prestaría-y acceder a les tos semeyes";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Rastrexadores d'anuncios";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Rastrexadores d'analítiques";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Rastrexadores de conteníu";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Proteición de rastrexu desactivada";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Rastrexadores sociales";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "Desactivar hasta que zarres %@ o calques en BALERAR.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Proteición de rastrexu";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "Escueyi si %@ bloquia rastrexadores d'anuncios, analíques, sociales y otros.";
+
