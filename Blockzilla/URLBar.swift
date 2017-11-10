@@ -374,7 +374,6 @@ class URLBar: UIView {
     }
     
     @objc func SELtappedScrollToTopArea() {
-        print("BTICH")
         delegate?.urlBarDidPressScrollToTop(self)
     }
     

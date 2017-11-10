@@ -489,10 +489,9 @@ extension BrowserViewController: URLBarDelegate {
     }
     
     func urlBarDidPressScrollToTop(_ urlBar: URLBar) {
-//        guard homeView == nil else {
-//            return
-//        }
-        print("bitches aint shit")
+        guard homeView == nil else {
+            return
+        }
         webViewController.scrollView.setContentOffset(.zero, animated: true)
     }
 
