@@ -27,6 +27,7 @@ class URLBar: UIView {
         button.backgroundColor = .red
         button.addTarget(self, action: #selector(URLBar.SELtappedScrollToTopArea), for: .touchUpInside)
         button.isUserInteractionEnabled = true
+        button.isEnabled = true
         return button
     }()
 
@@ -79,6 +80,7 @@ class URLBar: UIView {
         urlTextContainer.addSubview(shieldIcon)
         urlTextContainer.addSubview(textAndLockContainer)
         addSubview(scrollToTopButton)
+        bringSubview(toFront: scrollToTopButton)
 
         shieldIcon.isHidden = true
         shieldIcon.tintColor = .white
@@ -242,7 +244,8 @@ class URLBar: UIView {
         scrollToTopButton.snp.makeConstraints { make in
             make.top.equalTo(self)
             make.leading.trailing.equalTo(self)
-            make.height.equalTo(50)
+            make.height.equalTo(10)
+//            make.centerY.equalTo(self)
         }
 
         textAndLockContainer.snp.makeConstraints { make in
