@@ -39,6 +39,7 @@ class BrowserViewController: UIViewController {
     fileprivate var lastScrollTranslation = CGPoint.zero
     fileprivate var scrollBarOffsetAlpha: CGFloat = 0
     fileprivate var scrollBarState: URLBarScrollState = .expanded
+    fileprivate var topTouchArea: UIButton!
 
     fileprivate enum URLBarScrollState {
         case collapsed
@@ -80,6 +81,11 @@ class BrowserViewController: UIViewController {
 
         view.addSubview(mainContainerView)
         view.addSubview(drawerContainerView)
+        
+        topTouchArea = UIButton()
+        topTouchArea.isAccessibilityElement = false
+        topTouchArea.addTarget(self, action: #selector(BrowserViewController.SELtappedTopArea), for: UIControlEvents.touchUpInside)
+        view.addSubview(topTouchArea)
 
         drawerOverlayView.backgroundColor = UIColor(white: 0, alpha: 0.8)
         drawerOverlayView.layer.opacity = 0
@@ -186,6 +192,19 @@ class BrowserViewController: UIViewController {
         ensureBrowsingMode()
         guard let url = initialUrl else { return }
         submit(url: url)
+    }
+    
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
+        
+        topTouchArea.snp.remakeConstraints { make in
+            make.top.left.right.equalTo(self.view)
+            make.height.equalTo(32)
+        }
+    }
+    
+    @objc func SELtappedTopArea() {
+        showToolbars()
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -471,6 +490,13 @@ class BrowserViewController: UIViewController {
 extension BrowserViewController: URLBarDelegate {
     func urlBar(_ urlBar: URLBar, didEnterText text: String) {
         overlayView.setSearchQuery(query: text, animated: true)
+    }
+    
+    func urlBarDidPressScrollToTop(_ urlBar: URLBar) {
+        guard homeView == nil else {
+            return
+        }
+        webViewController.scrollView.setContentOffset(.zero, animated: true)
     }
 
     func urlBar(_ urlBar: URLBar, didSubmitText text: String) {
