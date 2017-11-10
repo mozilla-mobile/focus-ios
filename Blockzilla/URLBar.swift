@@ -12,6 +12,7 @@ protocol URLBarDelegate: class {
     func urlBar(_ urlBar: URLBar, didSubmitText text: String)
     func urlBarDidActivate(_ urlBar: URLBar)
     func urlBarDidDeactivate(_ urlBar: URLBar)
+    func urlBarDidPressScrollToTop(_ urlBar: URLBar)
     func urlBarDidFocus(_ urlBar: URLBar)
     func urlBarDidDismiss(_ urlBar: URLBar)
     func urlBarDidPressDelete(_ urlBar: URLBar)
@@ -20,6 +21,14 @@ protocol URLBarDelegate: class {
 
 class URLBar: UIView {
     weak var delegate: URLBarDelegate?
+    
+    fileprivate lazy var scrollToTopButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .red
+        button.addTarget(self, action: #selector(URLBar.SELtappedScrollToTopArea), for: .touchUpInside)
+        button.isUserInteractionEnabled = true
+        return button
+    }()
 
     let progressBar = GradientProgressBar(progressViewStyle: .bar)
     var inBrowsingMode: Bool = false
@@ -55,7 +64,7 @@ class URLBar: UIView {
     
     convenience init() {
         self.init(frame: CGRect.zero)
-
+        clipsToBounds = false
         addSubview(toolset.backButton)
         addSubview(toolset.forwardButton)
         addSubview(toolset.stopReloadButton)
@@ -69,6 +78,7 @@ class URLBar: UIView {
 
         urlTextContainer.addSubview(shieldIcon)
         urlTextContainer.addSubview(textAndLockContainer)
+        addSubview(scrollToTopButton)
 
         shieldIcon.isHidden = true
         shieldIcon.tintColor = .white
@@ -228,6 +238,12 @@ class URLBar: UIView {
                 make.width.equalTo(0).constraint
             ])
         }
+        
+        scrollToTopButton.snp.makeConstraints { make in
+            make.top.equalTo(self)
+            make.leading.trailing.equalTo(self)
+            make.height.equalTo(50)
+        }
 
         textAndLockContainer.snp.makeConstraints { make in
             make.top.bottom.equalTo(urlTextContainer)
@@ -353,10 +369,17 @@ class URLBar: UIView {
             UIMenuController.shared.menuItems = [lookupMenu]
         }
     }
+    
+    @objc func SELtappedScrollToTopArea() {
+        print("BTICH")
+        delegate?.urlBarDidPressScrollToTop(self)
+    }
+    
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         addCustomMenu()
         return super.canPerformAction(action, withSender: sender)
     }
+    
     var url: URL? = nil {
         didSet {
             if !urlText.isEditing {
@@ -366,6 +389,7 @@ class URLBar: UIView {
             }
         }
     }
+    
     weak var toolsetDelegate: BrowserToolsetDelegate? {
         didSet {
             toolset.delegate = toolsetDelegate
