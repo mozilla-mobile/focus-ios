@@ -227,7 +227,6 @@ class URLBar: UIView {
 
         shieldIcon.snp.makeConstraints { make in
             make.top.bottom.leading.equalTo(urlTextContainer)
-            make.width.greaterThanOrEqualTo(lockIcon)
 
             hideShieldConstraints.append(contentsOf:[
                 make.width.equalTo(0).constraint
@@ -730,9 +729,13 @@ class TrackingProtectionBadge: UIView {
     let counterLabel = UILabel()
     let trackingProtectionOff = UIImageView(image: #imageLiteral(resourceName: "tracking_protection_off"))
     let trackingProtectionCounter = UIImageView(image: #imageLiteral(resourceName: "tracking_protection_counter"))
+
+    override var intrinsicContentSize: CGSize { return CGSize(width: 30, height: 26) }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setContentHuggingPriority(.defaultLow, for: .horizontal)
+        counterLabel.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         setupViews()
     }
 
@@ -772,7 +775,6 @@ class TrackingProtectionBadge: UIView {
             trackingProtectionCounter.alpha = 1
             counterLabel.alpha = 1
             counterLabel.text = String(info.total)
-            counterLabel.sizeToFit()
         default:
             trackingProtectionOff.alpha = 1
             trackingProtectionCounter.alpha = 0
