@@ -14,6 +14,9 @@ class AddSearchEngineViewController: UIViewController {
     private let leftMargin = 10
     private let rowHeight = 44
     
+    private var nameInput = UITextField()
+    private var templateInput = UITextView()
+    
     init(delegate: AddSearchEngineDelegate) {
         self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
@@ -42,7 +45,6 @@ class AddSearchEngineViewController: UIViewController {
         nameLabel.textColor = UIConstants.colors.settingsTextLabel
         container.addSubview(nameLabel)
         
-        let nameInput = UITextField()
         nameInput.attributedPlaceholder = NSAttributedString(string: UIConstants.strings.AddSearchEngineName, attributes: [NSAttributedStringKey.foregroundColor: UIConstants.colors.settingsDetailLabel])
         nameInput.backgroundColor = UIConstants.colors.cellSelected
         nameInput.textColor = UIConstants.colors.settingsTextLabel
@@ -55,7 +57,6 @@ class AddSearchEngineViewController: UIViewController {
         templateLabel.textColor = UIConstants.colors.settingsTextLabel
         container.addSubview(templateLabel)
         
-        let templateInput = UITextView()
         templateInput.backgroundColor = UIConstants.colors.cellSelected
         templateInput.textColor = UIConstants.colors.settingsTextLabel
         container.addSubview(templateInput)
@@ -108,6 +109,11 @@ class AddSearchEngineViewController: UIViewController {
     }
     
     @objc func saveTapped() {
+        guard let name = nameInput.text else { return }
+        guard let template = templateInput.text else { return }
+        
+        delegate.addSearchEngineViewController(self, name: name, searchTemplate: template)
+        
         self.navigationController?.popViewController(animated: true)
     }
 }

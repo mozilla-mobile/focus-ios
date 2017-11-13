@@ -6,10 +6,12 @@ import Foundation
 
 class SearchEngineManager {
     public static let prefKeyEngine = "prefKeyEngine"
+    private static let prefKeyDisabledEngines = "prefKeyDisabledEngines"
+    private static let prefKeyCustomEngines = "prefKeyCustomEngines"
 
     private let prefs: UserDefaults
-    let engines: [SearchEngine]
-
+    var engines: [SearchEngine]
+    
     init(prefs: UserDefaults) {
         self.prefs = prefs
 
@@ -24,8 +26,15 @@ class SearchEngineManager {
         let pluginsPath = Bundle.main.url(forResource: "SearchPlugins", withExtension: nil)!
         let enginesPath = Bundle.main.path(forResource: "SearchEngines", ofType: "plist")!
         let engineMap = NSDictionary(contentsOfFile: enginesPath) as! [String: [String]]
-        let engines = searchPaths.flatMap { engineMap[$0] }.first!
+        var engines = searchPaths.flatMap { engineMap[$0] }.first!
 
+        let disabledEngines = prefs.stringArray(forKey: SearchEngineManager.prefKeyDisabledEngines) ?? [String]()
+        
+        // Filter out disabled engines
+        engines = engines.filter { name in
+            return !disabledEngines.contains(name)
+        }
+        
         // Find and parse the engines for this locale.
         self.engines = engines.flatMap { name in
             let path = searchPaths
@@ -33,6 +42,39 @@ class SearchEngineManager {
                 .first { FileManager.default.fileExists(atPath: $0.path) }!
             return parser.parse(file: path)
         }
+        
+        // Add in custom engines
+        let customEngines = readCustomEngines()
+        self.engines.append(contentsOf: customEngines)
+        
+        // Sort alphabetically
+        self.engines.sort { (aEngine, bEngine) -> Bool in
+            return aEngine.name < bEngine.name
+        }
+    }
+    
+    func addEngine(name: String, template: String) {
+        let correctedTemplate = template.replacingOccurrences(of: "%s", with: "{searchTerms}")
+        let engine = SearchEngine(name: name, image: nil, searchTemplate: correctedTemplate, suggestionsTemplate: nil)
+        
+        var customEngines = readCustomEngines()
+        customEngines.append(engine)
+        saveCustomEngines(customEngines: customEngines)
+        
+        engines.append(engine)
+    }
+    
+    private func readCustomEngines() -> [SearchEngine] {
+        if let archiveData = prefs.value(forKey: SearchEngineManager.prefKeyCustomEngines) as? NSData {
+            let archivedCustomEngines = NSKeyedUnarchiver.unarchiveObject(with: archiveData as Data)
+            return archivedCustomEngines as? [SearchEngine] ?? [SearchEngine]()
+        }
+        return [SearchEngine]()
+        //return prefs.array(forKey: SearchEngineManager.prefKeyCustomEngines) as? [SearchEngine] ?? [SearchEngine]()
+    }
+    
+    private func saveCustomEngines(customEngines: [SearchEngine]) {
+        prefs.set(NSKeyedArchiver.archivedData(withRootObject: customEngines), forKey: SearchEngineManager.prefKeyCustomEngines)
     }
 
     var activeEngine: SearchEngine {

@@ -4,7 +4,7 @@
 
 import Foundation
 
-class SearchEngine {
+class SearchEngine: NSObject, NSCoding {
     let name: String
     let image: UIImage?
 
@@ -16,6 +16,18 @@ class SearchEngine {
         self.image = image
         self.searchTemplate = searchTemplate
         self.suggestionsTemplate = suggestionsTemplate
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        guard let name = aDecoder.decodeObject(forKey: "name") as? String,
+            let searchTemplate = aDecoder.decodeObject(forKey: "searchTemplate") as? String else {
+                return nil
+        }
+        
+        self.name = name
+        self.searchTemplate = searchTemplate
+        image = aDecoder.decodeObject(forKey: "image") as? UIImage
+        suggestionsTemplate = aDecoder.decodeObject(forKey: "suggestionsTemplate") as? String
     }
 
     func urlForQuery(_ query: String) -> URL? {
@@ -35,4 +47,22 @@ class SearchEngine {
 
         return URL(string: urlString)
     }
+    
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(name, forKey: "name")
+        aCoder.encode(image, forKey: "image")
+        aCoder.encode(searchTemplate, forKey: "searchTemplate")
+        aCoder.encode(suggestionsTemplate, forKey: "suggestionsTemplate")
+    }
+//    
+//    func generateImage(name: String) -> UIImage {
+//        UIGraphicsBeginImageContext(CGSize(width: 100, height: 100))
+//        
+//        let str: NSString = "s"
+//        str.draw(in: <#T##CGRect#>, withAttributes: <#T##[NSAttributedStringKey : Any]?#>)
+//        
+//        let img = UIGraphicsGetImageFromCurrentImageContext()
+//        UIGraphicsEndImageContext()
+//        return img
+//    }
 }

@@ -78,6 +78,7 @@ class SearchSettingsViewController: UITableViewController {
 
 extension SearchSettingsViewController: AddSearchEngineDelegate {
     func addSearchEngineViewController(_ addSearchEngineViewController: AddSearchEngineViewController, name: String, searchTemplate: String) {
-        
+        searchEngineManager.addEngine(name: name, template: searchTemplate)
+        tableView.reloadData()
     }
 }
