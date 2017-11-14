@@ -464,6 +464,7 @@ class URLBar: UIView {
             } else {
                 self.hideShieldConstraints.forEach { $0.activate() }
             }
+            self.layoutIfNeeded()
         }
 
     }
@@ -740,8 +741,8 @@ class TrackingProtectionBadge: UIView {
     func setupViews() {
         counterLabel.backgroundColor = .clear
         counterLabel.textColor = UIColor.white
-        counterLabel.textAlignment = .left
-        counterLabel.font = UIFont.boldSystemFont(ofSize: 10)
+        counterLabel.textAlignment = .center
+        counterLabel.font = UIFont.boldSystemFont(ofSize: 8)
         counterLabel.text = "0"
         trackingProtectionOff.alpha = 0
         
@@ -755,7 +756,8 @@ class TrackingProtectionBadge: UIView {
         trackingProtectionCounter.snp.makeConstraints { make in
             make.leading.equalToSuperview().priority(1000)
             make.centerY.equalToSuperview().priority(500)
-            make.trailing.equalToSuperview().priority(500)
+            make.width.equalTo(24).priority(500)
+            make.trailing.equalToSuperview()
         }
 
         trackingProtectionOff.setContentHuggingPriority(.required, for: .horizontal)
@@ -763,11 +765,12 @@ class TrackingProtectionBadge: UIView {
             make.leading.equalToSuperview().priority(1000)
             make.centerY.equalToSuperview().priority(500)
         }
-        
+
+        counterLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         counterLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(trackingProtectionCounter).offset(-3).priority(500)
-            make.leading.equalTo(trackingProtectionCounter).offset(15).priority(1000)
-            make.trailing.equalTo(self)
+            make.width.height.equalTo(12)
+            make.bottom.equalTo(trackingProtectionCounter).offset(-2).priority(500)
+            make.leading.equalTo(trackingProtectionCounter).offset(15).priority(500)
         }
     }
     
@@ -782,6 +785,7 @@ class TrackingProtectionBadge: UIView {
             trackingProtectionCounter.alpha = 1
             counterLabel.alpha = 1
             counterLabel.text = String(info.total)
+            counterLabel.sizeToFit()
         default:
             trackingProtectionOff.alpha = 1
             trackingProtectionCounter.alpha = 0
