@@ -15,6 +15,7 @@ struct UIConstants {
         static let deleteButtonBackground = UIColor(white: 1, alpha: 0.2)
         static let deleteButtonBorder = UIColor(white: 1, alpha: 0.5)
         static let firstRunButton = UIColor.white
+        static let firstRunNextButton = UIColor(rgb: 0x9400FF)
         static let firstRunButtonBackground = UIColor(white: 1, alpha: 0.2)
         static let firstRunButtonBorder = UIColor(white: 1, alpha: 0.3)
         static let firstRunDisclaimer = UIColor(white: 1, alpha: 0.5)
@@ -66,10 +67,10 @@ struct UIConstants {
         static let copyButton = UIFont.systemFont(ofSize: 15)
         static let copyButtonQuery = UIFont.boldSystemFont(ofSize: 15)
         static let deleteButton = UIFont.systemFont(ofSize: 11)
-        static let firstRunButton = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
         static let firstRunDisclaimer = UIFont.systemFont(ofSize: 14)
         static let firstRunMessage = UIFont.systemFont(ofSize: 14)
         static let firstRunTitle = UIFont.systemFont(ofSize: 18)
+        static let firstRunButton = UIFont.systemFont(ofSize: 16)
         static let homeLabel = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.ultraLight)
         static let safariInstruction = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.medium)
         static let searchButton = UIFont.systemFont(ofSize: 15)
@@ -211,5 +212,8 @@ struct UIConstants {
         static let CardTextWelcome = NSLocalizedString("Intro.Slides.Welcome.Description", tableName: "Intro", value: "Take private browsing to the next level. Block ads and other content that can track you across sites and bog down page load times.", comment: "Description for the 'Welcome' panel in the First Run tour.")
         static let CardTextSearch = NSLocalizedString("Intro.Slides.Search.Description", tableName: "Intro", value: "Searching for something different? Choose a different search engine.", comment: "Description for the 'Favorite Search Engine' panel in the First Run tour.")
         static let SkipIntroButtonTitle = NSLocalizedString("Intro.Slides.Skip.Button", tableName: "Intro", value: "SKIP", comment: "Button to skip onboarding in Focus")
+        static let NextIntroButtonTitle = NSLocalizedString("Intro.Slides.Skip.Button", tableName: "Intro", value: "Next", comment: "Button to go to the next card in Focus onboarding.")
+        static let CardTitleHistory = NSLocalizedString("Intro.Slides.History.Title", tableName: "Intro", value: "Your history is history", comment: "Title for the third  panel 'History' in the First Run tour.")
+        static let CardTextHistory = NSLocalizedString("Intro.Slides.History.Description", tableName: "Intro", value: "Clear your entire browsing session history, passwords, cookies anytime with a single tap.", comment: "Description for the 'History' panel in the First Run tour.")
     }
 }

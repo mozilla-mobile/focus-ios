@@ -11,7 +11,7 @@ struct IntroViewControllerUX {
     static let Height = 460
     static let MinimumFontScale: CGFloat = 0.5
 
-    static let CardSlides = ["onboarding_1", "onboarding_2"]
+    static let CardSlides = ["onboarding_1", "onboarding_2", "onboarding_2"]
 
     static let PagerCenterOffsetFromScrollViewBottom = 24
 
@@ -113,6 +113,7 @@ class ScrollViewController: UIPageViewController {
         
         addCard(title: UIConstants.strings.CardTitleWelcome, text: UIConstants.strings.CardTextWelcome, viewController: UIViewController(), image: UIImageView(image: slides[0]))
         addCard(title: UIConstants.strings.CardTitleSearch, text: UIConstants.strings.CardTextSearch, viewController: UIViewController(), image: UIImageView(image: slides[1]))
+        addCard(title: UIConstants.strings.CardTitleHistory, text: UIConstants.strings.CardTextHistory, viewController: UIViewController(), image: UIImageView(image: slides[1]))
         
         if let firstViewController = orderedViewControllers.first {
             setViewControllers([firstViewController], direction: .forward, animated: true,completion: nil)
@@ -183,25 +184,39 @@ class ScrollViewController: UIPageViewController {
             make.height.equalTo(IntroViewControllerUX.Height)
         }
         
+        let cardButton = UIButton()
+
         if orderedViewControllers.count == slides.count - 1 {
-            let startBrowsingButton = UIButton()
-            startBrowsingButton.setTitle(UIConstants.strings.firstRunButton, for: .normal)
-            startBrowsingButton.setTitleColor(.purple, for: .normal)
-            startBrowsingButton.addTarget(self, action: #selector(ScrollViewController.didTapStartBrowsingButton), for: UIControlEvents.touchUpInside)
+            cardButton.setTitle(UIConstants.strings.firstRunButton, for: .normal)
+            cardButton.setTitleColor(UIConstants.colors.firstRunNextButton, for: .normal)
+            cardButton.titleLabel?.font = UIConstants.fonts.firstRunButton
+            cardButton.addTarget(self, action: #selector(ScrollViewController.didTapStartBrowsingButton), for: UIControlEvents.touchUpInside)
+        } else {
+            cardButton.setTitle(UIConstants.strings.NextIntroButtonTitle, for: .normal)
+            cardButton.setTitleColor(UIConstants.colors.firstRunNextButton, for: .normal)
+            cardButton.titleLabel?.font = UIConstants.fonts.firstRunButton
+            cardButton.addTarget(self, action: #selector(ScrollViewController.didTapNextButton), for: UIControlEvents.touchUpInside)
+        }
             
-            introView.addSubview(startBrowsingButton)
-            introView.bringSubview(toFront: startBrowsingButton)
-            startBrowsingButton.snp.makeConstraints { make in
-                make.bottom.equalTo(introView).offset(-20)
-                make.centerX.equalTo(introView)
-                make.width.equalTo(100)
-            }
+        introView.addSubview(cardButton)
+        introView.bringSubview(toFront: cardButton)
+        cardButton.snp.makeConstraints { make in
+            make.bottom.equalTo(introView).offset(-24)
+            make.centerX.equalTo(introView)
         }
         orderedViewControllers.append(viewController)
     }
     
     @objc func didTapStartBrowsingButton() {
         dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func didTapNextButton() {
+        guard let currentViewController = self.viewControllers?.first else { return }
+        guard let nextViewController = dataSource?.pageViewController(self, viewControllerAfter: currentViewController) else { return }
+        setViewControllers([nextViewController], direction: .forward, animated: true, completion: nil)
+        guard let viewControllerIndex = orderedViewControllers.index(of: nextViewController) else { return }
+        scrollViewControllerDelegate?.scrollViewController(scrollViewController: self, didUpdatePageIndex: viewControllerIndex)
     }
     
     fileprivate func attributedStringForLabel(_ text: String) -> NSMutableAttributedString {
@@ -229,7 +244,7 @@ extension ScrollViewController: UIPageViewControllerDataSource {
         guard let viewControllerIndex = orderedViewControllers.index(of: viewController) else {
             return nil
         }
-        scrollViewControllerDelegate?.scrollViewController(scrollViewController: self, didUpdatePageIndex: viewControllerIndex)
+
         let previousIndex = viewControllerIndex - 1
         
         guard previousIndex >= 0 else {
