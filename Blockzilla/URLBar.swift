@@ -228,6 +228,7 @@ class URLBar: UIView {
 
         shieldIcon.snp.makeConstraints { make in
             make.top.leading.bottom.equalToSuperview()
+            make.width.equalTo(24).priority(900)
 
             hideShieldConstraints.append(contentsOf:[
                 make.width.equalTo(0).constraint
