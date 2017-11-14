@@ -731,6 +731,7 @@ class TrackingProtectionBadge: UIView {
     let counterLabel = UILabel()
     let trackingProtectionOff = UIImageView(image: #imageLiteral(resourceName: "tracking_protection_off").imageFlippedForRightToLeftLayoutDirection())
     let trackingProtectionCounter = UIImageView(image: #imageLiteral(resourceName: "tracking_protection_counter").imageFlippedForRightToLeftLayoutDirection())
+    let counterLabelWrapper = UIView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -750,7 +751,8 @@ class TrackingProtectionBadge: UIView {
         addSubview(trackingProtectionCounter)
         counterLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
         counterLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
-        addSubview(counterLabel)
+        counterLabelWrapper.addSubview(counterLabel)
+        addSubview(counterLabelWrapper)
 
         trackingProtectionCounter.setContentHuggingPriority(.required, for: .horizontal)
         trackingProtectionCounter.snp.makeConstraints { make in
@@ -767,10 +769,15 @@ class TrackingProtectionBadge: UIView {
         }
 
         counterLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
-        counterLabel.snp.makeConstraints { make in
+        counterLabelWrapper.snp.makeConstraints { make in
             make.width.height.equalTo(12)
             make.bottom.equalTo(trackingProtectionCounter).offset(-2).priority(500)
-            make.leading.equalTo(trackingProtectionCounter).offset(15).priority(500)
+            make.leading.equalTo(trackingProtectionCounter).offset(13).priority(500)
+        }
+
+        counterLabel.snp.makeConstraints { make in
+            make.centerY.centerX.equalToSuperview().priority(500)
+            make.leading.greaterThanOrEqualToSuperview().offset(2)
         }
     }
     
