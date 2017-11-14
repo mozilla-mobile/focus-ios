@@ -7,13 +7,13 @@ import SnapKit
 import Foundation
 
 struct IntroViewControllerUX {
-    static let Width = 300
-    static let Height = 520
+    static let Width = 302
+    static let Height = 460
     static let MinimumFontScale: CGFloat = 0.5
 
     static let CardSlides = ["onboarding_1", "onboarding_2"]
 
-    static let PagerCenterOffsetFromScrollViewBottom = UIScreen.main.bounds.width <= 320 ? 20 : 30
+    static let PagerCenterOffsetFromScrollViewBottom = 24
 
     static let StartBrowsingButtonColor = UIColor(rgb: 0x4990E2)
     static let StartBrowsingButtonHeight = 56
@@ -54,8 +54,9 @@ class IntroViewController: UIViewController {
         pageControl.backgroundColor = .clear
         pageControl.isUserInteractionEnabled = false
         pageControl.snp.makeConstraints { make in
-            make.bottom.equalTo(self.view).offset(-IntroViewControllerUX.PagerCenterOffsetFromScrollViewBottom)
-            make.width.height.equalTo(30)
+            make.top.equalTo(pageViewController.view.snp.centerY).offset(IntroViewControllerUX.Height/2 + IntroViewControllerUX.PagerCenterOffsetFromScrollViewBottom)
+            make.width.equalTo(20)
+            make.height.equalTo(6)
             make.centerX.equalTo(self.view)
         }
         
@@ -65,7 +66,7 @@ class IntroViewController: UIViewController {
         skipButton.addTarget(self, action: #selector(IntroViewController.didTapSkipButton), for: UIControlEvents.touchUpInside)
         
         skipButton.snp.makeConstraints { make in
-            make.top.equalTo(self.view).offset(IntroViewControllerUX.PagerCenterOffsetFromScrollViewBottom)
+            make.bottom.equalTo(pageViewController.view.snp.centerY).offset(-IntroViewControllerUX.Height/2 - IntroViewControllerUX.PagerCenterOffsetFromScrollViewBottom)
             make.leading.equalTo(self.view).offset(28)
             make.width.equalTo(60)
         }
@@ -126,20 +127,25 @@ class ScrollViewController: UIPageViewController {
         viewController.view.addSubview(introView)
         
         introView.backgroundColor = .white
-        introView.layer.shadowRadius = 3
+        introView.layer.shadowRadius = 12
+//        introView.layer.shadowOffset = CGSize(
+//        introView.layer.sha
         introView.layer.shadowOpacity = 0.5
-        introView.layer.cornerRadius = 5
+        introView.layer.cornerRadius = 6
         
         introView.addSubview(image)
         image.snp.makeConstraints { make in
             make.top.equalTo(introView)
             make.centerX.equalTo(introView)
+            make.width.equalTo(280)
+            make.height.equalTo(212)
         }
         
         let titleLabel = UILabel()
         titleLabel.numberOfLines = 2
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = IntroViewControllerUX.MinimumFontScale
+        titleLabel.textColor = UIConstants.colors.firstRunTitle
         titleLabel.textAlignment = NSTextAlignment.center
         titleLabel.text = title
         titleLabel.font = UIConstants.fonts.firstRunTitle
@@ -147,6 +153,8 @@ class ScrollViewController: UIPageViewController {
         introView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { (make ) -> Void in
             make.top.equalTo(image.snp.bottom)
+            make.leading.equalTo(introView).offset(24)
+            make.trailing.equalTo(introView).inset(24)
             make.centerX.equalTo(introView)
             make.height.equalTo(IntroViewControllerUX.CardTitleHeight)
             make.width.equalTo(IntroViewControllerUX.CardTextWidth)
@@ -158,13 +166,15 @@ class ScrollViewController: UIPageViewController {
         textLabel.adjustsFontSizeToFitWidth = true
         textLabel.minimumScaleFactor = IntroViewControllerUX.MinimumFontScale
         textLabel.lineBreakMode = .byTruncatingTail
+        textLabel.textColor = UIConstants.colors.firstRunMessage
         textLabel.font = UIConstants.fonts.firstRunMessage
         
         introView.addSubview(textLabel)
         textLabel.snp.makeConstraints({ (make) -> Void in
-            make.top.equalTo(titleLabel.snp.bottom).offset(20)
+            make.top.equalTo(titleLabel.snp.bottom).offset(16)
             make.centerX.equalTo(introView)
-            make.width.equalTo(IntroViewControllerUX.CardTextWidth)
+            make.leading.equalTo(introView).offset(24)
+            make.trailing.equalTo(introView).inset(24)
         })
         
         introView.snp.makeConstraints { (make) -> Void in
@@ -212,7 +222,6 @@ extension ScrollViewController: UIPageViewControllerDelegate {
             scrollViewControllerDelegate?.scrollViewController(scrollViewController: self, didUpdatePageIndex: index)
         }
     }
-    
 }
 
 extension ScrollViewController: UIPageViewControllerDataSource {

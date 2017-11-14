@@ -18,8 +18,8 @@ struct UIConstants {
         static let firstRunButtonBackground = UIColor(white: 1, alpha: 0.2)
         static let firstRunButtonBorder = UIColor(white: 1, alpha: 0.3)
         static let firstRunDisclaimer = UIColor(white: 1, alpha: 0.5)
-        static let firstRunMessage = UIColor.white
-        static let firstRunTitle = UIColor.white
+        static let firstRunMessage = UIColor(rgb: 0x737373)
+        static let firstRunTitle = UIColor(rgb: 0x212121)
         static let focusLightBlue = UIColor(rgb: 0x00A7E0)
         static let focusDarkBlue = UIColor(rgb: 0x005DA5)
         static let focusBlue = UIColor(rgb: 0x00A7E0)
@@ -69,7 +69,7 @@ struct UIConstants {
         static let firstRunButton = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
         static let firstRunDisclaimer = UIFont.systemFont(ofSize: 14)
         static let firstRunMessage = UIFont.systemFont(ofSize: 14)
-        static let firstRunTitle = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.medium)
+        static let firstRunTitle = UIFont.systemFont(ofSize: 18)
         static let homeLabel = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.ultraLight)
         static let safariInstruction = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.medium)
         static let searchButton = UIFont.systemFont(ofSize: 15)
