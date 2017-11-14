@@ -13,6 +13,7 @@ protocol URLBarDelegate: class {
     func urlBarDidActivate(_ urlBar: URLBar)
     func urlBarDidDeactivate(_ urlBar: URLBar)
     func urlBarDidFocus(_ urlBar: URLBar)
+    func urlBarDidPressScrollTop(_: URLBar)
     func urlBarDidDismiss(_ urlBar: URLBar)
     func urlBarDidPressDelete(_ urlBar: URLBar)
     func urlBarDidTapShield(_ urlBar: URLBar)
@@ -52,9 +53,13 @@ class URLBar: UIView {
     private var isEditingConstraints = [Constraint]()
     private var preActivationConstraints = [Constraint]()
     private var postActivationConstraints = [Constraint]()
-    
+
     convenience init() {
         self.init(frame: CGRect.zero)
+
+        let singleTap = UITapGestureRecognizer(target: self, action: #selector(didSingleTap(sender:)))
+        singleTap.numberOfTapsRequired = 1
+        addGestureRecognizer(singleTap)
 
         addSubview(toolset.backButton)
         addSubview(toolset.forwardButton)
@@ -76,6 +81,7 @@ class URLBar: UIView {
         shieldIcon.contentMode = .center
         shieldIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         shieldIcon.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        shieldIcon.accessibilityIdentifier = "URLBar.trackingProtectionIcon"
 
         let gestureRecognizer = UITapGestureRecognizer()
         gestureRecognizer.numberOfTapsRequired = 1
@@ -221,8 +227,7 @@ class URLBar: UIView {
         }
 
         shieldIcon.snp.makeConstraints { make in
-            make.top.bottom.leading.equalTo(urlTextContainer)
-            make.width.greaterThanOrEqualTo(lockIcon)
+            make.top.leading.bottom.equalToSuperview()
 
             hideShieldConstraints.append(contentsOf:[
                 make.width.equalTo(0).constraint
@@ -402,7 +407,8 @@ class URLBar: UIView {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Since the URL text field is smaller and centered on iPads, make sure
         // that touching the surrounding area will trigger editing.
-        if let touch = touches.first {
+        if urlText.isUserInteractionEnabled,
+            let touch = touches.first {
             let point = touch.location(in: urlTextContainer)
             if urlTextContainer.bounds.contains(point) {
                 urlText.becomeFirstResponder()
@@ -538,6 +544,18 @@ class URLBar: UIView {
         }
     }
 
+    @objc private func didSingleTap(sender: UITapGestureRecognizer) {
+        if urlText.isUserInteractionEnabled {
+            let y = sender.location(in: self).y
+            guard y < 10 else { return }
+            delegate?.urlBarDidPressScrollTop(self)
+        } else {
+            let y = sender.location(in: collapsedUrlAndLockWrapper).y
+            guard y < 18 else { return }
+            delegate?.urlBarDidPressScrollTop(self)
+        }
+    }
+
     /// Show the URL toolset buttons if we're on iPad/landscape and not editing; hide them otherwise.
     /// This method is intended to be called inside `UIView.animate` block.
     private func updateToolsetConstraints() {
@@ -617,7 +635,7 @@ class URLBar: UIView {
     }
 
     func collapseUrlBar(expandAlpha: CGFloat, collapseAlpha: CGFloat) {
-        self.isUserInteractionEnabled = (expandAlpha == 1)
+        self.urlText.isUserInteractionEnabled = (expandAlpha == 1)
 
         deleteButton.alpha = expandAlpha
         urlTextContainer.alpha = expandAlpha
@@ -712,9 +730,10 @@ class TrackingProtectionBadge: UIView {
     let counterLabel = UILabel()
     let trackingProtectionOff = UIImageView(image: #imageLiteral(resourceName: "tracking_protection_off"))
     let trackingProtectionCounter = UIImageView(image: #imageLiteral(resourceName: "tracking_protection_counter"))
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setContentHuggingPriority(.defaultLow, for: .horizontal)
         setupViews()
     }
 
@@ -723,22 +742,31 @@ class TrackingProtectionBadge: UIView {
         counterLabel.textColor = UIColor.white
         counterLabel.textAlignment = .left
         counterLabel.font = UIFont.boldSystemFont(ofSize: 10)
+        counterLabel.text = "0"
+        trackingProtectionOff.alpha = 0
         
         addSubview(trackingProtectionOff)
         addSubview(trackingProtectionCounter)
+        counterLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        counterLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         addSubview(counterLabel)
 
-        trackingProtectionOff.snp.makeConstraints { make in
-            make.leading.centerY.equalTo(self)
+        trackingProtectionCounter.setContentHuggingPriority(.required, for: .horizontal)
+        trackingProtectionCounter.snp.makeConstraints { make in
+            make.leading.equalToSuperview().priority(1000)
+            make.centerY.equalToSuperview().priority(500)
+            make.trailing.equalToSuperview().priority(500)
         }
 
-        trackingProtectionCounter.snp.makeConstraints { make in
-            make.leading.centerY.equalTo(self)
+        trackingProtectionOff.setContentHuggingPriority(.required, for: .horizontal)
+        trackingProtectionOff.snp.makeConstraints { make in
+            make.leading.equalToSuperview().priority(1000)
+            make.centerY.equalToSuperview().priority(500)
         }
         
         counterLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(trackingProtectionCounter).offset(-3)
-            make.leading.equalTo(trackingProtectionCounter).offset(15)
+            make.bottom.equalTo(trackingProtectionCounter).offset(-3).priority(500)
+            make.leading.equalTo(trackingProtectionCounter).offset(15).priority(1000)
             make.trailing.equalTo(self)
         }
     }
@@ -754,7 +782,6 @@ class TrackingProtectionBadge: UIView {
             trackingProtectionCounter.alpha = 1
             counterLabel.alpha = 1
             counterLabel.text = String(info.total)
-            counterLabel.sizeToFit()
         default:
             trackingProtectionOff.alpha = 1
             trackingProtectionCounter.alpha = 0
