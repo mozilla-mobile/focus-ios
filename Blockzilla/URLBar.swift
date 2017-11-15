@@ -248,6 +248,9 @@ class URLBar: UIView {
             make.top.bottom.equalTo(textAndLockContainer)
 
             make.leading.equalTo(textAndLockContainer).inset(UIConstants.layout.lockIconInset).priority(999)
+
+            // Account for the content inset of the URLTextField to balance
+            // the spacing around the lock icon
             make.trailing.equalTo(urlText.snp.leading).inset(-(UIConstants.layout.lockIconInset - 4)).priority(999)
 
             hideLockConstraints.append(contentsOf: [
