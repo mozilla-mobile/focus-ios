@@ -69,7 +69,6 @@ class IntroViewController: UIViewController {
         skipButton.snp.makeConstraints { make in
             make.bottom.equalTo(pageViewController.view.snp.centerY).offset(-IntroViewControllerUX.Height/2 - IntroViewControllerUX.PagerCenterOffsetFromScrollViewBottom)
             make.leading.equalTo(self.view.snp.centerX).offset(-IntroViewControllerUX.Width/2)
-//            make.width.equalTo(60)
         }
     }
     
@@ -130,8 +129,6 @@ class ScrollViewController: UIPageViewController {
         
         introView.backgroundColor = .white
         introView.layer.shadowRadius = 12
-//        introView.layer.shadowOffset = CGSize(
-//        introView.layer.sha
         introView.layer.shadowOpacity = 0.5
         introView.layer.cornerRadius = 6
         
