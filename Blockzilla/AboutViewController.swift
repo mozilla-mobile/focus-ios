@@ -48,9 +48,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell : UITableViewCell?
-        cell = tableView.dequeueReusableCell(withIdentifier: "cellID")
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellID")
         return cell ?? UITableViewCell()
     }
 
@@ -191,14 +189,10 @@ private class AboutHeaderView: UIView {
         return learnMoreButton
     }()
 
-    init() {
-        super.init(frame: CGRect.zero)
+    convenience init() {
+        self.init(frame: CGRect.zero)
         addSubviews()
         configureConstraints()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 
     @objc private func didPressLearnMore() {
@@ -213,7 +207,6 @@ private class AboutHeaderView: UIView {
     }
 
     private func configureConstraints() {
-        translatesAutoresizingMaskIntoConstraints = false
 
         logo.snp.makeConstraints { make in
             make.centerX.equalTo(self)
