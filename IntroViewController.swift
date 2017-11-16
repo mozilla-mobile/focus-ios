@@ -76,6 +76,10 @@ class IntroViewController: UIViewController {
         background.removeFromSuperview()
         dismiss(animated: true, completion: nil)
     }
+
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return (UIDevice.current.userInterfaceIdiom == .phone) ? .portrait : .allButUpsideDown
+    }
 }
 
 extension IntroViewController: ScrollViewControllerDelegate {
