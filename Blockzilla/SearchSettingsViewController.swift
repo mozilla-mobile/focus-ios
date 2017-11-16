@@ -30,21 +30,39 @@ class SearchSettingsViewController: UITableViewController {
         view.backgroundColor = UIConstants.colors.background
         tableView.separatorColor = UIConstants.colors.settingsSeparator
         tableView.selectRow(at: IndexPath(row: 0, section: 1), animated: false, scrollPosition: .none)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.Edit, style: .plain, target: self, action: #selector(SearchSettingsViewController.toggleEditing))
+        navigationItem.rightBarButtonItem?.accessibilityIdentifier = "edit"
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searchEngineManager.engines.count + 1 // Add search engine row
+        let numberOfEngines = searchEngineManager.engines.count
+        if tableView.isEditing {
+            return numberOfEngines
+        }
+        
+        return numberOfEngines + 2 // 1 Add search engine row, 1 Restore default search engines row
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.item == searchEngineManager.engines.count {
+        let engines = searchEngineManager.engines
+        if indexPath.item == engines.count {
             let cell = UITableViewCell(style: .default, reuseIdentifier: "addSearchEngine")
             cell.textLabel?.text = UIConstants.strings.AddSearchEngineButton
             cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
             cell.backgroundColor = UIConstants.colors.background
             return cell
+        } else if indexPath.item > engines.count {
+            let cell = UITableViewCell(style: .default, reuseIdentifier: "restoreDefaultEngines")
+            cell.textLabel?.text = UIConstants.strings.RestoreSearchEnginesLabel
+            cell.textLabel?.textColor = searchEngineManager.hasDisabledDefaultEngine() ? UIConstants.colors.settingsTextLabel : UIConstants.colors.settingsDisabled
+            cell.backgroundColor = UIConstants.colors.background
+            cell.textLabel?.snp.makeConstraints({ (make) in
+                make.topMargin.equalTo(44)
+                make.leftMargin.equalTo(16)
+            })
+            return cell
         } else {
-            let engine = searchEngineManager.engines[indexPath.item]
+            let engine = engines[indexPath.item]
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
             cell.textLabel?.text = engine.name
             cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
@@ -58,15 +76,28 @@ class SearchSettingsViewController: UITableViewController {
             return cell
         }
     }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return indexPath.row == searchEngineManager.engines.count+1 ? 44*2 : 44
+    }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if indexPath.item == searchEngineManager.engines.count {
+        
+        let engines = searchEngineManager.engines
+        
+        if indexPath.item == engines.count {
             // Add search engine tapped
             let vc = AddSearchEngineViewController(delegate: self)
             navigationController?.pushViewController(vc, animated: true)
+        } else if indexPath.item > engines.count {
+            // Restore default engines tapped
+            if searchEngineManager.hasDisabledDefaultEngine() {
+                searchEngineManager.restoreDisabledDefaultEngines()
+                tableView.reloadData()
+            }
         } else {
-            let engine = searchEngineManager.engines[indexPath.item]
+            let engine = engines[indexPath.item]
             searchEngineManager.activeEngine = engine
             Telemetry.default.configuration.defaultSearchEngineProvider = engine.name
             
@@ -74,11 +105,43 @@ class SearchSettingsViewController: UITableViewController {
             delegate?.searchSettingsViewController(self, didSelectEngine: engine)
         }
     }
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        let engines = searchEngineManager.engines
+        
+//        if !tableView.isEditing {
+//            return false
+//        }
+        
+        if indexPath.row >= engines.count {
+            // Can not edit the add engine or restore default rows
+            return false
+        }
+        
+        let engine = engines[indexPath.row]
+        return engine != searchEngineManager.activeEngine
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            tableView.beginUpdates()
+            searchEngineManager.removeEngine(engine:searchEngineManager.engines[indexPath.row])
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            tableView.endUpdates()
+        }
+    }
+    
+    @objc func toggleEditing() {
+        navigationItem.rightBarButtonItem?.title = tableView.isEditing ? UIConstants.strings.Edit : UIConstants.strings.Done
+        tableView.setEditing(!tableView.isEditing, animated: true)
+        tableView.reloadData()
+    }
 }
 
 extension SearchSettingsViewController: AddSearchEngineDelegate {
     func addSearchEngineViewController(_ addSearchEngineViewController: AddSearchEngineViewController, name: String, searchTemplate: String) {
-        searchEngineManager.addEngine(name: name, template: searchTemplate)
+        let engine = searchEngineManager.addEngine(name: name, template: searchTemplate)
         tableView.reloadData()
+        delegate?.searchSettingsViewController(self, didSelectEngine: engine)
     }
 }
