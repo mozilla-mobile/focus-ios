@@ -11,7 +11,7 @@ struct IntroViewControllerUX {
     static let Height = 460
     static let MinimumFontScale: CGFloat = 0.5
 
-    static let CardSlides = ["onboarding_1", "onboarding_2", "onboarding_2"]
+    static let CardSlides = ["onboarding_1", "onboarding_2", "onboarding_3"]
 
     static let PagerCenterOffsetFromScrollViewBottom = 24
 
@@ -62,13 +62,14 @@ class IntroViewController: UIViewController {
         
         skipButton.backgroundColor = .clear
         skipButton.setTitle(UIConstants.strings.SkipIntroButtonTitle, for: .normal)
+        skipButton.titleLabel?.font = UIConstants.fonts.aboutText
         skipButton.setTitleColor(.white, for: .normal)
         skipButton.addTarget(self, action: #selector(IntroViewController.didTapSkipButton), for: UIControlEvents.touchUpInside)
         
         skipButton.snp.makeConstraints { make in
             make.bottom.equalTo(pageViewController.view.snp.centerY).offset(-IntroViewControllerUX.Height/2 - IntroViewControllerUX.PagerCenterOffsetFromScrollViewBottom)
-            make.leading.equalTo(self.view).offset(28)
-            make.width.equalTo(60)
+            make.leading.equalTo(self.view.snp.centerX).offset(-IntroViewControllerUX.Width/2)
+//            make.width.equalTo(60)
         }
     }
     
@@ -113,7 +114,7 @@ class ScrollViewController: UIPageViewController {
         
         addCard(title: UIConstants.strings.CardTitleWelcome, text: UIConstants.strings.CardTextWelcome, viewController: UIViewController(), image: UIImageView(image: slides[0]))
         addCard(title: UIConstants.strings.CardTitleSearch, text: UIConstants.strings.CardTextSearch, viewController: UIViewController(), image: UIImageView(image: slides[1]))
-        addCard(title: UIConstants.strings.CardTitleHistory, text: UIConstants.strings.CardTextHistory, viewController: UIViewController(), image: UIImageView(image: slides[1]))
+        addCard(title: UIConstants.strings.CardTitleHistory, text: UIConstants.strings.CardTextHistory, viewController: UIViewController(), image: UIImageView(image: slides[2]))
         
         if let firstViewController = orderedViewControllers.first {
             setViewControllers([firstViewController], direction: .forward, animated: true,completion: nil)
