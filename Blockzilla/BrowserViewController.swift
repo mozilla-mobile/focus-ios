@@ -477,6 +477,7 @@ extension BrowserViewController: URLBarDelegate {
             return
         }
 
+        SearchHistoryUtils.pushSearchToStack(with: text)
         var url = URIFixup.getURL(entry: text)
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
@@ -488,6 +489,7 @@ extension BrowserViewController: URLBarDelegate {
             submit(url: urlBarURL)
             urlBar.url = urlBarURL
         }
+
         urlBar.dismiss()
     }
 
@@ -529,11 +531,13 @@ extension BrowserViewController: URLBarDelegate {
 extension BrowserViewController: BrowserToolsetDelegate {
     func browserToolsetDidPressBack(_ browserToolset: BrowserToolset) {
         urlBar.dismiss()
+        SearchHistoryUtils.goBack()
         webViewController.goBack()
     }
 
     func browserToolsetDidPressForward(_ browserToolset: BrowserToolset) {
         urlBar.dismiss()
+        SearchHistoryUtils.goFoward()
         webViewController.goForward()
     }
 
@@ -605,6 +609,10 @@ extension BrowserViewController: OverlayViewDelegate {
 }
 
 extension BrowserViewController: WebControllerDelegate {
+    func webControllerSaveHistoryBeforeNavigation(_ controller: WebController) {
+        print("\(urlBar.retrieveUrlText()) ---------- \(String(describing: urlBar.url))")
+    }
+
     func webControllerDidStartNavigation(_ controller: WebController) {
         urlBar.isLoading = true
         browserToolbar.isLoading = true
