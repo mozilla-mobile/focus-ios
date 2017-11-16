@@ -36,7 +36,12 @@ class SearchProviderTest: BaseTestCase {
 	}
 	
 	private func changeSearchProvider(provider: String) {
-		
+        let cancel = XCUIApplication().buttons["Cancel"]
+
+        if (cancel.exists) {
+            cancel.tap()
+        }
+        
 		app.buttons["Settings"].tap()
 		app.tables.cells["SettingsViewController.searchCell"].tap()
 		

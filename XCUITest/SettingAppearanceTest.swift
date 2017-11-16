@@ -17,6 +17,12 @@ class SettingAppearanceTest: BaseTestCase {
     
     // Check for the basic appearance of the Settings Menu
     func testCheckSetting() {
+        let cancel = XCUIApplication().buttons["Cancel"]
+
+        if (cancel.exists) {
+            cancel.tap()
+        }
+
         app.buttons["Settings"].tap()
         
         
@@ -71,7 +77,7 @@ class SettingAppearanceTest: BaseTestCase {
             XCTAssert(app.staticTexts["Enable Firefox Klar"].exists)
             app.navigationBars["Firefox_Klar.SafariInstructionsView"].buttons["Settings"].tap()
         }
-        
+
         // Swipe up
         waitforExistence(element: app.tables.switches["BlockerToggle.BlockAds"])
         app.tables.children(matching: .cell).element(boundBy: 0).swipeUp()
