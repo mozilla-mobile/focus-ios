@@ -609,10 +609,6 @@ extension BrowserViewController: OverlayViewDelegate {
 }
 
 extension BrowserViewController: WebControllerDelegate {
-    func webControllerSaveHistoryBeforeNavigation(_ controller: WebController) {
-        print("\(urlBar.retrieveUrlText()) ---------- \(String(describing: urlBar.url))")
-    }
-
     func webControllerDidStartNavigation(_ controller: WebController) {
         urlBar.isLoading = true
         browserToolbar.isLoading = true
