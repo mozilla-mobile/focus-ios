@@ -877,6 +877,7 @@ extension BrowserViewController: URLBarDelegate {
             return
         }
 
+        SearchHistoryUtils.pushSearchToStack(with: text)
         var url = URIFixup.getURL(entry: text)
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
@@ -889,11 +890,15 @@ extension BrowserViewController: URLBarDelegate {
             submit(url: urlBarURL)
             urlBar.url = urlBarURL
         }
+<<<<<<< HEAD
         
         if let urlText = urlBar.url?.absoluteString {
             overlayView.currentURL = urlText
         }
         
+=======
+
+>>>>>>> Prototype the stack solution for searched values
         urlBar.dismiss()
     }
 
@@ -955,10 +960,13 @@ extension BrowserViewController: BrowserToolsetDelegate {
     }
     
     func browserToolsetDidPressBack(_ browserToolset: BrowserToolset) {
+        SearchHistoryUtils.goBack()
         webViewController.goBack()
     }
 
     func browserToolsetDidPressForward(_ browserToolset: BrowserToolset) {
+        urlBar.dismiss()
+        SearchHistoryUtils.goFoward()
         webViewController.goForward()
     }
 
