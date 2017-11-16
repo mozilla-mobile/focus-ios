@@ -54,15 +54,4 @@ class SearchEngine: NSObject, NSCoding {
         aCoder.encode(searchTemplate, forKey: "searchTemplate")
         aCoder.encode(suggestionsTemplate, forKey: "suggestionsTemplate")
     }
-//    
-//    func generateImage(name: String) -> UIImage {
-//        UIGraphicsBeginImageContext(CGSize(width: 100, height: 100))
-//        
-//        let str: NSString = "s"
-//        str.draw(in: <#T##CGRect#>, withAttributes: <#T##[NSAttributedStringKey : Any]?#>)
-//        
-//        let img = UIGraphicsGetImageFromCurrentImageContext()
-//        UIGraphicsEndImageContext()
-//        return img
-//    }
 }
