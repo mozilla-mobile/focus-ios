@@ -29,8 +29,7 @@ class OpenInFocusTest : BaseTestCase {
         safariApp.launch()
 
         // Need to wait for the site to load as well as the share buttn availability
-        waitforExistence(element: safariApp.buttons["Google Search"])
-
+        waitforExistence(element: safariApp.images["Google"])
         waitforEnable(element: safariApp.buttons["Share"])
         safariApp.buttons["Share"].tap()
         waitforEnable(element: safariApp.collectionViews.cells.buttons["More"])
