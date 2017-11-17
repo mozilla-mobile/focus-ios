@@ -293,6 +293,9 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func resetBrowser() {
+        // Clear User Defaults With searched history
+        UserDefaults.standard.set(nil, forKey: "searchedHistory")
+
         // Screenshot the browser, showing the screenshot on top.
         let image = mainContainerView.screenshot()
         let screenshotView = UIImageView(image: image)
@@ -477,7 +480,9 @@ extension BrowserViewController: URLBarDelegate {
             return
         }
 
+        // Saving History Search to UserDefaults
         SearchHistoryUtils.pushSearchToStack(with: text)
+
         var url = URIFixup.getURL(entry: text)
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
@@ -592,7 +597,7 @@ extension BrowserViewController: OverlayViewDelegate {
             urlBar.url = webViewController.url
             return
         }
-        
+
         var url = URIFixup.getURL(entry: text)
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
@@ -609,10 +614,6 @@ extension BrowserViewController: OverlayViewDelegate {
 }
 
 extension BrowserViewController: WebControllerDelegate {
-    func webControllerSaveHistoryBeforeNavigation(_ controller: WebController) {
-        print("\(urlBar.retrieveUrlText()) ---------- \(String(describing: urlBar.url))")
-    }
-
     func webControllerDidStartNavigation(_ controller: WebController) {
         urlBar.isLoading = true
         browserToolbar.isLoading = true

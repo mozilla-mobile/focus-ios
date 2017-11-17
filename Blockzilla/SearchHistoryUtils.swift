@@ -8,14 +8,29 @@ import Foundation
 struct textSearched{
     var text: String
     var isCurrentSearch: Bool
+
+    init(text : String, isCurrentSearch: Bool) {
+        self.text = text
+        self.isCurrentSearch = isCurrentSearch
+    }
+
+    init?(dictionary: [String: Any]) {
+        guard let text = dictionary["text"], let isCurrentSearch = dictionary["isCurrentSearch"] else { return nil }
+        self.init(text: text as! String, isCurrentSearch: isCurrentSearch as! Bool)
+    }
+
+    var propertyListRepresentation : [String:Any] {
+        return ["text" : text, "isCurrentSearch" : isCurrentSearch]
+    }
+
 }
 
 class SearchHistoryUtils {
     static func pushSearchToStack(with searchedText: String) {
         var currentStack = [textSearched]()
 
-        if let encodedCurrentStack = UserDefaults.standard.value(forKey: "searchedHistory") as? Data {
-            currentStack = NSKeyedUnarchiver.unarchiveObject(with: encodedCurrentStack) as? [textSearched] ?? []
+        if let propertylistSearchesRead = UserDefaults.standard.object(forKey: "searchedHistory") as? [[String:Any]] {
+            currentStack = propertylistSearchesRead.flatMap{ textSearched(dictionary: $0) }
 
             for index in 0..<currentStack.count {
                 currentStack[index].isCurrentSearch = false
@@ -24,15 +39,20 @@ class SearchHistoryUtils {
 
         currentStack.append(textSearched(text: searchedText, isCurrentSearch: true))
 
-        UserDefaults.standard.set(NSKeyedArchiver.archivedData(withRootObject: currentStack), forKey: "searchedHistory")
+        let propertylistSearchesWrite = currentStack.map{ $0.propertyListRepresentation }
+        UserDefaults.standard.set(propertylistSearchesWrite, forKey: "searchedHistory")
     }
 
     static func pullSearchFromStack() -> String? {
-        let currentStack = UserDefaults.standard.value(forKey: "searchedHistory") as? [textSearched] ?? []
+        var currentStack = [textSearched]()
+        if let propertylistSearchesRead = UserDefaults.standard.object(forKey: "searchedHistory") as? [[String:Any]] {
 
-        for search in currentStack {
-            if search.isCurrentSearch {
-                return search.text
+            currentStack = propertylistSearchesRead.flatMap{ textSearched(dictionary: $0) }
+
+            for search in currentStack {
+                if search.isCurrentSearch {
+                    return search.text
+                }
             }
         }
 
@@ -41,28 +61,40 @@ class SearchHistoryUtils {
 
     // go back
     static func goFoward() {
-        var currentStack = UserDefaults.standard.value(forKey: "searchedHistory") as? [textSearched] ?? []
+        var currentStack = [textSearched]()
+        if let propertylistSearchesRead = UserDefaults.standard.object(forKey: "searchedHistory") as? [[String:Any]] {
 
-        for index in 0..<currentStack.count {
-            if (currentStack[index].isCurrentSearch) {
+            currentStack = propertylistSearchesRead.flatMap{ textSearched(dictionary: $0) }
 
-                currentStack[index + 1].isCurrentSearch = true
-                currentStack[index].isCurrentSearch = false
+            for index in 0..<currentStack.count {
+                if (currentStack[index].isCurrentSearch) {
+
+                    currentStack[index + 1].isCurrentSearch = true
+                    currentStack[index].isCurrentSearch = false
+                    break
+                }
             }
+            let propertylistSearchesWrite = currentStack.map{ $0.propertyListRepresentation }
+            UserDefaults.standard.set(propertylistSearchesWrite, forKey: "searchedHistory")
         }
     }
 
     // go foward
     static func goBack() {
-        var currentStack = UserDefaults.standard.value(forKey: "searchedHistory") as? [textSearched] ?? []
+        var currentStack = [textSearched]()
+        if let propertylistSearchesRead = UserDefaults.standard.object(forKey: "searchedHistory") as? [[String:Any]] {
 
-        for index in 0..<currentStack.count {
-            if (currentStack[index].isCurrentSearch) {
+            currentStack = propertylistSearchesRead.flatMap{ textSearched(dictionary: $0) }
 
-                currentStack[index - 1].isCurrentSearch = true
-                currentStack[index].isCurrentSearch = false
+            for index in 0..<currentStack.count {
+                if (currentStack[index].isCurrentSearch) {
+
+                    currentStack[index - 1].isCurrentSearch = true
+                    currentStack[index].isCurrentSearch = false
+                }
             }
+            let propertylistSearchesWrite = currentStack.map{ $0.propertyListRepresentation }
+            UserDefaults.standard.set(propertylistSearchesWrite, forKey: "searchedHistory")
         }
-
     }
 }
