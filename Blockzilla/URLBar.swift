@@ -667,10 +667,8 @@ class URLBar: UIView {
             var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
             components?.user = nil
             components?.password = nil
-            if let searchedText = SearchHistoryUtils.pullSearchFromStack() {
+            if let searchedText = SearchHistoryUtils.pullSearchFromStack(), searchedText != "" {
                 displayURL = searchedText
-            } else {
-                displayURL = components?.url?.absoluteString
             }
             truncatedURL = components?.host
         }
