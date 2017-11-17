@@ -25,7 +25,6 @@ class WebsiteMemoryTest: BaseTestCase {
         if app.webViews.otherElements["Search"].exists {
             googleSearchField =  app.webViews.otherElements["Search"]
         }
-        waitforEnable(element: googleSearchField)
         
         // type 'mozilla' (typing doesn't work cleanly with UIWebview, so had to paste from clipboard)
         UIPasteboard.general.string = "mozilla"
