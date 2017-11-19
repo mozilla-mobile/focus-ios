@@ -117,7 +117,7 @@ class TrackingProtectionBreakdownVisualizer: UIView {
         contentSection.snp.remakeConstraints { make in
             make.top.equalToSuperview()
             make.height.equalToSuperview()
-            make.width.equalTo(0)
+            make.width.equalTo(0).priority(500)
             make.width.equalToSuperview().multipliedBy(calculateMultiplier(info.contentCount))
             make.trailing.equalToSuperview().priority(500)
         }
@@ -286,7 +286,7 @@ class TrackingProtectionBreakdownView: UIView {
 }
 
 class TrackingProtectionToggleView: UIView {
-    private let icon = UIImageView(image: #imageLiteral(resourceName: "tracking_protection"))
+    private let icon = UIImageView(image: #imageLiteral(resourceName: "tracking_protection").imageFlippedForRightToLeftLayoutDirection())
     private let label = UILabel(frame: .zero)
     let toggle = UISwitch()
     private let borderView = UIView()

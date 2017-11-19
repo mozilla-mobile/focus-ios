@@ -281,6 +281,8 @@ class BrowserViewController: UIViewController {
         }, completion: { completed in
             self.drawerOverlayView.isHidden = true
         })
+
+        Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.close, object: TelemetryEventObject.trackingProtectionDrawer))
     }
 
     fileprivate func showDrawer() {
@@ -290,6 +292,8 @@ class BrowserViewController: UIViewController {
             self.drawerOverlayView.layer.opacity = 1
             self.view.layoutIfNeeded()
         }, completion: nil)
+
+        Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.trackingProtectionDrawer))
     }
 
     fileprivate func resetBrowser() {
@@ -469,6 +473,21 @@ extension BrowserViewController: URLBarDelegate {
         overlayView.setSearchQuery(query: text, animated: true)
     }
 
+    func urlBarDidPressScrollTop(_: URLBar) {
+        guard !urlBar.isEditing else { return }
+
+        switch scrollBarState {
+        case .expanded:
+            // Just scroll the vertical position so the page doesn't appear under
+            // the notch on the iPhone X
+            var point = webViewController.scrollView.contentOffset
+            point.y = 0
+            webViewController.scrollView.setContentOffset(point, animated: true)
+        case .collapsed: showToolbars()
+        default: break
+        }
+    }
+
     func urlBar(_ urlBar: URLBar, didSubmitText text: String) {
         let text = text.trimmingCharacters(in: .whitespaces)
 
@@ -645,12 +664,8 @@ extension BrowserViewController: WebControllerDelegate {
         // from catching the global progress events.
         guard homeView == nil else { return }
 
-        if estimatedProgress == 0.1 {
-            urlBar.progressBar.animateHidden(false, duration: UIConstants.layout.progressVisibilityAnimationDuration)
-            urlBar.progressBar.animateGradient()
-            return
-        }
-
+        urlBar.progressBar.alpha = 1
+        urlBar.progressBar.isHidden = false
         urlBar.progressBar.setProgress(Float(estimatedProgress), animated: true)
     }
 
@@ -819,6 +834,11 @@ extension BrowserViewController: TrackingProtectionSummaryDelegate {
         } else {
             webViewController.disableTrackingProtection()
         }
+
+
+        let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.trackingProtectionToggle)
+        telemetryEvent.addExtra(key: "to", value: enabled)
+        Telemetry.default.recordEvent(telemetryEvent)
 
         webViewController.reload()
         hideDrawer()
