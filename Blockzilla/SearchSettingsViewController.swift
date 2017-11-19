@@ -33,6 +33,25 @@ class SearchSettingsViewController: UITableViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.Edit, style: .plain, target: self, action: #selector(SearchSettingsViewController.toggleEditing))
         navigationItem.rightBarButtonItem?.accessibilityIdentifier = "edit"
     }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let cell = UITableViewCell()
+        cell.textLabel?.text = " "
+        cell.backgroundColor = UIConstants.colors.background
+        
+        let label = UILabel()
+        label.text = UIConstants.strings.InstalledSearchEngines
+        label.textColor = UIConstants.colors.tableSectionHeader
+        label.font = UIConstants.fonts.tableSectionHeader
+        cell.contentView.addSubview(label)
+        
+        label.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(cell.textLabel!)
+            make.centerY.equalTo(cell.textLabel!).offset(3)
+        }
+
+        return cell
+    }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let numberOfEngines = searchEngineManager.engines.count
@@ -71,13 +90,19 @@ class SearchSettingsViewController: UITableViewController {
             if cell.imageView?.image == nil {
                 let v = UIView()
                 cell.addSubview(v)
+                cell.shouldIndentWhileEditing = true
                 
                 v.backgroundColor = UIColor(rgb: 0xededf0)
                 v.snp.makeConstraints({ (make) in
                     make.width.equalTo(32)
                     make.height.equalTo(32)
-                    make.left.equalTo(16)
+//                    make.left.equalTo(16)
                     make.top.equalTo((44-32) / 2)
+                    if let editingAccessoryView = cell.editingAccessoryView {
+                        make.left.equalTo((cell.editingAccessoryView?.snp.right)!).offset(16)
+                    } else {
+                        make.left.equalTo(16)
+                    }
                 })
                 
                 cell.textLabel?.snp.makeConstraints({ (make) in

@@ -16,6 +16,7 @@ class AddSearchEngineViewController: UIViewController {
     
     private var nameInput = UITextField()
     private var templateInput = UITextView()
+    private var templatePlaceholderLabel = UILabel()
     
     init(delegate: AddSearchEngineDelegate) {
         self.delegate = delegate
@@ -59,11 +60,20 @@ class AddSearchEngineViewController: UIViewController {
         
         templateInput.backgroundColor = UIConstants.colors.cellSelected
         templateInput.textColor = UIConstants.colors.settingsTextLabel
+        templateInput.keyboardType = .URL
         container.addSubview(templateInput)
-        
+//
+//        templatePlaceholderLabel.backgroundColor = UIConstants.colors.cellSelected
+//        templatePlaceholderLabel.textColor = UIConstants.colors.settingsTextLabel
+//        templatePlaceholderLabel.text = UIConstants.strings.AddSearchEngineTemplatePlaceholder
+//        templatePlaceholderLabel.adjustsFontSizeToFitWidth = true
+//        templateInput.addSubview(templatePlaceholderLabel)
+//        templatePlaceholderLabel.frame = CGRect(x: 0, y: 0, width: 300, height: 44)
+//
         let exampleLabel = UILabel()
         exampleLabel.text = UIConstants.strings.AddSearchEngineTemplateExample
         exampleLabel.textColor = UIConstants.colors.settingsTextLabel
+        exampleLabel.font = UIFont.systemFont(ofSize: 12)
         container.addSubview(exampleLabel)
         
         container.snp.makeConstraints { (make) in
@@ -85,7 +95,7 @@ class AddSearchEngineViewController: UIViewController {
         }
         
         templateLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(nameInput.snp.bottom)
+            make.top.equalTo(nameInput.snp.bottom).offset(20)
             make.left.equalTo(leftMargin)
             make.height.equalTo(rowHeight)
         }
@@ -113,7 +123,7 @@ class AddSearchEngineViewController: UIViewController {
         guard let template = templateInput.text else { return }
         
         delegate.addSearchEngineViewController(self, name: name, searchTemplate: template)
-        
+        Toast(text: UIConstants.strings.NewSearchEngineAdded).show()
         self.navigationController?.popViewController(animated: true)
     }
 }
