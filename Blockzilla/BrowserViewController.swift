@@ -466,7 +466,6 @@ class BrowserViewController: UIViewController {
         }
     }
 
-<<<<<<< HEAD
     fileprivate func resetBrowser(hidePreviousSession: Bool = false) {
         
         // Used when biometrics fail and the previous session should be obscured
@@ -475,13 +474,9 @@ class BrowserViewController: UIViewController {
             urlBar.activateTextField()
             return
         }
-        
-=======
-    fileprivate func resetBrowser() {
-        // Clear User Defaults With searched history
+
         UserDefaults.standard.set(nil, forKey: "searchedHistory")
 
->>>>>>> Fix the problem that store struct to UserDefaults
         // Screenshot the browser, showing the screenshot on top.
         let image = mainContainerView.screenshot()
         let screenshotView = UIImageView(image: image)
@@ -607,7 +602,6 @@ class BrowserViewController: UIViewController {
                 browserToolbar.animateHidden(false, duration: UIConstants.layout.toolbarFadeAnimationDuration)
             }
         }
-
         webViewController.load(URLRequest(url: url))
     }
 
@@ -886,6 +880,7 @@ extension BrowserViewController: URLBarDelegate {
 
         // Saving History Search to UserDefaults
         SearchHistoryUtils.pushSearchToStack(with: text)
+        SearchHistoryUtils.isFromURLBar = true
 
         var url = URIFixup.getURL(entry: text)
         if url == nil {
@@ -900,6 +895,7 @@ extension BrowserViewController: URLBarDelegate {
             urlBar.url = urlBarURL
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
         
         if let urlText = urlBar.url?.absoluteString {
             overlayView.currentURL = urlText
@@ -908,6 +904,8 @@ extension BrowserViewController: URLBarDelegate {
 =======
 
 >>>>>>> Prototype the stack solution for searched values
+=======
+>>>>>>> Solution for when user click on url inside the webview
         urlBar.dismiss()
     }
 
@@ -1086,6 +1084,12 @@ extension BrowserViewController: WebControllerDelegate {
     }
     
     func webControllerDidStartNavigation(_ controller: WebController) {
+
+        if (!SearchHistoryUtils.isFromURLBar && !SearchHistoryUtils.isNavigating) {
+            SearchHistoryUtils.pushSearchToStack(with: (urlBar.url?.absoluteString)!)
+        }
+        SearchHistoryUtils.isNavigating = false
+        SearchHistoryUtils.isFromURLBar = false
         urlBar.isLoading = true
         browserToolbar.isLoading = true
         toggleURLBarBackground(isBright: false)
