@@ -26,6 +26,10 @@ struct textSearched{
 }
 
 class SearchHistoryUtils {
+
+    static var isFromURLBar = false
+    static var isNavigating = false
+
     static func pushSearchToStack(with searchedText: String) {
         var currentStack = [textSearched]()
 
@@ -61,6 +65,7 @@ class SearchHistoryUtils {
 
     // go back
     static func goFoward() {
+        isNavigating = true
         var currentStack = [textSearched]()
         if let propertylistSearchesRead = UserDefaults.standard.object(forKey: "searchedHistory") as? [[String:Any]] {
 
@@ -81,6 +86,7 @@ class SearchHistoryUtils {
 
     // go foward
     static func goBack() {
+        isNavigating = true
         var currentStack = [textSearched]()
         if let propertylistSearchesRead = UserDefaults.standard.object(forKey: "searchedHistory") as? [[String:Any]] {
 

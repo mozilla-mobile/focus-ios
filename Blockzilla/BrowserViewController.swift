@@ -377,7 +377,6 @@ class BrowserViewController: UIViewController {
                 browserToolbar.animateHidden(false, duration: UIConstants.layout.toolbarFadeAnimationDuration)
             }
         }
-
         webViewController.load(URLRequest(url: url))
     }
 
@@ -482,6 +481,7 @@ extension BrowserViewController: URLBarDelegate {
 
         // Saving History Search to UserDefaults
         SearchHistoryUtils.pushSearchToStack(with: text)
+        SearchHistoryUtils.isFromURLBar = true
 
         var url = URIFixup.getURL(entry: text)
         if url == nil {
@@ -494,7 +494,6 @@ extension BrowserViewController: URLBarDelegate {
             submit(url: urlBarURL)
             urlBar.url = urlBarURL
         }
-
         urlBar.dismiss()
     }
 
@@ -615,6 +614,12 @@ extension BrowserViewController: OverlayViewDelegate {
 
 extension BrowserViewController: WebControllerDelegate {
     func webControllerDidStartNavigation(_ controller: WebController) {
+
+        if (!SearchHistoryUtils.isFromURLBar && !SearchHistoryUtils.isNavigating) {
+            SearchHistoryUtils.pushSearchToStack(with: (urlBar.url?.absoluteString)!)
+        }
+        SearchHistoryUtils.isNavigating = false
+        SearchHistoryUtils.isFromURLBar = false
         urlBar.isLoading = true
         browserToolbar.isLoading = true
         toggleURLBarBackground(isBright: false)
