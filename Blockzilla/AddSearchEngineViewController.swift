@@ -8,7 +8,7 @@ protocol AddSearchEngineDelegate {
     func addSearchEngineViewController(_ addSearchEngineViewController: AddSearchEngineViewController, name: String, searchTemplate: String)
 }
 
-class AddSearchEngineViewController: UIViewController {
+class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     private var delegate: AddSearchEngineDelegate
     
     private let leftMargin = 10
@@ -29,10 +29,10 @@ class AddSearchEngineViewController: UIViewController {
     
     override func viewDidLoad() {
         title = UIConstants.strings.AddSearchEngineTitle
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(AddSearchEngineViewController.cancelTapped))
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.Save, style: .plain, target: self, action: #selector(AddSearchEngineViewController.saveTapped))
         
         setupUI()
+        
+        setupEvents()
     }
     
     private func setupUI() {
@@ -62,14 +62,14 @@ class AddSearchEngineViewController: UIViewController {
         templateInput.textColor = UIConstants.colors.settingsTextLabel
         templateInput.keyboardType = .URL
         container.addSubview(templateInput)
-//
-//        templatePlaceholderLabel.backgroundColor = UIConstants.colors.cellSelected
-//        templatePlaceholderLabel.textColor = UIConstants.colors.settingsTextLabel
-//        templatePlaceholderLabel.text = UIConstants.strings.AddSearchEngineTemplatePlaceholder
-//        templatePlaceholderLabel.adjustsFontSizeToFitWidth = true
-//        templateInput.addSubview(templatePlaceholderLabel)
-//        templatePlaceholderLabel.frame = CGRect(x: 0, y: 0, width: 300, height: 44)
-//
+
+        templatePlaceholderLabel.backgroundColor = UIConstants.colors.cellSelected
+        templatePlaceholderLabel.textColor = UIConstants.colors.settingsDetailLabel
+        templatePlaceholderLabel.text = UIConstants.strings.AddSearchEngineTemplatePlaceholder
+        templatePlaceholderLabel.font = UIFont.systemFont(ofSize: 15)
+        templatePlaceholderLabel.numberOfLines = 0
+        templateInput.addSubview(templatePlaceholderLabel)
+
         let exampleLabel = UILabel()
         exampleLabel.text = UIConstants.strings.AddSearchEngineTemplateExample
         exampleLabel.textColor = UIConstants.colors.settingsTextLabel
@@ -106,12 +106,25 @@ class AddSearchEngineViewController: UIViewController {
             make.width.equalToSuperview()
         }
         
+        templatePlaceholderLabel.snp.makeConstraints { (make) in
+            make.width.equalToSuperview()
+            make.height.equalTo(44)
+            make.top.equalTo(5)
+            make.left.equalTo(5)
+        }
+        
         exampleLabel.snp.makeConstraints { (make) in
             make.top.equalTo(templateInput.snp.bottom)
             make.width.equalToSuperview()
             make.left.equalTo(leftMargin)
             make.height.equalTo(rowHeight)
         }
+    }
+    
+    private func setupEvents() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(AddSearchEngineViewController.cancelTapped))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.Save, style: .plain, target: self, action: #selector(AddSearchEngineViewController.saveTapped))
+        templateInput.delegate = self
     }
     
     @objc func cancelTapped() {
@@ -125,5 +138,22 @@ class AddSearchEngineViewController: UIViewController {
         delegate.addSearchEngineViewController(self, name: name, searchTemplate: template)
         Toast(text: UIConstants.strings.NewSearchEngineAdded).show()
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        templatePlaceholderLabel.isHidden = !isNullOrEmpty(text: textView.text)
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        templatePlaceholderLabel.isHidden = !isNullOrEmpty(text: textView.text)
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        templatePlaceholderLabel.isHidden = !isNullOrEmpty(text: textView.text)
+    }
+    
+    private func isNullOrEmpty(text:String?) -> Bool{
+        guard let text = text else { return true }
+        return text.isEmpty
     }
 }
