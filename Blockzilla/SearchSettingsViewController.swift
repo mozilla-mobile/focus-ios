@@ -82,46 +82,10 @@ class SearchSettingsViewController: UITableViewController {
             return cell
         } else {
             let engine = engines[indexPath.item]
-            let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+            let cell = UITableViewCell(style: .default, reuseIdentifier: engine.image == nil ? "empty-image-cell" : nil)
             cell.textLabel?.text = engine.name
             cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
             cell.imageView?.image = engine.image?.createScaled(size: CGSize(width: 32, height: 32))
-            
-            if cell.imageView?.image == nil {
-                let v = UIView()
-                cell.addSubview(v)
-                cell.shouldIndentWhileEditing = true
-                
-                v.backgroundColor = UIColor(rgb: 0xededf0)
-                v.snp.makeConstraints({ (make) in
-                    make.width.equalTo(32)
-                    make.height.equalTo(32)
-//                    make.left.equalTo(16)
-                    make.top.equalTo((44-32) / 2)
-                    if let editingAccessoryView = cell.editingAccessoryView {
-                        make.left.equalTo((cell.editingAccessoryView?.snp.right)!).offset(16)
-                    } else {
-                        make.left.equalTo(16)
-                    }
-                })
-                
-                cell.textLabel?.snp.makeConstraints({ (make) in
-                    make.left.equalTo(v.snp.right).offset(15)
-                    make.height.equalTo(44)
-                })
-                
-                let letterLabel = UILabel()
-                letterLabel.font = UIFont.systemFont(ofSize: 18)
-                letterLabel.textColor = UIColor.black
-                v.addSubview(letterLabel)
-                let idx = engine.name.index(engine.name.startIndex, offsetBy: 0)
-                letterLabel.text = String(engine.name[...idx])
-                letterLabel.snp.makeConstraints({ (make) in
-                    make.center.equalToSuperview()
-                })
-            }
-
-            
             cell.backgroundColor = UIConstants.colors.background
 
             if engine === searchEngineManager.activeEngine {

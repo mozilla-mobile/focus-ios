@@ -13,7 +13,7 @@ class SearchEngine: NSObject, NSCoding {
 
     init(name: String, image: UIImage?, searchTemplate: String, suggestionsTemplate: String?) {
         self.name = name
-        self.image = image
+        self.image = image ?? SearchEngine.generateImage(name: name)
         self.searchTemplate = searchTemplate
         self.suggestionsTemplate = suggestionsTemplate
     }
@@ -53,5 +53,24 @@ class SearchEngine: NSObject, NSCoding {
         aCoder.encode(image, forKey: "image")
         aCoder.encode(searchTemplate, forKey: "searchTemplate")
         aCoder.encode(suggestionsTemplate, forKey: "suggestionsTemplate")
+    }
+    
+    private static func generateImage(name: String) -> UIImage {
+        let faviconLetter = name.uppercased()[name.startIndex]
+        
+        var faviconImage = UIImage()
+
+        let faviconLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
+        faviconLabel.backgroundColor = UIColor(rgb: 0xededf0)
+        faviconLabel.text = String(faviconLetter)
+        faviconLabel.textAlignment = .center
+        faviconLabel.font = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.medium)
+        faviconLabel.textColor = UIColor.black
+        UIGraphicsBeginImageContextWithOptions(faviconLabel.bounds.size, false, 0.0)
+        faviconLabel.layer.render(in: UIGraphicsGetCurrentContext()!)
+        faviconImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        
+        return faviconImage
     }
 }
