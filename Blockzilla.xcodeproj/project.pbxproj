@@ -354,6 +354,7 @@
 		D3C70C671DDE795300CEE458 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D3C70C711DDFCA4800CEE458 /* Klar.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Klar.entitlements; sourceTree = "<group>"; };
 		D3C70C721DDFCA7000CEE458 /* KlarEnterprise.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = KlarEnterprise.entitlements; sourceTree = "<group>"; };
+		D3CD375A1DD3B51900468250 /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 		D3DA77841DC2C307009C114E /* ErrorPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorPage.swift; sourceTree = "<group>"; };
 		D3DA778B1DC2C60E009C114E /* errorPage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = errorPage.html; sourceTree = "<group>"; };
 		D3E251E71DAD714C005918DC /* InstructionsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionsView.swift; sourceTree = "<group>"; };
@@ -1371,6 +1372,7 @@
 				D3426AE91DB7F4060016DA5A /* KeyboardHelper.swift in Sources */,
 				D3E251EA1DAD714C005918DC /* InstructionsView.swift in Sources */,
 				D3561B2B1DB5925100A5EEAF /* GradientBackgroundView.swift in Sources */,
+				D3CD375B1DD3B51900468250 /* IntroViewController.swift in Sources */,
 				D3E2C96D1DA3077400DEBE3D /* CharacterSetExtensions.swift in Sources */,
 				D3E2C96F1DA3093D00DEBE3D /* BrowserToolbar.swift in Sources */,
 				746BD91A1F75881D00BE8DB9 /* SentryIntegration.swift in Sources */,
