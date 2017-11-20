@@ -142,7 +142,7 @@ struct UIConstants {
         static let externalLinkOpenMaps = NSLocalizedString("ExternalLink.openMapsButton", value: "Open Maps", comment: "Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html")
         static let externalLinkOpenAppStoreTitle = NSLocalizedString("ExternalLink.openAppStoreTitle", value: "%@ wants to open the App Store.", comment: "Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar.")
         static let externalLinkTitle = NSLocalizedString("ExternalLink.messageTitleWithPlaceholder", value: "You are now leaving %@.", comment: "Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html")
-        static let firstRunButton = NSLocalizedString("FirstRun.buttonLabel", value: "OK, Got It!", comment: "Label on button to dismiss first run UI")
+        static let firstRunButton = NSLocalizedString("FirstRun.lastSlide.buttonLabel", value: "OK, Got It!", comment: "Label on button to dismiss first run UI")
         static let homeLabel1 = NSLocalizedString("Home.descriptionLabel1", value: "Automatic private browsing.", comment: "First label for product description on the home screen")
         static let homeLabel2 = NSLocalizedString("Home.descriptionLabel2", value: "Browse. Erase. Repeat.", comment: "Second label for product description on the home screen")
         static let labelBlockAds = NSLocalizedString("Settings.toggleBlockAds", value: "Block ad trackers", comment: "Label for toggle on main screen")

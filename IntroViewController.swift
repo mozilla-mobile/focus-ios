@@ -157,13 +157,21 @@ class ScrollViewController: UIPageViewController {
     
     func addCard(title: String, text: String, viewController: UIViewController, image: UIImageView) {
         let introView = UIView()
+        let gradientLayer = IntroCardGradientBackgroundView()
+        gradientLayer.layer.cornerRadius = 6
+        
+        introView.addSubview(gradientLayer)
         viewController.view.backgroundColor = .clear
         viewController.view.addSubview(introView)
         
-        introView.backgroundColor = .white
+        gradientLayer.snp.makeConstraints { make in
+            make.edges.equalTo(introView)
+        }
+        
         introView.layer.shadowRadius = 12
         introView.layer.shadowOpacity = 0.2
         introView.layer.cornerRadius = 6
+        introView.layer.masksToBounds = false
         
         introView.addSubview(image)
         image.snp.makeConstraints { make in
