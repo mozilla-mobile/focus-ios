@@ -30,7 +30,15 @@ class IntroViewController: UIViewController {
     let pageControl = UIPageControl()
     let containerView = UIView()
     let skipButton = UIButton()
-    let background = GradientBackgroundView(alpha: 0.7)
+    private let backgroundDark = GradientBackgroundView()
+    private let backgroundBright = GradientBackgroundView(alpha: 0.8)
+
+    var isBright: Bool = false {
+        didSet {
+            backgroundDark.animateHidden(isBright, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+            backgroundBright.animateHidden(!isBright, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+        }
+    }
     
     var pageViewController: ScrollViewController = ScrollViewController() {
         didSet {
@@ -40,11 +48,22 @@ class IntroViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(background)
-        background.snp.makeConstraints { make in
-            make.edges.equalTo(view.snp.edges)
+        view.backgroundColor = .black
+
+        view.addSubview(backgroundDark)
+
+        backgroundBright.isHidden = true
+        backgroundBright.alpha = 0
+        view.addSubview(backgroundBright)
+
+        backgroundDark.snp.makeConstraints { make in
+            make.edges.equalTo(view)
         }
-        
+
+        backgroundBright.snp.makeConstraints { make in
+            make.edges.equalTo(view)
+        }
+
         pageViewController = ScrollViewController()
         addChildViewController(pageViewController)
         view.addSubview(pageViewController.view)
@@ -72,8 +91,9 @@ class IntroViewController: UIViewController {
         }
     }
     
-    @objc func didTapSkipButton(sender: UIButton) {
-        background.removeFromSuperview()
+    @objc func didTapSkipButton() {
+        backgroundDark.removeFromSuperview()
+        backgroundBright.removeFromSuperview()
         dismiss(animated: true, completion: nil)
     }
 
@@ -83,12 +103,21 @@ class IntroViewController: UIViewController {
 }
 
 extension IntroViewController: ScrollViewControllerDelegate {
+    func scrollViewController(scrollViewController: ScrollViewController, didDismissSlideDeck bool: Bool) {
+        didTapSkipButton()
+    }
+
     func scrollViewController(scrollViewController: ScrollViewController, didUpdatePageCount count: Int) {
         pageControl.numberOfPages = count
     }
     
     func scrollViewController(scrollViewController: ScrollViewController, didUpdatePageIndex index: Int) {
         pageControl.currentPage = index
+        if index == pageControl.numberOfPages - 1 {
+            isBright = true
+        } else {
+            isBright = false
+        }
     }
 }
 
@@ -133,7 +162,7 @@ class ScrollViewController: UIPageViewController {
         
         introView.backgroundColor = .white
         introView.layer.shadowRadius = 12
-        introView.layer.shadowOpacity = 0.5
+        introView.layer.shadowOpacity = 0.2
         introView.layer.cornerRadius = 6
         
         introView.addSubview(image)
@@ -155,12 +184,10 @@ class ScrollViewController: UIPageViewController {
         
         introView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { (make ) -> Void in
-            make.top.equalTo(image.snp.bottom)
+            make.top.equalTo(image.snp.bottom).offset(24)
             make.leading.equalTo(introView).offset(24)
             make.trailing.equalTo(introView).inset(24)
             make.centerX.equalTo(introView)
-            make.height.equalTo(IntroViewControllerUX.CardTitleHeight)
-            make.width.equalTo(IntroViewControllerUX.CardTextWidth)
         }
         
         let textLabel = UILabel()
@@ -169,6 +196,7 @@ class ScrollViewController: UIPageViewController {
         textLabel.adjustsFontSizeToFitWidth = true
         textLabel.minimumScaleFactor = IntroViewControllerUX.MinimumFontScale
         textLabel.lineBreakMode = .byTruncatingTail
+        textLabel.textAlignment = .center
         textLabel.textColor = UIConstants.colors.firstRunMessage
         textLabel.font = UIConstants.fonts.firstRunMessage
         
@@ -210,7 +238,7 @@ class ScrollViewController: UIPageViewController {
     }
     
     @objc func didTapStartBrowsingButton() {
-        dismiss(animated: true, completion: nil)
+        scrollViewControllerDelegate?.scrollViewController(scrollViewController: self, didDismissSlideDeck: true)
     }
     
     @objc func didTapNextButton() {
@@ -284,4 +312,5 @@ extension ScrollViewController: UIPageViewControllerDataSource {
 protocol ScrollViewControllerDelegate: class {
     func scrollViewController(scrollViewController: ScrollViewController, didUpdatePageCount count: Int)
     func scrollViewController(scrollViewController: ScrollViewController, didUpdatePageIndex index: Int)
+    func scrollViewController(scrollViewController: ScrollViewController, didDismissSlideDeck bool: Bool)
 }
