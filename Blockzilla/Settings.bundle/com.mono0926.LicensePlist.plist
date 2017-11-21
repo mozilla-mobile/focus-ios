@@ -6,6 +6,14 @@
 	<array>
 		<dict>
 			<key>File</key>
+			<string>com.mono0926.LicensePlist/focus-ios</string>
+			<key>Title</key>
+			<string>Firefox Focus</string>
+			<key>Type</key>
+			<string>PSChildPaneSpecifier</string>
+		</dict>
+		<dict>
+			<key>File</key>
 			<string>com.mono0926.LicensePlist/Fuzi</string>
 			<key>Title</key>
 			<string>Fuzi</string>
@@ -24,7 +32,7 @@
 			<key>File</key>
 			<string>com.mono0926.LicensePlist/ios_sdk</string>
 			<key>Title</key>
-			<string>ios_sdk</string>
+			<string>Adjust</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
@@ -32,7 +40,7 @@
 			<key>File</key>
 			<string>com.mono0926.LicensePlist/sentry-cocoa</string>
 			<key>Title</key>
-			<string>sentry-cocoa</string>
+			<string>Sentry</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
@@ -48,7 +56,7 @@
 			<key>File</key>
 			<string>com.mono0926.LicensePlist/telemetry-ios</string>
 			<key>Title</key>
-			<string>telemetry-ios</string>
+			<string>Telemetry</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
