@@ -50,7 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let prefIntroDone = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone)
 
         let needToShowFirstRunExperience = prefIntroDone < AppDelegate.prefIntroVersion
-        if  needToShowFirstRunExperience {
+        if needToShowFirstRunExperience {
 
             // Show the first run UI asynchronously to avoid the "unbalanced calls to begin/end appearance transitions" warning.
             DispatchQueue.main.async {
@@ -58,7 +58,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 UserDefaults.standard.set(AppDelegate.prefIntroVersion, forKey: AppDelegate.prefIntroDone)
                 UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
 
-                let firstRunViewController = FirstRunViewController()
+                let firstRunViewController = IntroViewController()
                 rootViewController.present(firstRunViewController, animated: false, completion: nil)
             }
         }
