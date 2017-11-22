@@ -171,6 +171,7 @@ struct UIConstants {
         static let settingsBlockOtherYes = NSLocalizedString("Settings.blockOtherYes", value: "I Understand", comment: "Button label for accepting Content blocker alert")
         static let settingsSearchTitle = NSLocalizedString("Settings.searchTitle", value: "Search Engine", comment: "Title for the search engine selection screen")
         static let settingsSearchSection = NSLocalizedString("Settings.searchSection", value: "SEARCH ENGINE", comment: "Title for the search engine row")
+        static let settingsAutocompleteSection = NSLocalizedString("Settings.autocompleteSection", value: "URL Autocomplete", comment: "Title for the URL Autocomplete row")
         static let settingsTitle = NSLocalizedString("Settings.screenTitle", value: "Settings", comment: "Title for settings screen")
         static let settingsToggleOtherSubtitle = NSLocalizedString("Settings.toggleOtherSubtitle", value: "May break some videos and Web pages", comment: "Label subtitle for toggle on main screen")
         static let learnMore = NSLocalizedString("Settings.learnMore", value: "Learn more.", comment: "Subtitle for Send Anonymous Usage Data toggle on main screen")
@@ -224,11 +225,23 @@ struct UIConstants {
         static let AddSearchEngineTemplatePlaceholder = NSLocalizedString("Settings.Search.SearchTemplatePlaceholder", value: "Paste or enter search string. If necessary, replace search term with: %s.", comment: "Placeholder text for input of new search engine template")
         static let AddSearchEngineTemplateExample = NSLocalizedString("settings.Search.SearchTemplateExample", value: "Example: searchengineexample.com/search/?q=%s", comment: "Text displayed as an example of the template to add a search engine.")
         static let RestoreSearchEnginesLabel = NSLocalizedString("Settings.Search.RestoreEngine", value: "Restore Default Search Engines", comment: "Label for button to bring deleted default engines back")
-        static let Edit = NSLocalizedString("Edit", value: "Edit", comment: "Label on button to allow edits")
-        static let Done = NSLocalizedString("Done", value: "Done", comment: "Label on button to complete edits")
         static let InstalledSearchEngines = NSLocalizedString("Settings.Search.InstalledSearchEngines", value: "INSTALLED SEARCH ENGINES", comment: "Header for rows of installed search engines")
         static let NewSearchEngineAdded = NSLocalizedString("Settings.Search.NewSearchEngineAdded", value: "New Search Engine Added", comment: "Toast displayed after adding a search engine")
 
+        static let enabled = NSLocalizedString("Enabled", value: "Enabled", comment: "label describing something as enabled")
+        static let disabled = NSLocalizedString("Disabled", value: "Disabled", comment: "label describing something as disabled")
+        static let edit = NSLocalizedString("Edit", value: "Edit", comment: "Label on button to allow edits")
+        static let done = NSLocalizedString("Done", value: "Done", comment: "Label on button to complete edits")
+
+        static let autocompleteLabel = NSLocalizedString("Autocomplete.defaultLabel", value: "Autocomplete", comment: "Label for enabling or disabling autocomplete")
+        static let autocompleteDefaultSectionTitle = NSLocalizedString("Autocomplete.defaultTitle", value: "DEFAULT URL LIST", comment: "Title for the default URL list section")
+        static let autocompleteDefaultDescription = NSLocalizedString("Autocomplete.defaultDescriptoin", value: "Enable to have %@ autocomplete over 450 popular URLs in the address bar.", comment: "Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar.")
+
+        static let autocompleteCustomSectionTitle = NSLocalizedString("Autocomplete.customTitle", value: "CUSTOM URL LIST", comment: "Title for the default URL list section")
+        static let autocompleteCustomSectionLabel = NSLocalizedString("Autocomplete.customLabel", value: "CUSTOM URLs", comment: "Label for button taking you to your custom Autocomplete URL list")
+        static let autocompleteCustomDescription = NSLocalizedString("Autocomplete.customDescriptoin", value: "Add and manage custom autocomplete URLs.", comment: "Description for adding and managing custom autocomplete URLs")
+        static let autocompleteAddCustomUrl = NSLocalizedString("Autocomplete.addCustomUrl", value: "+ Add Custom URL", comment: "Label for button to add a custom URL")
+        static let autocompleteEmptyState = NSLocalizedString("Autocomplete.emptyState", value: "No Custom URLs to display", comment: "Label for button to add a custom URL")
 
     }
 }
