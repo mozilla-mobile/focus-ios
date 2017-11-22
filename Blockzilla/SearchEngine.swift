@@ -60,7 +60,7 @@ class SearchEngine: NSObject, NSCoding {
         
         var faviconImage = UIImage()
 
-        let faviconLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
+        let faviconLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
         faviconLabel.backgroundColor = UIColor(rgb: 0xededf0)
         faviconLabel.text = String(faviconLetter)
         faviconLabel.textAlignment = .center

@@ -30,6 +30,7 @@ class SearchSettingsViewController: UITableViewController {
         view.backgroundColor = UIConstants.colors.background
         tableView.separatorColor = UIConstants.colors.settingsSeparator
         tableView.selectRow(at: IndexPath(row: 0, section: 1), animated: false, scrollPosition: .none)
+        tableView.tableFooterView = UIView()
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.Edit, style: .plain, target: self, action: #selector(SearchSettingsViewController.toggleEditing))
         navigationItem.rightBarButtonItem?.accessibilityIdentifier = "edit"
     }
@@ -85,7 +86,7 @@ class SearchSettingsViewController: UITableViewController {
             let cell = UITableViewCell(style: .default, reuseIdentifier: engine.image == nil ? "empty-image-cell" : nil)
             cell.textLabel?.text = engine.name
             cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
-            cell.imageView?.image = engine.image?.createScaled(size: CGSize(width: 32, height: 32))
+            cell.imageView?.image = engine.image?.createScaled(size: CGSize(width: 24, height: 24))
             cell.backgroundColor = UIConstants.colors.background
 
             if engine === searchEngineManager.activeEngine {

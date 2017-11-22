@@ -31,8 +31,8 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         title = UIConstants.strings.AddSearchEngineTitle
         
         setupUI()
-        
         setupEvents()
+        nameInput.becomeFirstResponder()
     }
     
     private func setupUI() {
@@ -51,6 +51,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         nameInput.textColor = UIConstants.colors.settingsTextLabel
         nameInput.leftView = UIView(frame: CGRect(x: 0, y: 0, width: leftMargin, height: rowHeight))
         nameInput.leftViewMode = .always
+        nameInput.font = UIFont.systemFont(ofSize: 15)
         container.addSubview(nameInput)
         
         let templateLabel = UILabel()
@@ -61,6 +62,8 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         templateInput.backgroundColor = UIConstants.colors.cellSelected
         templateInput.textColor = UIConstants.colors.settingsTextLabel
         templateInput.keyboardType = .URL
+        templateInput.font = UIFont.systemFont(ofSize: 15)
+        templateInput.contentInset = UIEdgeInsets(top: 5, left: 7, bottom: 7, right: 5)
         container.addSubview(templateInput)
 
         templatePlaceholderLabel.backgroundColor = UIConstants.colors.cellSelected
@@ -109,8 +112,8 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         templatePlaceholderLabel.snp.makeConstraints { (make) in
             make.width.equalToSuperview()
             make.height.equalTo(44)
-            make.top.equalTo(5)
-            make.left.equalTo(5)
+            make.top.equalTo(0)
+            make.left.equalTo(3)
         }
         
         exampleLabel.snp.makeConstraints { (make) in
