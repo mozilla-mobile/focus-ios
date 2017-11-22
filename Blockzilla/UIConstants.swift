@@ -169,7 +169,9 @@ struct UIConstants {
         static let settingsBlockOtherMessage = NSLocalizedString("Settings.blockOtherMessage", value: "Blocking other content trackers may break some videos and Web pages.", comment: "Alert message shown when toggling the Content blocker")
         static let settingsBlockOtherNo = NSLocalizedString("Settings.blockOtherNo", value: "No, Thanks", comment: "Button label for declining Content blocker alert")
         static let settingsBlockOtherYes = NSLocalizedString("Settings.blockOtherYes", value: "I Understand", comment: "Button label for accepting Content blocker alert")
-        static let settingsSearchTitle = NSLocalizedString("Settings.searchTitle", value: "Search Engine", comment: "Title for the search engine selection screen")
+
+        static let settingsSearchTitle = NSLocalizedString("Settings.searchTitle2", value: "SEARCH", comment: "Title for the search selection screen")
+        static let settingsSearchLabel = NSLocalizedString("Settings.searchLabel", value: "Search Engine", comment: "Label for the search engine in the search screen")
         static let settingsSearchSection = NSLocalizedString("Settings.searchSection", value: "SEARCH ENGINE", comment: "Title for the search engine row")
         static let settingsAutocompleteSection = NSLocalizedString("Settings.autocompleteSection", value: "URL Autocomplete", comment: "Title for the URL Autocomplete row")
         static let settingsTitle = NSLocalizedString("Settings.screenTitle", value: "Settings", comment: "Title for settings screen")
@@ -217,7 +219,8 @@ struct UIConstants {
         static let NextIntroButtonTitle = NSLocalizedString("Intro.Slides.Skip.Button", tableName: "Intro", value: "Next", comment: "Button to go to the next card in Focus onboarding.")
         static let CardTitleHistory = NSLocalizedString("Intro.Slides.History.Title", tableName: "Intro", value: "Your history is history", comment: "Title for the third  panel 'History' in the First Run tour.")
         static let CardTextHistory = NSLocalizedString("Intro.Slides.History.Description", tableName: "Intro", value: "Clear your entire browsing session history, passwords, cookies anytime with a single tap.", comment: "Description for the 'History' panel in the First Run tour.")
-        static let AddSearchEngineButton = NSLocalizedString("Settings.Search.AddSearchEngineButton", value: "+ Add Another Search Engine", comment: "Text for button to add another search engine in settings")
+        static let AddSearchEngineButtonWithPlus = NSLocalizedString("Settings.Search.AddSearchEngineButtonWithPlus", value: "+ Add Another Search Engine", comment: "Text for button to add another search engine in settings with the + prefix")
+        static let AddSearchEngineButton = NSLocalizedString("Settings.Search.AddSearchEngineButton", value: "Add Another Search Engine", comment: "Text for button to add another search engine in settings")
         static let AddSearchEngineTitle = NSLocalizedString("Settings.Search.AddSearchEngineTitle", value: "Add Search Engine", comment: "Title on add search engine settings screen")
         static let Save = NSLocalizedString("Save", value: "Save", comment: "Save button label")
         static let NameToDisplay = NSLocalizedString("Settings.Search.NameToDisplay", value: "Name to display", comment: "Label for input field for the name of the search engine to be added")
@@ -233,7 +236,7 @@ struct UIConstants {
         static let disabled = NSLocalizedString("Disabled", value: "Disabled", comment: "label describing something as disabled")
         static let edit = NSLocalizedString("Edit", value: "Edit", comment: "Label on button to allow edits")
         static let done = NSLocalizedString("Done", value: "Done", comment: "Label on button to complete edits")
-        static let cancel = NSLocalizedString("Cancel", value: "Cancel", comment: "Label on button to cancel edits")
+        static let cancelLabel = NSLocalizedString("Cancel", value: "Cancel", comment: "Label on button to cancel edits")
 
         static let autocompleteLabel = NSLocalizedString("Autocomplete.defaultLabel", value: "Autocomplete", comment: "Label for enabling or disabling autocomplete")
         static let autocompleteDefaultSectionTitle = NSLocalizedString("Autocomplete.defaultTitle", value: "DEFAULT URL LIST", comment: "Title for the default URL list section")
@@ -242,7 +245,11 @@ struct UIConstants {
         static let autocompleteCustomSectionTitle = NSLocalizedString("Autocomplete.customTitle", value: "CUSTOM URL LIST", comment: "Title for the default URL list section")
         static let autocompleteCustomSectionLabel = NSLocalizedString("Autocomplete.customLabel", value: "CUSTOM URLs", comment: "Label for button taking you to your custom Autocomplete URL list")
         static let autocompleteCustomDescription = NSLocalizedString("Autocomplete.customDescriptoin", value: "Add and manage custom autocomplete URLs.", comment: "Description for adding and managing custom autocomplete URLs")
-        static let autocompleteAddCustomUrl = NSLocalizedString("Autocomplete.addCustomUrl", value: "+ Add Custom URL", comment: "Label for button to add a custom URL")
+        static let autocompleteAddCustomUrlWithPlus = NSLocalizedString("Autocomplete.addCustomUrlWithPlus", value: "+ Add Custom URL", comment: "Label for button to add a custom URL with the + prefix")
+        static let autocompleteAddCustomUrl = NSLocalizedString("Autocomplete.addCustomUrl", value: "Add Custom URL", comment: "Label for button to add a custom URL")
+
+        static let autocompleteAddCustomUrlPlaceholder = NSLocalizedString("Autocomplete.addCustomUrlPlaceholder", value: "Paste or enter URL", comment: "Label for button to add a custom URL")
+        static let autocompleteAddCustomUrlExample = NSLocalizedString("Autocomplete.addCustomUrlExample", value: "Example: example.com", comment: "A label displaying an example URL")
         static let autocompleteEmptyState = NSLocalizedString("Autocomplete.emptyState", value: "No Custom URLs to display", comment: "Label for button to add a custom URL")
         static let autocompleteCustomURLAdded = NSLocalizedString("Autocomplete.customUrlAdded", value: "New Custom URL added.", comment: "Label for toast alerting a custom URL has been added")
 
