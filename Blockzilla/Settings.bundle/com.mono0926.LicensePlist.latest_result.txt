@@ -1,5 +1,7 @@
 name: focus-ios, nameSpecified: Firefox Focus, owner: mozilla-mobile, version: 
 
+name: SCSiriWaveformView, nameSpecified: , owner: stefanceriu, version: 
+
 name: SnapKit, nameSpecified: , owner: SnapKit, version: 4.0.0
 
 name: ios_sdk, nameSpecified: Adjust, owner: adjust, version: v4.11.5

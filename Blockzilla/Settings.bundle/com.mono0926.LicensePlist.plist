@@ -6,6 +6,14 @@
 	<array>
 		<dict>
 			<key>File</key>
+			<string>com.mono0926.LicensePlist/AutocompleteTextField</string>
+			<key>Title</key>
+			<string>AutocompleteTextField</string>
+			<key>Type</key>
+			<string>PSChildPaneSpecifier</string>
+		</dict>
+		<dict>
+			<key>File</key>
 			<string>com.mono0926.LicensePlist/focus-ios</string>
 			<key>Title</key>
 			<string>Firefox Focus</string>
@@ -33,6 +41,14 @@
 			<string>com.mono0926.LicensePlist/ios_sdk</string>
 			<key>Title</key>
 			<string>Adjust</string>
+			<key>Type</key>
+			<string>PSChildPaneSpecifier</string>
+		</dict>
+		<dict>
+			<key>File</key>
+			<string>com.mono0926.LicensePlist/SCSiriWaveformView</string>
+			<key>Title</key>
+			<string>SCSiriWaveformView</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
