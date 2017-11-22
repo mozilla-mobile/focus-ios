@@ -228,7 +228,7 @@ struct UIConstants {
         static let AddSearchEngineTemplateExample = NSLocalizedString("settings.Search.SearchTemplateExample", value: "Example: searchengineexample.com/search/?q=%s", comment: "Text displayed as an example of the template to add a search engine.")
         static let RestoreSearchEnginesLabel = NSLocalizedString("Settings.Search.RestoreEngine", value: "Restore Default Search Engines", comment: "Label for button to bring deleted default engines back")
         static let InstalledSearchEngines = NSLocalizedString("Settings.Search.InstalledSearchEngines", value: "INSTALLED SEARCH ENGINES", comment: "Header for rows of installed search engines")
-        static let NewSearchEngineAdded = NSLocalizedString("Settings.Search.NewSearchEngineAdded", value: "New Search Engine Added", comment: "Toast displayed after adding a search engine")
+        static let NewSearchEngineAdded = NSLocalizedString("Settings.Search.NewSearchEngineAdded", value: "New Search Engine Added.", comment: "Toast displayed after adding a search engine")
 
         static let enabled = NSLocalizedString("Enabled", value: "Enabled", comment: "label describing something as enabled")
         static let disabled = NSLocalizedString("Disabled", value: "Disabled", comment: "label describing something as disabled")
