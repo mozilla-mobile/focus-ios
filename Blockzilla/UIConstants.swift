@@ -233,6 +233,7 @@ struct UIConstants {
         static let disabled = NSLocalizedString("Disabled", value: "Disabled", comment: "label describing something as disabled")
         static let edit = NSLocalizedString("Edit", value: "Edit", comment: "Label on button to allow edits")
         static let done = NSLocalizedString("Done", value: "Done", comment: "Label on button to complete edits")
+        static let cancel = NSLocalizedString("Cancel", value: "Cancel", comment: "Label on button to cancel edits")
 
         static let autocompleteLabel = NSLocalizedString("Autocomplete.defaultLabel", value: "Autocomplete", comment: "Label for enabling or disabling autocomplete")
         static let autocompleteDefaultSectionTitle = NSLocalizedString("Autocomplete.defaultTitle", value: "DEFAULT URL LIST", comment: "Title for the default URL list section")
@@ -243,6 +244,7 @@ struct UIConstants {
         static let autocompleteCustomDescription = NSLocalizedString("Autocomplete.customDescriptoin", value: "Add and manage custom autocomplete URLs.", comment: "Description for adding and managing custom autocomplete URLs")
         static let autocompleteAddCustomUrl = NSLocalizedString("Autocomplete.addCustomUrl", value: "+ Add Custom URL", comment: "Label for button to add a custom URL")
         static let autocompleteEmptyState = NSLocalizedString("Autocomplete.emptyState", value: "No Custom URLs to display", comment: "Label for button to add a custom URL")
+        static let autocompleteCustomURLAdded = NSLocalizedString("Autocomplete.customUrlAdded", value: "New Custom URL added.", comment: "Label for toast alerting a custom URL has been added")
 
     }
 }
