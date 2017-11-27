@@ -74,12 +74,23 @@ class SearchSettingsViewController: UITableViewController {
         } else if indexPath.item > engines.count {
             let cell = UITableViewCell(style: .default, reuseIdentifier: "restoreDefaultEngines")
             cell.textLabel?.text = UIConstants.strings.RestoreSearchEnginesLabel
-            cell.textLabel?.textColor = searchEngineManager.hasDisabledDefaultEngine() ? UIConstants.colors.settingsTextLabel : UIConstants.colors.settingsDisabled
             cell.backgroundColor = UIConstants.colors.background
             cell.textLabel?.snp.makeConstraints({ (make) in
                 make.topMargin.equalTo(44)
+                make.centerY.equalTo(66)
                 make.leftMargin.equalTo(16)
             })
+            
+            if searchEngineManager.hasDisabledDefaultEngine() {
+                cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
+                cell.selectionStyle = .default
+                cell.isUserInteractionEnabled = true
+            } else {
+                cell.textLabel?.textColor = UIConstants.colors.settingsDisabled
+                cell.selectionStyle = .none
+                cell.isUserInteractionEnabled = false
+            }
+            
             return cell
         } else {
             let engine = engines[indexPath.item]
@@ -91,6 +102,13 @@ class SearchSettingsViewController: UITableViewController {
 
             if engine === searchEngineManager.activeEngine {
                 cell.accessoryType = .checkmark
+                
+                if tableView.isEditing {
+                    cell.textLabel?.textColor = UIConstants.colors.settingsDisabled
+                    cell.contentView.snp.makeConstraints({ (make) in
+                        make.left.equalTo(38)
+                    })
+                }
             }
 
             return cell
@@ -151,6 +169,8 @@ class SearchSettingsViewController: UITableViewController {
         navigationItem.rightBarButtonItem?.title = tableView.isEditing ? UIConstants.strings.Edit : UIConstants.strings.Done
         tableView.setEditing(!tableView.isEditing, animated: true)
         tableView.reloadData()
+        
+        navigationItem.hidesBackButton = tableView.isEditing
     }
 }
 
