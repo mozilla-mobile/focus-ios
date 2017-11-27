@@ -32,24 +32,17 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return enabled ? 2 : 1
+        return 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return 1
-        }
-        
-        return enabled ? domains.count + 1 : 0
+        return section == 0 ? 1 : 2
     }
     
     override func viewDidLoad() {
         view.backgroundColor = UIConstants.colors.background
         
-        title = UIConstants.strings.settingsAutocomplete
-
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.edit, style: .plain, target: self, action: #selector(AutocompleteSettingViewController.toggleEditing))
-        navigationItem.rightBarButtonItem?.accessibilityIdentifier = "edit"
+        title = UIConstants.strings.settingsAutocompleteSection
 
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
@@ -64,7 +57,13 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let labelText = section == 0 ? " " : UIConstants.strings.settingsCustomDomain
+        let labelText: String
+
+        switch section {
+        case 0: labelText = UIConstants.strings.autocompleteDefaultSectionTitle
+        case 1: labelText = UIConstants.strings.autocompleteCustomSectionTitle
+        default: fatalError("No title for section: \(section)")
+        }
         
         let cell = UITableViewCell()
         cell.textLabel?.text = labelText
@@ -82,12 +81,12 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell
         if (indexPath.section == 0) {
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: "enableCell")
-            cell.textLabel?.text = UIConstants.strings.settingsEnableAutocomplete
+            cell.textLabel?.text = UIConstants.strings.autocompleteLabel
             
             let toggle = UISwitch()
             toggle.addTarget(self, action: #selector(toggleSwitched(_:)), for: .valueChanged)
@@ -96,16 +95,20 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             cell.accessoryView = PaddedSwitch(switchView: toggle)
             
         } else {
-            if indexPath.row < domains.count {
-                let domain = domains[indexPath.row]
-                cell = UITableViewCell(style: .subtitle, reuseIdentifier: "domainCell")
-                cell.textLabel?.text = domain
-                cell.accessibilityIdentifier = domain
+            if indexPath.row == 0 {
+                cell = UITableViewCell(style: .subtitle, reuseIdentifier: "enableCell")
+                cell.textLabel?.text = UIConstants.strings.autocompleteLabel
+
+                let toggle = UISwitch()
+                toggle.addTarget(self, action: #selector(toggleSwitched(_:)), for: .valueChanged)
+                toggle.accessibilityIdentifier = "toggleAutocompleteSwitch"
+                toggle.isOn = enabled
+                cell.accessoryView = PaddedSwitch(switchView: toggle)
             } else {
                 cell = UITableViewCell(style: .subtitle, reuseIdentifier: "newDomainCell")
                 cell.accessoryType = .disclosureIndicator
-                cell.accessibilityIdentifier = "newDomainCell"
-                cell.textLabel?.text = UIConstants.strings.settingsAddDomain
+                cell.accessibilityIdentifier = "customURLS"
+                cell.textLabel?.text = UIConstants.strings.autocompleteCustomSectionLabel
             }
         }
         
@@ -127,7 +130,39 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return nil
+        switch section {
+        case 0:
+            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
+            let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
+            let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.autocompleteDefaultDescription, AppInfo.productName), attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.settingsDetailLabel])
+            let space = NSAttributedString(string: " ", attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
+            subtitle.append(space)
+            subtitle.append(learnMore)
+            cell.detailTextLabel?.attributedText = subtitle
+            cell.detailTextLabel?.numberOfLines = 0
+            cell.accessibilityIdentifier = "SettingsViewController.trackingProtectionLearnMoreCell"
+            cell.selectionStyle = .none
+            cell.backgroundColor = UIConstants.colors.background
+            cell.layoutMargins = UIEdgeInsets.zero
+
+            return cell
+        case 1:
+            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
+            let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
+            let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.autocompleteCustomDescription, AppInfo.productName), attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.settingsDetailLabel])
+            let space = NSAttributedString(string: " ", attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
+            subtitle.append(space)
+            subtitle.append(learnMore)
+            cell.detailTextLabel?.attributedText = subtitle
+            cell.detailTextLabel?.numberOfLines = 0
+            cell.accessibilityIdentifier = "SettingsViewController.learnMoreCell"
+            cell.selectionStyle = .none
+            cell.backgroundColor = UIConstants.colors.background
+            cell.layoutMargins = UIEdgeInsets.zero
+
+            return cell
+        default: return nil
+        }
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -151,14 +186,6 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         enabled = sender.isOn
         Settings.set(enabled, forToggle: .enableDomainAutocomplete)
         tableView.reloadData()
-    }
-    
-    @objc func toggleEditing() {
-        navigationItem.rightBarButtonItem?.title = tableView.isEditing ? UIConstants.strings.edit : UIConstants.strings.done
-        if tableView.isEditing {
-            delegate.autocompleteSettingViewController(self, enabled: enabled, didUpdateDomains: domains)
-        }
-        tableView.setEditing(!tableView.isEditing, animated: true)
     }
 }
 
