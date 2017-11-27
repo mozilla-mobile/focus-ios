@@ -187,6 +187,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         Settings.set(enabled, forToggle: .enableDomainAutocomplete)
         tableView.reloadData()
     }
+
 }
 
 extension AutocompleteSettingViewController: AddCustomDomainDelegate {

@@ -13,6 +13,7 @@ enum SettingsToggle: String {
     case safari = "Safari"
     case sendAnonymousUsageData = "SendAnonymousUsageData"
     case enableDomainAutocomplete = "enableDomainAutocomplete"
+    case enableCustomDomainAutocomplete = "enableCustomDomainAutocomplete"
 }
 
 struct Settings {
@@ -22,14 +23,15 @@ struct Settings {
 
     private static func defaultForToggle(_ toggle: SettingsToggle) -> Bool {
         switch toggle {
-            case .blockAds: return true
-            case .blockAnalytics: return true
-            case .blockSocial: return true
-            case .blockOther: return false
-            case .blockFonts: return false
-            case .safari: return true
-            case .sendAnonymousUsageData: return AppInfo.isKlar ? false : true
-            case .enableDomainAutocomplete: return true
+        case .blockAds: return true
+        case .blockAnalytics: return true
+        case .blockSocial: return true
+        case .blockOther: return false
+        case .blockFonts: return false
+        case .safari: return true
+        case .sendAnonymousUsageData: return AppInfo.isKlar ? false : true
+        case .enableDomainAutocomplete: return true
+        case .enableCustomDomainAutocomplete: return true
         }
     }
 
