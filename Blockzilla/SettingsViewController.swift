@@ -7,6 +7,26 @@ import SnapKit
 import UIKit
 import Telemetry
 
+class SettingsTableViewSearchCell: UITableViewCell {
+    let accessoryLabel = UILabel()
+
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        contentView.addSubview(accessoryLabel)
+        accessoryLabel.textColor = UIConstants.colors.settingsDetailLabel
+        accessoryType = .disclosureIndicator
+
+        accessoryLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview()
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     fileprivate let tableView = UITableView(frame: .zero, style: .grouped)
 
@@ -40,6 +60,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         self.searchEngineManager = searchEngineManager
         self.whatsNew = whatsNew
         super.init(nibName: nil, bundle: nil)
+
+        tableView.register(SettingsTableViewSearchCell.self, forCellReuseIdentifier: "searchCell")
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -178,14 +200,17 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         var cell: UITableViewCell
         switch (indexPath as NSIndexPath).section {
         case 0:
-            cell = UITableViewCell(style: .subtitle, reuseIdentifier: "searchCell")
-            cell.textLabel?.text = searchEngineManager.activeEngine.name
-            cell.accessoryType = .disclosureIndicator
-            cell.accessibilityIdentifier = "SettingsViewController.searchCell"
+            guard let searchCell = tableView.dequeueReusableCell(withIdentifier: "searchCell") as? SettingsTableViewSearchCell else { fatalError("No Search Cells!") }
+            searchCell.textLabel?.text = UIConstants.strings.settingsSearchLabel
+            searchCell.accessoryLabel.text = searchEngineManager.activeEngine.name
+            searchCell.accessoryType = .disclosureIndicator
+            searchCell.accessibilityIdentifier = "SettingsViewController.searchCell"
 
             let backgroundColorView = UIView()
             backgroundColorView.backgroundColor = UIConstants.colors.cellSelected
-            cell.selectedBackgroundView = backgroundColorView
+            searchCell.selectedBackgroundView = backgroundColorView
+
+            cell = searchCell
         case 5:
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: "autocomplete")
             cell.textLabel?.text = UIConstants.strings.settingsAutocomplete
@@ -222,7 +247,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0: return 1 // Search Engine.
+        case 0: return 1 // Search.
         case 1: return 1 // Integration.
         case 2: return 4 // Privacy.
         case 3: return 1 // Performance.
@@ -280,7 +305,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case 2: labelText = UIConstants.strings.toggleSectionPrivacy
         case 3: labelText = UIConstants.strings.toggleSectionPerformance
         case 4: labelText = UIConstants.strings.toggleSectionMozilla
-        case 5: labelText = UIConstants.strings.toggleSectionAssistance
         default: return nil
         }
 
