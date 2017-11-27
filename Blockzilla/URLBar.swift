@@ -136,6 +136,7 @@ class URLBar: UIView {
         urlText.textColor = UIConstants.colors.urlTextFont
         urlText.highlightColor = UIConstants.colors.urlTextHighlight
         urlText.keyboardType = .webSearch
+        urlText.keyboardAppearance = UIKeyboardAppearance.dark;
         urlText.autocapitalizationType = .none
         urlText.autocorrectionType = .no
         urlText.rightView = clearButton
