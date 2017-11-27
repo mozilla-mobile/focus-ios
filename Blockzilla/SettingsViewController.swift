@@ -16,6 +16,10 @@ class SettingsTableViewSearchCell: UITableViewCell {
         accessoryLabel.textColor = UIConstants.colors.settingsDetailLabel
         accessoryType = .disclosureIndicator
 
+        let backgroundColorView = UIView()
+        backgroundColorView.backgroundColor = UIConstants.colors.cellSelected
+        selectedBackgroundView = backgroundColorView
+
         accessoryLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview()
@@ -198,17 +202,18 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell
-        switch (indexPath as NSIndexPath).section {
+        switch indexPath.section {
         case 0:
             guard let searchCell = tableView.dequeueReusableCell(withIdentifier: "searchCell") as? SettingsTableViewSearchCell else { fatalError("No Search Cells!") }
-            searchCell.textLabel?.text = UIConstants.strings.settingsSearchLabel
-            searchCell.accessoryLabel.text = searchEngineManager.activeEngine.name
-            searchCell.accessoryType = .disclosureIndicator
-            searchCell.accessibilityIdentifier = "SettingsViewController.searchCell"
 
-            let backgroundColorView = UIView()
-            backgroundColorView.backgroundColor = UIConstants.colors.cellSelected
-            searchCell.selectedBackgroundView = backgroundColorView
+            let label = indexPath.row == 0 ? UIConstants.strings.settingsSearchLabel : UIConstants.strings.settingsAutocompleteSection
+            let accessoryLabel = indexPath.row == 0 ? searchEngineManager.activeEngine.name : "On"
+            let identifier = indexPath.row == 0 ? "SettingsViewController.searchCell" : "SettingsViewController.autocompleteCell"
+
+            searchCell.textLabel?.text = label
+            searchCell.accessoryLabel.text = accessoryLabel
+            searchCell.accessoryType = .disclosureIndicator
+            searchCell.accessibilityIdentifier = identifier
 
             cell = searchCell
         case 5:
@@ -247,7 +252,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0: return 1 // Search.
+        case 0: return 2 // Search.
         case 1: return 1 // Integration.
         case 2: return 4 // Privacy.
         case 3: return 1 // Performance.
@@ -351,17 +356,18 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         switch indexPath.section {
         case 0:
-            let searchSettingsViewController = SearchSettingsViewController(searchEngineManager: searchEngineManager)
-            searchSettingsViewController.delegate = self
-            navigationController?.pushViewController(searchSettingsViewController, animated: true)
-            break
+            if indexPath.row == 0 {
+                let searchSettingsViewController = SearchSettingsViewController(searchEngineManager: searchEngineManager)
+                searchSettingsViewController.delegate = self
+                navigationController?.pushViewController(searchSettingsViewController, animated: true)
+            } else if indexPath.row == 1 {
+                let autcompleteSettingViewController = AutocompleteSettingViewController(enabled: Settings.getToggle(.enableDomainAutocomplete), domains: Settings.getCustomDomainSetting(), delegate: self)
+                navigationController?.pushViewController(autcompleteSettingViewController, animated: true)
+            }
         case 4:
             if indexPath.row == 1 {
                 aboutClicked()
             }
-        case 5:
-            let autcompleteSettingViewController = AutocompleteSettingViewController(enabled: Settings.getToggle(.enableDomainAutocomplete), domains: Settings.getCustomDomainSetting(), delegate: self)
-            navigationController?.pushViewController(autcompleteSettingViewController, animated: true)
         default: break
         }
     }
