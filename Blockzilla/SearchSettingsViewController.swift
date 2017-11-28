@@ -71,12 +71,14 @@ class SearchSettingsViewController: UITableViewController {
             cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
             cell.backgroundColor = UIConstants.colors.background
             cell.accessibilityIdentifier = "addSearchEngine"
+            cell.selectedBackgroundView = getBackgroundView()
             return cell
         } else if indexPath.item > engines.count {
             let cell = UITableViewCell(style: .default, reuseIdentifier: "restoreDefaultEngines")
             cell.textLabel?.text = UIConstants.strings.RestoreSearchEnginesLabel
             cell.backgroundColor = UIConstants.colors.background
             cell.accessibilityIdentifier = "restoreDefaults"
+            cell.selectedBackgroundView = getBackgroundView()
             cell.textLabel?.snp.makeConstraints({ (make) in
                 make.topMargin.equalTo(44)
                 make.centerY.equalTo(66)
@@ -100,17 +102,27 @@ class SearchSettingsViewController: UITableViewController {
             cell.textLabel?.text = engine.name
             cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
             cell.imageView?.image = engine.image?.createScaled(size: CGSize(width: 24, height: 24))
+            cell.selectedBackgroundView = getBackgroundView()
             cell.backgroundColor = UIConstants.colors.background
             cell.accessibilityIdentifier = engine.name
+            
+            if tableView.isEditing {
+                cell.contentView.snp.makeConstraints({ (make) in
+                    make.left.equalTo(0)
+                })
+                
+                cell.imageView?.snp.makeConstraints({ (make) in
+                    make.left.equalTo(50)
+                    make.centerY.equalTo(cell)
+                })
+            }
 
             if engine === searchEngineManager.activeEngine {
                 cell.accessoryType = .checkmark
                 
                 if tableView.isEditing {
                     cell.textLabel?.textColor = UIConstants.colors.settingsDisabled
-                    cell.contentView.snp.makeConstraints({ (make) in
-                        make.left.equalTo(38)
-                    })
+                    cell.separatorInset = UIEdgeInsetsMake(0, 93, 0, 0)
                 }
             }
 
@@ -174,6 +186,12 @@ class SearchSettingsViewController: UITableViewController {
         tableView.reloadData()
         
         navigationItem.hidesBackButton = tableView.isEditing
+    }
+    
+    private func getBackgroundView(bgColor:UIColor = UIConstants.colors.cellSelected) -> UIView {
+        let view = UIView()
+        view.backgroundColor = bgColor
+        return view
     }
 }
 
