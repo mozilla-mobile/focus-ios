@@ -70,11 +70,13 @@ class SearchSettingsViewController: UITableViewController {
             cell.textLabel?.text = UIConstants.strings.AddSearchEngineButton
             cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
             cell.backgroundColor = UIConstants.colors.background
+            cell.accessibilityIdentifier = "addSearchEngine"
             return cell
         } else if indexPath.item > engines.count {
             let cell = UITableViewCell(style: .default, reuseIdentifier: "restoreDefaultEngines")
             cell.textLabel?.text = UIConstants.strings.RestoreSearchEnginesLabel
             cell.backgroundColor = UIConstants.colors.background
+            cell.accessibilityIdentifier = "restoreDefaults"
             cell.textLabel?.snp.makeConstraints({ (make) in
                 make.topMargin.equalTo(44)
                 make.centerY.equalTo(66)
@@ -99,6 +101,7 @@ class SearchSettingsViewController: UITableViewController {
             cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
             cell.imageView?.image = engine.image?.createScaled(size: CGSize(width: 24, height: 24))
             cell.backgroundColor = UIConstants.colors.background
+            cell.accessibilityIdentifier = engine.name
 
             if engine === searchEngineManager.activeEngine {
                 cell.accessoryType = .checkmark

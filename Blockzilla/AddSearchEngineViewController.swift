@@ -52,6 +52,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         nameInput.leftView = UIView(frame: CGRect(x: 0, y: 0, width: leftMargin, height: rowHeight))
         nameInput.leftViewMode = .always
         nameInput.font = UIFont.systemFont(ofSize: 15)
+        nameInput.accessibilityIdentifier = "nameInput"
         container.addSubview(nameInput)
         
         let templateLabel = UILabel()
@@ -64,6 +65,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         templateInput.keyboardType = .URL
         templateInput.font = UIFont.systemFont(ofSize: 15)
         templateInput.contentInset = UIEdgeInsets(top: 5, left: 7, bottom: 7, right: 5)
+        templateInput.accessibilityIdentifier = "templateInput"
         container.addSubview(templateInput)
 
         templatePlaceholderLabel.backgroundColor = UIConstants.colors.cellSelected
@@ -127,6 +129,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     private func setupEvents() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(AddSearchEngineViewController.cancelTapped))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.Save, style: .plain, target: self, action: #selector(AddSearchEngineViewController.saveTapped))
+        navigationItem.rightBarButtonItem?.accessibilityIdentifier = "save"
         templateInput.delegate = self
     }
     
