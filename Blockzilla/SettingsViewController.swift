@@ -362,7 +362,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 searchSettingsViewController.delegate = self
                 navigationController?.pushViewController(searchSettingsViewController, animated: true)
             } else if indexPath.row == 1 {
-                let autcompleteSettingViewController = AutocompleteSettingViewController(enabled: Settings.getToggle(.enableDomainAutocomplete), domains: Settings.getCustomDomainSetting(), delegate: self)
+                let autcompleteSettingViewController = AutocompleteSettingViewController()
                 navigationController?.pushViewController(autcompleteSettingViewController, animated: true)
             }
         case 4:
@@ -439,13 +439,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             updateSetting()
         }
     }
-}
-
-extension SettingsViewController: AutocompleteSettingDelegate {
-    func autocompleteSettingViewController(_ autoCompleteSettingViewController: AutocompleteSettingViewController, enabled: Bool, didUpdateDomains domains: [String]) {
-        Settings.setCustomDomainSetting(domains: domains)
-    }
-
 }
 
 extension SettingsViewController: SearchSettingsViewControllerDelegate {

@@ -1,36 +1,17 @@
-
-//
-//  AutocompleteSettingViewController.swift
-//  Blockzilla
-//
-//  Created by Joseph Gasiorek on 9/10/17.
-//  Copyright © 2017 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
 import Telemetry
 
-protocol AutocompleteSettingDelegate {
-    func autocompleteSettingViewController(_ autocompleteSettingViewController: AutocompleteSettingViewController, enabled: Bool, didUpdateDomains domains: [String])
-}
-
 class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    fileprivate var domains: [String]
-    private let delegate: AutocompleteSettingDelegate
     fileprivate let tableView = UITableView(frame: .zero, style: .grouped)
-    private var enabled: Bool
     
-    init(enabled: Bool, domains: [String], delegate: AutocompleteSettingDelegate) {
-        self.enabled = enabled
-        self.domains = domains
-        self.delegate = delegate
-        super.init(nibName: nil, bundle: nil)
+    convenience init() {
+        self.init(nibName: nil, bundle: nil)
     }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
@@ -91,7 +72,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             let toggle = UISwitch()
             toggle.addTarget(self, action: #selector(toggleSwitched(_:)), for: .valueChanged)
             toggle.accessibilityIdentifier = "toggleAutocompleteSwitch"
-            toggle.isOn = enabled
+            toggle.isOn = Settings.getToggle(.enableDomainAutocomplete)
             cell.accessoryView = PaddedSwitch(switchView: toggle)
             
         } else {
@@ -101,8 +82,8 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
 
                 let toggle = UISwitch()
                 toggle.addTarget(self, action: #selector(toggleSwitched(_:)), for: .valueChanged)
-                toggle.accessibilityIdentifier = "toggleAutocompleteSwitch"
-                toggle.isOn = enabled
+                toggle.accessibilityIdentifier = "toggleCustomAutocompleteSwitch"
+                toggle.isOn = Settings.getToggle(.enableCustomDomainAutocomplete)
                 cell.accessoryView = PaddedSwitch(switchView: toggle)
             } else {
                 cell = UITableViewCell(style: .subtitle, reuseIdentifier: "newDomainCell")
@@ -122,9 +103,8 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if indexPath.section == 1 && indexPath.row == domains.count {
-            // Add Custom Domain Tapped
-            let viewController = AddCustomDomainViewController(delegate: self)
+        if indexPath.section == 1 && indexPath.row == 1 {
+            let viewController = AutocompleteCustomUrlViewController()
             self.navigationController?.pushViewController(viewController, animated: true)
         }
     }
@@ -164,37 +144,13 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         default: return nil
         }
     }
-    
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        if indexPath.section == 0 || !tableView.isEditing {
-            return false
-        }
-        
-        return indexPath.row < domains.count
-    }
-    
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            tableView.beginUpdates()
-            domains.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-            tableView.endUpdates()
-        }
-    }
-    
+
     @objc private func toggleSwitched(_ sender: UISwitch) {
-        enabled = sender.isOn
+        let enabled = sender.isOn
         Settings.set(enabled, forToggle: .enableDomainAutocomplete)
-        tableView.reloadData()
     }
 
 }
 
-extension AutocompleteSettingViewController: AddCustomDomainDelegate {
-    func addCustomDomainViewController(_ addCustomDomainViewController: AddCustomDomainViewController, domain: String) {
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.customDomainAdded, object: TelemetryEventObject.setting)
-        domains.append(domain)
-        tableView.reloadData()
-        Settings.setCustomDomainSetting(domains: domains)
-    }
-}
+
+
