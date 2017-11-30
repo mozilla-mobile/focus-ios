@@ -6,10 +6,11 @@ import UIKit
 import SnapKit
 
 class AutocompleteCustomUrlViewController: UIViewController {
+    private let emptyStateView = UIView()
     private let tableView = UITableView(frame: .zero, style: .grouped)
     private var addDomainCell: UITableViewCell?
 
-    var domains: [String] = ["http://hackerne.ws"]
+    var domains: [String] = []
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)
@@ -17,6 +18,20 @@ class AutocompleteCustomUrlViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.edit, style: .plain, target: self, action: #selector(AutocompleteCustomUrlViewController.toggleEditing))
 
         view.addSubview(tableView)
+
+        let label = UILabel()
+        label.text = UIConstants.strings.autocompleteEmptyState
+        label.font = UIConstants.fonts.settingsDescriptionText
+        label.textColor = UIConstants.colors.settingsTextLabel
+        label.textAlignment = .center
+        emptyStateView.addSubview(label)
+        tableView.backgroundView = emptyStateView
+        tableView.backgroundView?.isHidden = true
+
+        label.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().offset(50)
+        }
 
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -38,8 +53,14 @@ class AutocompleteCustomUrlViewController: UIViewController {
     @objc private func toggleEditing() {
         navigationItem.rightBarButtonItem?.title = tableView.isEditing ? UIConstants.strings.edit : UIConstants.strings.done
 
+        
         tableView.setEditing(!tableView.isEditing, animated: true)
         addDomainCell?.animateHidden(tableView.isEditing, duration: 0.2)
+        updateEmptyStateView()
+    }
+
+    fileprivate func updateEmptyStateView() {
+        tableView.backgroundView?.animateHidden(!(tableView.isEditing && domains.isEmpty), duration: 0.2)
     }
 }
 
