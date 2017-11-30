@@ -121,8 +121,10 @@ class SearchSettingsViewController: UITableViewController {
                 cell.accessoryType = .checkmark
                 
                 if tableView.isEditing {
-                    cell.textLabel?.textColor = UIConstants.colors.settingsDisabled
+                    cell.textLabel?.textColor = UIConstants.colors.settingsDisabled.withAlphaComponent(0.5)
                     cell.separatorInset = UIEdgeInsetsMake(0, 93, 0, 0)
+                    cell.tintColor = tableView.tintColor.withAlphaComponent(0.5)
+                    cell.imageView?.alpha = 0.5
                 }
             }
 
