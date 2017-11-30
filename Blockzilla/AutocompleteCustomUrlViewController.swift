@@ -7,11 +7,15 @@ import SnapKit
 
 class AutocompleteCustomUrlViewController: UIViewController {
     private let tableView = UITableView(frame: .zero, style: .grouped)
+    private var addDomainCell: UITableViewCell?
 
-    var domains: [String] = []
+    var domains: [String] = ["http://hackerne.ws"]
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.edit, style: .plain, target: self, action: #selector(AutocompleteCustomUrlViewController.toggleEditing))
+
         view.addSubview(tableView)
 
         tableView.snp.makeConstraints { make in
@@ -29,6 +33,13 @@ class AutocompleteCustomUrlViewController: UIViewController {
         tableView.backgroundColor = UIConstants.colors.background
         tableView.layoutMargins = UIEdgeInsets.zero
         tableView.separatorColor = UIConstants.colors.settingsSeparator
+    }
+
+    @objc private func toggleEditing() {
+        navigationItem.rightBarButtonItem?.title = tableView.isEditing ? UIConstants.strings.edit : UIConstants.strings.done
+
+        tableView.setEditing(!tableView.isEditing, animated: true)
+        addDomainCell?.animateHidden(tableView.isEditing, duration: 0.2)
     }
 }
 
@@ -66,14 +77,12 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
         if (indexPath.row == domains.count) {
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: "addCustomDomainCell")
             cell.textLabel?.text = UIConstants.strings.autocompleteAddCustomUrlWithPlus
+            cell.accessoryType = .disclosureIndicator
+            addDomainCell = cell
         } else {
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: "domainCell")
+            cell.selectionStyle = .none
             cell.textLabel?.text = domains[indexPath.row]
-        }
-
-        if indexPath.row == 0 {
-            print("remove backgorundView")
-            cell.backgroundView = UIView()
         }
 
         cell.backgroundColor = UIConstants.colors.background
@@ -81,6 +90,10 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
         cell.layoutMargins = UIEdgeInsets.zero
 
         return cell
+    }
+
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return indexPath.row !=  domains.count
     }
 }
 
