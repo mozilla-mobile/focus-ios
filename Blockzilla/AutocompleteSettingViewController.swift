@@ -51,6 +51,21 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         cell.textLabel?.textColor = UIConstants.colors.tableSectionHeader
         cell.textLabel?.font = UIConstants.fonts.tableSectionHeader
         cell.backgroundColor = UIConstants.colors.background
+
+        // Hack to cover header separator line
+        let footer = UIView()
+        footer.backgroundColor = UIConstants.colors.background
+
+        cell.addSubview(footer)
+        cell.sendSubview(toBack: footer)
+
+        footer.snp.makeConstraints { make in
+            make.height.equalTo(1)
+            make.bottom.equalToSuperview().offset(1)
+            make.leading.trailing.equalToSuperview()
+        }
+
+        return cell
         
         return cell
     }

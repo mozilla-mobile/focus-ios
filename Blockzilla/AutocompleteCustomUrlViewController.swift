@@ -6,7 +6,9 @@ import UIKit
 import SnapKit
 
 class AutocompleteCustomUrlViewController: UIViewController {
-    private let tableView = UITableView(frame: .zero, style: .plain)
+    private let tableView = UITableView(frame: .zero, style: .grouped)
+
+    var domains: [String] = []
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)
@@ -15,5 +17,55 @@ class AutocompleteCustomUrlViewController: UIViewController {
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+    }
+
+    override func viewDidLoad() {
+        view.backgroundColor = UIConstants.colors.background
+
+        title = UIConstants.strings.autocompleteCustomSectionLabel
+
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.backgroundColor = UIConstants.colors.background
+        tableView.layoutMargins = UIEdgeInsets.zero
+        tableView.separatorColor = UIConstants.colors.settingsSeparator
+    }
+}
+
+extension AutocompleteCustomUrlViewController: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return domains.count + 1
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        var cell: UITableViewCell
+        if (indexPath.row == domains.count) {
+            cell = UITableViewCell(style: .subtitle, reuseIdentifier: "addCustomDomainCell")
+            cell.textLabel?.text = UIConstants.strings.autocompleteAddCustomUrlWithPlus
+        } else {
+            cell = UITableViewCell(style: .subtitle, reuseIdentifier: "domainCell")
+            cell.textLabel?.text = domains[indexPath.row]
+        }
+
+        if indexPath.row == 0 {
+            print("remove backgorundView")
+            cell.backgroundView = UIView()
+        }
+
+        cell.backgroundColor = UIConstants.colors.background
+        cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
+        cell.layoutMargins = UIEdgeInsets.zero
+
+        return cell
+    }
+}
+
+extension AutocompleteCustomUrlViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 44
     }
 }
