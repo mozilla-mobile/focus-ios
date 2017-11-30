@@ -66,8 +66,6 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         }
 
         return cell
-        
-        return cell
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
