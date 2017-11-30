@@ -10,8 +10,20 @@ protocol AddCustomDomainDelegate {
 }
 
 class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
+    private class InputField: UITextField {
+        override func textRect(forBounds bounds: CGRect) -> CGRect {
+            return bounds.insetBy(dx: 10, dy: 10)
+        }
+
+        override func editingRect(forBounds bounds: CGRect) -> CGRect {
+            return bounds.insetBy(dx: 10, dy: 10)
+        }
+    }
+
     private var delegate: AddCustomDomainDelegate
-    private var textInput = UITextField()
+    private let inputLabel = UILabel()
+    private let textInput: UITextField = InputField()
+    private let inputDescription = UILabel()
     
     init(delegate: AddCustomDomainDelegate) {
         self.delegate = delegate
@@ -23,10 +35,10 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
     }
     
     override func viewDidLoad() {
-        title = UIConstants.strings.settingsAddDomain
+        title = UIConstants.strings.autocompleteAddCustomUrl
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(AddCustomDomainViewController.cancelTapped))
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(AddCustomDomainViewController.doneTapped))
-        self.navigationItem.rightBarButtonItem?.accessibilityIdentifier = "doneButton"
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.save, style: .done, target: self, action: #selector(AddCustomDomainViewController.doneTapped))
+        self.navigationItem.rightBarButtonItem?.accessibilityIdentifier = "saveButton"
         
         setupUI()
     }
@@ -34,44 +46,44 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
     private func setupUI() {
         view.backgroundColor = UIConstants.colors.background
 
-        
-        let container = UIView()
-        container.backgroundColor = UIConstants.colors.urlTextBackground
-        view.addSubview(container)
-        
-        let httpLabel = UILabel()
-        httpLabel.text = "http://"
-        httpLabel.textColor = UIConstants.colors.settingsTextLabel
-        
-        container.addSubview(httpLabel)
-        container.addSubview(textInput)
-        
+        inputLabel.text = UIConstants.strings.autocompleteAddCustomUrlLabel
+        inputLabel.font = UIConstants.fonts.settingsInputLabel
+        inputLabel.textColor = UIConstants.colors.settingsTextLabel
+        view.addSubview(inputLabel)
+
+        textInput.backgroundColor = UIConstants.colors.urlTextBackground
         textInput.keyboardType = .URL
         textInput.autocapitalizationType = .none
         textInput.autocorrectionType = .no
         textInput.returnKeyType = .done
         textInput.textColor = UIColor.white
         textInput.delegate = self
-        textInput.placeholder = "mozilla.org"
+        textInput.attributedPlaceholder = NSAttributedString(string: UIConstants.strings.autocompleteAddCustomUrlPlaceholder, attributes: [.foregroundColor: UIConstants.colors.inputPlaceholder])
         textInput.accessibilityIdentifier = "urlInput"
         textInput.becomeFirstResponder()
-        
-        container.snp.makeConstraints { (make) in
-            make.width.equalToSuperview()
-            make.height.equalTo(40)
+        textInput.editingRect(forBounds: textInput.frame.insetBy(dx: 10, dy: 10))
+        view.addSubview(textInput)
+
+        inputDescription.text = UIConstants.strings.autocompleteAddCustomUrlExample
+        inputDescription.textColor = UIConstants.colors.settingsTextLabel
+        inputDescription.font = UIConstants.fonts.settingsDescriptionText
+        view.addSubview(inputDescription)
+
+        inputLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(40)
+            make.trailing.equalToSuperview()
+            make.leading.equalToSuperview().offset(10)
         }
-        
-        httpLabel.snp.makeConstraints { (make) in
-            make.height.equalToSuperview()
-            make.left.equalTo(10)
-            make.width.equalTo(50)
-            make.right.equalTo(httpLabel.snp.left)
+
+        textInput.snp.makeConstraints { make in
+            make.height.equalTo(44)
+            make.leading.trailing.equalToSuperview()
+            make.top.equalTo(inputLabel.snp.bottom).offset(10)
         }
-        
-        textInput.snp.makeConstraints { (make) in
-            make.height.equalToSuperview()
-            make.width.equalToSuperview()
-            make.left.equalTo(httpLabel.snp.right)
+
+        inputDescription.snp.makeConstraints { make in
+            make.top.equalTo(textInput.snp.bottom).offset(10)
+            make.leading.equalToSuperview().offset(10)
         }
     }
     

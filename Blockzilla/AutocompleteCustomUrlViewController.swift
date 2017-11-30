@@ -78,6 +78,11 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: "addCustomDomainCell")
             cell.textLabel?.text = UIConstants.strings.autocompleteAddCustomUrlWithPlus
             cell.accessoryType = .disclosureIndicator
+
+            let backgroundColorView = UIView()
+            backgroundColorView.backgroundColor = UIConstants.colors.cellSelected
+
+            cell.selectedBackgroundView = backgroundColorView
             addDomainCell = cell
         } else {
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: "domainCell")
@@ -95,10 +100,37 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return indexPath.row !=  domains.count
     }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == domains.count {
+            let viewController = AddCustomDomainViewController(delegate: self)
+
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                let navigationController = UINavigationController(rootViewController: viewController)
+                navigationController.modalPresentationStyle = .formSheet
+                let navigationBar = navigationController.navigationBar
+                navigationBar.isTranslucent = false
+                navigationBar.barTintColor = UIConstants.colors.background
+                navigationBar.tintColor = UIConstants.colors.navigationButton
+                navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIConstants.colors.navigationTitle]
+
+                present(navigationController, animated: true, completion: nil)
+
+            } else {
+                self.navigationController?.pushViewController(viewController, animated: true)
+            }
+        }
+    }
 }
 
 extension AutocompleteCustomUrlViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44
+    }
+}
+
+extension AutocompleteCustomUrlViewController: AddCustomDomainDelegate {
+    func addCustomDomainViewController(_ addCustomDomainViewController: AddCustomDomainViewController, domain: String) {
+        
     }
 }
