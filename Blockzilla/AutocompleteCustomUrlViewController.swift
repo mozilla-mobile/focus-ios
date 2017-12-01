@@ -144,6 +144,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
         if indexPath.row == domains.count {
             let viewController = AddCustomDomainViewController(autocompleteSource: customAutocompleteSource)
 
+            // Present the ViewController modallu on the iPad
             if UIDevice.current.userInterfaceIdiom == .pad {
                 let navigationController = UINavigationController(rootViewController: viewController)
                 navigationController.modalPresentationStyle = .formSheet
@@ -154,7 +155,6 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
                 navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIConstants.colors.navigationTitle]
 
                 present(navigationController, animated: true, completion: nil)
-
             } else {
                 self.navigationController?.pushViewController(viewController, animated: true)
             }
@@ -169,6 +169,8 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
             tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.endUpdates()
 
+            // We need to wait till after the editing animation when swiping to delete
+            // to make sure we're really not in editing mode
             perform(#selector(updateEmptyStateView), with: nil, afterDelay: 0.5)
         }
     }

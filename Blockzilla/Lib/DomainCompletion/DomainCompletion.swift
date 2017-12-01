@@ -7,8 +7,6 @@ import AutocompleteTextField
 
 typealias AutoCompleteSuggestions = [String]
 
-
-
 protocol AutocompleteSource {
     var enabled: Bool { get }
     func getSuggestions() -> AutoCompleteSuggestions
@@ -43,8 +41,9 @@ class CustomCompletionSource: CustomAutocompleteSource {
     }
 
     func add(suggestion: String) -> CustomCompletionResult {
-        var domains = getSuggestions()
+        guard !suggestion.isEmpty else { return .error(.invalidUrl) }
 
+        var domains = getSuggestions()
         guard !domains.contains(suggestion) else { return .error(.duplicateDomain) }
 
         domains.append(suggestion)
@@ -54,8 +53,9 @@ class CustomCompletionSource: CustomAutocompleteSource {
     }
 
     func add(suggestion: String, atIndex: Int) -> CustomCompletionResult {
-        var domains = getSuggestions()
+        guard !suggestion.isEmpty else { return .error(.invalidUrl) }
 
+        var domains = getSuggestions()
         guard !domains.contains(suggestion) else { return .error(.duplicateDomain) }
 
         domains.insert(suggestion, at: atIndex)

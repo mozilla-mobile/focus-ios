@@ -48,7 +48,6 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
         textInput.attributedPlaceholder = NSAttributedString(string: UIConstants.strings.autocompleteAddCustomUrlPlaceholder, attributes: [.foregroundColor: UIConstants.colors.inputPlaceholder])
         textInput.accessibilityIdentifier = "urlInput"
         textInput.becomeFirstResponder()
-        textInput.editingRect(forBounds: textInput.frame.insetBy(dx: 10, dy: 10))
         view.addSubview(textInput)
 
         inputDescription.text = UIConstants.strings.autocompleteAddCustomUrlExample
