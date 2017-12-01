@@ -58,7 +58,6 @@ class TrackingProtectionSettings: BaseTestCase {
 
         // Erase the history
         app.buttons["ERASE"].tap()
-        waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
 
         // Reset in-app settings (work-around until issue: #731)
         app.buttons["Settings"].tap()
