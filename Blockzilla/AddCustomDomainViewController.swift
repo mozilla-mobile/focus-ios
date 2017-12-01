@@ -4,19 +4,16 @@
 
 import Foundation
 import AutocompleteTextField
-
-protocol AddCustomDomainDelegate {
-    func addCustomDomainViewController(_ addCustomDomainViewController: AddCustomDomainViewController, domain: String)
-}
+import Telemetry
 
 class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
-    private var delegate: AddCustomDomainDelegate
+    private let autocompleteSource: CustomAutocompleteSource
     private let inputLabel = UILabel()
     private let textInput: UITextField = InsetTextField(insetBy: 10)
     private let inputDescription = UILabel()
     
-    init(delegate: AddCustomDomainDelegate) {
-        self.delegate = delegate
+    init(autocompleteSource: CustomAutocompleteSource) {
+        self.autocompleteSource = autocompleteSource
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -90,7 +87,15 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
         self.resignFirstResponder()
         guard let domain = textInput.text, !domain.isEmpty else { return }
 
-        delegate.addCustomDomainViewController(self, domain: domain)
+        let addResult = autocompleteSource.add(suggestion: domain)
+        guard case .success = addResult else {
+            guard case let .error(error) = addResult else { return }
+            Toast(text: error.message).show()
+            return
+        }
+
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.customDomainAdded, object: TelemetryEventObject.setting)
+        Toast(text: UIConstants.strings.autocompleteCustomURLAdded).show()
         self.navigationController?.popViewController(animated: true)
     }
 }

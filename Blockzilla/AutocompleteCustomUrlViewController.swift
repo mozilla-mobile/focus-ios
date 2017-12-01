@@ -131,7 +131,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == domains.count {
-            let viewController = AddCustomDomainViewController(delegate: self)
+            let viewController = AddCustomDomainViewController(autocompleteSource: customAutocompleteSource)
 
             if UIDevice.current.userInterfaceIdiom == .pad {
                 let navigationController = UINavigationController(rootViewController: viewController)
@@ -157,6 +157,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.customDomainRemoved, object: TelemetryEventObject.setting)
             tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.endUpdates()
+            updateEmptyStateView()
         }
     }
 }
@@ -167,10 +168,3 @@ extension AutocompleteCustomUrlViewController: UITableViewDelegate {
     }
 }
 
-extension AutocompleteCustomUrlViewController: AddCustomDomainDelegate {
-    func addCustomDomainViewController(_ addCustomDomainViewController: AddCustomDomainViewController, domain: String) {
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.customDomainAdded, object: TelemetryEventObject.setting)
-        _ = customAutocompleteSource.add(suggestion: domain)
-        tableView.reloadData()
-    }
-}

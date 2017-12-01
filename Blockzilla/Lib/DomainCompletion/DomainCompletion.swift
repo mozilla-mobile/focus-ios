@@ -46,8 +46,6 @@ class CustomCompletionSource: CustomAutocompleteSource {
 
         guard !domains.contains(suggestion) else { return .error(.duplicateDomain) }
 
-        URL(string: suggestion)
-
         domains.append(suggestion)
         Settings.setCustomDomainSetting(domains: domains)
 
@@ -57,7 +55,7 @@ class CustomCompletionSource: CustomAutocompleteSource {
     func remove(at index: Int) -> CustomCompletionResult {
         var domains = getSuggestions()
 
-        guard domains.count < index else { return .error(.indexOutOfRange) }
+        guard domains.count > index else { return .error(.indexOutOfRange) }
         domains.remove(at: index)
         Settings.setCustomDomainSetting(domains: domains)
 
