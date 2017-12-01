@@ -146,19 +146,15 @@ class SettingAppearanceTest: BaseTestCase {
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
         
         // Verify that autocomplete is enabled
+        waitforExistence(element: app.tables.switches["toggleAutocompleteSwitch"])
         let toggle = app.tables.switches["toggleAutocompleteSwitch"]
         XCTAssertEqual(toggle.value as! String, "1")
-        
-        // Verify that the user can add a new domain
-        XCTAssertTrue(app.tables.cells["newDomainCell"].exists)
+
         
         // Turn autocomplete off
         toggle.tap()
         XCTAssertEqual(toggle.value as! String, "0")
-        
-        // Verify that a user can not add a new domain
-        XCTAssertFalse(app.tables.cells["newDomainCell"].exists)
-        
+
         // Turn autocomplete back on
         toggle.tap()
     }
@@ -170,24 +166,27 @@ class SettingAppearanceTest: BaseTestCase {
         // Navigate to Autocomplete Settings
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
         
+        // Navigate to the customURL list
+        app.tables.cells["customURLS"].tap()
+
         // Navigate to add domain screen
-        app.tables.cells["newDomainCell"].tap()
+        app.tables.cells["addCustomDomainCell"].tap()
         
         // Edit Text Field
         let urlInput = app.textFields["urlInput"]
         urlInput.typeText("mozilla.org")
-        app.navigationBars.buttons["doneButton"].tap()
+        app.navigationBars.buttons["saveButton"].tap()
         
         // Validate that the new domain shows up in the Autocomplete Settings
         XCTAssertTrue(app.tables.cells["mozilla.org"].exists)
         
         // Start Editing
-        app.navigationBars.buttons["edit"].tap()
+        app.navigationBars.buttons["editButton"].tap()
         app.tables.cells["mozilla.org"].buttons["Delete mozilla.org"].tap()
         app.tables.cells["mozilla.org"].buttons["Delete"].tap()
         
         // Finish Editing
-        app.navigationBars.buttons["edit"].tap()
+        app.navigationBars.buttons["editButton"].tap()
         
         // Validate that the domain is gone
         XCTAssertFalse(app.tables.cells["mozilla.org"].exists)

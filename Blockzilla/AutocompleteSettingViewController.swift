@@ -148,7 +148,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             subtitle.append(learnMore)
             cell.detailTextLabel?.attributedText = subtitle
             cell.detailTextLabel?.numberOfLines = 0
-            cell.accessibilityIdentifier = "SettingsViewController.trackingProtectionLearnMoreCell"
+            cell.accessibilityIdentifier = "SettingsViewController.autocompleteLearnMore"
             cell.selectionStyle = .none
             cell.backgroundColor = UIConstants.colors.background
             cell.layoutMargins = UIEdgeInsets.zero
@@ -163,7 +163,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             subtitle.append(learnMore)
             cell.detailTextLabel?.attributedText = subtitle
             cell.detailTextLabel?.numberOfLines = 0
-            cell.accessibilityIdentifier = "SettingsViewController.learnMoreCell"
+            cell.accessibilityIdentifier = "SettingsViewController.customAutocompleteLearnMore"
             cell.selectionStyle = .none
             cell.backgroundColor = UIConstants.colors.background
             cell.layoutMargins = UIEdgeInsets.zero

@@ -19,6 +19,7 @@ class AutocompleteCustomUrlViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.edit, style: .plain, target: self, action: #selector(AutocompleteCustomUrlViewController.toggleEditing))
+        navigationItem.rightBarButtonItem?.accessibilityIdentifier = "editButton"
 
         view.addSubview(tableView)
 
@@ -115,6 +116,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: "addCustomDomainCell")
             cell.textLabel?.text = UIConstants.strings.autocompleteAddCustomUrlWithPlus
             cell.accessoryType = .disclosureIndicator
+            cell.accessibilityIdentifier = "addCustomDomainCell"
 
             let backgroundColorView = UIView()
             backgroundColorView.backgroundColor = UIConstants.colors.cellSelected
@@ -125,6 +127,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: "domainCell")
             cell.selectionStyle = .none
             cell.textLabel?.text = domains[indexPath.row]
+            cell.accessibilityIdentifier = domains[indexPath.row]
         }
 
         cell.backgroundColor = UIConstants.colors.background
