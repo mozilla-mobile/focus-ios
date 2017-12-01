@@ -82,7 +82,7 @@ class SearchSettingsViewController: UITableViewController {
             cell.textLabel?.snp.makeConstraints({ (make) in
                 make.topMargin.equalTo(44)
                 make.centerY.equalTo(66)
-                make.leftMargin.equalTo(16)
+                make.leadingMargin.equalTo(16)
             })
             
             if searchEngineManager.hasDisabledDefaultEngine() {
@@ -108,11 +108,11 @@ class SearchSettingsViewController: UITableViewController {
             
             if tableView.isEditing {
                 cell.contentView.snp.makeConstraints({ (make) in
-                    make.left.equalTo(0)
+                    make.leading.equalTo(0)
                 })
                 
                 cell.imageView?.snp.makeConstraints({ (make) in
-                    make.left.equalTo(50)
+                    make.leading.equalTo(50)
                     make.centerY.equalTo(cell)
                 })
             }
