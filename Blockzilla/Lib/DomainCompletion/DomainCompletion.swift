@@ -30,6 +30,7 @@ typealias CustomCompletionResult = Result<Void, CompletionSourceError>
 
 protocol CustomAutocompleteSource: AutocompleteSource {
     func add(suggestion: String) -> CustomCompletionResult
+    func add(suggestion: String, atIndex: Int) -> CustomCompletionResult
     func remove(at index: Int) -> CustomCompletionResult
 }
 
@@ -47,6 +48,17 @@ class CustomCompletionSource: CustomAutocompleteSource {
         guard !domains.contains(suggestion) else { return .error(.duplicateDomain) }
 
         domains.append(suggestion)
+        Settings.setCustomDomainSetting(domains: domains)
+
+        return .success(())
+    }
+
+    func add(suggestion: String, atIndex: Int) -> CustomCompletionResult {
+        var domains = getSuggestions()
+
+        guard !domains.contains(suggestion) else { return .error(.duplicateDomain) }
+
+        domains.insert(suggestion, at: atIndex)
         Settings.setCustomDomainSetting(domains: domains)
 
         return .success(())

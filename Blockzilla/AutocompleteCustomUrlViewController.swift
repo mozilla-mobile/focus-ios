@@ -172,6 +172,17 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
             perform(#selector(updateEmptyStateView), with: nil, afterDelay: 0.5)
         }
     }
+
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return indexPath.row !=  domains.count
+    }
+
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        let itemToMove = domains[sourceIndexPath.row]
+        _ = customAutocompleteSource.remove(at: sourceIndexPath.row)
+        _ = customAutocompleteSource.add(suggestion: itemToMove, atIndex: destinationIndexPath.row)
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.customDomainReordered, object: TelemetryEventObject.setting)
+    }
 }
 
 extension AutocompleteCustomUrlViewController: UITableViewDelegate {
