@@ -98,11 +98,8 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
     
     @objc func doneTapped() {
         self.resignFirstResponder()
-        guard let domain = textInput.text else { return }
-        if domain.count == 0 {
-            return
-        }
-        
+        guard let domain = textInput.text, !domain.isEmpty else { return }
+
         delegate.addCustomDomainViewController(self, domain: domain)
         self.navigationController?.popViewController(animated: true)
     }
