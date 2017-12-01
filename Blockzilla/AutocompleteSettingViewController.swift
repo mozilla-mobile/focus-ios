@@ -83,7 +83,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             cell.textLabel?.text = UIConstants.strings.autocompleteLabel
             
             let toggle = UISwitch()
-            toggle.addTarget(self, action: #selector(toggleSwitched(_:)), for: .valueChanged)
+            toggle.addTarget(self, action: #selector(defaultToggleSwitched(_:)), for: .valueChanged)
             toggle.accessibilityIdentifier = "toggleAutocompleteSwitch"
             toggle.isOn = Settings.getToggle(.enableDomainAutocomplete)
             cell.accessoryView = PaddedSwitch(switchView: toggle)
@@ -94,7 +94,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
                 cell.textLabel?.text = UIConstants.strings.autocompleteLabel
 
                 let toggle = UISwitch()
-                toggle.addTarget(self, action: #selector(toggleSwitched(_:)), for: .valueChanged)
+                toggle.addTarget(self, action: #selector(customToggleSwitched(_:)), for: .valueChanged)
                 toggle.accessibilityIdentifier = "toggleCustomAutocompleteSwitch"
                 toggle.isOn = Settings.getToggle(.enableCustomDomainAutocomplete)
                 cell.accessoryView = PaddedSwitch(switchView: toggle)
@@ -158,11 +158,15 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         }
     }
 
-    @objc private func toggleSwitched(_ sender: UISwitch) {
+    @objc private func defaultToggleSwitched(_ sender: UISwitch) {
         let enabled = sender.isOn
         Settings.set(enabled, forToggle: .enableDomainAutocomplete)
     }
 
+    @objc private func customToggleSwitched(_ sender: UISwitch) {
+        let enabled = sender.isOn
+        Settings.set(enabled, forToggle: .enableCustomDomainAutocomplete)
+    }
 }
 
 
