@@ -10,19 +10,9 @@ protocol AddCustomDomainDelegate {
 }
 
 class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
-    private class InputField: UITextField {
-        override func textRect(forBounds bounds: CGRect) -> CGRect {
-            return bounds.insetBy(dx: 10, dy: 10)
-        }
-
-        override func editingRect(forBounds bounds: CGRect) -> CGRect {
-            return bounds.insetBy(dx: 10, dy: 10)
-        }
-    }
-
     private var delegate: AddCustomDomainDelegate
     private let inputLabel = UILabel()
-    private let textInput: UITextField = InputField()
+    private let textInput: UITextField = InsetTextField(insetBy: 10)
     private let inputDescription = UILabel()
     
     init(delegate: AddCustomDomainDelegate) {
