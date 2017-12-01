@@ -217,15 +217,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             searchCell.accessibilityIdentifier = identifier
 
             cell = searchCell
-        case 5:
-            cell = UITableViewCell(style: .subtitle, reuseIdentifier: "autocomplete")
-            cell.textLabel?.text = UIConstants.strings.settingsAutocomplete
-            cell.accessoryType = .disclosureIndicator
-            cell.accessibilityIdentifier = "SettingsViewController.autocompleteCell"
-            
-            let backgroundColorView = UIView()
-            backgroundColorView.backgroundColor = UIConstants.colors.cellSelected
-            cell.selectedBackgroundView = backgroundColorView
         default:
             if indexPath.section == 4 && indexPath.row == 1 {
                 cell = UITableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
@@ -258,7 +249,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case 2: return 4 // Privacy.
         case 3: return 1 // Performance.
         case 4: return 1 // Mozilla.
-        case 5: return 1 // Assistance
         default:
             assertionFailure("Invalid section")
             return 0
@@ -266,7 +256,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 6
+        return 5
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -444,23 +434,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 extension SettingsViewController: SearchSettingsViewControllerDelegate {
     func searchSettingsViewController(_ searchSettingsViewController: SearchSettingsViewController, didSelectEngine engine: SearchEngine) {
         tableView.cellForRow(at: IndexPath(row: 0, section: 0))?.textLabel?.text = engine.name
-    }
-}
-
-class PaddedSwitch: UIView {
-    private static let Padding: CGFloat = 8
-
-    init(switchView: UISwitch) {
-        super.init(frame: CGRect.zero)
-
-        addSubview(switchView)
-
-        frame.size = CGSize(width: switchView.frame.width + PaddedSwitch.Padding, height: switchView.frame.height)
-        switchView.frame.origin = CGPoint(x: PaddedSwitch.Padding, y: 0)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
 

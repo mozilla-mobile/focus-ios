@@ -42,6 +42,7 @@
 		B3481A551FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3481A541FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift */; };
 		B3AFC2BC1F7C0B9F001AEF38 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AFC2BB1F7C0B9F001AEF38 /* WebViewController.swift */; };
 		B3CD41C91FD1027000AEBD58 /* InsetTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3CD41C81FD1027000AEBD58 /* InsetTextField.swift */; };
+		B3CD41CC1FD1CAF000AEBD58 /* PaddedSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3CD41CB1FD1CAF000AEBD58 /* PaddedSwitch.swift */; };
 		B3D23BEF1FA3A9E500D9C50F /* postload.js in Resources */ = {isa = PBXBuildFile; fileRef = B3D23BEE1FA3A9E500D9C50F /* postload.js */; };
 		B3F4A3171FA136E70029A6F2 /* preload.js in Resources */ = {isa = PBXBuildFile; fileRef = B3F4A3161FA136E60029A6F2 /* preload.js */; };
 		D00A44111EB8F80A00DB0218 /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D00A44101EB8F80A00DB0218 /* Telemetry.framework */; };
@@ -313,6 +314,7 @@
 		B3481A541FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteCustomUrlViewController.swift; sourceTree = "<group>"; };
 		B3AFC2BB1F7C0B9F001AEF38 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		B3CD41C81FD1027000AEBD58 /* InsetTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsetTextField.swift; sourceTree = "<group>"; };
+		B3CD41CB1FD1CAF000AEBD58 /* PaddedSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddedSwitch.swift; sourceTree = "<group>"; };
 		B3D23BEE1FA3A9E500D9C50F /* postload.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = postload.js; sourceTree = "<group>"; };
 		B3F4A3161FA136E60029A6F2 /* preload.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = preload.js; sourceTree = "<group>"; };
 		BC16C41C8D4A74C79A493D42 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
@@ -750,6 +752,7 @@
 				D597608A1F9FEF7100A2D212 /* TrackingProtection */,
 				B31DAAC81F7D87EF00A11A74 /* RequestHandler */,
 				B3CD41C81FD1027000AEBD58 /* InsetTextField.swift */,
+				B3CD41CB1FD1CAF000AEBD58 /* PaddedSwitch.swift */,
 			);
 			path = Lib;
 			sourceTree = "<group>";
@@ -1412,6 +1415,7 @@
 				D3E2C96B1DA3069000DEBE3D /* URIFixup.swift in Sources */,
 				D3DA77851DC2C307009C114E /* ErrorPage.swift in Sources */,
 				D3426AE91DB7F4060016DA5A /* KeyboardHelper.swift in Sources */,
+				B3CD41CC1FD1CAF000AEBD58 /* PaddedSwitch.swift in Sources */,
 				D3E251EA1DAD714C005918DC /* InstructionsView.swift in Sources */,
 				D3561B2B1DB5925100A5EEAF /* GradientBackgroundView.swift in Sources */,
 				D3CD375B1DD3B51900468250 /* FirstRunViewController.swift in Sources */,
