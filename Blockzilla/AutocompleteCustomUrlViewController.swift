@@ -60,6 +60,7 @@ class AutocompleteCustomUrlViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationItem.rightBarButtonItem?.isEnabled = domains.count > 0
         tableView.reloadData()
     }
 
@@ -68,7 +69,9 @@ class AutocompleteCustomUrlViewController: UIViewController {
         
         tableView.setEditing(!tableView.isEditing, animated: true)
         addDomainCell?.animateHidden(tableView.isEditing, duration: 0.2)
+        navigationItem.setHidesBackButton(tableView.isEditing, animated: true)
         updateEmptyStateView()
+        navigationItem.rightBarButtonItem?.isEnabled = tableView.isEditing || domains.count > 0
     }
 
     @objc fileprivate func updateEmptyStateView() {
@@ -176,6 +179,10 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
             // to make sure we're really not in editing mode
             perform(#selector(updateEmptyStateView), with: nil, afterDelay: 0.5)
         }
+    }
+
+    func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
+        navigationItem.rightBarButtonItem?.isEnabled = domains.count > 0
     }
 
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
