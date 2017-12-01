@@ -57,17 +57,26 @@ class AutocompleteCustomUrlViewController: UIViewController {
         tableView.separatorColor = UIConstants.colors.settingsSeparator
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
+    }
+
     @objc private func toggleEditing() {
         navigationItem.rightBarButtonItem?.title = tableView.isEditing ? UIConstants.strings.edit : UIConstants.strings.done
-
         
         tableView.setEditing(!tableView.isEditing, animated: true)
         addDomainCell?.animateHidden(tableView.isEditing, duration: 0.2)
         updateEmptyStateView()
     }
 
-    fileprivate func updateEmptyStateView() {
-        tableView.backgroundView?.animateHidden(!(tableView.isEditing && domains.isEmpty), duration: 0.2)
+    @objc fileprivate func updateEmptyStateView() {
+        if tableView.isEditing && domains.isEmpty {
+            tableView.backgroundView?.animateHidden(false, duration: 0.2)
+        } else {
+            guard !tableView.backgroundView!.isHidden else { return }
+            tableView.backgroundView?.animateHidden(true, duration: 0.2)
+        }
     }
 }
 
@@ -130,6 +139,8 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+
         if indexPath.row == domains.count {
             let viewController = AddCustomDomainViewController(autocompleteSource: customAutocompleteSource)
 
@@ -157,7 +168,8 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.customDomainRemoved, object: TelemetryEventObject.setting)
             tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.endUpdates()
-            updateEmptyStateView()
+
+            perform(#selector(updateEmptyStateView), with: nil, afterDelay: 0.5)
         }
     }
 }
