@@ -7,35 +7,61 @@ import AutocompleteTextField
 
 typealias AutoCompleteSuggestions = [String]
 
+
+
 protocol AutocompleteSource {
     var enabled: Bool { get }
     func getSuggestions() -> AutoCompleteSuggestions
 }
 
+enum CompletionSourceError {
+    case invalidUrl
+    case duplicateDomain
+    case indexOutOfRange
+
+    var message: String {
+        guard case .invalidUrl = self else { return "" }
+
+        return UIConstants.strings.autocompleteAddCustomUrlError
+    }
+}
+
+typealias CustomCompletionResult = Result<Void, CompletionSourceError>
+
 protocol CustomAutocompleteSource: AutocompleteSource {
-    func add(suggestion: String) -> Bool
-    func remove(at index: Int) -> Bool
+    func add(suggestion: String) -> CustomCompletionResult
+    func remove(at index: Int) -> CustomCompletionResult
 }
 
 class CustomCompletionSource: CustomAutocompleteSource {
+
     var enabled: Bool { return Settings.getToggle(.enableCustomDomainAutocomplete) }
 
     func getSuggestions() -> AutoCompleteSuggestions {
         return Settings.getCustomDomainSetting()
     }
 
-    func add(suggestion: String) -> Bool {
+    func add(suggestion: String) -> CustomCompletionResult {
         var domains = getSuggestions()
+
+        guard !domains.contains(suggestion) else { return .error(.duplicateDomain) }
+
+        URL(string: suggestion)
+
         domains.append(suggestion)
         Settings.setCustomDomainSetting(domains: domains)
-        return true
+
+        return .success(())
     }
 
-    func remove(at index: Int) -> Bool {
+    func remove(at index: Int) -> CustomCompletionResult {
         var domains = getSuggestions()
+
+        guard domains.count < index else { return .error(.indexOutOfRange) }
         domains.remove(at: index)
         Settings.setCustomDomainSetting(domains: domains)
-        return true
+
+        return .success(())
     }
 }
 

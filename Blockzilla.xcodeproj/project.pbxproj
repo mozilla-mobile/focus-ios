@@ -43,6 +43,7 @@
 		B3AFC2BC1F7C0B9F001AEF38 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AFC2BB1F7C0B9F001AEF38 /* WebViewController.swift */; };
 		B3CD41C91FD1027000AEBD58 /* InsetTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3CD41C81FD1027000AEBD58 /* InsetTextField.swift */; };
 		B3CD41CC1FD1CAF000AEBD58 /* PaddedSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3CD41CB1FD1CAF000AEBD58 /* PaddedSwitch.swift */; };
+		B3CD41CE1FD1CDE300AEBD58 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3CD41CD1FD1CDE300AEBD58 /* Result.swift */; };
 		B3D23BEF1FA3A9E500D9C50F /* postload.js in Resources */ = {isa = PBXBuildFile; fileRef = B3D23BEE1FA3A9E500D9C50F /* postload.js */; };
 		B3F4A3171FA136E70029A6F2 /* preload.js in Resources */ = {isa = PBXBuildFile; fileRef = B3F4A3161FA136E60029A6F2 /* preload.js */; };
 		D00A44111EB8F80A00DB0218 /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D00A44101EB8F80A00DB0218 /* Telemetry.framework */; };
@@ -315,6 +316,7 @@
 		B3AFC2BB1F7C0B9F001AEF38 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		B3CD41C81FD1027000AEBD58 /* InsetTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsetTextField.swift; sourceTree = "<group>"; };
 		B3CD41CB1FD1CAF000AEBD58 /* PaddedSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddedSwitch.swift; sourceTree = "<group>"; };
+		B3CD41CD1FD1CDE300AEBD58 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		B3D23BEE1FA3A9E500D9C50F /* postload.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = postload.js; sourceTree = "<group>"; };
 		B3F4A3161FA136E60029A6F2 /* preload.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = preload.js; sourceTree = "<group>"; };
 		BC16C41C8D4A74C79A493D42 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
@@ -753,6 +755,7 @@
 				B31DAAC81F7D87EF00A11A74 /* RequestHandler */,
 				B3CD41C81FD1027000AEBD58 /* InsetTextField.swift */,
 				B3CD41CB1FD1CAF000AEBD58 /* PaddedSwitch.swift */,
+				B3CD41CD1FD1CDE300AEBD58 /* Result.swift */,
 			);
 			path = Lib;
 			sourceTree = "<group>";
@@ -1358,6 +1361,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */,
+				B3CD41CE1FD1CDE300AEBD58 /* Result.swift in Sources */,
 				D3E2C8EA1D9F0E6200DEBE3D /* BrowserViewController.swift in Sources */,
 				D3426B031DBAE3800016DA5A /* URLBarContainer.swift in Sources */,
 				D3BFCB3F1BD14F5900AD22D1 /* LocalWebServer.swift in Sources */,
