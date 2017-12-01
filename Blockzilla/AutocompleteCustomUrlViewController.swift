@@ -149,6 +149,16 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
             }
         }
     }
+
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            tableView.beginUpdates()
+            _ = customAutocompleteSource.remove(at: indexPath.row)
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.customDomainRemoved, object: TelemetryEventObject.setting)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            tableView.endUpdates()
+        }
+    }
 }
 
 extension AutocompleteCustomUrlViewController: UITableViewDelegate {
