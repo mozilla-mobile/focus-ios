@@ -85,17 +85,21 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
     
     @objc func doneTapped() {
         self.resignFirstResponder()
-        guard let domain = textInput.text, !domain.isEmpty else { return }
-
-        let addResult = autocompleteSource.add(suggestion: domain)
-        guard case .success = addResult else {
-            guard case let .error(error) = addResult else { return }
-            Toast(text: error.message).show()
+        guard let domain = textInput.text, !domain.isEmpty else {
+            Toast(text: UIConstants.strings.autocompleteAddCustomUrlError).show()
             return
         }
 
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.customDomainAdded, object: TelemetryEventObject.setting)
-        Toast(text: UIConstants.strings.autocompleteCustomURLAdded).show()
-        self.navigationController?.popViewController(animated: true)
+        switch autocompleteSource.add(suggestion: domain) {
+        case .error(.duplicateDomain):
+            self.navigationController?.popViewController(animated: true)
+        case .error(let error):
+            guard !error.message.isEmpty else { return }
+            Toast(text: error.message).show()
+        case .success:
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.customDomainAdded, object: TelemetryEventObject.setting)
+            Toast(text: UIConstants.strings.autocompleteCustomURLAdded).show()
+            self.navigationController?.popViewController(animated: true)
+        }
     }
 }
