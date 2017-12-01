@@ -746,6 +746,7 @@
 		B31DAAC71F7D87E800A11A74 /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				B3CD41CA1FD1038000AEBD58 /* DomainCompletion */,
 				D597608A1F9FEF7100A2D212 /* TrackingProtection */,
 				B31DAAC81F7D87EF00A11A74 /* RequestHandler */,
 				B3CD41C81FD1027000AEBD58 /* InsetTextField.swift */,
@@ -784,6 +785,14 @@
 				B3AFC2BB1F7C0B9F001AEF38 /* WebViewController.swift */,
 			);
 			path = WebView;
+			sourceTree = "<group>";
+		};
+		B3CD41CA1FD1038000AEBD58 /* DomainCompletion */ = {
+			isa = PBXGroup;
+			children = (
+				D3426AEC1DB846310016DA5A /* DomainCompletion.swift */,
+			);
+			path = DomainCompletion;
 			sourceTree = "<group>";
 		};
 		D30179C41BCD78BF009AD388 /* SCSiriWaveformView */ = {
@@ -954,7 +963,6 @@
 				D3E2C96C1DA3077400DEBE3D /* CharacterSetExtensions.swift */,
 				D35A0E011E26C94F00297884 /* ClosedRangeExtensions.swift */,
 				D5ABA3D71FCC846800D5C060 /* AddCustomDomainViewController.swift */,
-				D3426AEC1DB846310016DA5A /* DomainCompletion.swift */,
 				D3DA77841DC2C307009C114E /* ErrorPage.swift */,
 				D30AEEBA1DE4CB1B0096A2E7 /* FileManagerExtensions.swift */,
 				D3CD375A1DD3B51900468250 /* FirstRunViewController.swift */,

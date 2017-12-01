@@ -117,7 +117,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         tableView.deselectRow(at: indexPath, animated: true)
         
         if indexPath.section == 1 && indexPath.row == 1 {
-            let viewController = AutocompleteCustomUrlViewController()
+            let viewController = AutocompleteCustomUrlViewController(customAutocompleteSource: CustomCompletionSource())
             self.navigationController?.pushViewController(viewController, animated: true)
         }
     }

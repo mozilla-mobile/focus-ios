@@ -10,10 +10,12 @@ class AutocompleteCustomUrlViewController: UIViewController {
     private let tableView = UITableView(frame: .zero, style: .grouped)
     private var addDomainCell: UITableViewCell?
 
-    var domains: [String] = []
+    private let customAutocompleteSource: CustomAutocompleteSource
+    private var domains: [String] { return customAutocompleteSource.getSuggestions() }
 
-    convenience init() {
-        self.init(nibName: nil, bundle: nil)
+    init(customAutocompleteSource: CustomAutocompleteSource) {
+        self.customAutocompleteSource = customAutocompleteSource
+        super.init(nibName: nil, bundle: nil)
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.edit, style: .plain, target: self, action: #selector(AutocompleteCustomUrlViewController.toggleEditing))
 
@@ -36,6 +38,10 @@ class AutocompleteCustomUrlViewController: UIViewController {
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {
@@ -152,6 +158,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDelegate {
 
 extension AutocompleteCustomUrlViewController: AddCustomDomainDelegate {
     func addCustomDomainViewController(_ addCustomDomainViewController: AddCustomDomainViewController, domain: String) {
-        
+        _ = customAutocompleteSource.add(suggestion: domain)
+        tableView.reloadData()
     }
 }

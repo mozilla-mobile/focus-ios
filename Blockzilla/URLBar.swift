@@ -29,7 +29,7 @@ class URLBar: UIView {
 
     fileprivate let cancelButton = InsetButton()
     fileprivate let deleteButton = InsetButton()
-    fileprivate let domainCompletion = DomainCompletion()
+    fileprivate let domainCompletion = DomainCompletion(completionSources: [TopDomainsCompletionSource(), CustomCompletionSource()])
 
     private let toolset = BrowserToolset()
     private let urlTextContainer = UIView()
