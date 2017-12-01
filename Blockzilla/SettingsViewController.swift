@@ -249,7 +249,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case 1: return 1 // Integration.
         case 2: return 4 // Privacy.
         case 3: return 1 // Performance.
-        case 4: return 1 // Mozilla.
+        case 4: return 2 // Mozilla.
         default:
             assertionFailure("Invalid section")
             return 0
