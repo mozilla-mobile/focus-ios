@@ -39,18 +39,33 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let labelText: String
+        var groupingOffset = 16
 
         switch section {
-        case 0: labelText = UIConstants.strings.autocompleteDefaultSectionTitle
+        case 0:
+            labelText = UIConstants.strings.autocompleteDefaultSectionTitle
+            groupingOffset = 3
         case 1: labelText = UIConstants.strings.autocompleteCustomSectionTitle
         default: fatalError("No title for section: \(section)")
         }
-        
+
+        // Hack: We want the header view's margin to match the cells, so we create an empty
+        // cell with a blank space as text to layout the text label. From there, we can define
+        // constraints for our custom label based on the cell's label.
         let cell = UITableViewCell()
-        cell.textLabel?.text = labelText
-        cell.textLabel?.textColor = UIConstants.colors.tableSectionHeader
-        cell.textLabel?.font = UIConstants.fonts.tableSectionHeader
+        cell.textLabel?.text = " "
         cell.backgroundColor = UIConstants.colors.background
+
+        let label = UILabel()
+        label.text = labelText
+        label.textColor = UIConstants.colors.tableSectionHeader
+        label.font = UIConstants.fonts.tableSectionHeader
+        cell.contentView.addSubview(label)
+
+        label.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(cell.textLabel!)
+            make.centerY.equalTo(cell.textLabel!).offset(groupingOffset)
+        }
 
         // Hack to cover header separator line
         let footer = UIView()
@@ -69,7 +84,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 30
+        return section != 0 ? 50 : 30
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
