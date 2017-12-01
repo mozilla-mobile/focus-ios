@@ -4,6 +4,7 @@
 
 import UIKit
 import SnapKit
+import Telemetry
 
 class AutocompleteCustomUrlViewController: UIViewController {
     private let emptyStateView = UIView()
@@ -158,6 +159,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDelegate {
 
 extension AutocompleteCustomUrlViewController: AddCustomDomainDelegate {
     func addCustomDomainViewController(_ addCustomDomainViewController: AddCustomDomainViewController, domain: String) {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.customDomainAdded, object: TelemetryEventObject.setting)
         _ = customAutocompleteSource.add(suggestion: domain)
         tableView.reloadData()
     }
