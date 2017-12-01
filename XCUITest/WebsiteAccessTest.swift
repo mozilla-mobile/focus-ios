@@ -89,12 +89,14 @@ class WebsiteAccessTests: BaseTestCase {
         // Add Custom Domain
         app.buttons["Settings"].tap()
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
-        app.tables.cells["newDomainCell"].tap()
-        
+        app.tables.cells["customURLS"].tap()
+        app.tables.cells["addCustomDomainCell"].tap()
+
         let urlInput = app.textFields["urlInput"]
         urlInput.typeText("getfirefox.com")
-        app.navigationBars.buttons["doneButton"].tap()
+        app.navigationBars.buttons["saveButton"].tap()
         
+        app.navigationBars.buttons.element(boundBy: 0).tap()
         app.navigationBars.buttons.element(boundBy: 0).tap()
         app.navigationBars.buttons.element(boundBy: 0).tap()
         
@@ -108,11 +110,12 @@ class WebsiteAccessTests: BaseTestCase {
         app.buttons["URLBar.cancelButton"].tap()
         app.buttons["Settings"].tap()
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
-        app.navigationBars.buttons["edit"].tap()
+        app.tables.cells["customURLS"].tap()
+        app.navigationBars.buttons["editButton"].tap()
         app.tables.cells["getfirefox.com"].buttons["Delete getfirefox.com"].tap()
         app.tables.cells["getfirefox.com"].buttons["Delete"].tap()
         
         // Finish Editing
-        app.navigationBars.buttons["edit"].tap()
+        app.navigationBars.buttons["editButton"].tap()
     }
 }
