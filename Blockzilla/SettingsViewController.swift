@@ -117,6 +117,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         updateSafariEnabledState()
     }
 
@@ -433,7 +434,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
 extension SettingsViewController: SearchSettingsViewControllerDelegate {
     func searchSettingsViewController(_ searchSettingsViewController: SearchSettingsViewController, didSelectEngine engine: SearchEngine) {
-        tableView.cellForRow(at: IndexPath(row: 0, section: 0))?.textLabel?.text = engine.name
+        (tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? SettingsTableViewSearchCell)?.accessoryLabel.text = engine.name
     }
 }
 
