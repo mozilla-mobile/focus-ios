@@ -57,6 +57,9 @@ class SearchProviderTest: BaseTestCase {
         
         // leave edit mode
         app.navigationBars.buttons["edit"].tap()
+        
+        // set google as default
+        app.tables.cells["Google"].tap()
     }
     
     func testRemoveDefaultSearchProvider() {
