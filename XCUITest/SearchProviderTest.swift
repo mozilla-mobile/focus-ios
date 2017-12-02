@@ -58,7 +58,7 @@ class SearchProviderTest: BaseTestCase {
         // leave edit mode
         app.navigationBars.buttons["edit"].tap()
         
-        // set google as default
+        // set google as default as another test trys to remove Wikipedia
         app.tables.cells["Google"].tap()
     }
     
