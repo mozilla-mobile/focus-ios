@@ -62,7 +62,7 @@ class SearchProviderTest: BaseTestCase {
         app.tables.cells["Google"].tap()
     }
     
-    func testRemoveDefaultSearchProvider() {
+    func testPreventionOfRemovingDefaultSearchProvider() {
         app.buttons["Settings"].tap()
         app.tables.cells["SettingsViewController.searchCell"].tap()
         
@@ -72,16 +72,7 @@ class SearchProviderTest: BaseTestCase {
         app.navigationBars.buttons["edit"].tap()
         XCTAssertFalse(app.tables.cells["restoreDefaults"].exists)
         
-        app.tables.cells["Wikipedia"].buttons["Delete Wikipedia"].tap()
-        app.tables.cells["Wikipedia"].buttons["Delete"].tap()
-        
-        // leave edit mode
-        app.navigationBars.buttons["edit"].tap()
-        
-        XCTAssertFalse(app.tables.cells["Wikipedia"].exists)
-        
-        app.tables.cells["restoreDefaults"].tap()
-        XCTAssertTrue(app.tables.cells["Wikipedia"].exists)
+        XCTAssertFalse(app.tables.cells["Wikipedia"].buttons["Delete Wikipedia"].exists)
     }
 	
 	private func changeSearchProvider(provider: String) {
