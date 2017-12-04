@@ -121,6 +121,7 @@
 		D597608C1F9FEFB300A2D212 /* TrackingProtection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D597608B1F9FEFB300A2D212 /* TrackingProtection.swift */; };
 		D5ABA3D91FCC846800D5C060 /* AddCustomDomainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5ABA3D71FCC846800D5C060 /* AddCustomDomainViewController.swift */; };
 		D5ABA3DA1FCC846800D5C060 /* AutocompleteSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5ABA3D81FCC846800D5C060 /* AutocompleteSettingViewController.swift */; };
+		D5B10AAB1FD5EFA40044523A /* OnePasswordExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 747ADA1D1FCE0B7B00970132 /* OnePasswordExtension.framework */; };
 		D5F72FB31FA7D1C50071DD9B /* TrackingProtectionSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F72FB21FA7D1C50071DD9B /* TrackingProtectionSummaryViewController.swift */; };
 		D8E0152C1FB4136E00CA3B9F /* AddSearchEngineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E0152B1FB4136E00CA3B9F /* AddSearchEngineViewController.swift */; };
 		D8E0155F1FCF409F00CA3B9F /* SearchEngineManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E0155E1FCF409F00CA3B9F /* SearchEngineManagerTests.swift */; };
@@ -698,6 +699,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5B10AAB1FD5EFA40044523A /* OnePasswordExtension.framework in Frameworks */,
 				746BD91E1F758C0800BE8DB9 /* Sentry.framework in Frameworks */,
 				D3AAC2911EAE9146005B7E8C /* AutocompleteTextField.framework in Frameworks */,
 				E47F9AE71DB929D800A93285 /* AdSupport.framework in Frameworks */,
