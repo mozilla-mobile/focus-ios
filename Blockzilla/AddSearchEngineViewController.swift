@@ -155,24 +155,19 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        templatePlaceholderLabel.isHidden = !AddSearchEngineViewController.isNullOrEmpty(text: textView.text)
+        templatePlaceholderLabel.isHidden = !textView.text.isEmpty
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        templatePlaceholderLabel.isHidden = !AddSearchEngineViewController.isNullOrEmpty(text: textView.text)
+        templatePlaceholderLabel.isHidden = !textView.text.isEmpty
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
-        templatePlaceholderLabel.isHidden = !AddSearchEngineViewController.isNullOrEmpty(text: textView.text)
-    }
-    
-    private static func isNullOrEmpty(text:String?) -> Bool {
-        guard let text = text else { return true }
-        return text.isEmpty
+        templatePlaceholderLabel.isHidden = !textView.text.isEmpty
     }
     
     static func isValidTemplate(_ template:String) -> Bool {
-        if isNullOrEmpty(text: template) {
+        if template.isEmpty {
             return false
         }
         
