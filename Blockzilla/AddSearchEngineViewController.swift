@@ -171,6 +171,10 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
             return false
         }
         
+        if !template.contains("%s") {
+            return false
+        }
+        
         guard let url = URL(string: template.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed)!) else { return false }
         return url.isWebPage()
     }
