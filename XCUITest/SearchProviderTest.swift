@@ -44,10 +44,14 @@ class SearchProviderTest: BaseTestCase {
         app.textViews["templateInput"].tap()
         app.textViews["templateInput"].typeText("https://developer.mozilla.org/en-US/search?q=%s")
         app.navigationBars.buttons["save"].tap()
-        
+
+        let toast = app.staticTexts["Toast.label"]
+        waitforNoExistence(element: toast)
+
         XCTAssertTrue(app.tables.cells["MDN"].exists)
         app.tables.cells["Wikipedia"].tap()
         
+        waitforExistence(element: app.tables.cells["SettingsViewController.searchCell"])
         app.tables.cells["SettingsViewController.searchCell"].tap()
         
         // enter edit mode
@@ -57,13 +61,11 @@ class SearchProviderTest: BaseTestCase {
         
         // leave edit mode
         app.navigationBars.buttons["edit"].tap()
-        
-        // set google as default as another test trys to remove Wikipedia
-        app.tables.cells["Google"].tap()
     }
     
-    func testRemoveDefaultSearchProvider() {
+    func testPreventionOfRemovingDefaultSearchProvider() {
         app.buttons["Settings"].tap()
+        let defaultEngineName = app.tables.cells["SettingsViewController.searchCell"].staticTexts.element(boundBy: 1).label
         app.tables.cells["SettingsViewController.searchCell"].tap()
         
         XCTAssertTrue(app.tables.cells["restoreDefaults"].exists)
@@ -72,16 +74,7 @@ class SearchProviderTest: BaseTestCase {
         app.navigationBars.buttons["edit"].tap()
         XCTAssertFalse(app.tables.cells["restoreDefaults"].exists)
         
-        app.tables.cells["Wikipedia"].buttons["Delete Wikipedia"].tap()
-        app.tables.cells["Wikipedia"].buttons["Delete"].tap()
-        
-        // leave edit mode
-        app.navigationBars.buttons["edit"].tap()
-        
-        XCTAssertFalse(app.tables.cells["Wikipedia"].exists)
-        
-        app.tables.cells["restoreDefaults"].tap()
-        XCTAssertTrue(app.tables.cells["Wikipedia"].exists)
+        XCTAssertFalse(app.tables.cells["defaultEngineName"].buttons["Delete \(defaultEngineName)"].exists)
     }
 	
 	private func changeSearchProvider(provider: String) {
