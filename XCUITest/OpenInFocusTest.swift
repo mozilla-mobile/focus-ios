@@ -16,7 +16,7 @@ class OpenInFocusTest : BaseTestCase {
         super.tearDown()
     }
 
-    func testOpenViaSafari() {
+    func xtestOpenViaSafari() {
         waitforHittable(element: app.textFields["URLBar.urlText"]) // wait for app.label
         let sharedExtName = app.label.contains("Klar") ? "Firefox Klar" : "Firefox Focus" as String
         
