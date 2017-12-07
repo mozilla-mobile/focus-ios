@@ -57,6 +57,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         nameInput.leftViewMode = .always
         nameInput.font = UIFont.systemFont(ofSize: 15)
         nameInput.accessibilityIdentifier = "nameInput"
+        nameInput.autocorrectionType = .no
         container.addSubview(nameInput)
         
         let templateLabel = UILabel()
@@ -83,9 +84,19 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         container.addSubview(templatePlaceholderLabel)
 
         let exampleLabel = UILabel()
-        exampleLabel.text = UIConstants.strings.AddSearchEngineTemplateExample
-        exampleLabel.textColor = UIConstants.colors.settingsTextLabel
+        let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
+        let subtitle = NSMutableAttributedString(string: UIConstants.strings.AddSearchEngineTemplateExample, attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.settingsDetailLabel])
+        let space = NSAttributedString(string: " ", attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
+        subtitle.append(space)
+        subtitle.append(learnMore)
+
+        exampleLabel.numberOfLines = 0
+        exampleLabel.attributedText = subtitle
         exampleLabel.font = UIFont.systemFont(ofSize: 12)
+
+
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(learnMoreTapped))
+        exampleLabel.addGestureRecognizer(tapGesture)
         container.addSubview(exampleLabel)
         
         container.snp.makeConstraints { (make) in
@@ -127,12 +138,17 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         
         exampleLabel.snp.makeConstraints { (make) in
             make.top.equalTo(templateInput.snp.bottom)
-            make.width.equalToSuperview()
-            make.left.equalTo(leftMargin)
-            make.height.equalTo(rowHeight)
+            make.leading.equalToSuperview().offset(leftMargin)
+            make.trailing.equalToSuperview().offset(-leftMargin)
         }
     }
-    
+
+    @objc func learnMoreTapped() {
+        guard let url = SupportUtils.URLForTopic(topic: "add-search-engine-ios") else { return }
+        let contentViewController = SettingsContentViewController(url: url)
+        navigationController?.pushViewController(contentViewController, animated: true)
+    }
+
     private func setupEvents() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(AddSearchEngineViewController.cancelTapped))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.save, style: .plain, target: self, action: #selector(AddSearchEngineViewController.saveTapped))
