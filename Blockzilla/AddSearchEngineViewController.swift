@@ -139,8 +139,8 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     }
     
     @objc func saveTapped() {
-        guard let name = nameInput.text else { return }
-        guard let template = templateInput.text else { return }
+        guard let name = nameInput.text, !name.isEmpty else { return }
+        guard let template = templateInput.text, !template.isEmpty else { return }
         
         delegate.addSearchEngineViewController(self, name: name, searchTemplate: template)
         Toast(text: UIConstants.strings.NewSearchEngineAdded).show()
