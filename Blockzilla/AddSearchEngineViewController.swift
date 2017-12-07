@@ -57,7 +57,6 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         nameInput.leftViewMode = .always
         nameInput.font = UIFont.systemFont(ofSize: 15)
         nameInput.accessibilityIdentifier = "nameInput"
-        nameInput.keyboardAppearance = .light
         container.addSubview(nameInput)
         
         let templateLabel = UILabel()
@@ -72,6 +71,8 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
 //        templateInput.contentInset = UIEdgeInsets(top: 5, left: 7, bottom: 7, right: 5)
         templateInput.accessibilityIdentifier = "templateInput"
         templateInput.autocapitalizationType = .none
+        templateInput.keyboardAppearance = .dark
+        templateInput.autocorrectionType = .no
         container.addSubview(templateInput)
 
         templatePlaceholderLabel.backgroundColor = UIConstants.colors.cellSelected
@@ -149,7 +150,11 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         guard let template = templateInput.text else { return }
         
         if !AddSearchEngineViewController.isValidTemplate(template) || !searchEngineManager.isValidSearchEngineName(name) {
-            Toast(text: UIConstants.strings.errorTryAgain).show()
+            let controller = UIAlertController(title: UIConstants.strings.autocompleteAddCustomUrlError, message: nil, preferredStyle: .alert)
+            controller.addAction(UIAlertAction(title: UIConstants.strings.errorTryAgain, style: .default, handler: { _ in
+
+            }))
+            self.present(controller, animated: true, completion: nil)
             return
         }
         
