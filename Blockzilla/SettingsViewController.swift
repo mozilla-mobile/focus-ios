@@ -9,12 +9,18 @@ import Telemetry
 
 class SettingsTableViewSearchCell: UITableViewCell {
     let accessoryLabel = UILabel()
+    let newTextLabel = UILabel()
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(accessoryLabel)
+        contentView.addSubview(newTextLabel)
         accessoryLabel.textColor = UIConstants.colors.settingsDetailLabel
+        newTextLabel.textColor = .white
         accessoryType = .disclosureIndicator
+        
+        newTextLabel.lineBreakMode = .byWordWrapping
+        newTextLabel.numberOfLines = 0
 
         let backgroundColorView = UIView()
         backgroundColorView.backgroundColor = UIConstants.colors.cellSelected
@@ -23,6 +29,12 @@ class SettingsTableViewSearchCell: UITableViewCell {
         accessoryLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview()
+        }
+        
+        newTextLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.trailing.lessThanOrEqualTo(accessoryLabel.snp.leading).offset(-10)
+            make.leading.equalTo(textLabel!)
         }
     }
 
@@ -212,7 +224,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             let accessoryLabel = indexPath.row == 0 ? searchEngineManager.activeEngine.name : autocompleteLabel
             let identifier = indexPath.row == 0 ? "SettingsViewController.searchCell" : "SettingsViewController.autocompleteCell"
 
-            searchCell.textLabel?.text = label
+            // Need to set an empty string so the newTextLabel gets the right constraints
+            searchCell.textLabel?.text = " "
+            searchCell.newTextLabel.text = label
             searchCell.accessoryLabel.text = accessoryLabel
             searchCell.accessoryType = .disclosureIndicator
             searchCell.accessibilityIdentifier = identifier
