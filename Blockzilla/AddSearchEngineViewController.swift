@@ -22,6 +22,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     init(delegate: AddSearchEngineDelegate, searchEngineManager: SearchEngineManager) {
         self.delegate = delegate
         self.searchEngineManager = searchEngineManager
+
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -34,6 +35,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         
         setupUI()
         setupEvents()
+        navigationItem.rightBarButtonItem?.isEnabled = false
         nameInput.becomeFirstResponder()
     }
     
@@ -135,6 +137,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.save, style: .plain, target: self, action: #selector(AddSearchEngineViewController.saveTapped))
         navigationItem.rightBarButtonItem?.accessibilityIdentifier = "save"
         templateInput.delegate = self
+        nameInput.delegate = self
     }
     
     @objc func cancelTapped() {
@@ -161,6 +164,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         templatePlaceholderLabel.isHidden = !textView.text.isEmpty
+        navigationItem.rightBarButtonItem?.isEnabled = !templateInput.text.isEmpty && !nameInput.text!.isEmpty
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
@@ -178,5 +182,12 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         
         guard let url = URL(string: template.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed)!) else { return false }
         return url.isWebPage()
+    }
+}
+
+extension AddSearchEngineViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        navigationItem.rightBarButtonItem?.isEnabled = !templateInput.text.isEmpty && !nameInput.text!.isEmpty
+        return true
     }
 }
