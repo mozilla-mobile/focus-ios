@@ -55,6 +55,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         nameInput.leftViewMode = .always
         nameInput.font = UIFont.systemFont(ofSize: 15)
         nameInput.accessibilityIdentifier = "nameInput"
+        nameInput.keyboardAppearance = .light
         container.addSubview(nameInput)
         
         let templateLabel = UILabel()
@@ -66,7 +67,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         templateInput.textColor = UIConstants.colors.settingsTextLabel
         templateInput.keyboardType = .URL
         templateInput.font = UIFont.systemFont(ofSize: 15)
-        templateInput.contentInset = UIEdgeInsets(top: 5, left: 7, bottom: 7, right: 5)
+//        templateInput.contentInset = UIEdgeInsets(top: 5, left: 7, bottom: 7, right: 5)
         templateInput.accessibilityIdentifier = "templateInput"
         templateInput.autocapitalizationType = .none
         container.addSubview(templateInput)
@@ -76,7 +77,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         templatePlaceholderLabel.text = UIConstants.strings.AddSearchEngineTemplatePlaceholder
         templatePlaceholderLabel.font = UIFont.systemFont(ofSize: 15)
         templatePlaceholderLabel.numberOfLines = 0
-        templateInput.addSubview(templatePlaceholderLabel)
+        container.addSubview(templatePlaceholderLabel)
 
         let exampleLabel = UILabel()
         exampleLabel.text = UIConstants.strings.AddSearchEngineTemplateExample
@@ -101,7 +102,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
             make.height.equalTo(rowHeight)
             make.width.equalToSuperview()
         }
-        
+
         templateLabel.snp.makeConstraints { (make) in
             make.top.equalTo(nameInput.snp.bottom).offset(20)
             make.left.equalTo(leftMargin)
@@ -113,11 +114,11 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
             make.height.equalTo(88)
             make.width.equalToSuperview()
         }
-        
+
         templatePlaceholderLabel.snp.makeConstraints { (make) in
             make.width.equalToSuperview()
             make.height.equalTo(44)
-            make.top.equalTo(0)
+            make.top.equalTo(templateInput)
             make.left.equalTo(3)
         }
         
