@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "動画を撮影してアップロードできます。";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "写真を保存してアップロードできます。";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "写真を保存してアップロードできます。";
 

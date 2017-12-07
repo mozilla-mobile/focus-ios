@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "אפשרות זו מאפשרת להסריט ולהעלות וידאו.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "אפשרות זו מאפשרת לשמור ולהעלות תמונות.";
 

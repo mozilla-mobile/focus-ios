@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Dette lader dig optage og uploade videoer.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Dette lader dig gemme og uploade fotos.";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Dette lader dig gemme og uploade fotografier.";
 

@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Dette gjør det mulig å ta og laste opp videoer.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Dette gjør det mulig å lagre og laste opp bilder.";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Dette gjør det mulig å lagre og laste opp bilder.";
 

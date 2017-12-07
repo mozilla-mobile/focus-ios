@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Бұл арқылы видеоларды түсіріп, жүктеуге болады.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Бұл арқылы фотоларды сақтап, жүктеуге болады.";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Бұл арқылы фотоларды сақтап, жүктеуге болады.";
 

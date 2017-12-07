@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Hierdie laat mens video’s neem en oplaai.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Hierdie laat mens foto’s stoor en oplaai.";
 

@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Ceci vous permet de prendre des vidéos et de les envoyer.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Ceci vous permet d’enregistrer des photos et de les envoyer.";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Ceci vous permet d’enregistrer des photos et de les envoyer.";
 

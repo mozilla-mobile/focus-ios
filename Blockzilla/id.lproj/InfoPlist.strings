@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Izinkan mengambil dan mengunggah video.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Ini memungkinkan Anda menyimpan dan mengunggah foto.";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Izinkan menyimpan dan mengunggah foto.";
 

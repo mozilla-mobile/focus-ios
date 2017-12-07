@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Ligeann seo duit físeáin a thógáil agus a uaslódáil.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Ligeann seo duit pictiúir a shábháil agus a uaslódáil.";
 

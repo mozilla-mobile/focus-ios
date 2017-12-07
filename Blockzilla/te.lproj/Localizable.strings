@@ -40,6 +40,54 @@
 /* Label on About screen */
 "About.topLabel" = "%@ మిమ్మల్ని నియంత్రణలో ఉంచును.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "వెనక్కి";
 
@@ -57,6 +105,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "ఆపుము";
+
+/* Label on button to cancel edits */
+"Cancel" = "";
+
+/* Label on button to complete edits */
+"Done" = "";
+
+/* Label on button to allow edits */
+"Edit" = "";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "మళ్ళీ ప్రయత్నించు";
@@ -92,7 +149,7 @@
 "ExternalLink.openMapsButton" = "పటములు తెరువు";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "సరే, అర్థమయ్యింది!";
+"FirstRun.lastSlide.buttonLabel" = "";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "మీరు విహరిస్తున్నపుడు స్వయంచాలితంగా ఆన్లైన్ ట్రాకర్లని నిరోధించండి. ఆ తరువాత సందర్శించిన పేజీలను, శోధనలు, సంకేతపదాలు మరియు కుక్కీలని మీ పరికరం నుండి చెరపండి.";
@@ -133,6 +190,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "సెట్టింగ్‌లను తెరవండి";
 
+/* Save button label */
+"Save" = "";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "ఇతర కంటెంట్ ట్రాకర్లను నిరోధించడం వలన కొన్ని వీడియోలు మరియు వెబ్ పేజీలు విరిగిపోవచ్చు.";
 
@@ -151,11 +244,11 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "అమరికలు";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "SEARCH ENGINE";
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "";
 
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "శోధన యంత్రము";
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRATION";
@@ -172,8 +265,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "యాడ్ ట్రాకర్లను నిరోధించండి";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "వైశ్లేషిక ట్రాకర్లను నిరోధించండి";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "వెబ్ ఫాంట్లను నిరోధించండి";
@@ -181,8 +280,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "ఇతర విషయ ట్రాకర్లను నిరోధించండి";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "సామాజిక ట్రాకర్లను నిరోధించండి";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "కొన్ని వీడియోలను మరియు వెబ్ పేజీలను విచ్ఛిన్నం చేయవచ్చు";
@@ -192,6 +297,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "వినియోగించిన డేటాను పంపు";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "కొత్త విశేషాలు ఏమిటి";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Firefox App ను పొందండి";
@@ -223,6 +331,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "%@ లో తెరువు";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "లొకేషన్ బార్ ఎంచుకోండి";
+
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "మీరు నకలు తీసిన లంకె: %@";
 
@@ -249,4 +360,34 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” మీ ఫోటోలను యాక్సెస్ చేయాలని అనుకుంటున్నారు";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "యాడ్ ట్రాకర్లు";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "";
 

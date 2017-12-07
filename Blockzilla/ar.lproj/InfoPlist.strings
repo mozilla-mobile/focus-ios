@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "يتيح لك هذا تصوير الڤديو و رفعه.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "يتيح لك هذا حفظ الصور و رفعها.";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "يتيح لك هذا حفظ الصور و رفعها.";
 

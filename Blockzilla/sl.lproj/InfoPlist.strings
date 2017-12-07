@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Omogoča snemanje in nalaganje videa.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Omogoča shranjevanje in pošiljanje fotografij.";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Omogoča shranjevanje in pošiljanje fotografij.";
 

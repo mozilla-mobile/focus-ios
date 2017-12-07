@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Acest lucru îți permite să realizezi și să încarci videoclipuri.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Acest lucru îți permite să salvezi și să încarci fotografii.";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Acest lucru îți permite să salvezi și să încarci fotografii.";
 

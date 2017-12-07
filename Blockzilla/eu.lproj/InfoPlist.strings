@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Honekin bideoak graba eta igo ditzakezu.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Honekin argazkiak gorde eta igo ditzakezu.";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Honekin argazkiak gorde eta igo ditzakezu.";
 

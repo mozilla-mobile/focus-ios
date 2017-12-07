@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Điều này cho phép bạn quay và tải video lên.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Điều này cho phép bạn lưu và tải hình ảnh lên.";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Điều này cho phép bạn lưu và tải hình ảnh lên.";
 

@@ -1,0 +1,15 @@
+/* (No Commment) */
+"NSCameraUsageDescription" = "Ovo vam omogućava slikanje i otpremanje fotografija.";
+
+/* (No Commment) */
+"NSLocationWhenInUseUsageDescription" = "Web stranice koje posjećujete mogu zahtjevati vašu lokaciju.";
+
+/* (No Commment) */
+"NSMicrophoneUsageDescription" = "Ovo vam omogućava snimanje i otpremanje videa.";
+
+/* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Ovo vam omogućava da sačuvate i otpremite fotografije.";
+
+/* (No Commment) */
+"NSPhotoLibraryUsageDescription" = "Ovo vam omogućava da sačuvate i otpremite fotografije.";
+

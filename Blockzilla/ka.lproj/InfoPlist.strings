@@ -1,0 +1,15 @@
+/* (No Commment) */
+"NSCameraUsageDescription" = "საშუალებას გაძლევთ, სურათის გადაღებისა და ატვირთვის.";
+
+/* (No Commment) */
+"NSLocationWhenInUseUsageDescription" = "ვებსაიტებმა, შესაძლოა მოითხოვოს თქვენი მდებარეობის მონაცემები.";
+
+/* (No Commment) */
+"NSMicrophoneUsageDescription" = "საშუალებას გაძლევთ, ვიდეოს გადაღებისა და ატვირთვის.";
+
+/* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "საშუალებას გაძლევთ, სურათის შენახვისა და ატვირთვის.";
+
+/* (No Commment) */
+"NSPhotoLibraryUsageDescription" = "საშუალებას გაძლევთ, სურათის გადაღებისა და ატვირთვის.";
+

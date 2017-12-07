@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Hér getur þú tekið og hlaðið upp myndböndum.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Hér getur þú vistað og hlaðið upp myndum.";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Hér getur þú tekið og hlaðið upp myndum.";
 

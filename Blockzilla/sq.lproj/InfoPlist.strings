@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Kjo ju lejon të xhironi dhe ngarkoni video.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Kjo ju lejon të ruani dhe ngarkoni foto.";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Kjo ju lejon të ruani dhe ngarkoni foto.";
 

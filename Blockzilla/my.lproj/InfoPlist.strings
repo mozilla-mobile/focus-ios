@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "ဗီဒီယိုရိုက်ခြင်းနှင့် တင်ပို့ခြင်းတို့ကို ဆောင်ရွက်နိုင်စေသည်။";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "ဓါတ်ပုံသိမ်းခြင်းနှင့် တင်ပို့ခြင်းတို့ကို ဆောင်ရွက်နိုင်စေသည်။";
 
