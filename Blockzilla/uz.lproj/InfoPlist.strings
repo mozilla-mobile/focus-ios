@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "U videoga olish va internetga yuklash imkonini beradi.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "U rasmni saqlash va internetga yuklash imkonini beradi.";
 

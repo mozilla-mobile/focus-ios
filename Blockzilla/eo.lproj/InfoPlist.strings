@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Tio ĉi permesas al vi preni kaj alŝuti filmetojn.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Tio ĉi permesas al vi konservi kaj alŝuti fotojn.";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Tio ĉi permesas al vi konservi kaj alŝuti fotojn.";
 

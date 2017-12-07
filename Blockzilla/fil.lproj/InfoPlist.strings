@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Maaari kang kumuha at mag-upload ng mga larawan dito.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Pinapayagan ka nito na i-save at mag-upload ng mga larawan.";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Maaari kang kumuha at mag-upload ng mga larawan dito.";
 

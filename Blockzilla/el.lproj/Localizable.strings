@@ -40,6 +40,54 @@
 /* Label on About screen */
 "About.topLabel" = "Το %@ σάς δίνει τον έλεγχο.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Πίσω";
 
@@ -57,6 +105,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Διακοπή";
+
+/* Label on button to cancel edits */
+"Cancel" = "";
+
+/* Label on button to complete edits */
+"Done" = "";
+
+/* Label on button to allow edits */
+"Edit" = "";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Δοκιμάστε ξανά";
@@ -92,7 +149,7 @@
 "ExternalLink.openMapsButton" = "Άνοιγμα Χαρτών";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "OK, ΤΟ 'ΠΙΑΣΑ!";
+"FirstRun.lastSlide.buttonLabel" = "";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Αποκλείστε αυτόματα τα διαδικτυακά trackers όσο περιηγείστε. Έπειτα, πατήστε για διαγραφή του ιστορικού, των αναζητήσεων, των cookies και των κωδικών πρόσβασης από τη συσκευή σας.";
@@ -133,6 +190,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Άνοιγμα εφαρμογής \"Ρυθμίσεις\"";
 
+/* Save button label */
+"Save" = "";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Η φραγή των trackers άλλου περιεχομένου ενδέχεται να χαλάσει μερικά βίντεο και ιστοσελίδες.";
 
@@ -151,11 +244,11 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Ρυθμίσεις";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "ΜΗΧΑΝΗ ΑΝΑΖΗΤΗΣΗΣ";
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "";
 
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Μηχανή αναζήτησης";
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "ΕΝΣΩΜΑΤΩΣΗ";
@@ -172,8 +265,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Φραγή trackers διαφημίσεων";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "Φραγή trackers αναλύσεων";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Φραγή γραμματοσειρών ιστού";
@@ -181,8 +280,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "Φραγή trackers άλλου περιεχομένου";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "Φραγή κοινωνικών trackers";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Ενδέχεται να χαλάσει μερικά βίντεο και ιστοσελίδες";
@@ -192,6 +297,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Αποστολή δεδομένων χρήσης";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Λήψη του Firefox";
@@ -223,6 +331,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Άνοιγμα σε %@";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Επιλέξτε γραμμή τοποθεσίας";
+
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "Αντιγραμμένος σύνδεσμος: %@";
 
@@ -249,4 +360,34 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "Το “%@” θα ήθελε πρόσβαση στις φωτογραφίες σας";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Προστασία από παρακολούθηση ανενεργή";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "Απενεργοποίηση μέχρι να κλείσετε το %@ ή να πατήσετε ΔΙΑΓΡΑΦΗ.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Προστασία από παρακολούθηση";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "";
 

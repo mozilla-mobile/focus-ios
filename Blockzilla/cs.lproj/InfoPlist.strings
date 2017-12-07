@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Toto vám dovolí pořizovat a nahrávat videa.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Toto vám dovolí ukládat a nahrávat fotografie.";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Toto vám dovolí ukládat a nahrávat fotografie.";
 

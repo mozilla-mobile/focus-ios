@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Mae hyn yn caniatáu i chi gymryd a llwytho fideos.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Mae hyn yn caniatáu i chi gadw a llwytho lluniau.";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Mae hyn yn caniatáu i chi gadw a llwytho lluniau.";
 
