@@ -9,7 +9,7 @@ protocol AddSearchEngineDelegate {
 }
 
 class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
-    private let REQUEST_TIMEOUT = 4
+    private let REQUEST_TIMEOUT: TimeInterval = 4
 
     private var delegate: AddSearchEngineDelegate
     private var searchEngineManager: SearchEngineManager
