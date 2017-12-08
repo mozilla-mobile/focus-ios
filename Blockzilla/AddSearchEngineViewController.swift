@@ -11,6 +11,7 @@ protocol AddSearchEngineDelegate {
 class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     private var delegate: AddSearchEngineDelegate
     private var searchEngineManager: SearchEngineManager
+    private var saveButton: UIBarButtonItem?
     
     private let leftMargin = 10
     private let rowHeight = 44
@@ -150,9 +151,12 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     }
 
     private func setupEvents() {
+        saveButton = UIBarButtonItem(title: UIConstants.strings.save, style: .plain, target: self, action: #selector(AddSearchEngineViewController.saveTapped))
+        saveButton?.accessibilityIdentifier = "save"
+
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(AddSearchEngineViewController.cancelTapped))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.save, style: .plain, target: self, action: #selector(AddSearchEngineViewController.saveTapped))
-        navigationItem.rightBarButtonItem?.accessibilityIdentifier = "save"
+        navigationItem.rightBarButtonItem = saveButton
+
         templateInput.delegate = self
         nameInput.delegate = self
     }
@@ -166,17 +170,59 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         guard let template = templateInput.text else { return }
         
         if !AddSearchEngineViewController.isValidTemplate(template) || !searchEngineManager.isValidSearchEngineName(name) {
-            let controller = UIAlertController(title: UIConstants.strings.autocompleteAddCustomUrlError, message: nil, preferredStyle: .alert)
-            controller.addAction(UIAlertAction(title: UIConstants.strings.errorTryAgain, style: .default, handler: { _ in
-
-            }))
-            self.present(controller, animated: true, completion: nil)
+            presentRetryError()
+            showIndicator(false)
             return
         }
-        
-        delegate.addSearchEngineViewController(self, name: name, searchTemplate: template)
-        Toast(text: UIConstants.strings.NewSearchEngineAdded).show()
-        self.navigationController?.popViewController(animated: true)
+
+        showIndicator(true)
+
+        let searchString = template.replacingOccurrences(of: "%s", with: "Firefox Focus".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)
+
+        guard let url = URL(string: searchString) else {
+            presentRetryError()
+            showIndicator(false)
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "HEAD"
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let statusCode = response.flatMap({ $0 as? HTTPURLResponse })?.statusCode else {
+                DispatchQueue.main.async { self.presentRetryError(); self.showIndicator(false) }
+                return }
+
+            DispatchQueue.main.async {
+                print(statusCode)
+                guard statusCode < 400 else {
+                    self.presentRetryError()
+                    self.navigationItem.rightBarButtonItem = self.saveButton
+                    return }
+
+                self.delegate.addSearchEngineViewController(self, name: name, searchTemplate: template)
+                Toast(text: UIConstants.strings.NewSearchEngineAdded).show()
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
+
+        task.resume()
+    }
+
+    private func presentRetryError() {
+        let controller = UIAlertController(title: UIConstants.strings.autocompleteAddCustomUrlError, message: nil, preferredStyle: .alert)
+        controller.addAction(UIAlertAction(title: UIConstants.strings.errorTryAgain, style: .default, handler: { _ in
+
+        }))
+        self.present(controller, animated: true, completion: nil)
+    }
+
+    func showIndicator(_ shouldShow: Bool) {
+        guard shouldShow else { self.navigationItem.rightBarButtonItem = self.saveButton; return }
+
+        let indicatorView = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: indicatorView)
+        indicatorView.startAnimating()
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
