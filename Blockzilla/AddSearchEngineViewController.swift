@@ -9,9 +9,12 @@ protocol AddSearchEngineDelegate {
 }
 
 class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
+    private let REQUEST_TIMEOUT = 4
+
     private var delegate: AddSearchEngineDelegate
     private var searchEngineManager: SearchEngineManager
     private var saveButton: UIBarButtonItem?
+    private var dataTask: URLSessionDataTask?
     
     private let leftMargin = 10
     private let rowHeight = 44
@@ -162,6 +165,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     }
     
     @objc func cancelTapped() {
+        dataTask?.cancel()
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -188,7 +192,9 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         var request = URLRequest(url: url)
         request.httpMethod = "HEAD"
 
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        request.timeoutInterval = REQUEST_TIMEOUT
+
+        dataTask = URLSession.shared.dataTask(with: request) { data, response, error in
             guard let statusCode = response.flatMap({ $0 as? HTTPURLResponse })?.statusCode else {
                 DispatchQueue.main.async { self.presentRetryError(); self.showIndicator(false) }
                 return }
@@ -205,7 +211,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
             }
         }
 
-        task.resume()
+        dataTask?.resume()
     }
 
     private func presentRetryError() {
