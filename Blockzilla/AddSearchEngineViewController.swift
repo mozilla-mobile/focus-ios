@@ -73,7 +73,6 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         templateInput.textColor = UIConstants.colors.settingsTextLabel
         templateInput.keyboardType = .URL
         templateInput.font = UIFont.systemFont(ofSize: 15)
-//        templateInput.contentInset = UIEdgeInsets(top: 5, left: 7, bottom: 7, right: 5)
         templateInput.accessibilityIdentifier = "templateInput"
         templateInput.autocapitalizationType = .none
         templateInput.keyboardAppearance = .dark
