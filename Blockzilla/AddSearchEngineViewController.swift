@@ -105,7 +105,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         }
         
         nameLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(20)
+            make.top.equalToSuperview().offset(16)
             make.height.equalTo(rowHeight)
             make.leftMargin.equalTo(leftMargin)
             make.width.equalToSuperview()
@@ -118,7 +118,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         }
 
         templateLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(nameInput.snp.bottom).offset(20)
+            make.top.equalTo(nameInput.snp.bottom).offset(16)
             make.left.equalTo(leftMargin)
             make.height.equalTo(rowHeight)
         }
@@ -137,7 +137,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         }
         
         exampleLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(templateInput.snp.bottom)
+            make.top.equalTo(templateInput.snp.bottom).offset(2)
             make.leading.equalToSuperview().offset(leftMargin)
             make.trailing.equalToSuperview().offset(-leftMargin)
         }
