@@ -194,7 +194,6 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
                 return }
 
             DispatchQueue.main.async {
-                print(statusCode)
                 guard statusCode < 400 else {
                     self.presentRetryError()
                     self.navigationItem.rightBarButtonItem = self.saveButton
