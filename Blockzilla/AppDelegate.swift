@@ -278,7 +278,7 @@ extension AppDelegate {
         #endif
         
         Telemetry.default.add(pingBuilderType: CorePingBuilder.self)
-        Telemetry.default.add(pingBuilderType: FocusEventPingBuilder.self)
+        Telemetry.default.add(pingBuilderType: MobileEventPingBuilder.self)
         
         // Start the telemetry session and record an event indicating that we have entered the
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
