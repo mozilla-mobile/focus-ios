@@ -374,7 +374,7 @@
 "trackingProtection.contentTrackerLabel" = "Inhalts-Tracker";
 
 /* text showing the tracking protection is disabled. */
-"trackingProtection.disabledLabel" = "Schutz vor Aktivitätenverfolgung aus";
+"trackingProtection.disabledLabel" = "Tracking-Schutz aus";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Weitere Informationen";
@@ -386,7 +386,7 @@
 "trackingProtection.toggleDescription1" = "Deaktivieren, bis Sie %@ schließen oder auf ENTFERNEN tippen.";
 
 /* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Schutz vor Aktivitätenverfolgung";
+"trackingProtection.toggleLabel" = "Tracking-Schutz";
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel" = "Auswählen, ob %@ Werbe-, Analyse-, soziale und andere Verfolger blockiert.";
