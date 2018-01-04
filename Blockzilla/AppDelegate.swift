@@ -6,7 +6,7 @@ import UIKit
 import Telemetry
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
     var window: UIWindow?
 
     private var splashView: UIView?
@@ -38,8 +38,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         window = UIWindow(frame: UIScreen.main.bounds)
 
-        let rootViewController = UINavigationController(rootViewController: browserViewController)
-        window?.rootViewController = rootViewController
+        browserViewController.modalDelegate = self
+        window?.rootViewController = browserViewController
         window?.makeKeyAndVisible()
 
         WebCacheUtils.reset()
@@ -72,7 +72,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     firstRunViewController = FirstRunViewController()
                     Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.coinFlip, object: TelemetryEventObject.firstRun)
                 }
-                rootViewController.present(firstRunViewController, animated: false, completion: nil)
+                self.browserViewController.present(firstRunViewController, animated: false, completion: nil)
             }
         }
         
@@ -294,6 +294,13 @@ extension AppDelegate {
         #endif
     }
     
+    func presentModal(viewController: UIViewController, animated: Bool) {
+        window?.rootViewController?.present(viewController, animated: animated, completion: nil)
+    }
+}
+
+protocol ModalDelegate {
+    func presentModal(viewController: UIViewController, animated: Bool)
 }
 
 extension UINavigationController {
