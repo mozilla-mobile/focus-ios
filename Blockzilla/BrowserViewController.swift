@@ -350,9 +350,13 @@ class BrowserViewController: UIViewController {
 
     fileprivate func showSettings() {
         urlBar.shouldPresent = false
+        
         let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: self)
-        navigationController!.pushViewController(settingsViewController, animated: true)
-        navigationController!.setNavigationBarHidden(false, animated: true)
+        
+        let settingsNavController = UINavigationController(rootViewController: settingsViewController)
+        settingsNavController.modalPresentationStyle = .formSheet
+        
+        navigationController?.present(settingsNavController, animated: true, completion: nil)
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.settingsButton)
     }
