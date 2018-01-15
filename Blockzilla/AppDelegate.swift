@@ -257,7 +257,7 @@ extension AppDelegate {
         // excluded from iCloud backup, we store pings in documents.
         telemetryConfig.dataDirectory = .documentDirectory
         
-        let defaultSearchEngineProvider = SearchEngineManager(prefs: UserDefaults.standard).engines.first?.name ?? "unknown"
+        let defaultSearchEngineProvider = SearchEngineManager(prefs: UserDefaults.standard).activeEngine.name
         telemetryConfig.defaultSearchEngineProvider = defaultSearchEngineProvider
         
         telemetryConfig.measureUserDefaultsSetting(forKey: SearchEngineManager.prefKeyEngine, withDefaultValue: defaultSearchEngineProvider)
