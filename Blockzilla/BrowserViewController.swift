@@ -68,6 +68,8 @@ class BrowserViewController: UIViewController {
 
     private var shouldEnsureBrowsingMode = false
     private var initialUrl: URL?
+    
+    private let userDefaultsTrackersBlockedKey = "lifetimeTrackersBlocked"
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)
@@ -244,6 +246,13 @@ class BrowserViewController: UIViewController {
             homeView.removeFromSuperview()
         }
         self.homeView = homeView
+        
+        if shouldShowTrackerStatsShareButton() {
+            let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
+            homeView.showTrackerStatsShareButton(text: String(format: UIConstants.strings.shareTrackerStatsLabel, String(numberOfTrackersBlocked), AppInfo.productName))
+        } else {
+            homeView.hideTrackerStatsShareButton()
+        }
     }
 
     private func createURLBar() {
@@ -470,6 +479,25 @@ class BrowserViewController: UIViewController {
             UIKeyCommand(input: "]", modifierFlags: .command, action: #selector(BrowserViewController.goForward), discoverabilityTitle: UIConstants.strings.browserForward),
         ]
     }
+    
+    private func shouldShowTrackerStatsShareButton() -> Bool {
+        if getNumberOfLifetimeTrackersBlocked() < 100 ||
+            NSLocale.current.identifier != "en_US" {
+            return false
+        }
+        
+        // 10% chance we show the button
+        // arc4random_uniform(10 returns an integer 0 through 9 (inclusive)
+        return arc4random_uniform(10) == 0
+    }
+    
+    private func getNumberOfLifetimeTrackersBlocked() -> Int {
+        return UserDefaults.standard.integer(forKey: userDefaultsTrackersBlockedKey)
+    }
+    
+    private func setNumberOfLifetimeTrackersBlocked(numberOfTrackers: Int) {
+        UserDefaults.standard.set(numberOfTrackers, forKey: userDefaultsTrackersBlockedKey)
+    }
 }
 
 extension BrowserViewController: URLBarDelegate {
@@ -587,6 +615,16 @@ extension BrowserViewController: BrowserToolsetDelegate {
 extension BrowserViewController: HomeViewDelegate {
     func homeViewDidPressSettings(homeView: HomeView) {
         showSettings()
+    }
+    
+    func shareTrackerStatsButtonTapped() {
+        // TODO: Telemetry
+        
+        let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
+        let appStoreUrl = String(format: "https://itunes.apple.com/app/id%@", AppInfo.isKlar ? "1073435754" : "1055677337")
+        let text = String(format: UIConstants.strings.shareTrackerStatsText, AppInfo.productName, String(numberOfTrackersBlocked), appStoreUrl)
+        let shareController = UIActivityViewController(activityItems: [text], applicationActivities: nil)
+        present(shareController, animated: true)
     }
 }
 
@@ -747,6 +785,15 @@ extension BrowserViewController: WebControllerDelegate {
     func webController(_ controller: WebController, stateDidChange state: BrowserState) {}
 
     func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus) {
+        // Calculate the number of trackers blocked and add that to lifetime total
+        if case .on(let info) = trackingStatus {
+            if case .on(let oldInfo) = trackingProtectionStatus {
+                let numberOfAdditionalTrackersBlocked = max(0, info.total - oldInfo.total)
+                let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
+                setNumberOfLifetimeTrackersBlocked(numberOfTrackers: numberOfTrackersBlocked + numberOfAdditionalTrackersBlocked)
+            }
+            
+        }
         trackingProtectionStatus = trackingStatus
     }
 

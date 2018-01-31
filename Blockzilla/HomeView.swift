@@ -6,11 +6,13 @@ import Foundation
 
 protocol HomeViewDelegate: class {
     func homeViewDidPressSettings(homeView: HomeView)
+    func shareTrackerStatsButtonTapped()
 }
 
 class HomeView: UIView {
     weak var delegate: HomeViewDelegate?
     private(set) var settingsButton: UIButton! = nil
+    private let trackerStatsShareButton = UIButton()
 
     init() {
         super.init(frame: CGRect.zero)
@@ -42,6 +44,14 @@ class HomeView: UIView {
         settingsButton.accessibilityIdentifier = "HomeView.settingsButton"
         addSubview(settingsButton)
         self.settingsButton = settingsButton
+        
+        trackerStatsShareButton.isHidden = true
+        trackerStatsShareButton.setTitleColor(.white, for: .normal)
+        trackerStatsShareButton.titleLabel?.font = UIConstants.fonts.homeLabel
+        trackerStatsShareButton.titleLabel?.textAlignment = .center
+        trackerStatsShareButton.addTarget(self, action: #selector(shareTapped), for: .touchUpInside)
+        trackerStatsShareButton.titleLabel?.numberOfLines = 0
+        addSubview(trackerStatsShareButton)
 
         textLogo.snp.makeConstraints { make in
             make.centerX.equalTo(self)
@@ -63,6 +73,12 @@ class HomeView: UIView {
             make.trailing.equalTo(safeAreaLayoutGuide).inset(16)
             make.height.width.equalTo(24)
         }
+        
+        trackerStatsShareButton.snp.makeConstraints { make in
+            make.top.equalTo(description2.snp.bottom).offset(20)
+            make.height.equalTo(20)
+            make.width.equalToSuperview()
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -71,6 +87,19 @@ class HomeView: UIView {
 
     @objc private func didPressSettings() {
         delegate?.homeViewDidPressSettings(homeView: self)
+    }
+    
+    func showTrackerStatsShareButton(text: String) {
+        trackerStatsShareButton.setTitle(text, for: .normal)
+        trackerStatsShareButton.isHidden = false
+    }
+    
+    func hideTrackerStatsShareButton() {
+        trackerStatsShareButton.isHidden = true
+    }
+    
+    @objc private func shareTapped() {
+        delegate?.shareTrackerStatsButtonTapped()
     }
     
     func setHighlightWhatsNew(shouldHighlight: Bool) {
