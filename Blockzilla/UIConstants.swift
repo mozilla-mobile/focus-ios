@@ -86,6 +86,7 @@ struct UIConstants {
         static let truncatedUrlText = UIFont.systemFont(ofSize: 12)
         static let settingsInputLabel = UIFont.systemFont(ofSize: 18)
         static let settingsDescriptionText = UIFont.systemFont(ofSize: 12)
+        static let shareTrackerStatsLabel = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.bold)
     }
 
     struct layout {

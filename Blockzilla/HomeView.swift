@@ -47,7 +47,7 @@ class HomeView: UIView {
         
         trackerStatsShareButton.isHidden = true
         trackerStatsShareButton.setTitleColor(.white, for: .normal)
-        trackerStatsShareButton.titleLabel?.font = UIConstants.fonts.homeLabel
+        trackerStatsShareButton.titleLabel?.font = UIConstants.fonts.shareTrackerStatsLabel
         trackerStatsShareButton.titleLabel?.textAlignment = .center
         trackerStatsShareButton.addTarget(self, action: #selector(shareTapped), for: .touchUpInside)
         trackerStatsShareButton.titleLabel?.numberOfLines = 0
