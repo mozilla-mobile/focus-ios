@@ -75,7 +75,7 @@ class HomeView: UIView {
         }
         
         trackerStatsShareButton.snp.makeConstraints { make in
-            make.top.equalTo(description2.snp.bottom).offset(20)
+            make.bottom.equalToSuperview().offset(-20)
             make.height.equalTo(20)
             make.width.equalToSuperview()
         }
