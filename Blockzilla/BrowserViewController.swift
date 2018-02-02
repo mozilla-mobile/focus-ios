@@ -70,6 +70,7 @@ class BrowserViewController: UIViewController {
     private var initialUrl: URL?
     
     private let userDefaultsTrackersBlockedKey = "lifetimeTrackersBlocked"
+    private let userDefaultsShareTrackerStatsKey = "shareTrackerStats"
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)
@@ -481,14 +482,29 @@ class BrowserViewController: UIViewController {
     }
     
     private func shouldShowTrackerStatsShareButton() -> Bool {
-        if getNumberOfLifetimeTrackersBlocked() < 100 ||
+        let shouldShowTrackerStatsToUser = UserDefaults.standard.object(forKey: userDefaultsShareTrackerStatsKey) as! Bool?
+        
+        if shouldShowTrackerStatsToUser == nil {
+            // User has not been put into a bucket for determining if it should be shown
+            // 10% chance they get put into the group that sees the share button
+            // arc4random_uniform(10) returns an integer 0 through 9 (inclusive)
+            if arc4random_uniform(10) == 0 {
+                UserDefaults.standard.set(true, forKey: userDefaultsShareTrackerStatsKey)
+                Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.shareStatsCoinFlip, object: TelemetryEventObject.showStatsShareButton)
+
+            } else {
+                UserDefaults.standard.set(false, forKey: userDefaultsShareTrackerStatsKey)
+                return false
+            }
+        }
+        
+        if shouldShowTrackerStatsToUser == false ||
+            getNumberOfLifetimeTrackersBlocked() < 100 ||
             NSLocale.current.identifier != "en_US" {
             return false
         }
         
-        // 10% chance we show the button
-        // arc4random_uniform(10 returns an integer 0 through 9 (inclusive)
-        return arc4random_uniform(10) == 0
+        return true
     }
     
     private func getNumberOfLifetimeTrackersBlocked() -> Int {
@@ -618,7 +634,7 @@ extension BrowserViewController: HomeViewDelegate {
     }
     
     func shareTrackerStatsButtonTapped() {
-        // TODO: Telemetry
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.share, object: TelemetryEventObject.trackerStatsShareButton)
         
         let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
         let appStoreUrl = String(format: "https://itunes.apple.com/app/id%@", AppInfo.isKlar ? "1073435754" : "1055677337")
@@ -786,13 +802,11 @@ extension BrowserViewController: WebControllerDelegate {
 
     func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus) {
         // Calculate the number of trackers blocked and add that to lifetime total
-        if case .on(let info) = trackingStatus {
-            if case .on(let oldInfo) = trackingProtectionStatus {
-                let numberOfAdditionalTrackersBlocked = max(0, info.total - oldInfo.total)
-                let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
-                setNumberOfLifetimeTrackersBlocked(numberOfTrackers: numberOfTrackersBlocked + numberOfAdditionalTrackersBlocked)
-            }
-            
+        if case .on(let info) = trackingStatus,
+           case .on(let oldInfo) = trackingProtectionStatus {
+            let differenceSinceLastUpdate = max(0, info.total - oldInfo.total)
+            let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
+            setNumberOfLifetimeTrackersBlocked(numberOfTrackers: numberOfTrackersBlocked + differenceSinceLastUpdate)
         }
         trackingProtectionStatus = trackingStatus
     }

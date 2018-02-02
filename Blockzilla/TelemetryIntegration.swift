@@ -30,6 +30,7 @@ class TelemetryEventMethod {
     public static let share = "share"
     public static let customDomainRemoved = "removed"
     public static let customDomainReordered = "reordered"
+    public static let shareStatsCoinFlip = "share_stats_coin_flip"
 }
 
 class TelemetryEventObject {
@@ -48,4 +49,6 @@ class TelemetryEventObject {
     public static let trackingProtectionToggle = "tracking_protection_toggle"
     public static let websiteLink = "website_link"
     public static let autofill = "autofill"
+    public static let showStatsShareButton = "show_share_share_button"
+    public static let trackerStatsShareButton = "tracker_stats_share_button"
 }
