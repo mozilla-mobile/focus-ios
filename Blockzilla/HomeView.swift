@@ -67,6 +67,7 @@ class HomeView: UIView {
         trackerStatsShareButton.titleLabel?.numberOfLines = 0
         trackerStatsShareButton.layer.borderColor = UIConstants.colors.defaultFont.cgColor
         trackerStatsShareButton.layer.borderWidth = 1.0;
+        trackerStatsShareButton.layer.cornerRadius = 4
         trackerStatsView.addSubview(trackerStatsShareButton)
 
         textLogo.snp.makeConstraints { make in
