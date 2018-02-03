@@ -12,8 +12,11 @@ protocol HomeViewDelegate: class {
 class HomeView: UIView {
     weak var delegate: HomeViewDelegate?
     private(set) var settingsButton: UIButton! = nil
-    private let trackerStatsShareButton = UIButton()
-
+    private let description1 = UILabel()
+    private let description2 = UILabel()
+    private let trackerStatsView = UIView()
+    private let trackerStatsLabel = UILabel()
+    
     init() {
         super.init(frame: CGRect.zero)
 
@@ -21,7 +24,6 @@ class HomeView: UIView {
         let textLogo = UIImageView(image: wordmark)
         addSubview(textLogo)
 
-        let description1 = UILabel()
         description1.textColor = .white
         description1.font = UIConstants.fonts.homeLabel
         description1.textAlignment = .center
@@ -29,7 +31,6 @@ class HomeView: UIView {
         description1.numberOfLines = 0
         addSubview(description1)
 
-        let description2 = UILabel()
         description2.textColor = .white
         description2.font = UIConstants.fonts.homeLabel
         description2.textAlignment = .center
@@ -45,13 +46,28 @@ class HomeView: UIView {
         addSubview(settingsButton)
         self.settingsButton = settingsButton
         
-        trackerStatsShareButton.isHidden = true
-        trackerStatsShareButton.setTitleColor(.white, for: .normal)
+        addSubview(trackerStatsView)
+        trackerStatsView.isHidden = true
+        
+        let shieldLogo = UIImageView(image: #imageLiteral(resourceName: "tracking_protection"))
+        shieldLogo.tintColor = UIColor.white
+        trackerStatsView.addSubview(shieldLogo)
+        
+        trackerStatsLabel.font = UIConstants.fonts.shareTrackerStatsLabel
+        trackerStatsLabel.textColor = UIConstants.colors.defaultFont
+        trackerStatsLabel.numberOfLines = 0
+        trackerStatsView.addSubview(trackerStatsLabel)
+        
+        let trackerStatsShareButton = UIButton()
+        trackerStatsShareButton.setTitleColor(UIConstants.colors.defaultFont, for: .normal)
         trackerStatsShareButton.titleLabel?.font = UIConstants.fonts.shareTrackerStatsLabel
         trackerStatsShareButton.titleLabel?.textAlignment = .center
+        trackerStatsShareButton.setTitle(UIConstants.strings.share, for: .normal)
         trackerStatsShareButton.addTarget(self, action: #selector(shareTapped), for: .touchUpInside)
         trackerStatsShareButton.titleLabel?.numberOfLines = 0
-        addSubview(trackerStatsShareButton)
+        trackerStatsShareButton.layer.borderColor = UIConstants.colors.defaultFont.cgColor
+        trackerStatsShareButton.layer.borderWidth = 1.0;
+        trackerStatsView.addSubview(trackerStatsShareButton)
 
         textLogo.snp.makeConstraints { make in
             make.centerX.equalTo(self)
@@ -74,10 +90,30 @@ class HomeView: UIView {
             make.height.width.equalTo(24)
         }
         
-        trackerStatsShareButton.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().offset(-20)
+        trackerStatsView.snp.makeConstraints { make in
+            make.bottom.equalTo(self).offset(-24)
             make.height.equalTo(20)
-            make.width.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.width.equalTo(300)
+        }
+        
+        trackerStatsLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.left.equalTo(shieldLogo.snp.right).offset(8)
+            make.right.equalTo(trackerStatsShareButton.snp.left).offset(13)
+            make.height.equalToSuperview()
+        }
+        
+        shieldLogo.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.left.equalToSuperview()
+        }
+        
+        trackerStatsShareButton.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.right.equalToSuperview()
+            make.width.equalTo(80)
+            make.height.equalTo(36)
         }
     }
 
@@ -90,12 +126,16 @@ class HomeView: UIView {
     }
     
     func showTrackerStatsShareButton(text: String) {
-        trackerStatsShareButton.setTitle(text, for: .normal)
-        trackerStatsShareButton.isHidden = false
+        trackerStatsLabel.text = text
+        trackerStatsView.isHidden = false
+        description1.isHidden = true
+        description2.isHidden = true
     }
     
     func hideTrackerStatsShareButton() {
-        trackerStatsShareButton.isHidden = true
+        trackerStatsView.isHidden = true
+        description1.isHidden = false
+        description2.isHidden = false
     }
     
     @objc private func shareTapped() {

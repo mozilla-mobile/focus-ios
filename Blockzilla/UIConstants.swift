@@ -196,6 +196,7 @@ struct UIConstants {
         static let saveImage = NSLocalizedString("contextMenu.saveImageTitle", value: "Save Image", comment: "Text for the context menu when a user wants to save an image after long pressing it.")
         static let copyImage = NSLocalizedString("contextMenu.copyImageTitle", value: "Copy Image", comment: "Text for the context menu when a user wants to copy an image after long pressing it.")
         static let shareLink = NSLocalizedString("contextMenu.shareLinkTitle", value: "Share Link", comment: "Text for the context menu when a user wants to share a link after long pressing it.")
+        static let share = NSLocalizedString("share", value: "Share", comment: "Text for a share button")
         static let copyLink = NSLocalizedString("contextMenu.copyLink", value: "Copy Link", comment: "Text for the context menu when a user wants to copy a link after long pressing it.")
         static let trackersBlocked = NSLocalizedString("URL.trackersBlockedLabel", value: "Trackers blocked", comment: "Text for the URL bar showing the number of trackers blocked on a webpage.")
         static let externalAppLink = NSLocalizedString("ExternalAppLink.messageTitle", value: "%@ wants to open another App", comment: "Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar.")
@@ -265,7 +266,7 @@ struct UIConstants {
         static let autocompleteAddCustomUrlExample = NSLocalizedString("Autocomplete.addCustomUrlExample", value: "Example: example.com", comment: "A label displaying an example URL")
         static let autocompleteEmptyState = NSLocalizedString("Autocomplete.emptyState", value: "No Custom URLs to display", comment: "Label for button to add a custom URL")
         static let autocompleteCustomURLAdded = NSLocalizedString("Autocomplete.customUrlAdded", value: "New Custom URL added.", comment: "Label for toast alerting a custom URL has been added")
-        static let shareTrackerStatsLabel = NSLocalizedString("share.trackerStatsLabel", value: "%@ trackers blocked by using %@. \n Click here to tell your friends!", comment: "Text used when the user shares their trackers blocked stats")
+        static let shareTrackerStatsLabel = NSLocalizedString("share.trackerStatsLabel", value: "%@ trackers blocked so far", comment: "Text used when the user shares their trackers blocked stats")
         static let shareTrackerStatsText = NSLocalizedString("share.trackerStatsText", value: "By using %@, I've blocked %@ trackers! No more ads following me around the internet! Download it here: %@", comment: "The text shared to users after the user chooses to share there tracker stats")
     }
 }

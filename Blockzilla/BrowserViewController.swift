@@ -250,7 +250,7 @@ class BrowserViewController: UIViewController {
         
         if shouldShowTrackerStatsShareButton() {
             let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
-            homeView.showTrackerStatsShareButton(text: String(format: UIConstants.strings.shareTrackerStatsLabel, String(numberOfTrackersBlocked), AppInfo.productName))
+            homeView.showTrackerStatsShareButton(text: String(format: UIConstants.strings.shareTrackerStatsLabel, String(numberOfTrackersBlocked)))
         } else {
             homeView.hideTrackerStatsShareButton()
         }
