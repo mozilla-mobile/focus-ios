@@ -500,7 +500,8 @@ class BrowserViewController: UIViewController {
         
         if shouldShowTrackerStatsToUser == false ||
             getNumberOfLifetimeTrackersBlocked() < 100 ||
-            NSLocale.current.identifier != "en_US" {
+            NSLocale.current.identifier != "en_US" ||
+            AppInfo.isKlar {
             return false
         }
         
@@ -637,9 +638,9 @@ extension BrowserViewController: HomeViewDelegate {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.share, object: TelemetryEventObject.trackerStatsShareButton)
         
         let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
-        let appStoreUrl = String(format: "https://itunes.apple.com/app/id%@", AppInfo.isKlar ? "1073435754" : "1055677337")
-        let text = String(format: UIConstants.strings.shareTrackerStatsText, AppInfo.productName, String(numberOfTrackersBlocked), appStoreUrl)
-        let shareController = UIActivityViewController(activityItems: [text], applicationActivities: nil)
+        let appStoreUrl = URL(string:String(format: "https://app.adjust.com/b8s7qo?campaign=shareblocked&creative=022018"))
+        let text = String(format: UIConstants.strings.shareTrackerStatsText, AppInfo.productName, String(numberOfTrackersBlocked))
+        let shareController = UIActivityViewController(activityItems: [text, appStoreUrl], applicationActivities: nil)
         present(shareController, animated: true)
     }
 }
