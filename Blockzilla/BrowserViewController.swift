@@ -638,7 +638,7 @@ extension BrowserViewController: HomeViewDelegate {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.share, object: TelemetryEventObject.trackerStatsShareButton)
         
         let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
-        let appStoreUrl = URL(string:String(format: "https://itunes.apple.com/app/apple-store/id1055677337?pt=373246&ct=ShareTracker&mt=8"))
+        let appStoreUrl = URL(string:String(format: "https://mzl.la/2GZBav0"))
         let text = String(format: UIConstants.strings.shareTrackerStatsText, AppInfo.productName, String(numberOfTrackersBlocked))
         let shareController = UIActivityViewController(activityItems: [text, appStoreUrl], applicationActivities: nil)
         present(shareController, animated: true)
