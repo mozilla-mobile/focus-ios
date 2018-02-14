@@ -282,7 +282,7 @@ extension AppDelegate {
             var outputDict = inputDict // make a mutable copy
             
             let shouldShowTrackerStatsToUser = UserDefaults.standard.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKey) as! Bool?
-            outputDict["showTrackerStats"] = shouldShowTrackerStatsToUser
+            outputDict["showTrackerStatsShare"] = shouldShowTrackerStatsToUser
             
             return outputDict
         }
