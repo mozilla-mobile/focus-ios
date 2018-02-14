@@ -70,7 +70,7 @@ class BrowserViewController: UIViewController {
     private var initialUrl: URL?
     
     private let userDefaultsTrackersBlockedKey = "lifetimeTrackersBlocked"
-    private let userDefaultsShareTrackerStatsKey = "shareTrackerStats"
+    static let userDefaultsShareTrackerStatsKey = "shareTrackerStats"
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)
@@ -482,18 +482,17 @@ class BrowserViewController: UIViewController {
     }
     
     private func shouldShowTrackerStatsShareButton() -> Bool {
-        let shouldShowTrackerStatsToUser = UserDefaults.standard.object(forKey: userDefaultsShareTrackerStatsKey) as! Bool?
+        let shouldShowTrackerStatsToUser = UserDefaults.standard.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKey) as! Bool?
         
         if shouldShowTrackerStatsToUser == nil {
             // User has not been put into a bucket for determining if it should be shown
             // 10% chance they get put into the group that sees the share button
             // arc4random_uniform(10) returns an integer 0 through 9 (inclusive)
             if arc4random_uniform(10) == 0 {
-                UserDefaults.standard.set(true, forKey: userDefaultsShareTrackerStatsKey)
-                Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.shareStatsCoinFlip, object: TelemetryEventObject.showStatsShareButton)
+                UserDefaults.standard.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKey)
 
             } else {
-                UserDefaults.standard.set(false, forKey: userDefaultsShareTrackerStatsKey)
+                UserDefaults.standard.set(false, forKey: BrowserViewController.userDefaultsShareTrackerStatsKey)
                 return false
             }
         }

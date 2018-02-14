@@ -278,6 +278,15 @@ extension AppDelegate {
             telemetryConfig.isUploadEnabled = Settings.getToggle(.sendAnonymousUsageData)
         #endif
         
+        Telemetry.default.beforeSerializePing(pingType: CorePingBuilder.PingType) { (inputDict) -> [String : Any?] in
+            var outputDict = inputDict // make a mutable copy
+            
+            let shouldShowTrackerStatsToUser = UserDefaults.standard.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKey) as! Bool?
+            outputDict["showTrackerStats"] = shouldShowTrackerStatsToUser
+            
+            return outputDict
+        }
+        
         Telemetry.default.add(pingBuilderType: CorePingBuilder.self)
         Telemetry.default.add(pingBuilderType: FocusEventPingBuilder.self)
         
