@@ -503,6 +503,7 @@ extension BrowserViewController: URLBarDelegate {
         var url = URIFixup.getURL(entry: text)
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
+            Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.name)
             url = searchEngineManager.activeEngine.urlForQuery(text)
         } else {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
