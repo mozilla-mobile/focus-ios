@@ -281,8 +281,7 @@ extension AppDelegate {
         Telemetry.default.beforeSerializePing(pingType: CorePingBuilder.PingType) { (inputDict) -> [String : Any?] in
             var outputDict = inputDict // make a mutable copy
             
-            let shouldShowTrackerStatsToUser = UserDefaults.standard.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKey) as! Bool?
-            outputDict["showTrackerStatsShare"] = shouldShowTrackerStatsToUser
+            outputDict["showTrackerStatsShare"] =  self.browserViewController.shouldShowTrackerStatsShareButton()
             
             return outputDict
         }
