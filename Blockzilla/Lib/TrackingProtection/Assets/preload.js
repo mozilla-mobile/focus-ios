@@ -44,7 +44,7 @@
   var observer = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
       mutation.addedNodes.forEach(function(node) {
-        if (node.tagName === 'SCRIPT') {
+        if (node.tagName === 'SCRIPT' || node.tagName === 'IFRAME' || node.tagName === 'LINK') {
           messageHandler.postMessage({ url: node.src })
         }
       });
