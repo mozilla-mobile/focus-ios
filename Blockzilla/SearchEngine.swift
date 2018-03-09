@@ -7,15 +7,17 @@ import Foundation
 class SearchEngine: NSObject, NSCoding {
     let name: String
     let image: UIImage?
+    var isCustom: Bool = false
 
     private let searchTemplate: String
     private let suggestionsTemplate: String?
 
-    init(name: String, image: UIImage?, searchTemplate: String, suggestionsTemplate: String?) {
+    init(name: String, image: UIImage?, searchTemplate: String, suggestionsTemplate: String?, isCustom:Bool = false) {
         self.name = name
         self.image = image ?? SearchEngine.generateImage(name: name)
         self.searchTemplate = searchTemplate
         self.suggestionsTemplate = suggestionsTemplate
+        self.isCustom = isCustom
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -53,6 +55,10 @@ class SearchEngine: NSObject, NSCoding {
         aCoder.encode(image, forKey: "image")
         aCoder.encode(searchTemplate, forKey: "searchTemplate")
         aCoder.encode(suggestionsTemplate, forKey: "suggestionsTemplate")
+    }
+    
+    func getNameOrCustom() -> String {
+        return isCustom ? "custom" : name
     }
     
     private static func generateImage(name: String) -> UIImage {
