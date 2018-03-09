@@ -69,8 +69,9 @@ class BrowserViewController: UIViewController {
     private var shouldEnsureBrowsingMode = false
     private var initialUrl: URL?
     
-    private let userDefaultsTrackersBlockedKey = "lifetimeTrackersBlocked"
-    private let userDefaultsShareTrackerStatsKey = "shareTrackerStats"
+    static let userDefaultsTrackersBlockedKey = "lifetimeTrackersBlocked"
+    static let userDefaultsShareTrackerStatsKeyOLD = "shareTrackerStats"
+    static let userDefaultsShareTrackerStatsKeyNEW = "shareTrackerStatsNew"
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)
@@ -480,24 +481,38 @@ class BrowserViewController: UIViewController {
         ]
     }
     
-    func shouldShowTrackerStatsShareButton() -> Bool {
-        let shouldShowTrackerStatsToUser = UserDefaults.standard.object(forKey: userDefaultsShareTrackerStatsKey) as! Bool?
+    func shouldShowTrackerStatsShareButton(percent: Int = 30, userDefaults:UserDefaults = UserDefaults.standard) -> Bool {
+        var shouldShowTrackerStatsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
         
         if shouldShowTrackerStatsToUser == nil {
-            // User has not been put into a bucket for determining if it should be shown
-            // 10% chance they get put into the group that sees the share button
-            // arc4random_uniform(10) returns an integer 0 through 9 (inclusive)
-            if arc4random_uniform(10) == 0 {
-                UserDefaults.standard.set(true, forKey: userDefaultsShareTrackerStatsKey)
-
+            // Check to see if the user was previously opted into the experiment
+            shouldShowTrackerStatsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD) as! Bool?
+            
+            if shouldShowTrackerStatsToUser != nil {
+                // Remove the old flag
+                userDefaults.removeObject(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD)
+            }
+            
+            if shouldShowTrackerStatsToUser == true {
+                // User has already been opted into the experiment, continue showing the share button
+                userDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
+                return true
             } else {
-                UserDefaults.standard.set(false, forKey: userDefaultsShareTrackerStatsKey)
-                return false
+                // User has not been put into a bucket for determining if it should be shown
+                // 30% chance they get put into the group that sees the share button
+                // arc4random_uniform(100) returns an integer 0 through 99 (inclusive)
+                if arc4random_uniform(100) < percent {
+                    userDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
+                    shouldShowTrackerStatsToUser = true
+                } else {
+                    userDefaults.set(false, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
+                    return false
+                }
             }
         }
         
         if shouldShowTrackerStatsToUser == false ||
-            getNumberOfLifetimeTrackersBlocked() < 100 ||
+            getNumberOfLifetimeTrackersBlocked(userDefaults: userDefaults) < 100 ||
             NSLocale.current.identifier != "en_US" ||
             AppInfo.isKlar {
             return false
@@ -506,12 +521,12 @@ class BrowserViewController: UIViewController {
         return true
     }
     
-    private func getNumberOfLifetimeTrackersBlocked() -> Int {
-        return UserDefaults.standard.integer(forKey: userDefaultsTrackersBlockedKey)
+    private func getNumberOfLifetimeTrackersBlocked(userDefaults:UserDefaults = UserDefaults.standard) -> Int {
+        return userDefaults.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
     }
     
     private func setNumberOfLifetimeTrackersBlocked(numberOfTrackers: Int) {
-        UserDefaults.standard.set(numberOfTrackers, forKey: userDefaultsTrackersBlockedKey)
+        UserDefaults.standard.set(numberOfTrackers, forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
     }
 }
 
