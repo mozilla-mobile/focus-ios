@@ -522,7 +522,7 @@ class BrowserViewController: UIViewController {
         return true
     }
     
-    private func getNumberOfLifetimeTrackersBlocked(userDefaults:UserDefaults = UserDefaults.standard) -> Int {
+    private func getNumberOfLifetimeTrackersBlocked(userDefaults: UserDefaults = UserDefaults.standard) -> Int {
         return userDefaults.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
     }
     
