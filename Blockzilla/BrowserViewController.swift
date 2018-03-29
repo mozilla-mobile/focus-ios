@@ -249,7 +249,7 @@ class BrowserViewController: UIViewController {
         }
         self.homeView = homeView
         
-        if shouldShowTrackerStatsShareButton() {
+        if canShowTrackerStatsShareButton() && shouldShowTrackerStatsShareButton() {
             let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
             homeView.showTrackerStatsShareButton(text: String(format: UIConstants.strings.shareTrackerStatsLabel, String(numberOfTrackersBlocked)))
         } else {
@@ -481,6 +481,10 @@ class BrowserViewController: UIViewController {
             UIKeyCommand(input: "]", modifierFlags: .command, action: #selector(BrowserViewController.goForward), discoverabilityTitle: UIConstants.strings.browserForward),
         ]
     }
+
+    func canShowTrackerStatsShareButton() -> Bool {
+        return NSLocale.current.identifier == "en_US" && !AppInfo.isKlar
+    }
     
     func shouldShowTrackerStatsShareButton(percent: Int = 30, userDefaults:UserDefaults = UserDefaults.standard) -> Bool {
         var shouldShowTrackerStatsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
@@ -513,9 +517,7 @@ class BrowserViewController: UIViewController {
         }
         
         if shouldShowTrackerStatsToUser == false ||
-            getNumberOfLifetimeTrackersBlocked(userDefaults: userDefaults) < 100 ||
-            NSLocale.current.identifier != "en_US" ||
-            AppInfo.isKlar {
+            getNumberOfLifetimeTrackersBlocked(userDefaults: userDefaults) < 100 {
             return false
         }
         
