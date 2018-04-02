@@ -75,7 +75,7 @@
       "default": {
         "searchDefault": "Google",
         "visibleDefaultEngines": [
-          "google", region"bing", "twitter", "wikipedia-br"
+          "google", "bing", "twitter", "wikipedia-br"
         ]
       }
     },
