@@ -281,9 +281,9 @@ extension AppDelegate {
         Telemetry.default.beforeSerializePing(pingType: CorePingBuilder.PingType) { (inputDict) -> [String : Any?] in
             var outputDict = inputDict // make a mutable copy
 
-            if self.browserViewController.canShowTrackerStatsShareButton() {
-                _ = self.browserViewController.shouldShowTrackerStatsShareButton() // Force a coin flip
-                outputDict["showTrackerStatsShare"] = UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
+            if self.browserViewController.canShowTrackerStatsShareButton() { // Klar users are not included in this experiment
+                self.browserViewController.flipCoinForShowTrackerButton() // Force a coin flip if one has not been flipped yet
+                outputDict["showTrackerStatsSharePhase2"] = UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
             }
             
             return outputDict

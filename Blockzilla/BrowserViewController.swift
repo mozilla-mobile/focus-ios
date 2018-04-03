@@ -485,43 +485,47 @@ class BrowserViewController: UIViewController {
     func canShowTrackerStatsShareButton() -> Bool {
         return NSLocale.current.identifier == "en_US" && !AppInfo.isKlar
     }
-    
-    func shouldShowTrackerStatsShareButton(percent: Int = 30, userDefaults:UserDefaults = UserDefaults.standard) -> Bool {
+
+    var showTrackerSemaphore = DispatchSemaphore(value: 1)
+    func flipCoinForShowTrackerButton(percent: Int = 30, userDefaults:UserDefaults = UserDefaults.standard) {
+        showTrackerSemaphore.wait()
+
         var shouldShowTrackerStatsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
-        
+
         if shouldShowTrackerStatsToUser == nil {
             // Check to see if the user was previously opted into the experiment
             shouldShowTrackerStatsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD) as! Bool?
-            
+
             if shouldShowTrackerStatsToUser != nil {
                 // Remove the old flag
                 userDefaults.removeObject(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD)
             }
-            
+
             if shouldShowTrackerStatsToUser == true {
                 // User has already been opted into the experiment, continue showing the share button
                 userDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
-                return true
             } else {
                 // User has not been put into a bucket for determining if it should be shown
                 // 30% chance they get put into the group that sees the share button
                 // arc4random_uniform(100) returns an integer 0 through 99 (inclusive)
                 if arc4random_uniform(100) < percent {
                     userDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
-                    shouldShowTrackerStatsToUser = true
                 } else {
                     userDefaults.set(false, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
-                    return false
                 }
             }
         }
-        
-        if shouldShowTrackerStatsToUser == false ||
-            getNumberOfLifetimeTrackersBlocked(userDefaults: userDefaults) < 100 {
-            return false
-        }
-        
-        return true
+
+        showTrackerSemaphore.signal()
+    }
+
+    func shouldShowTrackerStatsShareButton(percent: Int = 30, userDefaults:UserDefaults = UserDefaults.standard) -> Bool {
+        flipCoinForShowTrackerButton(percent:percent, userDefaults:userDefaults)
+
+        let shouldShowTrackerStatsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
+
+        return shouldShowTrackerStatsToUser == true &&
+            getNumberOfLifetimeTrackersBlocked(userDefaults: userDefaults) >= 10
     }
     
     private func getNumberOfLifetimeTrackersBlocked(userDefaults: UserDefaults = UserDefaults.standard) -> Int {
