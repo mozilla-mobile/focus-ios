@@ -30,44 +30,77 @@ protocol PageControlDelegate {
     func selectedIndex(_ index:Int)
 }
 
-class PageControl: NSObject {
+class PageControl: UIView {
     
-    var currentPage = 0
-    var numberOfPages = 0
     var hidesForSinglePage = false
     
-    var stack : UIStackView? = nil
+    var currentPage = 0
+    var numberOfPages = 0 {
+        didSet {
+            addPages()
+        }
+    }
+    
+    var stack: UIStackView?
     var delegate: PageControlDelegate?
     
-    init(numberOfPages: Int) {
-        super.init()
-
-        var buttonArray: [UIButton]!
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
+    func addPages() {
+        var buttonArray = [UIButton]()
         
+        print(numberOfPages)
         // Ensure we have at least one button
         if numberOfPages == 0 {
             return
         }
         
         for _ in 0..<numberOfPages {
-            let button = UIButton()
-            button.setImage(drawDot(), for: .normal)
+            let button = UIButton(frame: CGRect(x: 0, y: 0, width: 6, height: 6))
+            
+            button.setImage(UIImage(imageLiteralResourceName: "small_white_circle"), for: .normal)
+            /*
+            button.backgroundColor = UIColor.white
+            button.layer.shadowColor = UIColor.black.cgColor
+            button.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
+            button.layer.masksToBounds = false
+            button.layer.shadowRadius = 1.0
+            button.layer.shadowOpacity = 0.5
+            button.layer.cornerRadius = button.frame.width / 2
+           */
+           // button.layer.cornerRadius = 0.5 * button.bounds.size.width
+            //let img =
+            //button.setImage(drawDot(), for: .normal)
+            //let img = UIImage(imageLiteralResourceName: "enabled-yes")
+            //button.setImage(<#T##image: UIImage?##UIImage?#>, for: <#T##UIControlState#>)
+            
             buttonArray.append(button)
         }
-        
-        // Style the StackView
-        stack = UIStackView(arrangedSubviews: buttonArray)
-        stack?.spacing = 20
-        stack?.distribution = .fillEqually
-        stack?.alignment = .center
         
         // Enable the buttons to be tapped to switch to next page
         buttonArray.forEach({ button in
             button.addTarget(self, action: #selector(selected(sender:)), for: .touchUpInside)
         })
         
+        
+        // Style the StackView
+        stack = UIStackView(arrangedSubviews: buttonArray)
+        stack?.spacing = 20
+        stack?.distribution = .equalCentering
+        stack?.alignment = .center
+
+        print(buttonArray[0].frame)
+        print(buttonArray[0].layer.frame)
+        print(buttonArray[0].bounds)
+
         // Default to the first page
-        selectIndex(0)
+        //selectIndex(currentPage)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     func selectIndex(_ index:Int){
@@ -77,19 +110,19 @@ class PageControl: NSObject {
     }
     
     @objc func selected(sender : UIButton){
+        print("touched button")
         for button in (stack?.subviews)! as! [UIButton] {
             button.isSelected = button == sender
         }
-        
         delegate?.selectedIndex((stack?.subviews.index(of: sender))!)
     }
     
     
     private func drawDot() -> UIImage {
         
-        let dotView = UIView(frame: CGRect(x: 0, y: 0, width: 6.0, height: 6.0))
-        let circlePath = UIBezierPath(arcCenter: CGPoint(x: 100,y: 100), radius: CGFloat(20), startAngle: CGFloat(0), endAngle:CGFloat(Double.pi * 2), clockwise: true)
+        let circlePath = UIBezierPath(arcCenter: CGPoint(x: 0,y: 0), radius: CGFloat(20), startAngle: CGFloat(0), endAngle:CGFloat(Double.pi * 2), clockwise: true)
         
+        /*
         let shapeLayer = CAShapeLayer()
         shapeLayer.path = circlePath.cgPath
         
@@ -101,32 +134,34 @@ class PageControl: NSObject {
         shapeLayer.lineWidth = 1.0
         
         dotView.layer.addSublayer(shapeLayer)
-        
-        // Turn the view into a UIImage
-        let renderer = UIGraphicsImageRenderer(bounds: dotView.bounds)
-        return renderer.image { rendererContext in
-            dotView.layer.render(in: rendererContext.cgContext)
-        }
-    }
-}
-/*
-class PageControl: UIControl {
-    
-    // Our custom page control
-    
-    var currentPage: Int = 0
-    var numberOfPages = 0
-    var hidesForSinglePage = false
-    
-    func hello() {
-        self.
-    }
-}
  */
+        
+        let img = image(with: circlePath, size: CGSize(width: 6, height: 6))
+        
+        print(img?.scale)
+        
+        return img!
+        
+    }
+    
+    private func image(with path: UIBezierPath, size: CGSize) -> UIImage? {
+        print("Inside of image func")
+        UIGraphicsBeginImageContextWithOptions(size, false, 0)
+        
+        UIColor.blue.setStroke()
+        path.lineWidth = 2
+        path.stroke()
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
+    }
+}
 
 class IntroViewController: UIViewController {
     
-    let pageControl = UIPageControl()
+    //var pageControl = PageControl(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+    var pageControl = PageControl()
+    //let pageControl = UIPageControl()
     let containerView = UIView()
     let skipButton = UIButton()
     private let backgroundDark = GradientBackgroundView()
@@ -166,16 +201,21 @@ class IntroViewController: UIViewController {
         pageViewController = ScrollViewController()
         addChildViewController(pageViewController)
         view.addSubview(pageViewController.view)
-        view.addSubview(pageControl)
+        view.addSubview(pageControl.stack!)
         view.addSubview(skipButton)
         
         pageControl.backgroundColor = .clear
         pageControl.isUserInteractionEnabled = false
-        pageControl.snp.makeConstraints { make in
+        pageControl.stack!.snp.makeConstraints { make in
             make.top.equalTo(pageViewController.view.snp.centerY).offset(IntroViewControllerUX.Height/2 + IntroViewControllerUX.PagerCenterOffsetFromScrollViewBottom).priority(.high)
             make.centerX.equalTo(self.view)
             make.bottom.lessThanOrEqualTo(self.view).offset(24).priority(.required)
         }
+        
+        let button = pageControl.stack!.arrangedSubviews[0] as! UIButton
+        
+        print(button.bounds)
+        print(button.layer.bounds)
         
         skipButton.backgroundColor = .clear
         skipButton.setTitle(UIConstants.strings.SkipIntroButtonTitle, for: .normal)
