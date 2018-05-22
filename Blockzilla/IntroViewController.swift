@@ -33,8 +33,8 @@ protocol PageControlDelegate {
 class PageControl: UIView {
     
     var hidesForSinglePage = false
-    
     var currentPage = 0
+    
     var numberOfPages = 0 {
         didSet {
             addPages()
@@ -73,6 +73,7 @@ class PageControl: UIView {
         stack?.distribution = .equalCentering
         stack?.alignment = .center
         
+        currentPage = 0
         selectIndex(0)
     }
     
@@ -95,10 +96,11 @@ class PageControl: UIView {
         print("touched button")
        // let buttons = stack?.arrangedSubviews as! [UIButton]
         
-        for button in (stack?.subviews)! as! [UIButton] {
-            button.isSelected = button == sender
+        for i in 0..<((stack?.arrangedSubviews)! as! [UIButton]).count {
+            if stack?.arrangedSubviews[i] == sender {
+                selectIndex(i)
+            }
         }
-        
         delegate?.selectedIndex((stack?.subviews.index(of: sender))!)
     }
 }
@@ -157,11 +159,6 @@ class IntroViewController: UIViewController {
             make.centerX.equalTo(self.view)
             make.bottom.lessThanOrEqualTo(self.view).offset(24).priority(.required)
         }
-        
-        let button = pageControl.stack!.arrangedSubviews[0] as! UIButton
-        
-        print(button.bounds)
-        print(button.layer.bounds)
         
         skipButton.backgroundColor = .clear
         skipButton.setTitle(UIConstants.strings.SkipIntroButtonTitle, for: .normal)
