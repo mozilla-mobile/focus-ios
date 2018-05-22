@@ -51,7 +51,6 @@ class PageControl: UIView {
     func addPages() {
         var buttonArray = [UIButton]()
         
-        print(numberOfPages)
         // Ensure we have at least one button
         if numberOfPages == 0 {
             return
@@ -59,23 +58,7 @@ class PageControl: UIView {
         
         for _ in 0..<numberOfPages {
             let button = UIButton(frame: CGRect(x: 0, y: 0, width: 6, height: 6))
-            
-            button.setImage(UIImage(imageLiteralResourceName: "small_white_circle"), for: .normal)
-            /*
-            button.backgroundColor = UIColor.white
-            button.layer.shadowColor = UIColor.black.cgColor
-            button.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
-            button.layer.masksToBounds = false
-            button.layer.shadowRadius = 1.0
-            button.layer.shadowOpacity = 0.5
-            button.layer.cornerRadius = button.frame.width / 2
-           */
-           // button.layer.cornerRadius = 0.5 * button.bounds.size.width
-            //let img =
-            //button.setImage(drawDot(), for: .normal)
-            //let img = UIImage(imageLiteralResourceName: "enabled-yes")
-            //button.setImage(<#T##image: UIImage?##UIImage?#>, for: <#T##UIControlState#>)
-            
+            button.setImage(UIImage(imageLiteralResourceName: "page_indicator"), for: .normal)
             buttonArray.append(button)
         }
         
@@ -84,19 +67,13 @@ class PageControl: UIView {
             button.addTarget(self, action: #selector(selected(sender:)), for: .touchUpInside)
         })
         
-        
         // Style the StackView
         stack = UIStackView(arrangedSubviews: buttonArray)
         stack?.spacing = 20
         stack?.distribution = .equalCentering
         stack?.alignment = .center
-
-        print(buttonArray[0].frame)
-        print(buttonArray[0].layer.frame)
-        print(buttonArray[0].bounds)
-
-        // Default to the first page
-        //selectIndex(currentPage)
+        
+        selectIndex(0)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -104,56 +81,25 @@ class PageControl: UIView {
     }
     
     func selectIndex(_ index:Int){
-        for button in (stack?.subviews)! as! [UIButton] {
-            button.isSelected = true
+        let buttons = stack?.arrangedSubviews as! [UIButton]
+        for button in buttons {
+            button.isSelected = false
+            button.alpha = 0.3
         }
+        
+        buttons[index].isSelected = true
+        buttons[index].alpha = 1
     }
     
     @objc func selected(sender : UIButton){
         print("touched button")
+       // let buttons = stack?.arrangedSubviews as! [UIButton]
+        
         for button in (stack?.subviews)! as! [UIButton] {
             button.isSelected = button == sender
         }
+        
         delegate?.selectedIndex((stack?.subviews.index(of: sender))!)
-    }
-    
-    
-    private func drawDot() -> UIImage {
-        
-        let circlePath = UIBezierPath(arcCenter: CGPoint(x: 0,y: 0), radius: CGFloat(20), startAngle: CGFloat(0), endAngle:CGFloat(Double.pi * 2), clockwise: true)
-        
-        /*
-        let shapeLayer = CAShapeLayer()
-        shapeLayer.path = circlePath.cgPath
-        
-        //change the fill color
-        shapeLayer.fillColor = UIColor.white.cgColor
-        //you can change the stroke color
-        shapeLayer.strokeColor = UIColor.clear.cgColor
-        //you can change the line width
-        shapeLayer.lineWidth = 1.0
-        
-        dotView.layer.addSublayer(shapeLayer)
- */
-        
-        let img = image(with: circlePath, size: CGSize(width: 6, height: 6))
-        
-        print(img?.scale)
-        
-        return img!
-        
-    }
-    
-    private func image(with path: UIBezierPath, size: CGSize) -> UIImage? {
-        print("Inside of image func")
-        UIGraphicsBeginImageContextWithOptions(size, false, 0)
-        
-        UIColor.blue.setStroke()
-        path.lineWidth = 2
-        path.stroke()
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return image
     }
 }
 
