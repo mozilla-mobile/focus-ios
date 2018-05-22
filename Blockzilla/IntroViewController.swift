@@ -33,8 +33,6 @@ protocol PageControlDelegate {
 
 class PageControl: UIView {
     
-    var hidesForSinglePage = false
-    
     var currentPage = 0 {
         didSet {
             selectIndex(currentPage)
@@ -50,10 +48,6 @@ class PageControl: UIView {
     var stack: UIStackView?
     var delegate: PageControlDelegate?
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
     func addPages() {
         var buttonArray = [UIButton]()
         
@@ -62,29 +56,23 @@ class PageControl: UIView {
             return
         }
         
-        // Implemented as UIButtons in case we want to allow them to be tappable in the future to change the page
         for _ in 0..<numberOfPages {
             let button = UIButton(frame: CGRect(x: 0, y: 0, width: 6, height: 6))
             button.setImage(UIImage(imageLiteralResourceName: "page_indicator"), for: .normal)
             buttonArray.append(button)
         }
         
-        // Enable the buttons to be tapped to switch to next page
+        // Enable the buttons to be tapped to switch to a new page
         buttonArray.forEach({ button in
             button.addTarget(self, action: #selector(selected(sender:)), for: .touchUpInside)
         })
         
-        // Style the StackView
         stack = UIStackView(arrangedSubviews: buttonArray)
         stack?.spacing = 20
         stack?.distribution = .equalCentering
         stack?.alignment = .center
         
         currentPage = 0
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     func selectIndex(_ index:Int){
@@ -102,7 +90,7 @@ class PageControl: UIView {
         for i in 0..<((stack?.arrangedSubviews)! as! [UIButton]).count {
             if stack?.arrangedSubviews[i] == sender {
                 // Tapping on a button more than one past our current page will only increment by one.
-                // This is the default behavior for page controllers in iOS
+                // Note: this is the default behavior for page controllers in iOS
                 if i > currentPage {
                     currentPage += 1
                     delegate?.incrementPage()
@@ -140,8 +128,8 @@ class IntroViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .clear
         
+        view.backgroundColor = .clear
         view.addSubview(backgroundDark)
         
         backgroundBright.isHidden = true
