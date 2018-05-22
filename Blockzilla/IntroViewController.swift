@@ -33,7 +33,12 @@ protocol PageControlDelegate {
 class PageControl: UIView {
     
     var hidesForSinglePage = false
-    var currentPage = 0
+    
+    var currentPage = 0 {
+        didSet {
+            selectIndex(currentPage)
+        }
+    }
     
     var numberOfPages = 0 {
         didSet {
@@ -74,7 +79,7 @@ class PageControl: UIView {
         stack?.alignment = .center
         
         currentPage = 0
-        selectIndex(0)
+//        selectIndex(0)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -93,23 +98,20 @@ class PageControl: UIView {
     }
     
     @objc func selected(sender : UIButton){
-        print("touched button")
        // let buttons = stack?.arrangedSubviews as! [UIButton]
         
         for i in 0..<((stack?.arrangedSubviews)! as! [UIButton]).count {
             if stack?.arrangedSubviews[i] == sender {
-                selectIndex(i)
+                currentPage = i
             }
         }
-        delegate?.selectedIndex((stack?.subviews.index(of: sender))!)
+        //delegate?.selectedIndex((stack?.subviews.index(of: sender))!)
     }
 }
 
 class IntroViewController: UIViewController {
     
-    //var pageControl = PageControl(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
     var pageControl = PageControl()
-    //let pageControl = UIPageControl()
     let containerView = UIView()
     let skipButton = UIButton()
     private let backgroundDark = GradientBackgroundView()
