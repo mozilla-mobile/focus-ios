@@ -27,7 +27,8 @@ struct IntroViewControllerUX {
 }
 
 protocol PageControlDelegate {
-    func selectedIndex(_ index:Int)
+    func incrementPage()
+    func decrementPage()
 }
 
 class PageControl: UIView {
@@ -61,6 +62,7 @@ class PageControl: UIView {
             return
         }
         
+        // Implemented as UIButtons in case we want to allow them to be tappable in the future to change the page
         for _ in 0..<numberOfPages {
             let button = UIButton(frame: CGRect(x: 0, y: 0, width: 6, height: 6))
             button.setImage(UIImage(imageLiteralResourceName: "page_indicator"), for: .normal)
@@ -79,7 +81,6 @@ class PageControl: UIView {
         stack?.alignment = .center
         
         currentPage = 0
-//        selectIndex(0)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -98,14 +99,21 @@ class PageControl: UIView {
     }
     
     @objc func selected(sender : UIButton){
-       // let buttons = stack?.arrangedSubviews as! [UIButton]
-        
         for i in 0..<((stack?.arrangedSubviews)! as! [UIButton]).count {
             if stack?.arrangedSubviews[i] == sender {
-                currentPage = i
+                // Tapping on a button more than one past our current page will only increment by one.
+                // This is the default behavior for page controllers in iOS
+                if i > currentPage {
+                    currentPage += 1
+                    delegate?.incrementPage()
+                    break
+                } else if i < currentPage {
+                    currentPage -= 1
+                    delegate?.decrementPage()
+                    break
+                }
             }
         }
-        //delegate?.selectedIndex((stack?.subviews.index(of: sender))!)
     }
 }
 
@@ -149,6 +157,7 @@ class IntroViewController: UIViewController {
         }
         
         pageViewController = ScrollViewController()
+        pageControl.delegate = pageViewController
         addChildViewController(pageViewController)
         view.addSubview(pageViewController.view)
         view.addSubview(pageControl.stack!)
@@ -216,7 +225,24 @@ extension IntroViewController: ScrollViewControllerDelegate {
     }
 }
 
-class ScrollViewController: UIPageViewController {
+class ScrollViewController: UIPageViewController, PageControlDelegate {
+    
+    @objc func incrementPage() {
+        guard let currentViewController = self.viewControllers?.first else { return }
+        guard let nextViewController = dataSource?.pageViewController(self, viewControllerAfter: currentViewController) else { return }
+        setViewControllers([nextViewController], direction: .forward, animated: true, completion: nil)
+        guard let viewControllerIndex = orderedViewControllers.index(of: nextViewController) else { return }
+        scrollViewControllerDelegate?.scrollViewController(scrollViewController: self, didUpdatePageIndex: viewControllerIndex)
+    }
+    
+    func decrementPage() {
+        guard let currentViewController = self.viewControllers?.first else { return }
+        guard let previousViewController = dataSource?.pageViewController(self, viewControllerBefore: currentViewController) else { return }
+        setViewControllers([previousViewController], direction: .reverse, animated: true, completion: nil)
+        guard let viewControllerIndex = orderedViewControllers.index(of: previousViewController) else { return }
+        scrollViewControllerDelegate?.scrollViewController(scrollViewController: self, didUpdatePageIndex: viewControllerIndex)
+    }
+    
     private var slides = [UIImage]()
     private var orderedViewControllers: [UIViewController] = []
     weak var scrollViewControllerDelegate: ScrollViewControllerDelegate?
@@ -331,7 +357,7 @@ class ScrollViewController: UIPageViewController {
             cardButton.setTitle(UIConstants.strings.NextIntroButtonTitle, for: .normal)
             cardButton.setTitleColor(UIConstants.colors.firstRunNextButton, for: .normal)
             cardButton.titleLabel?.font = UIConstants.fonts.firstRunButton
-            cardButton.addTarget(self, action: #selector(ScrollViewController.didTapNextButton), for: UIControlEvents.touchUpInside)
+            cardButton.addTarget(self, action: #selector(ScrollViewController.incrementPage), for: UIControlEvents.touchUpInside)
         }
         
         introView.addSubview(cardButton)
@@ -345,14 +371,6 @@ class ScrollViewController: UIPageViewController {
     
     @objc func didTapStartBrowsingButton() {
         scrollViewControllerDelegate?.scrollViewController(scrollViewController: self, didDismissSlideDeck: true)
-    }
-    
-    @objc func didTapNextButton() {
-        guard let currentViewController = self.viewControllers?.first else { return }
-        guard let nextViewController = dataSource?.pageViewController(self, viewControllerAfter: currentViewController) else { return }
-        setViewControllers([nextViewController], direction: .forward, animated: true, completion: nil)
-        guard let viewControllerIndex = orderedViewControllers.index(of: nextViewController) else { return }
-        scrollViewControllerDelegate?.scrollViewController(scrollViewController: self, didUpdatePageIndex: viewControllerIndex)
     }
     
     fileprivate func attributedStringForLabel(_ text: String) -> NSMutableAttributedString {
