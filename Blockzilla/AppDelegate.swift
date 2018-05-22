@@ -53,8 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let prefIntroDone = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone)
 
-        let needToShowFirstRunExperience = true
-        // let needToShowFirstRunExperience = prefIntroDone < AppDelegate.prefIntroVersion
+        let needToShowFirstRunExperience = prefIntroDone < AppDelegate.prefIntroVersion
         if needToShowFirstRunExperience {
             // Show the first run UI asynchronously to avoid the "unbalanced calls to begin/end appearance transitions" warning.
             DispatchQueue.main.async {
@@ -65,8 +64,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 var firstRunViewController: UIViewController
                 
                 // Random number range [0 - 99], Coin Flip for A/B testing of Onboarding
-                //let shouldShowNewIntro = arc4random_uniform(UInt32(100)) >= 50
-                let shouldShowNewIntro = true
+                let shouldShowNewIntro = arc4random_uniform(UInt32(100)) >= 50
                 if  shouldShowNewIntro {
                     firstRunViewController = IntroViewController()
                     Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.coinFlip, object: TelemetryEventObject.onboarding)
