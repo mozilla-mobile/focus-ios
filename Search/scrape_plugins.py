@@ -21,8 +21,8 @@ EN_PLUGINS_FILE_URL = "https://hg.mozilla.org/releases/mozilla-aurora/raw-file/d
 # Paths for plugins in the l10n repos.
 L10N_PLUGINS_FILE_URL = "https://hg.mozilla.org/releases/l10n/mozilla-aurora/%s/raw-file/default/mobile/searchplugins/%%s"
 
-# TODO: Download list from Android repo once the mobile list is in the tree.
-LIST_PATH = "./list.json"
+# Download list from Android repo once the mobile list is in the tree.
+LIST_PATH = "https://hg.mozilla.org/mozilla-central/file/tip/mobile/locales/search/list.json"
 
 ns = { "search": "http://www.mozilla.org/2006/browser/search/" }
 
