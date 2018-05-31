@@ -53,6 +53,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let prefIntroDone = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone)
 
+        if AppInfo.isTesting() {
+            let firstRunViewController = IntroViewController()
+            rootViewController.present(firstRunViewController, animated: false, completion: nil)
+            return true
+        }
+        
         let needToShowFirstRunExperience = prefIntroDone < AppDelegate.prefIntroVersion
         if needToShowFirstRunExperience {
             // Show the first run UI asynchronously to avoid the "unbalanced calls to begin/end appearance transitions" warning.
@@ -60,20 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 // Set the prefIntroVersion viewed number in the same context as the presentation.
                 UserDefaults.standard.set(AppDelegate.prefIntroVersion, forKey: AppDelegate.prefIntroDone)
                 UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
-                
-                var firstRunViewController: UIViewController
-                
-                // Random number range [0 - 99], Coin Flip for A/B testing of Onboarding
-                let shouldShowNewIntro = arc4random_uniform(UInt32(100)) >= 50
-                if  shouldShowNewIntro {
-                    firstRunViewController = IntroViewController()
-                    Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.coinFlip, object: TelemetryEventObject.onboarding)
-
-                } else {
-                    firstRunViewController = FirstRunViewController()
-                    Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.coinFlip, object: TelemetryEventObject.firstRun)
-                }
-                rootViewController.present(firstRunViewController, animated: false, completion: nil)
+                rootViewController.present(IntroViewController(), animated: false, completion: nil)
             }
         }
         
