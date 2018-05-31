@@ -71,6 +71,7 @@ class PageControl: UIView {
         stack.spacing = 20
         stack.distribution = .equalCentering
         stack.alignment = .center
+        stack.accessibilityIdentifier = UIConstants.strings.onboardingStackView
         
         currentPage = 0
     }
@@ -217,28 +218,22 @@ extension IntroViewController: ScrollViewControllerDelegate {
 class ScrollViewController: UIPageViewController, PageControlDelegate {
     
     @objc func incrementPage(_ pageControl: PageControl) {
-        guard let currentViewController = self.viewControllers?.first,
-            let nextViewController = dataSource?.pageViewController(self, viewControllerAfter: currentViewController),
-            let viewControllerIndex = orderedViewControllers.index(of: nextViewController) else { return }
-        
-        changePage(viewController: nextViewController, newIndex: viewControllerIndex, isIncrement: true)
+        changePage(isIncrement: true)
     }
     
     func decrementPage(_ pageControl: PageControl) {
-        guard let currentViewController = self.viewControllers?.first,
-            let previousViewController = dataSource?.pageViewController(self, viewControllerBefore: currentViewController),
-            let viewControllerIndex = orderedViewControllers.index(of: previousViewController) else { return }
-        
-        changePage(viewController: previousViewController, newIndex: viewControllerIndex, isIncrement: false)
+        changePage(isIncrement: false)
     }
     
-    private func changePage(viewController: UIViewController, newIndex: Array<Any>.Index, isIncrement: Bool) {
-        if isIncrement {
-            setViewControllers([viewController], direction: .forward, animated: true, completion: nil)
-        } else {
-            setViewControllers([viewController], direction: .reverse, animated: true, completion: nil)
-        }
+    private func changePage(isIncrement: Bool) {
+        guard let currentViewController = viewControllers?.first, let nextViewController = isIncrement ?
+            dataSource?.pageViewController(self, viewControllerAfter: currentViewController):
+            dataSource?.pageViewController(self, viewControllerBefore: currentViewController) else { return }
         
+        guard let newIndex = orderedViewControllers.index(of: nextViewController) else { return }
+        let direction: UIPageViewControllerNavigationDirection = isIncrement ? .forward : .reverse
+        
+        setViewControllers([nextViewController], direction: direction, animated: true, completion: nil)
         scrollViewControllerDelegate?.scrollViewController(scrollViewController: self, didUpdatePageIndex: newIndex)
     }
     

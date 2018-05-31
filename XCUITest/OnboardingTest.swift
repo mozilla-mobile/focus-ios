@@ -1,10 +1,6 @@
-//
-//  OnboardingTest.swift
-//  XCUITest
-//
-//  Created by Sawyer Blatz on 5/30/18.
-//  Copyright © 2018 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import XCTest
 
@@ -20,8 +16,8 @@ class OnboardingTest: BaseTestCase {
     }
     
     func testPressingDots() {
-        let stackElement = XCUIApplication().children(matching: .window).element(boundBy: 0).children(matching: .other).element.children(matching: .other).element.children(matching: .other).element(boundBy: 2)
         
+        let stackElement = app.otherElements["Intro.stackView"]
         let pageIndicatorButton1 = stackElement.children(matching: .button).matching(identifier: "page indicator").element(boundBy: 0)
         let pageIndicatorButton2 = stackElement.children(matching: .button).matching(identifier: "page indicator").element(boundBy: 1)
         let pageIndicatorButton3 = stackElement.children(matching: .button).matching(identifier: "page indicator").element(boundBy: 2)
