@@ -326,6 +326,7 @@ class BrowserViewController: UIViewController {
         }
 
         // Reset the views. These changes won't be immediately visible since they'll be under the screenshot.
+        overlayView.currentURL = ""
         webViewController.reset()
         webViewContainer.isHidden = true
         browserToolbar.isHidden = true
@@ -543,6 +544,23 @@ class BrowserViewController: UIViewController {
 }
 
 extension BrowserViewController: URLBarDelegate {
+    
+    func urlBar(_ urlBar: URLBar, didAddCustomURL url: URL) {
+        // Add the URL to the autocomplete list:
+        let autocompleteSource = CustomCompletionSource()
+        
+        switch autocompleteSource.add(suggestion: url.absoluteString) {
+        case .error(.duplicateDomain):
+            break
+        case .error(let error):
+            guard !error.message.isEmpty else { return }
+            Toast(text: error.message).show()
+        case .success:
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.customDomain)
+            Toast(text: UIConstants.strings.autocompleteCustomURLAdded).show()
+        }
+    }
+    
     func urlBar(_ urlBar: URLBar, didEnterText text: String) {
         overlayView.setSearchQuery(query: text, animated: true)
     }
@@ -582,6 +600,11 @@ extension BrowserViewController: URLBarDelegate {
             submit(url: urlBarURL)
             urlBar.url = urlBarURL
         }
+        
+        if let urlText = urlBar.url?.absoluteString {
+            overlayView.currentURL = urlText
+        }
+        
         urlBar.dismiss()
     }
 
