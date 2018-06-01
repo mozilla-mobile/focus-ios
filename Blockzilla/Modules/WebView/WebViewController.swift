@@ -85,7 +85,6 @@ class WebViewController: UIViewController, WebController {
     
     @available(iOS 9, *)
     func requestDesktop() {
-        
         guard let currentItem = browserView.backForwardList.currentItem else {
             return
         }
