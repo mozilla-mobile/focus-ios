@@ -6,6 +6,7 @@ import Foundation
 import UIKit
 import SnapKit
 import Telemetry
+import StoreKit
 
 class BrowserViewController: UIViewController {
     private class DrawerView: UIView {
@@ -185,7 +186,8 @@ class BrowserViewController: UIViewController {
         containWebView()
         createHomeView()
         createURLBar()
-
+        requestReviewIfNecessary()
+        
         guard shouldEnsureBrowsingMode else { return }
         ensureBrowsingMode()
         guard let url = initialUrl else { return }
@@ -357,6 +359,36 @@ class BrowserViewController: UIViewController {
         })
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.eraseButton)
+    }
+    
+    private func requestReviewIfNecessary() {
+        let currentLaunchCount = UserDefaults.standard.integer(forKey: UIConstants.strings.userDefaultsLaunchCountKey)
+        let threshold = UserDefaults.standard.integer(forKey: UIConstants.strings.userDefaultsLaunchThresholdKey)
+
+        if threshold == 0 {
+            UserDefaults.standard.set(14, forKey: UIConstants.strings.userDefaultsLaunchThresholdKey)
+        }
+
+        // Make sure the request isn't within 48 hours (172,800 seconds) of last request
+        let currentTime = Double(Date().timeIntervalSince1970)
+        let previousRequest = UserDefaults.standard.double(forKey: UIConstants.strings.userDefaultsLastReviewRequestDate)
+        
+        if currentLaunchCount <= threshold ||  currentTime - previousRequest < 172800 {
+            return
+        }
+
+        SKStoreReviewController.requestReview()
+        UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: UIConstants.strings.userDefaultsLastReviewRequestDate)
+
+        // Increment the threshold by 50 so the user is not constantly pestered with review requests
+        switch threshold {
+            case 14:
+                UserDefaults.standard.set(64, forKey: UIConstants.strings.userDefaultsLaunchThresholdKey)
+            case 64:
+                UserDefaults.standard.set(114, forKey: UIConstants.strings.userDefaultsLaunchThresholdKey)
+            default:
+                break
+        }
     }
 
     fileprivate func showSettings() {
