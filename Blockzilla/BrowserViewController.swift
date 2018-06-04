@@ -186,8 +186,12 @@ class BrowserViewController: UIViewController {
         containWebView()
         createHomeView()
         createURLBar()
-        requestReviewIfNecessary()
         
+        // Listen for request desktop site notifications
+        let nc = NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification), object: nil, queue: nil)  { _ in
+            self.webViewController.requestDesktop()
+        }
+
         guard shouldEnsureBrowsingMode else { return }
         ensureBrowsingMode()
         guard let url = initialUrl else { return }
@@ -323,6 +327,7 @@ class BrowserViewController: UIViewController {
         }
 
         // Reset the views. These changes won't be immediately visible since they'll be under the screenshot.
+        overlayView.currentURL = ""
         webViewController.reset()
         webViewContainer.isHidden = true
         browserToolbar.isHidden = true
@@ -570,6 +575,23 @@ class BrowserViewController: UIViewController {
 }
 
 extension BrowserViewController: URLBarDelegate {
+    
+    func urlBar(_ urlBar: URLBar, didAddCustomURL url: URL) {
+        // Add the URL to the autocomplete list:
+        let autocompleteSource = CustomCompletionSource()
+        
+        switch autocompleteSource.add(suggestion: url.absoluteString) {
+        case .error(.duplicateDomain):
+            break
+        case .error(let error):
+            guard !error.message.isEmpty else { return }
+            Toast(text: error.message).show()
+        case .success:
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.customDomain)
+            Toast(text: UIConstants.strings.autocompleteCustomURLAdded).show()
+        }
+    }
+    
     func urlBar(_ urlBar: URLBar, didEnterText text: String) {
         overlayView.setSearchQuery(query: text, animated: true)
     }
@@ -609,6 +631,11 @@ extension BrowserViewController: URLBarDelegate {
             submit(url: urlBarURL)
             urlBar.url = urlBarURL
         }
+        
+        if let urlText = urlBar.url?.absoluteString {
+            overlayView.currentURL = urlText
+        }
+        
         urlBar.dismiss()
     }
 
@@ -648,6 +675,24 @@ extension BrowserViewController: URLBarDelegate {
 }
 
 extension BrowserViewController: BrowserToolsetDelegate {
+    func browserToolsetDidLongPressReload(_ browserToolbar: BrowserToolset) {
+        // Request desktop site
+        urlBar.dismiss()
+        
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Request Desktop Site", style: .default, handler: { (action) in
+            self.webViewController.requestDesktop()
+        }))
+        alert.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
+
+        // Must handle iPad interface separately, as it does not implement action sheets
+        let iPadAlert = alert.popoverPresentationController
+        iPadAlert?.sourceView = browserToolbar.stopReloadButton
+        iPadAlert?.sourceRect = browserToolbar.stopReloadButton.bounds
+        
+        present(alert, animated: true)
+    }
+    
     func browserToolsetDidPressBack(_ browserToolset: BrowserToolset) {
         urlBar.dismiss()
         webViewController.goBack()
