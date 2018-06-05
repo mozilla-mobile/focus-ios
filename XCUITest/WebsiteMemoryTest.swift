@@ -18,15 +18,20 @@ class WebsiteMemoryTest: BaseTestCase {
     
     func testGoogleTextField() {
         let app = XCUIApplication()
-        var googleSearchField = app.webViews.searchFields["Search"]
-        
+        var googleSearchField: XCUIElement = app.webViews.otherElements["Search"]
+
         // Enter 'google' on the search field to go to google site
         loadWebPage("google")
         if app.webViews.otherElements["Search"].exists {
-            googleSearchField =  app.webViews.otherElements["Search"]
+            // Do nothing, it's the initially expected type
+        } else if  app.webViews.searchFields["Search"].exists {
+            // Set field type of searchField
+            googleSearchField = app.webViews.searchFields["Search"]
+        } else {
+            // Fail, the field is not found
+            XCTAssertTrue(false, "Search field type not found")
         }
-        waitforEnable(element: googleSearchField)
-        
+
         // type 'mozilla' (typing doesn't work cleanly with UIWebview, so had to paste from clipboard)
         UIPasteboard.general.string = "mozilla"
         googleSearchField.tap()
@@ -34,17 +39,21 @@ class WebsiteMemoryTest: BaseTestCase {
         waitforExistence(element: app.menuItems["Paste"])
         app.menuItems["Paste"].tap()
         app.buttons["Google Search"].tap()
-        
+
         // wait for mozilla link to appear
         waitforExistence(element: app.links["Mozilla"].staticTexts["Mozilla"])
-        
+
         // revisit google site
         app.buttons["ERASE"].tap()
-        waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
+        // Disabling this check since BB seem to intermittently miss this popup which disappears after 1~2 seconds
+        // The popup is also checked in PastenGOTest
+        //waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
+        waitforExistence(element: app.staticTexts["Browse. Erase. Repeat."])
+        waitforExistence(element: app.staticTexts["Automatic private browsing."])
         loadWebPage("google")
         waitforExistence(element: googleSearchField)
         googleSearchField.tap()
-        
+
         // check the world 'mozilla' does not appear in the list of autocomplete
         waitforNoExistence(element: app.webViews.textFields["mozilla"])
         waitforNoExistence(element: app.webViews.searchFields["mozilla"])

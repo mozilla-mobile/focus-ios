@@ -4,6 +4,8 @@
 
 import UIKit
 import WebKit
+import Telemetry
+import OnePasswordExtension
 
 protocol BrowserState {
     var url: URL? { get }
@@ -14,7 +16,7 @@ protocol BrowserState {
 }
 
 protocol WebController {
-    weak var delegate: WebControllerDelegate? { get set }
+    var delegate: WebControllerDelegate? { get set }
     var canGoBack: Bool { get }
     var canGoForward: Bool { get }
 
@@ -40,16 +42,19 @@ class WebViewController: UIViewController, WebController {
     weak var delegate: WebControllerDelegate?
 
     private var browserView = WKWebView()
+    var onePasswordExtensionItem: NSExtensionItem!
     private var progressObserver: NSKeyValueObservation?
-    fileprivate var trackingProtecitonStatus = TrackingProtectionStatus.on(TrackingInformation()) {
+    private var trackingProtectionStatus = TrackingProtectionStatus.on(TPPageStats()) {
         didSet {
-            delegate?.webController(self, didUpdateTrackingProtectionStatus: trackingProtecitonStatus)
+            delegate?.webController(self, didUpdateTrackingProtectionStatus: trackingProtectionStatus)
         }
     }
 
-    fileprivate var trackingInformation = TrackingInformation() {
+    fileprivate var trackingInformation = TPPageStats() {
         didSet {
-            if case .on = trackingProtecitonStatus { trackingProtecitonStatus = .on(trackingInformation) }
+            if case .on = trackingProtectionStatus {
+                trackingProtectionStatus = .on(trackingInformation)
+            }
         }
     }
 
@@ -67,7 +72,7 @@ class WebViewController: UIViewController, WebController {
         browserView.load(URLRequest(url: URL(string: "about:blank")!))
         browserView.navigationDelegate = nil
         browserView.removeFromSuperview()
-        trackingProtecitonStatus = .on(TrackingInformation())
+        trackingProtectionStatus = .on(TPPageStats())
         browserView = WKWebView()
         setupWebview()
     }
@@ -77,6 +82,26 @@ class WebViewController: UIViewController, WebController {
     func goBack() { browserView.goBack() }
     func goForward() { browserView.goForward() }
     func reload() { browserView.reload() }
+    
+    @available(iOS 9, *)
+    func requestDesktop() {
+        guard let currentItem = browserView.backForwardList.currentItem else {
+            return
+        }
+    
+        browserView.customUserAgent = UserAgent.getDesktopUserAgent()
+        
+        if currentItem.url != currentItem.initialURL {
+            // Reload the initial URL to avoid UA specific redirection
+            browserView.load(URLRequest(url: currentItem.initialURL, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 60))
+        } else {
+            reload() // Reload the current URL. We cannot use loadRequest in this case because it seems to leverage caching.
+        }
+        
+        // Unset the desktopUserAgent
+        browserView.customUserAgent = UserAgent.browserUserAgent
+    }
+    
     func stop() { browserView.stopLoading() }
 
     private func setupWebview() {
@@ -131,17 +156,21 @@ class WebViewController: UIViewController, WebController {
     }
 
     func disableTrackingProtection() {
+        guard case .on = trackingProtectionStatus else { return }
+
         browserView.configuration.userContentController.removeScriptMessageHandler(forName: "focusTrackingProtection")
         browserView.configuration.userContentController.removeScriptMessageHandler(forName: "focusTrackingProtectionPostLoad")
         browserView.configuration.userContentController.removeAllUserScripts()
         browserView.configuration.userContentController.removeAllContentRuleLists()
-        trackingProtecitonStatus = .off
+        trackingProtectionStatus = .off
     }
 
     func enableTrackingProtection() {
+        guard case .off = trackingProtectionStatus else { return }
+
         setupBlockLists()
         setupUserScripts()
-        trackingProtecitonStatus = .on(TrackingInformation())
+        trackingProtectionStatus = .on(TPPageStats())
     }
 }
 
@@ -166,7 +195,7 @@ extension WebViewController: UIScrollViewDelegate {
 extension WebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         delegate?.webControllerDidStartNavigation(self)
-        if case .on = trackingProtecitonStatus { trackingInformation = TrackingInformation() }
+        if case .on = trackingProtectionStatus { trackingInformation = TPPageStats() }
 
         updateBackForwardState(webView: webView)
     }
@@ -181,7 +210,15 @@ extension WebViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         let present: (UIViewController) -> Void = { self.present($0, animated: true, completion: nil) }
-        let decision: WKNavigationActionPolicy = RequestHandler().handle(request: navigationAction.request, alertCallback: present) ? .allow : .cancel
+
+        // prevent Focus from opening universal links
+        // https://stackoverflow.com/questions/38450586/prevent-universal-links-from-opening-in-wkwebview-uiwebview
+        let allowDecision = WKNavigationActionPolicy(rawValue: WKNavigationActionPolicy.allow.rawValue + 2) ?? .allow
+
+        let decision: WKNavigationActionPolicy = RequestHandler().handle(request: navigationAction.request, alertCallback: present) ? allowDecision : .cancel
+        if navigationAction.navigationType == .linkActivated && browserView.url != navigationAction.request.url {
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.websiteLink)
+        }
         decisionHandler(decision)
     }
 }
@@ -208,14 +245,39 @@ extension WebViewController: WKUIDelegate {
 extension WebViewController: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         guard let body = message.body as? [String: String],
-              let urlString = body["url"] else { return }
+            let urlString = body["url"],
+            var components = URLComponents(string: urlString) else {
+                return
+        }
 
-        guard var components = URLComponents(string: urlString) else { return }
         components.scheme = "http"
         guard let url = components.url else { return }
 
-        if let listItem = TrackingProtection.shared.isBlocked(url: url) {
-            trackingInformation = trackingInformation.create(byAddingListItem: listItem)
+        let enabled = Utils.getEnabledLists().compactMap { BlocklistName(rawValue: $0) }
+        TPStatsBlocklistChecker.shared.isBlocked(url: url, enabledLists: enabled).uponQueue(.main) { listItem in
+            if let listItem = listItem {
+                self.trackingInformation = self.trackingInformation.create(byAddingListItem: listItem)
+            }
         }
+    }
+}
+
+extension WebViewController {
+    func createPasswordManagerExtensionItem() {
+        OnePasswordExtension.shared().createExtensionItem(forWebView: browserView, completion: {(extensionItem, error) -> Void in
+            if extensionItem == nil {
+                return
+            }
+            // Set the 1Password extension item property
+            self.onePasswordExtensionItem = extensionItem
+        })
+    }
+    
+    func fillPasswords(returnedItems: [AnyObject]) {
+        OnePasswordExtension.shared().fillReturnedItems(returnedItems, intoWebView: browserView, completion: { (success, returnedItemsError) -> Void in
+            if !success {
+                return
+            }
+        })
     }
 }

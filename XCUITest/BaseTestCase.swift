@@ -11,7 +11,8 @@ class BaseTestCase: XCTestCase {
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
-        XCUIApplication().launch()
+        app.launchArguments = ["testMode"]
+        app.launch()
     }
     
     override func tearDown() {
@@ -20,10 +21,15 @@ class BaseTestCase: XCTestCase {
     
     //If it is a first run, first run window should be gone
     func dismissFirstRunUI() {
-        let firstRunUI = XCUIApplication().buttons["OK, GOT IT!"]
-        
+        let firstRunUI = XCUIApplication().buttons["OK, Got It!"]
+        let onboardingUI = XCUIApplication().buttons["Skip"]
+
         if (firstRunUI.exists) {
             firstRunUI.tap()
+        }
+
+        if (onboardingUI.exists) {
+            onboardingUI.tap()
         }
     }
     
@@ -119,19 +125,23 @@ class BaseTestCase: XCTestCase {
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
         
         searchOrEnterAddressTextField.typeText(url + "\n")
-        
+
+        // Wait for 2 seconds until the progressbar appears. Using waitForExistence is not reliable, since it
+        // sometimes waits until idle, and by that time progressbard has gone.
+        Thread.sleep(forTimeInterval: 2)
+
+        // Now check for progressBar to disappear
         if waitForLoadToFinish {
             waitForWebPageLoad()
         }
     }
-    
+
     func waitForWebPageLoad () {
         let app = XCUIApplication()
         let finishLoadingTimeout: TimeInterval = 30
         let progressIndicator = app.progressIndicators.element(boundBy: 0)
-        waitforExistence(element: progressIndicator)
-        expectation(for: NSPredicate(format: "exists = true"), evaluatedWith: progressIndicator, handler: nil)
-        expectation(for: NSPredicate(format: "value BEGINSWITH '0'"), evaluatedWith: progressIndicator, handler: nil)
+
+        expectation(for: NSPredicate(format: "exists != true"), evaluatedWith: progressIndicator, handler: nil)
         waitForExpectations(timeout: finishLoadingTimeout, handler: nil)
     }
 }

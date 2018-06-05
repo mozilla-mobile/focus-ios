@@ -5,7 +5,7 @@
 import UIKit
 import SnapKit
 
-private extension BlockLists.List {
+private extension BlocklistName {
     var labelText: String {
         switch self {
         case .advertising: return UIConstants.strings.adTrackerLabel
@@ -47,16 +47,16 @@ class TrackingProtectionBreakdownVisualizer: UIView {
 
         backgroundColor = UIConstants.colors.trackingProtectionBreakdownBackground
 
-        adSection.backgroundColor = BlockLists.List.advertising.color
+        adSection.backgroundColor = BlocklistName.advertising.color
         addSubview(adSection)
 
-        analyticSection.backgroundColor = BlockLists.List.analytics.color
+        analyticSection.backgroundColor = BlocklistName.analytics.color
         addSubview(analyticSection)
 
-        socialSection.backgroundColor = BlockLists.List.social.color
+        socialSection.backgroundColor = BlocklistName.social.color
         addSubview(socialSection)
 
-        contentSection.backgroundColor = BlockLists.List.content.color
+        contentSection.backgroundColor = BlocklistName.content.color
         addSubview(contentSection)
     }
     
@@ -117,7 +117,7 @@ class TrackingProtectionBreakdownVisualizer: UIView {
         contentSection.snp.remakeConstraints { make in
             make.top.equalToSuperview()
             make.height.equalToSuperview()
-            make.width.equalTo(0)
+            make.width.equalTo(0).priority(500)
             make.width.equalToSuperview().multipliedBy(calculateMultiplier(info.contentCount))
             make.trailing.equalToSuperview().priority(500)
         }
@@ -126,8 +126,8 @@ class TrackingProtectionBreakdownVisualizer: UIView {
 
 class TrackingProtectionBreakdownItem: UIView {
     private let indicatorView = UIView()
-    private let titleLabel = UILabel()
-    private let counterLabel = UILabel()
+    private let titleLabel = SmartLabel()
+    private let counterLabel = SmartLabel()
 
     override var intrinsicContentSize: CGSize { return CGSize(width: 0, height: 56) }
 
@@ -145,6 +145,7 @@ class TrackingProtectionBreakdownItem: UIView {
 
         counterLabel.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         counterLabel.textColor = UIConstants.colors.trackingProtectionPrimary
+        counterLabel.accessibilityIdentifier = "TrackingProtectionBreakdownItem.counterLabel"
         addSubview(counterLabel)
 
         indicatorView.snp.makeConstraints { make in
@@ -153,9 +154,13 @@ class TrackingProtectionBreakdownItem: UIView {
             make.width.equalTo(8)
         }
 
+        let counterWidth = NSString(string: "1000").size(withAttributes: [NSAttributedStringKey.font: counterLabel.font]).width
+
         titleLabel.snp.makeConstraints { make in
             make.centerY.equalTo(indicatorView.snp.centerY)
             make.leading.equalTo(indicatorView.snp.trailing).offset(12)
+            // Leave space on the right for the label to grow
+            make.trailing.equalToSuperview().inset(counterWidth)
         }
 
         counterLabel.snp.makeConstraints { make in
@@ -176,13 +181,13 @@ class TrackingProtectionBreakdownItem: UIView {
 }
 
 class TrackingProtectionBreakdownView: UIView {
-    private let titleLabel = UILabel()
-    private let counterLabel = UILabel()
+    private let titleLabel = SmartLabel()
+    private let counterLabel = SmartLabel()
     private let breakdown = TrackingProtectionBreakdownVisualizer()
-    private let adItem = TrackingProtectionBreakdownItem(text: UIConstants.strings.adTrackerLabel, color: BlockLists.List.advertising.color)
-    private let analyticItem = TrackingProtectionBreakdownItem(text: UIConstants.strings.analyticTrackerLabel, color: BlockLists.List.analytics.color)
-    private let contentItem = TrackingProtectionBreakdownItem(text: UIConstants.strings.contentTrackerLabel, color: BlockLists.List.content.color)
-    private let socialItem = TrackingProtectionBreakdownItem(text: UIConstants.strings.socialTrackerLabel, color: BlockLists.List.social.color)
+    private let adItem = TrackingProtectionBreakdownItem(text: UIConstants.strings.adTrackerLabel, color: BlocklistName.advertising.color)
+    private let analyticItem = TrackingProtectionBreakdownItem(text: UIConstants.strings.analyticTrackerLabel, color: BlocklistName.analytics.color)
+    private let contentItem = TrackingProtectionBreakdownItem(text: UIConstants.strings.contentTrackerLabel, color: BlocklistName.content.color)
+    private let socialItem = TrackingProtectionBreakdownItem(text: UIConstants.strings.socialTrackerLabel, color: BlocklistName.social.color)
     private var stackView: UIStackView?
     private let learnMoreWrapper = UIView()
     fileprivate let learnMoreButton = UIButton()
@@ -231,7 +236,7 @@ class TrackingProtectionBreakdownView: UIView {
         addSubview(stackView)
         self.stackView = stackView
 
-        learnMoreButton.setTitle("Learn More", for: .normal)
+        learnMoreButton.setTitle(UIConstants.strings.trackingProtectionLearnMore, for: .normal)
         learnMoreButton.setTitleColor(UIConstants.colors.trackingProtectionLearnMore, for: .normal)
         learnMoreButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         learnMoreButton.contentHorizontalAlignment = .leading
@@ -286,12 +291,11 @@ class TrackingProtectionBreakdownView: UIView {
 }
 
 class TrackingProtectionToggleView: UIView {
-    private let icon = UIImageView(image: #imageLiteral(resourceName: "tracking_protection"))
-    private let label = UILabel(frame: .zero)
+    private let icon = UIImageView(image: #imageLiteral(resourceName: "tracking_protection").imageFlippedForRightToLeftLayoutDirection())
+    private let label = SmartLabel(frame: .zero)
     let toggle = UISwitch()
     private let borderView = UIView()
-    private let descriptionLabel = UILabel()
-
+    private let descriptionLabel = SmartLabel()
 
     var trackingProtectionStatus = TrackingProtectionStatus.off {
         didSet {
@@ -314,6 +318,7 @@ class TrackingProtectionToggleView: UIView {
         addSubview(label)
 
         toggle.onTintColor = UIConstants.colors.toggleOn
+        toggle.accessibilityIdentifier = "TrackingProtectionToggleView.toggleTrackingProtection"
         addSubview(toggle)
 
         borderView.backgroundColor = UIConstants.colors.settingsSeparator
@@ -322,7 +327,7 @@ class TrackingProtectionToggleView: UIView {
         descriptionLabel.text = String(format: UIConstants.strings.trackingProtectionToggleDescription, AppInfo.productName)
         descriptionLabel.font = UIFont.systemFont(ofSize: 14)
         descriptionLabel.textColor = UIConstants.colors.trackingProtectionSecondary
-        descriptionLabel.numberOfLines = 0
+        descriptionLabel.numberOfLines = 2
         addSubview(descriptionLabel)
         setupConstraints()
     }
@@ -335,8 +340,7 @@ class TrackingProtectionToggleView: UIView {
         }
 
         label.snp.makeConstraints {make in
-            make.leading.equalTo(icon.snp.trailing).offset(08)
-            make.height.equalToSuperview()
+            make.leading.equalTo(icon.snp.trailing).offset(8)
             make.centerY.equalToSuperview()
             make.trailing.equalTo(toggle.snp.leading).offset(-8)
         }
@@ -345,6 +349,8 @@ class TrackingProtectionToggleView: UIView {
             make.centerY.equalToSuperview()
             make.trailing.equalTo(safeAreaLayoutGuide).offset(-16)
         }
+
+        toggle.setContentCompressionResistancePriority(.required, for: .horizontal)
 
         borderView.snp.makeConstraints { make in
             make.top.equalTo(toggle.snp.bottom).offset(8)
@@ -381,6 +387,7 @@ class TrackingProtectionView: UIView {
         backgroundColor = UIConstants.colors.background
 
         closeButton.setImage(#imageLiteral(resourceName: "icon_stop_menu"), for: .normal)
+        closeButton.accessibilityIdentifier = "TrackingProtectionView.closeButton"
         addSubview(closeButton)
         addSubview(scrollView)
 
@@ -420,7 +427,7 @@ class TrackingProtectionView: UIView {
 class TrackingProtectionSummaryViewController: UIViewController {
     weak var delegate: TrackingProtectionSummaryDelegate?
     
-    var trackingProtectionStatus = TrackingProtectionStatus.on(TrackingInformation()) {
+    var trackingProtectionStatus = TrackingProtectionStatus.on(TPPageStats()) {
         didSet {
             trackingProtectionView.trackingProtectionStatus = trackingProtectionStatus
         }

@@ -15,7 +15,7 @@ let DefaultTimeoutTimeInterval = 10.0 // Seconds.  We'll want some telemetry on 
  */
 class SettingsContentViewController: UIViewController, WKNavigationDelegate {
     let interstitialBackgroundColor: UIColor
-    var url: URL!
+    var url: URL
     var timer: Timer?
     
     var isLoaded: Bool = false {
@@ -141,7 +141,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         let spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
         view.addSubview(spinner)
         
-        let error = UILabel()
+        let error = SmartLabel()
 //        error.text = TODOPageLoadErrorString
 //        error.textColor = UIColor.red
 //        error.textAlignment = NSTextAlignment.center
@@ -181,6 +181,19 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         self.timer?.invalidate()
         self.timer = nil
         self.isLoaded = true
+    }
+
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        let isLicensePage = navigationAction.request.url?.pathComponents.last.map({ $0 == "licenses.html" }) ?? false
+
+        guard !isLicensePage else {
+            decisionHandler(.cancel)
+            guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else { return }
+            UIApplication.shared.open(settingsUrl, options: [:], completionHandler: nil)
+            return
+        }
+
+        decisionHandler(.allow)
     }
 }
 

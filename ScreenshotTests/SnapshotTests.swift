@@ -47,11 +47,11 @@ class SnapshotTests: XCTestCase {
         app.switches["BlockerToggle.BlockOther"].tap()
         snapshot("09SettingsBlockOtherContentTrackers")
     }
-
+    
     func test03About() {
         let app = XCUIApplication()
         app.buttons["HomeView.settingsButton"].tap()
-        app.buttons["SettingsViewController.aboutButton"].tap()
+        app.cells["settingsViewController.about"].tap()
         snapshot("10About")
         app.swipeUp()
         snapshot("11About")
@@ -108,6 +108,44 @@ class SnapshotTests: XCTestCase {
         app.menuItems.element(boundBy: 3).tap()
 
         snapshot("08PasteAndGo")
+    }
+    
+    func test09TrackingProtection() {
+        let app = XCUIApplication()
+
+        // Inject a string into clipboard
+        let clipboardString = "Hello world"
+        UIPasteboard.general.string = clipboardString
+
+        // Enter 'mozilla' on the search field
+        let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
+        searchOrEnterAddressTextField.typeText("mozilla.org\n")
+
+        // Check the correct site is reached
+        waitForValueContains(element: searchOrEnterAddressTextField, value: "https://www.mozilla.org/")
+        app.otherElements["URLBar.trackingProtectionIcon"].tap()
+        snapshot("09TrackingProtection")
+    }
+    
+    func test10CustomSearchEngines() {
+        let app = XCUIApplication()
+
+        // Cancel URLBar
+        app.buttons["URLBar.cancelButton"].tap()
+        app.buttons["HomeView.settingsButton"].tap()
+        app.cells["SettingsViewController.searchCell"].tap()
+        app.cells["addSearchEngine"].tap()
+        snapshot("10CustomSearchEngines")
+    }
+    
+    func test11AutocompleteURLs() {
+        let app = XCUIApplication()
+
+        // Cancel URLBar
+        app.buttons["URLBar.cancelButton"].tap()
+        app.buttons["HomeView.settingsButton"].tap()
+        app.cells["SettingsViewController.autocompleteCell"].tap()
+        snapshot("11AutocompleteURLs")
     }
 
     func waitForValueContains(element:XCUIElement, value:String, file: String = #file, line: UInt = #line) {

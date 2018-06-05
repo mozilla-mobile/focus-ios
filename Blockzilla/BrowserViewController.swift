@@ -47,7 +47,7 @@ class BrowserViewController: UIViewController {
         case animating
     }
 
-    private var trackingProtectionStatus: TrackingProtectionStatus = .on(TrackingInformation()) {
+    private var trackingProtectionStatus: TrackingProtectionStatus = .on(TPPageStats()) {
         didSet {
             trackingProtectionSummaryController.trackingProtectionStatus = trackingProtectionStatus
             urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus)
@@ -68,6 +68,10 @@ class BrowserViewController: UIViewController {
 
     private var shouldEnsureBrowsingMode = false
     private var initialUrl: URL?
+    
+    static let userDefaultsTrackersBlockedKey = "lifetimeTrackersBlocked"
+    static let userDefaultsShareTrackerStatsKeyOLD = "shareTrackerStats"
+    static let userDefaultsShareTrackerStatsKeyNEW = "shareTrackerStatsNew"
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)
@@ -181,6 +185,11 @@ class BrowserViewController: UIViewController {
         containWebView()
         createHomeView()
         createURLBar()
+        
+        // Listen for request desktop site notifications
+        let nc = NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification), object: nil, queue: nil)  { _ in
+            self.webViewController.requestDesktop()
+        }
 
         guard shouldEnsureBrowsingMode else { return }
         ensureBrowsingMode()
@@ -194,19 +203,23 @@ class BrowserViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(true, animated: animated)
-
-        // Prevent the keyboard from showing up until after the user has viewed the Intro.
-        let userHasSeenIntro = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone) == AppDelegate.prefIntroVersion
-
-        if userHasSeenIntro && !urlBar.inBrowsingMode {
-            urlBar.becomeFirstResponder()
-        }
         
         homeView?.setHighlightWhatsNew(shouldHighlight: shouldShowWhatsNew())
         
         super.viewWillAppear(animated)
     }
-
+    
+    override func viewDidAppear(_ animated: Bool) {
+        // Prevent the keyboard from showing up until after the user has viewed the Intro.
+        let userHasSeenIntro = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone) == AppDelegate.prefIntroVersion
+        
+        if userHasSeenIntro && !urlBar.inBrowsingMode {
+            self.urlBar.becomeFirstResponder()
+        }
+        
+        super.viewDidAppear(animated)
+    }
+    
     private func containWebView() {
         addChildViewController(webViewController)
         webViewContainer.addSubview(webViewController.view)
@@ -240,6 +253,13 @@ class BrowserViewController: UIViewController {
             homeView.removeFromSuperview()
         }
         self.homeView = homeView
+        
+        if canShowTrackerStatsShareButton() && shouldShowTrackerStatsShareButton() {
+            let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
+            homeView.showTrackerStatsShareButton(text: String(format: UIConstants.strings.shareTrackerStatsLabel, String(numberOfTrackersBlocked)))
+        } else {
+            homeView.hideTrackerStatsShareButton()
+        }
     }
 
     private func createURLBar() {
@@ -281,6 +301,8 @@ class BrowserViewController: UIViewController {
         }, completion: { completed in
             self.drawerOverlayView.isHidden = true
         })
+
+        Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.close, object: TelemetryEventObject.trackingProtectionDrawer))
     }
 
     fileprivate func showDrawer() {
@@ -290,6 +312,8 @@ class BrowserViewController: UIViewController {
             self.drawerOverlayView.layer.opacity = 1
             self.view.layoutIfNeeded()
         }, completion: nil)
+
+        Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.trackingProtectionDrawer))
     }
 
     fileprivate func resetBrowser() {
@@ -305,6 +329,7 @@ class BrowserViewController: UIViewController {
         }
 
         // Reset the views. These changes won't be immediately visible since they'll be under the screenshot.
+        overlayView.currentURL = ""
         webViewController.reset()
         webViewContainer.isHidden = true
         browserToolbar.isHidden = true
@@ -464,11 +489,97 @@ class BrowserViewController: UIViewController {
             UIKeyCommand(input: "]", modifierFlags: .command, action: #selector(BrowserViewController.goForward), discoverabilityTitle: UIConstants.strings.browserForward),
         ]
     }
+
+    func canShowTrackerStatsShareButton() -> Bool {
+        return NSLocale.current.identifier == "en_US" && !AppInfo.isKlar
+    }
+
+    var showTrackerSemaphore = DispatchSemaphore(value: 1)
+    func flipCoinForShowTrackerButton(percent: Int = 30, userDefaults:UserDefaults = UserDefaults.standard) {
+        showTrackerSemaphore.wait()
+
+        var shouldShowTrackerStatsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
+
+        if shouldShowTrackerStatsToUser == nil {
+            // Check to see if the user was previously opted into the experiment
+            shouldShowTrackerStatsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD) as! Bool?
+
+            if shouldShowTrackerStatsToUser != nil {
+                // Remove the old flag
+                userDefaults.removeObject(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD)
+            }
+
+            if shouldShowTrackerStatsToUser == true {
+                // User has already been opted into the experiment, continue showing the share button
+                userDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
+            } else {
+                // User has not been put into a bucket for determining if it should be shown
+                // 30% chance they get put into the group that sees the share button
+                // arc4random_uniform(100) returns an integer 0 through 99 (inclusive)
+                if arc4random_uniform(100) < percent {
+                    userDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
+                } else {
+                    userDefaults.set(false, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
+                }
+            }
+        }
+
+        showTrackerSemaphore.signal()
+    }
+
+    func shouldShowTrackerStatsShareButton(percent: Int = 30, userDefaults:UserDefaults = UserDefaults.standard) -> Bool {
+        flipCoinForShowTrackerButton(percent:percent, userDefaults:userDefaults)
+
+        let shouldShowTrackerStatsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
+
+        return shouldShowTrackerStatsToUser == true &&
+            getNumberOfLifetimeTrackersBlocked(userDefaults: userDefaults) >= 10
+    }
+    
+    private func getNumberOfLifetimeTrackersBlocked(userDefaults: UserDefaults = UserDefaults.standard) -> Int {
+        return userDefaults.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
+    }
+    
+    private func setNumberOfLifetimeTrackersBlocked(numberOfTrackers: Int) {
+        UserDefaults.standard.set(numberOfTrackers, forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
+    }
 }
 
 extension BrowserViewController: URLBarDelegate {
+    
+    func urlBar(_ urlBar: URLBar, didAddCustomURL url: URL) {
+        // Add the URL to the autocomplete list:
+        let autocompleteSource = CustomCompletionSource()
+        
+        switch autocompleteSource.add(suggestion: url.absoluteString) {
+        case .error(.duplicateDomain):
+            break
+        case .error(let error):
+            guard !error.message.isEmpty else { return }
+            Toast(text: error.message).show()
+        case .success:
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.customDomain)
+            Toast(text: UIConstants.strings.autocompleteCustomURLAdded).show()
+        }
+    }
+    
     func urlBar(_ urlBar: URLBar, didEnterText text: String) {
         overlayView.setSearchQuery(query: text, animated: true)
+    }
+
+    func urlBarDidPressScrollTop(_: URLBar) {
+        guard !urlBar.isEditing else { return }
+
+        switch scrollBarState {
+        case .expanded:
+            // Just scroll the vertical position so the page doesn't appear under
+            // the notch on the iPhone X
+            var point = webViewController.scrollView.contentOffset
+            point.y = 0
+            webViewController.scrollView.setContentOffset(point, animated: true)
+        case .collapsed: showToolbars()
+        default: break
+        }
     }
 
     func urlBar(_ urlBar: URLBar, didSubmitText text: String) {
@@ -486,6 +597,7 @@ extension BrowserViewController: URLBarDelegate {
         var url = URIFixup.getURL(entry: text)
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
+            Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
             url = searchEngineManager.activeEngine.urlForQuery(text)
         } else {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
@@ -494,6 +606,11 @@ extension BrowserViewController: URLBarDelegate {
             submit(url: urlBarURL)
             urlBar.url = urlBarURL
         }
+        
+        if let urlText = urlBar.url?.absoluteString {
+            overlayView.currentURL = urlText
+        }
+        
         urlBar.dismiss()
     }
 
@@ -533,6 +650,24 @@ extension BrowserViewController: URLBarDelegate {
 }
 
 extension BrowserViewController: BrowserToolsetDelegate {
+    func browserToolsetDidLongPressReload(_ browserToolbar: BrowserToolset) {
+        // Request desktop site
+        urlBar.dismiss()
+        
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Request Desktop Site", style: .default, handler: { (action) in
+            self.webViewController.requestDesktop()
+        }))
+        alert.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
+
+        // Must handle iPad interface separately, as it does not implement action sheets
+        let iPadAlert = alert.popoverPresentationController
+        iPadAlert?.sourceView = browserToolbar.stopReloadButton
+        iPadAlert?.sourceRect = browserToolbar.stopReloadButton.bounds
+        
+        present(alert, animated: true)
+    }
+    
     func browserToolsetDidPressBack(_ browserToolset: BrowserToolset) {
         urlBar.dismiss()
         SearchHistoryUtils.goBack()
@@ -557,8 +692,11 @@ extension BrowserViewController: BrowserToolsetDelegate {
 
     func browserToolsetDidPressSend(_ browserToolset: BrowserToolset) {
         guard let url = webViewController.url else { return }
+        
+        let shareExtensionHelper = OpenUtils(url: url, webViewController: webViewController)
+        let controller = shareExtensionHelper.buildShareViewController(url: url, title: webViewController.title, printFormatter: webViewController.printFormatter, anchor: browserToolset.sendButton)
 
-        present(OpenUtils.buildShareViewController(url: url, title: webViewController.title, printFormatter: webViewController.printFormatter, anchor: browserToolset.sendButton), animated: true, completion: nil)
+        present(controller, animated: true, completion: nil)
     }
 
     func browserToolsetDidPressSettings(_ browserToolbar: BrowserToolset) {
@@ -569,6 +707,17 @@ extension BrowserViewController: BrowserToolsetDelegate {
 extension BrowserViewController: HomeViewDelegate {
     func homeViewDidPressSettings(homeView: HomeView) {
         showSettings()
+    }
+    
+    func shareTrackerStatsButtonTapped() {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.share, object: TelemetryEventObject.trackerStatsShareButton)
+        
+        let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
+        let appStoreUrl = URL(string:String(format: "https://mzl.la/2GZBav0"))
+        let text = String(format: UIConstants.strings.shareTrackerStatsText, AppInfo.productName, String(numberOfTrackersBlocked))
+        let shareController = UIActivityViewController(activityItems: [text, appStoreUrl as Any], applicationActivities: nil)
+        present(shareController, animated: true)
+        urlBar?.shouldPresent = false
     }
 }
 
@@ -584,6 +733,7 @@ extension BrowserViewController: OverlayViewDelegate {
     func overlayView(_ overlayView: OverlayView, didSearchForQuery query: String) {
         if let url = searchEngineManager.activeEngine.urlForQuery(query) {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.selectQuery, object: TelemetryEventObject.searchBar)
+            Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
             submit(url: url)
             urlBar.url = url
         }
@@ -600,6 +750,7 @@ extension BrowserViewController: OverlayViewDelegate {
         var url = URIFixup.getURL(entry: text)
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
+            Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
             url = searchEngineManager.activeEngine.urlForQuery(text)
         } else {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
@@ -659,12 +810,8 @@ extension BrowserViewController: WebControllerDelegate {
         // from catching the global progress events.
         guard homeView == nil else { return }
 
-        if estimatedProgress == 0.1 {
-            urlBar.progressBar.animateHidden(false, duration: UIConstants.layout.progressVisibilityAnimationDuration)
-            urlBar.progressBar.animateGradient()
-            return
-        }
-
+        urlBar.progressBar.alpha = 1
+        urlBar.progressBar.isHidden = false
         urlBar.progressBar.setProgress(Float(estimatedProgress), animated: true)
     }
 
@@ -739,6 +886,13 @@ extension BrowserViewController: WebControllerDelegate {
     func webController(_ controller: WebController, stateDidChange state: BrowserState) {}
 
     func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus) {
+        // Calculate the number of trackers blocked and add that to lifetime total
+        if case .on(let info) = trackingStatus,
+           case .on(let oldInfo) = trackingProtectionStatus {
+            let differenceSinceLastUpdate = max(0, info.total - oldInfo.total)
+            let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
+            setNumberOfLifetimeTrackersBlocked(numberOfTrackers: numberOfTrackersBlocked + differenceSinceLastUpdate)
+        }
         trackingProtectionStatus = trackingStatus
     }
 
@@ -833,6 +987,11 @@ extension BrowserViewController: TrackingProtectionSummaryDelegate {
         } else {
             webViewController.disableTrackingProtection()
         }
+
+
+        let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.trackingProtectionToggle)
+        telemetryEvent.addExtra(key: "to", value: enabled)
+        Telemetry.default.recordEvent(telemetryEvent)
 
         webViewController.reload()
         hideDrawer()

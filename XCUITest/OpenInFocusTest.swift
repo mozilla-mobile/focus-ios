@@ -16,7 +16,7 @@ class OpenInFocusTest : BaseTestCase {
         super.tearDown()
     }
 
-    func testOpenViaSafari() {
+    func xtestOpenViaSafari() {
         waitforHittable(element: app.textFields["URLBar.urlText"]) // wait for app.label
         let sharedExtName = app.label.contains("Klar") ? "Firefox Klar" : "Firefox Focus" as String
         
@@ -25,9 +25,12 @@ class OpenInFocusTest : BaseTestCase {
         waitforHittable(element: springboard.scrollViews.otherElements.icons[sharedExtName])
 
         let safariApp = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.mobilesafari")!
-        safariApp.launchArguments = ["-u", "https://www.google.com"]
+        safariApp.launchArguments = ["-u", "about:blank"]
         safariApp.launch()
-        
+
+        // Need to wait for the site to load as well as the share buttn availability
+        waitforExistence(element: safariApp.buttons["Google Search"])
+
         waitforEnable(element: safariApp.buttons["Share"])
         safariApp.buttons["Share"].tap()
         waitforEnable(element: safariApp.collectionViews.cells.buttons["More"])
@@ -44,7 +47,7 @@ class OpenInFocusTest : BaseTestCase {
         let focusApp = XCUIApplication()
         let addressBarField = focusApp.textFields["URLBar.urlText"]
         waitForWebPageLoad()
-
+        waitforExistence(element: focusApp.buttons["Google Search"])
         waitForValueContains(element: addressBarField, value: "https://www.google")
         waitforExistence(element: focusApp.buttons["ERASE"])  // check site is fully loaded
     }
