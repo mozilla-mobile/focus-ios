@@ -23,6 +23,7 @@ class OverlayView: UIView {
     private let copyBorder = UIView()
     private let findInPageButton = InsetButton()
     private let findInPageBorder = UIView()
+    public var currentURL = ""
 
     init() {
         super.init(frame: CGRect.zero)

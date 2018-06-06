@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "firefox.png",
+      "filename" : "desktop.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "firefox@2x.png",
+      "filename" : "desktop@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "firefox@3x.png",
+      "filename" : "desktop@3x.png",
       "scale" : "3x"
     }
   ],
