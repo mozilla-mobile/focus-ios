@@ -374,11 +374,12 @@ class BrowserViewController: UIViewController {
             UserDefaults.standard.set(14, forKey: UIConstants.strings.userDefaultsLaunchThresholdKey)
         }
 
-        // Make sure the request isn't within 48 hours (172,800 seconds) of last request
+        // Make sure the request isn't within 90 days of last request
+        let minimumDaysBetweenReviewRequest = 90.0
         let currentTime = Double(Date().timeIntervalSince1970)
         let previousRequest = UserDefaults.standard.double(forKey: UIConstants.strings.userDefaultsLastReviewRequestDate)
         
-        if currentLaunchCount <= threshold ||  currentTime - previousRequest < 172800 {
+        if currentLaunchCount <= threshold ||  currentTime - previousRequest < (minimumDaysBetweenReviewRequest * 24 * 60 * 60) {
             return
         }
 
