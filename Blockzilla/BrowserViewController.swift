@@ -338,6 +338,8 @@ class BrowserViewController: UIViewController {
 
         // Clear the cache and cookies, starting a new session.
         WebCacheUtils.reset()
+        
+        requestReviewIfNecessary()
 
         // Zoom out on the screenshot, then slide down, then remove it.
         mainContainerView.layoutIfNeeded()
@@ -372,19 +374,25 @@ class BrowserViewController: UIViewController {
 
         if threshold == 0 {
             UserDefaults.standard.set(14, forKey: UIConstants.strings.userDefaultsLaunchThresholdKey)
+            return
         }
 
         // Make sure the request isn't within 90 days of last request
-        let minimumDaysBetweenReviewRequest = 90.0
-        let currentTime = Double(Date().timeIntervalSince1970)
-        let previousRequest = UserDefaults.standard.double(forKey: UIConstants.strings.userDefaultsLastReviewRequestDate)
-        
-        if currentLaunchCount <= threshold ||  currentTime - previousRequest < (minimumDaysBetweenReviewRequest * 24 * 60 * 60) {
+        let minimumDaysBetweenReviewRequest = 90
+        let daysSinceLastRequest: Int
+        if let previousRequest = UserDefaults.standard.object(forKey: UIConstants.strings.userDefaultsLastReviewRequestDate) as? Date {
+            daysSinceLastRequest = Calendar.current.dateComponents([.day], from: previousRequest, to: Date()).day ?? 0
+        } else {
+            // No previous request date found, meaning we've never asked for a review
+            daysSinceLastRequest = 91
+        }
+
+        if currentLaunchCount <= threshold ||  daysSinceLastRequest < minimumDaysBetweenReviewRequest {
             return
         }
 
         SKStoreReviewController.requestReview()
-        UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: UIConstants.strings.userDefaultsLastReviewRequestDate)
+        UserDefaults.standard.set(Date(), forKey: UIConstants.strings.userDefaultsLastReviewRequestDate)
 
         // Increment the threshold by 50 so the user is not constantly pestered with review requests
         switch threshold {

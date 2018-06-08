@@ -412,11 +412,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 aboutClicked()
             } else if indexPath.row == 2 {
                 if let reviewURL = URL(string: "https://itunes.apple.com/us/app/firefox-focus-privacy-browser/id1055677337?mt=8"), UIApplication.shared.canOpenURL(reviewURL) {
-                    if #available(iOS 10.0, *) {
-                        UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
-                    } else {
-                        UIApplication.shared.openURL(reviewURL)
-                    }
+                    UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
                 }
             }
         default: break
