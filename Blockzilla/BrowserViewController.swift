@@ -368,7 +368,7 @@ class BrowserViewController: UIViewController {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.eraseButton)
     }
     
-    private func requestReviewIfNecessary() {
+    func requestReviewIfNecessary() {
         let currentLaunchCount = UserDefaults.standard.integer(forKey: UIConstants.strings.userDefaultsLaunchCountKey)
         let threshold = UserDefaults.standard.integer(forKey: UIConstants.strings.userDefaultsLaunchThresholdKey)
 
