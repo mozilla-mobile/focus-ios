@@ -384,14 +384,13 @@ class BrowserViewController: UIViewController {
             daysSinceLastRequest = Calendar.current.dateComponents([.day], from: previousRequest, to: Date()).day ?? 0
         } else {
             // No previous request date found, meaning we've never asked for a review
-            daysSinceLastRequest = 91
+            daysSinceLastRequest = minimumDaysBetweenReviewRequest
         }
 
         if currentLaunchCount <= threshold ||  daysSinceLastRequest < minimumDaysBetweenReviewRequest {
             return
         }
 
-        SKStoreReviewController.requestReview()
         UserDefaults.standard.set(Date(), forKey: UIConstants.strings.userDefaultsLastReviewRequestDate)
 
         // Increment the threshold by 50 so the user is not constantly pestered with review requests
@@ -403,6 +402,8 @@ class BrowserViewController: UIViewController {
             default:
                 break
         }
+        
+        SKStoreReviewController.requestReview()
     }
 
     fileprivate func showSettings() {
