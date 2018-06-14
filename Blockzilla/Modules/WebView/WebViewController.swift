@@ -24,6 +24,7 @@ protocol WebController {
 }
 
 protocol WebControllerDelegate: class {
+    func webControllerDidStartProvisionalNavigation(_ controller: WebController)
     func webControllerDidStartNavigation(_ controller: WebController)
     func webControllerDidFinishNavigation(_ controller: WebController)
     func webController(_ controller: WebController, didFailNavigationWithError error: Error)
@@ -230,6 +231,10 @@ extension WebViewController: WKNavigationDelegate {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.websiteLink)
         }
         decisionHandler(decision)
+    }
+    
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        delegate?.webControllerDidStartProvisionalNavigation(self)
     }
 }
 

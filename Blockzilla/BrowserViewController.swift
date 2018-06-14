@@ -750,25 +750,18 @@ extension BrowserViewController: BrowserToolsetDelegate {
     }
     
     func browserToolsetDidPressBack(_ browserToolset: BrowserToolset) {
-        urlBar.dismiss()
-        updateFindInPageVisibility(visible: false)
         webViewController.goBack()
     }
 
     func browserToolsetDidPressForward(_ browserToolset: BrowserToolset) {
-        urlBar.dismiss()
-        updateFindInPageVisibility(visible: false)
         webViewController.goForward()
     }
 
     func browserToolsetDidPressReload(_ browserToolset: BrowserToolset) {
-        urlBar.dismiss()
-        updateFindInPageVisibility(visible: false)
         webViewController.reload()
     }
 
     func browserToolsetDidPressStop(_ browserToolset: BrowserToolset) {
-        urlBar.dismiss()
         webViewController.stop()
     }
 
@@ -854,6 +847,11 @@ extension BrowserViewController: OverlayViewDelegate {
 }
 
 extension BrowserViewController: WebControllerDelegate {
+    func webControllerDidStartProvisionalNavigation(_ controller: WebController) {
+        urlBar.dismiss()
+        updateFindInPageVisibility(visible: false)
+    }
+    
     func webController(_ controller: WebController, didUpdateFindInPageResults currentResult: Int?, totalResults: Int?) {
         if let total = totalResults {
             findInPageBar?.totalResults = total
