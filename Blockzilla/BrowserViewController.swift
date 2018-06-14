@@ -222,7 +222,7 @@ class BrowserViewController: UIViewController {
         let userHasSeenIntro = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone) == AppDelegate.prefIntroVersion
         
         if userHasSeenIntro && !urlBar.inBrowsingMode {
-            self.urlBar.becomeFirstResponder()
+            urlBar.activateTextField()
         }
         
         super.viewDidAppear(animated)
@@ -416,7 +416,7 @@ class BrowserViewController: UIViewController {
                 screenshotView.alpha = 0
                 self.mainContainerView.layoutIfNeeded()
             }, completion: { _ in
-                self.urlBar.becomeFirstResponder()
+                self.urlBar.activateTextField()
                 Toast(text: UIConstants.strings.eraseMessage).show()
                 screenshotView.removeFromSuperview()
             })
@@ -464,7 +464,7 @@ class BrowserViewController: UIViewController {
     }
 
     func openOverylay(text: String) {
-        urlBar.becomeFirstResponder()
+        urlBar.activateTextField()
         urlBar.fillUrlBar(text: text)
     }
 
@@ -516,7 +516,7 @@ class BrowserViewController: UIViewController {
     }
     
     @objc private func selectLocationBar() {
-        urlBar.becomeFirstResponder()
+        urlBar.activateTextField()
     }
     
     @objc private func reload() {
