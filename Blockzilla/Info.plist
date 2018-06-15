@@ -47,6 +47,10 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key></key>
+	<string></string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>This lets you unlock the app.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>This lets you take and upload photos.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

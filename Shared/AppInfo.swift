@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import UIKit
 
 class AppInfo {
     /// Return the shared container identifier (also known as the app group) to be used with for example background
