@@ -190,6 +190,9 @@ class BrowserViewController: UIViewController {
         let nc = NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification), object: nil, queue: nil)  { _ in
             self.webViewController.requestDesktop()
         }
+        
+        let dropInteraction = UIDropInteraction(delegate: self)
+        view.addInteraction(dropInteraction)
 
         guard shouldEnsureBrowsingMode else { return }
         ensureBrowsingMode()
@@ -546,7 +549,7 @@ class BrowserViewController: UIViewController {
     }
 }
 
-extension BrowserViewController: UIDragInteractionDelegate {
+extension BrowserViewController: UIDragInteractionDelegate, UIDropInteractionDelegate {
     func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
         guard let url = urlBar.url, let itemProvider = NSItemProvider(contentsOf: url) else { return [] }
         let dragItem = UIDragItem(itemProvider: itemProvider)
@@ -567,6 +570,27 @@ extension BrowserViewController: UIDragInteractionDelegate {
                 }
                 return UIDragPreview(for: url)
             }
+        }
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
+        return session.canLoadObjects(ofClass: URL.self)
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
+        return UIDropProposal(operation: .copy)
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
+        _ = session.loadObjects(ofClass: URL.self) { urls in
+
+            guard let url = urls.first else {
+                return
+            }
+            
+            self.ensureBrowsingMode()
+            self.urlBar.fillUrlBar(text: url.absoluteString)
+            self.submit(url: url)
         }
     }
 }
