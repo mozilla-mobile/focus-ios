@@ -102,6 +102,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         }
         
+        var hasFooter: Bool {
+            switch self {
+            case .privacy, .mozilla: return true
+            case .search, .integration, .security, .performance: return false
+            }
+        }
+        
         static func getSections(deviceHasBiometrics: Bool) -> [Section] {
             var sections: [Section] = [.search, integration, privacy, .performance, .mozilla]
             if deviceHasBiometrics { sections.insert(.security, at: 3) }
@@ -110,19 +117,60 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
+    
+    enum BiometryType {
+        enum Status {
+            case hasIdentities
+            case hasNoIdentities
+            
+            init(_ hasIdentities: Bool) {
+                self = hasIdentities ? .hasIdentities : .hasNoIdentities
+            }
+        }
+        
+        case faceID(Status), touchID(Status), none
+        
+        private static let NO_IDENTITY_ERROR = -7
+        
+        var hasBiometry: Bool {
+            switch self {
+            case .touchID, .faceID: return true
+            case .none: return false
+            }
+        }
+        
+        var hasIdentities: Bool {
+            switch self {
+            case .touchID(Status.hasIdentities), .faceID(Status.hasIdentities): return true
+            default: return false
+            }
+        }
+        
+        init(context: LAContext) {
+            var biometricError: NSError?
+            guard context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &biometricError) else { self = .none; return }
+            let status = Status(biometricError.map({ $0.code != BiometryType.NO_IDENTITY_ERROR }) ?? true)
+            
+            switch context.biometryType {
+            case .faceID: self = .faceID(status)
+            case .touchID: self = .touchID(status)
+            case .none: self = .none
+            }
+        }
+    }
+    
     fileprivate let tableView = UITableView(frame: .zero, style: .grouped)
 
     // Hold a strong reference to the block detector so it isn't deallocated
     // in the middle of its detection.
     private let detector = BlockerEnabledDetector.makeInstance()
-    private let context = LAContext()
-    private var biometricError: NSError?
+    private let biometryType = BiometryType(context: LAContext())
     private var isSafariEnabled = false
     private let searchEngineManager: SearchEngineManager
     private var highlightsButton: UIBarButtonItem?
     private let whatsNew: WhatsNewDelegate
     private lazy var sections = {
-        Section.getSections(deviceHasBiometrics: self.shouldShowBiometricsToggle())
+        Section.getSections(deviceHasBiometrics: biometryType.hasBiometry)
     }()
     
     private var toggles = [
@@ -219,16 +267,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func createBiometricLoginToggle() {
-        if !shouldShowBiometricsToggle() {
-            return
-        }
+        if case BiometryType.none = biometryType { return }
         
-        let NO_IDENTITY_ERROR = -7
-        let deviceHasNoIdentities = biometricError.map({ $0.code == NO_IDENTITY_ERROR }) ?? false
         let label: String
         let subtitle: String
         
-        switch context.biometryType {
+        switch biometryType {
             case .faceID:
                 label = UIConstants.strings.labelFaceIDLogin
                 subtitle = UIConstants.strings.labelFaceIDLoginDescription
@@ -241,7 +285,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         
         let toggle = BlockerToggle(label: label, setting: SettingsToggle.biometricLogin, subtitle: subtitle)
-        toggle.toggle.isEnabled = !deviceHasNoIdentities
+        toggle.toggle.isEnabled = biometryType.hasIdentities
         
         toggles.insert(toggle, at: 5)
     }
@@ -256,41 +300,39 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let section = sections[section]
         
-        switch sections[section] {
-            case .privacy:
+        switch  section {
+            case .privacy, .mozilla:
                 let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
+                
+                let subtitle: NSMutableAttributedString
+                let accessabilityIdentifier: String
+                let selector: Selector
+                
+                if case .mozilla = section {
+                    accessabilityIdentifier = "SettingsViewController.learnMoreCell"
+                    subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.detailTextSendUsageData, AppInfo.productName), attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.settingsDetailLabel])
+                    selector = #selector(tappedLearnMoreFooter)
+                } else {
+                    accessabilityIdentifier = "SettingsViewController.trackingProtectionLearnMoreCell"
+                    subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.trackersDescriptionLabel, AppInfo.productName), attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.settingsDetailLabel])
+                    selector = #selector(tappedTrackingProtectionLearnMoreFooter)
+                }
+                
                 let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
-                let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.trackersDescriptionLabel, AppInfo.productName), attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.settingsDetailLabel])
                 let space = NSAttributedString(string: " ", attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
                 subtitle.append(space)
                 subtitle.append(learnMore)
+                
                 cell.detailTextLabel?.attributedText = subtitle
                 cell.detailTextLabel?.numberOfLines = 0
-                cell.accessibilityIdentifier = "SettingsViewController.trackingProtectionLearnMoreCell"
+                cell.accessibilityIdentifier = accessabilityIdentifier
                 cell.selectionStyle = .none
                 cell.backgroundColor = UIConstants.colors.background
                 cell.layoutMargins = UIEdgeInsets.zero
                 
-                let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tappedTrackingProtectionLearnMoreFooter))
-                cell.addGestureRecognizer(tapGesture)
-                
-                return cell
-            case .mozilla:
-                let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-                let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
-                let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.detailTextSendUsageData, AppInfo.productName), attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.settingsDetailLabel])
-                let space = NSAttributedString(string: " ", attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
-                subtitle.append(space)
-                subtitle.append(learnMore)
-                cell.detailTextLabel?.attributedText = subtitle
-                cell.detailTextLabel?.numberOfLines = 0
-                cell.accessibilityIdentifier = "SettingsViewController.learnMoreCell"
-                cell.selectionStyle = .none
-                cell.backgroundColor = UIConstants.colors.background
-                cell.layoutMargins = UIEdgeInsets.zero
-                
-                let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tappedLearnMoreFooter))
+                let tapGesture = UITapGestureRecognizer(target: self, action: selector)
                 cell.addGestureRecognizer(tapGesture)
                 
                 return cell
@@ -312,7 +354,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return sections[section] == .privacy || sections[section] == .mozilla ? 50 : 0
+        return sections[section].hasFooter ? 50 : 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -370,18 +412,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
-    }
-    
-    func shouldShowBiometricsToggle() -> Bool {
-        let NO_IDENTITY_ERROR = -7
-        let canAuthenticateWithBiometrics = context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &biometricError)
-        let deviceHasNoIdentities = biometricError.map({ $0.code == NO_IDENTITY_ERROR }) ?? false
-        
-        if (canAuthenticateWithBiometrics || deviceHasNoIdentities) {
-            return true
-        }
-        
-        return false
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

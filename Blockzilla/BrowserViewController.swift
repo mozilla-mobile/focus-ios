@@ -553,12 +553,14 @@ class BrowserViewController: UIViewController {
     }
 
     private func hideSplashScreen() {
-        if let splash = splashScreen {
-            splash.removeFromSuperview()
-        }
+        splashScreen?.removeFromSuperview()
     }
 
     private func displaySplashScreen() {
+        if let splash = splashScreen {
+            return
+        }
+        
         let splashView = UIView()
         splashView.backgroundColor = UIConstants.colors.background
         mainContainerView.addSubview(splashView)
