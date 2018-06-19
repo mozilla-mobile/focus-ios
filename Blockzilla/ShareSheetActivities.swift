@@ -124,7 +124,7 @@ class FindInPageActivity: UIActivity {
     }
     
     override var activityImage: UIImage? {
-        return #imageLiteral(resourceName: "request_desktop_site_activity")
+        return #imageLiteral(resourceName: "ios-find-in-page")
     }
     
     override func perform() {
