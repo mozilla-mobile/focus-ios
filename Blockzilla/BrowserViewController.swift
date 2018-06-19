@@ -355,6 +355,7 @@ class BrowserViewController: UIViewController {
                 findInPageBar.snp.makeConstraints { make in
                     make.height.equalTo(UIConstants.ToolbarHeight)
                     make.leading.trailing.equalTo(alertStackView)
+                    make.bottom.equalTo(alertStackView.snp.bottom)
                 }
                 
                 updateViewConstraints()
@@ -528,7 +529,9 @@ class BrowserViewController: UIViewController {
                 self.urlBar.collapseUrlBar(expandAlpha: 0, collapseAlpha: 1)
             }
 
-            self.browserToolbar.animateHidden(self.homeView != nil || self.showsToolsetInURLBar, duration: coordinator.transitionDuration)
+            self.browserToolbar.animateHidden(self.homeView != nil || self.showsToolsetInURLBar, duration: coordinator.transitionDuration, completion: {
+                self.updateViewConstraints()
+            })
         })
     }
 
