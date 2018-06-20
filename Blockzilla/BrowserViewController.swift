@@ -392,6 +392,8 @@ class BrowserViewController: UIViewController {
     func updateFindInPageVisibility(visible: Bool, text: String = "") {
         if visible {
             if findInPageBar == nil {
+                Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.findInPageBar)
+                
                 urlBar.dismiss()
                 let findInPageBar = FindInPageBar()
                 self.findInPageBar = findInPageBar
@@ -858,6 +860,7 @@ extension BrowserViewController: BrowserToolsetDelegate {
         
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Request Desktop Site", style: .default, handler: { (action) in
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.requestDesktop)
             self.webViewController.requestDesktop()
         }))
         alert.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
