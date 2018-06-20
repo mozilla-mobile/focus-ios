@@ -563,9 +563,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func displaySplashScreen() {
-        if let splash = splashScreen {
-            return
-        }
+        guard splashScreen == nil else { return }
         
         let splashView = UIView()
         splashView.backgroundColor = UIConstants.colors.background

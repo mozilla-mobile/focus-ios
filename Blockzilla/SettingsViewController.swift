@@ -267,7 +267,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func createBiometricLoginToggle() {
-        if case BiometryType.none = biometryType { return }
+        guard biometryType.hasBiometry else { return }
         
         let label: String
         let subtitle: String
@@ -302,7 +302,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let section = sections[section]
         
-        switch  section {
+        switch section {
             case .privacy, .mozilla:
                 let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
                 
