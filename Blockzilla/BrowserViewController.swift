@@ -693,6 +693,8 @@ extension BrowserViewController: UIDragInteractionDelegate, UIDropInteractionDel
             self.urlBar.fillUrlBar(text: url.absoluteString)
             self.submit(url: url)
         }
+    }
+}
 
 extension BrowserViewController: FindInPageBarDelegate {
     func findInPage(_ findInPage: FindInPageBar, didTextChange text: String) {
