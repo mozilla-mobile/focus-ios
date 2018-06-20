@@ -204,6 +204,11 @@ class BrowserViewController: UIViewController {
         NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification), object: nil, queue: nil)  { _ in
             self.webViewController.requestDesktop()
         }
+        
+        // Listen for find in page actvitiy notifications
+        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.findInPageNotification), object: nil, queue: nil)  { _ in
+            self.updateFindInPageVisibility(visible: true, text: "")
+        }
 
         guard shouldEnsureBrowsingMode else { return }
         ensureBrowsingMode()
@@ -398,6 +403,7 @@ class BrowserViewController: UIViewController {
                 findInPageBar.snp.makeConstraints { make in
                     make.height.equalTo(UIConstants.ToolbarHeight)
                     make.leading.trailing.equalTo(alertStackView)
+                    make.bottom.equalTo(alertStackView.snp.bottom)
                 }
                 
                 updateViewConstraints()
@@ -602,7 +608,9 @@ class BrowserViewController: UIViewController {
                 self.urlBar.collapseUrlBar(expandAlpha: 0, collapseAlpha: 1)
             }
 
-            self.browserToolbar.animateHidden(self.homeView != nil || self.showsToolsetInURLBar, duration: coordinator.transitionDuration)
+            self.browserToolbar.animateHidden(self.homeView != nil || self.showsToolsetInURLBar, duration: coordinator.transitionDuration, completion: {
+                self.updateViewConstraints()
+            })
         })
     }
 
