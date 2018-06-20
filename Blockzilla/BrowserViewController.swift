@@ -6,12 +6,16 @@ import Foundation
 import UIKit
 import SnapKit
 import Telemetry
+import LocalAuthentication
 import StoreKit
 
 class BrowserViewController: UIViewController {
     private class DrawerView: UIView {
         override var intrinsicContentSize: CGSize { return CGSize(width: 320, height: 0) }
     }
+
+    private var splashScreen: UIView?
+    private let context = LAContext()
 
     private let mainContainerView = UIView(frame: .zero)
     private let drawerContainerView = DrawerView(frame: .zero)
@@ -86,6 +90,7 @@ class BrowserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setupBiometrics()
         view.addSubview(mainContainerView)
         view.addSubview(drawerContainerView)
 
@@ -202,6 +207,11 @@ class BrowserViewController: UIViewController {
         
         let dropInteraction = UIDropInteraction(delegate: self)
         view.addInteraction(dropInteraction)
+      
+        // Listen for find in page actvitiy notifications
+        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.findInPageNotification), object: nil, queue: nil)  { _ in
+            self.updateFindInPageVisibility(visible: true, text: "")
+        }
 
         guard shouldEnsureBrowsingMode else { return }
         ensureBrowsingMode()
@@ -232,6 +242,44 @@ class BrowserViewController: UIViewController {
         super.viewDidAppear(animated)
     }
     
+    private func setupBiometrics() {
+        self.context.localizedReason = UIConstants.strings.biometricReason
+        self.context.localizedCancelTitle = UIConstants.strings.newSessionFromBiometricFailure
+
+        // Register for foreground notification to check biometric authentication
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationWillEnterForeground, object: nil, queue: nil) { notification in
+            var biometricError: NSError?
+
+            // Check if user is already in a cleared session, or doesn't have biometrics enabled in settings
+            if self.webViewContainer.isHidden || !Settings.getToggle(SettingsToggle.biometricLogin) {
+                return
+            }
+
+            self.displaySplashScreen()
+
+            if self.context.canEvaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, error: &biometricError) {
+                self.context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: self.context.localizedReason) {
+                    [unowned self] (success, _) in
+
+                    DispatchQueue.main.async {
+                        self.hideSplashScreen()
+                        if success {
+                            self.showToolbars()
+                        } else {
+                            // Clear the browser session, as the user failed to authenticate
+                            self.resetBrowser()
+                        }
+                    }
+                }
+            } else {
+                // Ran into an error with biometrics, so disable them and clear the browser:
+                Settings.set(false, forToggle: SettingsToggle.biometricLogin)
+                self.resetBrowser()
+                self.hideSplashScreen()
+            }
+        }
+    }
+
     private func containWebView() {
         addChildViewController(webViewController)
         webViewContainer.addSubview(webViewController.view)
@@ -361,6 +409,7 @@ class BrowserViewController: UIViewController {
                 findInPageBar.snp.makeConstraints { make in
                     make.height.equalTo(UIConstants.ToolbarHeight)
                     make.leading.trailing.equalTo(alertStackView)
+                    make.bottom.equalTo(alertStackView.snp.bottom)
                 }
                 
                 updateViewConstraints()
@@ -515,6 +564,35 @@ class BrowserViewController: UIViewController {
         urlBar.fillUrlBar(text: text)
     }
 
+    private func hideSplashScreen() {
+        splashScreen?.removeFromSuperview()
+    }
+
+    private func displaySplashScreen() {
+        guard splashScreen == nil else { return }
+        
+        let splashView = UIView()
+        splashView.backgroundColor = UIConstants.colors.background
+        mainContainerView.addSubview(splashView)
+
+        let logoImage = UIImageView(image: AppInfo.config.wordmark)
+        splashView.addSubview(logoImage)
+
+        splashView.snp.makeConstraints { make in
+            make.edges.equalTo(mainContainerView)
+        }
+
+        logoImage.snp.makeConstraints { make in
+            make.center.equalTo(splashView)
+        }
+
+        view.layoutIfNeeded()
+        splashView.layoutIfNeeded()
+
+        splashScreen = splashView
+        hideToolbars()
+    }
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         
@@ -534,7 +612,9 @@ class BrowserViewController: UIViewController {
                 self.urlBar.collapseUrlBar(expandAlpha: 0, collapseAlpha: 1)
             }
 
-            self.browserToolbar.animateHidden(self.homeView != nil || self.showsToolsetInURLBar, duration: coordinator.transitionDuration)
+            self.browserToolbar.animateHidden(self.homeView != nil || self.showsToolsetInURLBar, duration: coordinator.transitionDuration, completion: {
+                self.updateViewConstraints()
+            })
         })
     }
 
