@@ -740,7 +740,7 @@ extension BrowserViewController: UIDragInteractionDelegate, UIDropInteractionDel
     func dragInteraction(_ interaction: UIDragInteraction, previewForLifting item: UIDragItem, session: UIDragSession) -> UITargetedDragPreview? {
         let params = UIDragPreviewParameters()
         params.backgroundColor = UIColor.clear
-        return UITargetedDragPreview(view: urlBar.urlText, parameters: params)
+        return UITargetedDragPreview(view: urlBar.draggableUrlTextView, parameters: params)
     }
  
     func dragInteraction(_ interaction: UIDragInteraction, sessionDidMove session: UIDragSession) {

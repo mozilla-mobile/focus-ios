@@ -34,7 +34,8 @@ class URLBar: UIView {
 
     private let toolset = BrowserToolset()
     private let urlTextContainer = UIView()
-    public let urlText = URLTextField()
+    private let urlText = URLTextField()
+    var draggableUrlTextView: UIView { return urlText }
     private let truncatedUrlText = UITextView()
     private let shieldIcon = TrackingProtectionBadge()
     private let lockIcon = UIImageView(image: #imageLiteral(resourceName: "icon_https"))
@@ -729,29 +730,29 @@ extension URLBar: AutocompleteTextFieldDelegate {
     }
 }
 
-public class URLTextField: AutocompleteTextField {
+private class URLTextField: AutocompleteTextField {
     
     // Disable user interaction on resign so that touch and hold on URL bar creates menu
-    public override func resignFirstResponder() -> Bool {
+    override func resignFirstResponder() -> Bool {
         isUserInteractionEnabled = false
         return super.resignFirstResponder()
     }
     
-    public override var placeholder: String? {
+    override var placeholder: String? {
         didSet {
             attributedPlaceholder = NSAttributedString(string: placeholder ?? "", attributes: [NSAttributedStringKey.foregroundColor: UIConstants.colors.urlTextPlaceholder])
         }
     }
 
-    public override func textRect(forBounds bounds: CGRect) -> CGRect {
+    override func textRect(forBounds bounds: CGRect) -> CGRect {
         return getInsetRect(forBounds: bounds)
     }
 
-    public override func editingRect(forBounds bounds: CGRect) -> CGRect {
+    override func editingRect(forBounds bounds: CGRect) -> CGRect {
         return getInsetRect(forBounds: bounds)
     }
 
-    public func getInsetRect(forBounds bounds: CGRect) -> CGRect {
+    private func getInsetRect(forBounds bounds: CGRect) -> CGRect {
         // Add internal padding.
         let inset = bounds.insetBy(dx: UIConstants.layout.urlBarWidthInset, dy: UIConstants.layout.urlBarHeightInset)
 
@@ -764,7 +765,7 @@ public class URLTextField: AutocompleteTextField {
         return CGRect(x: inset.origin.x, y: inset.origin.y, width: inset.width - clearButtonWidth, height: inset.height)
     }
 
-    override public func rightViewRect(forBounds bounds: CGRect) -> CGRect {
+    override fileprivate func rightViewRect(forBounds bounds: CGRect) -> CGRect {
         return super.rightViewRect(forBounds: bounds).offsetBy(dx: -UIConstants.layout.urlBarWidthInset, dy: 0)
     }
 }
