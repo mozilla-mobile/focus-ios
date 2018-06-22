@@ -108,11 +108,7 @@ class DomainCompletion: AutocompleteTextFieldCompletionSource {
 
     func autocompleteTextFieldCompletionSource(_ autocompleteTextField: AutocompleteTextField, forText text: String) -> String? {
         guard !text.isEmpty else { return nil }
-
-        let domains = completionSources.lazy
-            .filter({ $0.enabled }) // Only include domain sources that are enabled in settings
-            .flatMap({ $0.getSuggestions() }) // Flatten all sources into a [String]
-
+        let domains = getDomains()
         for domain in domains {
             if let completion = self.completion(forDomain: domain, withText: text) {
                 return completion
@@ -120,6 +116,12 @@ class DomainCompletion: AutocompleteTextFieldCompletionSource {
         }
 
         return nil
+    }
+
+    public func getDomains() -> [String] {
+        return completionSources.lazy
+        .filter({ $0.enabled }) // Only include domain sources that are enabled in settings
+        .flatMap({ $0.getSuggestions() }) // Flatten all sources into a [String]
     }
 
     private func completion(forDomain domain: String, withText text: String) -> String? {

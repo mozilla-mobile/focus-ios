@@ -41,6 +41,7 @@ class TelemetryEventObject {
     public static let settingsButton = "settings_button"
     public static let setting = "setting"
     public static let menu = "menu"
+    public static let autocomplete = "autocomplete"
     public static let customDomain = "custom_domain"
     public static let pasteAndGo = "paste_and_go"
     public static let requestHandler = "request_handler"

@@ -22,6 +22,7 @@ protocol URLBarDelegate: class {
 
 class URLBar: UIView {
     weak var delegate: URLBarDelegate?
+    var currentUserInput: String?
 
     let progressBar = GradientProgressBar(progressViewStyle: .bar)
     var inBrowsingMode: Bool = false
@@ -713,11 +714,18 @@ extension URLBar: AutocompleteTextFieldDelegate {
     }
 
     func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool {
+        // Checks if the user used the autocomplete to finish their query
+        if let autocompleteText = autocompleteTextField.text, autocompleteText != currentUserInput {
+            Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.autocomplete))
+        }
+        currentUserInput = nil
         delegate?.urlBar(self, didSubmitText: autocompleteTextField.text ?? "")
         return true
     }
 
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didTextChange text: String) {
+        // Saves the most recent user input before returning the autocompleted domain
+        currentUserInput = text
         autocompleteTextField.rightView?.isHidden = text.isEmpty
 
         if !isEditing && shouldPresent {
