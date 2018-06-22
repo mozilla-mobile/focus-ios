@@ -715,18 +715,9 @@ extension URLBar: AutocompleteTextFieldDelegate {
 
     func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool {
         // Checks if the user used the autocomplete to finish their query
-        let domains = domainCompletion.getDomains()
         if let autocompleteText = autocompleteTextField.text, autocompleteText != currentUserInput {
-            for domain in domains {
-                if domain == autocompleteText.split(separator: "/")[0] {
-                    Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.autocomplete))
-
-                    // Just in case a user inputs a duplicate url in the custom autocomplete list
-                    break
-                }
-            }
+            Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.autocomplete))
         }
-
         currentUserInput = nil
         delegate?.urlBar(self, didSubmitText: autocompleteTextField.text ?? "")
         return true
