@@ -6,11 +6,16 @@ import Foundation
 import UIKit
 import SnapKit
 import Telemetry
+import LocalAuthentication
+import StoreKit
 
 class BrowserViewController: UIViewController {
     private class DrawerView: UIView {
         override var intrinsicContentSize: CGSize { return CGSize(width: 320, height: 0) }
     }
+
+    private var splashScreen: UIView?
+    private let context = LAContext()
 
     private let mainContainerView = UIView(frame: .zero)
     private let drawerContainerView = DrawerView(frame: .zero)
@@ -21,6 +26,7 @@ class BrowserViewController: UIViewController {
 
     private let trackingProtectionSummaryController = TrackingProtectionSummaryViewController()
 
+    fileprivate var keyboardState: KeyboardState?
     fileprivate let browserToolbar = BrowserToolbar()
     fileprivate var homeView: HomeView?
     fileprivate let overlayView = OverlayView()
@@ -29,6 +35,8 @@ class BrowserViewController: UIViewController {
     fileprivate var urlBar: URLBar!
     fileprivate var topURLBarConstraints = [Constraint]()
     fileprivate let requestHandler = RequestHandler()
+    fileprivate var findInPageBar: FindInPageBar?
+    fileprivate let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
 
     fileprivate var drawerConstraint: Constraint!
     fileprivate var toolbarBottomConstraint: Constraint!
@@ -47,7 +55,7 @@ class BrowserViewController: UIViewController {
         case animating
     }
 
-    private var trackingProtectionStatus: TrackingProtectionStatus = .on(TrackingInformation()) {
+    private var trackingProtectionStatus: TrackingProtectionStatus = .on(TPPageStats()) {
         didSet {
             trackingProtectionSummaryController.trackingProtectionStatus = trackingProtectionStatus
             urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus)
@@ -68,6 +76,10 @@ class BrowserViewController: UIViewController {
 
     private var shouldEnsureBrowsingMode = false
     private var initialUrl: URL?
+    
+    static let userDefaultsTrackersBlockedKey = "lifetimeTrackersBlocked"
+    static let userDefaultsShareTrackerStatsKeyOLD = "shareTrackerStats"
+    static let userDefaultsShareTrackerStatsKeyNEW = "shareTrackerStatsNew"
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)
@@ -78,6 +90,7 @@ class BrowserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setupBiometrics()
         view.addSubview(mainContainerView)
         view.addSubview(drawerContainerView)
 
@@ -174,6 +187,10 @@ class BrowserViewController: UIViewController {
             make.top.equalTo(urlBarContainer.snp.bottom)
             make.leading.trailing.bottom.equalTo(mainContainerView)
         }
+        
+        view.addSubview(alertStackView)
+        alertStackView.axis = .vertical
+        alertStackView.alignment = .center
 
         // true if device is an iPad or is an iPhone in landscape mode
         showsToolsetInURLBar = (UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == view.frame.size.width || view.frame.size.width > view.frame.size.height)) || (UIDevice.current.userInterfaceIdiom == .phone && view.frame.size.width > view.frame.size.height)
@@ -181,6 +198,17 @@ class BrowserViewController: UIViewController {
         containWebView()
         createHomeView()
         createURLBar()
+        updateViewConstraints()
+        
+        // Listen for request desktop site notifications
+        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification), object: nil, queue: nil)  { _ in
+            self.webViewController.requestDesktop()
+        }
+        
+        // Listen for find in page actvitiy notifications
+        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.findInPageNotification), object: nil, queue: nil)  { _ in
+            self.updateFindInPageVisibility(visible: true, text: "")
+        }
 
         guard shouldEnsureBrowsingMode else { return }
         ensureBrowsingMode()
@@ -205,12 +233,50 @@ class BrowserViewController: UIViewController {
         let userHasSeenIntro = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone) == AppDelegate.prefIntroVersion
         
         if userHasSeenIntro && !urlBar.inBrowsingMode {
-            self.urlBar.becomeFirstResponder()
+            urlBar.activateTextField()
         }
         
         super.viewDidAppear(animated)
     }
     
+    private func setupBiometrics() {
+        self.context.localizedReason = UIConstants.strings.biometricReason
+        self.context.localizedCancelTitle = UIConstants.strings.newSessionFromBiometricFailure
+
+        // Register for foreground notification to check biometric authentication
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationWillEnterForeground, object: nil, queue: nil) { notification in
+            var biometricError: NSError?
+
+            // Check if user is already in a cleared session, or doesn't have biometrics enabled in settings
+            if self.webViewContainer.isHidden || !Settings.getToggle(SettingsToggle.biometricLogin) {
+                return
+            }
+
+            self.displaySplashScreen()
+
+            if self.context.canEvaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, error: &biometricError) {
+                self.context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: self.context.localizedReason) {
+                    [unowned self] (success, _) in
+
+                    DispatchQueue.main.async {
+                        self.hideSplashScreen()
+                        if success {
+                            self.showToolbars()
+                        } else {
+                            // Clear the browser session, as the user failed to authenticate
+                            self.resetBrowser()
+                        }
+                    }
+                }
+            } else {
+                // Ran into an error with biometrics, so disable them and clear the browser:
+                Settings.set(false, forToggle: SettingsToggle.biometricLogin)
+                self.resetBrowser()
+                self.hideSplashScreen()
+            }
+        }
+    }
+
     private func containWebView() {
         addChildViewController(webViewController)
         webViewContainer.addSubview(webViewController.view)
@@ -244,6 +310,13 @@ class BrowserViewController: UIViewController {
             homeView.removeFromSuperview()
         }
         self.homeView = homeView
+        
+        if canShowTrackerStatsShareButton() && shouldShowTrackerStatsShareButton() {
+            let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
+            homeView.showTrackerStatsShareButton(text: String(format: UIConstants.strings.shareTrackerStatsLabel, String(numberOfTrackersBlocked)))
+        } else {
+            homeView.hideTrackerStatsShareButton()
+        }
     }
 
     private func createURLBar() {
@@ -299,6 +372,59 @@ class BrowserViewController: UIViewController {
 
         Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.trackingProtectionDrawer))
     }
+    
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
+        alertStackView.snp.remakeConstraints { make in
+            make.centerX.equalTo(self.view)
+            make.width.equalTo(self.view.snp.width)
+            
+            if let keyboardHeight = keyboardState?.intersectionHeightForView(view: self.view), keyboardHeight > 0 {
+                make.bottom.equalTo(self.view).offset(-keyboardHeight)
+            } else if !browserToolbar.isHidden {
+                make.bottom.equalTo(self.browserToolbar.snp.top)
+            } else {
+                make.bottom.equalTo(self.view.snp.bottom)
+            }
+        }
+    }
+    
+    func updateFindInPageVisibility(visible: Bool, text: String = "") {
+        if visible {
+            if findInPageBar == nil {
+                urlBar.dismiss()
+                let findInPageBar = FindInPageBar()
+                self.findInPageBar = findInPageBar
+                findInPageBar.text = text
+                findInPageBar.delegate = self
+                
+                alertStackView.addArrangedSubview(findInPageBar)
+                
+                findInPageBar.snp.makeConstraints { make in
+                    make.height.equalTo(UIConstants.ToolbarHeight)
+                    make.leading.trailing.equalTo(alertStackView)
+                    make.bottom.equalTo(alertStackView.snp.bottom)
+                }
+                
+                updateViewConstraints()
+                
+                // We make the find-in-page bar the first responder below, causing the keyboard delegates
+                // to fire. This, in turn, will animate the Find in Page container since we use the same
+                // delegate to slide the bar up and down with the keyboard. We don't want to animate the
+                // constraints added above, however, so force a layout now to prevent these constraints
+                // from being lumped in with the keyboard animation.
+                findInPageBar.layoutIfNeeded()
+            }
+            
+            self.findInPageBar?.becomeFirstResponder()
+        } else if let findInPageBar = self.findInPageBar {
+            findInPageBar.endEditing(true)
+            webViewController.evaluate("__firefox__.findDone()", completion: nil)
+            findInPageBar.removeFromSuperview()
+            self.findInPageBar = nil
+            updateViewConstraints()
+        }
+    }
 
     fileprivate func resetBrowser() {
         // Screenshot the browser, showing the screenshot on top.
@@ -310,6 +436,7 @@ class BrowserViewController: UIViewController {
         }
 
         // Reset the views. These changes won't be immediately visible since they'll be under the screenshot.
+        overlayView.currentURL = ""
         webViewController.reset()
         webViewContainer.isHidden = true
         browserToolbar.isHidden = true
@@ -320,6 +447,8 @@ class BrowserViewController: UIViewController {
 
         // Clear the cache and cookies, starting a new session.
         WebCacheUtils.reset()
+        
+        requestReviewIfNecessary()
 
         // Zoom out on the screenshot, then slide down, then remove it.
         mainContainerView.layoutIfNeeded()
@@ -339,13 +468,51 @@ class BrowserViewController: UIViewController {
                 screenshotView.alpha = 0
                 self.mainContainerView.layoutIfNeeded()
             }, completion: { _ in
-                self.urlBar.becomeFirstResponder()
+                self.urlBar.activateTextField()
                 Toast(text: UIConstants.strings.eraseMessage).show()
                 screenshotView.removeFromSuperview()
             })
         })
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.eraseButton)
+    }
+    
+    func requestReviewIfNecessary() {
+        let currentLaunchCount = UserDefaults.standard.integer(forKey: UIConstants.strings.userDefaultsLaunchCountKey)
+        let threshold = UserDefaults.standard.integer(forKey: UIConstants.strings.userDefaultsLaunchThresholdKey)
+
+        if threshold == 0 {
+            UserDefaults.standard.set(14, forKey: UIConstants.strings.userDefaultsLaunchThresholdKey)
+            return
+        }
+
+        // Make sure the request isn't within 90 days of last request
+        let minimumDaysBetweenReviewRequest = 90
+        let daysSinceLastRequest: Int
+        if let previousRequest = UserDefaults.standard.object(forKey: UIConstants.strings.userDefaultsLastReviewRequestDate) as? Date {
+            daysSinceLastRequest = Calendar.current.dateComponents([.day], from: previousRequest, to: Date()).day ?? 0
+        } else {
+            // No previous request date found, meaning we've never asked for a review
+            daysSinceLastRequest = minimumDaysBetweenReviewRequest
+        }
+
+        if currentLaunchCount <= threshold ||  daysSinceLastRequest < minimumDaysBetweenReviewRequest {
+            return
+        }
+
+        UserDefaults.standard.set(Date(), forKey: UIConstants.strings.userDefaultsLastReviewRequestDate)
+
+        // Increment the threshold by 50 so the user is not constantly pestered with review requests
+        switch threshold {
+            case 14:
+                UserDefaults.standard.set(64, forKey: UIConstants.strings.userDefaultsLaunchThresholdKey)
+            case 64:
+                UserDefaults.standard.set(114, forKey: UIConstants.strings.userDefaultsLaunchThresholdKey)
+            default:
+                break
+        }
+        
+        SKStoreReviewController.requestReview()
     }
 
     fileprivate func showSettings() {
@@ -387,8 +554,37 @@ class BrowserViewController: UIViewController {
     }
 
     func openOverylay(text: String) {
-        urlBar.becomeFirstResponder()
+        urlBar.activateTextField()
         urlBar.fillUrlBar(text: text)
+    }
+
+    private func hideSplashScreen() {
+        splashScreen?.removeFromSuperview()
+    }
+
+    private func displaySplashScreen() {
+        guard splashScreen == nil else { return }
+        
+        let splashView = UIView()
+        splashView.backgroundColor = UIConstants.colors.background
+        mainContainerView.addSubview(splashView)
+
+        let logoImage = UIImageView(image: AppInfo.config.wordmark)
+        splashView.addSubview(logoImage)
+
+        splashView.snp.makeConstraints { make in
+            make.edges.equalTo(mainContainerView)
+        }
+
+        logoImage.snp.makeConstraints { make in
+            make.center.equalTo(splashView)
+        }
+
+        view.layoutIfNeeded()
+        splashView.layoutIfNeeded()
+
+        splashScreen = splashView
+        hideToolbars()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -410,7 +606,9 @@ class BrowserViewController: UIViewController {
                 self.urlBar.collapseUrlBar(expandAlpha: 0, collapseAlpha: 1)
             }
 
-            self.browserToolbar.animateHidden(self.homeView != nil || self.showsToolsetInURLBar, duration: coordinator.transitionDuration)
+            self.browserToolbar.animateHidden(self.homeView != nil || self.showsToolsetInURLBar, duration: coordinator.transitionDuration, completion: {
+                self.updateViewConstraints()
+            })
         })
     }
 
@@ -439,7 +637,7 @@ class BrowserViewController: UIViewController {
     }
     
     @objc private func selectLocationBar() {
-        urlBar.becomeFirstResponder()
+        urlBar.activateTextField()
     }
     
     @objc private func reload() {
@@ -470,9 +668,105 @@ class BrowserViewController: UIViewController {
             UIKeyCommand(input: "]", modifierFlags: .command, action: #selector(BrowserViewController.goForward), discoverabilityTitle: UIConstants.strings.browserForward),
         ]
     }
+
+    func canShowTrackerStatsShareButton() -> Bool {
+        return NSLocale.current.identifier == "en_US" && !AppInfo.isKlar
+    }
+
+    var showTrackerSemaphore = DispatchSemaphore(value: 1)
+    func flipCoinForShowTrackerButton(percent: Int = 30, userDefaults:UserDefaults = UserDefaults.standard) {
+        showTrackerSemaphore.wait()
+
+        var shouldShowTrackerStatsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
+
+        if shouldShowTrackerStatsToUser == nil {
+            // Check to see if the user was previously opted into the experiment
+            shouldShowTrackerStatsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD) as! Bool?
+
+            if shouldShowTrackerStatsToUser != nil {
+                // Remove the old flag
+                userDefaults.removeObject(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD)
+            }
+
+            if shouldShowTrackerStatsToUser == true {
+                // User has already been opted into the experiment, continue showing the share button
+                userDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
+            } else {
+                // User has not been put into a bucket for determining if it should be shown
+                // 30% chance they get put into the group that sees the share button
+                // arc4random_uniform(100) returns an integer 0 through 99 (inclusive)
+                if arc4random_uniform(100) < percent {
+                    userDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
+                } else {
+                    userDefaults.set(false, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
+                }
+            }
+        }
+
+        showTrackerSemaphore.signal()
+    }
+
+    func shouldShowTrackerStatsShareButton(percent: Int = 30, userDefaults:UserDefaults = UserDefaults.standard) -> Bool {
+        flipCoinForShowTrackerButton(percent:percent, userDefaults:userDefaults)
+
+        let shouldShowTrackerStatsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
+
+        return shouldShowTrackerStatsToUser == true &&
+            getNumberOfLifetimeTrackersBlocked(userDefaults: userDefaults) >= 10
+    }
+    
+    private func getNumberOfLifetimeTrackersBlocked(userDefaults: UserDefaults = UserDefaults.standard) -> Int {
+        return userDefaults.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
+    }
+    
+    private func setNumberOfLifetimeTrackersBlocked(numberOfTrackers: Int) {
+        UserDefaults.standard.set(numberOfTrackers, forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
+    }
+}
+
+extension BrowserViewController: FindInPageBarDelegate {
+    func findInPage(_ findInPage: FindInPageBar, didTextChange text: String) {
+        find(text, function: "find")
+    }
+    
+    func findInPage(_ findInPage: FindInPageBar, didFindNextWithText text: String) {
+        findInPageBar?.endEditing(true)
+        find(text, function: "findNext")
+    }
+    
+    func findInPage(_ findInPage: FindInPageBar, didFindPreviousWithText text: String) {
+        findInPageBar?.endEditing(true)
+        find(text, function: "findPrevious")
+    }
+    
+    func findInPageDidPressClose(_ findInPage: FindInPageBar) {
+        updateFindInPageVisibility(visible: false)
+    }
+    
+    fileprivate func find(_ text: String, function: String) {
+        let escaped = text.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"")
+        webViewController.evaluate("__firefox__.\(function)(\"\(escaped)\")", completion: nil)
+    }
 }
 
 extension BrowserViewController: URLBarDelegate {
+    
+    func urlBar(_ urlBar: URLBar, didAddCustomURL url: URL) {
+        // Add the URL to the autocomplete list:
+        let autocompleteSource = CustomCompletionSource()
+        
+        switch autocompleteSource.add(suggestion: url.absoluteString) {
+        case .error(.duplicateDomain):
+            break
+        case .error(let error):
+            guard !error.message.isEmpty else { return }
+            Toast(text: error.message).show()
+        case .success:
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.customDomain)
+            Toast(text: UIConstants.strings.autocompleteCustomURLAdded).show()
+        }
+    }
+    
     func urlBar(_ urlBar: URLBar, didEnterText text: String) {
         overlayView.setSearchQuery(query: text, animated: true)
     }
@@ -503,6 +797,7 @@ extension BrowserViewController: URLBarDelegate {
         var url = URIFixup.getURL(entry: text)
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
+            Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
             url = searchEngineManager.activeEngine.urlForQuery(text)
         } else {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
@@ -511,6 +806,11 @@ extension BrowserViewController: URLBarDelegate {
             submit(url: urlBarURL)
             urlBar.url = urlBarURL
         }
+        
+        if let urlText = urlBar.url?.absoluteString {
+            overlayView.currentURL = urlText
+        }
+        
         urlBar.dismiss()
     }
 
@@ -520,6 +820,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressDelete(_ urlBar: URLBar) {
+        updateFindInPageVisibility(visible: false)
         self.resetBrowser()
     }
 
@@ -532,6 +833,7 @@ extension BrowserViewController: URLBarDelegate {
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
             self.topURLBarConstraints.forEach { $0.activate() }
             self.urlBarContainer.alpha = 1
+            self.updateFindInPageVisibility(visible: false)
             self.view.layoutIfNeeded()
         }
     }
@@ -550,23 +852,37 @@ extension BrowserViewController: URLBarDelegate {
 }
 
 extension BrowserViewController: BrowserToolsetDelegate {
-    func browserToolsetDidPressBack(_ browserToolset: BrowserToolset) {
+    func browserToolsetDidLongPressReload(_ browserToolbar: BrowserToolset) {
+        // Request desktop site
         urlBar.dismiss()
+        
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Request Desktop Site", style: .default, handler: { (action) in
+            self.webViewController.requestDesktop()
+        }))
+        alert.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
+
+        // Must handle iPad interface separately, as it does not implement action sheets
+        let iPadAlert = alert.popoverPresentationController
+        iPadAlert?.sourceView = browserToolbar.stopReloadButton
+        iPadAlert?.sourceRect = browserToolbar.stopReloadButton.bounds
+        
+        present(alert, animated: true)
+    }
+    
+    func browserToolsetDidPressBack(_ browserToolset: BrowserToolset) {
         webViewController.goBack()
     }
 
     func browserToolsetDidPressForward(_ browserToolset: BrowserToolset) {
-        urlBar.dismiss()
         webViewController.goForward()
     }
 
     func browserToolsetDidPressReload(_ browserToolset: BrowserToolset) {
-        urlBar.dismiss()
         webViewController.reload()
     }
 
     func browserToolsetDidPressStop(_ browserToolset: BrowserToolset) {
-        urlBar.dismiss()
         webViewController.stop()
     }
 
@@ -576,10 +892,12 @@ extension BrowserViewController: BrowserToolsetDelegate {
         let shareExtensionHelper = OpenUtils(url: url, webViewController: webViewController)
         let controller = shareExtensionHelper.buildShareViewController(url: url, title: webViewController.title, printFormatter: webViewController.printFormatter, anchor: browserToolset.sendButton)
 
+        updateFindInPageVisibility(visible: false)
         present(controller, animated: true, completion: nil)
     }
 
     func browserToolsetDidPressSettings(_ browserToolbar: BrowserToolset) {
+        updateFindInPageVisibility(visible: false)
         showSettings()
     }
 }
@@ -587,6 +905,18 @@ extension BrowserViewController: BrowserToolsetDelegate {
 extension BrowserViewController: HomeViewDelegate {
     func homeViewDidPressSettings(homeView: HomeView) {
         showSettings()
+    }
+    
+    func shareTrackerStatsButtonTapped() {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.share, object: TelemetryEventObject.trackerStatsShareButton)
+        
+        let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
+        let appStoreUrl = URL(string:String(format: "https://mzl.la/2GZBav0"))
+        // Add space after shareTrackerStatsText to add URL in sentence
+        let text = String(format: UIConstants.strings.shareTrackerStatsText + " ", AppInfo.productName, String(numberOfTrackersBlocked))
+        let shareController = UIActivityViewController(activityItems: [text, appStoreUrl as Any], applicationActivities: nil)
+        present(shareController, animated: true)
+        urlBar?.shouldPresent = false
     }
 }
 
@@ -602,12 +932,19 @@ extension BrowserViewController: OverlayViewDelegate {
     func overlayView(_ overlayView: OverlayView, didSearchForQuery query: String) {
         if let url = searchEngineManager.activeEngine.urlForQuery(query) {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.selectQuery, object: TelemetryEventObject.searchBar)
+            Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
             submit(url: url)
             urlBar.url = url
         }
 
         urlBar.dismiss()
     }
+    
+    func overlayView(_ overlayView: OverlayView, didSearchOnPage query: String) {
+        updateFindInPageVisibility(visible: true, text: query)
+        self.find(query, function: "find")
+    }
+    
     func overlayView(_ overlayView: OverlayView, didSubmitText text: String) {
         let text = text.trimmingCharacters(in: .whitespaces)
         guard !text.isEmpty else {
@@ -618,6 +955,7 @@ extension BrowserViewController: OverlayViewDelegate {
         var url = URIFixup.getURL(entry: text)
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
+            Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
             url = searchEngineManager.activeEngine.urlForQuery(text)
         } else {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
@@ -631,6 +969,21 @@ extension BrowserViewController: OverlayViewDelegate {
 }
 
 extension BrowserViewController: WebControllerDelegate {
+    func webControllerDidStartProvisionalNavigation(_ controller: WebController) {
+        urlBar.dismiss()
+        updateFindInPageVisibility(visible: false)
+    }
+    
+    func webController(_ controller: WebController, didUpdateFindInPageResults currentResult: Int?, totalResults: Int?) {
+        if let total = totalResults {
+            findInPageBar?.totalResults = total
+        }
+        
+        if let current = currentResult {
+            findInPageBar?.currentResult = current
+        }
+    }
+    
     func webControllerDidStartNavigation(_ controller: WebController) {
         urlBar.isLoading = true
         browserToolbar.isLoading = true
@@ -730,6 +1083,7 @@ extension BrowserViewController: WebControllerDelegate {
         self.urlBar.collapseUrlBar(expandAlpha: max(0, (1 - scrollBarOffsetAlpha * 2)), collapseAlpha: max(0, -(1 - scrollBarOffsetAlpha * 2)))
         self.urlBarTopConstraint.update(offset: -scrollBarOffsetAlpha * (UIConstants.layout.urlBarHeight - UIConstants.layout.collapsedUrlBarHeight))
         self.toolbarBottomConstraint.update(offset: scrollBarOffsetAlpha * (UIConstants.layout.browserToolbarHeight + view.safeAreaInsets.bottom))
+        updateViewConstraints()
         scrollView.bounds.origin.y += (lastOffsetAlpha - scrollBarOffsetAlpha) * UIConstants.layout.urlBarHeight
 
         lastScrollOffset = scrollView.contentOffset
@@ -747,6 +1101,13 @@ extension BrowserViewController: WebControllerDelegate {
     func webController(_ controller: WebController, stateDidChange state: BrowserState) {}
 
     func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus) {
+        // Calculate the number of trackers blocked and add that to lifetime total
+        if case .on(let info) = trackingStatus,
+           case .on(let oldInfo) = trackingProtectionStatus {
+            let differenceSinceLastUpdate = max(0, info.total - oldInfo.total)
+            let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
+            setNumberOfLifetimeTrackersBlocked(numberOfTrackers: numberOfTrackersBlocked + differenceSinceLastUpdate)
+        }
         trackingProtectionStatus = trackingStatus
     }
 

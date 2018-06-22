@@ -22,7 +22,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setupContinuousDeploymentTooling()
         setupErrorTracking()
         setupTelemetry()
+        TPStatsBlocklistChecker.shared.startup()
 
+        // Count number of app launches for requesting a review
+        let currentLaunchCount = UserDefaults.standard.integer(forKey: UIConstants.strings.userDefaultsLaunchCountKey)
+        UserDefaults.standard.set(currentLaunchCount + 1, forKey: UIConstants.strings.userDefaultsLaunchCountKey)
+    
         // Disable localStorage.
         // We clear the Caches directory after each Erase, but WebKit apparently maintains
         // localStorage in-memory (bug 1319208), so we just disable it altogether.
@@ -52,6 +57,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let prefIntroDone = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone)
 
+        if AppInfo.isTesting() {
+            let firstRunViewController = IntroViewController()
+            rootViewController.present(firstRunViewController, animated: false, completion: nil)
+            return true
+        }
+        
         let needToShowFirstRunExperience = prefIntroDone < AppDelegate.prefIntroVersion
         if needToShowFirstRunExperience {
             // Show the first run UI asynchronously to avoid the "unbalanced calls to begin/end appearance transitions" warning.
@@ -59,20 +70,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 // Set the prefIntroVersion viewed number in the same context as the presentation.
                 UserDefaults.standard.set(AppDelegate.prefIntroVersion, forKey: AppDelegate.prefIntroDone)
                 UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
-                
-                var firstRunViewController: UIViewController
-                
-                // Random number range [0 - 99], Coin Flip for A/B testing of Onboarding
-                let shouldShowNewIntro = arc4random_uniform(UInt32(100)) >= 50
-                if  shouldShowNewIntro {
-                    firstRunViewController = IntroViewController()
-                    Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.coinFlip, object: TelemetryEventObject.onboarding)
-
-                } else {
-                    firstRunViewController = FirstRunViewController()
-                    Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.coinFlip, object: TelemetryEventObject.firstRun)
-                }
-                rootViewController.present(firstRunViewController, animated: false, completion: nil)
+                rootViewController.present(IntroViewController(), animated: false, completion: nil)
             }
         }
         
@@ -94,7 +92,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
+    func application(_ application: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             return false
         }
@@ -257,7 +255,8 @@ extension AppDelegate {
         // excluded from iCloud backup, we store pings in documents.
         telemetryConfig.dataDirectory = .documentDirectory
         
-        let defaultSearchEngineProvider = SearchEngineManager(prefs: UserDefaults.standard).engines.first?.name ?? "unknown"
+        let activeSearchEngine = SearchEngineManager(prefs: UserDefaults.standard).activeEngine
+        let defaultSearchEngineProvider = activeSearchEngine.isCustom ? "custom" : activeSearchEngine.name
         telemetryConfig.defaultSearchEngineProvider = defaultSearchEngineProvider
         
         telemetryConfig.measureUserDefaultsSetting(forKey: SearchEngineManager.prefKeyEngine, withDefaultValue: defaultSearchEngineProvider)
@@ -276,6 +275,17 @@ extension AppDelegate {
             telemetryConfig.isCollectionEnabled = Settings.getToggle(.sendAnonymousUsageData)
             telemetryConfig.isUploadEnabled = Settings.getToggle(.sendAnonymousUsageData)
         #endif
+        
+        Telemetry.default.beforeSerializePing(pingType: CorePingBuilder.PingType) { (inputDict) -> [String : Any?] in
+            var outputDict = inputDict // make a mutable copy
+
+            if self.browserViewController.canShowTrackerStatsShareButton() { // Klar users are not included in this experiment
+                self.browserViewController.flipCoinForShowTrackerButton() // Force a coin flip if one has not been flipped yet
+                outputDict["showTrackerStatsSharePhase2"] = UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
+            }
+            
+            return outputDict
+        }
         
         Telemetry.default.add(pingBuilderType: CorePingBuilder.self)
         Telemetry.default.add(pingBuilderType: FocusEventPingBuilder.self)

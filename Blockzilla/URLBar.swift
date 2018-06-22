@@ -10,6 +10,7 @@ import Telemetry
 protocol URLBarDelegate: class {
     func urlBar(_ urlBar: URLBar, didEnterText text: String)
     func urlBar(_ urlBar: URLBar, didSubmitText text: String)
+    func urlBar(_ urlBar: URLBar, didAddCustomURL url: URL)
     func urlBarDidActivate(_ urlBar: URLBar)
     func urlBarDidDeactivate(_ urlBar: URLBar)
     func urlBarDidFocus(_ urlBar: URLBar)
@@ -55,6 +56,10 @@ class URLBar: UIView {
     private var preActivationConstraints = [Constraint]()
     private var postActivationConstraints = [Constraint]()
 
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+    
     convenience init() {
         self.init(frame: CGRect.zero)
 
@@ -70,7 +75,13 @@ class URLBar: UIView {
         urlBarBackgroundView.backgroundColor = UIConstants.colors.urlTextBackground
         urlBarBackgroundView.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
         addSubview(urlBarBackgroundView)
+       
+        let tap = UITapGestureRecognizer(target: self, action: #selector(activateTextField))
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(displayURLContextMenu))
+        self.addGestureRecognizer(tap)
+        self.addGestureRecognizer(longPress)
 
+        urlText.isUserInteractionEnabled = false
         addSubview(urlTextContainer)
 
         urlTextContainer.addSubview(shieldIcon)
@@ -345,8 +356,29 @@ class URLBar: UIView {
         
     }
     
-    @discardableResult override func becomeFirstResponder() -> Bool {
-        return urlText.becomeFirstResponder()
+    @objc public func activateTextField() {
+        urlText.isUserInteractionEnabled = true
+        urlText.becomeFirstResponder()
+    }
+    
+    @objc private func displayURLContextMenu(sender: UILongPressGestureRecognizer) {
+        if sender.state == .began {
+            self.becomeFirstResponder()
+            let customURLItem = UIMenuItem(title: UIConstants.strings.customURLMenuButton, action: #selector(addCustomURL))
+            let copyItem = UIMenuItem(title: UIConstants.strings.copyMenuButton, action: #selector(copyToClipboard))
+            UIMenuController.shared.setTargetRect(self.bounds, in: self)
+            UIMenuController.shared.menuItems = [copyItem, customURLItem]
+            UIMenuController.shared.setMenuVisible(true, animated: true)
+        }
+    }
+    
+    @objc func addCustomURL() {
+        guard let url = self.url else { return }
+        delegate?.urlBar(self, didAddCustomURL: url)
+    }
+    
+    @objc func copyToClipboard() {
+        UIPasteboard.general.string = self.urlText.text ?? ""
     }
     
     @objc func pasteAndGo() {
@@ -359,7 +391,7 @@ class URLBar: UIView {
 
     //Adds Menu Item
     func addCustomMenu() {
-        if UIPasteboard.general.string != nil {
+        if UIPasteboard.general.string != nil && urlText.isFirstResponder {
             let lookupMenu = UIMenuItem(title: UIConstants.strings.urlPasteAndGo, action: #selector(pasteAndGo))
             UIMenuController.shared.menuItems = [lookupMenu]
         }
@@ -519,7 +551,7 @@ class URLBar: UIView {
         isEditing = false
         updateLockIcon()
         updateShieldIcon()
-        urlText.resignFirstResponder()
+        let _ = urlText.resignFirstResponder()
         setTextToURL()
         self.toolset.sendButton.isEnabled = true
         delegate?.urlBarDidDismiss(self)
@@ -642,8 +674,6 @@ class URLBar: UIView {
     }
 
     func collapseUrlBar(expandAlpha: CGFloat, collapseAlpha: CGFloat) {
-        self.urlText.isUserInteractionEnabled = (expandAlpha == 1)
-
         deleteButton.alpha = expandAlpha
         urlTextContainer.alpha = expandAlpha
         truncatedUrlText.alpha = collapseAlpha
@@ -676,7 +706,7 @@ extension URLBar: AutocompleteTextFieldDelegate {
         }
         
         // When text.characters.count == 0, it is the HomeView
-        if let text = autocompleteTextField.text, !isEditing, text.characters.count == 0 {
+        if let text = autocompleteTextField.text, !isEditing, text.count == 0 {
             shouldPresent = true
         }
 
@@ -717,6 +747,13 @@ extension URLBar: AutocompleteTextFieldDelegate {
 }
 
 private class URLTextField: AutocompleteTextField {
+    
+    // Disable user interaction on resign so that touch and hold on URL bar creates menu
+    override func resignFirstResponder() -> Bool {
+        isUserInteractionEnabled = false
+        return super.resignFirstResponder()
+    }
+    
     override var placeholder: String? {
         didSet {
             attributedPlaceholder = NSAttributedString(string: placeholder ?? "", attributes: [NSAttributedStringKey.foregroundColor: UIConstants.colors.urlTextPlaceholder])
@@ -750,7 +787,7 @@ private class URLTextField: AutocompleteTextField {
 }
 
 class TrackingProtectionBadge: UIView {
-    let counterLabel = UILabel()
+    let counterLabel = SmartLabel()
     let trackingProtectionOff = UIImageView(image: #imageLiteral(resourceName: "tracking_protection_off").imageFlippedForRightToLeftLayoutDirection())
     let trackingProtectionCounter = UIImageView(image: #imageLiteral(resourceName: "tracking_protection_counter").imageFlippedForRightToLeftLayoutDirection())
     let counterLabelWrapper = UIView()

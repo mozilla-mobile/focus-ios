@@ -7,15 +7,17 @@ import Foundation
 class SearchEngine: NSObject, NSCoding {
     let name: String
     let image: UIImage?
+    var isCustom: Bool = false
 
     private let searchTemplate: String
     private let suggestionsTemplate: String?
 
-    init(name: String, image: UIImage?, searchTemplate: String, suggestionsTemplate: String?) {
+    init(name: String, image: UIImage?, searchTemplate: String, suggestionsTemplate: String?, isCustom:Bool = false) {
         self.name = name
         self.image = image ?? SearchEngine.generateImage(name: name)
         self.searchTemplate = searchTemplate
         self.suggestionsTemplate = suggestionsTemplate
+        self.isCustom = isCustom
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -55,12 +57,16 @@ class SearchEngine: NSObject, NSCoding {
         aCoder.encode(suggestionsTemplate, forKey: "suggestionsTemplate")
     }
     
+    func getNameOrCustom() -> String {
+        return isCustom ? "custom" : name
+    }
+    
     private static func generateImage(name: String) -> UIImage {
         let faviconLetter = name.uppercased()[name.startIndex]
         
         var faviconImage = UIImage()
 
-        let faviconLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
+        let faviconLabel = SmartLabel(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
         faviconLabel.backgroundColor = UIColor(rgb: 0xededf0)
         faviconLabel.text = String(faviconLetter)
         faviconLabel.textAlignment = .center
