@@ -30,6 +30,7 @@ class TelemetryEventMethod {
     public static let share = "share"
     public static let customDomainRemoved = "removed"
     public static let customDomainReordered = "reordered"
+
 }
 
 class TelemetryEventObject {
@@ -37,6 +38,8 @@ class TelemetryEventObject {
     public static let searchBar = "search_bar"
     public static let eraseButton = "erase_button"
     public static let findInPageBar = "find_in_page_bar"
+    public static let findNext = "find_next"
+    public static let findPrev = "find_prev"
     public static let onboarding = "ios_onboarding_v1"
     public static let firstRun = "previous_first_run"
     public static let settingsButton = "settings_button"

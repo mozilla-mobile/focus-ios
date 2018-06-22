@@ -732,16 +732,19 @@ extension BrowserViewController: FindInPageBarDelegate {
     }
     
     func findInPage(_ findInPage: FindInPageBar, didFindNextWithText text: String) {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.findNext)
         findInPageBar?.endEditing(true)
         find(text, function: "findNext")
     }
     
     func findInPage(_ findInPage: FindInPageBar, didFindPreviousWithText text: String) {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.findPrev)
         findInPageBar?.endEditing(true)
         find(text, function: "findPrevious")
     }
     
     func findInPageDidPressClose(_ findInPage: FindInPageBar) {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.close, object: TelemetryEventObject.findInPageBar)
         updateFindInPageVisibility(visible: false)
     }
     
