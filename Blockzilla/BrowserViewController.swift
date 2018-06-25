@@ -1216,6 +1216,8 @@ extension BrowserViewController: WebControllerDelegate {
 extension BrowserViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+        keyboardState = state
+        self.updateViewConstraints()
         UIView.animate(withDuration: state.animationDuration) {
             self.homeViewBottomConstraint.update(offset: -state.intersectionHeightForView(view: self.view))
             self.view.layoutIfNeeded()
@@ -1223,6 +1225,8 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+        keyboardState = state
+        self.updateViewConstraints()
         UIView.animate(withDuration: state.animationDuration) {
             self.homeViewBottomConstraint.update(offset: 0)
             self.view.layoutIfNeeded()
