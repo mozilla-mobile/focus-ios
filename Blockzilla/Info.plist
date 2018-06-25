@@ -44,7 +44,7 @@
 	<key>NSFaceIDUsageDescription</key>
 	<string>This lets you unlock the app.</string>
 	<key>CFBundleShortVersionString</key>
-	<string>4.1</string>
+	<string>6.0</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
