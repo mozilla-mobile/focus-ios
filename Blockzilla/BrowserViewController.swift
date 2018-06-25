@@ -6,12 +6,16 @@ import Foundation
 import UIKit
 import SnapKit
 import Telemetry
+import LocalAuthentication
 import StoreKit
 
 class BrowserViewController: UIViewController {
     private class DrawerView: UIView {
         override var intrinsicContentSize: CGSize { return CGSize(width: 320, height: 0) }
     }
+
+    private var splashScreen: UIView?
+    private let context = LAContext()
 
     private let mainContainerView = UIView(frame: .zero)
     private let drawerContainerView = DrawerView(frame: .zero)
@@ -22,6 +26,7 @@ class BrowserViewController: UIViewController {
 
     private let trackingProtectionSummaryController = TrackingProtectionSummaryViewController()
 
+    fileprivate var keyboardState: KeyboardState?
     fileprivate let browserToolbar = BrowserToolbar()
     fileprivate var homeView: HomeView?
     fileprivate let overlayView = OverlayView()
@@ -30,6 +35,8 @@ class BrowserViewController: UIViewController {
     fileprivate var urlBar: URLBar!
     fileprivate var topURLBarConstraints = [Constraint]()
     fileprivate let requestHandler = RequestHandler()
+    fileprivate var findInPageBar: FindInPageBar?
+    fileprivate let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
 
     fileprivate var drawerConstraint: Constraint!
     fileprivate var toolbarBottomConstraint: Constraint!
@@ -83,6 +90,7 @@ class BrowserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setupBiometrics()
         view.addSubview(mainContainerView)
         view.addSubview(drawerContainerView)
 
@@ -179,6 +187,10 @@ class BrowserViewController: UIViewController {
             make.top.equalTo(urlBarContainer.snp.bottom)
             make.leading.trailing.bottom.equalTo(mainContainerView)
         }
+        
+        view.addSubview(alertStackView)
+        alertStackView.axis = .vertical
+        alertStackView.alignment = .center
 
         // true if device is an iPad or is an iPhone in landscape mode
         showsToolsetInURLBar = (UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == view.frame.size.width || view.frame.size.width > view.frame.size.height)) || (UIDevice.current.userInterfaceIdiom == .phone && view.frame.size.width > view.frame.size.height)
@@ -186,10 +198,19 @@ class BrowserViewController: UIViewController {
         containWebView()
         createHomeView()
         createURLBar()
+        updateViewConstraints()
         
         // Listen for request desktop site notifications
         NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification), object: nil, queue: nil)  { _ in
             self.webViewController.requestDesktop()
+        }
+        
+        let dropInteraction = UIDropInteraction(delegate: self)
+        view.addInteraction(dropInteraction)
+      
+        // Listen for find in page actvitiy notifications
+        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.findInPageNotification), object: nil, queue: nil)  { _ in
+            self.updateFindInPageVisibility(visible: true, text: "")
         }
 
         guard shouldEnsureBrowsingMode else { return }
@@ -215,12 +236,50 @@ class BrowserViewController: UIViewController {
         let userHasSeenIntro = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone) == AppDelegate.prefIntroVersion
         
         if userHasSeenIntro && !urlBar.inBrowsingMode {
-            self.urlBar.becomeFirstResponder()
+            urlBar.activateTextField()
         }
         
         super.viewDidAppear(animated)
     }
     
+    private func setupBiometrics() {
+        self.context.localizedReason = UIConstants.strings.biometricReason
+        self.context.localizedCancelTitle = UIConstants.strings.newSessionFromBiometricFailure
+
+        // Register for foreground notification to check biometric authentication
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidBecomeActive, object: nil, queue: nil) { notification in
+            var biometricError: NSError?
+
+            // Check if user is already in a cleared session, or doesn't have biometrics enabled in settings
+            if self.webViewContainer.isHidden || !Settings.getToggle(SettingsToggle.biometricLogin) {
+                return
+            }
+
+            self.displaySplashScreen()
+
+            if self.context.canEvaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, error: &biometricError) {
+                self.context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: self.context.localizedReason) {
+                    [unowned self] (success, _) in
+
+                    DispatchQueue.main.async {
+                        self.hideSplashScreen()
+                        if success {
+                            self.showToolbars()
+                        } else {
+                            // Clear the browser session, as the user failed to authenticate
+                            self.resetBrowser()
+                        }
+                    }
+                }
+            } else {
+                // Ran into an error with biometrics, so disable them and clear the browser:
+                Settings.set(false, forToggle: SettingsToggle.biometricLogin)
+                self.resetBrowser()
+                self.hideSplashScreen()
+            }
+        }
+    }
+
     private func containWebView() {
         addChildViewController(webViewController)
         webViewContainer.addSubview(webViewController.view)
@@ -276,6 +335,9 @@ class BrowserViewController: UIViewController {
         urlBar.showToolset = showsToolsetInURLBar
         mainContainerView.insertSubview(urlBar, aboveSubview: urlBarContainer)
 
+        let dragInteraction = UIDragInteraction(delegate: self)
+        urlBar.addInteraction(dragInteraction)
+        
         urlBar.snp.makeConstraints { make in
             urlBarTopConstraint = make.top.equalTo(mainContainerView.safeAreaLayoutGuide.snp.top).constraint
             topURLBarConstraints = [
@@ -315,6 +377,59 @@ class BrowserViewController: UIViewController {
         }, completion: nil)
 
         Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.trackingProtectionDrawer))
+    }
+    
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
+        alertStackView.snp.remakeConstraints { make in
+            make.centerX.equalTo(self.view)
+            make.width.equalTo(self.view.snp.width)
+            
+            if let keyboardHeight = keyboardState?.intersectionHeightForView(view: self.view), keyboardHeight > 0 {
+                make.bottom.equalTo(self.view).offset(-keyboardHeight)
+            } else if !browserToolbar.isHidden {
+                make.bottom.equalTo(self.browserToolbar.snp.top)
+            } else {
+                make.bottom.equalTo(self.view.snp.bottom)
+            }
+        }
+    }
+    
+    func updateFindInPageVisibility(visible: Bool, text: String = "") {
+        if visible {
+            if findInPageBar == nil {
+                urlBar.dismiss()
+                let findInPageBar = FindInPageBar()
+                self.findInPageBar = findInPageBar
+                findInPageBar.text = text
+                findInPageBar.delegate = self
+                
+                alertStackView.addArrangedSubview(findInPageBar)
+                
+                findInPageBar.snp.makeConstraints { make in
+                    make.height.equalTo(UIConstants.ToolbarHeight)
+                    make.leading.trailing.equalTo(alertStackView)
+                    make.bottom.equalTo(alertStackView.snp.bottom)
+                }
+                
+                updateViewConstraints()
+                
+                // We make the find-in-page bar the first responder below, causing the keyboard delegates
+                // to fire. This, in turn, will animate the Find in Page container since we use the same
+                // delegate to slide the bar up and down with the keyboard. We don't want to animate the
+                // constraints added above, however, so force a layout now to prevent these constraints
+                // from being lumped in with the keyboard animation.
+                findInPageBar.layoutIfNeeded()
+            }
+            
+            self.findInPageBar?.becomeFirstResponder()
+        } else if let findInPageBar = self.findInPageBar {
+            findInPageBar.endEditing(true)
+            webViewController.evaluate("__firefox__.findDone()", completion: nil)
+            findInPageBar.removeFromSuperview()
+            self.findInPageBar = nil
+            updateViewConstraints()
+        }
     }
 
     fileprivate func resetBrowser() {
@@ -359,7 +474,7 @@ class BrowserViewController: UIViewController {
                 screenshotView.alpha = 0
                 self.mainContainerView.layoutIfNeeded()
             }, completion: { _ in
-                self.urlBar.becomeFirstResponder()
+                self.urlBar.activateTextField()
                 Toast(text: UIConstants.strings.eraseMessage).show()
                 screenshotView.removeFromSuperview()
             })
@@ -445,8 +560,37 @@ class BrowserViewController: UIViewController {
     }
 
     func openOverylay(text: String) {
-        urlBar.becomeFirstResponder()
+        urlBar.activateTextField()
         urlBar.fillUrlBar(text: text)
+    }
+
+    private func hideSplashScreen() {
+        splashScreen?.removeFromSuperview()
+    }
+
+    private func displaySplashScreen() {
+        guard splashScreen == nil else { return }
+        
+        let splashView = UIView()
+        splashView.backgroundColor = UIConstants.colors.background
+        mainContainerView.addSubview(splashView)
+
+        let logoImage = UIImageView(image: AppInfo.config.wordmark)
+        splashView.addSubview(logoImage)
+
+        splashView.snp.makeConstraints { make in
+            make.edges.equalTo(mainContainerView)
+        }
+
+        logoImage.snp.makeConstraints { make in
+            make.center.equalTo(splashView)
+        }
+
+        view.layoutIfNeeded()
+        splashView.layoutIfNeeded()
+
+        splashScreen = splashView
+        hideToolbars()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -468,7 +612,9 @@ class BrowserViewController: UIViewController {
                 self.urlBar.collapseUrlBar(expandAlpha: 0, collapseAlpha: 1)
             }
 
-            self.browserToolbar.animateHidden(self.homeView != nil || self.showsToolsetInURLBar, duration: coordinator.transitionDuration)
+            self.browserToolbar.animateHidden(self.homeView != nil || self.showsToolsetInURLBar, duration: coordinator.transitionDuration, completion: {
+                self.updateViewConstraints()
+            })
         })
     }
 
@@ -497,7 +643,7 @@ class BrowserViewController: UIViewController {
     }
     
     @objc private func selectLocationBar() {
-        urlBar.becomeFirstResponder()
+        urlBar.activateTextField()
     }
     
     @objc private func reload() {
@@ -584,6 +730,79 @@ class BrowserViewController: UIViewController {
     }
 }
 
+extension BrowserViewController: UIDragInteractionDelegate, UIDropInteractionDelegate {
+    func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
+        guard let url = urlBar.url, let itemProvider = NSItemProvider(contentsOf: url) else { return [] }
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.drag, object: TelemetryEventObject.searchBar)
+        return [dragItem]
+    }
+
+    func dragInteraction(_ interaction: UIDragInteraction, previewForLifting item: UIDragItem, session: UIDragSession) -> UITargetedDragPreview? {
+        let params = UIDragPreviewParameters()
+        params.backgroundColor = UIColor.clear
+        return UITargetedDragPreview(view: urlBar.draggableUrlTextView, parameters: params)
+    }
+ 
+    func dragInteraction(_ interaction: UIDragInteraction, sessionDidMove session: UIDragSession) {
+        for item in session.items {
+            item.previewProvider = {
+                guard let url = self.urlBar.url else {
+                    return UIDragPreview(view: UIView())
+                }
+                return UIDragPreview(for: url)
+            }
+        }
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
+        return session.canLoadObjects(ofClass: URL.self)
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
+        return UIDropProposal(operation: .copy)
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
+        _ = session.loadObjects(ofClass: URL.self) { urls in
+
+            guard let url = urls.first else {
+                return
+            }
+            
+            self.ensureBrowsingMode()
+            self.urlBar.fillUrlBar(text: url.absoluteString)
+            self.submit(url: url)
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.drop, object: TelemetryEventObject.searchBar)
+        }
+    }
+}
+
+extension BrowserViewController: FindInPageBarDelegate {
+    func findInPage(_ findInPage: FindInPageBar, didTextChange text: String) {
+        find(text, function: "find")
+    }
+    
+    func findInPage(_ findInPage: FindInPageBar, didFindNextWithText text: String) {
+        findInPageBar?.endEditing(true)
+        find(text, function: "findNext")
+    }
+    
+    func findInPage(_ findInPage: FindInPageBar, didFindPreviousWithText text: String) {
+        findInPageBar?.endEditing(true)
+        find(text, function: "findPrevious")
+    }
+    
+    func findInPageDidPressClose(_ findInPage: FindInPageBar) {
+        updateFindInPageVisibility(visible: false)
+    }
+    
+    fileprivate func find(_ text: String, function: String) {
+        let escaped = text.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"")
+        webViewController.evaluate("__firefox__.\(function)(\"\(escaped)\")", completion: nil)
+    }
+}
+
 extension BrowserViewController: URLBarDelegate {
     
     func urlBar(_ urlBar: URLBar, didAddCustomURL url: URL) {
@@ -606,11 +825,19 @@ extension BrowserViewController: URLBarDelegate {
         overlayView.setSearchQuery(query: text, animated: true)
     }
 
-    func urlBarDidPressScrollTop(_: URLBar) {
+    func urlBarDidPressScrollTop(_: URLBar, tap: UITapGestureRecognizer) {
         guard !urlBar.isEditing else { return }
 
         switch scrollBarState {
         case .expanded:
+            let y = tap.location(in: urlBar).y
+            
+            // If the tap is greater than this threshold, the user wants to type in the URL bar
+            if y >= 10 {
+                urlBar.activateTextField()
+                return
+            }
+            
             // Just scroll the vertical position so the page doesn't appear under
             // the notch on the iPhone X
             var point = webViewController.scrollView.contentOffset
@@ -655,6 +882,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressDelete(_ urlBar: URLBar) {
+        updateFindInPageVisibility(visible: false)
         self.resetBrowser()
     }
 
@@ -667,6 +895,7 @@ extension BrowserViewController: URLBarDelegate {
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
             self.topURLBarConstraints.forEach { $0.activate() }
             self.urlBarContainer.alpha = 1
+            self.updateFindInPageVisibility(visible: false)
             self.view.layoutIfNeeded()
         }
     }
@@ -704,22 +933,18 @@ extension BrowserViewController: BrowserToolsetDelegate {
     }
     
     func browserToolsetDidPressBack(_ browserToolset: BrowserToolset) {
-        urlBar.dismiss()
         webViewController.goBack()
     }
 
     func browserToolsetDidPressForward(_ browserToolset: BrowserToolset) {
-        urlBar.dismiss()
         webViewController.goForward()
     }
 
     func browserToolsetDidPressReload(_ browserToolset: BrowserToolset) {
-        urlBar.dismiss()
         webViewController.reload()
     }
 
     func browserToolsetDidPressStop(_ browserToolset: BrowserToolset) {
-        urlBar.dismiss()
         webViewController.stop()
     }
 
@@ -729,10 +954,12 @@ extension BrowserViewController: BrowserToolsetDelegate {
         let shareExtensionHelper = OpenUtils(url: url, webViewController: webViewController)
         let controller = shareExtensionHelper.buildShareViewController(url: url, title: webViewController.title, printFormatter: webViewController.printFormatter, anchor: browserToolset.sendButton)
 
+        updateFindInPageVisibility(visible: false)
         present(controller, animated: true, completion: nil)
     }
 
     func browserToolsetDidPressSettings(_ browserToolbar: BrowserToolset) {
+        updateFindInPageVisibility(visible: false)
         showSettings()
     }
 }
@@ -747,10 +974,10 @@ extension BrowserViewController: HomeViewDelegate {
         
         let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
         let appStoreUrl = URL(string:String(format: "https://mzl.la/2GZBav0"))
-        let text = String(format: UIConstants.strings.shareTrackerStatsText, AppInfo.productName, String(numberOfTrackersBlocked))
+        // Add space after shareTrackerStatsText to add URL in sentence
+        let text = String(format: UIConstants.strings.shareTrackerStatsText + " ", AppInfo.productName, String(numberOfTrackersBlocked))
         let shareController = UIActivityViewController(activityItems: [text, appStoreUrl as Any], applicationActivities: nil)
         present(shareController, animated: true)
-        urlBar?.shouldPresent = false
     }
 }
 
@@ -773,6 +1000,12 @@ extension BrowserViewController: OverlayViewDelegate {
 
         urlBar.dismiss()
     }
+    
+    func overlayView(_ overlayView: OverlayView, didSearchOnPage query: String) {
+        updateFindInPageVisibility(visible: true, text: query)
+        self.find(query, function: "find")
+    }
+    
     func overlayView(_ overlayView: OverlayView, didSubmitText text: String) {
         let text = text.trimmingCharacters(in: .whitespaces)
         guard !text.isEmpty else {
@@ -797,6 +1030,21 @@ extension BrowserViewController: OverlayViewDelegate {
 }
 
 extension BrowserViewController: WebControllerDelegate {
+    func webControllerDidStartProvisionalNavigation(_ controller: WebController) {
+        urlBar.dismiss()
+        updateFindInPageVisibility(visible: false)
+    }
+    
+    func webController(_ controller: WebController, didUpdateFindInPageResults currentResult: Int?, totalResults: Int?) {
+        if let total = totalResults {
+            findInPageBar?.totalResults = total
+        }
+        
+        if let current = currentResult {
+            findInPageBar?.currentResult = current
+        }
+    }
+    
     func webControllerDidStartNavigation(_ controller: WebController) {
         urlBar.isLoading = true
         browserToolbar.isLoading = true
@@ -900,6 +1148,7 @@ extension BrowserViewController: WebControllerDelegate {
         self.urlBar.collapseUrlBar(expandAlpha: max(0, (1 - scrollBarOffsetAlpha * 2)), collapseAlpha: max(0, -(1 - scrollBarOffsetAlpha * 2)))
         self.urlBarTopConstraint.update(offset: -scrollBarOffsetAlpha * (UIConstants.layout.urlBarHeight - UIConstants.layout.collapsedUrlBarHeight))
         self.toolbarBottomConstraint.update(offset: scrollBarOffsetAlpha * (UIConstants.layout.browserToolbarHeight + view.safeAreaInsets.bottom))
+        updateViewConstraints()
         scrollView.bounds.origin.y += (lastOffsetAlpha - scrollBarOffsetAlpha) * UIConstants.layout.urlBarHeight
 
         lastScrollOffset = scrollView.contentOffset
@@ -973,6 +1222,8 @@ extension BrowserViewController: WebControllerDelegate {
 extension BrowserViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+        keyboardState = state
+        self.updateViewConstraints()
         UIView.animate(withDuration: state.animationDuration) {
             self.homeViewBottomConstraint.update(offset: -state.intersectionHeightForView(view: self.view))
             self.view.layoutIfNeeded()
@@ -980,6 +1231,8 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+        keyboardState = state
+        self.updateViewConstraints()
         UIView.animate(withDuration: state.animationDuration) {
             self.homeViewBottomConstraint.update(offset: 0)
             self.view.layoutIfNeeded()

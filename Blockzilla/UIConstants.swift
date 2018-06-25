@@ -6,6 +6,9 @@ import Foundation
 import UIKit
 
 struct UIConstants {
+    
+    static var ToolbarHeight: CGFloat = 46
+
     struct colors {
         static let background = UIColor(rgb: 0x272727)
         static let buttonHighlight = UIColor(rgb: 0x333333)
@@ -62,6 +65,76 @@ struct UIConstants {
         static let trackingProtectionSecondary = UIColor(rgb: 0xB2B2B2)
         static let trackingProtectionBreakdownBackground = UIColor(rgb: 0x414146)
         static let trackingProtectionLearnMore = UIColor(rgb: 0x0A84FF)
+    }
+    
+    struct Photon {
+        static let Magenta50 = UIColor(rgb: 0xff1ad9)
+        static let Magenta60 = UIColor(rgb: 0xed00b5)
+        static let Magenta70 = UIColor(rgb: 0xb5007f)
+        static let Magenta80 = UIColor(rgb: 0x7d004f)
+        static let Magenta90 = UIColor(rgb: 0x440027)
+        
+        static let Purple30 = UIColor(rgb: 0xc069ff)
+        static let Purple40 = UIColor(rgb: 0xad3bff)
+        static let Purple50 = UIColor(rgb: 0x9400ff)
+        static let Purple60 = UIColor(rgb: 0x8000d7)
+        static let Purple70 = UIColor(rgb: 0x6200a4)
+        static let Purple80 = UIColor(rgb: 0x440071)
+        static let Purple90 = UIColor(rgb: 0x25003e)
+        
+        static let Blue40 = UIColor(rgb: 0x45a1ff)
+        static let Blue50 = UIColor(rgb: 0x0a84ff)
+        static let Blue60 = UIColor(rgb: 0x0060df)
+        static let Blue70 = UIColor(rgb: 0x003eaa)
+        static let Blue80 = UIColor(rgb: 0x002275)
+        static let Blue90 = UIColor(rgb: 0x000f40)
+        
+        static let Teal50 = UIColor(rgb: 0x00feff)
+        static let Teal60 = UIColor(rgb: 0x00c8d7)
+        static let Teal70 = UIColor(rgb: 0x008ea4)
+        static let Teal80 = UIColor(rgb: 0x005a71)
+        static let Teal90 = UIColor(rgb: 0x002d3e)
+        
+        static let Green50 = UIColor(rgb: 0x30e60b)
+        static let Green60 = UIColor(rgb: 0x12bc00)
+        static let Green70 = UIColor(rgb: 0x058b00)
+        static let Green80 = UIColor(rgb: 0x006504)
+        static let Green90 = UIColor(rgb: 0x003706)
+        
+        static let Yellow50 = UIColor(rgb: 0xffe900)
+        static let Yellow60 = UIColor(rgb: 0xd7b600)
+        static let Yellow70 = UIColor(rgb: 0xa47f00)
+        static let Yellow80 = UIColor(rgb: 0x715100)
+        static let Yellow90 = UIColor(rgb: 0x3e2800)
+        
+        static let Red50 = UIColor(rgb: 0xff0039)
+        static let Red60 = UIColor(rgb: 0xd70022)
+        static let Red70 = UIColor(rgb: 0xa4000f)
+        static let Red80 = UIColor(rgb: 0x5a0002)
+        static let Red90 = UIColor(rgb: 0x3e0200)
+        
+        static let Orange50 = UIColor(rgb: 0xff9400)
+        static let Orange60 = UIColor(rgb: 0xd76e00)
+        static let Orange70 = UIColor(rgb: 0xa44900)
+        static let Orange80 = UIColor(rgb: 0x712b00)
+        static let Orange90 = UIColor(rgb: 0x3e1300)
+        
+        static let Grey10 = UIColor(rgb: 0xf9f9fa)
+        static let Grey20 = UIColor(rgb: 0xededf0)
+        static let Grey30 = UIColor(rgb: 0xd7d7db)
+        static let Grey40 = UIColor(rgb: 0xb1b1b3)
+        static let Grey50 = UIColor(rgb: 0x737373)
+        static let Grey60 = UIColor(rgb: 0x4a4a4f)
+        static let Grey70 = UIColor(rgb: 0x38383d)
+        static let Grey80 = UIColor(rgb: 0x2a2a2e)
+        static let Grey90 = UIColor(rgb: 0x0c0c0d)
+        
+        static let Ink70 = UIColor(rgb: 0x363959)
+        static let Ink80 = UIColor(rgb: 0x202340)
+        static let Ink90 = UIColor(rgb: 0x0f1126)
+        
+        static let White100 = UIColor(rgb: 0xffffff)
+        
     }
 
     struct fonts {
@@ -133,6 +206,8 @@ struct UIConstants {
         static let aboutTitle = NSLocalizedString("About.screenTitle", value: "About Firefox Focus", comment: "Title for the About screen")
         static let whatsNewTitle = NSLocalizedString("Settings.whatsNewTitle", value: "What’s New", comment: "Title for What's new screen")
         static let aboutTopLabel = NSLocalizedString("About.topLabel", value: "%@ puts you in control.", comment: "Label on About screen")
+        static let biometricReason = NSLocalizedString("BiometricPrompt.reason", value: "Authenticate to continue session.", comment: "Reason for requesting biometric access")
+        static let newSessionFromBiometricFailure = NSLocalizedString("BiometricPrompt.cancel", value: "New Session", comment: "Cancel option after failing biometric check")
         static let browserBack = NSLocalizedString("Browser.backLabel", value: "Back", comment: "Accessibility label for the back button")
         static let browserForward = NSLocalizedString("Browser.forwardLabel", value: "Forward", comment: "Accessibility label for the forward button")
         static let browserReload = NSLocalizedString("Browser.reloadLabel", value: "Reload", comment: "Accessibility label for the reload button")
@@ -160,6 +235,10 @@ struct UIConstants {
         static let homeLabel2 = NSLocalizedString("Home.descriptionLabel2", value: "Browse. Erase. Repeat.", comment: "Second label for product description on the home screen")
         static let labelBlockAds = NSLocalizedString("Settings.toggleBlockAds", value: "Block ad trackers", comment: "Label for toggle on main screen")
         static let labelBlockAdsDescription = NSLocalizedString("Settings.toggleBlockAdsDescription", value: "Some ads track site visits, even if you don’t click the ads", comment: "Description for 'Block ad Trackers'")
+        static let labelFaceIDLogin = NSLocalizedString("Settings.toggleFaceID", value: "Use Face ID to unlock app", comment: "Label for toggle on settings screen")
+        static let labelFaceIDLoginDescription = NSLocalizedString("Settings.toggleFaceIDDescription", value: "Face ID can unlock Firefox Focus if a URL is already open in the app", comment: "Description for 'Enable Face ID'")
+        static let labelTouchIDLogin = NSLocalizedString("Settings.toggleTouchID", value: "Use Touch ID to unlock app", comment: "Label for toggle on settings screen")
+        static let labelTouchIDLoginDescription = NSLocalizedString("Settings.toggleTouchIDDescription", value: "Touch ID can unlock Firefox Focus if a URL is already open in the app", comment: "Description for 'Enable Touch ID'")
         static let labelBlockAnalytics = NSLocalizedString("Settings.toggleBlockAnalytics", value: "Block analytics trackers", comment: "Label for toggle on main screen")
         static let labelBlockAnalyticsDescription = NSLocalizedString("Settings.toggleBlockAnalyticsDescription", value: "Used to collect, analyze and measure activities like tapping and scrolling", comment: "Description for 'Block analytics Trackers'")
         static let labelBlockSocial = NSLocalizedString("Settings.toggleBlockSocial", value: "Block social trackers", comment: "Label for toggle on main screen")
@@ -178,6 +257,7 @@ struct UIConstants {
         static let safariInstructionsOpen = NSLocalizedString("Safari.instructionsOpen", value: "Open Settings App", comment: "Label for instructions to enable Safari, shown when enabling Safari Integration in Settings")
         static let safariInstructionsNotEnabled = String(format: NSLocalizedString("Safari.instructionsNotEnabled", value: "%@ is not enabled.", comment: "Error label when the blocker is not enabled, shown in the intro and main app when disabled"), AppInfo.productName)
         static let searchButton = NSLocalizedString("URL.searchLabel", value: "Search for %@", comment: "Label displayed for search button when typing in the URL bar")
+        static let findInPageButton = NSLocalizedString("URL.findOnPageLabel", value: "Find in page: %@", comment: "Label displayed for find in page button when typing in the URL Bar")
         static let settingsBlockOtherMessage = NSLocalizedString("Settings.blockOtherMessage", value: "Blocking other content trackers may break some videos and Web pages.", comment: "Alert message shown when toggling the Content blocker")
         static let settingsBlockOtherNo = NSLocalizedString("Settings.blockOtherNo", value: "No, Thanks", comment: "Button label for declining Content blocker alert")
         static let settingsBlockOtherYes = NSLocalizedString("Settings.blockOtherYes", value: "I Understand", comment: "Button label for accepting Content blocker alert")
@@ -191,13 +271,16 @@ struct UIConstants {
         static let toggleSectionMozilla = NSLocalizedString("Settings.sectionMozilla", value: "MOZILLA", comment: "Section label for Mozilla toggles")
         static let toggleSectionPerformance = NSLocalizedString("Settings.sectionPerformance", value: "PERFORMANCE", comment: "Section label for performance toggles")
         static let toggleSectionPrivacy = NSLocalizedString("Settings.sectionPrivacy", value: "PRIVACY", comment: "Section label for privacy toggles")
+        static let toggleSectionSecurity = NSLocalizedString("Settings.sectionSecurity", value: "SECURITY", comment: "Section label for security toggles")
         static let toggleSafari = NSLocalizedString("Settings.toggleSafari", value: "Safari", comment: "Safari toggle label on settings screen")
         static let urlBarCancel = NSLocalizedString("URL.cancelLabel", value: "Cancel", comment: "Label for cancel button shown when entering a URL or search")
         static let urlTextPlaceholder = NSLocalizedString("URL.placeholderText", value: "Search or enter address", comment: "Placeholder text shown in the URL bar before the user navigates to a page")
         static let shareMenuOpenInFocus = NSLocalizedString("ShareMenu.OpenInFocus", value: "Open in %@", comment: "Text for the share menu option when a user wants to open a page in Focus.")
         static let shareMenuRequestDesktop = NSLocalizedString("ShareMenu.RequestDesktop", value: "Request Desktop Site", comment: "Text for the share menu option when a user wants to reload the site as a desktop")
+        static let shareMenuFindInPage = NSLocalizedString("ShareMenu.FindInPage", value: "Find in Page", comment: "Text for the share menu option when a user wants to open the find in page menu")
         static let shareMenuGetTheFirefoxApp = NSLocalizedString("ShareMenu.GetFirefox", value: "Get the Firefox App", comment: "Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string.")
         static let requestDesktopNotification = NSLocalizedString("Notification.requestDesktop", comment: "Notification name for requesting a website in desktop form.")
+        static let findInPageNotification = NSLocalizedString("Notification.findInPage", comment: "Notification name for opening the find in page menu.")
         static let urlPasteAndGo = NSLocalizedString("URL.contextMenu", value: "Paste & Go", comment: "Text for the URL context menu when a user long presses on the URL bar with clipboard contents.")
         static let saveImage = NSLocalizedString("contextMenu.saveImageTitle", value: "Save Image", comment: "Text for the context menu when a user wants to save an image after long pressing it.")
         static let copyImage = NSLocalizedString("contextMenu.copyImageTitle", value: "Copy Image", comment: "Text for the context menu when a user wants to copy an image after long pressing it.")
