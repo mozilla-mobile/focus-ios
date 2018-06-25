@@ -734,6 +734,7 @@ extension BrowserViewController: UIDragInteractionDelegate, UIDropInteractionDel
     func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
         guard let url = urlBar.url, let itemProvider = NSItemProvider(contentsOf: url) else { return [] }
         let dragItem = UIDragItem(itemProvider: itemProvider)
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.drag, object: TelemetryEventObject.searchBar)
         return [dragItem]
     }
 
@@ -772,6 +773,7 @@ extension BrowserViewController: UIDragInteractionDelegate, UIDropInteractionDel
             self.ensureBrowsingMode()
             self.urlBar.fillUrlBar(text: url.absoluteString)
             self.submit(url: url)
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.drop, object: TelemetryEventObject.searchBar)
         }
     }
 }
