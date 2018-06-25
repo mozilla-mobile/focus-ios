@@ -771,11 +771,19 @@ extension BrowserViewController: URLBarDelegate {
         overlayView.setSearchQuery(query: text, animated: true)
     }
 
-    func urlBarDidPressScrollTop(_: URLBar) {
+    func urlBarDidPressScrollTop(_: URLBar, tap: UITapGestureRecognizer) {
         guard !urlBar.isEditing else { return }
 
         switch scrollBarState {
         case .expanded:
+            let y = tap.location(in: urlBar).y
+            
+            // If the tap is greater than this threshold, the user wants to type in the URL bar
+            if y >= 10 {
+                urlBar.activateTextField()
+                return
+            }
+            
             // Just scroll the vertical position so the page doesn't appear under
             // the notch on the iPhone X
             var point = webViewController.scrollView.contentOffset
@@ -916,7 +924,6 @@ extension BrowserViewController: HomeViewDelegate {
         let text = String(format: UIConstants.strings.shareTrackerStatsText + " ", AppInfo.productName, String(numberOfTrackersBlocked))
         let shareController = UIActivityViewController(activityItems: [text, appStoreUrl as Any], applicationActivities: nil)
         present(shareController, animated: true)
-        urlBar?.shouldPresent = false
     }
 }
 
@@ -1157,6 +1164,8 @@ extension BrowserViewController: WebControllerDelegate {
 extension BrowserViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+        keyboardState = state
+        self.updateViewConstraints()
         UIView.animate(withDuration: state.animationDuration) {
             self.homeViewBottomConstraint.update(offset: -state.intersectionHeightForView(view: self.view))
             self.view.layoutIfNeeded()
@@ -1164,6 +1173,8 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+        keyboardState = state
+        self.updateViewConstraints()
         UIView.animate(withDuration: state.animationDuration) {
             self.homeViewBottomConstraint.update(offset: 0)
             self.view.layoutIfNeeded()
