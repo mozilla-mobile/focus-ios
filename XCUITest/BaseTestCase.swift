@@ -123,6 +123,7 @@ class BaseTestCase: XCTestCase {
     func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true) {
         let app = XCUIApplication()
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
+        searchOrEnterAddressTextField.tap()
         
         searchOrEnterAddressTextField.typeText(url + "\n")
 
