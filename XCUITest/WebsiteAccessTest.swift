@@ -102,6 +102,7 @@ class WebsiteAccessTests: BaseTestCase {
         
         // Test auto completing the domain
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
+        searchOrEnterAddressTextField.tap()
         searchOrEnterAddressTextField.typeText("getfire")
         waitforExistence(element: app.buttons["Search for getfire"])
         waitForValueMatch(element: searchOrEnterAddressTextField, value: "getfirefox.com/")
