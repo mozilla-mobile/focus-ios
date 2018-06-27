@@ -205,6 +205,9 @@ class BrowserViewController: UIViewController {
             self.webViewController.requestDesktop()
         }
         
+        let dropInteraction = UIDropInteraction(delegate: self)
+        view.addInteraction(dropInteraction)
+      
         // Listen for find in page actvitiy notifications
         NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.findInPageNotification), object: nil, queue: nil)  { _ in
             self.updateFindInPageVisibility(visible: true, text: "")
@@ -244,7 +247,7 @@ class BrowserViewController: UIViewController {
         self.context.localizedCancelTitle = UIConstants.strings.newSessionFromBiometricFailure
 
         // Register for foreground notification to check biometric authentication
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationWillEnterForeground, object: nil, queue: nil) { notification in
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidBecomeActive, object: nil, queue: nil) { notification in
             var biometricError: NSError?
 
             // Check if user is already in a cleared session, or doesn't have biometrics enabled in settings
@@ -332,6 +335,9 @@ class BrowserViewController: UIViewController {
         urlBar.showToolset = showsToolsetInURLBar
         mainContainerView.insertSubview(urlBar, aboveSubview: urlBarContainer)
 
+        let dragInteraction = UIDragInteraction(delegate: self)
+        urlBar.addInteraction(dragInteraction)
+        
         urlBar.snp.makeConstraints { make in
             urlBarTopConstraint = make.top.equalTo(mainContainerView.safeAreaLayoutGuide.snp.top).constraint
             topURLBarConstraints = [
@@ -726,6 +732,54 @@ class BrowserViewController: UIViewController {
     }
 }
 
+extension BrowserViewController: UIDragInteractionDelegate, UIDropInteractionDelegate {
+    func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
+        guard let url = urlBar.url, let itemProvider = NSItemProvider(contentsOf: url) else { return [] }
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.drag, object: TelemetryEventObject.searchBar)
+        return [dragItem]
+    }
+
+    func dragInteraction(_ interaction: UIDragInteraction, previewForLifting item: UIDragItem, session: UIDragSession) -> UITargetedDragPreview? {
+        let params = UIDragPreviewParameters()
+        params.backgroundColor = UIColor.clear
+        return UITargetedDragPreview(view: urlBar.draggableUrlTextView, parameters: params)
+    }
+ 
+    func dragInteraction(_ interaction: UIDragInteraction, sessionDidMove session: UIDragSession) {
+        for item in session.items {
+            item.previewProvider = {
+                guard let url = self.urlBar.url else {
+                    return UIDragPreview(view: UIView())
+                }
+                return UIDragPreview(for: url)
+            }
+        }
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
+        return session.canLoadObjects(ofClass: URL.self)
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
+        return UIDropProposal(operation: .copy)
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
+        _ = session.loadObjects(ofClass: URL.self) { urls in
+
+            guard let url = urls.first else {
+                return
+            }
+            
+            self.ensureBrowsingMode()
+            self.urlBar.fillUrlBar(text: url.absoluteString)
+            self.submit(url: url)
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.drop, object: TelemetryEventObject.searchBar)
+        }
+    }
+}
+
 extension BrowserViewController: FindInPageBarDelegate {
     func findInPage(_ findInPage: FindInPageBar, didTextChange text: String) {
         find(text, function: "find")
@@ -776,11 +830,19 @@ extension BrowserViewController: URLBarDelegate {
         overlayView.setSearchQuery(query: text, animated: true)
     }
 
-    func urlBarDidPressScrollTop(_: URLBar) {
+    func urlBarDidPressScrollTop(_: URLBar, tap: UITapGestureRecognizer) {
         guard !urlBar.isEditing else { return }
 
         switch scrollBarState {
         case .expanded:
+            let y = tap.location(in: urlBar).y
+            
+            // If the tap is greater than this threshold, the user wants to type in the URL bar
+            if y >= 10 {
+                urlBar.activateTextField()
+                return
+            }
+            
             // Just scroll the vertical position so the page doesn't appear under
             // the notch on the iPhone X
             var point = webViewController.scrollView.contentOffset
@@ -922,7 +984,6 @@ extension BrowserViewController: HomeViewDelegate {
         let text = String(format: UIConstants.strings.shareTrackerStatsText + " ", AppInfo.productName, String(numberOfTrackersBlocked))
         let shareController = UIActivityViewController(activityItems: [text, appStoreUrl as Any], applicationActivities: nil)
         present(shareController, animated: true)
-        urlBar?.shouldPresent = false
     }
 }
 
@@ -1163,6 +1224,8 @@ extension BrowserViewController: WebControllerDelegate {
 extension BrowserViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+        keyboardState = state
+        self.updateViewConstraints()
         UIView.animate(withDuration: state.animationDuration) {
             self.homeViewBottomConstraint.update(offset: -state.intersectionHeightForView(view: self.view))
             self.view.layoutIfNeeded()
@@ -1170,6 +1233,8 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+        keyboardState = state
+        self.updateViewConstraints()
         UIView.animate(withDuration: state.animationDuration) {
             self.homeViewBottomConstraint.update(offset: 0)
             self.view.layoutIfNeeded()
