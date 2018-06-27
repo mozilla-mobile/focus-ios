@@ -136,6 +136,10 @@ class BaseTestCase: XCTestCase {
             waitForWebPageLoad()
         }
     }
+    
+    func checkForHomeScreen() {
+        waitforExistence(element: app.buttons["Settings"])
+    }
 
     func waitForWebPageLoad () {
         let app = XCUIApplication()

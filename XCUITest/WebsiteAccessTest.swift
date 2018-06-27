@@ -18,8 +18,7 @@ class WebsiteAccessTests: BaseTestCase {
  
     func testVisitWebsite() {
         // Check initial page
-        XCTAssertTrue(app.staticTexts["Browse. Erase. Repeat."].exists)
-        XCTAssertTrue(app.staticTexts["Automatic private browsing."].exists)
+        checkForHomeScreen()
         
         // Enter 'mozilla' on the search field
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
