@@ -49,8 +49,7 @@ class WebsiteAccessTests: BaseTestCase {
         //waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
         
         // Check it is on the initial page
-        waitforExistence(element: app.staticTexts["Browse. Erase. Repeat."])
-        waitforExistence(element: app.staticTexts["Automatic private browsing."])
+        checkForHomeScreen()
     }
     
     func testDisableAutocomplete() {
