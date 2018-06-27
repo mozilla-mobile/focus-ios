@@ -27,6 +27,7 @@ class WebsiteAccessTests: BaseTestCase {
         
         // Check the text autocompletes to mozilla.org/, and also look for 'Search for mozilla' button below
         let label = app.textFields["Search or enter address"]
+        searchOrEnterAddressTextField.tap()
         searchOrEnterAddressTextField.typeText("mozilla")
         waitForValueMatch(element: label, value: "mozilla.org/")
         waitforExistence(element: app.buttons["Search for mozilla"])
@@ -64,6 +65,7 @@ class WebsiteAccessTests: BaseTestCase {
         
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
         
+        searchOrEnterAddressTextField.tap()
         searchOrEnterAddressTextField.typeText("mozilla")
         waitforExistence(element: app.buttons["Search for mozilla"])
         waitForValueMatch(element: searchOrEnterAddressTextField, value: "mozilla")
@@ -78,6 +80,7 @@ class WebsiteAccessTests: BaseTestCase {
         app.navigationBars.buttons.element(boundBy: 0).tap()
         app.navigationBars.buttons.element(boundBy: 0).tap()
         
+        searchOrEnterAddressTextField.tap()
         searchOrEnterAddressTextField.typeText("mozilla")
         waitforExistence(element: app.buttons["Search for mozilla"])
         waitForValueMatch(element: searchOrEnterAddressTextField, value: "mozilla.org/")
