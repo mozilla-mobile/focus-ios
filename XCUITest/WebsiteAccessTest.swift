@@ -66,7 +66,9 @@ class WebsiteAccessTests: BaseTestCase {
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
         
         searchOrEnterAddressTextField.typeText("mozilla")
-        waitforExistence(element: app.buttons["Search for mozilla"])
+        waitforExistence(element: app.buttons["OverlayView.searchButton"])
+        let searchForButton = app.buttons["OverlayView.searchButton"]
+        XCTAssertNotEqual(searchForButton.label, "Search for mozilla.org/")
         waitForValueMatch(element: searchOrEnterAddressTextField, value: "mozilla")
         app.buttons["URLBar.cancelButton"].tap()
         
@@ -80,7 +82,7 @@ class WebsiteAccessTests: BaseTestCase {
         app.navigationBars.buttons.element(boundBy: 0).tap()
         
         searchOrEnterAddressTextField.typeText("mozilla")
-        waitforExistence(element: app.buttons["Search for mozilla"])
+        XCTAssertNotEqual(searchForButton.label, "Search for mozilla.org/")
         waitForValueMatch(element: searchOrEnterAddressTextField, value: "mozilla.org/")
         app.buttons["URLBar.cancelButton"].tap()
     }
