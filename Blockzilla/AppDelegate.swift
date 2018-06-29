@@ -19,6 +19,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static let prefWhatsNewCounter = "WhatsNewCounter"
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        if AppInfo.testRequestsReset() {
+            if let bundleID = Bundle.main.bundleIdentifier {
+                UserDefaults.standard.removePersistentDomain(forName: bundleID)
+            }
+        }
         setupContinuousDeploymentTooling()
         setupErrorTracking()
         setupTelemetry()
