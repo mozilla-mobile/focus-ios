@@ -20,6 +20,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     static var needsAuthenticated = false
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        if AppInfo.testRequestsReset() {
+            if let bundleID = Bundle.main.bundleIdentifier {
+                UserDefaults.standard.removePersistentDomain(forName: bundleID)
+            }
+        }
         setupContinuousDeploymentTooling()
         setupErrorTracking()
         setupTelemetry()
@@ -266,7 +271,8 @@ extension AppDelegate {
         telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockSocial, withDefaultValue: Settings.getToggle(.blockSocial))
         telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockOther, withDefaultValue: Settings.getToggle(.blockOther))
         telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockFonts, withDefaultValue: Settings.getToggle(.blockFonts))
-        
+        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.biometricLogin, withDefaultValue: Settings.getToggle(.biometricLogin))
+
         #if DEBUG
             telemetryConfig.updateChannel = "debug"
             telemetryConfig.isCollectionEnabled = false
