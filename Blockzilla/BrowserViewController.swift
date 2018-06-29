@@ -388,9 +388,16 @@ class BrowserViewController: UIViewController {
             if let keyboardHeight = keyboardState?.intersectionHeightForView(view: self.view), keyboardHeight > 0 {
                 make.bottom.equalTo(self.view).offset(-keyboardHeight)
             } else if !browserToolbar.isHidden {
-                make.bottom.equalTo(self.browserToolbar.snp.top)
+                // is an iPhone
+                if scrollBarOffsetAlpha == 1 {
+                    // browserToolbar is collapsed
+                    make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
+                } else {
+                    make.bottom.equalTo(self.browserToolbar.snp.top)
+                }
             } else {
-                make.bottom.equalTo(self.view.snp.bottom)
+                // is an iPad
+                make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
             }
         }
     }
