@@ -129,7 +129,7 @@ class BaseTestCase: XCTestCase {
         UIPasteboard.general.string = searchWord
 
         // Must press this way in order to support iPhone 5s
-        searchOrEnterAddressTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx:10,dy:0)).tap()
+        searchOrEnterAddressTextField.tap()
         searchOrEnterAddressTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx:10,dy:0)).press(forDuration: 1.5)
         waitforExistence(element: app.menuItems["Paste & Go"])
         app.menuItems["Paste & Go"].tap()
@@ -152,7 +152,7 @@ class BaseTestCase: XCTestCase {
         waitforHittable(element: searchOrEnterAddressTextField)
         
         // Must press this way in order to support iPhone 5s
-        searchOrEnterAddressTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx:10,dy:0)).tap()
+        searchOrEnterAddressTextField.tap()
         searchOrEnterAddressTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx:10,dy:0)).press(forDuration: 1.5)
         waitforExistence(element: app.menuItems["Paste & Go"])
         app.menuItems["Paste & Go"].tap()
