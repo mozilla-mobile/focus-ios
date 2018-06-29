@@ -14,7 +14,7 @@ protocol URLBarDelegate: class {
     func urlBarDidActivate(_ urlBar: URLBar)
     func urlBarDidDeactivate(_ urlBar: URLBar)
     func urlBarDidFocus(_ urlBar: URLBar)
-    func urlBarDidPressScrollTop(_: URLBar)
+    func urlBarDidPressScrollTop(_: URLBar, tap: UITapGestureRecognizer)
     func urlBarDidDismiss(_ urlBar: URLBar)
     func urlBarDidPressDelete(_ urlBar: URLBar)
     func urlBarDidTapShield(_ urlBar: URLBar)
@@ -36,6 +36,7 @@ class URLBar: UIView {
     private let toolset = BrowserToolset()
     private let urlTextContainer = UIView()
     private let urlText = URLTextField()
+    var draggableUrlTextView: UIView { return urlText }
     private let truncatedUrlText = UITextView()
     private let shieldIcon = TrackingProtectionBadge()
     private let lockIcon = UIImageView(image: #imageLiteral(resourceName: "icon_https"))
@@ -67,6 +68,9 @@ class URLBar: UIView {
         singleTap.numberOfTapsRequired = 1
         addGestureRecognizer(singleTap)
 
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(displayURLContextMenu))
+        self.addGestureRecognizer(longPress)
+        
         addSubview(toolset.backButton)
         addSubview(toolset.forwardButton)
         addSubview(toolset.stopReloadButton)
@@ -75,11 +79,6 @@ class URLBar: UIView {
         urlBarBackgroundView.backgroundColor = UIConstants.colors.urlTextBackground
         urlBarBackgroundView.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
         addSubview(urlBarBackgroundView)
-       
-        let tap = UITapGestureRecognizer(target: self, action: #selector(activateTextField))
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(displayURLContextMenu))
-        self.addGestureRecognizer(tap)
-        self.addGestureRecognizer(longPress)
 
         urlText.isUserInteractionEnabled = false
         addSubview(urlTextContainer)
@@ -584,15 +583,7 @@ class URLBar: UIView {
     }
 
     @objc private func didSingleTap(sender: UITapGestureRecognizer) {
-        if urlText.isUserInteractionEnabled {
-            let y = sender.location(in: self).y
-            guard y < 10 else { return }
-            delegate?.urlBarDidPressScrollTop(self)
-        } else {
-            let y = sender.location(in: collapsedUrlAndLockWrapper).y
-            guard y < 18 else { return }
-            delegate?.urlBarDidPressScrollTop(self)
-        }
+        delegate?.urlBarDidPressScrollTop(self, tap: sender)
     }
 
     /// Show the URL toolset buttons if we're on iPad/landscape and not editing; hide them otherwise.
