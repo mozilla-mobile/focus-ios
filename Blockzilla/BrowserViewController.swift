@@ -263,18 +263,13 @@ class BrowserViewController: UIViewController {
             if self.context.canEvaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, error: &biometricError) {
                 self.context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: self.context.localizedReason) {
                     [unowned self] (success, _) in
-
                     DispatchQueue.main.async {
                         if success {
                             self.showToolbars()
                             AppDelegate.splashView?.animateHidden(true, duration: 0.25)
                         } else {
                             // Clear the browser session, as the user failed to authenticate
-                            // No animation here so the user doesn't see the previous session
-                            self.resetBrowser(shouldAnimate: false, completion: {
-                                print("hiding splash view")
-                                //AppDelegate.splashView?.animateHidden(true, duration: 0.25)
-                            })
+                            self.resetBrowser(hidePreviousSession: true)
                         }
                     }
                 }
@@ -439,25 +434,12 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    fileprivate func resetBrowser(shouldAnimate: Bool = true, completion: (() -> Void)? = nil) {
-        if !shouldAnimate {
-            // Reset the views. These changes won't be immediately visible since they'll be under the screenshot.
-            overlayView.currentURL = ""
-            webViewController.reset()
-            UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration) {
-                self.webViewContainer.isHidden = true
-                self.browserToolbar.isHidden = true
-
-            }
-            self.urlBar.removeFromSuperview()
-            self.urlBarContainer.alpha = 0
-            createHomeView()
-            createURLBar()
-            
-            // Clear the cache and cookies, starting a new session.
-            WebCacheUtils.reset()
-            
-            requestReviewIfNecessary()
+    fileprivate func resetBrowser(hidePreviousSession: Bool = false) {
+        
+        // Used when biometrics fail and the previous session should be obscured
+        if hidePreviousSession {
+            clearBrowser()
+            urlBar.activateTextField()
             return
         }
         
@@ -469,37 +451,16 @@ class BrowserViewController: UIViewController {
             make.edges.equalTo(mainContainerView)
         }
 
-        // Reset the views. These changes won't be immediately visible since they'll be under the screenshot.
-        overlayView.currentURL = ""
-        webViewController.reset()
-        webViewContainer.isHidden = true
-        browserToolbar.isHidden = true
-        urlBar.removeFromSuperview()
-        urlBarContainer.alpha = 0
-        createHomeView()
-        createURLBar()
-
-        // Clear the cache and cookies, starting a new session.
-        WebCacheUtils.reset()
+        clearBrowser()
         
-        requestReviewIfNecessary()
-        
-        // let animationSpeed = shouldAnimate ? UIConstants.layout.deleteAnimationDuration : 0.0
-        let animationSpeed = UIConstants.layout.deleteAnimationDuration
-        
-        // Zoom out on the screenshot, then slide down, then remove it.
-        mainContainerView.layoutIfNeeded()
-        
-        UIView.animate(withDuration: animationSpeed, delay: 0, options: .curveEaseInOut, animations: {
+        UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, delay: 0, options: .curveEaseInOut, animations: {
             screenshotView.snp.remakeConstraints { make in
                 make.center.equalTo(self.mainContainerView)
                 make.size.equalTo(self.mainContainerView).multipliedBy(0.9)
             }
             self.mainContainerView.layoutIfNeeded()
         }, completion: { _ in
-            
-          
-            UIView.animate(withDuration: animationSpeed, animations: {
+            UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, animations: {
                 screenshotView.snp.remakeConstraints { make in
                     make.centerX.equalTo(self.mainContainerView)
                     make.top.equalTo(self.mainContainerView.snp.bottom)
@@ -511,11 +472,27 @@ class BrowserViewController: UIViewController {
                 self.urlBar.activateTextField()
                 Toast(text: UIConstants.strings.eraseMessage).show()
                 screenshotView.removeFromSuperview()
-                completion?()
             })
         })
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.eraseButton)
+    }
+    
+    private func clearBrowser() {
+        // Helper function for resetBrowser that handles all the logic of actually clearing user data and the browsing session
+        overlayView.currentURL = ""
+        webViewController.reset()
+        webViewContainer.isHidden = true
+        browserToolbar.isHidden = true
+        urlBar.removeFromSuperview()
+        urlBarContainer.alpha = 0
+        createHomeView()
+        createURLBar()
+        
+        // Clear the cache and cookies, starting a new session.
+        WebCacheUtils.reset()
+        requestReviewIfNecessary()
+        mainContainerView.layoutIfNeeded()
     }
     
     func requestReviewIfNecessary() {
