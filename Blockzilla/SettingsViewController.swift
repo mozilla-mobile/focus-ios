@@ -8,7 +8,21 @@ import UIKit
 import Telemetry
 import LocalAuthentication
 
-class SettingsTableViewSearchCell: UITableViewCell {
+class SettingsTableViewCell: UITableViewCell {
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+
+        let backgroundColorView = UIView()
+        backgroundColorView.backgroundColor = UIConstants.colors.cellSelected
+        selectedBackgroundView = backgroundColorView
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class SettingsTableViewSearchCell: SettingsTableViewCell {
     private let newLabel = SmartLabel()
     private let accessoryLabel = SmartLabel()
     private let spacerView = UIView()
@@ -43,10 +57,6 @@ class SettingsTableViewSearchCell: UITableViewCell {
         newLabel.textColor = UIConstants.colors.settingsTextLabel
         accessoryLabel.textColor = UIConstants.colors.settingsDetailLabel
         accessoryType = .disclosureIndicator
-
-        let backgroundColorView = UIView()
-        backgroundColorView.backgroundColor = UIConstants.colors.cellSelected
-        selectedBackgroundView = backgroundColorView
 
         accessoryLabel.setContentHuggingPriority(.required, for: .horizontal)
         accessoryLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -87,7 +97,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             case .privacy: return 4
             case .security: return 1
             case .performance: return 1
-            case .mozilla: return 2
+            case .mozilla: return 3
             }
         }
         
@@ -251,6 +261,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateSafariEnabledState()
+        tableView.reloadData()
     }
 
     @objc private func applicationDidBecomeActive() {
@@ -376,11 +387,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             cell = searchCell
         default:
             if sections[indexPath.section] == .mozilla && indexPath.row == 1 {
-                cell = UITableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
+                cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
                 cell.textLabel?.text = UIConstants.strings.aboutTitle
                 cell.accessibilityIdentifier = "settingsViewController.about"
-            } else if indexPath.section == 4 && indexPath.row == 2 {
-                cell = UITableViewCell(style: .subtitle, reuseIdentifier: "ratingCell")
+            } else if sections[indexPath.section] == .mozilla && indexPath.row == 2 {
+                cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "ratingCell")
                 cell.textLabel?.text = UIConstants.strings.ratingSetting
                 cell.accessibilityIdentifier = "settingsViewController.rateFocus"
             } else {
@@ -505,6 +516,16 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             case .mozilla:
                 if indexPath.row == 1 {
                     aboutClicked()
+                } else if indexPath.row == 2 {
+                    if AppInfo.isKlar {
+                        if let reviewURL = URL(string: "https://itunes.apple.com/de/app/firefox-klar/id1073435754?mt=8&app=itunes&ign-mpt=uo%3D4"), UIApplication.shared.canOpenURL(reviewURL) {
+                            UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
+                        }
+                    } else {
+                        if let reviewURL = URL(string: "https://itunes.apple.com/us/app/firefox-focus-privacy-browser/id1055677337?mt=8"), UIApplication.shared.canOpenURL(reviewURL) {
+                            UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
+                        }
+                    }
                 }
             default: break
         }

@@ -29,6 +29,7 @@ class OverlayView: UIView {
         super.init(frame: CGRect.zero)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
         searchButton.isHidden = true
+        searchButton.accessibilityIdentifier = "OverlayView.searchButton"
         searchButton.alpha = 0
         searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .normal)
         searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .highlighted)
@@ -156,7 +157,7 @@ class OverlayView: UIView {
         button.setAttributedTitle(attributedString, for: .normal)
     }
     
-    func setSearchQuery(query: String, animated: Bool) {
+    func setSearchQuery(query: String, animated: Bool, hideFindInPage: Bool) {
         searchQuery = query
         let query = query.trimmingCharacters(in: .whitespaces)
 
@@ -168,14 +169,14 @@ class OverlayView: UIView {
                     self.copyButton.setAttributedTitle(NSAttributedString(string: String(format: UIConstants.strings.linkYouCopied, url.absoluteString), attributes: [NSAttributedStringKey.foregroundColor: UIColor.white]), for: .normal)
                     showCopyButton = url.isWebPage()
                 }
-
+                
                 // Show or hide the search button depending on whether there's entered text.
                 if self.searchButton.isHidden != query.isEmpty {
                     let duration = animated ? UIConstants.layout.searchButtonAnimationDuration : 0
                     self.searchButton.animateHidden(query.isEmpty, duration: duration)
                     self.searchBorder.animateHidden(query.isEmpty, duration: duration)
-                    self.findInPageButton.animateHidden(query.isEmpty, duration: duration)
-                    self.findInPageBorder.animateHidden(query.isEmpty, duration: duration)
+                    self.findInPageButton.animateHidden((query.isEmpty || hideFindInPage), duration: duration)
+                    self.findInPageBorder.animateHidden((query.isEmpty || hideFindInPage), duration: duration)
                 }
                 self.setAttributedButtonTitle(phrase: query, button: self.searchButton, localizedStringFormat: UIConstants.strings.searchButton)
                 self.setAttributedButtonTitle(phrase: query, button: self.findInPageButton, localizedStringFormat: UIConstants.strings.findInPageButton)
@@ -225,7 +226,7 @@ class OverlayView: UIView {
     }
 
     func dismiss() {
-        setSearchQuery(query: "", animated: false)
+        setSearchQuery(query: "", animated: false, hideFindInPage: true)
         self.isUserInteractionEnabled = false
         copyButton.isHidden = true
         copyBorder.isHidden = true
@@ -235,7 +236,7 @@ class OverlayView: UIView {
     }
 
     func present() {
-        setSearchQuery(query: "", animated: false)
+        setSearchQuery(query: "", animated: false, hideFindInPage: true)
         self.isUserInteractionEnabled = false
         copyButton.isHidden = false
         copyBorder.isHidden = false
