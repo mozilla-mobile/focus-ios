@@ -15,8 +15,7 @@ class BrowserViewController: UIViewController {
     }
 
     private var splashScreen: UIView?
-    private let context = LAContext()
-
+    private var context = LAContext()
     private let mainContainerView = UIView(frame: .zero)
     private let drawerContainerView = DrawerView(frame: .zero)
     private let drawerOverlayView = UIView()
@@ -252,23 +251,26 @@ class BrowserViewController: UIViewController {
             var biometricError: NSError?
 
             // Check if user is already in a cleared session, or doesn't have biometrics enabled in settings
-            if self.webViewContainer.isHidden || !Settings.getToggle(SettingsToggle.biometricLogin) {
+            if  !Settings.getToggle(SettingsToggle.biometricLogin) || !AppDelegate.needsAuthenticated || self.webViewContainer.isHidden {
+                AppDelegate.splashView?.animateHidden(true, duration: 0.25)
                 return
             }
+            AppDelegate.needsAuthenticated = false
 
-            self.displaySplashScreen()
+            self.context = LAContext()
+            self.context.localizedReason = UIConstants.strings.biometricReason
+            self.context.localizedCancelTitle = UIConstants.strings.newSessionFromBiometricFailure
 
             if self.context.canEvaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, error: &biometricError) {
                 self.context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: self.context.localizedReason) {
                     [unowned self] (success, _) in
-
                     DispatchQueue.main.async {
-                        self.hideSplashScreen()
                         if success {
                             self.showToolbars()
+                            AppDelegate.splashView?.animateHidden(true, duration: 0.25)
                         } else {
                             // Clear the browser session, as the user failed to authenticate
-                            self.resetBrowser()
+                            self.resetBrowser(hidePreviousSession: true)
                         }
                     }
                 }
@@ -276,7 +278,7 @@ class BrowserViewController: UIViewController {
                 // Ran into an error with biometrics, so disable them and clear the browser:
                 Settings.set(false, forToggle: SettingsToggle.biometricLogin)
                 self.resetBrowser()
-                self.hideSplashScreen()
+                AppDelegate.splashView?.animateHidden(true, duration: 0.25)
             }
         }
     }
@@ -402,6 +404,8 @@ class BrowserViewController: UIViewController {
     func updateFindInPageVisibility(visible: Bool, text: String = "") {
         if visible {
             if findInPageBar == nil {
+                Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.findInPageBar)
+                
                 urlBar.dismiss()
                 let findInPageBar = FindInPageBar()
                 self.findInPageBar = findInPageBar
@@ -433,7 +437,7 @@ class BrowserViewController: UIViewController {
                 // delegate to slide the bar up and down with the keyboard. We don't want to animate the
                 // constraints added above, however, so force a layout now to prevent these constraints
                 // from being lumped in with the keyboard animation.
-                findInPageBar.layoutIfNeeded()
+                alertStackView.layoutIfNeeded()
             }
             
             self.findInPageBar?.becomeFirstResponder()
@@ -448,7 +452,15 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    fileprivate func resetBrowser() {
+    fileprivate func resetBrowser(hidePreviousSession: Bool = false) {
+        
+        // Used when biometrics fail and the previous session should be obscured
+        if hidePreviousSession {
+            clearBrowser()
+            urlBar.activateTextField()
+            return
+        }
+        
         // Screenshot the browser, showing the screenshot on top.
         let image = mainContainerView.screenshot()
         let screenshotView = UIImageView(image: image)
@@ -457,23 +469,8 @@ class BrowserViewController: UIViewController {
             make.edges.equalTo(mainContainerView)
         }
 
-        // Reset the views. These changes won't be immediately visible since they'll be under the screenshot.
-        overlayView.currentURL = ""
-        webViewController.reset()
-        webViewContainer.isHidden = true
-        browserToolbar.isHidden = true
-        urlBar.removeFromSuperview()
-        urlBarContainer.alpha = 0
-        createHomeView()
-        createURLBar()
-
-        // Clear the cache and cookies, starting a new session.
-        WebCacheUtils.reset()
+        clearBrowser()
         
-        requestReviewIfNecessary()
-
-        // Zoom out on the screenshot, then slide down, then remove it.
-        mainContainerView.layoutIfNeeded()
         UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, delay: 0, options: .curveEaseInOut, animations: {
             screenshotView.snp.remakeConstraints { make in
                 make.center.equalTo(self.mainContainerView)
@@ -497,6 +494,23 @@ class BrowserViewController: UIViewController {
         })
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.eraseButton)
+    }
+    
+    private func clearBrowser() {
+        // Helper function for resetBrowser that handles all the logic of actually clearing user data and the browsing session
+        overlayView.currentURL = ""
+        webViewController.reset()
+        webViewContainer.isHidden = true
+        browserToolbar.isHidden = true
+        urlBar.removeFromSuperview()
+        urlBarContainer.alpha = 0
+        createHomeView()
+        createURLBar()
+        
+        // Clear the cache and cookies, starting a new session.
+        WebCacheUtils.reset()
+        requestReviewIfNecessary()
+        mainContainerView.layoutIfNeeded()
     }
     
     func requestReviewIfNecessary() {
@@ -801,16 +815,19 @@ extension BrowserViewController: FindInPageBarDelegate {
     }
     
     func findInPage(_ findInPage: FindInPageBar, didFindNextWithText text: String) {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.findNext)
         findInPageBar?.endEditing(true)
         find(text, function: "findNext")
     }
     
     func findInPage(_ findInPage: FindInPageBar, didFindPreviousWithText text: String) {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.findPrev)
         findInPageBar?.endEditing(true)
         find(text, function: "findPrevious")
     }
     
     func findInPageDidPressClose(_ findInPage: FindInPageBar) {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.close, object: TelemetryEventObject.findInPageBar)
         updateFindInPageVisibility(visible: false)
     }
     
@@ -839,7 +856,9 @@ extension BrowserViewController: URLBarDelegate {
     }
     
     func urlBar(_ urlBar: URLBar, didEnterText text: String) {
-        overlayView.setSearchQuery(query: text, animated: true)
+        // Hide find in page if the home view is displayed
+        let isOnHomeView = homeView != nil
+        overlayView.setSearchQuery(query: text, animated: true, hideFindInPage: isOnHomeView)
     }
 
     func urlBarDidPressScrollTop(_: URLBar, tap: UITapGestureRecognizer) {
@@ -937,6 +956,7 @@ extension BrowserViewController: BrowserToolsetDelegate {
         
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Request Desktop Site", style: .default, handler: { (action) in
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.requestDesktop)
             self.webViewController.requestDesktop()
         }))
         alert.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
@@ -1067,6 +1087,10 @@ extension BrowserViewController: WebControllerDelegate {
         browserToolbar.isLoading = true
         toggleURLBarBackground(isBright: false)
         showToolbars()
+        
+        if webViewController.url?.absoluteString != "about:blank" {
+            urlBar.url = webViewController.url
+        }
     }
 
     func webControllerDidFinishNavigation(_ controller: WebController) {
