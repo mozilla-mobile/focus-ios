@@ -36,6 +36,7 @@ class BrowserViewController: UIViewController {
     fileprivate var topURLBarConstraints = [Constraint]()
     fileprivate let requestHandler = RequestHandler()
     fileprivate var findInPageBar: FindInPageBar?
+    fileprivate var fillerView: UIView?
     fileprivate let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
 
     fileprivate var drawerConstraint: Constraint!
@@ -389,12 +390,8 @@ class BrowserViewController: UIViewController {
                 make.bottom.equalTo(self.view).offset(-keyboardHeight)
             } else if !browserToolbar.isHidden {
                 // is an iPhone
-                if scrollBarOffsetAlpha == 1 {
-                    // browserToolbar is collapsed
-                    make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
-                } else {
-                    make.bottom.equalTo(self.browserToolbar.snp.top)
-                }
+                make.bottom.equalTo(self.browserToolbar.snp.top).priority(.low)
+                make.bottom.lessThanOrEqualTo(self.view.safeAreaLayoutGuide.snp.bottom).priority(.required)
             } else {
                 // is an iPad
                 make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
@@ -408,15 +405,25 @@ class BrowserViewController: UIViewController {
                 urlBar.dismiss()
                 let findInPageBar = FindInPageBar()
                 self.findInPageBar = findInPageBar
+                let fillerView = UIView()
+                self.fillerView = fillerView
+                fillerView.backgroundColor = UIConstants.Photon.Grey70
                 findInPageBar.text = text
                 findInPageBar.delegate = self
                 
                 alertStackView.addArrangedSubview(findInPageBar)
+                mainContainerView.insertSubview(fillerView, belowSubview: browserToolbar)
                 
                 findInPageBar.snp.makeConstraints { make in
                     make.height.equalTo(UIConstants.ToolbarHeight)
                     make.leading.trailing.equalTo(alertStackView)
                     make.bottom.equalTo(alertStackView.snp.bottom)
+                }
+                
+                fillerView.snp.makeConstraints { make in
+                    make.top.equalTo(alertStackView.snp.bottom)
+                    make.bottom.equalTo(self.view)
+                    make.leading.trailing.equalTo(alertStackView)
                 }
                 
                 updateViewConstraints()
@@ -434,7 +441,9 @@ class BrowserViewController: UIViewController {
             findInPageBar.endEditing(true)
             webViewController.evaluate("__firefox__.findDone()", completion: nil)
             findInPageBar.removeFromSuperview()
+            fillerView?.removeFromSuperview()
             self.findInPageBar = nil
+            self.fillerView = nil
             updateViewConstraints()
         }
     }
@@ -1184,6 +1193,9 @@ extension BrowserViewController: WebControllerDelegate {
         let scrollView = webViewController.scrollView
 
         scrollBarState = .animating
+        
+        // Must update view constraints so find in page bar knows to snap to top of browserToolBar again
+        updateViewConstraints()
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: {
             self.urlBar.collapseUrlBar(expandAlpha: 1, collapseAlpha: 0)
             self.urlBarTopConstraint.update(offset: 0)
