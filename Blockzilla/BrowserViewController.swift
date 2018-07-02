@@ -838,7 +838,9 @@ extension BrowserViewController: URLBarDelegate {
     }
     
     func urlBar(_ urlBar: URLBar, didEnterText text: String) {
-        overlayView.setSearchQuery(query: text, animated: true)
+        // Hide find in page if the home view is displayed
+        let isOnHomeView = homeView != nil
+        overlayView.setSearchQuery(query: text, animated: true, hideFindInPage: isOnHomeView)
     }
 
     func urlBarDidPressScrollTop(_: URLBar, tap: UITapGestureRecognizer) {
@@ -1067,6 +1069,10 @@ extension BrowserViewController: WebControllerDelegate {
         browserToolbar.isLoading = true
         toggleURLBarBackground(isBright: false)
         showToolbars()
+        
+        if webViewController.url?.absoluteString != "about:blank" {
+            urlBar.url = webViewController.url
+        }
     }
 
     func webControllerDidFinishNavigation(_ controller: WebController) {
