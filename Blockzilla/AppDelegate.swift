@@ -9,7 +9,7 @@ import Telemetry
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
-    private var splashView: UIView?
+    static var splashView: UIView?
     static let prefIntroDone = "IntroDone"
     static let prefIntroVersion = 2
     private let browserViewController = BrowserViewController()
@@ -18,7 +18,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static let prefWhatsNewDone = "WhatsNewDone"
     static let prefWhatsNewCounter = "WhatsNewCounter"
 
+    static var needsAuthenticated = false
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        if AppInfo.testRequestsReset() {
+            if let bundleID = Bundle.main.bundleIdentifier {
+                UserDefaults.standard.removePersistentDomain(forName: bundleID)
+            }
+        }
         setupContinuousDeploymentTooling()
         setupErrorTracking()
         setupTelemetry()
@@ -190,19 +196,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }, completion: { success in
                 splashView.isHidden = true
                 logoImage.layer.transform = CATransform3DIdentity
-                self.splashView = splashView
+                AppDelegate.splashView = splashView
             })
         })
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-        splashView?.animateHidden(false, duration: 0)
+        AppDelegate.splashView?.animateHidden(false, duration: 0)
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
 
-        splashView?.animateHidden(true, duration: 0.25)
         if let url = queuedUrl {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openedFromExtension, object: TelemetryEventObject.app)
 
@@ -223,6 +228,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // session. This gets called every time the app goes to background but should not get
         // called for *temporary* interruptions such as an incoming phone call until the user
         // takes action and we are officially backgrounded.
+        AppDelegate.needsAuthenticated = true
         let orientation = UIDevice.current.orientation.isPortrait ? "Portrait" : "Landscape"
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.background, object:
             TelemetryEventObject.app, value: nil, extras: ["orientation": orientation])
@@ -265,7 +271,8 @@ extension AppDelegate {
         telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockSocial, withDefaultValue: Settings.getToggle(.blockSocial))
         telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockOther, withDefaultValue: Settings.getToggle(.blockOther))
         telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockFonts, withDefaultValue: Settings.getToggle(.blockFonts))
-        
+        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.biometricLogin, withDefaultValue: Settings.getToggle(.biometricLogin))
+
         #if DEBUG
             telemetryConfig.updateChannel = "debug"
             telemetryConfig.isCollectionEnabled = false
