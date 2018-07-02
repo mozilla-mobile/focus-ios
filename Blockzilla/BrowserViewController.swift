@@ -263,15 +263,14 @@ class BrowserViewController: UIViewController {
             if self.context.canEvaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, error: &biometricError) {
                 self.context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: self.context.localizedReason) {
                     [unowned self] (success, _) in
-
                     DispatchQueue.main.async {
                         if success {
                             self.showToolbars()
+                            AppDelegate.splashView?.animateHidden(true, duration: 0.25)
                         } else {
                             // Clear the browser session, as the user failed to authenticate
-                            self.resetBrowser()
+                            self.resetBrowser(hidePreviousSession: true)
                         }
-                        AppDelegate.splashView?.animateHidden(true, duration: 0.25)
                     }
                 }
             } else {
@@ -435,7 +434,15 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    fileprivate func resetBrowser() {
+    fileprivate func resetBrowser(hidePreviousSession: Bool = false) {
+        
+        // Used when biometrics fail and the previous session should be obscured
+        if hidePreviousSession {
+            clearBrowser()
+            urlBar.activateTextField()
+            return
+        }
+        
         // Screenshot the browser, showing the screenshot on top.
         let image = mainContainerView.screenshot()
         let screenshotView = UIImageView(image: image)
@@ -444,23 +451,8 @@ class BrowserViewController: UIViewController {
             make.edges.equalTo(mainContainerView)
         }
 
-        // Reset the views. These changes won't be immediately visible since they'll be under the screenshot.
-        overlayView.currentURL = ""
-        webViewController.reset()
-        webViewContainer.isHidden = true
-        browserToolbar.isHidden = true
-        urlBar.removeFromSuperview()
-        urlBarContainer.alpha = 0
-        createHomeView()
-        createURLBar()
-
-        // Clear the cache and cookies, starting a new session.
-        WebCacheUtils.reset()
+        clearBrowser()
         
-        requestReviewIfNecessary()
-
-        // Zoom out on the screenshot, then slide down, then remove it.
-        mainContainerView.layoutIfNeeded()
         UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, delay: 0, options: .curveEaseInOut, animations: {
             screenshotView.snp.remakeConstraints { make in
                 make.center.equalTo(self.mainContainerView)
@@ -484,6 +476,23 @@ class BrowserViewController: UIViewController {
         })
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.eraseButton)
+    }
+    
+    private func clearBrowser() {
+        // Helper function for resetBrowser that handles all the logic of actually clearing user data and the browsing session
+        overlayView.currentURL = ""
+        webViewController.reset()
+        webViewContainer.isHidden = true
+        browserToolbar.isHidden = true
+        urlBar.removeFromSuperview()
+        urlBarContainer.alpha = 0
+        createHomeView()
+        createURLBar()
+        
+        // Clear the cache and cookies, starting a new session.
+        WebCacheUtils.reset()
+        requestReviewIfNecessary()
+        mainContainerView.layoutIfNeeded()
     }
     
     func requestReviewIfNecessary() {
@@ -829,7 +838,9 @@ extension BrowserViewController: URLBarDelegate {
     }
     
     func urlBar(_ urlBar: URLBar, didEnterText text: String) {
-        overlayView.setSearchQuery(query: text, animated: true)
+        // Hide find in page if the home view is displayed
+        let isOnHomeView = homeView != nil
+        overlayView.setSearchQuery(query: text, animated: true, hideFindInPage: isOnHomeView)
     }
 
     func urlBarDidPressScrollTop(_: URLBar, tap: UITapGestureRecognizer) {
@@ -1058,6 +1069,10 @@ extension BrowserViewController: WebControllerDelegate {
         browserToolbar.isLoading = true
         toggleURLBarBackground(isBright: false)
         showToolbars()
+        
+        if webViewController.url?.absoluteString != "about:blank" {
+            urlBar.url = webViewController.url
+        }
     }
 
     func webControllerDidFinishNavigation(_ controller: WebController) {
