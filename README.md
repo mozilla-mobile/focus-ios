@@ -1,3 +1,5 @@
+Test ignore me
+
 [![codecov](https://codecov.io/gh/mozilla-mobile/focus/branch/master/graph/badge.svg)](https://codecov.io/gh/mozilla-mobile/focus)
 
 # Firefox Focus for iOS
