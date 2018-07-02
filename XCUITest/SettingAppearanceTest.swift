@@ -134,7 +134,6 @@ class SettingAppearanceTest: BaseTestCase {
         app.activate()
         
         // Now back to Focus
-        //waitForValueContains(element: app.textFields["Search or enter address"], value: "https://www.google")
         waitForWebPageLoad()
         app.buttons["ERASE"].tap()
         waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
