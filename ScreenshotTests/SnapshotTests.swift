@@ -16,51 +16,55 @@ class SnapshotTests: XCTestCase {
     func test01Screenshots() {
         let app = XCUIApplication()
         snapshot("00FirstRun")
+        app.swipeLeft()
+        snapshot("01FirstRun")
+        app.swipeLeft()
+        snapshot("02FirstRun")
         app.buttons["IntroViewController.button"].tap()
 
-        snapshot("01Home")
+        snapshot("03Home")
 
-        snapshot("02LocationBarEmptyState")
+        snapshot("04LocationBarEmptyState")
         app.textFields["URLBar.urlText"].typeText("bugzilla.mozilla.org")
-        snapshot("03SearchFor")
-
+        snapshot("05SearchFor")
+        
         app.typeText("\n")
         waitForValueContains(element: app.textFields["URLBar.urlText"], value: "https://bugzilla.mozilla.org/")
+        snapshot("06EraseButton")
         
-        app.textFields["URLBar.urlText"].typeText("bugzilla")
+        let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
+        searchOrEnterAddressTextField.tap()
+        searchOrEnterAddressTextField.typeText("bugzilla")
         app.buttons["FindInPageBar.button"].tap()
-        
-        snapshot("04FindInPage")
-        
-        snapshot("05EraseButton")
+        snapshot("07FindInPage")
 
         app.buttons["URLBar.deleteButton"].tap()
         waitforExistence(element: app.staticTexts["Toast.label"])
-        snapshot("06YourBrowsingHistoryHasBeenErased")
+        snapshot("08YourBrowsingHistoryHasBeenErased")
     }
 
     func test02Settings() {
         let app = XCUIApplication()
         app.buttons["HomeView.settingsButton"].tap()
-        snapshot("07Settings")
+        snapshot("09Settings")
         app.swipeUp()
-        snapshot("08Settings")
+        snapshot("10Settings")
         app.swipeDown()
         app.cells["SettingsViewController.searchCell"].tap()
-        snapshot("09SettingsSearchEngine")
+        snapshot("11SettingsSearchEngine")
         app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
         app.swipeUp()
         app.switches["BlockerToggle.BlockOther"].tap()
-        snapshot("10SettingsBlockOtherContentTrackers")
+        snapshot("12SettingsBlockOtherContentTrackers")
     }
     
     func test03About() {
         let app = XCUIApplication()
         app.buttons["HomeView.settingsButton"].tap()
         app.cells["settingsViewController.about"].tap()
-        snapshot("11About")
+        snapshot("13About")
         app.swipeUp()
-        snapshot("12About")
+        snapshot("14About")
     }
 
     func test04ShareMenu() {
@@ -68,28 +72,28 @@ class SnapshotTests: XCTestCase {
         app.textFields["URLBar.urlText"].typeText("bugzilla.mozilla.org\n")
         waitForValueContains(element: app.textFields["URLBar.urlText"], value: "https://bugzilla.mozilla.org/")
         app.buttons["BrowserToolset.sendButton"].tap()
-        snapshot("13ShareMenu")
+        snapshot("15ShareMenu")
     }
 
     func test05SafariIntegration() {
         let app = XCUIApplication()
         app.buttons["HomeView.settingsButton"].tap()
         app.tables.switches["BlockerToggle.Safari"].tap()
-        snapshot("14SafariIntegrationInstructions")
+        snapshot("16SafariIntegrationInstructions")
     }
 
     func test06OpenMaps() {
         let app = XCUIApplication()
         app.textFields["URLBar.urlText"].typeText("maps.apple.com\n")
         waitForValueContains(element: app.textFields["URLBar.urlText"], value: "http://maps.apple.com")
-        snapshot("15OpenMaps")
+        snapshot("17OpenMaps")
     }
 
     func test07OpenAppStore() {
         let app = XCUIApplication()
         app.textFields["URLBar.urlText"].typeText("itunes.apple.com\n")
         waitForValueContains(element: app.textFields["URLBar.urlText"], value: "http://itunes.apple.com")
-        snapshot("16OpenAppStore")
+        snapshot("18OpenAppStore")
     }
 
     func test08PasteAndGo() {
@@ -113,7 +117,7 @@ class SnapshotTests: XCTestCase {
 
         app.menuItems.element(boundBy: 3).tap()
 
-        snapshot("08PasteAndGo")
+        snapshot("19PasteAndGo")
     }
     
     func test09TrackingProtection() {
@@ -130,7 +134,7 @@ class SnapshotTests: XCTestCase {
         // Check the correct site is reached
         waitForValueContains(element: searchOrEnterAddressTextField, value: "https://www.mozilla.org/")
         app.otherElements["URLBar.trackingProtectionIcon"].tap()
-        snapshot("09TrackingProtection")
+        snapshot("20TrackingProtection")
     }
     
     func test10CustomSearchEngines() {
@@ -139,7 +143,7 @@ class SnapshotTests: XCTestCase {
         app.buttons["HomeView.settingsButton"].tap()
         app.cells["SettingsViewController.searchCell"].tap()
         app.cells["addSearchEngine"].tap()
-        snapshot("10CustomSearchEngines")
+        snapshot("21CustomSearchEngines")
     }
     
     func test11AutocompleteURLs() {
@@ -147,7 +151,7 @@ class SnapshotTests: XCTestCase {
 
         app.buttons["HomeView.settingsButton"].tap()
         app.cells["SettingsViewController.autocompleteCell"].tap()
-        snapshot("11AutocompleteURLs")
+        snapshot("22AutocompleteURLs")
     }
 
     func waitForValueContains(element:XCUIElement, value:String, file: String = #file, line: UInt = #line) {
