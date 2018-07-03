@@ -286,10 +286,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         switch biometryType {
             case .faceID:
                 label = UIConstants.strings.labelFaceIDLogin
-                subtitle = UIConstants.strings.labelFaceIDLoginDescription
+                subtitle = String(format: UIConstants.strings.labelFaceIDLoginDescription, AppInfo.productName)
             case .touchID:
                 label = UIConstants.strings.labelTouchIDLogin
-                subtitle = UIConstants.strings.labelTouchIDLoginDescription
+                subtitle = String(format: UIConstants.strings.labelTouchIDLoginDescription, AppInfo.productName)
             default:
                 // Unknown biometric type
                 return
