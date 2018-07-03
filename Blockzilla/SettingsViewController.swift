@@ -286,10 +286,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         switch biometryType {
             case .faceID:
                 label = UIConstants.strings.labelFaceIDLogin
-                subtitle = UIConstants.strings.labelFaceIDLoginDescription
+                subtitle = String(format: UIConstants.strings.labelFaceIDLoginDescription, AppInfo.productName)
             case .touchID:
                 label = UIConstants.strings.labelTouchIDLogin
-                subtitle = UIConstants.strings.labelTouchIDLoginDescription
+                subtitle = String(format: UIConstants.strings.labelTouchIDLoginDescription, AppInfo.productName)
             default:
                 // Unknown biometric type
                 return
@@ -392,7 +392,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.accessibilityIdentifier = "settingsViewController.about"
             } else if sections[indexPath.section] == .mozilla && indexPath.row == 2 {
                 cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "ratingCell")
-                cell.textLabel?.text = UIConstants.strings.ratingSetting
+                cell.textLabel?.text = String(format: UIConstants.strings.ratingSetting, AppInfo.productName)
                 cell.accessibilityIdentifier = "settingsViewController.rateFocus"
             } else {
                 cell = UITableViewCell(style: .subtitle, reuseIdentifier: "toggleCell")
@@ -517,14 +517,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 if indexPath.row == 1 {
                     aboutClicked()
                 } else if indexPath.row == 2 {
-                    if AppInfo.isKlar {
-                        if let reviewURL = URL(string: "https://itunes.apple.com/de/app/firefox-klar/id1073435754?mt=8&app=itunes&ign-mpt=uo%3D4"), UIApplication.shared.canOpenURL(reviewURL) {
-                            UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
-                        }
-                    } else {
-                        if let reviewURL = URL(string: "https://itunes.apple.com/us/app/firefox-focus-privacy-browser/id1055677337?mt=8"), UIApplication.shared.canOpenURL(reviewURL) {
-                            UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
-                        }
+                    let appId = AppInfo.config.appId
+                    if let reviewURL = URL(string: "https://itunes.apple.com/app/id\(appId)?action=write-review"), UIApplication.shared.canOpenURL(reviewURL) {
+                        UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
                     }
                 }
             default: break

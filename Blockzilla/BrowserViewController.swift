@@ -35,6 +35,7 @@ class BrowserViewController: UIViewController {
     fileprivate var topURLBarConstraints = [Constraint]()
     fileprivate let requestHandler = RequestHandler()
     fileprivate var findInPageBar: FindInPageBar?
+    fileprivate var fillerView: UIView?
     fileprivate let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
 
     fileprivate var drawerConstraint: Constraint!
@@ -263,15 +264,14 @@ class BrowserViewController: UIViewController {
             if self.context.canEvaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, error: &biometricError) {
                 self.context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: self.context.localizedReason) {
                     [unowned self] (success, _) in
-
                     DispatchQueue.main.async {
                         if success {
                             self.showToolbars()
+                            AppDelegate.splashView?.animateHidden(true, duration: 0.25)
                         } else {
                             // Clear the browser session, as the user failed to authenticate
-                            self.resetBrowser()
+                            self.resetBrowser(hidePreviousSession: true)
                         }
-                        AppDelegate.splashView?.animateHidden(true, duration: 0.25)
                     }
                 }
             } else {
@@ -391,9 +391,12 @@ class BrowserViewController: UIViewController {
             if let keyboardHeight = keyboardState?.intersectionHeightForView(view: self.view), keyboardHeight > 0 {
                 make.bottom.equalTo(self.view).offset(-keyboardHeight)
             } else if !browserToolbar.isHidden {
-                make.bottom.equalTo(self.browserToolbar.snp.top)
+                // is an iPhone
+                make.bottom.equalTo(self.browserToolbar.snp.top).priority(.low)
+                make.bottom.lessThanOrEqualTo(self.view.safeAreaLayoutGuide.snp.bottom).priority(.required)
             } else {
-                make.bottom.equalTo(self.view.snp.bottom)
+                // is an iPad
+                make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
             }
         }
     }
@@ -406,16 +409,28 @@ class BrowserViewController: UIViewController {
                 urlBar.dismiss()
                 let findInPageBar = FindInPageBar()
                 self.findInPageBar = findInPageBar
+                let fillerView = UIView()
+                self.fillerView = fillerView
+                fillerView.backgroundColor = UIConstants.Photon.Grey70
                 findInPageBar.text = text
                 findInPageBar.delegate = self
                 
                 alertStackView.addArrangedSubview(findInPageBar)
+                mainContainerView.insertSubview(fillerView, belowSubview: browserToolbar)
                 
                 findInPageBar.snp.makeConstraints { make in
                     make.height.equalTo(UIConstants.ToolbarHeight)
                     make.leading.trailing.equalTo(alertStackView)
                     make.bottom.equalTo(alertStackView.snp.bottom)
                 }
+                
+                fillerView.snp.makeConstraints { make in
+                    make.top.equalTo(alertStackView.snp.bottom)
+                    make.bottom.equalTo(self.view)
+                    make.leading.trailing.equalTo(alertStackView)
+                }
+                
+                updateViewConstraints()
                 
                 // We make the find-in-page bar the first responder below, causing the keyboard delegates
                 // to fire. This, in turn, will animate the Find in Page container since we use the same
@@ -430,12 +445,22 @@ class BrowserViewController: UIViewController {
             findInPageBar.endEditing(true)
             webViewController.evaluate("__firefox__.findDone()", completion: nil)
             findInPageBar.removeFromSuperview()
+            fillerView?.removeFromSuperview()
             self.findInPageBar = nil
+            self.fillerView = nil
             updateViewConstraints()
         }
     }
 
-    fileprivate func resetBrowser() {
+    fileprivate func resetBrowser(hidePreviousSession: Bool = false) {
+        
+        // Used when biometrics fail and the previous session should be obscured
+        if hidePreviousSession {
+            clearBrowser()
+            urlBar.activateTextField()
+            return
+        }
+        
         // Screenshot the browser, showing the screenshot on top.
         let image = mainContainerView.screenshot()
         let screenshotView = UIImageView(image: image)
@@ -444,23 +469,8 @@ class BrowserViewController: UIViewController {
             make.edges.equalTo(mainContainerView)
         }
 
-        // Reset the views. These changes won't be immediately visible since they'll be under the screenshot.
-        overlayView.currentURL = ""
-        webViewController.reset()
-        webViewContainer.isHidden = true
-        browserToolbar.isHidden = true
-        urlBar.removeFromSuperview()
-        urlBarContainer.alpha = 0
-        createHomeView()
-        createURLBar()
-
-        // Clear the cache and cookies, starting a new session.
-        WebCacheUtils.reset()
+        clearBrowser()
         
-        requestReviewIfNecessary()
-
-        // Zoom out on the screenshot, then slide down, then remove it.
-        mainContainerView.layoutIfNeeded()
         UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, delay: 0, options: .curveEaseInOut, animations: {
             screenshotView.snp.remakeConstraints { make in
                 make.center.equalTo(self.mainContainerView)
@@ -484,6 +494,23 @@ class BrowserViewController: UIViewController {
         })
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.eraseButton)
+    }
+    
+    private func clearBrowser() {
+        // Helper function for resetBrowser that handles all the logic of actually clearing user data and the browsing session
+        overlayView.currentURL = ""
+        webViewController.reset()
+        webViewContainer.isHidden = true
+        browserToolbar.isHidden = true
+        urlBar.removeFromSuperview()
+        urlBarContainer.alpha = 0
+        createHomeView()
+        createURLBar()
+        
+        // Clear the cache and cookies, starting a new session.
+        WebCacheUtils.reset()
+        requestReviewIfNecessary()
+        mainContainerView.layoutIfNeeded()
     }
     
     func requestReviewIfNecessary() {
@@ -1190,6 +1217,9 @@ extension BrowserViewController: WebControllerDelegate {
         let scrollView = webViewController.scrollView
 
         scrollBarState = .animating
+        
+        // Must update view constraints so find in page bar knows to snap to top of browserToolBar again
+        updateViewConstraints()
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: {
             self.urlBar.collapseUrlBar(expandAlpha: 1, collapseAlpha: 0)
             self.urlBarTopConstraint.update(offset: 0)
