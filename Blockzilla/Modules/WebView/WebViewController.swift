@@ -62,7 +62,13 @@ class WebViewController: UIViewController, WebController {
 
     var printFormatter: UIPrintFormatter { return browserView.viewPrintFormatter() }
     var scrollView: UIScrollView { return browserView.scrollView }
-    private let scriptHandlers = (tpPreload: "focusTrackingProtection", tpPostLoad: "focusTrackingProtectionPostLoad", findInPage: "findInPageHandler")
+    private enum ScriptHandlers: String {
+        case focusTrackingProtection
+        case focusTrackingProtectionPostLoad
+        case findInPageHandler
+        
+        static var allValues: [ScriptHandlers] { return [.focusTrackingProtection, .focusTrackingProtectionPostLoad, .findInPageHandler] }
+    }
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)
@@ -154,21 +160,21 @@ class WebViewController: UIViewController, WebController {
     }
 
     private func setupTrackingProtectionScripts() {
-        browserView.configuration.userContentController.add(self, name: "focusTrackingProtection")
+        browserView.configuration.userContentController.add(self, name: ScriptHandlers.focusTrackingProtection.rawValue)
         addScript(forResource: "preload", injectionTime: .atDocumentStart, forMainFrameOnly: true)
-        browserView.configuration.userContentController.add(self, name: "focusTrackingProtectionPostLoad")
+        browserView.configuration.userContentController.add(self, name: ScriptHandlers.focusTrackingProtectionPostLoad.rawValue)
         addScript(forResource: "postload", injectionTime: .atDocumentEnd, forMainFrameOnly: false)
     }
     
     private func setupFindInPageScripts() {
-        browserView.configuration.userContentController.add(self, name: "findInPageHandler")
+        browserView.configuration.userContentController.add(self, name: ScriptHandlers.findInPageHandler.rawValue)
         addScript(forResource: "FindInPage", injectionTime: .atDocumentEnd, forMainFrameOnly: true)
     }
 
     func disableTrackingProtection() {
         guard case .on = trackingProtectionStatus else { return }
-        [scriptHandlers.tpPreload, scriptHandlers.tpPostLoad, scriptHandlers.findInPage].forEach {
-            browserView.configuration.userContentController.removeScriptMessageHandler(forName: $0) }
+        ScriptHandlers.allValues.forEach {
+            browserView.configuration.userContentController.removeScriptMessageHandler(forName: $0.rawValue) }
         browserView.configuration.userContentController.removeAllUserScripts()
         browserView.configuration.userContentController.removeAllContentRuleLists()
         setupFindInPageScripts()
