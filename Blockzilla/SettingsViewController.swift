@@ -392,7 +392,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.accessibilityIdentifier = "settingsViewController.about"
             } else if sections[indexPath.section] == .mozilla && indexPath.row == 2 {
                 cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "ratingCell")
-                cell.textLabel?.text = UIConstants.strings.ratingSetting
+                cell.textLabel?.text = String(format: UIConstants.strings.ratingSetting, AppInfo.productName)
                 cell.accessibilityIdentifier = "settingsViewController.rateFocus"
             } else {
                 cell = UITableViewCell(style: .subtitle, reuseIdentifier: "toggleCell")
