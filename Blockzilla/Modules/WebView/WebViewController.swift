@@ -62,6 +62,7 @@ class WebViewController: UIViewController, WebController {
 
     var printFormatter: UIPrintFormatter { return browserView.viewPrintFormatter() }
     var scrollView: UIScrollView { return browserView.scrollView }
+    private let scriptHandlers = (tpPreload: "focusTrackingProtection", tpPostLoad: "focusTrackingProtectionPostLoad", findInPage: "findInPageHandler")
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)
@@ -119,7 +120,8 @@ class WebViewController: UIViewController, WebController {
         }
 
         setupBlockLists()
-        setupUserScripts()
+        setupTrackingProtectionScripts()
+        setupFindInPageScripts()
 
         view.addSubview(browserView)
         browserView.snp.makeConstraints { make in
@@ -144,31 +146,32 @@ class WebViewController: UIViewController, WebController {
             self.reloadBlockers(lists)
         }
     }
-
-    private func setupUserScripts() {
-        browserView.configuration.userContentController.add(self, name: "focusTrackingProtection")
-        let source = try! String(contentsOf: Bundle.main.url(forResource: "preload", withExtension: "js")!)
-        let script = WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true)
+    
+    private func addScript(forResource resource: String, injectionTime: WKUserScriptInjectionTime, forMainFrameOnly mainFrameOnly: Bool) {
+        let source = try! String(contentsOf: Bundle.main.url(forResource: resource, withExtension: "js")!)
+        let script = WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: mainFrameOnly)
         browserView.configuration.userContentController.addUserScript(script)
+    }
 
+    private func setupTrackingProtectionScripts() {
+        browserView.configuration.userContentController.add(self, name: "focusTrackingProtection")
+        addScript(forResource: "preload", injectionTime: .atDocumentStart, forMainFrameOnly: true)
         browserView.configuration.userContentController.add(self, name: "focusTrackingProtectionPostLoad")
-        let source2 = try! String(contentsOf: Bundle.main.url(forResource: "postload", withExtension: "js")!)
-        let script2 = WKUserScript(source: source2, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
-        browserView.configuration.userContentController.addUserScript(script2)
-        
+        addScript(forResource: "postload", injectionTime: .atDocumentEnd, forMainFrameOnly: false)
+    }
+    
+    private func setupFindInPageScripts() {
         browserView.configuration.userContentController.add(self, name: "findInPageHandler")
-        let source3 = try! String(contentsOf: Bundle.main.url(forResource: "FindInPage", withExtension: "js")!)
-        let script3 = WKUserScript(source: source3, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
-        browserView.configuration.userContentController.addUserScript(script3)
+        addScript(forResource: "FindInPage", injectionTime: .atDocumentEnd, forMainFrameOnly: true)
     }
 
     func disableTrackingProtection() {
         guard case .on = trackingProtectionStatus else { return }
-
-        browserView.configuration.userContentController.removeScriptMessageHandler(forName: "focusTrackingProtection")
-        browserView.configuration.userContentController.removeScriptMessageHandler(forName: "focusTrackingProtectionPostLoad")
+        [scriptHandlers.tpPreload, scriptHandlers.tpPostLoad, scriptHandlers.findInPage].forEach {
+            browserView.configuration.userContentController.removeScriptMessageHandler(forName: $0) }
         browserView.configuration.userContentController.removeAllUserScripts()
         browserView.configuration.userContentController.removeAllContentRuleLists()
+        setupFindInPageScripts()
         trackingProtectionStatus = .off
     }
 
@@ -176,7 +179,7 @@ class WebViewController: UIViewController, WebController {
         guard case .off = trackingProtectionStatus else { return }
 
         setupBlockLists()
-        setupUserScripts()
+        setupTrackingProtectionScripts()
         trackingProtectionStatus = .on(TPPageStats())
     }
     
