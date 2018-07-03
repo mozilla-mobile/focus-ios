@@ -41,6 +41,13 @@ protocol WebControllerDelegate: class {
 }
 
 class WebViewController: UIViewController, WebController {
+    private enum ScriptHandlers: String {
+        case focusTrackingProtection
+        case focusTrackingProtectionPostLoad
+        case findInPageHandler
+        
+        static var allValues: [ScriptHandlers] { return [.focusTrackingProtection, .focusTrackingProtectionPostLoad, .findInPageHandler] }
+    }
     weak var delegate: WebControllerDelegate?
 
     private var browserView = WKWebView()
@@ -62,13 +69,6 @@ class WebViewController: UIViewController, WebController {
 
     var printFormatter: UIPrintFormatter { return browserView.viewPrintFormatter() }
     var scrollView: UIScrollView { return browserView.scrollView }
-    private enum ScriptHandlers: String {
-        case focusTrackingProtection
-        case focusTrackingProtectionPostLoad
-        case findInPageHandler
-        
-        static var allValues: [ScriptHandlers] { return [.focusTrackingProtection, .focusTrackingProtectionPostLoad, .findInPageHandler] }
-    }
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)
@@ -174,7 +174,8 @@ class WebViewController: UIViewController, WebController {
     func disableTrackingProtection() {
         guard case .on = trackingProtectionStatus else { return }
         ScriptHandlers.allValues.forEach {
-            browserView.configuration.userContentController.removeScriptMessageHandler(forName: $0.rawValue) }
+            browserView.configuration.userContentController.removeScriptMessageHandler(forName: $0.rawValue)
+        }
         browserView.configuration.userContentController.removeAllUserScripts()
         browserView.configuration.userContentController.removeAllContentRuleLists()
         setupFindInPageScripts()
