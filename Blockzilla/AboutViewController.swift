@@ -87,7 +87,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
             // so we can calculate the view's height.
             headerView.layoutIfNeeded()
 
-            return headerView.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
+            return headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
         default: break
         }
 
@@ -143,7 +143,7 @@ private class AboutHeaderView: UIView {
         let bulletStyle = NSMutableParagraphStyle()
         bulletStyle.firstLineHeadIndent = 15
         bulletStyle.headIndent = 29.5
-        let bulletAttributes = [NSAttributedStringKey.paragraphStyle: bulletStyle]
+        let bulletAttributes = [NSAttributedString.Key.paragraphStyle: bulletStyle]
         let bulletFormat = "•  %@\n"
 
         let paragraph = [
@@ -181,11 +181,11 @@ private class AboutHeaderView: UIView {
 
     private lazy var learnMoreButton : UIButton = {
         let learnMoreButton = UIButton()
-        learnMoreButton.setTitle(UIConstants.strings.aboutLearnMoreButton, for: .normal)
-        learnMoreButton.setTitleColor(UIConstants.colors.settingsLink, for: .normal)
-        learnMoreButton.setTitleColor(UIConstants.colors.buttonHighlight, for: .highlighted)
+        learnMoreButton.setTitle(UIConstants.strings.aboutLearnMoreButton, for: UIControl.State.normal)
+        learnMoreButton.setTitleColor(UIConstants.colors.settingsLink, for: UIControl.State.normal)
+        learnMoreButton.setTitleColor(UIConstants.colors.buttonHighlight, for: UIControl.State.highlighted)
         learnMoreButton.titleLabel?.font = UIConstants.fonts.aboutText
-        learnMoreButton.addTarget(self, action: #selector(didPressLearnMore), for: .touchUpInside)
+        learnMoreButton.addTarget(self, action: #selector(didPressLearnMore), for: UIControl.Event.touchUpInside)
         return learnMoreButton
     }()
 

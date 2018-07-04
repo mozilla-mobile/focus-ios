@@ -58,13 +58,13 @@ class PageControl: UIView {
         
         for _ in 0..<numberOfPages {
             let button = UIButton(frame: CGRect(x: 0, y: 0, width: 6, height: 6))
-            button.setImage(UIImage(imageLiteralResourceName: "page_indicator"), for: .normal)
+            button.setImage(UIImage(imageLiteralResourceName: "page_indicator"), for: UIControl.State.normal)
             buttonArray.append(button)
         }
         
         // Enable the buttons to be tapped to switch to a new page
         buttonArray.forEach() { button in
-            button.addTarget(self, action: #selector(selected(sender:)), for: .touchUpInside)
+            button.addTarget(self, action: #selector(selected(sender:)), for: UIControl.Event.touchUpInside)
         }
         
         stack = UIStackView(arrangedSubviews: buttonArray)
@@ -147,7 +147,7 @@ class IntroViewController: UIViewController {
         
         pageViewController = ScrollViewController()
         pageControl.delegate = pageViewController
-        addChildViewController(pageViewController)
+        addChild(pageViewController)
         view.addSubview(pageViewController.view)
         
         view.addSubview(pageControl.stack)
@@ -162,12 +162,12 @@ class IntroViewController: UIViewController {
         }
         
         skipButton.backgroundColor = .clear
-        skipButton.setTitle(UIConstants.strings.SkipIntroButtonTitle, for: .normal)
+        skipButton.setTitle(UIConstants.strings.SkipIntroButtonTitle, for: UIControl.State.normal)
         skipButton.titleLabel?.font = UIConstants.fonts.aboutText
-        skipButton.setTitleColor(.white, for: .normal)
+        skipButton.setTitleColor(.white, for: UIControl.State.normal)
         skipButton.sizeToFit()
         skipButton.accessibilityIdentifier = "IntroViewController.button"
-        skipButton.addTarget(self, action: #selector(IntroViewController.didTapSkipButton), for: UIControlEvents.touchUpInside)
+        skipButton.addTarget(self, action: #selector(IntroViewController.didTapSkipButton), for: UIControl.Event.touchUpInside)
         
         skipButton.snp.makeConstraints { make in
             make.bottom.equalTo(pageViewController.view.snp.centerY).offset(-IntroViewControllerUX.Height/2 - IntroViewControllerUX.PagerCenterOffsetFromScrollViewBottom).priority(.high)
@@ -231,7 +231,7 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
             dataSource?.pageViewController(self, viewControllerBefore: currentViewController) else { return }
         
         guard let newIndex = orderedViewControllers.index(of: nextViewController) else { return }
-        let direction: UIPageViewControllerNavigationDirection = isIncrement ? .forward : .reverse
+        let direction: UIPageViewController.NavigationDirection = isIncrement ? .forward : .reverse
         
         setViewControllers([nextViewController], direction: direction, animated: true, completion: nil)
         scrollViewControllerDelegate?.scrollViewController(scrollViewController: self, didUpdatePageIndex: newIndex)
@@ -241,7 +241,7 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
     private var orderedViewControllers: [UIViewController] = []
     weak var scrollViewControllerDelegate: ScrollViewControllerDelegate?
     
-    override init(transitionStyle style: UIPageViewControllerTransitionStyle, navigationOrientation: UIPageViewControllerNavigationOrientation, options: [String : Any]? = nil) {
+    override init(transitionStyle style: UIPageViewController.TransitionStyle, navigationOrientation: UIPageViewController.NavigationOrientation, options: [UIPageViewController.OptionsKey : Any]? = nil) {
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: options)
     }
     
@@ -343,19 +343,19 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
         let cardButton = UIButton()
         
         if orderedViewControllers.count == slides.count - 1 {
-            cardButton.setTitle(UIConstants.strings.firstRunButton, for: .normal)
-            cardButton.setTitleColor(UIConstants.colors.firstRunNextButton, for: .normal)
+            cardButton.setTitle(UIConstants.strings.firstRunButton, for: UIControl.State.normal)
+            cardButton.setTitleColor(UIConstants.colors.firstRunNextButton, for: UIControl.State.normal)
             cardButton.titleLabel?.font = UIConstants.fonts.firstRunButton
-            cardButton.addTarget(self, action: #selector(ScrollViewController.didTapStartBrowsingButton), for: UIControlEvents.touchUpInside)
+            cardButton.addTarget(self, action: #selector(ScrollViewController.didTapStartBrowsingButton), for: UIControl.Event.touchUpInside)
         } else {
-            cardButton.setTitle(UIConstants.strings.NextIntroButtonTitle, for: .normal)
-            cardButton.setTitleColor(UIConstants.colors.firstRunNextButton, for: .normal)
+            cardButton.setTitle(UIConstants.strings.NextIntroButtonTitle, for: UIControl.State.normal)
+            cardButton.setTitleColor(UIConstants.colors.firstRunNextButton, for: UIControl.State.normal)
             cardButton.titleLabel?.font = UIConstants.fonts.firstRunButton
-            cardButton.addTarget(self, action: #selector(ScrollViewController.incrementPage), for: UIControlEvents.touchUpInside)
+            cardButton.addTarget(self, action: #selector(ScrollViewController.incrementPage), for: UIControl.Event.touchUpInside)
         }
         
         introView.addSubview(cardButton)
-        introView.bringSubview(toFront: cardButton)
+        introView.bringSubviewToFront(cardButton)
         cardButton.snp.makeConstraints { make in
             make.bottom.equalTo(introView).offset(-24)
             make.centerX.equalTo(introView)
@@ -373,7 +373,7 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
         paragraphStyle.alignment = .center
         
         let string = NSMutableAttributedString(string: text)
-        string.addAttribute(NSAttributedStringKey.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: string.length))
+        string.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: string.length))
         return string
     }
 }

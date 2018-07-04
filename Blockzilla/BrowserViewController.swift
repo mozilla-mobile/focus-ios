@@ -247,7 +247,7 @@ class BrowserViewController: UIViewController {
         self.context.localizedCancelTitle = UIConstants.strings.newSessionFromBiometricFailure
 
         // Register for foreground notification to check biometric authentication
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidBecomeActive, object: nil, queue: nil) { notification in
+        NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: nil) { notification in
             var biometricError: NSError?
 
             // Check if user is already in a cleared session, or doesn't have biometrics enabled in settings
@@ -284,9 +284,9 @@ class BrowserViewController: UIViewController {
     }
 
     private func containWebView() {
-        addChildViewController(webViewController)
+        addChild(webViewController)
         webViewContainer.addSubview(webViewController.view)
-        webViewController.didMove(toParentViewController: self)
+        webViewController.didMove(toParent: self)
 
         webViewController.view.snp.makeConstraints { make in
             make.edges.equalTo(webViewContainer.snp.edges)
@@ -294,9 +294,9 @@ class BrowserViewController: UIViewController {
     }
 
     private func containTrackingProtectionSummary() {
-        addChildViewController(trackingProtectionSummaryController)
+        addChild(trackingProtectionSummaryController)
         drawerContainerView.addSubview(trackingProtectionSummaryController.view)
-        trackingProtectionSummaryController.didMove(toParentViewController: self)
+        trackingProtectionSummaryController.didMove(toParent: self)
 
         trackingProtectionSummaryController.view.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -363,7 +363,7 @@ class BrowserViewController: UIViewController {
     }
 
     @objc fileprivate func hideDrawer() {
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .curveEaseIn, animations: {
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: UIView.AnimationOptions.curveEaseIn, animations: {
             self.drawerConstraint.deactivate()
             self.drawerOverlayView.layer.opacity = 0
             self.view.layoutIfNeeded()
@@ -375,7 +375,7 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func showDrawer() {
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .curveEaseIn, animations: {
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: UIView.AnimationOptions.curveEaseIn, animations: {
             self.drawerConstraint.activate()
             self.drawerOverlayView.isHidden = false
             self.drawerOverlayView.layer.opacity = 1
@@ -474,7 +474,7 @@ class BrowserViewController: UIViewController {
 
         clearBrowser()
         
-        UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, delay: 0, options: .curveEaseInOut, animations: {
+        UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, delay: 0, options: UIView.AnimationOptions.curveEaseInOut, animations: {
             screenshotView.snp.remakeConstraints { make in
                 make.center.equalTo(self.mainContainerView)
                 make.size.equalTo(self.mainContainerView).multipliedBy(0.9)
@@ -1224,7 +1224,7 @@ extension BrowserViewController: WebControllerDelegate {
         
         // Must update view constraints so find in page bar knows to snap to top of browserToolBar again
         updateViewConstraints()
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: {
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: UIView.AnimationOptions.allowUserInteraction, animations: {
             self.urlBar.collapseUrlBar(expandAlpha: 1, collapseAlpha: 0)
             self.urlBarTopConstraint.update(offset: 0)
             self.toolbarBottomConstraint.update(inset: 0)
@@ -1240,7 +1240,7 @@ extension BrowserViewController: WebControllerDelegate {
         let scrollView = webViewController.scrollView
 
         scrollBarState = .animating
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: {
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: UIView.AnimationOptions.allowUserInteraction, animations: {
             self.urlBar.collapseUrlBar(expandAlpha: 0, collapseAlpha: 1)
             self.urlBarTopConstraint.update(offset: -UIConstants.layout.urlBarHeight + UIConstants.layout.collapsedUrlBarHeight)
             self.toolbarBottomConstraint.update(offset: UIConstants.layout.browserToolbarHeight)

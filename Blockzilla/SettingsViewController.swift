@@ -9,7 +9,7 @@ import Telemetry
 import LocalAuthentication
 
 class SettingsTableViewCell: UITableViewCell {
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         let backgroundColorView = UIView()
@@ -43,7 +43,7 @@ class SettingsTableViewSearchCell: SettingsTableViewCell {
         }
     }
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         newLabel.numberOfLines = 0
         newLabel.lineBreakMode = .byWordWrapping
@@ -221,7 +221,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         navigationBar.isTranslucent = false
         navigationBar.barTintColor = UIConstants.colors.background
         navigationBar.tintColor = UIConstants.colors.navigationButton
-        navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIConstants.colors.navigationTitle]
+        navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIConstants.colors.navigationTitle]
 
         highlightsButton = UIBarButtonItem(title: UIConstants.strings.whatsNewTitle, style: .plain, target: self, action: #selector(whatsNewClicked))
         highlightsButton?.image = UIImage(named: "highlight")
@@ -251,11 +251,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             let toggle = blockerToggle.toggle
             toggle.onTintColor = UIConstants.colors.toggleOn
             toggle.tintColor = UIConstants.colors.toggleOff
-            toggle.addTarget(self, action: #selector(toggleSwitched(_:)), for: .valueChanged)
+            toggle.addTarget(self, action: #selector(toggleSwitched(_:)), for: UIControl.Event.valueChanged)
             toggle.isOn = Settings.getToggle(blockerToggle.setting)
         }
 
-        NotificationCenter.default.addObserver(self, selector: #selector(applicationDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -323,16 +323,16 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 
                 if case .mozilla = section {
                     accessabilityIdentifier = "SettingsViewController.learnMoreCell"
-                    subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.detailTextSendUsageData, AppInfo.productName), attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.settingsDetailLabel])
+                    subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.detailTextSendUsageData, AppInfo.productName), attributes: [NSAttributedString.Key.foregroundColor : UIConstants.colors.settingsDetailLabel])
                     selector = #selector(tappedLearnMoreFooter)
                 } else {
                     accessabilityIdentifier = "SettingsViewController.trackingProtectionLearnMoreCell"
-                    subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.trackersDescriptionLabel, AppInfo.productName), attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.settingsDetailLabel])
+                    subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.trackersDescriptionLabel, AppInfo.productName), attributes: [NSAttributedString.Key.foregroundColor : UIConstants.colors.settingsDetailLabel])
                     selector = #selector(tappedTrackingProtectionLearnMoreFooter)
                 }
                 
-                let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
-                let space = NSAttributedString(string: " ", attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
+                let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [NSAttributedString.Key.foregroundColor : UIConstants.colors.toggleOn])
+                let space = NSAttributedString(string: " ", attributes: [NSAttributedString.Key.foregroundColor : UIConstants.colors.toggleOn])
                 subtitle.append(space)
                 subtitle.append(learnMore)
                 
@@ -427,7 +427,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         // Height for the Search Engine and Learn More row.
-        if indexPath.section == 0 { return UITableViewAutomaticDimension }
+        if indexPath.section == 0 { return UITableView.automaticDimension }
         if indexPath.section == 5 ||
             (indexPath.section == 4 && indexPath.row >= 1) {
             return 44
@@ -451,7 +451,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     private func heightForLabel(_ label: UILabel, width: CGFloat, text: String) -> CGFloat {
         let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
-        let attrs: [NSAttributedStringKey: Any] = [.font: label.font]
+        let attrs: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: label.font]
         let boundingRect = NSString(string: text).boundingRect(with: size, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: attrs, context: nil)
         return boundingRect.height
     }
@@ -486,7 +486,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         footer.backgroundColor = UIConstants.colors.background
 
         cell.addSubview(footer)
-        cell.sendSubview(toBack: footer)
+        cell.sendSubviewToBack(footer)
 
         footer.snp.makeConstraints { make in
             make.height.equalTo(1)
@@ -578,11 +578,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             updateSetting()
         case .blockOther where sender.isOn:
             let alertController = UIAlertController(title: nil, message: UIConstants.strings.settingsBlockOtherMessage, preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherNo, style: UIAlertActionStyle.default) { _ in
+            alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherNo, style: UIAlertAction.Style.default) { _ in
                 sender.isOn = false
                 updateSetting()
             })
-            alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherYes, style: UIAlertActionStyle.destructive) { _ in
+            alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherYes, style: UIAlertAction.Style.destructive) { _ in
                 updateSetting()
             })
             alertController.popoverPresentationController?.sourceView = sender

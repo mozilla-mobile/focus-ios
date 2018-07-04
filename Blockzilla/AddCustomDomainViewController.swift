@@ -50,7 +50,7 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
         textInput.returnKeyType = .done
         textInput.textColor = UIColor.white
         textInput.delegate = self
-        textInput.attributedPlaceholder = NSAttributedString(string: UIConstants.strings.autocompleteAddCustomUrlPlaceholder, attributes: [.foregroundColor: UIConstants.colors.inputPlaceholder])
+        textInput.attributedPlaceholder = NSAttributedString(string: UIConstants.strings.autocompleteAddCustomUrlPlaceholder, attributes: [NSAttributedString.Key.foregroundColor: UIConstants.colors.inputPlaceholder])
         textInput.accessibilityIdentifier = "urlInput"
         textInput.becomeFirstResponder()
         view.addSubview(textInput)

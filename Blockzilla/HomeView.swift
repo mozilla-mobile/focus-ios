@@ -39,8 +39,8 @@ class HomeView: UIView {
         addSubview(description2)
 
         let settingsButton = UIButton()
-        settingsButton.setImage(#imageLiteral(resourceName: "icon_settings"), for: .normal)
-        settingsButton.addTarget(self, action: #selector(didPressSettings), for: .touchUpInside)
+        settingsButton.setImage(#imageLiteral(resourceName: "icon_settings"), for: UIControl.State.normal)
+        settingsButton.addTarget(self, action: #selector(didPressSettings), for: UIControl.Event.touchUpInside)
         settingsButton.accessibilityLabel = UIConstants.strings.browserSettings
         settingsButton.accessibilityIdentifier = "HomeView.settingsButton"
         addSubview(settingsButton)
@@ -60,11 +60,11 @@ class HomeView: UIView {
         trackerStatsView.addSubview(trackerStatsLabel)
         
         let trackerStatsShareButton = UIButton()
-        trackerStatsShareButton.setTitleColor(UIConstants.colors.defaultFont, for: .normal)
+        trackerStatsShareButton.setTitleColor(UIConstants.colors.defaultFont, for: UIControl.State.normal)
         trackerStatsShareButton.titleLabel?.font = UIConstants.fonts.shareTrackerStatsLabel
         trackerStatsShareButton.titleLabel?.textAlignment = .center
-        trackerStatsShareButton.setTitle(UIConstants.strings.share, for: .normal)
-        trackerStatsShareButton.addTarget(self, action: #selector(shareTapped), for: .touchUpInside)
+        trackerStatsShareButton.setTitle(UIConstants.strings.share, for: UIControl.State.normal)
+        trackerStatsShareButton.addTarget(self, action: #selector(shareTapped), for: UIControl.Event.touchUpInside)
         trackerStatsShareButton.titleLabel?.numberOfLines = 0
         trackerStatsShareButton.layer.borderColor = UIConstants.colors.defaultFont.cgColor
         trackerStatsShareButton.layer.borderWidth = 1.0;
@@ -149,9 +149,9 @@ class HomeView: UIView {
     
     func setHighlightWhatsNew(shouldHighlight: Bool) {
         if shouldHighlight {
-            settingsButton.setImage(UIImage(named: "preferences_updated"), for: .normal)
+            settingsButton.setImage(UIImage(named: "preferences_updated"), for: UIControl.State.normal)
         } else {
-            settingsButton.setImage(#imageLiteral(resourceName: "icon_settings"), for: .normal)
+            settingsButton.setImage(#imageLiteral(resourceName: "icon_settings"), for: UIControl.State.normal)
         }
     }
 }

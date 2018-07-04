@@ -102,7 +102,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
         footer.backgroundColor = UIConstants.colors.background
 
         cell.addSubview(footer)
-        cell.sendSubview(toBack: footer)
+        cell.sendSubviewToBack(footer)
 
         footer.snp.makeConstraints { make in
             make.height.equalTo(1)
@@ -159,7 +159,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
                 navigationBar.isTranslucent = false
                 navigationBar.barTintColor = UIConstants.colors.background
                 navigationBar.tintColor = UIConstants.colors.navigationButton
-                navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIConstants.colors.navigationTitle]
+                navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIConstants.colors.navigationTitle]
 
                 present(navigationController, animated: true, completion: nil)
             } else {
@@ -168,7 +168,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
         }
     }
 
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             tableView.beginUpdates()
             _ = customAutocompleteSource.remove(at: indexPath.row)

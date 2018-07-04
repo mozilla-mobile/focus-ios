@@ -154,7 +154,7 @@ class TrackingProtectionBreakdownItem: UIView {
             make.width.equalTo(8)
         }
 
-        let counterWidth = NSString(string: "1000").size(withAttributes: [NSAttributedStringKey.font: counterLabel.font]).width
+        let counterWidth = NSString(string: "1000").size(withAttributes: [NSAttributedString.Key.font: counterLabel.font]).width
 
         titleLabel.snp.makeConstraints { make in
             make.centerY.equalTo(indicatorView.snp.centerY)
@@ -236,8 +236,8 @@ class TrackingProtectionBreakdownView: UIView {
         addSubview(stackView)
         self.stackView = stackView
 
-        learnMoreButton.setTitle(UIConstants.strings.trackingProtectionLearnMore, for: .normal)
-        learnMoreButton.setTitleColor(UIConstants.colors.trackingProtectionLearnMore, for: .normal)
+        learnMoreButton.setTitle(UIConstants.strings.trackingProtectionLearnMore, for: UIControl.State.normal)
+        learnMoreButton.setTitleColor(UIConstants.colors.trackingProtectionLearnMore, for: UIControl.State.normal)
         learnMoreButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         learnMoreButton.contentHorizontalAlignment = .leading
         learnMoreWrapper.addSubview(learnMoreButton)
@@ -386,7 +386,7 @@ class TrackingProtectionView: UIView {
         self.init(frame: .zero)
         backgroundColor = UIConstants.colors.background
 
-        closeButton.setImage(#imageLiteral(resourceName: "icon_stop_menu"), for: .normal)
+        closeButton.setImage(#imageLiteral(resourceName: "icon_stop_menu"), for: UIControl.State.normal)
         closeButton.accessibilityIdentifier = "TrackingProtectionView.closeButton"
         addSubview(closeButton)
         addSubview(scrollView)
@@ -437,9 +437,9 @@ class TrackingProtectionSummaryViewController: UIViewController {
     
     convenience init() {
         self.init(nibName: nil, bundle: nil)
-        trackingProtectionView.closeButton.addTarget(self, action: #selector(didTapClose), for: .touchUpInside)
-        trackingProtectionView.toggle.addTarget(self, action: #selector(didToggle(sender:)), for: .touchUpInside)
-        trackingProtectionView.learnMoreButton.addTarget(self, action: #selector(didTapLearnMore(sender:)), for: .touchUpInside)
+        trackingProtectionView.closeButton.addTarget(self, action: #selector(didTapClose), for: UIControl.Event.touchUpInside)
+        trackingProtectionView.toggle.addTarget(self, action: #selector(didToggle(sender:)), for: UIControl.Event.touchUpInside)
+        trackingProtectionView.learnMoreButton.addTarget(self, action: #selector(didTapLearnMore(sender:)), for: UIControl.Event.touchUpInside)
     }
 
     override func loadView() {
@@ -454,7 +454,7 @@ class TrackingProtectionSummaryViewController: UIViewController {
         navigationBar.isTranslucent = false
         navigationBar.barTintColor = UIConstants.colors.background
         navigationBar.tintColor = UIConstants.colors.navigationButton
-        navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIConstants.colors.navigationTitle]
+        navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIConstants.colors.navigationTitle]
 
         let button = UIBarButtonItem(image: #imageLiteral(resourceName: "icon_stop_menu"), landscapeImagePhone: #imageLiteral(resourceName: "icon_stop_menu"), style: .done, target: self, action: #selector(closeModal))
 
