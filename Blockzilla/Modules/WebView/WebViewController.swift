@@ -24,6 +24,7 @@ protocol WebController {
 }
 
 protocol WebControllerDelegate: class {
+    func webControllerDidStartProvisionalNavigation(_ controller: WebController)
     func webControllerDidStartNavigation(_ controller: WebController)
     func webControllerDidFinishNavigation(_ controller: WebController)
     func webController(_ controller: WebController, didFailNavigationWithError error: Error)
@@ -36,9 +37,17 @@ protocol WebControllerDelegate: class {
     func webController(_ controller: WebController, stateDidChange state: BrowserState)
     func webControllerShouldScrollToTop(_ controller: WebController) -> Bool
     func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus)
+    func webController(_ controller: WebController, didUpdateFindInPageResults currentResult: Int?, totalResults: Int?)
 }
 
 class WebViewController: UIViewController, WebController {
+    private enum ScriptHandlers: String {
+        case focusTrackingProtection
+        case focusTrackingProtectionPostLoad
+        case findInPageHandler
+        
+        static var allValues: [ScriptHandlers] { return [.focusTrackingProtection, .focusTrackingProtectionPostLoad, .findInPageHandler] }
+    }
     weak var delegate: WebControllerDelegate?
 
     private var browserView = WKWebView()
@@ -82,6 +91,26 @@ class WebViewController: UIViewController, WebController {
     func goBack() { browserView.goBack() }
     func goForward() { browserView.goForward() }
     func reload() { browserView.reload() }
+    
+    @available(iOS 9, *)
+    func requestDesktop() {
+        guard let currentItem = browserView.backForwardList.currentItem else {
+            return
+        }
+    
+        browserView.customUserAgent = UserAgent.getDesktopUserAgent()
+        
+        if currentItem.url != currentItem.initialURL {
+            // Reload the initial URL to avoid UA specific redirection
+            browserView.load(URLRequest(url: currentItem.initialURL, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 60))
+        } else {
+            reload() // Reload the current URL. We cannot use loadRequest in this case because it seems to leverage caching.
+        }
+        
+        // Unset the desktopUserAgent
+        browserView.customUserAgent = UserAgent.browserUserAgent
+    }
+    
     func stop() { browserView.stopLoading() }
 
     private func setupWebview() {
@@ -97,7 +126,8 @@ class WebViewController: UIViewController, WebController {
         }
 
         setupBlockLists()
-        setupUserScripts()
+        setupTrackingProtectionScripts()
+        setupFindInPageScripts()
 
         view.addSubview(browserView)
         browserView.snp.makeConstraints { make in
@@ -122,26 +152,33 @@ class WebViewController: UIViewController, WebController {
             self.reloadBlockers(lists)
         }
     }
-
-    private func setupUserScripts() {
-        browserView.configuration.userContentController.add(self, name: "focusTrackingProtection")
-        let source = try! String(contentsOf: Bundle.main.url(forResource: "preload", withExtension: "js")!)
-        let script = WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true)
+    
+    private func addScript(forResource resource: String, injectionTime: WKUserScriptInjectionTime, forMainFrameOnly mainFrameOnly: Bool) {
+        let source = try! String(contentsOf: Bundle.main.url(forResource: resource, withExtension: "js")!)
+        let script = WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: mainFrameOnly)
         browserView.configuration.userContentController.addUserScript(script)
+    }
 
-        browserView.configuration.userContentController.add(self, name: "focusTrackingProtectionPostLoad")
-        let source2 = try! String(contentsOf: Bundle.main.url(forResource: "postload", withExtension: "js")!)
-        let script2 = WKUserScript(source: source2, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
-        browserView.configuration.userContentController.addUserScript(script2)
+    private func setupTrackingProtectionScripts() {
+        browserView.configuration.userContentController.add(self, name: ScriptHandlers.focusTrackingProtection.rawValue)
+        addScript(forResource: "preload", injectionTime: .atDocumentStart, forMainFrameOnly: true)
+        browserView.configuration.userContentController.add(self, name: ScriptHandlers.focusTrackingProtectionPostLoad.rawValue)
+        addScript(forResource: "postload", injectionTime: .atDocumentEnd, forMainFrameOnly: false)
+    }
+    
+    private func setupFindInPageScripts() {
+        browserView.configuration.userContentController.add(self, name: ScriptHandlers.findInPageHandler.rawValue)
+        addScript(forResource: "FindInPage", injectionTime: .atDocumentEnd, forMainFrameOnly: true)
     }
 
     func disableTrackingProtection() {
         guard case .on = trackingProtectionStatus else { return }
-
-        browserView.configuration.userContentController.removeScriptMessageHandler(forName: "focusTrackingProtection")
-        browserView.configuration.userContentController.removeScriptMessageHandler(forName: "focusTrackingProtectionPostLoad")
+        ScriptHandlers.allValues.forEach {
+            browserView.configuration.userContentController.removeScriptMessageHandler(forName: $0.rawValue)
+        }
         browserView.configuration.userContentController.removeAllUserScripts()
         browserView.configuration.userContentController.removeAllContentRuleLists()
+        setupFindInPageScripts()
         trackingProtectionStatus = .off
     }
 
@@ -149,8 +186,12 @@ class WebViewController: UIViewController, WebController {
         guard case .off = trackingProtectionStatus else { return }
 
         setupBlockLists()
-        setupUserScripts()
+        setupTrackingProtectionScripts()
         trackingProtectionStatus = .on(TPPageStats())
+    }
+    
+    func evaluate(_ javascript: String, completion: ((Any?, Error?) -> Void)?) {
+        browserView.evaluateJavaScript(javascript, completionHandler: completion)
     }
 }
 
@@ -201,6 +242,10 @@ extension WebViewController: WKNavigationDelegate {
         }
         decisionHandler(decision)
     }
+    
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        delegate?.webControllerDidStartProvisionalNavigation(self)
+    }
 }
 
 extension WebViewController: BrowserState {
@@ -224,6 +269,20 @@ extension WebViewController: WKUIDelegate {
 
 extension WebViewController: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        if message.name == "findInPageHandler" {
+            let data = message.body as! [String: Int]
+            
+            // We pass these separately as they're sent in different messages to the userContentController
+            if let currentResult = data["currentResult"] {
+                delegate?.webController(self, didUpdateFindInPageResults: currentResult, totalResults: nil)
+            }
+            
+            if let totalResults = data["totalResults"] {
+                delegate?.webController(self, didUpdateFindInPageResults: nil, totalResults: totalResults)
+            }
+            return
+        }
+        
         guard let body = message.body as? [String: String],
             let urlString = body["url"],
             var components = URLComponents(string: urlString) else {

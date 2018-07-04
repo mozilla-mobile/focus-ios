@@ -9,7 +9,7 @@ import Telemetry
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
-    private var splashView: UIView?
+    static var splashView: UIView?
     static let prefIntroDone = "IntroDone"
     static let prefIntroVersion = 2
     private let browserViewController = BrowserViewController()
@@ -18,12 +18,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static let prefWhatsNewDone = "WhatsNewDone"
     static let prefWhatsNewCounter = "WhatsNewCounter"
 
+    static var needsAuthenticated = false
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        if AppInfo.testRequestsReset() {
+            if let bundleID = Bundle.main.bundleIdentifier {
+                UserDefaults.standard.removePersistentDomain(forName: bundleID)
+            }
+        }
         setupContinuousDeploymentTooling()
         setupErrorTracking()
         setupTelemetry()
         TPStatsBlocklistChecker.shared.startup()
 
+        // Count number of app launches for requesting a review
+        let currentLaunchCount = UserDefaults.standard.integer(forKey: UIConstants.strings.userDefaultsLaunchCountKey)
+        UserDefaults.standard.set(currentLaunchCount + 1, forKey: UIConstants.strings.userDefaultsLaunchCountKey)
+    
         // Disable localStorage.
         // We clear the Caches directory after each Erase, but WebKit apparently maintains
         // localStorage in-memory (bug 1319208), so we just disable it altogether.
@@ -53,6 +63,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let prefIntroDone = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone)
 
+        if AppInfo.isTesting() {
+            let firstRunViewController = IntroViewController()
+            rootViewController.present(firstRunViewController, animated: false, completion: nil)
+            return true
+        }
+        
         let needToShowFirstRunExperience = prefIntroDone < AppDelegate.prefIntroVersion
         if needToShowFirstRunExperience {
             // Show the first run UI asynchronously to avoid the "unbalanced calls to begin/end appearance transitions" warning.
@@ -60,20 +76,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 // Set the prefIntroVersion viewed number in the same context as the presentation.
                 UserDefaults.standard.set(AppDelegate.prefIntroVersion, forKey: AppDelegate.prefIntroDone)
                 UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
-                
-                var firstRunViewController: UIViewController
-                
-                // Random number range [0 - 99], Coin Flip for A/B testing of Onboarding
-                let shouldShowNewIntro = arc4random_uniform(UInt32(100)) >= 50
-                if  shouldShowNewIntro {
-                    firstRunViewController = IntroViewController()
-                    Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.coinFlip, object: TelemetryEventObject.onboarding)
-
-                } else {
-                    firstRunViewController = FirstRunViewController()
-                    Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.coinFlip, object: TelemetryEventObject.firstRun)
-                }
-                rootViewController.present(firstRunViewController, animated: false, completion: nil)
+                rootViewController.present(IntroViewController(), animated: false, completion: nil)
             }
         }
         
@@ -193,19 +196,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }, completion: { success in
                 splashView.isHidden = true
                 logoImage.layer.transform = CATransform3DIdentity
-                self.splashView = splashView
+                AppDelegate.splashView = splashView
             })
         })
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-        splashView?.animateHidden(false, duration: 0)
+        AppDelegate.splashView?.animateHidden(false, duration: 0)
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
 
-        splashView?.animateHidden(true, duration: 0.25)
         if let url = queuedUrl {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openedFromExtension, object: TelemetryEventObject.app)
 
@@ -226,6 +228,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // session. This gets called every time the app goes to background but should not get
         // called for *temporary* interruptions such as an incoming phone call until the user
         // takes action and we are officially backgrounded.
+        AppDelegate.needsAuthenticated = true
         let orientation = UIDevice.current.orientation.isPortrait ? "Portrait" : "Landscape"
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.background, object:
             TelemetryEventObject.app, value: nil, extras: ["orientation": orientation])
@@ -268,7 +271,8 @@ extension AppDelegate {
         telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockSocial, withDefaultValue: Settings.getToggle(.blockSocial))
         telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockOther, withDefaultValue: Settings.getToggle(.blockOther))
         telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockFonts, withDefaultValue: Settings.getToggle(.blockFonts))
-        
+        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.biometricLogin, withDefaultValue: Settings.getToggle(.biometricLogin))
+
         #if DEBUG
             telemetryConfig.updateChannel = "debug"
             telemetryConfig.isCollectionEnabled = false
