@@ -420,20 +420,53 @@ class BrowserViewController: UIViewController {
                 
                 alertStackView.addArrangedSubview(findInPageBar)
                 mainContainerView.insertSubview(fillerView, belowSubview: browserToolbar)
+              //  alertStackView.layoutIfNeeded()
+                //alertStackView.layoutIfNeeded()
+
+                updateViewConstraints()
                 
-                UIView.animate(withDuration: UIConstants.layout.searchButtonAnimationDuration, animations: {
+                
+                UIView.animate(withDuration: 2.0, animations: {
                     findInPageBar.snp.makeConstraints { make in
+                        print("CHANGING CONSTRAINTS")
                         make.height.equalTo(UIConstants.ToolbarHeight)
                         make.leading.trailing.equalTo(self.alertStackView)
                         make.bottom.equalTo(self.alertStackView.snp.bottom)
                     }
-                }) { (_) in
+                }) { (complete) in
                     fillerView.snp.makeConstraints { make in
                         make.top.equalTo(self.alertStackView.snp.bottom)
                         make.bottom.equalTo(self.view)
                         make.leading.trailing.equalTo(self.alertStackView)
                     }
                 }
+                
+                
+             //   updateViewConstraints()
+
+                
+                //alertStackView.layoutIfNeeded()
+                
+               // findInPageBar.layoutIfNeeded()
+                
+               // alertStackView.layoutIfNeeded()
+                
+              //  findInPageBar.layoutIfNeeded()
+               // alertStackView.layoutIfNeeded()
+
+               // alertStackView.layoutIfNeeded()
+            
+
+                //updateViewConstraints()
+                
+                // We make the find-in-page bar the first responder below, causing the keyboard delegates
+                // to fire. This, in turn, will animate the Find in Page container since we use the same
+                // delegate to slide the bar up and down with the keyboard. We don't want to animate the
+                // constraints added above, however, so force a layout now to prevent these constraints
+                // from being lumped in with the keyboard animation.
+              //  alertStackView.layoutIfNeeded()
+
+              //  updateViewConstraints()
             }
             
             self.findInPageBar?.becomeFirstResponder()
