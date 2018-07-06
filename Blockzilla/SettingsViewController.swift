@@ -286,10 +286,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         switch biometryType {
             case .faceID:
                 label = UIConstants.strings.labelFaceIDLogin
-                subtitle = UIConstants.strings.labelFaceIDLoginDescription
+                subtitle = String(format: UIConstants.strings.labelFaceIDLoginDescription, AppInfo.productName)
             case .touchID:
                 label = UIConstants.strings.labelTouchIDLogin
-                subtitle = UIConstants.strings.labelTouchIDLoginDescription
+                subtitle = String(format: UIConstants.strings.labelTouchIDLoginDescription, AppInfo.productName)
             default:
                 // Unknown biometric type
                 return
@@ -388,7 +388,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         default:
             if sections[indexPath.section] == .mozilla && indexPath.row == 1 {
                 cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
-                cell.textLabel?.text = UIConstants.strings.aboutTitle
+                cell.textLabel?.text = String(format: UIConstants.strings.aboutTitle, AppInfo.productName)
                 cell.accessibilityIdentifier = "settingsViewController.about"
             } else if sections[indexPath.section] == .mozilla && indexPath.row == 2 {
                 cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "ratingCell")
