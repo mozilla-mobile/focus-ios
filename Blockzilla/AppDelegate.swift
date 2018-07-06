@@ -17,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var queuedString: String?
     static let prefWhatsNewDone = "WhatsNewDone"
     static let prefWhatsNewCounter = "WhatsNewCounter"
+    private var userAgent: UserAgent?
 
     static var needsAuthenticated = false
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -40,7 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UserDefaults.standard.set(false, forKey: "WebKitLocalStorageEnabledPreferenceKey")
 
         // Set up our custom user agent.
-        UserAgent.setup()
+        userAgent = UserAgent(userDefaults: UserDefaults.standard)
 
         // Re-register the blocking lists at startup in case they've changed.
         Utils.reloadSafariContentBlocker()
