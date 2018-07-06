@@ -168,7 +168,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         switch shortcutIdentifier {
         case .EraseAndOpen:
-            browserViewController.resetBrowser()
+            browserViewController.resetBrowser(hidePreviousSession: true)
         }
         return true
     }
