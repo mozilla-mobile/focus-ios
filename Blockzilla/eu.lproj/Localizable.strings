@@ -239,7 +239,7 @@
 "Settings.detailTextSendUsageData" = "%@ denontzat eskaini eta hobetzeko beharrezkoa dena soilik biltzen ahalegintzen da Mozilla.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "Argibide gehiago.";
+"Settings.learnMore" = "Argibide \U206Fgehiago.";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Ezarpenak";

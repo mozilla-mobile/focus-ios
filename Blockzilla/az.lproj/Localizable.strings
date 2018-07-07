@@ -239,7 +239,7 @@
 "Settings.detailTextSendUsageData" = "Mozilla ancaq %@ səyyahını hamı üçün yaxşılaşdırmağa lazım olan məlumatları yığır.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "Ətraflı öyrən.";
+"Settings.learnMore" = "Ətraflı \U206Föyrən.";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Tənzimləmələr";

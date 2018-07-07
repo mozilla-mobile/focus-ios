@@ -239,7 +239,7 @@
 "Settings.detailTextSendUsageData" = "Mozilla тек %@ әркім үшін ұсыну және жақсарту мақсатында керек деректерді жинауға тырысады.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "Көбірек білу.";
+"Settings.learnMore" = "Көбірек \U206Fбілу.";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Баптаулар";
