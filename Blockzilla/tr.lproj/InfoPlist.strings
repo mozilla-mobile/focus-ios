@@ -1,15 +1,18 @@
-/* (No Comment) */
+/* (No Commment) */
 "NSCameraUsageDescription" = "Fotoğraf çekmenizi ve yüklemenizi sağlar.";
 
-/* (No Comment) */
+/* (No Commment) */
+"NSFaceIDUsageDescription" = "Uygulamanın kilidini açmanıza izin verir.";
+
+/* (No Commment) */
 "NSLocationWhenInUseUsageDescription" = "Ziyaret ettiğiniz web siteleri konumunuzu isteyebilir.";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSMicrophoneUsageDescription" = "Video çekmenizi ve yüklemenizi sağlar.";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSPhotoLibraryAddUsageDescription" = "Fotoğrafları kaydetmenizi ve yüklemenizi sağlar.";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Fotoğrafları kaydetmenizi ve yüklemenizi sağlar.";
 

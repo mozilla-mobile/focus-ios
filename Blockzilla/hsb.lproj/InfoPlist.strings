@@ -1,15 +1,18 @@
-/* (No Comment) */
+/* (No Commment) */
 "NSCameraUsageDescription" = "To wam zmóžnja, fotografować a fota nahrać.";
 
-/* (No Comment) */
+/* (No Commment) */
+"NSFaceIDUsageDescription" = "Z tym móžeće nałoženje wotewrěć.";
+
+/* (No Commment) */
 "NSLocationWhenInUseUsageDescription" = "Websydła, kotrež wopytujeće, snano waše stejnišćo žadaja.";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSMicrophoneUsageDescription" = "To wam zmóžnja, wideja natočić a nahrać.";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSPhotoLibraryAddUsageDescription" = "To wam zmóžnja, fota składować a nahrać.";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "To wam zmóžnja, fota składować a nahrać.";
 
