@@ -1,15 +1,18 @@
-/* (No Comment) */
+/* (No Commment) */
 "NSCameraUsageDescription" = "写真を撮影してアップロードできます。";
 
-/* (No Comment) */
+/* (No Commment) */
+"NSFaceIDUsageDescription" = "アプリのロックを解除します。";
+
+/* (No Commment) */
 "NSLocationWhenInUseUsageDescription" = "訪れたウェブサイトがあなたの位置情報を要求しています。";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSMicrophoneUsageDescription" = "動画を撮影してアップロードできます。";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSPhotoLibraryAddUsageDescription" = "写真を保存してアップロードできます。";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "写真を保存してアップロードできます。";
 

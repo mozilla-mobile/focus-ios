@@ -1,15 +1,18 @@
-/* (No Comment) */
+/* (No Commment) */
 "NSCameraUsageDescription" = "此权限让您可以拍摄和上传照片。";
 
-/* (No Comment) */
+/* (No Commment) */
+"NSFaceIDUsageDescription" = "让您可以解锁应用。";
+
+/* (No Commment) */
 "NSLocationWhenInUseUsageDescription" = "您访问的网站可能请求您的位置。";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSMicrophoneUsageDescription" = "此权限让您可以拍摄和上传视频。";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSPhotoLibraryAddUsageDescription" = "此权限让您可以保存和上传照片。";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "此权限让您可以保存和上传照片。";
 

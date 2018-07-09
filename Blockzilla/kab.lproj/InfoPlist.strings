@@ -1,15 +1,18 @@
-/* (No Comment) */
+/* (No Commment) */
 "NSCameraUsageDescription" = "Ayagi ad ak-yeǧǧ ad teṭṭfeḍ neɣ ad tessaliḍ tiwlafin.";
 
-/* (No Comment) */
+/* (No Commment) */
+"NSFaceIDUsageDescription" = "Ayagi ad k-yeǧǧ ad tserḥeḍ i usnas.";
+
+/* (No Commment) */
 "NSLocationWhenInUseUsageDescription" = "Ismal web aniɣer trezzuḍ zemren ad sutren adig-inek.";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSMicrophoneUsageDescription" = "Ayagi ad ak-isireg asider d usali n tvidyutin.";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSPhotoLibraryAddUsageDescription" = "S waya ad teskelseḍ daɣ ad d-tessidreḍ tugniwin.";
 
-/* (No Comment) */
-"NSPhotoLibraryUsageDescription" = "S waya ad teskelseḍ daɣ ad d-tessidreḍ tugniwin.";
+/* (No Commment) */
+"NSPhotoLibraryUsageDescription" = "S waya ad teskelseḍ daɣ ad d-tessaliḍ tiwlafin.";
 
