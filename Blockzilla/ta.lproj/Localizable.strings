@@ -239,7 +239,7 @@
 "Settings.detailTextSendUsageData" = "அனைவருக்கும் %@ வழங்கவும் மேம்படுத்தவும் தேவையானதை மட்டும் சேகரிக்க மொசில்லா உறுதிபூண்டுள்ளது.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "மேலும் அறிய.";
+"Settings.learnMore" = "மேலும் \U206Fஅறிய.";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "அமைவுகள்";

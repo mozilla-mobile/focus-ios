@@ -239,7 +239,7 @@
 "Settings.detailTextSendUsageData" = "Mozilla ay nag susumikap na kolektahin lamang kung ano ang kailangan naming ibigay at pagbutihin ang %@ para sa lahat.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "Matuto ng higit pa.";
+"Settings.learnMore" = "Matuto \U206Fng \U206Fhigit \U206Fpa.";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Mga Setting";

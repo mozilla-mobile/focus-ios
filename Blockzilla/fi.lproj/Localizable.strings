@@ -71,7 +71,7 @@
 "Settings.detailTextSendUsageData" = "Mozilla pyrkii keräämään vain tietoja, jotka ovat tarpeellisia %@en jakelun ja kehittämisen kannalta.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "Lue lisää.";
+"Settings.learnMore" = "Lue \U206Flisää.";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Asetukset";

@@ -239,7 +239,7 @@
 "Settings.detailTextSendUsageData" = "Strivañ a ra Mozilla evit dastum ar pezh hon eus ezhomm hepken evit gwellaat ha kinnig %@ d'an holl.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "Gouzout hiroc'h.";
+"Settings.learnMore" = "Gouzout \U206Fhiroc'h.";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Arventennoù";

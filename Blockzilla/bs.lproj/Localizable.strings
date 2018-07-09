@@ -239,7 +239,7 @@
 "Settings.detailTextSendUsageData" = "Mozila nastoji prikupljati samo ono što je potrebno da osigura i poboljša %@ za sve.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "Saznajte više.";
+"Settings.learnMore" = "Saznajte \U206Fviše.";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Postavke";

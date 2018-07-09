@@ -143,7 +143,7 @@
 "Settings.detailTextSendUsageData" = "ప్రతి ఒక్కరికీ %@ ను అందించడానికి మరియు మెరుగుపరచడానికి Mozilla అవసరమైనవి మాత్రమే సేకరించేందుకు కృషి చేస్తుంది.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "ఇంకా తెలుసుకోండి.";
+"Settings.learnMore" = "ఇంకా \U206Fతెలుసుకోండి.";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "అమరికలు";

@@ -239,7 +239,7 @@
 "Settings.detailTextSendUsageData" = "Mozilla streeft ernaar alleen te verzamelen wat nodig is om %@ voor iedereen aan te bieden en te verbeteren.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "Meer info";
+"Settings.learnMore" = "Meer \U206Finfo";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Instellingen";

@@ -239,7 +239,7 @@
 "Settings.detailTextSendUsageData" = "Mozilla se procujo, jano informacije gromaźiś, kótarež trjebamy, aby %@ za kuždego póbitowaś a pólěpšyś.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "Dalšne informacije.";
+"Settings.learnMore" = "Dalšne \U206Finformacije.";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Nastajenja";

@@ -200,7 +200,7 @@
 "Settings.detailTextSendUsageData" = "Mozilla सबैको लागि %@ प्रदान र सुधार गर्न आवश्यक कुरा मात्र संकलन गर्ने प्रयास गर्दछ ।";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "थप जान्नुहोस् ।";
+"Settings.learnMore" = "थप \U206Fजान्नुहोस् ।";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "सेटिङहरू";
