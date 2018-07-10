@@ -1,15 +1,18 @@
-/* (No Comment) */
+/* (No Commment) */
 "NSCameraUsageDescription" = "To wam zmóžnja, fotografěrowaś a fota nagraś.";
 
-/* (No Comment) */
+/* (No Commment) */
+"NSFaceIDUsageDescription" = "Z tym móžośo nałoženje wótwóriś.";
+
+/* (No Commment) */
 "NSLocationWhenInUseUsageDescription" = "Websedła, kótarež se woglědujośo, pominaju snaź wašo stojnišćo.";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSMicrophoneUsageDescription" = "To wam zmóžnja, wideo gótowaś a nagraś.";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSPhotoLibraryAddUsageDescription" = "To wam zmóžnja, fota składowaś a nagraś.";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "To wam zmóžnja, fota składowaś a nagraś.";
 

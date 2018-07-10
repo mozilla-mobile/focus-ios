@@ -1,15 +1,18 @@
-/* (No Comment) */
+/* (No Commment) */
 "NSCameraUsageDescription" = "Mae hyn yn caniatáu i chi gymryd lluniau a'u llwytho.";
 
-/* (No Comment) */
+/* (No Commment) */
+"NSFaceIDUsageDescription" = "Mae hwn yn eich galluogi i ddatgloi'r ap.";
+
+/* (No Commment) */
 "NSLocationWhenInUseUsageDescription" = "Efallai y bydd gwefannau rydych yn ymweld â nhw'n gofyn am eich lleoliad.";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSMicrophoneUsageDescription" = "Mae hyn yn caniatáu i chi gymryd a llwytho fideos.";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSPhotoLibraryAddUsageDescription" = "Mae hyn yn caniatáu i chi gadw a llwytho lluniau.";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Mae hyn yn caniatáu i chi gadw a llwytho lluniau.";
 

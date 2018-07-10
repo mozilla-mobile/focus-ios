@@ -1,15 +1,18 @@
-/* (No Comment) */
+/* (No Commment) */
 "NSCameraUsageDescription" = "Toto umožňuje vytvárať a odosielať fotografie.";
 
-/* (No Comment) */
+/* (No Commment) */
+"NSFaceIDUsageDescription" = "Toto vám umožňuje odomknúť aplikáciu.";
+
+/* (No Commment) */
 "NSLocationWhenInUseUsageDescription" = "Stránky, ktoré navštevujete, môžu požiadať o prezradenie vašej polohy.";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSMicrophoneUsageDescription" = "Toto umožňuje tvoriť a nahrávať videá.";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSPhotoLibraryAddUsageDescription" = "Toto umožňuje ukladať a nahrávať fotografie.";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Toto umožňuje ukladať a odosielať fotografie.";
 
