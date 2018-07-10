@@ -34,7 +34,7 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Seqdec-it am usiɣzef Safari:";
 
-/* (No Commment) */
+/* (No Comment) */
 "About.screenTitle" = "Γef";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */

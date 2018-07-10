@@ -34,7 +34,7 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Jako rozszerzenie blokad zawartości Safari pozwala:";
 
-/* (No Commment) */
+/* (No Comment) */
 "About.screenTitle" = "O programie";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */

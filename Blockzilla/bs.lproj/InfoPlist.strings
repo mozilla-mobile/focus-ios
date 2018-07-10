@@ -1,18 +1,18 @@
-/* (No Commment) */
+/* (No Comment) */
 "NSCameraUsageDescription" = "Ovo vam omogućava slikanje i otpremanje fotografija.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSFaceIDUsageDescription" = "Ovo vam dopušta da otključate aplikaciju.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Web stranice koje posjećujete mogu zahtjevati vašu lokaciju.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSMicrophoneUsageDescription" = "Ovo vam omogućava snimanje i otpremanje videa.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSPhotoLibraryAddUsageDescription" = "Ovo vam omogućava da sačuvate i otpremite fotografije.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "Ovo vam omogućava da sačuvate i otpremite fotografije.";
 
