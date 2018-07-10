@@ -1,17 +1,18 @@
-/* (No Comment) */
+/* (No Commment) */
 "NSCameraUsageDescription" = "This lets you take and upload photos.";
 
-/* (No Comment) */
+/* (No Commment) */
+"NSFaceIDUsageDescription" = "This lets you unlock the app.";
+
+/* (No Commment) */
 "NSLocationWhenInUseUsageDescription" = "Websites you visit may request your location.";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSMicrophoneUsageDescription" = "This lets you take and upload videos.";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSPhotoLibraryAddUsageDescription" = "This lets you save and upload photos.";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "This lets you save and upload photos.";
 
-/* (No Comment) */
-"NSFaceIDUsageDescription" = "This lets you unlock the app.";

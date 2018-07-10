@@ -1,15 +1,18 @@
-/* (No Comment) */
+/* (No Commment) */
 "NSCameraUsageDescription" = "Gant se e c'hallit kemer ha pellgas luc'hskeudennoù.";
 
-/* (No Comment) */
+/* (No Commment) */
+"NSFaceIDUsageDescription" = "Gant se e c'hallit dibrennañ an arload.";
+
+/* (No Commment) */
 "NSLocationWhenInUseUsageDescription" = "Lec'hiennoù web a weladennit a c'hall azgoulenn ho lec'hiadur.";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSMicrophoneUsageDescription" = "Gant se e c'hallit kemer ha pellgas videoioù.";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSPhotoLibraryAddUsageDescription" = "Gant se e c'hallit enrollañ ha pellgas skeudennoù.";
 
-/* (No Comment) */
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Gant se e c'hallit enrollañ ha pellgas luc'hskeudennoù.";
 
