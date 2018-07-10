@@ -9,6 +9,8 @@
 			<string>$(PRODUCT_BUNDLE_IDENTIFIER).EraseAndOpen</string>
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>Erase and Open</string>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>erase_quick_action</string>
 		</dict>
 	</array>
 	<key>CFBundleName</key>
