@@ -593,35 +593,6 @@ class BrowserViewController: UIViewController {
         urlBar.fillUrlBar(text: text)
     }
 
-    private func hideSplashScreen() {
-        splashScreen?.removeFromSuperview()
-    }
-
-    private func displaySplashScreen() {
-        guard splashScreen == nil else { return }
-        
-        let splashView = UIView()
-        splashView.backgroundColor = UIConstants.colors.background
-        mainContainerView.addSubview(splashView)
-
-        let logoImage = UIImageView(image: AppInfo.config.wordmark)
-        splashView.addSubview(logoImage)
-
-        splashView.snp.makeConstraints { make in
-            make.edges.equalTo(mainContainerView)
-        }
-
-        logoImage.snp.makeConstraints { make in
-            make.center.equalTo(splashView)
-        }
-
-        view.layoutIfNeeded()
-        splashView.layoutIfNeeded()
-
-        splashScreen = splashView
-        hideToolbars()
-    }
-
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         
