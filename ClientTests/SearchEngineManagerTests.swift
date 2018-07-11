@@ -4,7 +4,12 @@
 
 
 import XCTest
+
+#if FOCUS
 @testable import Firefox_Focus
+#else
+@testable import Firefox_Klar
+#endif
 
 class SearchEngineManagerTests: XCTestCase {
     private var mockUserDefaults = MockUserDefaults()
@@ -105,7 +110,7 @@ class SearchEngineManagerTests: XCTestCase {
     }
 }
 
-class MockUserDefaults: UserDefaults {
+fileprivate class MockUserDefaults: UserDefaults {
     var setCalls = 0
     var valueCalls = 0
     

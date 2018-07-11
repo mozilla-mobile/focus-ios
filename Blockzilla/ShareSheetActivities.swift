@@ -118,6 +118,60 @@ class OpenInChromeActivity: UIActivity {
     }
 }
 
+class FindInPageActivity: UIActivity {
+    override var activityTitle: String? {
+        return UIConstants.strings.shareMenuFindInPage
+    }
+    
+    override var activityImage: UIImage? {
+        return #imageLiteral(resourceName: "ios-find-in-page")
+    }
+    
+    override func perform() {
+        openFindInPage()
+        activityDidFinish(true)
+    }
+    
+    override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
+        return true
+    }
+    
+    func openFindInPage() {
+        NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: UIConstants.strings.findInPageNotification)))
+    }
+}
+
+class RequestDesktopActivity: UIActivity {
+    fileprivate let url: URL
+    
+    init(url: URL) {
+        self.url = url
+    }
+    
+    override var activityTitle: String? {
+        return UIConstants.strings.shareMenuRequestDesktop
+    }
+    
+    override var activityImage: UIImage? {
+        return #imageLiteral(resourceName: "request_desktop_site_activity")
+    }
+    
+    override func perform() {
+        // Reload in desktop mode
+        reloadAsDesktopSite(url: url)
+        activityDidFinish(true)
+    }
+    
+    override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
+        return true
+    }
+    
+    func reloadAsDesktopSite(url: URL) {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.requestDesktop)
+        NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification)))
+    }
+}
+
 /// This Activity Item Provider subclass does two things that are non-standard behaviour:
 ///
 /// * We return NSNull if the calling activity is not supposed to see the title. For example the Copy action, which should only paste the URL. We also include Message and Mail to have parity with what Safari exposes.
