@@ -14,7 +14,6 @@ class BrowserViewController: UIViewController {
         override var intrinsicContentSize: CGSize { return CGSize(width: 320, height: 0) }
     }
 
-    private var splashScreen: UIView?
     private var context = LAContext()
     private let mainContainerView = UIView(frame: .zero)
     private let drawerContainerView = DrawerView(frame: .zero)
