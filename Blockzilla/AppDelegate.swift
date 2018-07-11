@@ -12,7 +12,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static var splashView: UIView?
     static let prefIntroDone = "IntroDone"
     static let prefIntroVersion = 2
-    private let browserViewController = BrowserViewController()
+    static private let browserViewController = BrowserViewController()
     private var queuedUrl: URL?
     private var queuedString: String?
     static let prefWhatsNewDone = "WhatsNewDone"
@@ -49,7 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         window = UIWindow(frame: UIScreen.main.bounds)
 
-        let rootViewController = UINavigationController(rootViewController: browserViewController)
+        let rootViewController = UINavigationController(rootViewController: AppDelegate.browserViewController)
         window?.rootViewController = rootViewController
         window?.makeKeyAndVisible()
 
@@ -125,7 +125,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if application.applicationState == .active {
                 // If we are active then we can ask the BVC to open the new tab right away.
                 // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
-                browserViewController.submit(url: url)
+                AppDelegate.browserViewController.submit(url: url)
             } else {
                 queuedUrl = url
             }
@@ -135,7 +135,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if application.applicationState == .active {
                 // If we are active then we can ask the BVC to open the new tab right away.
                 // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
-                browserViewController.openOverylay(text: text)
+                AppDelegate.browserViewController.openOverylay(text: text)
             } else {
                 queuedString = text
             }
@@ -211,13 +211,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let url = queuedUrl {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openedFromExtension, object: TelemetryEventObject.app)
 
-            browserViewController.ensureBrowsingMode()
-            browserViewController.submit(url: url)
+            AppDelegate.browserViewController.ensureBrowsingMode()
+            AppDelegate.browserViewController.submit(url: url)
             queuedUrl = nil
         } else if let text = queuedString {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openedFromExtension, object: TelemetryEventObject.app)
 
-            browserViewController.openOverylay(text: text)
+            AppDelegate.browserViewController.openOverylay(text: text)
             queuedString = nil
         }
 
@@ -232,6 +232,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let orientation = UIDevice.current.orientation.isPortrait ? "Portrait" : "Landscape"
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.background, object:
             TelemetryEventObject.app, value: nil, extras: ["orientation": orientation])
+    }
+    
+    static func shouldHideSplashView(hide: Bool) {
+        print("Hiding: \(hide)")
+        AppDelegate.splashView?.animateHidden(hide, duration: 0.25)
+        if hide {
+            // Dismiss the keyboard
+        }
     }
 }
 
@@ -286,8 +294,8 @@ extension AppDelegate {
         Telemetry.default.beforeSerializePing(pingType: CorePingBuilder.PingType) { (inputDict) -> [String : Any?] in
             var outputDict = inputDict // make a mutable copy
 
-            if self.browserViewController.canShowTrackerStatsShareButton() { // Klar users are not included in this experiment
-                self.browserViewController.flipCoinForShowTrackerButton() // Force a coin flip if one has not been flipped yet
+            if AppDelegate.browserViewController.canShowTrackerStatsShareButton() { // Klar users are not included in this experiment
+                AppDelegate.browserViewController.flipCoinForShowTrackerButton() // Force a coin flip if one has not been flipped yet
                 outputDict["showTrackerStatsSharePhase2"] = UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
             }
             

@@ -252,7 +252,7 @@ class BrowserViewController: UIViewController {
 
             // Check if user is already in a cleared session, or doesn't have biometrics enabled in settings
             if  !Settings.getToggle(SettingsToggle.biometricLogin) || !AppDelegate.needsAuthenticated || self.webViewContainer.isHidden {
-                AppDelegate.splashView?.animateHidden(true, duration: 0.25)
+                AppDelegate.shouldHideSplashView(hide: true)
                 return
             }
             AppDelegate.needsAuthenticated = false
@@ -267,7 +267,7 @@ class BrowserViewController: UIViewController {
                     DispatchQueue.main.async {
                         if success {
                             self.showToolbars()
-                            AppDelegate.splashView?.animateHidden(true, duration: 0.25)
+                            AppDelegate.shouldHideSplashView(hide: true)
                         } else {
                             // Clear the browser session, as the user failed to authenticate
                             self.resetBrowser(hidePreviousSession: true)
@@ -278,7 +278,7 @@ class BrowserViewController: UIViewController {
                 // Ran into an error with biometrics, so disable them and clear the browser:
                 Settings.set(false, forToggle: SettingsToggle.biometricLogin)
                 self.resetBrowser()
-                AppDelegate.splashView?.animateHidden(true, duration: 0.25)
+                AppDelegate.shouldHideSplashView(hide: true)
             }
         }
     }
