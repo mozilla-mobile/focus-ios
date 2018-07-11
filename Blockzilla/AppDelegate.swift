@@ -202,7 +202,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-        AppDelegate.splashView?.animateHidden(false, duration: 0)
+        AppDelegate.shouldHideSplashView(hide: false, duration: 0.25)
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -234,11 +234,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             TelemetryEventObject.app, value: nil, extras: ["orientation": orientation])
     }
     
-    static func shouldHideSplashView(hide: Bool) {
-        print("Hiding: \(hide)")
-        AppDelegate.splashView?.animateHidden(hide, duration: 0.25)
-        if hide {
-            // Dismiss the keyboard
+    static func shouldHideSplashView(hide: Bool, duration: TimeInterval = 0.25) {
+        AppDelegate.splashView?.animateHidden(hide, duration: duration)
+        if !hide {
+            AppDelegate.browserViewController.deactivateUrlBarOnHomeView()
+        } else {
+            AppDelegate.browserViewController.activateUrlBarOnHomeView()
         }
     }
 }
