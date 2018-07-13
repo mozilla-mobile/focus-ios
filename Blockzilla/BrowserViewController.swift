@@ -13,6 +13,8 @@ class BrowserViewController: UIViewController {
     private class DrawerView: UIView {
         override var intrinsicContentSize: CGSize { return CGSize(width: 320, height: 0) }
     }
+    
+    let appSplashController: AppSplashController
 
     private var context = LAContext()
     private let mainContainerView = UIView(frame: .zero)
@@ -80,10 +82,16 @@ class BrowserViewController: UIViewController {
     static let userDefaultsShareTrackerStatsKeyOLD = "shareTrackerStats"
     static let userDefaultsShareTrackerStatsKeyNEW = "shareTrackerStatsNew"
 
-    convenience init() {
-        self.init(nibName: nil, bundle: nil)
+    init(appSplashController: AppSplashController) {
+        self.appSplashController = appSplashController
+        
+        super.init(nibName: nil, bundle: nil)
         drawerContainerView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("BrowserViewController hasn't implemented init?(coder:)")
     }
     
     override func viewDidLoad() {
@@ -251,7 +259,7 @@ class BrowserViewController: UIViewController {
 
             // Check if user is already in a cleared session, or doesn't have biometrics enabled in settings
             if  !Settings.getToggle(SettingsToggle.biometricLogin) || !AppDelegate.needsAuthenticated || self.webViewContainer.isHidden {
-                AppDelegate.shouldHideSplashView(hide: true)
+                self.appSplashController.toggleSplashView(hide: true)
                 return
             }
             AppDelegate.needsAuthenticated = false
@@ -266,10 +274,11 @@ class BrowserViewController: UIViewController {
                     DispatchQueue.main.async {
                         if success {
                             self.showToolbars()
-                            AppDelegate.shouldHideSplashView(hide: true)
+                            self.appSplashController.toggleSplashView(hide: true)
                         } else {
                             // Clear the browser session, as the user failed to authenticate
                             self.resetBrowser(hidePreviousSession: true)
+                            self.appSplashController.toggleSplashView(hide: true)
                         }
                     }
                 }
@@ -277,7 +286,7 @@ class BrowserViewController: UIViewController {
                 // Ran into an error with biometrics, so disable them and clear the browser:
                 Settings.set(false, forToggle: SettingsToggle.biometricLogin)
                 self.resetBrowser()
-                AppDelegate.shouldHideSplashView(hide: true)
+                self.appSplashController.toggleSplashView(hide: true)
             }
         }
     }
