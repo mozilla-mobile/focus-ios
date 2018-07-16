@@ -139,8 +139,8 @@ class URLBar: UIView {
         // our own so we can use it as the rightView.
         let clearButton = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         clearButton.isHidden = true
-        clearButton.setImage(#imageLiteral(resourceName: "icon_clear"), for: UIControl.State.normal)
-        clearButton.addTarget(self, action: #selector(didPressClear), for: UIControl.Event.touchUpInside)
+        clearButton.setImage(#imageLiteral(resourceName: "icon_clear"), for: .normal)
+        clearButton.addTarget(self, action: #selector(didPressClear), for: .touchUpInside)
 
         urlText.font = UIConstants.fonts.urlText
         urlText.tintColor = UIConstants.colors.urlTextFont
@@ -160,17 +160,17 @@ class URLBar: UIView {
 
         cancelButton.isHidden = true
         cancelButton.alpha = 0
-        cancelButton.setTitle(UIConstants.strings.urlBarCancel, for: UIControl.State.normal)
+        cancelButton.setTitle(UIConstants.strings.urlBarCancel, for: .normal)
         cancelButton.titleLabel?.font = UIConstants.fonts.cancelButton
         cancelButton.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         cancelButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
-        cancelButton.addTarget(self, action: #selector(dismiss), for: UIControl.Event.touchUpInside)
+        cancelButton.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
         cancelButton.accessibilityIdentifier = "URLBar.cancelButton"
         addSubview(cancelButton)
 
         deleteButton.isHidden = true
         deleteButton.alpha = 0
-        deleteButton.setTitle(UIConstants.strings.eraseButton, for: UIControl.State.normal)
+        deleteButton.setTitle(UIConstants.strings.eraseButton, for: .normal)
         deleteButton.titleLabel?.font = UIConstants.fonts.deleteButton
         deleteButton.titleEdgeInsets = UIEdgeInsets(top: 2, left: 10, bottom: 2, right: 10)
         deleteButton.backgroundColor = UIConstants.colors.deleteButtonBackground
@@ -179,7 +179,7 @@ class URLBar: UIView {
         deleteButton.layer.borderColor = UIConstants.colors.deleteButtonBorder.cgColor
         deleteButton.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         deleteButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
-        deleteButton.addTarget(self, action: #selector(didPressDelete), for: UIControl.Event.touchUpInside)
+        deleteButton.addTarget(self, action: #selector(didPressDelete), for: .touchUpInside)
         deleteButton.accessibilityIdentifier = "URLBar.deleteButton"
         addSubview(deleteButton)
 
@@ -191,7 +191,7 @@ class URLBar: UIView {
         let hiddenDeleteButton = UIButton()
         hiddenDeleteButton.isUserInteractionEnabled = false
         hiddenDeleteButton.isHidden = true
-        hiddenDeleteButton.setTitle(UIConstants.strings.eraseButton, for: UIControl.State.normal)
+        hiddenDeleteButton.setTitle(UIConstants.strings.eraseButton, for: .normal)
         hiddenDeleteButton.titleLabel?.font = UIConstants.fonts.deleteButton
         hiddenDeleteButton.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         hiddenDeleteButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
@@ -740,7 +740,7 @@ private class URLTextField: AutocompleteTextField {
     
     override var placeholder: String? {
         didSet {
-            attributedPlaceholder = NSAttributedString(string: placeholder ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIConstants.colors.urlTextPlaceholder])
+            attributedPlaceholder = NSAttributedString(string: placeholder ?? "", attributes: [.foregroundColor: UIConstants.colors.urlTextPlaceholder])
         }
     }
 

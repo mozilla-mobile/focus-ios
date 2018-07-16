@@ -221,7 +221,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         navigationBar.isTranslucent = false
         navigationBar.barTintColor = UIConstants.colors.background
         navigationBar.tintColor = UIConstants.colors.navigationButton
-        navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIConstants.colors.navigationTitle]
+        navigationBar.titleTextAttributes = [.foregroundColor: UIConstants.colors.navigationTitle]
 
         highlightsButton = UIBarButtonItem(title: UIConstants.strings.whatsNewTitle, style: .plain, target: self, action: #selector(whatsNewClicked))
         highlightsButton?.image = UIImage(named: "highlight")
@@ -253,7 +253,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             let toggle = blockerToggle.toggle
             toggle.onTintColor = UIConstants.colors.toggleOn
             toggle.tintColor = UIConstants.colors.toggleOff
-            toggle.addTarget(self, action: #selector(toggleSwitched(_:)), for: UIControl.Event.valueChanged)
+            toggle.addTarget(self, action: #selector(toggleSwitched(_:)), for: .valueChanged)
             toggle.isOn = Settings.getToggle(blockerToggle.setting)
         }
 
@@ -325,16 +325,16 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 
                 if case .mozilla = section {
                     accessabilityIdentifier = "SettingsViewController.learnMoreCell"
-                    subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.detailTextSendUsageData, AppInfo.productName), attributes: [NSAttributedString.Key.foregroundColor : UIConstants.colors.settingsDetailLabel])
+                    subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.detailTextSendUsageData, AppInfo.productName), attributes: [.foregroundColor : UIConstants.colors.settingsDetailLabel])
                     selector = #selector(tappedLearnMoreFooter)
                 } else {
                     accessabilityIdentifier = "SettingsViewController.trackingProtectionLearnMoreCell"
-                    subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.trackersDescriptionLabel, AppInfo.productName), attributes: [NSAttributedString.Key.foregroundColor : UIConstants.colors.settingsDetailLabel])
+                    subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.trackersDescriptionLabel, AppInfo.productName), attributes: [.foregroundColor : UIConstants.colors.settingsDetailLabel])
                     selector = #selector(tappedTrackingProtectionLearnMoreFooter)
                 }
                 
-                let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [NSAttributedString.Key.foregroundColor : UIConstants.colors.toggleOn])
-                let space = NSAttributedString(string: " ", attributes: [NSAttributedString.Key.foregroundColor : UIConstants.colors.toggleOn])
+                let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.toggleOn])
+                let space = NSAttributedString(string: " ", attributes: [.foregroundColor : UIConstants.colors.toggleOn])
                 subtitle.append(space)
                 subtitle.append(learnMore)
                 
@@ -453,7 +453,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     private func heightForLabel(_ label: UILabel, width: CGFloat, text: String) -> CGFloat {
         let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
-        let attrs: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: label.font]
+        let attrs: [NSAttributedString.Key: Any] = [.font: label.font]
         let boundingRect = NSString(string: text).boundingRect(with: size, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: attrs, context: nil)
         return boundingRect.height
     }
@@ -584,11 +584,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             updateSetting()
         case .blockOther where sender.isOn:
             let alertController = UIAlertController(title: nil, message: UIConstants.strings.settingsBlockOtherMessage, preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherNo, style: UIAlertAction.Style.default) { _ in
+            alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherNo, style: .default) { _ in
                 sender.isOn = false
                 updateSetting()
             })
-            alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherYes, style: UIAlertAction.Style.destructive) { _ in
+            alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherYes, style: .destructive) { _ in
                 updateSetting()
             })
             alertController.popoverPresentationController?.sourceView = sender

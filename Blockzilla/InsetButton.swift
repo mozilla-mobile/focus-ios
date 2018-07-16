@@ -11,8 +11,8 @@ class InsetButton: UIButton {
     init() {
         super.init(frame: CGRect.zero)
 
-        addTarget(self, action: #selector(didTouchDismiss), for: [UIControl.Event.touchDown, UIControl.Event.touchDragEnter])
-        addTarget(self, action: #selector(didTouchUpDismiss), for: [UIControl.Event.touchDragExit, UIControl.Event.touchUpInside, UIControl.Event.touchUpOutside])
+        addTarget(self, action: #selector(didTouchDismiss), for: [.touchDown, .touchDragEnter])
+        addTarget(self, action: #selector(didTouchUpDismiss), for: [.touchDragExit, .touchUpInside, .touchUpOutside])
     }
 
     required init?(coder aDecoder: NSCoder) {

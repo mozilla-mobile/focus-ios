@@ -98,7 +98,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             cell.textLabel?.text = UIConstants.strings.autocompleteLabel
             
             let toggle = UISwitch()
-            toggle.addTarget(self, action: #selector(defaultToggleSwitched(_:)), for: UIControl.Event.valueChanged)
+            toggle.addTarget(self, action: #selector(defaultToggleSwitched(_:)), for: .valueChanged)
             toggle.accessibilityIdentifier = "toggleAutocompleteSwitch"
             toggle.isOn = Settings.getToggle(.enableDomainAutocomplete)
             toggle.onTintColor = UIConstants.colors.toggleOn
@@ -111,7 +111,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
                 cell.textLabel?.text = UIConstants.strings.autocompleteLabel
 
                 let toggle = UISwitch()
-                toggle.addTarget(self, action: #selector(customToggleSwitched(_:)), for: UIControl.Event.valueChanged)
+                toggle.addTarget(self, action: #selector(customToggleSwitched(_:)), for: .valueChanged)
                 toggle.accessibilityIdentifier = "toggleCustomAutocompleteSwitch"
                 toggle.isOn = Settings.getToggle(.enableCustomDomainAutocomplete)
                 toggle.onTintColor = UIConstants.colors.toggleOn
@@ -145,9 +145,9 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         switch section {
         case 0:
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-            let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [NSAttributedString.Key.foregroundColor : UIConstants.colors.toggleOn])
-            let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.autocompleteDefaultDescription, AppInfo.productName), attributes: [NSAttributedString.Key.foregroundColor : UIConstants.colors.settingsDetailLabel])
-            let space = NSAttributedString(string: " ", attributes: [NSAttributedString.Key.foregroundColor : UIConstants.colors.toggleOn])
+            let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.toggleOn])
+            let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.autocompleteDefaultDescription, AppInfo.productName), attributes: [.foregroundColor : UIConstants.colors.settingsDetailLabel])
+            let space = NSAttributedString(string: " ", attributes: [.foregroundColor : UIConstants.colors.toggleOn])
             subtitle.append(space)
             subtitle.append(learnMore)
             cell.detailTextLabel?.attributedText = subtitle
@@ -163,9 +163,9 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             return cell
         case 1:
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-            let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [NSAttributedString.Key.foregroundColor : UIConstants.colors.toggleOn])
-            let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.autocompleteCustomDescription, AppInfo.productName), attributes: [NSAttributedString.Key.foregroundColor : UIConstants.colors.settingsDetailLabel])
-            let space = NSAttributedString(string: " ", attributes: [NSAttributedString.Key.foregroundColor : UIConstants.colors.toggleOn])
+            let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.toggleOn])
+            let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.autocompleteCustomDescription, AppInfo.productName), attributes: [.foregroundColor : UIConstants.colors.settingsDetailLabel])
+            let space = NSAttributedString(string: " ", attributes: [.foregroundColor : UIConstants.colors.toggleOn])
             subtitle.append(space)
             subtitle.append(learnMore)
             cell.detailTextLabel?.attributedText = subtitle

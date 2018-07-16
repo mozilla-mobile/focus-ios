@@ -31,11 +31,11 @@ class OverlayView: UIView {
         searchButton.isHidden = true
         searchButton.accessibilityIdentifier = "OverlayView.searchButton"
         searchButton.alpha = 0
-        searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: UIControl.State.normal)
-        searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: UIControl.State.highlighted)
+        searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .normal)
+        searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .highlighted)
         searchButton.titleLabel?.font = UIConstants.fonts.searchButton
         setUpOverlayButton(button: searchButton)
-        searchButton.addTarget(self, action: #selector(didPressSearch), for: UIControl.Event.touchUpInside)
+        searchButton.addTarget(self, action: #selector(didPressSearch), for: .touchUpInside)
         addSubview(searchButton)
 
         searchBorder.isHidden = true
@@ -55,7 +55,7 @@ class OverlayView: UIView {
         findInPageButton.titleLabel?.font = UIConstants.fonts.copyButton
         findInPageButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         findInPageButton.titleLabel?.lineBreakMode = .byTruncatingTail
-        findInPageButton.addTarget(self, action: #selector(didPressFindOnPage), for: UIControl.Event.touchUpInside)
+        findInPageButton.addTarget(self, action: #selector(didPressFindOnPage), for: .touchUpInside)
         findInPageButton.accessibilityIdentifier = "FindInPageBar.button"
         if UIView.userInterfaceLayoutDirection(for: findInPageButton.semanticContentAttribute) == .rightToLeft {
             findInPageButton.contentHorizontalAlignment = .right
@@ -87,7 +87,7 @@ class OverlayView: UIView {
         } else {
             copyButton.contentHorizontalAlignment = .left
         }
-        copyButton.addTarget(self, action: #selector(didPressCopy), for: UIControl.Event.touchUpInside)
+        copyButton.addTarget(self, action: #selector(didPressCopy), for: .touchUpInside)
         addSubview(copyButton)
         
         copyBorder.backgroundColor = UIConstants.colors.copyButtonBorder
@@ -137,9 +137,9 @@ class OverlayView: UIView {
      */
     func getAttributedButtonTitle(phrase: String,
                                   localizedStringFormat: String) -> NSAttributedString {
-        let attributedString = NSMutableAttributedString(string: localizedStringFormat, attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
-        let phraseString = NSAttributedString(string: phrase, attributes: [NSAttributedString.Key.font: UIConstants.fonts.copyButtonQuery,
-                                                                           NSAttributedString.Key.foregroundColor: UIColor.white])
+        let attributedString = NSMutableAttributedString(string: localizedStringFormat, attributes: [.foregroundColor: UIColor.white])
+        let phraseString = NSAttributedString(string: phrase, attributes: [.font: UIConstants.fonts.copyButtonQuery,
+                                                                           .foregroundColor: UIColor.white])
 
         guard let range = attributedString.string.range(of: "%@") else { return phraseString }
 
@@ -154,7 +154,7 @@ class OverlayView: UIView {
         let attributedString = getAttributedButtonTitle(phrase: phrase,
                                                         localizedStringFormat: localizedStringFormat)
         
-        button.setAttributedTitle(attributedString, for: UIControl.State.normal)
+        button.setAttributedTitle(attributedString, for: .normal)
     }
     
     func setSearchQuery(query: String, animated: Bool, hideFindInPage: Bool) {
@@ -166,7 +166,7 @@ class OverlayView: UIView {
         UIPasteboard.general.urlAsync() { handoffUrl in
             DispatchQueue.main.async {
                 if let url = handoffUrl, url.isWebPage() {
-                    self.copyButton.setAttributedTitle(NSAttributedString(string: String(format: UIConstants.strings.linkYouCopied, url.absoluteString), attributes: [NSAttributedString.Key.foregroundColor: UIColor.white]), for: UIControl.State.normal)
+                    self.copyButton.setAttributedTitle(NSAttributedString(string: String(format: UIConstants.strings.linkYouCopied, url.absoluteString), attributes: [.foregroundColor: UIColor.white]), for: .normal)
                     showCopyButton = url.isWebPage()
                 }
                 

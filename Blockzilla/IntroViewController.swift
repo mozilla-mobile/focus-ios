@@ -58,13 +58,13 @@ class PageControl: UIView {
         
         for _ in 0..<numberOfPages {
             let button = UIButton(frame: CGRect(x: 0, y: 0, width: 6, height: 6))
-            button.setImage(UIImage(imageLiteralResourceName: "page_indicator"), for: UIControl.State.normal)
+            button.setImage(UIImage(imageLiteralResourceName: "page_indicator"), for: .normal)
             buttonArray.append(button)
         }
         
         // Enable the buttons to be tapped to switch to a new page
         buttonArray.forEach() { button in
-            button.addTarget(self, action: #selector(selected(sender:)), for: UIControl.Event.touchUpInside)
+            button.addTarget(self, action: #selector(selected(sender:)), for: .touchUpInside)
         }
         
         stack = UIStackView(arrangedSubviews: buttonArray)
@@ -162,12 +162,12 @@ class IntroViewController: UIViewController {
         }
         
         skipButton.backgroundColor = .clear
-        skipButton.setTitle(UIConstants.strings.SkipIntroButtonTitle, for: UIControl.State.normal)
+        skipButton.setTitle(UIConstants.strings.SkipIntroButtonTitle, for: .normal)
         skipButton.titleLabel?.font = UIConstants.fonts.aboutText
-        skipButton.setTitleColor(.white, for: UIControl.State.normal)
+        skipButton.setTitleColor(.white, for: .normal)
         skipButton.sizeToFit()
         skipButton.accessibilityIdentifier = "IntroViewController.button"
-        skipButton.addTarget(self, action: #selector(IntroViewController.didTapSkipButton), for: UIControl.Event.touchUpInside)
+        skipButton.addTarget(self, action: #selector(IntroViewController.didTapSkipButton), for: .touchUpInside)
         
         skipButton.snp.makeConstraints { make in
             make.bottom.equalTo(pageViewController.view.snp.centerY).offset(-IntroViewControllerUX.Height/2 - IntroViewControllerUX.PagerCenterOffsetFromScrollViewBottom).priority(.high)
@@ -343,15 +343,15 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
         let cardButton = UIButton()
         
         if orderedViewControllers.count == slides.count - 1 {
-            cardButton.setTitle(UIConstants.strings.firstRunButton, for: UIControl.State.normal)
-            cardButton.setTitleColor(UIConstants.colors.firstRunNextButton, for: UIControl.State.normal)
+            cardButton.setTitle(UIConstants.strings.firstRunButton, for: .normal)
+            cardButton.setTitleColor(UIConstants.colors.firstRunNextButton, for: .normal)
             cardButton.titleLabel?.font = UIConstants.fonts.firstRunButton
-            cardButton.addTarget(self, action: #selector(ScrollViewController.didTapStartBrowsingButton), for: UIControl.Event.touchUpInside)
+            cardButton.addTarget(self, action: #selector(ScrollViewController.didTapStartBrowsingButton), for: .touchUpInside)
         } else {
-            cardButton.setTitle(UIConstants.strings.NextIntroButtonTitle, for: UIControl.State.normal)
-            cardButton.setTitleColor(UIConstants.colors.firstRunNextButton, for: UIControl.State.normal)
+            cardButton.setTitle(UIConstants.strings.NextIntroButtonTitle, for: .normal)
+            cardButton.setTitleColor(UIConstants.colors.firstRunNextButton, for: .normal)
             cardButton.titleLabel?.font = UIConstants.fonts.firstRunButton
-            cardButton.addTarget(self, action: #selector(ScrollViewController.incrementPage), for: UIControl.Event.touchUpInside)
+            cardButton.addTarget(self, action: #selector(ScrollViewController.incrementPage), for: .touchUpInside)
         }
         
         introView.addSubview(cardButton)
@@ -374,7 +374,7 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
         paragraphStyle.alignment = .center
         
         let string = NSMutableAttributedString(string: text)
-        string.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: string.length))
+        string.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: string.length))
         return string
     }
 }

@@ -23,36 +23,36 @@ class BrowserToolset {
 
     init() {
         backButton.tintColor = UIConstants.colors.toolbarButtonNormal
-        backButton.setImage(#imageLiteral(resourceName: "icon_back_active"), for: UIControl.State.normal)
-        backButton.setImage(#imageLiteral(resourceName: "icon_back_active").alpha(0.3), for: UIControl.State.disabled)
-        backButton.addTarget(self, action: #selector(didPressBack), for: UIControl.Event.touchUpInside)
+        backButton.setImage(#imageLiteral(resourceName: "icon_back_active"), for: .normal)
+        backButton.setImage(#imageLiteral(resourceName: "icon_back_active").alpha(0.3), for: .disabled)
+        backButton.addTarget(self, action: #selector(didPressBack), for: .touchUpInside)
         backButton.alpha = UIConstants.layout.browserToolbarDisabledOpacity
         backButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         backButton.accessibilityLabel = UIConstants.strings.browserBack
         backButton.isEnabled = false
 
         forwardButton.tintColor = UIConstants.colors.toolbarButtonNormal
-        forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active"), for: UIControl.State.normal)
-        forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active").alpha(0.3), for: UIControl.State.disabled)
-        forwardButton.addTarget(self, action: #selector(didPressForward), for: UIControl.Event.touchUpInside)
+        forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active"), for: .normal)
+        forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active").alpha(0.3), for: .disabled)
+        forwardButton.addTarget(self, action: #selector(didPressForward), for: .touchUpInside)
         forwardButton.alpha = UIConstants.layout.browserToolbarDisabledOpacity
         forwardButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         forwardButton.accessibilityLabel = UIConstants.strings.browserForward
         forwardButton.isEnabled = false
 
         stopReloadButton.tintColor = UIConstants.colors.toolbarButtonNormal
-        stopReloadButton.setImage(#imageLiteral(resourceName: "icon_stop_menu"), for: UIControl.State.normal)
+        stopReloadButton.setImage(#imageLiteral(resourceName: "icon_stop_menu"), for: .normal)
         stopReloadButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         let longPressGestureStopReloadButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressReload))
         stopReloadButton.addGestureRecognizer(longPressGestureStopReloadButton)
-        stopReloadButton.addTarget(self, action: #selector(didPressStopReload), for: UIControl.Event.touchUpInside)
+        stopReloadButton.addTarget(self, action: #selector(didPressStopReload), for: .touchUpInside)
         stopReloadButton.accessibilityIdentifier = "BrowserToolset.stopReloadButton"
 
         sendButton.tintColor = UIConstants.colors.toolbarButtonNormal
-        sendButton.setImage(#imageLiteral(resourceName: "icon_openwith_active"), for: UIControl.State.normal)
-        sendButton.setImage(#imageLiteral(resourceName: "icon_openwith_active").alpha(0.3), for: UIControl.State.disabled)
+        sendButton.setImage(#imageLiteral(resourceName: "icon_openwith_active"), for: .normal)
+        sendButton.setImage(#imageLiteral(resourceName: "icon_openwith_active").alpha(0.3), for: .disabled)
         sendButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
-        sendButton.addTarget(self, action: #selector(didPressSend), for: UIControl.Event.touchUpInside)
+        sendButton.addTarget(self, action: #selector(didPressSend), for: .touchUpInside)
         sendButton.accessibilityLabel = UIConstants.strings.browserShare
         sendButton.accessibilityIdentifier = "BrowserToolset.sendButton"
     }
@@ -74,10 +74,10 @@ class BrowserToolset {
     var isLoading: Bool = false {
         didSet {
             if isLoading {
-                stopReloadButton.setImage(#imageLiteral(resourceName: "icon_stop_menu"), for: UIControl.State.normal)
+                stopReloadButton.setImage(#imageLiteral(resourceName: "icon_stop_menu"), for: .normal)
                 stopReloadButton.accessibilityLabel = UIConstants.strings.browserStop
             } else {
-                stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu"), for: UIControl.State.normal)
+                stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu"), for: .normal)
                 stopReloadButton.accessibilityLabel = UIConstants.strings.browserReload
             }
         }

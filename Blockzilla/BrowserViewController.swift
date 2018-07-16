@@ -365,7 +365,7 @@ class BrowserViewController: UIViewController {
     }
 
     @objc fileprivate func hideDrawer() {
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: UIView.AnimationOptions.curveEaseIn, animations: {
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .curveEaseIn, animations: {
             self.drawerConstraint.deactivate()
             self.drawerOverlayView.layer.opacity = 0
             self.view.layoutIfNeeded()
@@ -377,7 +377,7 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func showDrawer() {
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: UIView.AnimationOptions.curveEaseIn, animations: {
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .curveEaseIn, animations: {
             self.drawerConstraint.activate()
             self.drawerOverlayView.isHidden = false
             self.drawerOverlayView.layer.opacity = 1
@@ -471,7 +471,7 @@ class BrowserViewController: UIViewController {
 
         clearBrowser()
         
-        UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, delay: 0, options: UIView.AnimationOptions.curveEaseInOut, animations: {
+        UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, delay: 0, options: .curveEaseInOut, animations: {
             screenshotView.snp.remakeConstraints { make in
                 make.center.equalTo(self.mainContainerView)
                 make.size.equalTo(self.mainContainerView).multipliedBy(0.9)
@@ -1225,7 +1225,7 @@ extension BrowserViewController: WebControllerDelegate {
 
         scrollBarState = .animating
         
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: UIView.AnimationOptions.allowUserInteraction, animations: {
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: {
             self.urlBar.collapseUrlBar(expandAlpha: 1, collapseAlpha: 0)
             self.urlBarTopConstraint.update(offset: 0)
             self.toolbarBottomConstraint.update(inset: 0)
@@ -1241,7 +1241,7 @@ extension BrowserViewController: WebControllerDelegate {
         let scrollView = webViewController.scrollView
 
         scrollBarState = .animating
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: UIView.AnimationOptions.allowUserInteraction, animations: {
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: {
             self.urlBar.collapseUrlBar(expandAlpha: 0, collapseAlpha: 1)
             self.urlBarTopConstraint.update(offset: -UIConstants.layout.urlBarHeight + UIConstants.layout.collapsedUrlBarHeight)
             self.toolbarBottomConstraint.update(offset: UIConstants.layout.browserToolbarHeight)
