@@ -265,8 +265,8 @@ class BrowserViewController: UIViewController {
             self.context.localizedReason = String(format: UIConstants.strings.touchIdReason, AppInfo.productName)
             self.context.localizedCancelTitle = UIConstants.strings.newSessionFromBiometricFailure
 
-            if self.context.canEvaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, error: &biometricError) {
-                self.context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: self.context.localizedReason) {
+            if self.context.canEvaluatePolicy(LAPolicy.deviceOwnerAuthentication, error: &biometricError) {
+                self.context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: self.context.localizedReason) {
                     [unowned self] (success, _) in
                     DispatchQueue.main.async {
                         if success {
