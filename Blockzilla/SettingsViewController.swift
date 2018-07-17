@@ -461,6 +461,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         switch sections[indexPath.section] {
+        case .privacy:
+            if indexPath.row == 0 {
+                let trackingProtectionVC = TrackingProtectionViewController()
+                navigationController?.pushViewController(trackingProtectionVC, animated: true)
+            }
         case .search:
             if indexPath.row == 0 {
                 let searchSettingsViewController = SearchSettingsViewController(searchEngineManager: searchEngineManager)
