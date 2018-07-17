@@ -1,1 +1,23 @@
-/* No Localized Strings */
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "మీ పూర్తి బ్రౌజింగ్ సెషన్ చరిత్ర, పాస్వర్డ్లు, కుక్కీలు ఎప్పుడైనా ఒకే ట్యాప్తో క్లియర్ చేయబడతాయి.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "మీ చరిత్ర ఇప్పుడు ఇక చరిత్ర";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "తరువాత";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "విభిన్నమైన వాటి కోసం శోధిస్తున్నారా? మరొక శోధన ఇంజిన్ను ఎంచుకోండి.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "మీ శోధన, మీ విధానం";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "దాటవేయి";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "ప్రైవేట్ బ్రౌజింగ్ని తదుపరి స్థాయికి తీసుకువెళ్ళండి. ప్రకటనలను, ఇతర సైట్ల అంతటా మిమ్మల్ని ట్రాక్ చేయగల విషయాలని బ్లాక్ చేయండి మరియు పేజీ లోడ్ సమయాన్ని తగ్గించండి.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "మీ గోప్యతను అధికం చేయండి";
