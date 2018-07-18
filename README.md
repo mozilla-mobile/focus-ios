@@ -54,7 +54,7 @@ V7.0 Development Branch
 
 For version 7.0 of Focus, we are working off of the v7.0-dev branch.
 
-This branch only works with Xcode 10 and supports iOS 11 & 12. This means you will need the Xcode 10 beta (beta 3 recommended).
+This branch only works with Xcode 10 and supports iOS 11 & 12. This means you will need the Xcode 10 beta (beta 3+ recommended).
 
 This branch is written in Swift 4.2. Pull requests for this branch must also be written in Swift 4.2. 
 
