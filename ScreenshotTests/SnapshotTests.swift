@@ -44,7 +44,7 @@ class SnapshotTests: XCTestCase {
         waitforExistence(element: app.staticTexts["Toast.label"])
         snapshot("08YourBrowsingHistoryHasBeenErased")
     }
-    
+
     func test02Settings() {
         let app = XCUIApplication()
         dismissFirstRunUI()
