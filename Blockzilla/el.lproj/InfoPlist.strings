@@ -2,9 +2,6 @@
 "NSCameraUsageDescription" = "Αυτό σάς επιτρέπει να τραβάτε και να μεταφορτώνετε φωτογραφίες.";
 
 /* (No Comment) */
-"NSFaceIDUsageDescription" = "This lets you unlock the app.";
-
-/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Οι ιστοσελίδες που επισκέπτεστε ενδέχεται να ζητήσουν την τοποθεσία σας.";
 
 /* (No Comment) */
