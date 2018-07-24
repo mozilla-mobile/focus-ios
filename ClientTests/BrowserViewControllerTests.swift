@@ -4,13 +4,23 @@
 
 
 import XCTest
+
+#if FOCUS
 @testable import Firefox_Focus
+#else
+@testable import Firefox_Klar
+#endif
 
 class BrowserViewControllerTests: XCTestCase {
     private let mockUserDefaults = MockUserDefaults()
     
+    class TestAppSplashController: AppSplashController {
+        var splashView = UIView()
+        func toggleSplashView(hide: Bool) {}
+    }
+    
     func testRequestReviewThreshold() {
-        let bvc = BrowserViewController()
+        let bvc = BrowserViewController(appSplashController: TestAppSplashController())
         mockUserDefaults.clear()
         
         // Ensure initial threshold is set
@@ -45,7 +55,7 @@ class BrowserViewControllerTests: XCTestCase {
     }
 
     func testShareButtonPreviouslyInGroup() {
-        let bvc = BrowserViewController()
+        let bvc = BrowserViewController(appSplashController: TestAppSplashController())
         mockUserDefaults.clear()
         mockUserDefaults.set(10, forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
         mockUserDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD)
@@ -56,7 +66,7 @@ class BrowserViewControllerTests: XCTestCase {
     }
     
     func testShareButtonPreviouslyOutGroup() {
-        let bvc = BrowserViewController()
+        let bvc = BrowserViewController(appSplashController: TestAppSplashController())
         mockUserDefaults.clear()
         mockUserDefaults.set(10, forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
         mockUserDefaults.set(false, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD)
@@ -66,7 +76,7 @@ class BrowserViewControllerTests: XCTestCase {
     }
     
     func testShareButtonHasNotHitEnoughTrackers() {
-        let bvc = BrowserViewController()
+        let bvc = BrowserViewController(appSplashController: TestAppSplashController())
         mockUserDefaults.clear()
         mockUserDefaults.set(9, forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
         
@@ -75,7 +85,7 @@ class BrowserViewControllerTests: XCTestCase {
     }
     
     func testShareButtonInGroup() {
-        let bvc = BrowserViewController()
+        let bvc = BrowserViewController(appSplashController: TestAppSplashController())
         mockUserDefaults.clear()
         mockUserDefaults.set(10, forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
         mockUserDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
@@ -85,7 +95,7 @@ class BrowserViewControllerTests: XCTestCase {
     }
     
     func testShareButtonOutGroup() {
-        let bvc = BrowserViewController()
+        let bvc = BrowserViewController(appSplashController: TestAppSplashController())
         mockUserDefaults.clear()
         mockUserDefaults.set(10, forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
         mockUserDefaults.set(false, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
