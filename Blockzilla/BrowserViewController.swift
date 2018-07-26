@@ -128,7 +128,7 @@ class BrowserViewController: UIViewController {
 
         webViewController.delegate = self
 
-        let background = GradientBackgroundView(alpha: 0.7, startPoint: CGPoint.zero, endPoint: CGPoint(x: 1, y: 1))
+        let background = GradientBackgroundView(alpha: 0.7, startPoint: CGPoint.zero, endPoint: CGPoint(x: 1, y: 1), background: UIConstants.Photon.Ink80)
         mainContainerView.addSubview(background)
 
         mainContainerView.addSubview(homeViewContainer)
@@ -228,7 +228,12 @@ class BrowserViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(true, animated: animated)
         
-        homeView?.setHighlightWhatsNew(shouldHighlight: shouldShowWhatsNew())
+        if let homeViewToolset = homeView?.toolbar.toolset {
+            homeViewToolset.setHighlightWhatsNew(shouldHighlight: homeViewToolset.shouldShowWhatsNew())
+            homeView?.toolbar.layoutIfNeeded()
+        }
+        browserToolbar.toolset.setHighlightWhatsNew(shouldHighlight: browserToolbar.toolset.shouldShowWhatsNew())
+        browserToolbar.layoutIfNeeded()
         
         super.viewWillAppear(animated)
     }
@@ -308,6 +313,7 @@ class BrowserViewController: UIViewController {
     private func createHomeView() {
         let homeView = HomeView()
         homeView.delegate = self
+        homeView.toolbar.toolset.delegate = self
         homeViewContainer.addSubview(homeView)
 
         homeView.snp.makeConstraints { make in
@@ -355,11 +361,10 @@ class BrowserViewController: UIViewController {
 
             // Initial centered constraints, which will effectively be deactivated when
             // the top constraints are active because of their reduced priorities.
-            make.leading.equalTo(mainContainerView.safeAreaLayoutGuide).priority(500)
+            make.centerX.equalToSuperview().priority(.required)
+            make.leading.equalTo(mainContainerView.safeAreaLayoutGuide).priority(.medium)
+            make.trailing.equalTo(mainContainerView.safeAreaLayoutGuide).priority(.medium)
             make.top.equalTo(homeView).priority(500)
-
-            // Note: this padding here is in addition to the 8px that’s already applied for the Cancel action
-            make.trailing.equalTo(homeView.settingsButton.snp.leading).offset(-8).priority(500)
         }
         topURLBarConstraints.forEach { $0.deactivate() }
     }
@@ -557,7 +562,7 @@ class BrowserViewController: UIViewController {
         
         urlBar.shouldPresent = false
         
-        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: self)
+        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset)
         
         let settingsNavController = UINavigationController(rootViewController: settingsViewController)
         settingsNavController.modalPresentationStyle = .formSheet
@@ -696,10 +701,21 @@ class BrowserViewController: UIViewController {
     }
 
     private func toggleURLBarBackground(isBright: Bool) {
-        if case .on = trackingProtectionStatus {
-            urlBarContainer.isBright = isBright
+        if urlBar.isEditing {
+            urlBarContainer.color = .editing
+        } else if case .on = trackingProtectionStatus {
+            urlBarContainer.color = .bright
         } else {
-            urlBarContainer.isBright = false
+            urlBarContainer.color = .dark
+        }
+    }
+    
+    private func toggleToolbarBackground() {
+        switch trackingProtectionStatus {
+        case .off:
+            browserToolbar.color = .dark
+        case .on:
+            browserToolbar.color = .bright
         }
     }
     
@@ -991,16 +1007,6 @@ extension BrowserViewController: BrowserToolsetDelegate {
         webViewController.stop()
     }
 
-    func browserToolsetDidPressSend(_ browserToolset: BrowserToolset) {
-        guard let url = webViewController.url else { return }
-        
-        let shareExtensionHelper = OpenUtils(url: url, webViewController: webViewController)
-        let controller = shareExtensionHelper.buildShareViewController(url: url, title: webViewController.title, printFormatter: webViewController.printFormatter, anchor: browserToolset.sendButton)
-
-        updateFindInPageVisibility(visible: false)
-        present(controller, animated: true, completion: nil)
-    }
-
     func browserToolsetDidPressSettings(_ browserToolbar: BrowserToolset) {
         updateFindInPageVisibility(visible: false)
         showSettings()
@@ -1008,9 +1014,6 @@ extension BrowserViewController: BrowserToolsetDelegate {
 }
 
 extension BrowserViewController: HomeViewDelegate {
-    func homeViewDidPressSettings(homeView: HomeView) {
-        showSettings()
-    }
     
     func shareTrackerStatsButtonTapped() {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.share, object: TelemetryEventObject.trackerStatsShareButton)
@@ -1091,7 +1094,7 @@ extension BrowserViewController: WebControllerDelegate {
     
     func webControllerDidStartNavigation(_ controller: WebController) {
         urlBar.isLoading = true
-        browserToolbar.isLoading = true
+        browserToolbar.color = .loading
         toggleURLBarBackground(isBright: false)
         showToolbars()
         
@@ -1105,7 +1108,7 @@ extension BrowserViewController: WebControllerDelegate {
             urlBar.url = webViewController.url
         }
         urlBar.isLoading = false
-        browserToolbar.isLoading = false
+        toggleToolbarBackground()
         toggleURLBarBackground(isBright: !urlBar.isEditing)
         urlBar.progressBar.hideProgressBar()
     }
@@ -1113,7 +1116,7 @@ extension BrowserViewController: WebControllerDelegate {
     func webController(_ controller: WebController, didFailNavigationWithError error: Error) {
         urlBar.url = webViewController.url
         urlBar.isLoading = false
-        browserToolbar.isLoading = false
+        toggleToolbarBackground()
         toggleURLBarBackground(isBright: true)
         urlBar.progressBar.hideProgressBar()
     }
@@ -1291,18 +1294,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
 protocol WhatsNewDelegate {
     func shouldShowWhatsNew() -> Bool
     func didShowWhatsNew() -> Void
-}
-
-extension BrowserViewController: WhatsNewDelegate {
-    func shouldShowWhatsNew() -> Bool {
-        let counter = UserDefaults.standard.integer(forKey: AppDelegate.prefWhatsNewCounter)
-        return counter != 0
-    }
-    
-    func didShowWhatsNew() {
-        UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
-        UserDefaults.standard.removeObject(forKey: AppDelegate.prefWhatsNewCounter)
-    }
 }
 
 extension BrowserViewController: TrackingProtectionSummaryDelegate {
