@@ -46,29 +46,4 @@ class FindInPageTest: BaseTestCase {
         // Ensure find in page bar is dismissed
         waitforNoExistence(element: app.buttons["FindInPage.close"])
     }
-    
-    func testActivityMenuFindInPageAction(){
-        // Navigate to website
-        loadWebPage("http://localhost:6573/licenses.html\n")
-        waitforExistence(element:  app.buttons["BrowserToolset.sendButton"])
-        app.buttons["BrowserToolset.sendButton"].tap()
-        
-        // Activate find in page activity item and search for a keyword
-        waitforHittable(element: app.buttons["Find in Page"])
-        app.buttons["Find in Page"].tap()
-        app.typeText("Moz")
-        
-        // Try all functions of find in page bar
-        waitforHittable(element: app.buttons["FindInPage.find_previous"])
-        app.buttons["FindInPage.find_previous"].tap()
-        
-        waitforHittable(element: app.buttons["FindInPage.find_next"])
-        app.buttons["FindInPage.find_next"].tap()
-        
-        waitforHittable(element: app.buttons["FindInPage.close"])
-        app.buttons["FindInPage.close"].tap()
-        
-        // Ensure find in page bar is dismissed
-        waitforNoExistence(element: app.buttons["FindInPage.close"])
-    }
 }

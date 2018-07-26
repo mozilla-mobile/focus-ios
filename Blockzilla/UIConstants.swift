@@ -54,9 +54,9 @@ struct UIConstants {
         static let toolbarBorder = UIColor(rgb: 0x5F6368)
         static let toolbarButtonNormal = UIColor.darkGray
         static let urlTextBackground = UIColor(white: 1, alpha: 0.2)
-        static let urlTextFont = UIColor.white
+        static let urlTextFont = UIConstants.Photon.Grey10
         static let urlTextHighlight = UIColor(rgb: 0xB5007F)
-        static let urlTextPlaceholder = UIColor(white: 1, alpha: 0.4)
+        static let urlTextPlaceholder = UIConstants.Photon.Grey10.withAlphaComponent(0.4)
         static let urlTextShadow = UIColor.black
 
         static let inputPlaceholder = UIColor(rgb: 0xb2b2b2)
@@ -140,8 +140,8 @@ struct UIConstants {
     struct fonts {
         static let aboutText = UIFont.systemFont(ofSize: 14)
         static let cancelButton = UIFont.systemFont(ofSize: 15)
-        static let copyButton = UIFont.systemFont(ofSize: 15)
-        static let copyButtonQuery = UIFont.boldSystemFont(ofSize: 15)
+        static let copyButton = UIFont.systemFont(ofSize: 16)
+        static let copyButtonQuery = UIFont.boldSystemFont(ofSize: 16)
         static let deleteButton = UIFont.systemFont(ofSize: 11)
         static let firstRunDisclaimer = UIFont.systemFont(ofSize: 14)
         static let firstRunMessage = UIFont.systemFont(ofSize: 14)
@@ -149,8 +149,8 @@ struct UIConstants {
         static let firstRunButton = UIFont.systemFont(ofSize: 16)
         static let homeLabel = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.ultraLight)
         static let safariInstruction = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.medium)
-        static let searchButton = UIFont.systemFont(ofSize: 15)
-        static let searchButtonQuery = UIFont.boldSystemFont(ofSize: 15)
+        static let searchButton = UIFont.systemFont(ofSize: 16)
+        static let searchButtonQuery = UIFont.boldSystemFont(ofSize: 16)
         static let settingsHomeButton = UIFont.systemFont(ofSize: 15)
         static let settingsOverlayButton = UIFont.systemFont(ofSize: 13)
         static let tableSectionHeader = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.semibold)
@@ -177,11 +177,11 @@ struct UIConstants {
         static let toastDuration: TimeInterval = 1.5
         static let toolbarFadeAnimationDuration = 0.25
         static let toolbarButtonInsets = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
-        static let urlBarCornerRadius: CGFloat = 2
+        static let urlBarCornerRadius: CGFloat = 4
         static let urlBarHeight: CGFloat = 54
         static let collapsedUrlBarHeight: CGFloat = 22
         static let urlBarTransitionAnimationDuration: TimeInterval = 0.2
-        static let urlBarMargin: CGFloat = 8
+        static let urlBarMargin: CGFloat = 12
         static let urlBarHeightInset: CGFloat = 10
         static let urlBarShadowOpacity: Float = 0.3
         static let urlBarShadowRadius: CGFloat = 2
@@ -294,7 +294,7 @@ struct UIConstants {
         static let openSettingsButtonTitle = NSLocalizedString("photosPermission.openSettings", value: "Open Settings", comment: "Title for button that takes the user to system settings")
         static let openIn = NSLocalizedString("actionSheet.openIn", value: "Open in %@", comment: "Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page.")
         static let handoffSyncing = NSLocalizedString("Focus.handoffSyncing", value: "Apple Handoff is syncing", comment: "Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681")
-        static let linkYouCopied = NSLocalizedString("contextMenu.clipboardLink", value: "Link you copied: %@", comment: "Text for the context menu when a user has a link on their clipboard.")
+        static let linkYouCopied = NSLocalizedString("contextMenu.linkCopied", value: "Link you copied: ", comment: "Text for the context menu when a user has a link on their clipboard.")
         static let trackingProtectionToggleLabel = NSLocalizedString("trackingProtection.toggleLabel", value: "Tracking Protection", comment: "Text for the toggle that temporarily disables tracking protection.")
         static let trackingProtectionToggleDescription = NSLocalizedString("trackingProtection.toggleDescription1", value: "Disable until you close %@ or tap ERASE.", comment: "Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar")
         static let trackingProtectionDisabledLabel = NSLocalizedString("trackingProtection.disabledLabel", value: "Tracking Protection off", comment: "text showing the tracking protection is disabled.")
