@@ -6,19 +6,23 @@ import Foundation
 import SnapKit
 
 class BrowserToolbar: UIView {
-    private let toolset = BrowserToolset()
-    private let backgroundDark = GradientBackgroundView()
-    private let backgroundBright = GradientBackgroundView(alpha: 0.2)
+    let toolset = BrowserToolset()
+    private let backgroundLoading = GradientBackgroundView()
+    private let backgroundDark = UIView()
+    private let backgroundBright = GradientBackgroundView(alpha: 0.2, background: UIConstants.Photon.Ink80)
     private let stackView = UIStackView()
 
     init() {
         super.init(frame: CGRect.zero)
 
         let background = UIView()
-        background.alpha = 0.9
+        background.alpha = 0.95
         background.backgroundColor = UIConstants.colors.background
         addSubview(background)
 
+        background.addSubview(backgroundLoading)
+        
+        backgroundDark.backgroundColor = UIConstants.Photon.Ink80
         background.addSubview(backgroundDark)
 
         backgroundBright.isHidden = true
@@ -34,7 +38,7 @@ class BrowserToolbar: UIView {
         stackView.addArrangedSubview(toolset.backButton)
         stackView.addArrangedSubview(toolset.forwardButton)
         stackView.addArrangedSubview(toolset.stopReloadButton)
-        stackView.addArrangedSubview(toolset.sendButton)
+        stackView.addArrangedSubview(toolset.settingsButton)
         addSubview(stackView)
 
         borderView.snp.makeConstraints { make in
@@ -60,6 +64,10 @@ class BrowserToolbar: UIView {
         backgroundBright.snp.makeConstraints { make in
             make.edges.equalTo(background)
         }
+        
+        backgroundLoading.snp.makeConstraints { make in
+            make.edges.equalTo(background)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -83,14 +91,20 @@ class BrowserToolbar: UIView {
             toolset.canGoForward = canGoForward
         }
     }
-
-    var isLoading: Bool = false {
+    
+    enum toolbarState {
+        case bright
+        case dark
+        case loading
+    }
+    
+    var color: toolbarState = .loading {
         didSet {
-            toolset.isLoading = isLoading
-
             let duration = UIConstants.layout.urlBarTransitionAnimationDuration
-            backgroundDark.animateHidden(!isLoading, duration: duration)
-            backgroundBright.animateHidden(isLoading, duration: duration)
+            backgroundDark.animateHidden(color != .dark, duration: duration)
+            backgroundBright.animateHidden(color != .bright, duration: duration)
+            backgroundLoading.animateHidden(color != .loading, duration: duration)
+            toolset.isLoading = color == .loading
         }
     }
 }
