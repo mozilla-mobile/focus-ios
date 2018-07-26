@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "Tracking Protection - Off.png",
+      "filename" : "Page Action Menu.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Tracking Protection - Off@2x.png",
+      "filename" : "Page Action Menu@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Tracking Protection - Off@3x.png",
+      "filename" : "Page Action Menu@3x.png",
       "scale" : "3x"
     }
   ],
