@@ -33,7 +33,6 @@ class URLBar: UIView {
     fileprivate let domainCompletion = DomainCompletion(completionSources: [TopDomainsCompletionSource(), CustomCompletionSource()])
 
     private let toolset = BrowserToolset()
-    private let urlTextContainer = UIView()
     private let urlText = URLTextField()
     var draggableUrlTextView: UIView { return urlText }
     private let truncatedUrlText = UITextView()
@@ -60,7 +59,7 @@ class URLBar: UIView {
     override var canBecomeFirstResponder: Bool {
         return true
     }
-    
+
     convenience init() {
         self.init(frame: CGRect.zero)
 
@@ -78,18 +77,20 @@ class URLBar: UIView {
         
         urlBarBorderView.backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.1)
         urlBarBorderView.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
+        urlBarBorderView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        urlBarBorderView.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         addSubview(urlBarBorderView)
 
         urlBarBackgroundView.backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         urlBarBackgroundView.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
-        addSubview(urlBarBackgroundView)
+        urlBarBackgroundView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        urlBarBackgroundView.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        urlBarBorderView.addSubview(urlBarBackgroundView)
         
         addSubview(shieldIcon)
 
         urlText.isUserInteractionEnabled = false
-        addSubview(urlTextContainer)
-
-        urlTextContainer.addSubview(textAndLockContainer)
+        urlBarBackgroundView.addSubview(textAndLockContainer)
 
         shieldIcon.isHidden = true
         shieldIcon.tintColor = .white
@@ -170,10 +171,8 @@ class URLBar: UIView {
         deleteButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         deleteButton.addTarget(self, action: #selector(didPressDelete), for: .touchUpInside)
         deleteButton.accessibilityIdentifier = "URLBar.deleteButton"
+        
         addSubview(deleteButton)
-
-        let buttonContainer = UIView()
-        addSubview(buttonContainer)
 
         progressBar.isHidden = true
         progressBar.alpha = 0
@@ -205,27 +204,26 @@ class URLBar: UIView {
         }
         
         urlBarBorderView.snp.makeConstraints { make in
-            make.edges.equalTo(urlTextContainer)
+            make.leading.equalTo(shieldIcon.snp.trailing).offset(UIConstants.layout.urlBarMargin)
+
+            hideToolsetConstraints.append(make.trailing.equalTo(deleteButton.snp.leading).offset(-UIConstants.layout.urlBarMargin).constraint)
+            showToolsetConstraints.append(make.trailing.equalTo(toolset.settingsButton.snp.leading).inset(UIConstants.layout.urlBarMargin).constraint)
+
+            make.height.equalTo(42).priority(.medium)
+
+            self.isEditingConstraints.append(make.height.equalTo(48).priority(.high).constraint)
+
+            make.top.bottom.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
         }
 
         urlBarBackgroundView.snp.makeConstraints { make in
-            make.edges.equalTo(urlBarBorderView).inset(4)
-        }
-
-        urlTextContainer.snp.makeConstraints { make in
-            make.centerX.equalToSuperview().priority(.required)
-            make.leading.equalTo(shieldIcon.snp.trailing).inset(-UIConstants.layout.urlBarMargin)
-            make.trailing.equalTo(deleteButton.snp.leading).inset(-UIConstants.layout.urlBarMargin)
-            make.height.equalTo(48).priority(.required)
-            make.top.bottom.equalTo(self).inset(UIConstants.layout.urlBarMargin)
-
-            // Stretch the URL bar as much as we can without breaking constraints.
-            make.width.equalTo(self).priority(500)
+            make.edges.equalToSuperview().inset(4)
         }
 
         shieldIcon.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
-            make.leading.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
+            hideToolsetConstraints.append(make.leading.equalToSuperview().inset(UIConstants.layout.urlBarMargin).constraint)
+            showToolsetConstraints.append(make.leading.equalTo(toolset.stopReloadButton.snp.trailing).constraint)
             make.width.equalTo(24).priority(900)
 
             hideShieldConstraints.append(contentsOf:[
@@ -234,12 +232,12 @@ class URLBar: UIView {
         }
 
         textAndLockContainer.snp.makeConstraints { make in
-            make.top.bottom.equalTo(urlTextContainer)
-            make.leading.equalTo(urlBarBorderView).priority(999)
-            make.trailing.lessThanOrEqualTo(urlTextContainer)
+            make.top.bottom.equalToSuperview()
+            make.leading.equalToSuperview().priority(999)
+            make.trailing.lessThanOrEqualToSuperview()
 
-            centeredURLConstraints.append(make.centerX.equalTo(self).constraint)
-            fullWidthURLTextConstraints.append(make.trailing.equalTo(urlTextContainer).constraint)
+            centeredURLConstraints.append(make.centerX.equalToSuperview().constraint)
+            fullWidthURLTextConstraints.append(make.trailing.equalToSuperview().constraint)
         }
 
         lockIcon.snp.makeConstraints { make in
@@ -263,28 +261,18 @@ class URLBar: UIView {
         }
 
         toolset.settingsButton.snp.makeConstraints { make in
-            make.trailing.equalTo(safeAreaLayoutGuide)
+            showToolsetConstraints.append(make.trailing.equalTo(deleteButton.snp.leading).constraint)
+            hideToolsetConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide).constraint)
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
         }
 
-        buttonContainer.snp.makeConstraints { make in
+        deleteButton.snp.makeConstraints { make in
             make.centerY.equalTo(self)
 
-            preActivationConstraints.append(contentsOf: [
-                make.leading.equalTo(urlTextContainer.snp.trailing).inset(-UIConstants.layout.urlBarMargin).constraint,
-                make.trailing.equalToSuperview().constraint,
-            ])
+            isEditingConstraints.append(make.width.equalTo(0).constraint)
 
-            postActivationConstraints.append(contentsOf: [
-                make.width.greaterThanOrEqualTo(deleteButton).constraint,
-                make.leading.equalTo(urlTextContainer.snp.trailing).inset(-UIConstants.layout.urlBarMargin).constraint,
-                make.trailing.equalToSuperview().inset(UIConstants.layout.urlBarMargin).constraint,
-            ])
-        }
-
-        deleteButton.snp.makeConstraints { make in
-            make.center.equalTo(buttonContainer)
+            make.trailing.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
         }
 
         progressBar.snp.makeConstraints { make in
@@ -421,8 +409,8 @@ class URLBar: UIView {
         // that touching the surrounding area will trigger editing.
         if urlText.isUserInteractionEnabled,
             let touch = touches.first {
-            let point = touch.location(in: urlTextContainer)
-            if urlTextContainer.bounds.contains(point) {
+            let point = touch.location(in: urlBarBorderView)
+            if urlBarBorderView.bounds.contains(point) {
                 urlText.becomeFirstResponder()
                 return
             }
@@ -509,15 +497,11 @@ class URLBar: UIView {
 
                 // Shrink the URL text background in from the outer URL bar.
                 self.urlBarBackgroundView.alpha = 1
-                self.urlTextContainer.snp.remakeConstraints { make in
-                    make.leading.equalTo(self.shieldIcon.snp.trailing).inset(-UIConstants.layout.urlBarMargin)
-                    make.height.equalTo(48).priority(.required)
-                    make.top.bottom.equalTo(self).inset(UIConstants.layout.urlBarMargin)
-                    make.width.equalTo(self).priority(500)
-                }
+
                 self.urlBarBackgroundView.snp.remakeConstraints { make in
-                    make.edges.equalTo(self.urlTextContainer).inset(4)
+                    make.edges.equalToSuperview().inset(4)
                 }
+
                 self.urlBarBorderView.backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.1)
                 self.urlBarBackgroundView.backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
             }
@@ -550,16 +534,10 @@ class URLBar: UIView {
                 // Reveal the URL bar buttons on iPad/landscape.
                 self.updateToolsetConstraints()
 
-                // Redesign URL bar border
-                self.urlTextContainer.snp.remakeConstraints { make in
-                    make.leading.equalTo(self.shieldIcon.snp.trailing).inset(-UIConstants.layout.urlBarMargin)
-                    make.height.equalTo(42).priority(.required)
-                    make.top.bottom.equalTo(self).inset(UIConstants.layout.urlBarMargin)
-                    make.width.equalTo(self).priority(500)
-                }
                 self.urlBarBackgroundView.snp.remakeConstraints { make in
-                    make.edges.equalTo(self.urlTextContainer).inset(1)
+                    make.edges.equalToSuperview().inset(1)
                 }
+
                 self.urlBarBorderView.backgroundColor = UIConstants.Photon.Grey90.withAlphaComponent(0.2)
                 self.urlBarBackgroundView.backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
             }
@@ -652,7 +630,6 @@ class URLBar: UIView {
 
     func collapseUrlBar(expandAlpha: CGFloat, collapseAlpha: CGFloat) {
         deleteButton.alpha = expandAlpha
-        urlTextContainer.alpha = expandAlpha
         urlBarBorderView.alpha = expandAlpha
         urlBarBackgroundView.alpha = expandAlpha
         shieldIcon.alpha = expandAlpha
