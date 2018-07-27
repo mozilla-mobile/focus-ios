@@ -182,7 +182,7 @@ class URLBar: UIView {
         let toolsetButtonWidthMultiplier = 0.08
 
         toolset.backButton.snp.makeConstraints { make in
-            make.leading.equalTo(safeAreaLayoutGuide)
+            make.leading.equalTo(shieldIcon.snp.trailing)
             make.centerY.equalTo(self)
 
             showToolsetConstraints.append(make.width.equalTo(self).multipliedBy(toolsetButtonWidthMultiplier).constraint)
@@ -214,8 +214,10 @@ class URLBar: UIView {
 
         urlTextContainer.snp.makeConstraints { make in
             make.centerX.equalToSuperview().priority(.required)
-            make.leading.equalTo(shieldIcon.snp.trailing).inset(-UIConstants.layout.urlBarMargin)
-            make.trailing.equalTo(deleteButton.snp.leading).inset(-UIConstants.layout.urlBarMargin)
+            make.leading.greaterThanOrEqualTo(shieldIcon.snp.trailing).inset(-UIConstants.layout.urlBarMargin)
+            make.leading.equalTo(toolset.stopReloadButton.snp.trailing).priority(.required)
+            make.trailing.equalTo(toolset.settingsButton.snp.leading).priority(.required)
+            make.trailing.greaterThanOrEqualTo(deleteButton.snp.leading).inset(-UIConstants.layout.urlBarMargin)
             make.height.equalTo(48).priority(.required)
             make.top.bottom.equalTo(self).inset(UIConstants.layout.urlBarMargin)
 
@@ -263,7 +265,7 @@ class URLBar: UIView {
         }
 
         toolset.settingsButton.snp.makeConstraints { make in
-            make.trailing.equalTo(safeAreaLayoutGuide)
+            make.trailing.equalTo(deleteButton.snp.leading)
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
         }
@@ -272,13 +274,15 @@ class URLBar: UIView {
             make.centerY.equalTo(self)
 
             preActivationConstraints.append(contentsOf: [
-                make.leading.equalTo(urlTextContainer.snp.trailing).inset(-UIConstants.layout.urlBarMargin).constraint,
+                make.leading.greaterThanOrEqualTo(urlTextContainer.snp.trailing).inset(-UIConstants.layout.urlBarMargin).constraint,
+                make.leading.equalTo(toolset.settingsButton.snp.trailing).constraint,
                 make.trailing.equalToSuperview().constraint,
             ])
 
             postActivationConstraints.append(contentsOf: [
                 make.width.greaterThanOrEqualTo(deleteButton).constraint,
-                make.leading.equalTo(urlTextContainer.snp.trailing).inset(-UIConstants.layout.urlBarMargin).constraint,
+                make.leading.greaterThanOrEqualTo(urlTextContainer.snp.trailing).inset(-UIConstants.layout.urlBarMargin).constraint,
+                make.leading.equalTo(toolset.settingsButton.snp.trailing).constraint,
                 make.trailing.equalToSuperview().inset(UIConstants.layout.urlBarMargin).constraint,
             ])
         }
@@ -510,7 +514,10 @@ class URLBar: UIView {
                 // Shrink the URL text background in from the outer URL bar.
                 self.urlBarBackgroundView.alpha = 1
                 self.urlTextContainer.snp.remakeConstraints { make in
-                    make.leading.equalTo(self.shieldIcon.snp.trailing).inset(-UIConstants.layout.urlBarMargin)
+                    make.leading.greaterThanOrEqualTo(self.shieldIcon.snp.trailing).inset(-UIConstants.layout.urlBarMargin)
+                    make.leading.equalTo(self.toolset.stopReloadButton.snp.trailing).priority(.required)
+                    make.trailing.equalTo(self.toolset.settingsButton.snp.leading).priority(.required)
+                    make.trailing.greaterThanOrEqualTo(self.deleteButton.snp.leading).inset(-UIConstants.layout.urlBarMargin)
                     make.height.equalTo(48).priority(.required)
                     make.top.bottom.equalTo(self).inset(UIConstants.layout.urlBarMargin)
                     make.width.equalTo(self).priority(500)
@@ -552,7 +559,10 @@ class URLBar: UIView {
 
                 // Redesign URL bar border
                 self.urlTextContainer.snp.remakeConstraints { make in
-                    make.leading.equalTo(self.shieldIcon.snp.trailing).inset(-UIConstants.layout.urlBarMargin)
+                    make.leading.greaterThanOrEqualTo(self.shieldIcon.snp.trailing).inset(-UIConstants.layout.urlBarMargin)
+                    make.leading.equalTo(self.toolset.stopReloadButton.snp.trailing).priority(.required)
+                    make.trailing.equalTo(self.toolset.settingsButton.snp.leading).priority(.required)
+                    make.trailing.greaterThanOrEqualTo(self.deleteButton.snp.leading).inset(-UIConstants.layout.urlBarMargin)
                     make.height.equalTo(42).priority(.required)
                     make.top.bottom.equalTo(self).inset(UIConstants.layout.urlBarMargin)
                     make.width.equalTo(self).priority(500)
