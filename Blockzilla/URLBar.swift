@@ -59,7 +59,7 @@ class URLBar: UIView {
     override var canBecomeFirstResponder: Bool {
         return true
     }
-    
+
     convenience init() {
         self.init(frame: CGRect.zero)
         
@@ -497,11 +497,9 @@ class URLBar: UIView {
                 
                 // Shrink the URL text background in from the outer URL bar.
                 self.urlBarBackgroundView.alpha = 1
-                
                 self.urlBarBackgroundView.snp.remakeConstraints { make in
                     make.edges.equalToSuperview().inset(4)
                 }
-                
                 self.urlBarBorderView.backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.1)
                 self.urlBarBackgroundView.backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
             }
@@ -537,7 +535,6 @@ class URLBar: UIView {
                 self.urlBarBackgroundView.snp.remakeConstraints { make in
                     make.edges.equalToSuperview().inset(1)
                 }
-                
                 self.urlBarBorderView.backgroundColor = UIConstants.Photon.Grey90.withAlphaComponent(0.2)
                 self.urlBarBackgroundView.backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
             }
