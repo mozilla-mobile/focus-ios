@@ -128,7 +128,7 @@ class BrowserViewController: UIViewController {
 
         webViewController.delegate = self
 
-        let background = GradientBackgroundView(alpha: 0.7, startPoint: CGPoint.zero, endPoint: CGPoint(x: 1, y: 1))
+        let background = GradientBackgroundView(alpha: 0.7, startPoint: CGPoint.zero, endPoint: CGPoint(x: 1, y: 1), background: UIConstants.Photon.Ink80)
         mainContainerView.addSubview(background)
 
         mainContainerView.addSubview(homeViewContainer)
@@ -358,12 +358,12 @@ class BrowserViewController: UIViewController {
                 urlBarTopConstraint,
                 make.leading.trailing.bottom.equalTo(urlBarContainer).constraint
             ]
-
+            
             // Initial centered constraints, which will effectively be deactivated when
             // the top constraints are active because of their reduced priorities.
             make.centerX.equalToSuperview().priority(.required)
-            make.leading.equalTo(mainContainerView.safeAreaLayoutGuide).offset(8).priority(.medium)
-            make.trailing.equalTo(mainContainerView.safeAreaLayoutGuide).offset(-8).priority(.medium)
+            make.leading.equalTo(mainContainerView.safeAreaLayoutGuide).priority(.medium)
+            make.trailing.equalTo(mainContainerView.safeAreaLayoutGuide).priority(.medium)
             make.top.equalTo(homeView).priority(500)
         }
         topURLBarConstraints.forEach { $0.deactivate() }

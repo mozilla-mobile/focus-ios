@@ -8,14 +8,14 @@ import SnapKit
 class BrowserToolbar: UIView {
     let toolset = BrowserToolset()
     private let backgroundDark = GradientBackgroundView()
-    private let backgroundBright = GradientBackgroundView(alpha: 0.2)
+    private let backgroundBright = GradientBackgroundView(alpha: 0.2, background: UIConstants.Photon.Ink80)
     private let stackView = UIStackView()
 
     init() {
         super.init(frame: CGRect.zero)
 
         let background = UIView()
-        background.alpha = 0.9
+        background.alpha = 0.95
         background.backgroundColor = UIConstants.colors.background
         addSubview(background)
 
