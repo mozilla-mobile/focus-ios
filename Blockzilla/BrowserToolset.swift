@@ -26,7 +26,6 @@ class BrowserToolset {
         backButton.setImage(#imageLiteral(resourceName: "icon_back_active"), for: .normal)
         backButton.setImage(#imageLiteral(resourceName: "icon_back_active").alpha(0.4), for: .disabled)
         backButton.addTarget(self, action: #selector(didPressBack), for: .touchUpInside)
-        backButton.alpha = UIConstants.layout.browserToolbarDisabledOpacity
         backButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         backButton.accessibilityLabel = UIConstants.strings.browserBack
         backButton.isEnabled = false
@@ -35,14 +34,13 @@ class BrowserToolset {
         forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active"), for: .normal)
         forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active").alpha(0.4), for: .disabled)
         forwardButton.addTarget(self, action: #selector(didPressForward), for: .touchUpInside)
-        forwardButton.alpha = UIConstants.layout.browserToolbarDisabledOpacity
         forwardButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         forwardButton.accessibilityLabel = UIConstants.strings.browserForward
         forwardButton.isEnabled = false
 
         stopReloadButton.tintColor = UIConstants.colors.toolbarButtonNormal
-        stopReloadButton.setImage(#imageLiteral(resourceName: "icon_stop_menu"), for: .normal)
-        stopReloadButton.setImage(#imageLiteral(resourceName: "icon_stop_menu").alpha(0.4), for: .disabled)
+        stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu"), for: .normal)
+        stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu").alpha(0.4), for: .disabled)
         stopReloadButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         let longPressGestureStopReloadButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressReload))
         stopReloadButton.addGestureRecognizer(longPressGestureStopReloadButton)
@@ -53,7 +51,7 @@ class BrowserToolset {
         settingsButton.addTarget(self, action: #selector(didPressSettings), for: .touchUpInside)
         settingsButton.accessibilityLabel = UIConstants.strings.browserSettings
         settingsButton.accessibilityIdentifier = "HomeView.settingsButton"
-        stopReloadButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
+        settingsButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         setHighlightWhatsNew(shouldHighlight: shouldShowWhatsNew())
     }
 

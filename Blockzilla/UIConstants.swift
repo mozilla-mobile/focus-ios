@@ -155,7 +155,7 @@ struct UIConstants {
         static let settingsOverlayButton = UIFont.systemFont(ofSize: 13)
         static let tableSectionHeader = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.semibold)
         static let toast = UIFont.systemFont(ofSize: 12)
-        static let urlText = UIFont.systemFont(ofSize: 15)
+        static let urlText = UIFont.systemFont(ofSize: 16)
         static let truncatedUrlText = UIFont.systemFont(ofSize: 12)
         static let settingsInputLabel = UIFont.systemFont(ofSize: 18)
         static let settingsDescriptionText = UIFont.systemFont(ofSize: 12)
@@ -187,6 +187,9 @@ struct UIConstants {
         static let urlBarShadowRadius: CGFloat = 2
         static let urlBarShadowOffset = CGSize(width: 0, height: 2)
         static let urlBarWidthInset: CGFloat = 8
+        static let urlBarBorderInset: CGFloat = 4
+        static let deleteButtonInset: CGFloat = -12
+        static let lockIconInset: Float = 4
     }
 
     struct strings {

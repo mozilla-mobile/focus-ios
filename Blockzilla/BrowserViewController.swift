@@ -358,7 +358,7 @@ class BrowserViewController: UIViewController {
                 urlBarTopConstraint,
                 make.leading.trailing.bottom.equalTo(urlBarContainer).constraint
             ]
-
+            
             // Initial centered constraints, which will effectively be deactivated when
             // the top constraints are active because of their reduced priorities.
             make.centerX.equalToSuperview().priority(.required)
@@ -457,7 +457,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    fileprivate func resetBrowser(hidePreviousSession: Bool = false) {
+    func resetBrowser(hidePreviousSession: Bool = false) {
         
         // Used when biometrics fail and the previous session should be obscured
         if hidePreviousSession {
