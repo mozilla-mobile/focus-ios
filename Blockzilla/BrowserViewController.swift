@@ -128,7 +128,7 @@ class BrowserViewController: UIViewController {
 
         webViewController.delegate = self
 
-        let background = GradientBackgroundView(alpha: 0.7, startPoint: CGPoint.zero, endPoint: CGPoint(x: 1, y: 1))
+        let background = GradientBackgroundView(alpha: 0.7, startPoint: CGPoint.zero, endPoint: CGPoint(x: 1, y: 1), background: UIConstants.Photon.Ink80)
         mainContainerView.addSubview(background)
 
         mainContainerView.addSubview(homeViewContainer)
@@ -228,7 +228,12 @@ class BrowserViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(true, animated: animated)
         
-        homeView?.setHighlightWhatsNew(shouldHighlight: shouldShowWhatsNew())
+        if let homeViewToolset = homeView?.toolbar.toolset {
+            homeViewToolset.setHighlightWhatsNew(shouldHighlight: homeViewToolset.shouldShowWhatsNew())
+            homeView?.toolbar.layoutIfNeeded()
+        }
+        browserToolbar.toolset.setHighlightWhatsNew(shouldHighlight: browserToolbar.toolset.shouldShowWhatsNew())
+        browserToolbar.layoutIfNeeded()
         
         super.viewWillAppear(animated)
     }
@@ -249,7 +254,7 @@ class BrowserViewController: UIViewController {
         self.context.localizedCancelTitle = UIConstants.strings.newSessionFromBiometricFailure
 
         // Register for foreground notification to check biometric authentication
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidBecomeActive, object: nil, queue: nil) { notification in
+        NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: nil) { notification in
             var biometricError: NSError?
 
             // Check if user is already in a cleared session, or doesn't have biometrics enabled in settings
@@ -286,9 +291,9 @@ class BrowserViewController: UIViewController {
     }
 
     private func containWebView() {
-        addChildViewController(webViewController)
+        addChild(webViewController)
         webViewContainer.addSubview(webViewController.view)
-        webViewController.didMove(toParentViewController: self)
+        webViewController.didMove(toParent: self)
 
         webViewController.view.snp.makeConstraints { make in
             make.edges.equalTo(webViewContainer.snp.edges)
@@ -296,9 +301,9 @@ class BrowserViewController: UIViewController {
     }
 
     private func containTrackingProtectionSummary() {
-        addChildViewController(trackingProtectionSummaryController)
+        addChild(trackingProtectionSummaryController)
         drawerContainerView.addSubview(trackingProtectionSummaryController.view)
-        trackingProtectionSummaryController.didMove(toParentViewController: self)
+        trackingProtectionSummaryController.didMove(toParent: self)
 
         trackingProtectionSummaryController.view.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -308,6 +313,7 @@ class BrowserViewController: UIViewController {
     private func createHomeView() {
         let homeView = HomeView()
         homeView.delegate = self
+        homeView.toolbar.toolset.delegate = self
         homeViewContainer.addSubview(homeView)
 
         homeView.snp.makeConstraints { make in
@@ -352,14 +358,13 @@ class BrowserViewController: UIViewController {
                 urlBarTopConstraint,
                 make.leading.trailing.bottom.equalTo(urlBarContainer).constraint
             ]
-
+            
             // Initial centered constraints, which will effectively be deactivated when
             // the top constraints are active because of their reduced priorities.
-            make.leading.equalTo(mainContainerView.safeAreaLayoutGuide).priority(500)
+            make.centerX.equalToSuperview().priority(.required)
+            make.leading.equalTo(mainContainerView.safeAreaLayoutGuide).priority(.medium)
+            make.trailing.equalTo(mainContainerView.safeAreaLayoutGuide).priority(.medium)
             make.top.equalTo(homeView).priority(500)
-
-            // Note: this padding here is in addition to the 8px that’s already applied for the Cancel action
-            make.trailing.equalTo(homeView.settingsButton.snp.leading).offset(-8).priority(500)
         }
         topURLBarConstraints.forEach { $0.deactivate() }
     }
@@ -452,7 +457,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    fileprivate func resetBrowser(hidePreviousSession: Bool = false) {
+    func resetBrowser(hidePreviousSession: Bool = false) {
         
         // Used when biometrics fail and the previous session should be obscured
         if hidePreviousSession {
@@ -557,7 +562,7 @@ class BrowserViewController: UIViewController {
         
         urlBar.shouldPresent = false
         
-        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: self)
+        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset)
         
         let settingsNavController = UINavigationController(rootViewController: settingsViewController)
         settingsNavController.modalPresentationStyle = .formSheet
@@ -991,16 +996,6 @@ extension BrowserViewController: BrowserToolsetDelegate {
         webViewController.stop()
     }
 
-    func browserToolsetDidPressSend(_ browserToolset: BrowserToolset) {
-        guard let url = webViewController.url else { return }
-        
-        let shareExtensionHelper = OpenUtils(url: url, webViewController: webViewController)
-        let controller = shareExtensionHelper.buildShareViewController(url: url, title: webViewController.title, printFormatter: webViewController.printFormatter, anchor: browserToolset.sendButton)
-
-        updateFindInPageVisibility(visible: false)
-        present(controller, animated: true, completion: nil)
-    }
-
     func browserToolsetDidPressSettings(_ browserToolbar: BrowserToolset) {
         updateFindInPageVisibility(visible: false)
         showSettings()
@@ -1008,9 +1003,6 @@ extension BrowserViewController: BrowserToolsetDelegate {
 }
 
 extension BrowserViewController: HomeViewDelegate {
-    func homeViewDidPressSettings(homeView: HomeView) {
-        showSettings()
-    }
     
     func shareTrackerStatsButtonTapped() {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.share, object: TelemetryEventObject.trackerStatsShareButton)
@@ -1291,18 +1283,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
 protocol WhatsNewDelegate {
     func shouldShowWhatsNew() -> Bool
     func didShowWhatsNew() -> Void
-}
-
-extension BrowserViewController: WhatsNewDelegate {
-    func shouldShowWhatsNew() -> Bool {
-        let counter = UserDefaults.standard.integer(forKey: AppDelegate.prefWhatsNewCounter)
-        return counter != 0
-    }
-    
-    func didShowWhatsNew() {
-        UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
-        UserDefaults.standard.removeObject(forKey: AppDelegate.prefWhatsNewCounter)
-    }
 }
 
 extension BrowserViewController: TrackingProtectionSummaryDelegate {

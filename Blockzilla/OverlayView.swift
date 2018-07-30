@@ -41,6 +41,7 @@ class OverlayView: UIView {
         searchBorder.isHidden = true
         searchBorder.alpha = 0
         searchBorder.backgroundColor = UIConstants.colors.settingsButtonBorder
+        searchButton.backgroundColor = UIConstants.Photon.Ink80
         addSubview(searchBorder)
         searchButton.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
@@ -65,7 +66,9 @@ class OverlayView: UIView {
         addSubview(findInPageButton)
         
         findInPageBorder.isHidden = true
+        findInPageButton.isHidden = true
         findInPageBorder.backgroundColor = UIConstants.colors.copyButtonBorder
+        findInPageButton.backgroundColor = UIConstants.Photon.Ink80
         addSubview(findInPageBorder)
         
         findInPageButton.snp.makeConstraints { make in
@@ -91,6 +94,7 @@ class OverlayView: UIView {
         addSubview(copyButton)
         
         copyBorder.backgroundColor = UIConstants.colors.copyButtonBorder
+        copyButton.backgroundColor = UIConstants.Photon.Ink80
         addSubview(copyBorder)
         
         copyButton.snp.makeConstraints { make in
@@ -137,9 +141,9 @@ class OverlayView: UIView {
      */
     func getAttributedButtonTitle(phrase: String,
                                   localizedStringFormat: String) -> NSAttributedString {
-        let attributedString = NSMutableAttributedString(string: localizedStringFormat, attributes: [NSAttributedStringKey.foregroundColor: UIColor.white])
-        let phraseString = NSAttributedString(string: phrase, attributes: [NSAttributedStringKey.font: UIConstants.fonts.copyButtonQuery,
-                                                                           NSAttributedStringKey.foregroundColor: UIColor.white])
+        let attributedString = NSMutableAttributedString(string: localizedStringFormat, attributes: [.foregroundColor: UIConstants.Photon.Grey10])
+        let phraseString = NSAttributedString(string: phrase, attributes: [.font: UIConstants.fonts.copyButtonQuery,
+                                                                           .foregroundColor: UIConstants.Photon.Grey10])
 
         guard let range = attributedString.string.range(of: "%@") else { return phraseString }
 
@@ -166,7 +170,10 @@ class OverlayView: UIView {
         UIPasteboard.general.urlAsync() { handoffUrl in
             DispatchQueue.main.async {
                 if let url = handoffUrl, url.isWebPage() {
-                    self.copyButton.setAttributedTitle(NSAttributedString(string: String(format: UIConstants.strings.linkYouCopied, url.absoluteString), attributes: [NSAttributedStringKey.foregroundColor: UIColor.white]), for: .normal)
+                    let attributedTitle = NSMutableAttributedString(string: UIConstants.strings.linkYouCopied, attributes: [.foregroundColor : UIConstants.Photon.Grey10])
+                    let attributedCopiedUrl = NSMutableAttributedString(string: url.absoluteString, attributes: [.font: UIConstants.fonts.copyButtonQuery, .foregroundColor : UIConstants.Photon.Grey10])
+                    attributedTitle.append(attributedCopiedUrl)
+                    self.copyButton.setAttributedTitle(attributedTitle, for: .normal)
                     showCopyButton = url.isWebPage()
                 }
                 
@@ -211,6 +218,7 @@ class OverlayView: UIView {
             copyButton.isHidden = true
             copyBorder.isHidden = true
         }
+        layoutIfNeeded()
     }
 
     @objc private func didPressSearch() {
