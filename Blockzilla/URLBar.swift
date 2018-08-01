@@ -226,7 +226,7 @@ class URLBar: UIView {
 
             hideShieldConstraints.append(contentsOf:[
                 make.width.equalTo(0).constraint
-                ])
+            ])
         }
 
         textAndLockContainer.snp.makeConstraints { make in
