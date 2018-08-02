@@ -467,9 +467,8 @@ class BrowserViewController: UIViewController {
         }
         
         // Screenshot the browser, showing the screenshot on top.
-        guard let screenshotView = view.snapshotView(afterScreenUpdates: true) else {
-            return
-        }
+        let screenshotView = view.snapshotView(afterScreenUpdates: true) ?? UIView()
+        
         mainContainerView.addSubview(screenshotView)
         screenshotView.snp.makeConstraints { make in
             make.edges.equalTo(mainContainerView)
