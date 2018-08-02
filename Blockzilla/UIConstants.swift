@@ -56,7 +56,7 @@ struct UIConstants {
         static let urlTextBackground = UIColor(white: 1, alpha: 0.2)
         static let urlTextFont = UIColor.white
         static let urlTextHighlight = UIColor(rgb: 0xB5007F)
-        static let urlTextPlaceholder = UIColor(white: 1, alpha: 0.4)
+        static let urlTextPlaceholder = UIConstants.Photon.Grey10.withAlphaComponent(0.4)
         static let urlTextShadow = UIColor.black
 
         static let inputPlaceholder = UIColor(rgb: 0xb2b2b2)
@@ -155,7 +155,7 @@ struct UIConstants {
         static let settingsOverlayButton = UIFont.systemFont(ofSize: 13)
         static let tableSectionHeader = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.semibold)
         static let toast = UIFont.systemFont(ofSize: 12)
-        static let urlText = UIFont.systemFont(ofSize: 15)
+        static let urlText = UIFont.systemFont(ofSize: 16)
         static let truncatedUrlText = UIFont.systemFont(ofSize: 12)
         static let settingsInputLabel = UIFont.systemFont(ofSize: 18)
         static let settingsDescriptionText = UIFont.systemFont(ofSize: 12)
@@ -167,6 +167,8 @@ struct UIConstants {
         static let browserToolbarHeight: CGFloat = 44
         static let copyButtonAnimationDuration: TimeInterval = 0.1
         static let deleteAnimationDuration: TimeInterval = 0.15
+        static let alphaToZeroDeleteAnimationDuration: TimeInterval = deleteAnimationDuration * (2 / 3)
+        static let displayKeyboardDeleteAnimationDuration: TimeInterval = deleteAnimationDuration * (1 / 3)
         static let lockIconInset: Float = 4
         static let navigationDoneOffset: Float = -10
         static let overlayAnimationDuration: TimeInterval = 0.25
@@ -177,7 +179,7 @@ struct UIConstants {
         static let toastDuration: TimeInterval = 1.5
         static let toolbarFadeAnimationDuration = 0.25
         static let toolbarButtonInsets = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
-        static let urlBarCornerRadius: CGFloat = 2
+        static let urlBarCornerRadius: CGFloat = 4
         static let urlBarHeight: CGFloat = 54
         static let collapsedUrlBarHeight: CGFloat = 22
         static let urlBarTransitionAnimationDuration: TimeInterval = 0.2
@@ -187,6 +189,8 @@ struct UIConstants {
         static let urlBarShadowRadius: CGFloat = 2
         static let urlBarShadowOffset = CGSize(width: 0, height: 2)
         static let urlBarWidthInset: CGFloat = 8
+        static let urlBarBorderInset: CGFloat = 4
+        static let deleteButtonInset: CGFloat = -12
     }
 
     struct strings {

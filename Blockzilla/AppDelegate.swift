@@ -5,8 +5,21 @@
 import UIKit
 import Telemetry
 
-protocol AppSplashController {
-    var splashView: UIView { get }
+@UIApplicationMain
+class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
+    
+    // This enum can be expanded to support all new shortcuts added to menu.
+    enum ShortcutIdentifier: String {
+        case EraseAndOpen
+        init?(fullIdentifier: String) {
+            guard let shortIdentifier = fullIdentifier.components(separatedBy: ".").last else {
+                return nil
+            }
+            self.init(rawValue: shortIdentifier)
+        }
+    }
+    
+    var window: UIWindow?
 
     func toggleSplashView(hide: Bool)
 }
@@ -19,17 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppSplashController {
     static let prefWhatsNewCounter = "WhatsNewCounter"
     static var needsAuthenticated = false
 
-    var window: UIWindow?
-
-    var splashView: UIView = UIView()
-    private lazy var browserViewController = {
-        BrowserViewController(appSplashController: self)
-    }()
-
-    private var queuedUrl: URL?
-    private var queuedString: String?
-
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         if AppInfo.testRequestsReset() {
             if let bundleID = Bundle.main.bundleIdentifier {
                 UserDefaults.standard.removePersistentDomain(forName: bundleID)
@@ -56,8 +59,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppSplashController {
 
         window = UIWindow(frame: UIScreen.main.bounds)
 
-        let rootViewController = UINavigationController(rootViewController: browserViewController)
-        window?.rootViewController = rootViewController
+        browserViewController.modalDelegate = self
+        window?.rootViewController = browserViewController
         window?.makeKeyAndVisible()
 
         WebCacheUtils.reset()
@@ -72,7 +75,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppSplashController {
 
         if AppInfo.isTesting() {
             let firstRunViewController = IntroViewController()
-            rootViewController.present(firstRunViewController, animated: false, completion: nil)
+            self.browserViewController.present(firstRunViewController, animated: false, completion: nil)
             return true
         }
         
@@ -83,7 +86,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppSplashController {
                 // Set the prefIntroVersion viewed number in the same context as the presentation.
                 UserDefaults.standard.set(AppDelegate.prefIntroVersion, forKey: AppDelegate.prefIntroDone)
                 UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
-                rootViewController.present(IntroViewController(), animated: false, completion: nil)
+                self.browserViewController.present(IntroViewController(), animated: false, completion: nil)
             }
         }
         
@@ -105,7 +108,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppSplashController {
         return true
     }
 
-    func application(_ application: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+    func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             return false
         }
@@ -148,6 +151,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppSplashController {
             }
         }
 
+        return true
+    }
+    
+    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: (Bool) -> Void) {
+        
+        completionHandler(handleShortcut(shortcutItem: shortcutItem))
+    }
+    
+    private func handleShortcut(shortcutItem: UIApplicationShortcutItem) -> Bool {
+        let shortcutType = shortcutItem.type
+        guard let shortcutIdentifier = ShortcutIdentifier(fullIdentifier: shortcutType) else {
+            return false
+        }
+        switch shortcutIdentifier {
+        case .EraseAndOpen:
+            browserViewController.resetBrowser(hidePreviousSession: true)
+        }
         return true
     }
 
@@ -194,10 +214,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppSplashController {
         }
 
         let animationDuration = 0.25
-        UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIViewAnimationOptions(), animations: {
+        UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIView.AnimationOptions(), animations: {
             logoImage.layer.transform = CATransform3DMakeScale(0.8, 0.8, 1.0)
         }, completion: { success in
-            UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIViewAnimationOptions(), animations: {
+            UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIView.AnimationOptions(), animations: {
                 splashView.alpha = 0
                 logoImage.layer.transform = CATransform3DMakeScale(2.0, 2.0, 1.0)
             }, completion: { success in
@@ -328,6 +348,13 @@ extension AppDelegate {
         #endif
     }
     
+    func presentModal(viewController: UIViewController, animated: Bool) {
+        window?.rootViewController?.present(viewController, animated: animated, completion: nil)
+    }
+}
+
+protocol ModalDelegate {
+    func presentModal(viewController: UIViewController, animated: Bool)
 }
 
 extension UINavigationController {
