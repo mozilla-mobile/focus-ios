@@ -468,6 +468,7 @@ class BrowserViewController: UIViewController {
         
         // Screenshot the browser, showing the screenshot on top.
         let screenshotView = view.snapshotView(afterScreenUpdates: true) ?? UIView()
+        
         mainContainerView.addSubview(screenshotView)
         screenshotView.snp.makeConstraints { make in
             make.edges.equalTo(mainContainerView)
@@ -482,7 +483,7 @@ class BrowserViewController: UIViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + UIConstants.layout.displayKeyboardDeleteAnimationDuration) {
             self.urlBar.activateTextField()
         }
-
+        
         UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, animations: {
             screenshotView.snp.remakeConstraints { make in
                 make.centerX.equalTo(self.mainContainerView)
