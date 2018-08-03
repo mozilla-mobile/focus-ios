@@ -110,10 +110,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         }
 
-        static func getSections(deviceHasBiometrics: Bool) -> [Section] {
+        static func getSections() -> [Section] {
             return [.privacy, .search, integration, .mozilla]
         }
     }
+    
+    
 
     enum BiometryType {
         enum Status {
@@ -167,7 +169,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     private var highlightsButton: UIBarButtonItem?
     private let whatsNew: WhatsNewDelegate
     private lazy var sections = {
-        Section.getSections(deviceHasBiometrics: biometryType.hasBiometry)
+        Section.getSections()
     }()
 
     private var toggles = [Int : BlockerToggle]()
@@ -182,7 +184,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let usageDataSubtitle = String(format: UIConstants.strings.detailTextSendUsageData, AppInfo.productName)
         let usageDataToggle = BlockerToggle(label: UIConstants.strings.labelSendAnonymousUsageData, setting: SettingsToggle.sendAnonymousUsageData, subtitle: usageDataSubtitle)
         let safariToggle = BlockerToggle(label: UIConstants.strings.toggleSafari, setting: SettingsToggle.safari)
-        if let biometricToggle = createBiometricLoginToggle() {
+        if let biometricToggle = createBiometricLoginToggleIfAvailable() {
             return [
                 1: blockFontsToggle,
                 2: biometricToggle,
@@ -284,7 +286,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         return .lightContent
     }
     
-    fileprivate func createBiometricLoginToggle() -> BlockerToggle? {
+    fileprivate func createBiometricLoginToggleIfAvailable() -> BlockerToggle? {
         guard biometryType.hasBiometry else { return nil }
         
         let label: String
@@ -544,19 +546,5 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 extension SettingsViewController: SearchSettingsViewControllerDelegate {
     func searchSettingsViewController(_ searchSettingsViewController: SearchSettingsViewController, didSelectEngine engine: SearchEngine) {
         (tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? SettingsTableViewSearchCell)?.accessoryLabelText = engine.name
-    }
-}
-
-class BlockerToggle {
-    let toggle = UISwitch()
-    let label: String
-    let setting: SettingsToggle
-    let subtitle: String?
-
-    init(label: String, setting: SettingsToggle, subtitle: String? = nil) {
-        self.label = label
-        self.setting = setting
-        self.subtitle = subtitle
-        toggle.accessibilityIdentifier = "BlockerToggle.\(setting.rawValue)"
     }
 }
