@@ -39,6 +39,7 @@ class URLBar: UIView {
     private let shieldIcon = TrackingProtectionBadge()
     private let lockIcon = UIImageView(image: #imageLiteral(resourceName: "icon_https"))
     private let smallLockIcon = UIImageView(image: #imageLiteral(resourceName: "icon_https_small"))
+    private let pageActionsButton = InsetButton()
     private let urlBarBorderView = UIView()
     private let urlBarBackgroundView = UIView()
     private let textAndLockContainer = UIView()
@@ -50,6 +51,7 @@ class URLBar: UIView {
     private var hideShieldConstraints = [Constraint]()
     private var hideLockConstraints = [Constraint]()
     private var hideSmallLockConstraints = [Constraint]()
+    private var hidePageActionsConstraints = [Constraint]()
     private var hideToolsetConstraints = [Constraint]()
     private var showToolsetConstraints = [Constraint]()
     private var isEditingConstraints = [Constraint]()
@@ -110,6 +112,15 @@ class URLBar: UIView {
         lockIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         lockIcon.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         textAndLockContainer.addSubview(lockIcon)
+        
+        pageActionsButton.isHidden = true
+        pageActionsButton.alpha = 0
+        pageActionsButton.setImage(#imageLiteral(resourceName: "icon_page_action"), for: .normal)
+        pageActionsButton.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        pageActionsButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        pageActionsButton.addTarget(self, action: #selector(didPressPageActions), for: .touchUpInside)
+        pageActionsButton.accessibilityIdentifier = "URLBar.pageActionsButton"
+        textAndLockContainer.addSubview(pageActionsButton)
 
         smallLockIcon.alpha = 0
         smallLockIcon.contentMode = .center
@@ -192,6 +203,13 @@ class URLBar: UIView {
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
         }
+        
+        toolset.settingsButton.snp.makeConstraints { make in
+            showToolsetConstraints.append(make.trailing.equalTo(deleteButton.snp.leading).constraint)
+            hideToolsetConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide).constraint)
+            make.centerY.equalTo(self)
+            make.size.equalTo(toolset.backButton)
+        }
 
         toolset.stopReloadButton.snp.makeConstraints { make in
             make.trailing.equalTo(toolset.settingsButton.snp.leading)
@@ -203,7 +221,7 @@ class URLBar: UIView {
             make.leading.equalTo(shieldIcon.snp.trailing).offset(UIConstants.layout.urlBarMargin)
 
             hideToolsetConstraints.append(make.trailing.equalTo(deleteButton.snp.leading).offset(-UIConstants.layout.urlBarMargin).constraint)
-            showToolsetConstraints.append(make.trailing.equalTo(toolset.stopReloadButton.snp.leading).inset(UIConstants.layout.urlBarMargin).constraint)
+            showToolsetConstraints.append(make.trailing.equalTo(toolset.stopReloadButton.snp.leading).inset(UIConstants.layout.urlBarMargin).priority(.required).constraint)
 
             make.height.equalTo(42).priority(.medium)
 
@@ -235,6 +253,16 @@ class URLBar: UIView {
             centeredURLConstraints.append(make.centerX.equalToSuperview().constraint)
             fullWidthURLTextConstraints.append(make.trailing.equalToSuperview().constraint)
         }
+        
+        pageActionsButton.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.trailing.equalTo(textAndLockContainer).inset(UIConstants.layout.urlBarIconInset).priority(.required)
+            make.width.equalTo(24).priority(900)
+            
+            hidePageActionsConstraints.append(contentsOf:[
+                make.size.equalTo(0).constraint
+                ])
+        }
 
         lockIcon.snp.makeConstraints { make in
             make.top.bottom.equalTo(textAndLockContainer)
@@ -253,12 +281,12 @@ class URLBar: UIView {
         }
 
         urlText.snp.makeConstraints { make in
-            make.top.bottom.trailing.equalTo(textAndLockContainer)
+            make.top.bottom.equalToSuperview()
+            make.trailing.equalTo(pageActionsButton.snp.leading)
         }
 
         toolset.settingsButton.snp.makeConstraints { make in
             showToolsetConstraints.append(make.trailing.greaterThanOrEqualTo(deleteButton.snp.leading).constraint)
-            showToolsetConstraints.append(make.leading.equalTo(toolset.settingsButton.snp.trailing).priority(.required).constraint)
             hideToolsetConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide).constraint)
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
@@ -363,7 +391,7 @@ class URLBar: UIView {
             if !urlText.isEditing {
                 setTextToURL()
                 updateLockIcon()
-                updateShieldIcon()
+                updateUrlIcons()
             }
         }
     }
@@ -445,17 +473,20 @@ class URLBar: UIView {
         }
     }
 
-    private func updateShieldIcon() {
+    private func updateUrlIcons() {
         let visible = !isEditing && url != nil
         let duration = UIConstants.layout.urlBarTransitionAnimationDuration / 2
 
+        pageActionsButton.animateHidden(!visible, duration: duration)
         shieldIcon.animateHidden(!visible, duration: duration)
         self.layoutIfNeeded()
 
         UIView.animate(withDuration: duration) {
             if visible {
+                self.hidePageActionsConstraints.forEach { $0.deactivate() }
                 self.hideShieldConstraints.forEach { $0.deactivate() }
             } else {
+                self.hidePageActionsConstraints.forEach { $0.activate() }
                 self.hideShieldConstraints.forEach { $0.activate() }
             }
             self.layoutIfNeeded()
@@ -473,7 +504,7 @@ class URLBar: UIView {
         isEditing = true
         shouldPresent = false
         updateLockIcon()
-        updateShieldIcon()
+        updateUrlIcons()
         toolset.settingsButton.isEnabled = true
         delegate?.urlBarDidFocus(self)
 
@@ -507,7 +538,7 @@ class URLBar: UIView {
 
         isEditing = false
         updateLockIcon()
-        updateShieldIcon()
+        updateUrlIcons()
         let _ = urlText.resignFirstResponder()
         setTextToURL()
         delegate?.urlBarDidDismiss(self)
@@ -600,6 +631,10 @@ class URLBar: UIView {
         })
 
         delegate?.urlBarDidDeactivate(self)
+    }
+    
+    @objc private func didPressPageActions() {
+        // TODO
     }
 
     fileprivate func setTextToURL() {

@@ -467,8 +467,8 @@ class BrowserViewController: UIViewController {
         }
         
         // Screenshot the browser, showing the screenshot on top.
-        let screenshotView = view.snapshotView(afterScreenUpdates: true) ?? UIView()
-        
+        let image = mainContainerView.screenshot()
+        let screenshotView = UIImageView(image: image)
         mainContainerView.addSubview(screenshotView)
         screenshotView.snp.makeConstraints { make in
             make.edges.equalTo(mainContainerView)
@@ -476,26 +476,26 @@ class BrowserViewController: UIViewController {
 
         clearBrowser()
         
-        UIView.animate(withDuration: UIConstants.layout.alphaToZeroDeleteAnimationDuration, animations: {
-            screenshotView.alpha = 0
-        }, completion: nil)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + UIConstants.layout.displayKeyboardDeleteAnimationDuration) {
-            self.urlBar.activateTextField()
-        }
-        
-        UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, animations: {
+        UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, delay: 0, options: .curveEaseInOut, animations: {
             screenshotView.snp.remakeConstraints { make in
-                make.centerX.equalTo(self.mainContainerView)
-                make.top.equalTo(self.mainContainerView.snp.bottom)
+                make.center.equalTo(self.mainContainerView)
                 make.size.equalTo(self.mainContainerView).multipliedBy(0.9)
             }
-            screenshotView.alpha = 0
             self.mainContainerView.layoutIfNeeded()
         }, completion: { _ in
-            self.urlBar.activateTextField()
-            Toast(text: UIConstants.strings.eraseMessage).show()
-            screenshotView.removeFromSuperview()
+            UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, animations: {
+                screenshotView.snp.remakeConstraints { make in
+                    make.centerX.equalTo(self.mainContainerView)
+                    make.top.equalTo(self.mainContainerView.snp.bottom)
+                    make.size.equalTo(self.mainContainerView).multipliedBy(0.9)
+                }
+                screenshotView.alpha = 0
+                self.mainContainerView.layoutIfNeeded()
+            }, completion: { _ in
+                self.urlBar.activateTextField()
+                Toast(text: UIConstants.strings.eraseMessage).show()
+                screenshotView.removeFromSuperview()
+            })
         })
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.eraseButton)
@@ -701,10 +701,21 @@ class BrowserViewController: UIViewController {
     }
 
     private func toggleURLBarBackground(isBright: Bool) {
-        if case .on = trackingProtectionStatus {
-            urlBarContainer.isBright = isBright
+        if urlBar.isEditing {
+            urlBarContainer.color = .editing
+        } else if case .on = trackingProtectionStatus {
+            urlBarContainer.color = .bright
         } else {
-            urlBarContainer.isBright = false
+            urlBarContainer.color = .dark
+        }
+    }
+    
+    private func toggleToolbarBackground() {
+        switch trackingProtectionStatus {
+        case .off:
+            browserToolbar.color = .dark
+        case .on:
+            browserToolbar.color = .bright
         }
     }
     
@@ -1083,7 +1094,7 @@ extension BrowserViewController: WebControllerDelegate {
     
     func webControllerDidStartNavigation(_ controller: WebController) {
         urlBar.isLoading = true
-        browserToolbar.isLoading = true
+        browserToolbar.color = .loading
         toggleURLBarBackground(isBright: false)
         showToolbars()
         
@@ -1097,7 +1108,7 @@ extension BrowserViewController: WebControllerDelegate {
             urlBar.url = webViewController.url
         }
         urlBar.isLoading = false
-        browserToolbar.isLoading = false
+        toggleToolbarBackground()
         toggleURLBarBackground(isBright: !urlBar.isEditing)
         urlBar.progressBar.hideProgressBar()
     }
@@ -1105,8 +1116,8 @@ extension BrowserViewController: WebControllerDelegate {
     func webController(_ controller: WebController, didFailNavigationWithError error: Error) {
         urlBar.url = webViewController.url
         urlBar.isLoading = false
-        browserToolbar.isLoading = false
         toggleURLBarBackground(isBright: true)
+        toggleToolbarBackground()
         urlBar.progressBar.hideProgressBar()
     }
 
