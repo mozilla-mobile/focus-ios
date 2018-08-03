@@ -177,8 +177,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     private var initialToggles : [Int : BlockerToggle]  {
         let blockFontsToggle = BlockerToggle(label: UIConstants.strings.labelBlockFonts, setting: SettingsToggle.blockFonts)
         let toggle = blockFontsToggle.toggle
-        toggle.onTintColor = UIConstants.colors.toggleOn
-        toggle.tintColor = UIConstants.colors.toggleOff
         toggle.addTarget(self, action: #selector(toggleSwitched(_:)), for: .valueChanged)
         toggle.isOn = Settings.getToggle(blockFontsToggle.setting)
         let usageDataSubtitle = String(format: UIConstants.strings.detailTextSendUsageData, AppInfo.productName)
@@ -258,7 +256,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         for (i, blockerToggle) in toggles {
             let toggle = blockerToggle.toggle
             toggle.onTintColor = UIConstants.colors.toggleOn
-            toggle.tintColor = UIConstants.colors.toggleOff
             toggle.addTarget(self, action: #selector(toggleSwitched(_:)), for: .valueChanged)
             toggle.isOn = Settings.getToggle(blockerToggle.setting)
             toggles[i] = blockerToggle

@@ -15,5 +15,7 @@ class BlockerToggle {
         self.setting = setting
         self.subtitle = subtitle
         toggle.accessibilityIdentifier = "BlockerToggle.\(setting.rawValue)"
+        toggle.onTintColor = UIConstants.colors.toggleOn
+        toggle.tintColor = UIConstants.colors.toggleOff
     }
 }
