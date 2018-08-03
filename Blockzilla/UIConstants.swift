@@ -269,6 +269,7 @@ struct UIConstants {
         static let learnMore = NSLocalizedString("Settings.learnMore", value: "Learn more.", comment: "Subtitle for Send Anonymous Usage Data toggle on main screen")
         static let toggleSectionPrivacy = NSLocalizedString("Settings.privacyTitle", value: "PRIVACY & SECURITY", comment: "Section label for privacy toggles")
         static let toggleSafari = NSLocalizedString("Settings.toggleSafariIntegration", value: "Safari Integration", comment: "Safari toggle label on settings screen")
+        static let headerMozilla = NSLocalizedString("Settings.toggleMozilla", value: "MOZILLA", comment: "Header title for about Mozilla section")
         static let urlBarCancel = NSLocalizedString("URL.cancelLabel", value: "Cancel", comment: "Label for cancel button shown when entering a URL or search")
         static let urlTextPlaceholder = NSLocalizedString("URL.placeholderText", value: "Search or enter address", comment: "Placeholder text shown in the URL bar before the user navigates to a page")
         static let shareMenuOpenInFocus = NSLocalizedString("ShareMenu.OpenInFocus", value: "Open in %@", comment: "Text for the share menu option when a user wants to open a page in Focus.")

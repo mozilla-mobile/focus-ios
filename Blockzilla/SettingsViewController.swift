@@ -105,6 +105,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             switch self {
             case .search: return UIConstants.strings.settingsSearchTitle
             case .privacy: return UIConstants.strings.toggleSectionPrivacy
+            case .mozilla: return UIConstants.strings.headerMozilla
             default: return nil
             }
         }
@@ -430,7 +431,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         var groupingOffset = 16
         
-        if sections[section] == .search {
+        if sections[section] == .search || sections[section] == .mozilla {
             groupingOffset = 3
         }
 
