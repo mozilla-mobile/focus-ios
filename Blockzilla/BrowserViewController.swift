@@ -19,6 +19,7 @@ class BrowserViewController: UIViewController {
     private let mainContainerView = UIView(frame: .zero)
     private let drawerContainerView = DrawerView(frame: .zero)
     private let drawerOverlayView = UIView()
+    let darkView = UIView()
     
     private let webViewController = WebViewController()
     private let webViewContainer = UIView()
@@ -95,6 +96,14 @@ class BrowserViewController: UIViewController {
         setupBiometrics()
         view.addSubview(mainContainerView)
         view.addSubview(drawerContainerView)
+        
+        darkView.isHidden = true
+        darkView.backgroundColor = UIConstants.Photon.Ink80
+        darkView.alpha = 0.4
+        view.addSubview(darkView)
+        darkView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
 
         drawerOverlayView.backgroundColor = UIColor(white: 0, alpha: 0.8)
         drawerOverlayView.layer.opacity = 0
@@ -701,10 +710,21 @@ class BrowserViewController: UIViewController {
     }
 
     private func toggleURLBarBackground(isBright: Bool) {
-        if case .on = trackingProtectionStatus {
-            urlBarContainer.isBright = isBright
+        if urlBar.isEditing {
+            urlBarContainer.color = .editing
+        } else if case .on = trackingProtectionStatus {
+            urlBarContainer.color = .bright
         } else {
-            urlBarContainer.isBright = false
+            urlBarContainer.color = .dark
+        }
+    }
+    
+    private func toggleToolbarBackground() {
+        switch trackingProtectionStatus {
+        case .off:
+            browserToolbar.color = .dark
+        case .on:
+            browserToolbar.color = .bright
         }
     }
     
@@ -958,6 +978,32 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidTapShield(_ urlBar: URLBar) {
         showDrawer()
     }
+    
+    func urlBarDidLongPress(_ urlBar: URLBar) {
+        let customURLItem = PhotonActionSheetItem(title: UIConstants.strings.customURLMenuButton, iconString: "icon_link") { action in
+            urlBar.addCustomURL()
+        }
+        let copyItem = PhotonActionSheetItem(title: UIConstants.strings.copyMenuButton, iconString: "icon_link") { action in
+            urlBar.copyToClipboard()
+        }
+        let pasteItem = PhotonActionSheetItem(title: UIConstants.strings.urlPaste, iconString: "icon_paste") { action in
+            urlBar.paste()
+        }
+        let pasteAndGoItem = PhotonActionSheetItem(title: UIConstants.strings.urlPasteAndGo, iconString: "icon_paste") { action in
+            urlBar.pasteAndGo()
+        }
+        let urlContextMenu = PhotonActionSheet(actions: [[customURLItem], [pasteAndGoItem, pasteItem, copyItem]], style: .overCurrentContext)
+        urlContextMenu.modalPresentationStyle = .overCurrentContext
+        urlContextMenu.delegate = self
+        darkView.isHidden = false
+        present(urlContextMenu, animated: true, completion: nil)
+    }
+}
+
+extension BrowserViewController: PhotonActionSheetTransitionDelegate {
+    func photonActionSheetDidDismiss() {
+        darkView.isHidden = true
+    }
 }
 
 extension BrowserViewController: BrowserToolsetDelegate {
@@ -1083,7 +1129,7 @@ extension BrowserViewController: WebControllerDelegate {
     
     func webControllerDidStartNavigation(_ controller: WebController) {
         urlBar.isLoading = true
-        browserToolbar.isLoading = true
+        browserToolbar.color = .loading
         toggleURLBarBackground(isBright: false)
         showToolbars()
         
@@ -1097,7 +1143,7 @@ extension BrowserViewController: WebControllerDelegate {
             urlBar.url = webViewController.url
         }
         urlBar.isLoading = false
-        browserToolbar.isLoading = false
+        toggleToolbarBackground()
         toggleURLBarBackground(isBright: !urlBar.isEditing)
         urlBar.progressBar.hideProgressBar()
     }
@@ -1105,8 +1151,8 @@ extension BrowserViewController: WebControllerDelegate {
     func webController(_ controller: WebController, didFailNavigationWithError error: Error) {
         urlBar.url = webViewController.url
         urlBar.isLoading = false
-        browserToolbar.isLoading = false
         toggleURLBarBackground(isBright: true)
+        toggleToolbarBackground()
         urlBar.progressBar.hideProgressBar()
     }
 
