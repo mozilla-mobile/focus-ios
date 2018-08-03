@@ -18,7 +18,7 @@ protocol URLBarDelegate: class {
     func urlBarDidDismiss(_ urlBar: URLBar)
     func urlBarDidPressDelete(_ urlBar: URLBar)
     func urlBarDidTapShield(_ urlBar: URLBar)
-    func urlBarDidLongPressUrl(_ urlBar: URLBar)
+    func urlBarDidLongPress(_ urlBar: URLBar)
 }
 
 class URLBar: UIView {
@@ -645,9 +645,9 @@ class URLBar: UIView {
         delegate?.urlBarDidTapShield(self)
     }
     
-    @objc func urlBarDidLongPressUrl(sender: UILongPressGestureRecognizer) {
+    @objc func urlBarDidLongPress(sender: UILongPressGestureRecognizer) {
         if sender.state == .began {
-            delegate?.urlBarDidLongPressUrl(self)
+            delegate?.urlBarDidLongPress(self)
         }
     }
 

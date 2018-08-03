@@ -968,7 +968,7 @@ extension BrowserViewController: URLBarDelegate {
         showDrawer()
     }
     
-    func urlBarDidLongPressUrl(_ urlBar: URLBar) {
+    func urlBarDidLongPress(_ urlBar: URLBar) {
         let customURLItem = PhotonActionSheetItem(title: UIConstants.strings.customURLMenuButton, iconString: "icon_link") { action in
             urlBar.addCustomURL()
         }
@@ -994,7 +994,6 @@ extension BrowserViewController: PhotonActionSheetTransitionDelegate {
         darkView.isHidden = true
     }
 }
-
 
 extension BrowserViewController: BrowserToolsetDelegate {
     func browserToolsetDidLongPressReload(_ browserToolbar: BrowserToolset) {
