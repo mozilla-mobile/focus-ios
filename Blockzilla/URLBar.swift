@@ -18,6 +18,7 @@ protocol URLBarDelegate: class {
     func urlBarDidDismiss(_ urlBar: URLBar)
     func urlBarDidPressDelete(_ urlBar: URLBar)
     func urlBarDidTapShield(_ urlBar: URLBar)
+    func urlBarDidLongPressUrl(_ urlBar: URLBar)
 }
 
 class URLBar: UIView {
@@ -69,7 +70,7 @@ class URLBar: UIView {
         singleTap.numberOfTapsRequired = 1
         addGestureRecognizer(singleTap)
 
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(displayURLContextMenu))
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(urlBarDidLongPressUrl))
         self.addGestureRecognizer(longPress)
         
         addSubview(toolset.backButton)
@@ -370,17 +371,6 @@ class URLBar: UIView {
         urlText.becomeFirstResponder()
     }
     
-    @objc private func displayURLContextMenu(sender: UILongPressGestureRecognizer) {
-        if sender.state == .began {
-            self.becomeFirstResponder()
-            let customURLItem = UIMenuItem(title: UIConstants.strings.customURLMenuButton, action: #selector(addCustomURL))
-            let copyItem = UIMenuItem(title: UIConstants.strings.copyMenuButton, action: #selector(copyToClipboard))
-            UIMenuController.shared.setTargetRect(self.bounds, in: self)
-            UIMenuController.shared.menuItems = [copyItem, customURLItem]
-            UIMenuController.shared.setMenuVisible(true, animated: true)
-        }
-    }
-    
     @objc func addCustomURL() {
         guard let url = self.url else { return }
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.quickAddCustomDomainButton)
@@ -391,12 +381,22 @@ class URLBar: UIView {
         UIPasteboard.general.string = self.urlText.text ?? ""
     }
     
+    @objc func paste() {
+        if let clipboardString = UIPasteboard.general.string {
+            present()
+            urlText.text = clipboardString
+            activateTextField()
+        }
+    }
+    
     @objc func pasteAndGo() {
-        present()
-        delegate?.urlBarDidActivate(self)
-        delegate?.urlBar(self, didSubmitText: UIPasteboard.general.string!)
-
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.pasteAndGo)
+        if let clipboardString = UIPasteboard.general.string {
+            present()
+            delegate?.urlBarDidActivate(self)
+            delegate?.urlBar(self, didSubmitText: clipboardString)
+            
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.pasteAndGo)
+        }
     }
 
     //Adds Menu Item
@@ -643,6 +643,12 @@ class URLBar: UIView {
 
     @objc private func didTapShieldIcon() {
         delegate?.urlBarDidTapShield(self)
+    }
+    
+    @objc func urlBarDidLongPressUrl(sender: UILongPressGestureRecognizer) {
+        if sender.state == .began {
+            delegate?.urlBarDidLongPressUrl(self)
+        }
     }
 
     private func deactivate() {
