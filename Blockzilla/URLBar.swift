@@ -19,6 +19,7 @@ protocol URLBarDelegate: class {
     func urlBarDidPressDelete(_ urlBar: URLBar)
     func urlBarDidTapShield(_ urlBar: URLBar)
     func urlBarDidLongPress(_ urlBar: URLBar)
+    func urlBarDidPressPageActions(_ urlBar: URLBar)
 }
 
 class URLBar: UIView {
@@ -68,7 +69,7 @@ class URLBar: UIView {
         singleTap.numberOfTapsRequired = 1
         addGestureRecognizer(singleTap)
 
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(urlBarDidLongPressUrl))
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(urlBarDidLongPress))
         self.addGestureRecognizer(longPress)
         
         addSubview(toolset.backButton)
@@ -640,7 +641,7 @@ class URLBar: UIView {
     }
     
     @objc private func didPressPageActions() {
-        // TODO
+        delegate?.urlBarDidPressPageActions(self)
     }
 
     fileprivate func setTextToURL() {
