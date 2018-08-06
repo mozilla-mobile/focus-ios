@@ -16,14 +16,6 @@ class OpenUtils: NSObject {
         self.selectedURL = url
         self.webViewController = webViewController
     }
-    
-    var canOpenInFirefox: Bool {
-        return app.canOpenURL(URL(string: "firefox://")!)
-    }
-
-    var canOpenInChrome: Bool {
-        return app.canOpenURL(URL(string: "googlechrome://")!)
-    }
 
     func buildShareViewController(url: URL) -> UIActivityViewController {
         var activityItems: [Any] = [url]

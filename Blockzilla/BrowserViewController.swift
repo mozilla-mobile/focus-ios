@@ -1007,10 +1007,10 @@ extension BrowserViewController: URLBarDelegate {
             self.present(shareVC, animated: true, completion: nil)
         }
         var shareItems = [sharePageItem]
-        if utils.canOpenInFirefox {
+        if items.canOpenInFirefox {
             shareItems.append(items.openInFireFoxItem)
         }
-        if utils.canOpenInChrome {
+        if items.canOpenInChrome {
             shareItems.append(items.openInChromeItem)
         }
         shareItems.append(items.openInSafariItem)

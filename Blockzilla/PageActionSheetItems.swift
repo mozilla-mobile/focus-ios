@@ -14,6 +14,14 @@ class PageActionSheetItems {
         self.url = url
     }
     
+    var canOpenInFirefox: Bool {
+        return app.canOpenURL(URL(string: "firefox://")!)
+    }
+    
+    var canOpenInChrome: Bool {
+        return app.canOpenURL(URL(string: "googlechrome://")!)
+    }
+    
     lazy var openInFireFoxItem = PhotonActionSheetItem(title: UIConstants.strings.shareOpenInFirefox, iconString: "open_in_firefox_icon") { action in
         guard let escaped = self.url.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed),
             let firefoxURL = URL(string: "firefox://open-url?url=\(escaped)&private=true"),
