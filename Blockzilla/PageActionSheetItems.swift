@@ -52,6 +52,7 @@ class PageActionSheetItems {
     lazy var findInPageItem = PhotonActionSheetItem(title: UIConstants.strings.shareMenuFindInPage, iconString: "icon_searchfor") { action in
         NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: UIConstants.strings.findInPageNotification)))
     }
+    
     lazy var requestDesktopItem = PhotonActionSheetItem(title: UIConstants.strings.shareMenuRequestDesktop, iconString: "request_desktop_site_activity") { action in
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.requestDesktop)
         NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification)))
