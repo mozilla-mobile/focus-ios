@@ -10,13 +10,13 @@ import LocalAuthentication
 import StoreKit
 
 class BrowserViewController: UIViewController {
+    let appSplashController: AppSplashController
 
-    private var splashScreen: UIView?
     private var context = LAContext()
     private let mainContainerView = UIView(frame: .zero)
     let darkView = UIView()
     
-    private let webViewController = WebViewController()
+    private let webViewController = WebViewController(userAgent: UserAgent.shared)
     private let webViewContainer = UIView()
     
     var modalDelegate: ModalDelegate?
@@ -75,9 +75,15 @@ class BrowserViewController: UIViewController {
     static let userDefaultsShareTrackerStatsKeyOLD = "shareTrackerStats"
     static let userDefaultsShareTrackerStatsKeyNEW = "shareTrackerStatsNew"
 
-    convenience init() {
-        self.init(nibName: nil, bundle: nil)
+    init(appSplashController: AppSplashController) {
+        self.appSplashController = appSplashController
+        
+        super.init(nibName: nil, bundle: nil)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("BrowserViewController hasn't implemented init?(coder:)")
     }
     
     override func viewDidLoad() {
@@ -222,34 +228,32 @@ class BrowserViewController: UIViewController {
     }
     
     private func setupBiometrics() {
-        self.context.localizedReason = UIConstants.strings.biometricReason
-        self.context.localizedCancelTitle = UIConstants.strings.newSessionFromBiometricFailure
-
         // Register for foreground notification to check biometric authentication
         NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: nil) { notification in
             var biometricError: NSError?
 
             // Check if user is already in a cleared session, or doesn't have biometrics enabled in settings
             if  !Settings.getToggle(SettingsToggle.biometricLogin) || !AppDelegate.needsAuthenticated || self.webViewContainer.isHidden {
-                AppDelegate.splashView?.animateHidden(true, duration: 0.25)
+                self.appSplashController.toggleSplashView(hide: true)
                 return
             }
             AppDelegate.needsAuthenticated = false
 
             self.context = LAContext()
-            self.context.localizedReason = String(format: UIConstants.strings.biometricReason, AppInfo.productName)
+            self.context.localizedReason = String(format: UIConstants.strings.authenticationReason, AppInfo.productName)
             self.context.localizedCancelTitle = UIConstants.strings.newSessionFromBiometricFailure
 
-            if self.context.canEvaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, error: &biometricError) {
-                self.context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: self.context.localizedReason) {
+            if self.context.canEvaluatePolicy(LAPolicy.deviceOwnerAuthentication, error: &biometricError) {
+                self.context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: self.context.localizedReason) {
                     [unowned self] (success, _) in
                     DispatchQueue.main.async {
                         if success {
                             self.showToolbars()
-                            AppDelegate.splashView?.animateHidden(true, duration: 0.25)
+                            self.appSplashController.toggleSplashView(hide: true)
                         } else {
                             // Clear the browser session, as the user failed to authenticate
                             self.resetBrowser(hidePreviousSession: true)
+                            self.appSplashController.toggleSplashView(hide: true)
                         }
                     }
                 }
@@ -257,9 +261,20 @@ class BrowserViewController: UIViewController {
                 // Ran into an error with biometrics, so disable them and clear the browser:
                 Settings.set(false, forToggle: SettingsToggle.biometricLogin)
                 self.resetBrowser()
-                AppDelegate.splashView?.animateHidden(true, duration: 0.25)
+                self.appSplashController.toggleSplashView(hide: true)
             }
         }
+    }
+    
+    // These functions are used to handle displaying and hiding the keyboard after the splash view is animated
+    public func activateUrlBarOnHomeView() {
+        // If the home view is not displayed, nor the overlayView hidden do not activate the text field:
+        guard homeView != nil || !overlayView.isHidden else { return }
+        urlBar.activateTextField()
+    }
+    
+    public func deactivateUrlBarOnHomeView() {
+        urlBar.dismissTextField()
     }
 
     private func containWebView() {
@@ -566,35 +581,6 @@ class BrowserViewController: UIViewController {
     func openOverylay(text: String) {
         urlBar.activateTextField()
         urlBar.fillUrlBar(text: text)
-    }
-
-    private func hideSplashScreen() {
-        splashScreen?.removeFromSuperview()
-    }
-
-    private func displaySplashScreen() {
-        guard splashScreen == nil else { return }
-        
-        let splashView = UIView()
-        splashView.backgroundColor = UIConstants.colors.background
-        mainContainerView.addSubview(splashView)
-
-        let logoImage = UIImageView(image: AppInfo.config.wordmark)
-        splashView.addSubview(logoImage)
-
-        splashView.snp.makeConstraints { make in
-            make.edges.equalTo(mainContainerView)
-        }
-
-        logoImage.snp.makeConstraints { make in
-            make.center.equalTo(splashView)
-        }
-
-        view.layoutIfNeeded()
-        splashView.layoutIfNeeded()
-
-        splashScreen = splashView
-        hideToolbars()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
