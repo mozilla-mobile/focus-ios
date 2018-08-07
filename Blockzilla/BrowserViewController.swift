@@ -26,8 +26,6 @@ class BrowserViewController: UIViewController {
     
     var modalDelegate: ModalDelegate?
 
-    private let trackingProtectionSummaryController = TrackingProtectionSummaryViewController()
-
     fileprivate var keyboardState: KeyboardState?
     fileprivate let browserToolbar = BrowserToolbar()
     fileprivate var homeView: HomeView?
@@ -60,7 +58,7 @@ class BrowserViewController: UIViewController {
 
     private var trackingProtectionStatus: TrackingProtectionStatus = .on(TPPageStats()) {
         didSet {
-            trackingProtectionSummaryController.trackingProtectionStatus = trackingProtectionStatus
+//            trackingProtectionSummaryController.trackingProtectionStatus = trackingProtectionStatus
             urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus)
         }
     }
@@ -131,9 +129,6 @@ class BrowserViewController: UIViewController {
             self.drawerConstraint = make.leading.equalToSuperview().constraint
         }
         self.drawerConstraint.deactivate()
-
-        trackingProtectionSummaryController.delegate = self
-        containTrackingProtectionSummary()
 
         webViewController.delegate = self
 
@@ -309,16 +304,6 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    private func containTrackingProtectionSummary() {
-        addChild(trackingProtectionSummaryController)
-        drawerContainerView.addSubview(trackingProtectionSummaryController.view)
-        trackingProtectionSummaryController.didMove(toParent: self)
-
-        trackingProtectionSummaryController.view.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-    }
-
     private func createHomeView() {
         let homeView = HomeView()
         homeView.delegate = self
@@ -390,17 +375,6 @@ class BrowserViewController: UIViewController {
         Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.close, object: TelemetryEventObject.trackingProtectionDrawer))
     }
 
-    fileprivate func showDrawer() {
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .curveEaseIn, animations: {
-            self.drawerConstraint.activate()
-            self.drawerOverlayView.isHidden = false
-            self.drawerOverlayView.layer.opacity = 1
-            self.view.layoutIfNeeded()
-        }, completion: nil)
-
-        Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.trackingProtectionDrawer))
-    }
-    
     override func updateViewConstraints() {
         super.updateViewConstraints()
         alertStackView.snp.remakeConstraints { make in
@@ -976,7 +950,31 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidTapShield(_ urlBar: URLBar) {
-        showDrawer()
+        Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.trackingProtectionDrawer))
+        
+        switch trackingProtectionStatus {
+        case .on(let info):
+            let titleItem = PhotonActionSheetItem(title: UIConstants.strings.trackingProtectionLabel, iconString: "tracking_protection", isEnabled: true, accessory: .Switch)
+            let totalCount = PhotonActionSheetItem(title: UIConstants.strings.trackersBlocked, accessory: .Text, accessoryText: String(info.total), bold: true)
+            let adCount = PhotonActionSheetItem(title: UIConstants.strings.adTrackerLabel, accessory: .Text, accessoryText: String(info.adCount))
+            let analyticCount = PhotonActionSheetItem(title: UIConstants.strings.analyticTrackerLabel, accessory: .Text, accessoryText: String(info.analyticCount))
+            let socialCount = PhotonActionSheetItem(title: UIConstants.strings.socialTrackerLabel, accessory: .Text, accessoryText: String(info.socialCount))
+            let contentCount = PhotonActionSheetItem(title: UIConstants.strings.contentTrackerLabel, accessory: .Text, accessoryText: String(info.contentCount))
+            
+            let menuOn = PhotonActionSheet(actions: [[titleItem], [totalCount, adCount, analyticCount, socialCount, contentCount]], style: .overCurrentContext)
+            presentPhotonActionSheet(menuOn)
+            
+        case .off:
+            let titleItem = PhotonActionSheetItem(title: UIConstants.strings.trackingProtectionLabel, iconString: "tracking_protection_off", isEnabled: false, accessory: .Switch)
+            let totalCount = PhotonActionSheetItem(title: UIConstants.strings.trackersBlocked, accessory: .Text, accessoryText: "0", bold: true)
+            let adCount = PhotonActionSheetItem(title: UIConstants.strings.adTrackerLabel, accessory: .Text, accessoryText: "0", bold: true)
+            let analyticCount = PhotonActionSheetItem(title: UIConstants.strings.analyticTrackerLabel, accessory: .Text, accessoryText: "0", bold: true)
+            let socialCount = PhotonActionSheetItem(title: UIConstants.strings.socialTrackerLabel, accessory: .Text, accessoryText: "0", bold: true)
+            let contentCount = PhotonActionSheetItem(title: UIConstants.strings.contentTrackerLabel, accessory: .Text, accessoryText: "0", bold: true)
+            
+            let menuOff = PhotonActionSheet(actions: [[titleItem], [totalCount, adCount, analyticCount, socialCount, contentCount]], style: .overCurrentContext)
+            presentPhotonActionSheet(menuOff)
+        }
     }
     
     func urlBarDidLongPress(_ urlBar: URLBar) {
@@ -1025,7 +1023,8 @@ extension BrowserViewController: URLBarDelegate {
     }
 }
 
-extension BrowserViewController: PhotonActionSheetTransitionDelegate {
+extension BrowserViewController: PhotonActionSheetDelegate {
+    
     func presentPhotonActionSheet(_ actionSheet: PhotonActionSheet) {
         actionSheet.modalPresentationStyle = .overCurrentContext
         actionSheet.delegate = self
@@ -1034,6 +1033,19 @@ extension BrowserViewController: PhotonActionSheetTransitionDelegate {
     }
     func photonActionSheetDidDismiss() {
         darkView.isHidden = true
+    }
+    func photonActionSheetDidToggleProtection(enabled: Bool) {
+        if enabled {
+            webViewController.enableTrackingProtection()
+        } else {
+            webViewController.disableTrackingProtection()
+        }
+        
+        let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.trackingProtectionToggle)
+        telemetryEvent.addExtra(key: "to", value: enabled)
+        Telemetry.default.recordEvent(telemetryEvent)
+        
+        webViewController.reload()
     }
 }
 
@@ -1360,27 +1372,5 @@ extension BrowserViewController: KeyboardHelperDelegate {
 protocol WhatsNewDelegate {
     func shouldShowWhatsNew() -> Bool
     func didShowWhatsNew() -> Void
-}
-
-extension BrowserViewController: TrackingProtectionSummaryDelegate {
-    func trackingProtectionSummaryControllerDidTapClose(_ controller: TrackingProtectionSummaryViewController) {
-        hideDrawer()
-    }
-
-    func trackingProtectionSummaryControllerDidToggleTrackingProtection(_ enabled: Bool) {
-        if enabled {
-            webViewController.enableTrackingProtection()
-        } else {
-            webViewController.disableTrackingProtection()
-        }
-
-
-        let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.trackingProtectionToggle)
-        telemetryEvent.addExtra(key: "to", value: enabled)
-        Telemetry.default.recordEvent(telemetryEvent)
-
-        webViewController.reload()
-        hideDrawer()
-    }
 }
 
