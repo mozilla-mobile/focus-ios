@@ -1023,7 +1023,6 @@ extension BrowserViewController: URLBarDelegate {
 }
 
 extension BrowserViewController: PhotonActionSheetDelegate {
-    
     func presentPhotonActionSheet(_ actionSheet: PhotonActionSheet) {
         actionSheet.modalPresentationStyle = .overCurrentContext
         actionSheet.delegate = self
