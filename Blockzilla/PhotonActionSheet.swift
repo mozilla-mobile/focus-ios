@@ -230,7 +230,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
     }
     
-    @objc func dismiss(_ gestureRecognizer: UIGestureRecognizer?) {
+    @objc func dismiss(_ gestureRecognizer: UIGestureRecognizer? = nil) {
         delegate?.photonActionSheetDidDismiss()
         self.dismiss(animated: true, completion: nil)
     }
@@ -242,7 +242,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     
     @objc func didToggle(enabled: Bool) {
         delegate?.photonActionSheetDidToggleProtection(enabled: enabled)
-        dismiss(nil)
+        dismiss()
         delegate?.photonActionSheetDidDismiss()
     }
     
@@ -278,7 +278,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         var action = actions[indexPath.section][indexPath.row]
         guard let handler = action.handler else {
-            self.dismiss(nil)
+            self.dismiss()
             return
         }
         
