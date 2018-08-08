@@ -96,6 +96,7 @@ class BrowserViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("Browser VC loaded")
 
         setupBiometrics()
         view.addSubview(mainContainerView)
@@ -502,7 +503,9 @@ class BrowserViewController: UIViewController {
                 self.mainContainerView.layoutIfNeeded()
             }, completion: { _ in
                 self.urlBar.activateTextField()
-                Toast(text: UIConstants.strings.eraseMessage).show()
+                let eraseMessageToast = Toast(text: UIConstants.strings.eraseMessage)
+                eraseMessageToast.delegate = self
+                eraseMessageToast.show()
                 screenshotView.removeFromSuperview()
             })
         })
@@ -833,10 +836,14 @@ extension BrowserViewController: URLBarDelegate {
             break
         case .error(let error):
             guard !error.message.isEmpty else { return }
-            Toast(text: error.message).show()
+            let errorMessageToast = Toast(text: error.message)
+            errorMessageToast.delegate = self
+            errorMessageToast.show()
         case .success:
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.customDomain)
-            Toast(text: UIConstants.strings.autocompleteCustomURLAdded).show()
+            let successMessageToast = Toast(text: UIConstants.strings.autocompleteCustomURLAdded)
+            successMessageToast.delegate = self
+            successMessageToast.show()
         }
     }
     
@@ -1303,6 +1310,15 @@ extension BrowserViewController: TrackingProtectionSummaryDelegate {
 
         webViewController.reload()
         hideDrawer()
+    }
+}
+
+extension BrowserViewController: ToastDelegate {
+    func toastDidShow(_ toast: UIView) {
+        // Anchor toast top constraint under the urlBar in the BrowserViewController
+        toast.snp.makeConstraints { (make) in
+            make.top.equalTo(urlBar.snp.bottom).offset(8)
+        }
     }
 }
 

@@ -4,8 +4,13 @@
 
 import Foundation
 
+protocol ToastDelegate: class {
+    func toastDidShow(_ toast: UIView)
+}
+
 class Toast {
     private let text: String
+    weak var delegate: ToastDelegate?
 
     init(text: String) {
         self.text = text
@@ -30,9 +35,9 @@ class Toast {
         label.accessibilityIdentifier = "Toast.label"
         toast.addSubview(label)
 
+        delegate?.toastDidShow(toast)
+
         toast.snp.makeConstraints { make in
-            let bottomOffset = -(KeyboardHelper.defaultHelper.currentState?.intersectionHeightForView(view: window.rootViewController!.view) ?? 0.0)
-            make.bottom.equalTo(window).offset(-24 + bottomOffset)
             make.centerX.equalTo(window)
             make.leading.greaterThanOrEqualTo(window)
             make.trailing.lessThanOrEqualTo(window)
