@@ -96,8 +96,6 @@ class BrowserViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("Browser VC loaded")
-
         setupBiometrics()
         view.addSubview(mainContainerView)
         view.addSubview(drawerContainerView)
