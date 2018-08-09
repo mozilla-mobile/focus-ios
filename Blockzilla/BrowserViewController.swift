@@ -501,9 +501,7 @@ class BrowserViewController: UIViewController {
                 self.mainContainerView.layoutIfNeeded()
             }, completion: { _ in
                 self.urlBar.activateTextField()
-                let eraseMessageToast = Toast(text: UIConstants.strings.eraseMessage)
-                eraseMessageToast.delegate = self
-                eraseMessageToast.show()
+                Toast(text: UIConstants.strings.eraseMessage).show()
                 screenshotView.removeFromSuperview()
             })
         })
@@ -834,14 +832,10 @@ extension BrowserViewController: URLBarDelegate {
             break
         case .error(let error):
             guard !error.message.isEmpty else { return }
-            let errorMessageToast = Toast(text: error.message)
-            errorMessageToast.delegate = self
-            errorMessageToast.show()
+            Toast(text: error.message).show()
         case .success:
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.customDomain)
-            let successMessageToast = Toast(text: UIConstants.strings.autocompleteCustomURLAdded)
-            successMessageToast.delegate = self
-            successMessageToast.show()
+            Toast(text: UIConstants.strings.autocompleteCustomURLAdded).show()
         }
     }
     
@@ -1310,13 +1304,3 @@ extension BrowserViewController: TrackingProtectionSummaryDelegate {
         hideDrawer()
     }
 }
-
-extension BrowserViewController: ToastDelegate {
-    func toastDidShow(_ toast: UIView) {
-        // Anchor toast top constraint under the urlBar in the BrowserViewController
-        toast.snp.makeConstraints { (make) in
-            make.top.equalTo(urlBar.snp.bottom).offset(8)
-        }
-    }
-}
-

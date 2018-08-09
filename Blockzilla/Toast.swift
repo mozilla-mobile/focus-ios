@@ -4,13 +4,8 @@
 
 import Foundation
 
-protocol ToastDelegate: class {
-    func toastDidShow(_ toast: UIView)
-}
-
 class Toast {
     private let text: String
-    weak var delegate: ToastDelegate?
 
     init(text: String) {
         self.text = text
@@ -35,9 +30,9 @@ class Toast {
         label.accessibilityIdentifier = "Toast.label"
         toast.addSubview(label)
 
-        delegate?.toastDidShow(toast)
-
         toast.snp.makeConstraints { make in
+            let topOffset = UIConstants.layout.urlBarHeightInset + (UIConstants.layout.urlBarBorderInset * 2) + UIConstants.layout.urlBarHeight
+            make.top.equalTo(window.safeAreaLayoutGuide).offset(topOffset)
             make.centerX.equalTo(window)
             make.leading.greaterThanOrEqualTo(window)
             make.trailing.lessThanOrEqualTo(window)
