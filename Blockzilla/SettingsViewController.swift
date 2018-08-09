@@ -461,10 +461,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        var groupingOffset = 3
+        var groupingOffset = UIConstants.layout.settingsDefaultTitleOffset
         
         if sections[section] == .privacy {
-            groupingOffset = 16
+            groupingOffset = UIConstants.layout.settingsFirstTitleOffset
         }
 
         // Hack: We want the header view's margin to match the cells, so we create an empty
