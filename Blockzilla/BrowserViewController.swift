@@ -1305,3 +1305,4 @@ extension BrowserViewController: TrackingProtectionSummaryDelegate {
         hideDrawer()
     }
 }
+
