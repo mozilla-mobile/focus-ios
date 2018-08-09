@@ -920,10 +920,10 @@ extension BrowserViewController: URLBarDelegate {
         switch trackingProtectionStatus {
         case .on(let info):
             let menuOn = buildTrackingProtectionMenu(info: info)
-            presentPhotonActionSheet(menuOn)
+            presentPhotonActionSheet(menuOn, from: urlBar.shieldIcon)
         case .off:
             let menuOff = buildTrackingProtectionMenu(info: nil)
-            presentPhotonActionSheet(menuOff)
+            presentPhotonActionSheet(menuOff, from: urlBar.shieldIcon)
         }
     }
     
@@ -947,7 +947,7 @@ extension BrowserViewController: URLBarDelegate {
         }
         actions.append(copyItem)
         let urlContextMenu = PhotonActionSheet(actions: [[customURLItem], actions], style: .overCurrentContext)
-        presentPhotonActionSheet(urlContextMenu)
+        presentPhotonActionSheet(urlContextMenu, from: urlBar)
     }
     
     func urlBarDidPressPageActions(_ urlBar: URLBar) {
@@ -975,15 +975,22 @@ extension BrowserViewController: URLBarDelegate {
         
         let actionItems = [items.findInPageItem, items.requestDesktopItem]
         let pageActionsMenu = PhotonActionSheet(actions: [[titleItem], shareItems, actionItems], style: .overCurrentContext)
-        presentPhotonActionSheet(pageActionsMenu)
+        presentPhotonActionSheet(pageActionsMenu, from: urlBar.pageActionsButton)
     }
 }
 
 extension BrowserViewController: PhotonActionSheetDelegate {
-    func presentPhotonActionSheet(_ actionSheet: PhotonActionSheet) {
-        actionSheet.modalPresentationStyle = .overCurrentContext
+    func presentPhotonActionSheet(_ actionSheet: PhotonActionSheet, from sender: UIView) {
+        actionSheet.modalPresentationStyle = UIDevice.current.userInterfaceIdiom == .pad ? .popover : .overCurrentContext
         actionSheet.delegate = self
         darkView.isHidden = false
+        if let popoverVC = actionSheet.popoverPresentationController, actionSheet.modalPresentationStyle == .popover {
+            popoverVC.delegate = self
+            popoverVC.sourceView = sender
+            popoverVC.sourceRect = CGRect(x: sender.frame.width/2, y: sender.frame.size.height * 0.75, width: 1, height: 1)
+            popoverVC.permittedArrowDirections = .up
+            popoverVC.backgroundColor = UIConstants.Photon.Ink80
+        }
         present(actionSheet, animated: true, completion: nil)
     }
     func photonActionSheetDidDismiss() {
@@ -1318,6 +1325,13 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) { }
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) { }
+}
+
+extension BrowserViewController: UIPopoverPresentationControllerDelegate {
+    
+    func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
+        darkView.isHidden = true
+    }
 }
 
 protocol WhatsNewDelegate {
