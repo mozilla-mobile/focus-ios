@@ -187,7 +187,14 @@ class URLBar: UIView {
         progressBar.alpha = 0
         addSubview(progressBar)
 
-        let toolsetButtonWidthMultiplier = 0.03
+        var toolsetButtonWidthMultiplier : CGFloat {
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                return 0.04
+            }
+            else {
+                return 0.05
+            }
+        }
 
         toolset.backButton.snp.makeConstraints { make in
             make.leading.equalTo(safeAreaLayoutGuide)
@@ -222,7 +229,6 @@ class URLBar: UIView {
             make.leading.equalTo(shieldIcon.snp.trailing).offset(UIConstants.layout.urlBarMargin)
 
             make.trailing.equalTo(deleteButton.snp.leading).offset(-UIConstants.layout.urlBarMargin)
-//            showToolsetConstraints.append(make.trailing.equalTo(toolset.settingsButton.snp.leading).inset(UIConstants.layout.urlBarMargin).priority(.required).constraint)
 
             make.height.equalTo(42).priority(.medium)
 
@@ -238,7 +244,7 @@ class URLBar: UIView {
         shieldIcon.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
             hideToolsetConstraints.append(make.leading.equalToSuperview().inset(UIConstants.layout.urlBarMargin).constraint)
-            showToolsetConstraints.append(make.leading.equalTo(toolset.stopReloadButton.snp.trailing).constraint)
+            showToolsetConstraints.append(make.leading.equalTo(toolset.stopReloadButton.snp.trailing).offset(UIConstants.layout.urlBarToolsetOffset).constraint)
             make.width.equalTo(24).priority(900)
 
             hideShieldConstraints.append(contentsOf:[
@@ -297,9 +303,7 @@ class URLBar: UIView {
 
             isEditingConstraints.append(make.width.equalTo(0).constraint)
             hideToolsetConstraints.append(make.trailing.equalToSuperview().inset(UIConstants.layout.urlBarMargin).constraint)
-            showToolsetConstraints.append(make.trailing.greaterThanOrEqualTo(toolset.settingsButton.snp.leading).priority(.required).constraint)
-
-            
+            showToolsetConstraints.append(make.trailing.greaterThanOrEqualTo(toolset.settingsButton.snp.leading).offset(-UIConstants.layout.urlBarToolsetOffset).constraint)
         }
 
         progressBar.snp.makeConstraints { make in
