@@ -372,7 +372,7 @@ class URLBar: UIView {
     }
     
     @objc func copyToClipboard() {
-        UIPasteboard.general.string = self.urlText.text ?? ""
+        UIPasteboard.general.string = self.url?.absoluteString ?? ""
     }
     
     @objc func paste(clipboardString: String) {
@@ -565,9 +565,9 @@ class URLBar: UIView {
 
         self.layoutIfNeeded()
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
-            self.isEditingConstraints.forEach { $0.deactivate() }
 
             if self.inBrowsingMode {
+                self.isEditingConstraints.forEach { $0.deactivate() }
                 // Reveal the URL bar buttons on iPad/landscape.
                 self.updateToolsetConstraints()
 
@@ -658,7 +658,7 @@ class URLBar: UIView {
     }
 
     fileprivate func setTextToURL() {
-        var displayURL: String? = nil
+        var fullUrl: String? = nil
         var truncatedURL: String? = nil
 
         if let url = url {
@@ -666,11 +666,11 @@ class URLBar: UIView {
             var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
             components?.user = nil
             components?.password = nil
-            displayURL = components?.url?.absoluteString
+            fullUrl = components?.url?.absoluteString
             truncatedURL = components?.host
+            urlText.text = isEditing ? fullUrl : truncatedURL
+            truncatedUrlText.text = truncatedURL
         }
-        urlText.text = displayURL
-        truncatedUrlText.text = truncatedURL
     }
 
     func collapseUrlBar(expandAlpha: CGFloat, collapseAlpha: CGFloat) {
@@ -699,6 +699,8 @@ class URLBar: UIView {
 
 extension URLBar: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
+        
+        setTextToURL()
 
         autocompleteTextField.highlightAll()
         
