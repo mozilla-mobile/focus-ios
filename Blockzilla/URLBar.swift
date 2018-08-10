@@ -187,7 +187,7 @@ class URLBar: UIView {
         progressBar.alpha = 0
         addSubview(progressBar)
 
-        let toolsetButtonWidthMultiplier = 0.07
+        let toolsetButtonWidthMultiplier = 0.03
 
         toolset.backButton.snp.makeConstraints { make in
             make.leading.equalTo(safeAreaLayoutGuide)
@@ -207,14 +207,13 @@ class URLBar: UIView {
         }
         
         toolset.settingsButton.snp.makeConstraints { make in
-            showToolsetConstraints.append(make.trailing.equalTo(deleteButton.snp.leading).constraint)
-            hideToolsetConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide).constraint)
+            make.trailing.equalTo(safeAreaLayoutGuide)
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
         }
 
         toolset.stopReloadButton.snp.makeConstraints { make in
-            make.trailing.equalTo(toolset.settingsButton.snp.leading)
+            make.leading.equalTo(toolset.forwardButton.snp.trailing)
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
         }
@@ -222,8 +221,8 @@ class URLBar: UIView {
         urlBarBorderView.snp.makeConstraints { make in
             make.leading.equalTo(shieldIcon.snp.trailing).offset(UIConstants.layout.urlBarMargin)
 
-            hideToolsetConstraints.append(make.trailing.equalTo(deleteButton.snp.leading).offset(-UIConstants.layout.urlBarMargin).constraint)
-            showToolsetConstraints.append(make.trailing.equalTo(toolset.stopReloadButton.snp.leading).inset(UIConstants.layout.urlBarMargin).priority(.required).constraint)
+            make.trailing.equalTo(deleteButton.snp.leading).offset(-UIConstants.layout.urlBarMargin)
+//            showToolsetConstraints.append(make.trailing.equalTo(toolset.settingsButton.snp.leading).inset(UIConstants.layout.urlBarMargin).priority(.required).constraint)
 
             make.height.equalTo(42).priority(.medium)
 
@@ -239,7 +238,7 @@ class URLBar: UIView {
         shieldIcon.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
             hideToolsetConstraints.append(make.leading.equalToSuperview().inset(UIConstants.layout.urlBarMargin).constraint)
-            showToolsetConstraints.append(make.leading.equalTo(toolset.forwardButton.snp.trailing).constraint)
+            showToolsetConstraints.append(make.leading.equalTo(toolset.stopReloadButton.snp.trailing).constraint)
             make.width.equalTo(24).priority(900)
 
             hideShieldConstraints.append(contentsOf:[
@@ -288,8 +287,7 @@ class URLBar: UIView {
         }
 
         toolset.settingsButton.snp.makeConstraints { make in
-            showToolsetConstraints.append(make.trailing.greaterThanOrEqualTo(deleteButton.snp.leading).constraint)
-            hideToolsetConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide).constraint)
+            make.trailing.equalTo(safeAreaLayoutGuide)
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
         }
@@ -298,8 +296,10 @@ class URLBar: UIView {
             make.centerY.equalTo(self)
 
             isEditingConstraints.append(make.width.equalTo(0).constraint)
+            hideToolsetConstraints.append(make.trailing.equalToSuperview().inset(UIConstants.layout.urlBarMargin).constraint)
+            showToolsetConstraints.append(make.trailing.greaterThanOrEqualTo(toolset.settingsButton.snp.leading).priority(.required).constraint)
 
-            make.trailing.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
+            
         }
 
         progressBar.snp.makeConstraints { make in
