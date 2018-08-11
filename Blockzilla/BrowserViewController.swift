@@ -967,6 +967,10 @@ extension BrowserViewController: BrowserToolsetDelegate {
     }
     
     func browserToolsetDidPressBack(_ browserToolset: BrowserToolset) {
+<<<<<<< HEAD
+=======
+        urlBar.dismiss()
+>>>>>>> c19fb7e66c9fa788bfb234baafbbaaa3a01f742f
         SearchHistoryUtils.goBack()
         webViewController.goBack()
     }
