@@ -470,6 +470,8 @@ class URLBar: UIView {
     func fillUrlBar(text: String) {
         urlText.text = text
     }
+    
+    
 
     private func updateLockIcon() {
         let visible = !isEditing && (url?.scheme == "https")
@@ -662,7 +664,7 @@ class URLBar: UIView {
     }
 
     fileprivate func setTextToURL() {
-        var fullUrl: String? = nil
+        var displayText: String? = nil
         var truncatedURL: String? = nil
 
         if let url = url {
@@ -670,9 +672,13 @@ class URLBar: UIView {
             var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
             components?.user = nil
             components?.password = nil
-            fullUrl = components?.url?.absoluteString
+            
+            if let searchedText = SearchHistoryUtils.pullSearchFromStack(), searchedText != "" {
+                displayText = searchedText
+            }
+            
             truncatedURL = components?.host
-            urlText.text = isEditing ? fullUrl : truncatedURL
+            urlText.text = displayText
             truncatedUrlText.text = truncatedURL
         }
     }
