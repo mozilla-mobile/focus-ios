@@ -392,18 +392,18 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.detailTextLabel?.text = toggle.subtitle
                 cell.detailTextLabel?.numberOfLines = 0
                 cell.selectionStyle = .none
-//                if toggle.label == UIConstants.strings.labelSendAnonymousUsageData {
-//                    let selector = #selector(tappedLearnMoreFooter)
-//                    let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.toggleOn])
-//                    let space = NSAttributedString(string: " ", attributes: [.foregroundColor : UIConstants.colors.toggleOn])
-//                    guard let subtitle = toggle.subtitle else { return cell }
-//                    let attributedSubtitle = NSMutableAttributedString(string: subtitle)
-//                    attributedSubtitle.append(space)
-//                    attributedSubtitle.append(learnMore)
-//                    cell.detailTextLabel?.attributedText = attributedSubtitle
-//                    let tapGesture = UITapGestureRecognizer(target: self, action: selector)
-//                    cell.addGestureRecognizer(tapGesture)
-//                }
+                if toggle.label == UIConstants.strings.labelSendAnonymousUsageData {
+                    let selector = #selector(tappedLearnMoreFooter)
+                    let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.toggleOn])
+                    let space = NSAttributedString(string: " ", attributes: [.foregroundColor : UIConstants.colors.toggleOn])
+                    guard let subtitle = toggle.subtitle else { return cell }
+                    let attributedSubtitle = NSMutableAttributedString(string: subtitle)
+                    attributedSubtitle.append(space)
+                    attributedSubtitle.append(learnMore)
+                    cell.detailTextLabel?.attributedText = attributedSubtitle
+                    let tapGesture = UITapGestureRecognizer(target: self, action: selector)
+                    cell.addGestureRecognizer(tapGesture)
+                }
             }
         }
 
