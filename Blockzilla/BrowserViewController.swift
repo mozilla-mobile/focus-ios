@@ -474,7 +474,9 @@ class BrowserViewController: UIViewController {
             urlBar.activateTextField()
             return
         }
-        
+
+        UserDefaults.standard.set(nil, forKey: "searchedHistory")
+
         // Screenshot the browser, showing the screenshot on top.
         let image = mainContainerView.screenshot()
         let screenshotView = UIImageView(image: image)
@@ -600,7 +602,6 @@ class BrowserViewController: UIViewController {
                 browserToolbar.animateHidden(false, duration: UIConstants.layout.toolbarFadeAnimationDuration)
             }
         }
-
         webViewController.load(URLRequest(url: url))
     }
 
@@ -877,6 +878,10 @@ extension BrowserViewController: URLBarDelegate {
             return
         }
 
+        // Saving History Search to UserDefaults
+        SearchHistoryUtils.pushSearchToStack(with: text)
+        SearchHistoryUtils.isFromURLBar = true
+
         var url = URIFixup.getURL(entry: text)
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
@@ -889,11 +894,18 @@ extension BrowserViewController: URLBarDelegate {
             submit(url: urlBarURL)
             urlBar.url = urlBarURL
         }
+<<<<<<< HEAD
+<<<<<<< HEAD
         
         if let urlText = urlBar.url?.absoluteString {
             overlayView.currentURL = urlText
         }
         
+=======
+
+>>>>>>> Prototype the stack solution for searched values
+=======
+>>>>>>> Solution for when user click on url inside the webview
         urlBar.dismiss()
     }
 
@@ -955,10 +967,17 @@ extension BrowserViewController: BrowserToolsetDelegate {
     }
     
     func browserToolsetDidPressBack(_ browserToolset: BrowserToolset) {
+<<<<<<< HEAD
+=======
+        urlBar.dismiss()
+>>>>>>> c19fb7e66c9fa788bfb234baafbbaaa3a01f742f
+        SearchHistoryUtils.goBack()
         webViewController.goBack()
     }
 
     func browserToolsetDidPressForward(_ browserToolset: BrowserToolset) {
+        urlBar.dismiss()
+        SearchHistoryUtils.goFoward()
         webViewController.goForward()
     }
 
@@ -1035,7 +1054,7 @@ extension BrowserViewController: OverlayViewDelegate {
             urlBar.url = webViewController.url
             return
         }
-        
+
         var url = URIFixup.getURL(entry: text)
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
@@ -1069,6 +1088,12 @@ extension BrowserViewController: WebControllerDelegate {
     }
     
     func webControllerDidStartNavigation(_ controller: WebController) {
+
+        if (!SearchHistoryUtils.isFromURLBar && !SearchHistoryUtils.isNavigating) {
+            SearchHistoryUtils.pushSearchToStack(with: (urlBar.url?.absoluteString)!)
+        }
+        SearchHistoryUtils.isNavigating = false
+        SearchHistoryUtils.isFromURLBar = false
         urlBar.isLoading = true
         browserToolbar.isLoading = true
         toggleURLBarBackground(isBright: false)

@@ -474,6 +474,10 @@ class URLBar: UIView {
         urlText.text = text
     }
 
+    func retrieveUrlText() -> String {
+        return urlText.text!
+    }
+
     private func updateLockIcon() {
         let visible = !isEditing && (url?.scheme == "https")
         let duration = UIConstants.layout.urlBarTransitionAnimationDuration / 2
@@ -663,7 +667,9 @@ class URLBar: UIView {
             var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
             components?.user = nil
             components?.password = nil
-            displayURL = components?.url?.absoluteString
+            if let searchedText = SearchHistoryUtils.pullSearchFromStack(), searchedText != "" {
+                displayURL = searchedText
+            }
             truncatedURL = components?.host
         }
         urlText.text = displayURL
