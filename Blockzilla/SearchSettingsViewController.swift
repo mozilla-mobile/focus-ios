@@ -109,6 +109,7 @@ class SearchSettingsViewController: UITableViewController {
                 cell.selectionStyle = .none
                 cell.isUserInteractionEnabled = false
             }
+            
             return cell
         } else {
             let engine = engines[indexPath.item]
