@@ -107,8 +107,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             case .privacy: return UIConstants.strings.toggleSectionPrivacy
             case .search: return UIConstants.strings.settingsSearchTitle
             case .siri: return UIConstants.strings.siriShortcutsTitle
+            case .integration: return UIConstants.strings.toggleSectionIntegration
             case .mozilla: return UIConstants.strings.toggleSectionMozilla
-            default: return nil
             }
         }
 
