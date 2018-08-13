@@ -16,17 +16,13 @@ class BrowserToolbar: UIView {
         super.init(frame: CGRect.zero)
 
         let background = UIView()
-        background.alpha = 0.95
-        background.backgroundColor = UIConstants.colors.background
+        background.alpha = 1
+        background.backgroundColor = UIColor.clear
         addSubview(background)
 
         addSubview(backgroundLoading)
-        addSubview(backgroundDark)
-        
         backgroundDark.backgroundColor = UIConstants.Photon.Ink80
-
-        backgroundBright.isHidden = true
-        backgroundBright.alpha = 0
+        addSubview(backgroundDark)
         background.addSubview(backgroundBright)
 
         let borderView = UIView()
