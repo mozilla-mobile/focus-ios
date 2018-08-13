@@ -282,7 +282,7 @@ struct UIConstants {
         static let settingsTitle = NSLocalizedString("Settings.screenTitle", value: "Settings", comment: "Title for settings screen")
         static let settingsToggleOtherSubtitle = NSLocalizedString("Settings.toggleOtherSubtitle", value: "May break some videos and Web pages", comment: "Label subtitle for toggle on main screen")
         static let learnMore = NSLocalizedString("Settings.learnMore", value: "Learn more.", comment: "Subtitle for Send Anonymous Usage Data toggle on main screen")
-        static let toggleSectionIntegration = NSLocalizedString("Settings.sectionIntegration", value: "INTEGRATION", comment: "Label for Safari integration section")
+        static let toggleSectionIntegration = NSLocalizedString("Settings.safariTitle", value: "SAFARI INTEGRATION", comment: "Label for Safari integration section")
         static let toggleSectionMozilla = NSLocalizedString("Settings.sectionMozilla", value: "MOZILLA", comment: "Section label for Mozilla toggles")
         static let toggleSectionPerformance = NSLocalizedString("Settings.sectionPerformance", value: "PERFORMANCE", comment: "Section label for performance toggles")
         static let toggleSectionPrivacy = NSLocalizedString("Settings.sectionPrivacy", value: "PRIVACY", comment: "Section label for privacy toggles")
