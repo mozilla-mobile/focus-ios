@@ -254,7 +254,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         navigationItem.rightBarButtonItem = highlightsButton
         
         if whatsNew.shouldShowWhatsNew() {
-            highlightsButton?.tintColor = UIConstants.colors.settingsLink
+            highlightsButton?.tintColor = UIConstants.colors.whatsNew
         }
 
         view.addSubview(tableView)
@@ -397,8 +397,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.selectionStyle = .none
                 if toggle.label == UIConstants.strings.labelSendAnonymousUsageData {
                     let selector = #selector(tappedLearnMoreFooter)
-                    let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.toggleOn])
-                    let space = NSAttributedString(string: " ", attributes: [.foregroundColor : UIConstants.colors.toggleOn])
+                    let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.settingsLink])
+                    let space = NSAttributedString(string: " ", attributes: [:])
                     guard let subtitle = toggle.subtitle else { return cell }
                     let attributedSubtitle = NSMutableAttributedString(string: subtitle)
                     attributedSubtitle.append(space)

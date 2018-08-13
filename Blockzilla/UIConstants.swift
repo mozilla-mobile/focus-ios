@@ -46,7 +46,7 @@ struct UIConstants {
         static let settingsTextLabel = UIConstants.Photon.Grey10
         static let settingsDetailLabel = UIColor(rgb: 0xD8D8D8)
         static let settingsSeparator = UIConstants.Photon.Grey50
-        static let settingsLink = UIColor(rgb: 0x0A84FF)
+        static let settingsLink = UIConstants.Photon.Magenta60
         static let settingsDisabled = UIColor(rgb: 0xB2B2B2)
         static let tableSectionHeader = UIColor(rgb: 0x6D6D72)
         static let toastBackground = UIColor(rgb: 0x414146)
@@ -60,6 +60,7 @@ struct UIConstants {
         static let urlTextHighlight = UIColor(rgb: 0xB5007F)
         static let urlTextPlaceholder = UIConstants.Photon.Grey10.withAlphaComponent(0.4)
         static let urlTextShadow = UIColor.black
+        static let whatsNew = UIColor(rgb: 0x0A84FF)
 
         static let inputPlaceholder = UIColor(rgb: 0xb2b2b2)
 
