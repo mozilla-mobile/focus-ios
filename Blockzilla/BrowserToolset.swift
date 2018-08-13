@@ -24,7 +24,7 @@ class BrowserToolset {
     init() {
         backButton.tintColor = UIConstants.colors.toolbarButtonNormal
         backButton.setImage(#imageLiteral(resourceName: "icon_back_active"), for: .normal)
-        backButton.setImage(#imageLiteral(resourceName: "icon_back_active").alpha(0.4), for: .disabled)
+        backButton.setImage(#imageLiteral(resourceName: "icon_back_active").alpha(0.2), for: .disabled)
         backButton.addTarget(self, action: #selector(didPressBack), for: .touchUpInside)
         backButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         backButton.accessibilityLabel = UIConstants.strings.browserBack
@@ -32,7 +32,7 @@ class BrowserToolset {
 
         forwardButton.tintColor = UIConstants.colors.toolbarButtonNormal
         forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active"), for: .normal)
-        forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active").alpha(0.4), for: .disabled)
+        forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active").alpha(0.2), for: .disabled)
         forwardButton.addTarget(self, action: #selector(didPressForward), for: .touchUpInside)
         forwardButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         forwardButton.accessibilityLabel = UIConstants.strings.browserForward
@@ -40,7 +40,7 @@ class BrowserToolset {
 
         stopReloadButton.tintColor = UIConstants.colors.toolbarButtonNormal
         stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu"), for: .normal)
-        stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu").alpha(0.4), for: .disabled)
+        stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu").alpha(0.2), for: .disabled)
         stopReloadButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         let longPressGestureStopReloadButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressReload))
         stopReloadButton.addGestureRecognizer(longPressGestureStopReloadButton)
