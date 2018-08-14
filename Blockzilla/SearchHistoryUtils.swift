@@ -34,7 +34,7 @@ class SearchHistoryUtils {
         var currentStack = [textSearched]()
         
         if let propertylistSearchesRead = UserDefaults.standard.object(forKey: "searchedHistory") as? [[String:Any]] {
-            currentStack = propertylistSearchesRead.flatMap{ textSearched(dictionary: $0) }
+            currentStack = propertylistSearchesRead.compactMap{ textSearched(dictionary: $0) }
             
             for index in 0..<currentStack.count {
                 currentStack[index].isCurrentSearch = false
@@ -51,8 +51,7 @@ class SearchHistoryUtils {
         var currentStack = [textSearched]()
         if let propertylistSearchesRead = UserDefaults.standard.object(forKey: "searchedHistory") as? [[String:Any]] {
             
-            currentStack = propertylistSearchesRead.flatMap{ textSearched(dictionary: $0) }
-            
+            currentStack = propertylistSearchesRead.compactMap{ textSearched(dictionary: $0) }
             for search in currentStack {
                 if search.isCurrentSearch {
                     return search.text
@@ -60,16 +59,15 @@ class SearchHistoryUtils {
             }
         }
         
-        return ""
+        return nil
     }
-    
-    // go back
-    static func goFoward() {
+
+    static func goForward() {
         isNavigating = true
         var currentStack = [textSearched]()
         if let propertylistSearchesRead = UserDefaults.standard.object(forKey: "searchedHistory") as? [[String:Any]] {
             
-            currentStack = propertylistSearchesRead.flatMap{ textSearched(dictionary: $0) }
+            currentStack = propertylistSearchesRead.compactMap{ textSearched(dictionary: $0) }
             
             for index in 0..<currentStack.count {
                 if (currentStack[index].isCurrentSearch) {
@@ -83,14 +81,13 @@ class SearchHistoryUtils {
             UserDefaults.standard.set(propertylistSearchesWrite, forKey: "searchedHistory")
         }
     }
-    
-    // go foward
+
     static func goBack() {
         isNavigating = true
         var currentStack = [textSearched]()
         if let propertylistSearchesRead = UserDefaults.standard.object(forKey: "searchedHistory") as? [[String:Any]] {
             
-            currentStack = propertylistSearchesRead.flatMap{ textSearched(dictionary: $0) }
+            currentStack = propertylistSearchesRead.compactMap{ textSearched(dictionary: $0) }
             
             for index in 0..<currentStack.count {
                 if (currentStack[index].isCurrentSearch) {

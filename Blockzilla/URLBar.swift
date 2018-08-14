@@ -470,8 +470,6 @@ class URLBar: UIView {
     func fillUrlBar(text: String) {
         urlText.text = text
     }
-    
-    
 
     private func updateLockIcon() {
         let visible = !isEditing && (url?.scheme == "https")
@@ -664,21 +662,24 @@ class URLBar: UIView {
     }
 
     fileprivate func setTextToURL() {
-        var displayText: String? = nil
+        var fullUrl: String? = nil
         var truncatedURL: String? = nil
-
+        var displayText: String? = nil
+        
         if let url = url {
             // Strip the username/password to prevent domain spoofing.
             var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
             components?.user = nil
             components?.password = nil
-            
-            if let searchedText = SearchHistoryUtils.pullSearchFromStack(), searchedText != "" {
-                displayText = searchedText
-            }
-            
+            fullUrl = components?.url?.absoluteString
             truncatedURL = components?.host
-            urlText.text = displayText
+
+            if let stackValue = SearchHistoryUtils.pullSearchFromStack(), !stackValue.hasPrefix("http://") && !stackValue.hasPrefix("https://") {
+                displayText = stackValue
+            } else {
+                displayText = truncatedURL
+            }
+            urlText.text = isEditing ? fullUrl : displayText
             truncatedUrlText.text = truncatedURL
         }
     }

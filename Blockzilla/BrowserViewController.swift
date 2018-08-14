@@ -1037,7 +1037,7 @@ extension BrowserViewController: BrowserToolsetDelegate {
     }
 
     func browserToolsetDidPressForward(_ browserToolset: BrowserToolset) {
-        SearchHistoryUtils.goFoward()
+        SearchHistoryUtils.goForward()
         webViewController.goForward()
     }
 
