@@ -96,20 +96,6 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = UITableViewCell()
         cell.backgroundColor = UIConstants.colors.backgroundColor
-
-        // Hack to cover header separator line
-        let footer = UIView()
-        footer.backgroundColor = UIConstants.colors.backgroundColor
-
-        cell.addSubview(footer)
-        cell.sendSubviewToBack(footer)
-
-        footer.snp.makeConstraints { make in
-            make.height.equalTo(1)
-            make.bottom.equalToSuperview().offset(1)
-            make.leading.trailing.equalToSuperview()
-        }
-
         return cell
     }
 
