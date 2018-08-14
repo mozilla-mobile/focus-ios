@@ -10,7 +10,7 @@ struct UIConstants {
     static var ToolbarHeight: CGFloat = 46
 
     struct colors {
-        static let backgroundColor = UIConstants.Photon.Ink80
+        static let background = UIConstants.Photon.Ink80
         static let buttonHighlight = UIColor(rgb: 0x333333)
         static let cellSelected = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         static let cellBackground = UIConstants.Photon.Ink70
