@@ -200,6 +200,7 @@ struct UIConstants {
         static let settingsDefaultTitleOffset = 3
         static let settingsFirstTitleOffset = 16
         static let urlBarToolsetOffset: CGFloat = 60
+        static let textLogoOffset: CGFloat = -10 - browserToolbarHeight / 2
     }
 
     struct strings {
