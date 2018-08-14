@@ -9,7 +9,7 @@ class BrowserToolbar: UIView {
     let toolset = BrowserToolset()
     private let backgroundLoading = GradientBackgroundView()
     private let backgroundDark = UIView()
-    private let backgroundBright = GradientBackgroundView(alpha: 0.2, background: UIConstants.Photon.Ink80)
+    private let backgroundBright = GradientBackgroundView(alpha: 0.2, background: UIConstants.colors.backgroundColor)
     private let stackView = UIStackView()
 
     init() {
@@ -17,13 +17,13 @@ class BrowserToolbar: UIView {
 
         let background = UIView()
         background.alpha = 0.95
-        background.backgroundColor = UIConstants.colors.background
+        background.backgroundColor = UIConstants.colors.backgroundColor
         addSubview(background)
 
         addSubview(backgroundLoading)
         addSubview(backgroundDark)
         
-        backgroundDark.backgroundColor = UIConstants.Photon.Ink80
+        backgroundDark.backgroundColor = UIConstants.colors.backgroundColor
 
         backgroundBright.isHidden = true
         backgroundBright.alpha = 0

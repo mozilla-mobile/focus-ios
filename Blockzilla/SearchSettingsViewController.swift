@@ -28,7 +28,7 @@ class SearchSettingsViewController: UITableViewController {
         super.viewDidLoad()
 
         navigationItem.title = UIConstants.strings.settingsSearchLabel
-        view.backgroundColor = UIConstants.colors.settingsBackgroundColor
+        view.backgroundColor = UIConstants.colors.backgroundColor
         tableView.separatorColor = UIConstants.colors.settingsSeparator
         tableView.selectRow(at: IndexPath(row: 0, section: 1), animated: false, scrollPosition: .none)
         tableView.tableFooterView = UIView()
@@ -39,7 +39,7 @@ class SearchSettingsViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = UITableViewCell()
         cell.textLabel?.text = " "
-        cell.backgroundColor = UIConstants.colors.settingsBackgroundColor
+        cell.backgroundColor = UIConstants.colors.backgroundColor
         
         let label = SmartLabel()
         label.text = UIConstants.strings.InstalledSearchEngines
