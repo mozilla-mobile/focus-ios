@@ -936,7 +936,7 @@ extension BrowserViewController: URLBarDelegate {
                 urlBar.paste(clipboardString: clipboardString)
             }
             actions.append(pasteItem)
-            let pasteAndGoItem = PhotonActionSheetItem(title: UIConstants.strings.urlPasteAndGo, iconString: "icon_paste") { action in
+            let pasteAndGoItem = PhotonActionSheetItem(title: UIConstants.strings.urlPasteAndGo, iconString: "icon_paste_and_go") { action in
                 urlBar.pasteAndGo(clipboardString: clipboardString)
             }
             actions.append(pasteAndGoItem)
