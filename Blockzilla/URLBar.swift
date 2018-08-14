@@ -246,7 +246,8 @@ class URLBar: UIView {
         }
 
         shieldIcon.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.height.equalTo(UIConstants.layout.urlBarButtonTargetSize)
             hideToolsetConstraints.append(make.leading.equalToSuperview().constraint)
             showToolsetConstraints.append(make.leading.equalTo(toolset.stopReloadButton.snp.trailing).offset(UIConstants.layout.urlBarToolsetOffset).constraint)
             make.width.equalTo(UIConstants.layout.urlBarButtonTargetSize).priority(900)
@@ -301,7 +302,8 @@ class URLBar: UIView {
         }
 
         deleteButton.snp.makeConstraints { make in
-            make.centerY.equalTo(self)
+            make.centerY.equalToSuperview()
+            make.height.equalTo(UIConstants.layout.urlBarButtonTargetSize)
 
             isEditingConstraints.append(make.width.equalTo(0).constraint)
             hideToolsetConstraints.append(make.trailing.equalToSuperview().constraint)
