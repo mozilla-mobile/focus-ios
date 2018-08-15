@@ -582,7 +582,6 @@ class URLBar: UIView {
         updateLockIcon()
         updateUrlIcons()
         let _ = urlText.resignFirstResponder()
-        setTextToURL()
         delegate?.urlBarDidDismiss(self)
         
         cancelButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
@@ -688,7 +687,7 @@ class URLBar: UIView {
         delegate?.urlBarDidPressPageActions(self)
     }
 
-    fileprivate func setTextToURL() {
+    fileprivate func setTextToURL(displayFullUrl: Bool = false) {
         var fullUrl: String? = nil
         var truncatedURL: String? = nil
 
@@ -699,7 +698,7 @@ class URLBar: UIView {
             components?.password = nil
             fullUrl = components?.url?.absoluteString
             truncatedURL = components?.host
-            urlText.text = isEditing ? fullUrl : truncatedURL
+            urlText.text = displayFullUrl ? fullUrl : truncatedURL
             truncatedUrlText.text = truncatedURL
         }
     }
@@ -730,9 +729,8 @@ class URLBar: UIView {
 
 extension URLBar: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
-        
-        setTextToURL()
 
+        setTextToURL(displayFullUrl: true)
         autocompleteTextField.highlightAll()
         
         if !isEditing && inBrowsingMode {
