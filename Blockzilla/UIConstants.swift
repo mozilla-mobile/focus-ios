@@ -10,7 +10,7 @@ struct UIConstants {
     static var ToolbarHeight: CGFloat = 46
 
     struct colors {
-        static let background = UIColor(rgb: 0x272727)
+        static let background = UIConstants.Photon.Ink80
         static let buttonHighlight = UIColor(rgb: 0x333333)
         static let cellSelected = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         static let cellBackground = UIConstants.Photon.Ink70
@@ -41,7 +41,6 @@ struct UIConstants {
         static let navigationTitle = UIConstants.Photon.Grey10
         static let overlayBackground = UIColor(white: 0, alpha: 0.8)
         static let progressBar = UIColor(rgb: 0xC86DD7)
-        static let settingsBackgroundColor = UIConstants.Photon.Ink80
         static let settingsButtonBorder = UIColor(rgb: 0x5F6368, alpha: 0.8)
         static let settingsTextLabel = UIConstants.Photon.Grey10
         static let settingsDetailLabel = UIColor(rgb: 0xD8D8D8)
@@ -201,6 +200,7 @@ struct UIConstants {
         static let settingsDefaultTitleOffset = 3
         static let settingsFirstTitleOffset = 16
         static let urlBarToolsetOffset: CGFloat = 60
+        static let textLogoOffset: CGFloat = -10 - browserToolbarHeight / 2
         static let urlBarButtonImageSize: CGFloat = 24
         static let urlBarButtonTargetSize: CGFloat = 40
     }
@@ -233,7 +233,7 @@ struct UIConstants {
         static let browserShare = NSLocalizedString("Browser.shareLabel", value: "Share", comment: "Accessibility label for the share button")
         static let browserStop = NSLocalizedString("Browser.stopLabel", value: "Stop", comment: "Accessibility label for the stop button")
         static let customURLMenuButton = NSLocalizedString("Browser.customURLMenuLabel", value: "Add Custom URL", comment: "Custom URL button in URL long press menu")
-        static let copyMenuButton = NSLocalizedString("Browser.copyMenuLabel", value: "Copy", comment: "Copy URL button in URL long press menu")
+        static let copyMenuButton = NSLocalizedString("Browser.copyAddressLabel", value: "Copy Address", comment: "Copy URL button in URL long press menu")
         static let eraseButton = NSLocalizedString("URL.eraseButtonLabel", value: "ERASE", comment: "Erase button in the URL bar")
         static let eraseMessage = NSLocalizedString("URL.eraseMessageLabel", value: "Your browsing history has been erased.", comment: "Message shown after pressing the Erase button")
         static let errorTryAgain = NSLocalizedString("Error.tryAgainButton", value: "Try again", comment: "Button label to reload the error page")
