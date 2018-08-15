@@ -324,16 +324,21 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         return view
     }
     
-    // A header height of at least 1 is required to make sure the default header size isnt used when laying out with AutoLayout
+    // A height of at least 1 is required to make sure the default header size isnt used when laying out with AutoLayout
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 1
     }
     
-    // A footer height of at least 1 is required to make sure the default footer size isnt used when laying out with AutoLayout
+    // A height of at least 1 is required to make sure the default footer size isnt used when laying out with AutoLayout
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if title != nil && section == 0 {
-            return PhotonActionSheetUX.TitleHeaderHeight
-        } else {
+        switch section {
+        case 0:
+            if title != nil {
+                return PhotonActionSheetUX.TitleHeaderHeight
+            } else {
+                return 1
+            }
+        default:
             return PhotonActionSheetUX.SeparatorHeaderHeight
         }
     }
