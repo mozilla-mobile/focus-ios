@@ -88,6 +88,8 @@ class BrowserViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setupIntents()
 
         setupBiometrics()
         view.addSubview(mainContainerView)
@@ -434,7 +436,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    func resetBrowser(hidePreviousSession: Bool = false) {
+    public func resetBrowser(hidePreviousSession: Bool = false) {
         
         // Used when biometrics fail and the previous session should be obscured
         if hidePreviousSession {
@@ -1322,6 +1324,25 @@ extension BrowserViewController: UIPopoverPresentationControllerDelegate {
     
     func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
         darkView.isHidden = true
+    }
+}
+
+// Siri Extensions
+extension BrowserViewController {
+    func setupIntents() {
+        if #available(iOS 12.0, *) {
+            let activity = NSUserActivity(activityType: "org.mozilla.ios.Klar.erase")
+            activity.title = "Erase"
+            activity.userInfo = [:]
+            activity.isEligibleForSearch = true
+            activity.isEligibleForPrediction = true
+            activity.persistentIdentifier = NSUserActivityPersistentIdentifier("org.mozilla.ios.Klar.erase")
+            view.userActivity = activity
+            activity.becomeCurrent()
+    }
+        else {
+            return
+        }
     }
 }
 

@@ -16,6 +16,7 @@
 		0BC928CE1E366A6E004AC581 /* AsianLocaleTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */; };
 		16074B6D2114364C003B671F /* PhotonActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16074B6C2114364C003B671F /* PhotonActionSheet.swift */; };
 		161D90312108085F00C2A74A /* HomeViewToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161D90302108085F00C2A74A /* HomeViewToolbar.swift */; };
+		163BFFE22124EBAF0007CEBC /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 163BFFE12124EBAF0007CEBC /* Intents.framework */; };
 		16938C0121010C2D00DCD489 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 16938C0321010C2D00DCD489 /* InfoPlist.strings */; };
 		16D7169C2114EF76000C8A66 /* BlockerToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D7169B2114EF72000C8A66 /* BlockerToggle.swift */; };
 		16D7169E2114F00E000C8A66 /* TrackingProtectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D7169D2114F00E000C8A66 /* TrackingProtectionViewController.swift */; };
@@ -53,7 +54,7 @@
 		747ADA181FC38EFC00970132 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747ADA171FC38EFC00970132 /* IntroViewController.swift */; };
 		74F94FF21FD9CA070047E629 /* Intro.strings in Resources */ = {isa = PBXBuildFile; fileRef = 74F94FF41FD9CA070047E629 /* Intro.strings */; };
 		A57245250F88CCA4993E55B2 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4C4943B406FCA9B74B4E186 /* CoreText.framework */; };
-		A89766DA1F57DCA9008183C5 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		A89766DA1F57DCA9008183C5 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		B3481A551FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3481A541FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift */; };
 		B3AFC2BC1F7C0B9F001AEF38 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AFC2BB1F7C0B9F001AEF38 /* WebViewController.swift */; };
 		B3CD41C91FD1027000AEBD58 /* InsetTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3CD41C81FD1027000AEBD58 /* InsetTextField.swift */; };
@@ -237,6 +238,7 @@
 		0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsianLocaleTest.swift; sourceTree = "<group>"; };
 		16074B6C2114364C003B671F /* PhotonActionSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotonActionSheet.swift; sourceTree = "<group>"; };
 		161D90302108085F00C2A74A /* HomeViewToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewToolbar.swift; sourceTree = "<group>"; };
+		163BFFE12124EBAF0007CEBC /* Intents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Intents.framework; path = System/Library/Frameworks/Intents.framework; sourceTree = SDKROOT; };
 		16938BFB21010C2B00DCD489 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		16938BFC21010C2C00DCD489 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Localizable.strings; sourceTree = "<group>"; };
 		16938BFD21010C2C00DCD489 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Intro.strings; sourceTree = "<group>"; };
@@ -839,6 +841,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				163BFFE22124EBAF0007CEBC /* Intents.framework in Frameworks */,
 				D5B10AAB1FD5EFA40044523A /* OnePasswordExtension.framework in Frameworks */,
 				746BD91E1F758C0800BE8DB9 /* Sentry.framework in Frameworks */,
 				D3AAC2911EAE9146005B7E8C /* AutocompleteTextField.framework in Frameworks */,
@@ -1037,6 +1040,7 @@
 		D77FE464056F274978E025ED /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				163BFFE12124EBAF0007CEBC /* Intents.framework */,
 				747ADA1D1FCE0B7B00970132 /* OnePasswordExtension.framework */,
 				746BD91D1F758C0700BE8DB9 /* Sentry.framework */,
 				746BD91B1F758BEC00BE8DB9 /* Carthage */,
@@ -1373,6 +1377,9 @@
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
 							};
+							com.apple.Siri = {
+								enabled = 1;
+							};
 						};
 					};
 					E4BF2DEB1BACE92400DA9D68 = {
@@ -1428,7 +1435,7 @@
 			files = (
 				742C99D41F3A3AD200717D69 /* Assets.xcassets in Resources */,
 				16938C0121010C2D00DCD489 /* InfoPlist.strings in Resources */,
-				A89766DA1F57DCA9008183C5 /* BuildFile in Resources */,
+				A89766DA1F57DCA9008183C5 /* (null) in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

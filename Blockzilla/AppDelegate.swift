@@ -269,6 +269,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             TelemetryEventObject.app, value: nil, extras: ["orientation": orientation])
     }
     
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        if let viewController = window?.rootViewController as? BrowserViewController {
+            viewController.resetBrowser()
+        }
+        return true
+    }
+    
     func toggleSplashView(hide: Bool) {
         let duration = 0.25
         splashView.animateHidden(hide, duration: duration)
