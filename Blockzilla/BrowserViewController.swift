@@ -953,7 +953,7 @@ extension BrowserViewController: URLBarDelegate {
         guard let url = urlBar.url else { return }
         let utils = OpenUtils(url: url, webViewController: webViewController)
         let items = PageActionSheetItems(url: url)
-        let titleItem = PhotonActionSheetItem(title: UIConstants.strings.pageActionsTitle)
+//        let titleItem = PhotonActionSheetItem(title: UIConstants.strings.pageActionsTitle)
         let sharePageItem = PhotonActionSheetItem(title: UIConstants.strings.sharePage, iconString: "icon_openwith_active") { action in
             let shareVC = utils.buildShareViewController(url: url)
             shareVC.becomeFirstResponder()
@@ -973,7 +973,7 @@ extension BrowserViewController: URLBarDelegate {
         shareItems.append(copyItem)
         
         let actionItems = [items.findInPageItem, items.requestDesktopItem]
-        let pageActionsMenu = PhotonActionSheet(actions: [[titleItem], shareItems, actionItems], style: .overCurrentContext)
+        let pageActionsMenu = PhotonActionSheet(title: "Page Actions", actions: [shareItems, actionItems], style: .overCurrentContext)
         presentPhotonActionSheet(pageActionsMenu, from: urlBar.pageActionsButton)
     }
 }

@@ -29,6 +29,12 @@ private struct PhotonActionSheetUX {
     static let CellName = "PhotonActionSheetCell"
     static let CloseButtonHeight: CGFloat  = 56
     static let TablePadding: CGFloat = 6
+    static let BackgroundAlpha: CGFloat = 0.9
+    static let TitleHeaderHeight: CGFloat = 36
+    static let SeparatorHeaderHeight: CGFloat = 12
+    static let SeparatorColor = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
+    static let TableViewBackgroundColor = UIConstants.Photon.Ink90.withAlphaComponent(PhotonActionSheetUX.BackgroundAlpha)
+    static let BlurAlpha: CGFloat = 0.7
 }
 
 public struct PhotonActionSheetItem {
@@ -124,7 +130,11 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         // In a popover the popover provides the blur background
         // Not using a background color allows the view to style correctly with the popover arrow
         if self.popoverPresentationController == nil {
-            tableView.backgroundColor = UIConstants.Photon.Ink70
+            tableView.backgroundColor = PhotonActionSheetUX.TableViewBackgroundColor
+            let blurEffect = UIBlurEffect(style: .regular)
+            let blurEffectView = UIVisualEffectView(effect: blurEffect)
+            blurEffectView.alpha = PhotonActionSheetUX.BlurAlpha
+            tableView.backgroundView = blurEffectView
         } else {
             tableView.backgroundColor = .clear
         }
@@ -150,7 +160,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             }
             make.width.equalTo(width)
         }
-        tableView.alpha = 0.9
+//        tableView.alpha = 0.9
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -162,6 +172,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.keyboardDismissMode = .onDrag
         tableView.register(PhotonActionSheetCell.self, forCellReuseIdentifier: PhotonActionSheetUX.CellName)
         tableView.register(PhotonActionSheetSeparator.self, forHeaderFooterViewReuseIdentifier: "SeparatorSectionHeader")
+        tableView.register(PhotonActionSheetTitleHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.TitleHeaderName)
         tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "EmptyHeader")
         tableView.estimatedRowHeight = PhotonActionSheetUX.RowHeight
         tableView.estimatedSectionFooterHeight = PhotonActionSheetUX.HeaderFooterHeight
@@ -246,6 +257,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.cellForRow(at: indexPath)
         var action = actions[indexPath.section][indexPath.row]
         guard let handler = action.handler else {
             self.dismiss()
@@ -281,10 +293,27 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+        let cell  = tableView.cellForRow(at: indexPath)
+        cell?.contentView.backgroundColor = PhotonActionSheetCellUX.SelectedOverlayColor
+    }
+    
+    func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
+        let cell  = tableView.cellForRow(at: indexPath)
+        cell?.contentView.backgroundColor = .clear
+    }
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         // If we have multiple sections show a separator for each one except the first.
         if section > 0 {
             return tableView.dequeueReusableHeaderFooterView(withIdentifier: "SeparatorSectionHeader")
+        }
+        
+        if let title = title {
+            let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetUX.TitleHeaderName) as! PhotonActionSheetTitleHeaderView
+            header.tintColor = self.tintColor
+            header.configure(with: title)
+            return header
         }
         
         let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "EmptyHeader")
@@ -303,9 +332,66 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     
     // A footer height of at least 1 is required to make sure the default footer size isnt used when laying out with AutoLayout
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 1
+        if title != nil && section == 0 {
+            return PhotonActionSheetUX.TitleHeaderHeight
+        } else {
+            return PhotonActionSheetUX.SeparatorHeaderHeight
+        }
     }
 }
+
+private class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
+    static let Padding: CGFloat = 12
+    
+    lazy var titleLabel: UILabel = {
+        let titleLabel = UILabel()
+        titleLabel.font = UIConstants.fonts.actionMenuTitle
+        titleLabel.numberOfLines = 1
+        titleLabel.textColor = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
+        return titleLabel
+    }()
+    
+    lazy var separatorView: UIView = {
+        let separatorLine = UIView()
+        separatorLine.backgroundColor = PhotonActionSheetUX.SeparatorColor
+        return separatorLine
+    }()
+    
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
+        
+        self.backgroundView = UIView()
+        self.backgroundView?.backgroundColor = .clear
+        contentView.addSubview(titleLabel)
+        
+        titleLabel.snp.makeConstraints { make in
+            make.leading.equalTo(contentView).offset(PhotonActionSheetTitleHeaderView.Padding)
+            make.trailing.greaterThanOrEqualTo(contentView)
+            make.top.equalTo(contentView).offset(PhotonActionSheetUX.TablePadding)
+        }
+        
+        contentView.addSubview(separatorView)
+        
+        separatorView.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(self)
+            make.top.equalTo(titleLabel.snp.bottom).offset(PhotonActionSheetUX.TablePadding)
+            make.height.equalTo(0.5)
+        }
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure(with title: String) {
+        self.titleLabel.text = title
+    }
+    
+    override func prepareForReuse() {
+        self.titleLabel.text = nil
+    }
+}
+
 
 private struct PhotonActionSheetCellUX {
     static let LabelColor = UIColor.blue
@@ -314,7 +400,7 @@ private struct PhotonActionSheetCellUX {
     static let TitleLabelOffset = 10
     static let CellTopBottomOffset = 12
     static let StatusIconSize = 24
-    static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
+    static let SelectedOverlayColor = UIColor(rgb: 0x5D5F79)
     static let CornerRadius: CGFloat = 3
 }
 
@@ -325,8 +411,7 @@ private class PhotonActionSheetSeparator: UITableViewHeaderFooterView {
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         self.backgroundView = UIView()
-        self.backgroundView?.backgroundColor = .clear
-        separatorLineView.backgroundColor = UIColor.black
+        separatorLineView.backgroundColor = PhotonActionSheetUX.SeparatorColor
         self.contentView.addSubview(separatorLineView)
         separatorLineView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
@@ -399,6 +484,7 @@ private class PhotonActionSheetCell: UITableViewCell {
         let selectedOverlay = UIView()
         selectedOverlay.backgroundColor = PhotonActionSheetCellUX.SelectedOverlayColor
         selectedOverlay.isHidden = true
+        selectedOverlay.alpha = 0.2
         return selectedOverlay
     }()
     
@@ -415,12 +501,6 @@ private class PhotonActionSheetCell: UITableViewCell {
         stackView.axis = .horizontal
         return stackView
     }()
-    
-    override var isSelected: Bool {
-        didSet {
-            self.selectedOverlay.isHidden = !isSelected
-        }
-    }
     
     override func prepareForReuse() {
         self.statusIcon.image = nil
@@ -477,7 +557,7 @@ private class PhotonActionSheetCell: UITableViewCell {
         titleLabel.font  = action.bold ? UIConstants.fonts.actionMenuItemBold : UIConstants.fonts.actionMenuItem
         accessibilityIdentifier = action.iconString
         accessibilityLabel = action.title
-        selectionStyle = action.handler != nil ? .default : .none
+        selectionStyle = .none
         
         if let iconName = action.iconString, let image = UIImage(named: iconName) {
             statusIcon.image = image.createScaled(size: PhotonActionSheetUX.IconSize)
