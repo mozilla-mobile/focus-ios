@@ -263,7 +263,8 @@ class URLBar: UIView {
         }
 
         shieldIcon.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.height.equalTo(UIConstants.layout.urlBarButtonTargetSize)
             hideToolsetConstraints.append(make.leading.equalToSuperview().constraint)
             showToolsetConstraints.append(make.leading.equalTo(toolset.stopReloadButton.snp.trailing).offset(UIConstants.layout.urlBarToolsetOffset).constraint)
             make.width.equalTo(UIConstants.layout.urlBarButtonTargetSize).priority(900)
@@ -325,7 +326,8 @@ class URLBar: UIView {
         hideCancelConstraints.forEach { $0.activate() }
 
         deleteButton.snp.makeConstraints { make in
-            make.centerY.equalTo(self)
+            make.centerY.equalToSuperview()
+            make.height.equalTo(UIConstants.layout.urlBarButtonTargetSize)
 
             isEditingConstraints.append(make.width.equalTo(0).constraint)
             hideToolsetConstraints.append(make.trailing.equalToSuperview().constraint)
@@ -386,10 +388,7 @@ class URLBar: UIView {
     @objc private func displayURLContextMenu(sender: UILongPressGestureRecognizer) {
         if sender.state == .began {
             self.becomeFirstResponder()
-            let customURLItem = UIMenuItem(title: UIConstants.strings.customURLMenuButton, action: #selector(addCustomURL))
-            let copyItem = UIMenuItem(title: UIConstants.strings.copyMenuButton, action: #selector(copyToClipboard))
             UIMenuController.shared.setTargetRect(self.bounds, in: self)
-            UIMenuController.shared.menuItems = [copyItem, customURLItem]
             UIMenuController.shared.setMenuVisible(true, animated: true)
         }
     }

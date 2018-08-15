@@ -21,7 +21,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
     }
     
     override func viewDidLoad() {
-        view.backgroundColor = UIConstants.colors.settingsBackgroundColor
+        view.backgroundColor = UIConstants.colors.background
         
         title = UIConstants.strings.settingsAutocompleteSection
 
@@ -32,7 +32,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.backgroundColor = UIConstants.colors.settingsBackgroundColor
+        tableView.backgroundColor = UIConstants.colors.background
         tableView.layoutMargins = UIEdgeInsets.zero
         tableView.separatorColor = UIConstants.colors.settingsSeparator
     }
@@ -54,7 +54,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         // constraints for our custom label based on the cell's label.
         let cell = UITableViewCell()
         cell.textLabel?.text = " "
-        cell.backgroundColor = UIConstants.colors.settingsBackgroundColor
+        cell.backgroundColor = UIConstants.colors.background
 
         let label = SmartLabel()
         label.text = labelText
@@ -66,20 +66,6 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             make.leading.trailing.equalTo(cell.textLabel!)
             make.centerY.equalTo(cell.textLabel!).offset(groupingOffset)
         }
-
-        // Hack to cover header separator line
-        let footer = UIView()
-        footer.backgroundColor = UIConstants.colors.settingsBackgroundColor
-
-        cell.addSubview(footer)
-        cell.sendSubviewToBack(footer)
-
-        footer.snp.makeConstraints { make in
-            make.height.equalTo(1)
-            make.bottom.equalToSuperview().offset(1)
-            make.leading.trailing.equalToSuperview()
-        }
-
         return cell
     }
     
@@ -143,16 +129,16 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         switch section {
         case 0:
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-            let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.toggleOn])
+            let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.settingsLink])
             let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.autocompleteDefaultDescription, AppInfo.productName), attributes: [.foregroundColor : UIConstants.colors.settingsDetailLabel])
-            let space = NSAttributedString(string: " ", attributes: [.foregroundColor : UIConstants.colors.toggleOn])
+            let space = NSAttributedString(string: " ", attributes: [:])
             subtitle.append(space)
             subtitle.append(learnMore)
             cell.detailTextLabel?.attributedText = subtitle
             cell.detailTextLabel?.numberOfLines = 0
             cell.accessibilityIdentifier = "SettingsViewController.autocompleteLearnMore"
             cell.selectionStyle = .none
-            cell.backgroundColor = UIConstants.colors.settingsBackgroundColor
+            cell.backgroundColor = UIConstants.colors.background
             cell.layoutMargins = UIEdgeInsets.zero
 
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(learnMoreDefaultTapped))
@@ -161,16 +147,16 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             return cell
         case 1:
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-            let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.toggleOn])
+            let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.settingsLink])
             let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.autocompleteCustomDescription, AppInfo.productName), attributes: [.foregroundColor : UIConstants.colors.settingsDetailLabel])
-            let space = NSAttributedString(string: " ", attributes: [.foregroundColor : UIConstants.colors.toggleOn])
+            let space = NSAttributedString(string: " ", attributes: [:])
             subtitle.append(space)
             subtitle.append(learnMore)
             cell.detailTextLabel?.attributedText = subtitle
             cell.detailTextLabel?.numberOfLines = 0
             cell.accessibilityIdentifier = "SettingsViewController.customAutocompleteLearnMore"
             cell.selectionStyle = .none
-            cell.backgroundColor = UIConstants.colors.settingsBackgroundColor
+            cell.backgroundColor = UIConstants.colors.background
             cell.layoutMargins = UIEdgeInsets.zero
 
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(learnMoreCustomapped))

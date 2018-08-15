@@ -107,8 +107,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             case .privacy: return UIConstants.strings.toggleSectionPrivacy
             case .search: return UIConstants.strings.settingsSearchTitle
             case .siri: return UIConstants.strings.siriShortcutsTitle
+            case .integration: return UIConstants.strings.toggleSectionIntegration
             case .mozilla: return UIConstants.strings.toggleSectionMozilla
-            default: return nil
             }
         }
 
@@ -183,9 +183,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     private var initialToggles : [Int : BlockerToggle]  {
         let blockFontsToggle = BlockerToggle(label: UIConstants.strings.labelBlockFonts, setting: SettingsToggle.blockFonts)
-        let toggle = blockFontsToggle.toggle
-        toggle.addTarget(self, action: #selector(toggleSwitched(_:)), for: .valueChanged)
-        toggle.isOn = Settings.getToggle(blockFontsToggle.setting)
         let usageDataSubtitle = String(format: UIConstants.strings.detailTextSendUsageData, AppInfo.productName)
         let usageDataToggle = BlockerToggle(label: UIConstants.strings.labelSendAnonymousUsageData, setting: SettingsToggle.sendAnonymousUsageData, subtitle: usageDataSubtitle)
         let safariToggle = BlockerToggle(label: UIConstants.strings.toggleSafari, setting: SettingsToggle.safari)
@@ -234,13 +231,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     override func viewDidLoad() {
-        view.backgroundColor = UIConstants.colors.settingsBackgroundColor
+        view.backgroundColor = UIConstants.colors.background
 
         title = UIConstants.strings.settingsTitle
 
         let navigationBar = navigationController!.navigationBar
         navigationBar.isTranslucent = false
-        navigationBar.barTintColor = UIConstants.colors.settingsBackgroundColor
+        navigationBar.barTintColor = UIConstants.colors.background
         navigationBar.tintColor = UIConstants.colors.navigationButton
         navigationBar.titleTextAttributes = [.foregroundColor: UIConstants.colors.navigationTitle]
         
@@ -254,7 +251,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         navigationItem.rightBarButtonItem = highlightsButton
         
         if whatsNew.shouldShowWhatsNew() {
-            highlightsButton?.tintColor = UIConstants.colors.settingsLink
+            highlightsButton?.tintColor = UIConstants.colors.whatsNew
         }
 
         view.addSubview(tableView)
@@ -264,7 +261,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.backgroundColor = UIConstants.colors.settingsBackgroundColor
+        tableView.backgroundColor = UIConstants.colors.background
         tableView.layoutMargins = UIEdgeInsets.zero
         tableView.separatorColor = UIConstants.colors.settingsSeparator
         tableView.allowsSelection = true
@@ -397,8 +394,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.selectionStyle = .none
                 if toggle.label == UIConstants.strings.labelSendAnonymousUsageData {
                     let selector = #selector(tappedLearnMoreFooter)
-                    let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.toggleOn])
-                    let space = NSAttributedString(string: " ", attributes: [.foregroundColor : UIConstants.colors.toggleOn])
+                    let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.settingsLink])
+                    let space = NSAttributedString(string: " ", attributes: [:])
                     guard let subtitle = toggle.subtitle else { return cell }
                     let attributedSubtitle = NSMutableAttributedString(string: subtitle)
                     attributedSubtitle.append(space)
@@ -472,7 +469,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         // constraints for our custom label based on the cell's label.
         let cell = UITableViewCell()
         cell.textLabel?.text = " "
-        cell.backgroundColor = UIConstants.colors.settingsBackgroundColor
+        cell.backgroundColor = UIConstants.colors.background
 
         let label = SmartLabel()
         label.text = sections[section].headerText
@@ -532,7 +529,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     private func updateSafariEnabledState() {
-        guard let safariToggle = self.toggles[3]?.toggle else { return }
+        guard let safariIndex = toggles.first(where: { $1.setting ==  SettingsToggle.safari})?.key,
+            let safariToggle = toggles[safariIndex]?.toggle else { return }
         safariToggle.isEnabled = false
 
         detector.detectEnabled(view) { [weak self] enabled in
@@ -570,6 +568,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             Settings.set(sender.isOn, forToggle: toggle.setting)
             ContentBlockerHelper.shared.reload()
             Utils.reloadSafariContentBlocker()
+        }
+        
+        // First check if the user changed the anonymous usage data setting and follow that choice right
+        // here. Otherwise it will be delayed until the application restarts.
+        if toggle.setting == .sendAnonymousUsageData {
+            Telemetry.default.configuration.isCollectionEnabled = sender.isOn
+            Telemetry.default.configuration.isUploadEnabled = sender.isOn
         }
 
         switch toggle.setting {
