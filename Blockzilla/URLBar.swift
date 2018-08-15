@@ -674,11 +674,12 @@ class URLBar: UIView {
             fullUrl = components?.url?.absoluteString
             truncatedURL = components?.host
 
-            if let stackValue = SearchHistoryUtils.pullSearchFromStack(), !stackValue.hasPrefix("http://") && !stackValue.hasPrefix("https://") {
+            if let stackValue = SearchHistoryUtils.pullSearchFromStack(), !stackValue.isUrl {
                 displayText = stackValue
             } else {
                 displayText = truncatedURL
             }
+
             urlText.text = isEditing ? fullUrl : displayText
             truncatedUrlText.text = truncatedURL
         }
