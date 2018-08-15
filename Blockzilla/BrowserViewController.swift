@@ -88,8 +88,6 @@ class BrowserViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setupIntents()
 
         setupBiometrics()
         view.addSubview(mainContainerView)
@@ -470,6 +468,8 @@ class BrowserViewController: UIViewController {
         })
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.eraseButton)
+        
+        donateErase()
     }
     
     private func clearBrowser() {
@@ -1329,14 +1329,14 @@ extension BrowserViewController: UIPopoverPresentationControllerDelegate {
 
 // Siri Extensions
 extension BrowserViewController {
-    func setupIntents() {
+    func donateErase() {
         if #available(iOS 12.0, *) {
-            let activity = NSUserActivity(activityType: "org.mozilla.ios.Klar.erase")
-            activity.title = "Erase"
+            let activity = NSUserActivity(activityType: "org.mozilla.ios.Klar.eraseAndOpen")
+            activity.title = UIConstants.strings.eraseAndOpenSiri
             activity.userInfo = [:]
             activity.isEligibleForSearch = true
             activity.isEligibleForPrediction = true
-            activity.persistentIdentifier = NSUserActivityPersistentIdentifier("org.mozilla.ios.Klar.erase")
+            activity.persistentIdentifier = NSUserActivityPersistentIdentifier("org.mozilla.ios.Klar.eraseAndOpen")
             view.userActivity = activity
             activity.becomeCurrent()
     }

@@ -270,9 +270,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     }
     
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        if let viewController = window?.rootViewController as? BrowserViewController {
-            viewController.resetBrowser()
+        switch userActivity.activityType {
+        case "org.mozilla.ios.Klar.eraseAndOpen":
+            browserViewController.resetBrowser(hidePreviousSession: true)
+        default: break
         }
+        
+        
         return true
     }
     
