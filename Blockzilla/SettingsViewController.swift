@@ -107,8 +107,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             case .privacy: return UIConstants.strings.toggleSectionPrivacy
             case .search: return UIConstants.strings.settingsSearchTitle
             case .siri: return UIConstants.strings.siriShortcutsTitle
+            case .integration: return UIConstants.strings.toggleSectionIntegration
             case .mozilla: return UIConstants.strings.toggleSectionMozilla
-            default: return nil
             }
         }
 
@@ -231,13 +231,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     override func viewDidLoad() {
-        view.backgroundColor = UIConstants.colors.settingsBackgroundColor
+        view.backgroundColor = UIConstants.colors.background
 
         title = UIConstants.strings.settingsTitle
 
         let navigationBar = navigationController!.navigationBar
         navigationBar.isTranslucent = false
-        navigationBar.barTintColor = UIConstants.colors.settingsBackgroundColor
+        navigationBar.barTintColor = UIConstants.colors.background
         navigationBar.tintColor = UIConstants.colors.navigationButton
         navigationBar.titleTextAttributes = [.foregroundColor: UIConstants.colors.navigationTitle]
         
@@ -251,7 +251,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         navigationItem.rightBarButtonItem = highlightsButton
         
         if whatsNew.shouldShowWhatsNew() {
-            highlightsButton?.tintColor = UIConstants.colors.settingsLink
+            highlightsButton?.tintColor = UIConstants.colors.whatsNew
         }
 
         view.addSubview(tableView)
@@ -261,7 +261,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.backgroundColor = UIConstants.colors.settingsBackgroundColor
+        tableView.backgroundColor = UIConstants.colors.background
         tableView.layoutMargins = UIEdgeInsets.zero
         tableView.separatorColor = UIConstants.colors.settingsSeparator
         tableView.allowsSelection = true
@@ -394,8 +394,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.selectionStyle = .none
                 if toggle.label == UIConstants.strings.labelSendAnonymousUsageData {
                     let selector = #selector(tappedLearnMoreFooter)
-                    let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.toggleOn])
-                    let space = NSAttributedString(string: " ", attributes: [.foregroundColor : UIConstants.colors.toggleOn])
+                    let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.settingsLink])
+                    let space = NSAttributedString(string: " ", attributes: [:])
                     guard let subtitle = toggle.subtitle else { return cell }
                     let attributedSubtitle = NSMutableAttributedString(string: subtitle)
                     attributedSubtitle.append(space)
@@ -469,7 +469,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         // constraints for our custom label based on the cell's label.
         let cell = UITableViewCell()
         cell.textLabel?.text = " "
-        cell.backgroundColor = UIConstants.colors.settingsBackgroundColor
+        cell.backgroundColor = UIConstants.colors.background
 
         let label = SmartLabel()
         label.text = sections[section].headerText

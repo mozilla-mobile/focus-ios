@@ -93,7 +93,7 @@ class BrowserViewController: UIViewController {
         view.addSubview(mainContainerView)
         
         darkView.isHidden = true
-        darkView.backgroundColor = UIConstants.Photon.Ink80
+        darkView.backgroundColor = UIConstants.colors.background
         darkView.alpha = 0.4
         view.addSubview(darkView)
         darkView.snp.makeConstraints { make in
@@ -932,14 +932,14 @@ extension BrowserViewController: URLBarDelegate {
         }
         var actions = [PhotonActionSheetItem]()
         if let clipboardString = UIPasteboard.general.string {
-            let pasteItem = PhotonActionSheetItem(title: UIConstants.strings.urlPaste, iconString: "icon_paste") { action in
-                urlBar.paste(clipboardString: clipboardString)
-            }
-            actions.append(pasteItem)
             let pasteAndGoItem = PhotonActionSheetItem(title: UIConstants.strings.urlPasteAndGo, iconString: "icon_paste") { action in
                 urlBar.pasteAndGo(clipboardString: clipboardString)
             }
             actions.append(pasteAndGoItem)
+            let pasteItem = PhotonActionSheetItem(title: UIConstants.strings.urlPaste, iconString: "icon_paste") { action in
+                urlBar.paste(clipboardString: clipboardString)
+            }
+            actions.append(pasteItem)
         }
         let copyItem = PhotonActionSheetItem(title: UIConstants.strings.copyMenuButton, iconString: "icon_link") { action in
             urlBar.copyToClipboard()
@@ -988,7 +988,7 @@ extension BrowserViewController: PhotonActionSheetDelegate {
             popoverVC.sourceView = sender
             popoverVC.sourceRect = CGRect(x: sender.frame.width/2, y: sender.frame.size.height * 0.75, width: 1, height: 1)
             popoverVC.permittedArrowDirections = .up
-            popoverVC.backgroundColor = UIConstants.Photon.Ink80
+            popoverVC.backgroundColor = UIConstants.colors.background
         }
         present(actionSheet, animated: true, completion: nil)
     }

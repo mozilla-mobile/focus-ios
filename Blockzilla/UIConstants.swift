@@ -10,7 +10,7 @@ struct UIConstants {
     static var ToolbarHeight: CGFloat = 46
 
     struct colors {
-        static let background = UIColor(rgb: 0x272727)
+        static let background = UIConstants.Photon.Ink80
         static let buttonHighlight = UIColor(rgb: 0x333333)
         static let cellSelected = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         static let cellBackground = UIConstants.Photon.Ink70
@@ -41,12 +41,11 @@ struct UIConstants {
         static let navigationTitle = UIConstants.Photon.Grey10
         static let overlayBackground = UIColor(white: 0, alpha: 0.8)
         static let progressBar = UIColor(rgb: 0xC86DD7)
-        static let settingsBackgroundColor = UIConstants.Photon.Ink80
         static let settingsButtonBorder = UIColor(rgb: 0x5F6368, alpha: 0.8)
         static let settingsTextLabel = UIConstants.Photon.Grey10
         static let settingsDetailLabel = UIColor(rgb: 0xD8D8D8)
         static let settingsSeparator = UIConstants.Photon.Grey50
-        static let settingsLink = UIColor(rgb: 0x0A84FF)
+        static let settingsLink = UIConstants.Photon.Magenta60
         static let settingsDisabled = UIColor(rgb: 0xB2B2B2)
         static let tableSectionHeader = UIColor(rgb: 0x6D6D72)
         static let toastBackground = UIColor(rgb: 0x414146)
@@ -60,6 +59,7 @@ struct UIConstants {
         static let urlTextHighlight = UIColor(rgb: 0xB5007F)
         static let urlTextPlaceholder = UIConstants.Photon.Grey10.withAlphaComponent(0.4)
         static let urlTextShadow = UIColor.black
+        static let whatsNew = UIColor(rgb: 0x0A84FF)
 
         static let inputPlaceholder = UIColor(rgb: 0xb2b2b2)
 
@@ -201,6 +201,8 @@ struct UIConstants {
         static let settingsFirstTitleOffset = 16
         static let urlBarToolsetOffset: CGFloat = 60
         static let textLogoOffset: CGFloat = -10 - browserToolbarHeight / 2
+        static let urlBarButtonImageSize: CGFloat = 24
+        static let urlBarButtonTargetSize: CGFloat = 40
     }
 
     struct strings {
@@ -231,7 +233,7 @@ struct UIConstants {
         static let browserShare = NSLocalizedString("Browser.shareLabel", value: "Share", comment: "Accessibility label for the share button")
         static let browserStop = NSLocalizedString("Browser.stopLabel", value: "Stop", comment: "Accessibility label for the stop button")
         static let customURLMenuButton = NSLocalizedString("Browser.customURLMenuLabel", value: "Add Custom URL", comment: "Custom URL button in URL long press menu")
-        static let copyMenuButton = NSLocalizedString("Browser.copyMenuLabel", value: "Copy", comment: "Copy URL button in URL long press menu")
+        static let copyMenuButton = NSLocalizedString("Browser.copyAddressLabel", value: "Copy Address", comment: "Copy URL button in URL long press menu")
         static let eraseButton = NSLocalizedString("URL.eraseButtonLabel", value: "ERASE", comment: "Erase button in the URL bar")
         static let eraseMessage = NSLocalizedString("URL.eraseMessageLabel", value: "Your browsing history has been erased.", comment: "Message shown after pressing the Erase button")
         static let errorTryAgain = NSLocalizedString("Error.tryAgainButton", value: "Try again", comment: "Button label to reload the error page")
@@ -282,7 +284,7 @@ struct UIConstants {
         static let settingsTitle = NSLocalizedString("Settings.screenTitle", value: "Settings", comment: "Title for settings screen")
         static let settingsToggleOtherSubtitle = NSLocalizedString("Settings.toggleOtherSubtitle", value: "May break some videos and Web pages", comment: "Label subtitle for toggle on main screen")
         static let learnMore = NSLocalizedString("Settings.learnMore", value: "Learn more.", comment: "Subtitle for Send Anonymous Usage Data toggle on main screen")
-        static let toggleSectionIntegration = NSLocalizedString("Settings.sectionIntegration", value: "INTEGRATION", comment: "Label for Safari integration section")
+        static let toggleSectionIntegration = NSLocalizedString("Settings.safariTitle", value: "SAFARI INTEGRATION", comment: "Label for Safari integration section")
         static let toggleSectionMozilla = NSLocalizedString("Settings.sectionMozilla", value: "MOZILLA", comment: "Section label for Mozilla toggles")
         static let toggleSectionPerformance = NSLocalizedString("Settings.sectionPerformance", value: "PERFORMANCE", comment: "Section label for performance toggles")
         static let toggleSectionPrivacy = NSLocalizedString("Settings.sectionPrivacy", value: "PRIVACY", comment: "Section label for privacy toggles")
@@ -369,6 +371,7 @@ struct UIConstants {
         static let autocompleteAddCustomUrlWithPlus = NSLocalizedString("Autocomplete.addCustomUrlWithPlus", value: "+ Add Custom URL", comment: "Label for button to add a custom URL with the + prefix")
         static let autocompleteAddCustomUrl = NSLocalizedString("Autocomplete.addCustomUrl", value: "Add Custom URL", comment: "Label for button to add a custom URL")
         static let autocompleteAddCustomUrlError = NSLocalizedString("Autocomplete.addCustomUrlError", value: "Double-check the URL you entered.", comment: "Label for error state when entering an invalid URL")
+        static let addSearchEngineError = NSLocalizedString("SearchEngine.addEngineError", value: "That didn't work. Try replacing the search term with this: %s.", comment: "Label for error state when entering an invalid search engine URL.")
 
         static let autocompleteAddCustomUrlPlaceholder = NSLocalizedString("Autocomplete.addCustomUrlPlaceholder", value: "Paste or enter URL", comment: "Placeholder for the input field to add a custom URL")
         static let autocompleteAddCustomUrlLabel = NSLocalizedString("Autocomplete.addCustomUrlLabel", value: "URL to add", comment: "Label for the input to add a custom URL")
