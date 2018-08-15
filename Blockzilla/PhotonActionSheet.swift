@@ -160,7 +160,6 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             }
             make.width.equalTo(width)
         }
-//        tableView.alpha = 0.9
     }
     
     override func viewWillAppear(_ animated: Bool) {
