@@ -478,14 +478,6 @@ private class PhotonActionSheetCell: UITableViewCell {
         return label
     }()
     
-    lazy var selectedOverlay: UIView = {
-        let selectedOverlay = UIView()
-        selectedOverlay.backgroundColor = PhotonActionSheetCellUX.SelectedOverlayColor
-        selectedOverlay.isHidden = true
-        selectedOverlay.alpha = 0.2
-        return selectedOverlay
-    }()
-    
     lazy var disclosureIndicator: UIImageView = {
         let disclosureIndicator = createIconImageView()
         disclosureIndicator.image = UIImage(named: "menu-Disclosure")
@@ -511,12 +503,7 @@ private class PhotonActionSheetCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         isAccessibilityElement = true
-        contentView.addSubview(selectedOverlay)
         backgroundColor = .clear
-        
-        selectedOverlay.snp.makeConstraints { make in
-            make.edges.equalTo(contentView)
-        }
         
         // Setup our StackViews
         let textStackView = UIStackView(arrangedSubviews: [titleLabel, subtitleLabel])
