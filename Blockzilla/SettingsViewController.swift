@@ -630,7 +630,7 @@ extension SettingsViewController: INUIAddVoiceShortcutViewControllerDelegate {
         INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
             if let voiceShortcuts = voiceShortcuts {
                 let foundShortcut = voiceShortcuts.filter { (attempt) in
-                    attempt.shortcut.userActivity?.activityType == activityType.rawValue
+                    attempt.__shortcut.userActivity?.activityType == activityType.rawValue
                     }.first
                 if let foundShortcut = foundShortcut {
                     let viewController = INUIEditVoiceShortcutViewController(voiceShortcut: foundShortcut)
@@ -655,7 +655,7 @@ extension SettingsViewController: INUIAddVoiceShortcutViewControllerDelegate {
             var title = String()
             if let voiceShortcuts = voiceShortcuts {
                 let foundShortcut = voiceShortcuts.filter { (attempt) in
-                    attempt.shortcut.userActivity?.activityType == activityType.rawValue
+                    attempt.__shortcut.userActivity?.activityType == activityType.rawValue
                     }.first
                 if foundShortcut != nil {
                     title = "Edit"
