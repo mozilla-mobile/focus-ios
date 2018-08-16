@@ -624,14 +624,18 @@ extension SettingsViewController: INUIAddVoiceShortcutViewControllerDelegate {
                     let viewController = INUIEditVoiceShortcutViewController(voiceShortcut: foundShortcut)
                     viewController.modalPresentationStyle = .formSheet
                     viewController.delegate = self
-                    self.present(viewController, animated: true, completion: nil)
+                    DispatchQueue.main.async {
+                        self.present(viewController, animated: true, completion: nil)
+                    }
                 } else {
                     guard let activity = SiriShortcuts().getActivity(for: activityType) else { return }
                     let shortcut = INShortcut(userActivity: activity)
                     let viewController = INUIAddVoiceShortcutViewController(shortcut: shortcut)
                     viewController.modalPresentationStyle = .formSheet
                     viewController.delegate = self
-                   self.present(viewController, animated: true, completion: nil)
+                    DispatchQueue.main.async {
+                        self.present(viewController, animated: true, completion: nil)
+                    }
                 }
             }
         }
