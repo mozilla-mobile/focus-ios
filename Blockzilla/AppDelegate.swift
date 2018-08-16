@@ -275,8 +275,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             browserViewController.resetBrowser(hidePreviousSession: true)
         default: break
         }
-        
-        
         return true
     }
     

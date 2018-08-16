@@ -358,27 +358,15 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             if indexPath.row == 0 {
                 siriCell.label = UIConstants.strings.eraseSiri
                 siriCell.accessibilityIdentifier = "settingsViewController.siriEraseCell"
-                
             } else if indexPath.row == 1 {
-                siriCell.label = String(format: UIConstants.strings.eraseAndOpenSiri, AppInfo.productName)
-                siriCell.accessibilityIdentifier = "settingsViewController.siriEraseAndOpenCell"
                 if #available(iOS 12.0, *) {
-                    let siriButton = INUIAddVoiceShortcutButton(type: .custom)
-                    setSiriLabel(for: siriButton, activityType: .eraseAndOpen)
-                    siriButton.userActivity = SiriShortcuts().getActivity(for: .eraseAndOpen)
-                    siriButton.contentHorizontalAlignment = .right
-                    siriButton.setTitleColor(UIConstants.colors.settingsDetailLabel, for: .normal)
-                    siriButton.backgroundColor = .clear
-                    siriButton.isUserInteractionEnabled = false
-                    
-                    siriCell.addSubview(siriButton)
-                    
-                    siriButton.snp.makeConstraints { make in
-                        make.height.equalToSuperview()
-                        make.trailing.equalTo(siriCell.accessoryLabel.snp.leading)
+                    siriCell.label = String(format: UIConstants.strings.eraseAndOpenSiri, AppInfo.productName)
+                    siriCell.accessibilityIdentifier = "settingsViewController.siriEraseAndOpenCell"
+                    hasAddedActivity(type: .eraseAndOpen) { (result: Bool) in
+                        DispatchQueue.main.async {
+                            siriCell.accessoryLabel.text = result ? UIConstants.strings.Edit : UIConstants.strings.addToSiri
+                        }
                     }
-                } else {
-                    return siriCell
                 }
             } else {
                 siriCell.label = UIConstants.strings.openUrlsSiri
@@ -650,20 +638,16 @@ extension SettingsViewController: INUIAddVoiceShortcutViewControllerDelegate {
     }
     
     @available(iOS 12.0, *)
-    func setSiriLabel(for button: INUIAddVoiceShortcutButton, activityType: SiriShortcuts.activityType) {
+    func hasAddedActivity(type: SiriShortcuts.activityType, _ completion: @escaping (_ result: Bool) -> Void) {
         INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
-            var title = String()
             if let voiceShortcuts = voiceShortcuts {
                 let foundShortcut = voiceShortcuts.filter { (attempt) in
-                    attempt.__shortcut.userActivity?.activityType == activityType.rawValue
+                    attempt.__shortcut.userActivity?.activityType == type.rawValue
                     }.first
                 if foundShortcut != nil {
-                    title = "Edit"
+                    completion(true)
                 } else {
-                    title = "Add to Siri"
-                }
-                DispatchQueue.main.async {
-                    button.setTitle(title, for: .normal)
+                    completion(false)
                 }
             }
         }
