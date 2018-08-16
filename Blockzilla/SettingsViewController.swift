@@ -352,6 +352,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             searchCell.accessoryLabelText = accessoryLabel
             searchCell.label = label
             searchCell.accessibilityIdentifier = identifier
+            
             cell = searchCell
         case .siri:
             guard let siriCell = tableView.dequeueReusableCell(withIdentifier: "accessoryCell") as? SettingsTableViewAccessoryCell else { fatalError("No Search Cells!") }
@@ -517,7 +518,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             }
             else if indexPath.row == 1 {
                 if #available(iOS 12.0, *) {
-                    addToSiri(activityType: SiriShortcuts.activityType.eraseAndOpen)
+                    manageSiri(for: SiriShortcuts.activityType.eraseAndOpen)
                 }
             }
             else {
@@ -614,7 +615,7 @@ extension SettingsViewController: INUIAddVoiceShortcutViewControllerDelegate {
     }
     
     @available(iOS 12.0, *)
-    func addToSiri(activityType: SiriShortcuts.activityType) {
+    func manageSiri(for activityType: SiriShortcuts.activityType) {
         INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
             if let voiceShortcuts = voiceShortcuts {
                 let foundShortcut = voiceShortcuts.filter { (attempt) in
