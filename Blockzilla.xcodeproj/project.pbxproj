@@ -4081,7 +4081,7 @@
 				BUNDLE_ID_SUFFIX = .dev;
 				CODE_SIGN_ENTITLEMENTS = Klar.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 43AQ936H96;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4098,7 +4098,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar;
 				PRODUCT_NAME = "Firefox Klar";
-				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "KLAR DEBUG BUDDYBUILD";
 				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
