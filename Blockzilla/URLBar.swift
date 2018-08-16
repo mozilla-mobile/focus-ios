@@ -583,6 +583,7 @@ class URLBar: UIView {
         updateUrlIcons()
         let _ = urlText.resignFirstResponder()
         delegate?.urlBarDidDismiss(self)
+        setTextToURL()
         
         cancelButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         hideCancelConstraints.forEach { $0.activate() }
