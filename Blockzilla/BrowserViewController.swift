@@ -469,7 +469,10 @@ class BrowserViewController: UIViewController {
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.eraseButton)
         
-        donateErase()
+        SiriShortcuts().donateActivity(for: .eraseAndOpen)
+        guard let activity = SiriShortcuts().getActivity(for: .eraseAndOpen) else { return }
+        view.userActivity = activity
+        activity.becomeCurrent()
     }
     
     private func clearBrowser() {
@@ -1324,25 +1327,6 @@ extension BrowserViewController: UIPopoverPresentationControllerDelegate {
     
     func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
         darkView.isHidden = true
-    }
-}
-
-// Siri Extensions
-extension BrowserViewController {
-    func donateErase() {
-        if #available(iOS 12.0, *) {
-            let activity = NSUserActivity(activityType: "org.mozilla.ios.Klar.eraseAndOpen")
-            activity.title = UIConstants.strings.eraseAndOpenSiri
-            activity.userInfo = [:]
-            activity.isEligibleForSearch = true
-            activity.isEligibleForPrediction = true
-            activity.persistentIdentifier = NSUserActivityPersistentIdentifier("org.mozilla.ios.Klar.eraseAndOpen")
-            view.userActivity = activity
-            activity.becomeCurrent()
-    }
-        else {
-            return
-        }
     }
 }
 
