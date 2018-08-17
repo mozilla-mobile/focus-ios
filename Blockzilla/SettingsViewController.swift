@@ -37,7 +37,7 @@ class SettingsTableViewAccessoryCell: SettingsTableViewCell {
         }
     }
 
-    var label: String? {
+    var labelText: String? {
         get { return newLabel.text }
         set {
             newLabel.text = newValue
@@ -350,18 +350,18 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             let identifier = indexPath.row == 0 ? "SettingsViewController.searchCell" : "SettingsViewController.autocompleteCell"
 
             searchCell.accessoryLabelText = accessoryLabel
-            searchCell.label = label
+            searchCell.labelText = label
             searchCell.accessibilityIdentifier = identifier
 
             cell = searchCell
         case .siri:
             guard let siriCell = tableView.dequeueReusableCell(withIdentifier: "accessoryCell") as? SettingsTableViewAccessoryCell else { fatalError("No Search Cells!") }
             if indexPath.row == 0 {
-                siriCell.label = UIConstants.strings.eraseSiri
+                siriCell.labelText = UIConstants.strings.eraseSiri
                 siriCell.accessibilityIdentifier = "settingsViewController.siriEraseCell"
             } else if indexPath.row == 1 {
                 if #available(iOS 12.0, *) {
-                    siriCell.label = String(format: UIConstants.strings.eraseAndOpenSiri, AppInfo.productName)
+                    siriCell.labelText = UIConstants.strings.eraseAndOpenSiri
                     siriCell.accessibilityIdentifier = "settingsViewController.siriEraseAndOpenCell"
                     hasAddedActivity(type: .eraseAndOpen) { (result: Bool) in
                         DispatchQueue.main.async {
@@ -370,7 +370,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                     }
                 }
             } else {
-                siriCell.label = UIConstants.strings.openUrlsSiri
+                siriCell.labelText = UIConstants.strings.openUrlsSiri
                 siriCell.accessibilityIdentifier = "settingsViewController.siriOpenURLsCell"
             }
             cell = siriCell
