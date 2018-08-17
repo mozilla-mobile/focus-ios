@@ -42,9 +42,9 @@ class SiriShortcuts {
     
     private var openUrlActivity: NSUserActivity? {
         if #available(iOS 12.0, *) {
+            guard let url = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return nil }
             let activity = NSUserActivity(activityType: activityType.openURL.rawValue)
             activity.title = UIConstants.strings.openUrlSiri
-            var url = "google.com"
             activity.userInfo = ["url": url]
             activity.isEligibleForSearch = false
             activity.isEligibleForPrediction = true

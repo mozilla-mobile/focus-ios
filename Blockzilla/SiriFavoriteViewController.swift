@@ -12,7 +12,7 @@ class SiriFavoriteViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         title = UIConstants.strings.favoriteUrl
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(SiriFavoriteViewController.cancelTapped))
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.save, style: .done, target: self, action: #selector(SiriFavoriteViewController.doneTapped))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.save, style: .done, target: self, action: #selector(SiriFavoriteViewController.saveTapped))
         self.navigationItem.rightBarButtonItem?.accessibilityIdentifier = "saveButton"
         
         setupUI()
@@ -70,7 +70,7 @@ class SiriFavoriteViewController: UIViewController, UITextFieldDelegate {
         self.navigationController?.popViewController(animated: true)
     }
     
-    @objc func doneTapped() {
+    @objc func saveTapped() {
         self.resignFirstResponder()
         guard var domain = textInput.text, !domain.isEmpty else {
             Toast(text: UIConstants.strings.autocompleteAddCustomUrlError).show()
@@ -83,15 +83,12 @@ class SiriFavoriteViewController: UIViewController, UITextFieldDelegate {
             Toast(text: UIConstants.strings.autocompleteAddCustomUrlError).show()
             return
         }
-        print("in favorite")
-        print(url.absoluteString)
         UserDefaults.standard.set(url.absoluteString, forKey: "favoriteUrl")
         self.navigationController?.popViewController(animated: true)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        print("done")
-//        doneTapped()
+        saveTapped()
         return true
     }
 }
