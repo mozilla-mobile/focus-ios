@@ -370,8 +370,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                     }
                 }
             } else {
-                siriCell.labelText = UIConstants.strings.openUrlsSiri
-                siriCell.accessibilityIdentifier = "settingsViewController.siriOpenURLsCell"
+                siriCell.labelText = UIConstants.strings.openUrlSiri
+                siriCell.accessibilityIdentifier = "settingsViewController.siriOpenURLCell"
             }
             cell = siriCell
         case .mozilla:
@@ -522,7 +522,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
             }
             else {
-                // TODO: Issue #1097
+                let siriFavoriteVC = SiriFavoriteViewController()
+                navigationController?.pushViewController(siriFavoriteVC, animated: true)
             }
         case .mozilla:
             if indexPath.row == 0 {

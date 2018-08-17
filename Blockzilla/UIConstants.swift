@@ -389,6 +389,7 @@ struct UIConstants {
         static let eraseAndOpenSiri = NSLocalizedString("Siri.eraseAndOpen", value: "Erase & Open", comment: "Title of option in settings to set up Siri to erase and then open Focus/Klar. %@ is the application name.")
         static let openUrlSiri = NSLocalizedString("Siri.openURL", value: "Open Favorite URL", comment: "Title of option in settings to set up Siri to open a specified URL in Focus/Klar.")
         static let addToSiri = NSLocalizedString("Siri.addTo", value: "Add to Siri", comment: "Button to add a specified shortcut option to Siri.")
+        static let favoriteUrl = NSLocalizedString("Siri.favoriteUrl", value: "Favorite URL", comment: "Label for input to set a favorite URL to be opened by Siri.")
         
         static let userDefaultsLaunchThresholdKey = "launchThreshold"
         static let userDefaultsLaunchCountKey = "launchCount"
