@@ -37,9 +37,4 @@ class SiriShortcuts {
             return nil
         }
     }
-    
-    func donateActivity(for type: activityType) {
-        guard let activity = getActivity(for: type) else { return }
-        activity.becomeCurrent()
-    }
 }
