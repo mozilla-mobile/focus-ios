@@ -45,9 +45,6 @@ class SiriShortcuts {
             let activity = NSUserActivity(activityType: activityType.openURL.rawValue)
             activity.title = UIConstants.strings.openUrlSiri
             var url = "google.com"
-            if !url.hasPrefix("http://") && !url.hasPrefix("https://") {
-                url = String(format: "https://%@", url)
-            }
             activity.userInfo = ["url": url]
             activity.isEligibleForSearch = false
             activity.isEligibleForPrediction = true

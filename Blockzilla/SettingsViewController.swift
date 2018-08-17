@@ -283,6 +283,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        let myValue = UserDefaults.standard.value(forKey: "favoriteUrl") as? String
         updateSafariEnabledState()
         tableView.reloadData()
     }

@@ -33,7 +33,12 @@ class SiriFavoriteViewController: UIViewController, UITextFieldDelegate {
         textInput.returnKeyType = .done
         textInput.textColor = UIColor.white
         textInput.delegate = self
-        textInput.attributedPlaceholder = NSAttributedString(string: UIConstants.strings.autocompleteAddCustomUrlPlaceholder, attributes: [.foregroundColor: UIConstants.colors.inputPlaceholder])
+        if let storedFavorite = UserDefaults.standard.value(forKey: "favoriteUrl") as? String {
+            textInput.text = storedFavorite
+        } else {
+            textInput.attributedPlaceholder = NSAttributedString(string: UIConstants.strings.autocompleteAddCustomUrlPlaceholder, attributes: [.foregroundColor: UIConstants.colors.inputPlaceholder])
+        }
+        
         textInput.accessibilityIdentifier = "urlInput"
         textInput.becomeFirstResponder()
         view.addSubview(textInput)
@@ -66,7 +71,22 @@ class SiriFavoriteViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc func doneTapped() {
-        print("done")
+        self.resignFirstResponder()
+        guard var domain = textInput.text, !domain.isEmpty else {
+            Toast(text: UIConstants.strings.autocompleteAddCustomUrlError).show()
+            return
+        }
+        if !domain.hasPrefix("http://") && !domain.hasPrefix("https://") {
+            domain = String(format: "https://%@", domain)
+        }
+        guard let url = URL(string: domain) else {
+            Toast(text: UIConstants.strings.autocompleteAddCustomUrlError).show()
+            return
+        }
+        print("in favorite")
+        print(url.absoluteString)
+        UserDefaults.standard.set(url.absoluteString, forKey: "favoriteUrl")
+        self.navigationController?.popViewController(animated: true)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
