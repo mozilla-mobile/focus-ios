@@ -352,7 +352,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             searchCell.accessoryLabelText = accessoryLabel
             searchCell.label = label
             searchCell.accessibilityIdentifier = identifier
-            
+
             cell = searchCell
         case .siri:
             guard let siriCell = tableView.dequeueReusableCell(withIdentifier: "accessoryCell") as? SettingsTableViewAccessoryCell else { fatalError("No Search Cells!") }
@@ -617,7 +617,8 @@ extension SettingsViewController: INUIAddVoiceShortcutViewControllerDelegate {
     @available(iOS 12.0, *)
     func manageSiri(for activityType: SiriShortcuts.activityType) {
         INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
-            if let voiceShortcuts = voiceShortcuts {
+            DispatchQueue.main.async {
+                guard let voiceShortcuts = voiceShortcuts else { return }
                 let foundShortcut = voiceShortcuts.filter { (attempt) in
                     attempt.__shortcut.userActivity?.activityType == activityType.rawValue
                     }.first
@@ -625,18 +626,14 @@ extension SettingsViewController: INUIAddVoiceShortcutViewControllerDelegate {
                     let viewController = INUIEditVoiceShortcutViewController(voiceShortcut: foundShortcut)
                     viewController.modalPresentationStyle = .formSheet
                     viewController.delegate = self
-                    DispatchQueue.main.async {
-                        self.present(viewController, animated: true, completion: nil)
-                    }
+                    self.present(viewController, animated: true, completion: nil)
                 } else {
                     guard let activity = SiriShortcuts().getActivity(for: activityType) else { return }
                     let shortcut = INShortcut(userActivity: activity)
                     let viewController = INUIAddVoiceShortcutViewController(shortcut: shortcut)
                     viewController.modalPresentationStyle = .formSheet
                     viewController.delegate = self
-                    DispatchQueue.main.async {
-                        self.present(viewController, animated: true, completion: nil)
-                    }
+                    self.present(viewController, animated: true, completion: nil)
                 }
             }
         }
@@ -645,16 +642,11 @@ extension SettingsViewController: INUIAddVoiceShortcutViewControllerDelegate {
     @available(iOS 12.0, *)
     func hasAddedActivity(type: SiriShortcuts.activityType, _ completion: @escaping (_ result: Bool) -> Void) {
         INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
-            if let voiceShortcuts = voiceShortcuts {
-                let foundShortcut = voiceShortcuts.filter { (attempt) in
-                    attempt.__shortcut.userActivity?.activityType == type.rawValue
-                    }.first
-                if foundShortcut != nil {
-                    completion(true)
-                } else {
-                    completion(false)
-                }
-            }
+            guard let voiceShortcuts = voiceShortcuts else { return }
+            let foundShortcut = voiceShortcuts.filter { (attempt) in
+                attempt.__shortcut.userActivity?.activityType == type.rawValue
+                }.first
+            completion(foundShortcut != nil)
         }
     }
 }

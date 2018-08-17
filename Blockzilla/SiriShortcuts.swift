@@ -15,12 +15,10 @@ class SiriShortcuts {
     
     func getActivity(for type: activityType) -> NSUserActivity? {
         switch type {
-        case .erase:
-            print("erase")
         case .eraseAndOpen:
             return eraseAndOpenActivity
-        case .openURL:
-            print("open URL")
+        default:
+            break
         }
         return nil
     }
@@ -28,11 +26,11 @@ class SiriShortcuts {
     private var eraseAndOpenActivity: NSUserActivity? {
         if #available(iOS 12.0, *) {
             let activity = NSUserActivity(activityType: activityType.eraseAndOpen.rawValue)
-            activity.title = "Erase and open"
+            activity.title = UIConstants.strings.eraseAndOpenSiri
             activity.userInfo = [:]
             activity.isEligibleForSearch = true
             activity.isEligibleForPrediction = true
-            activity.suggestedInvocationPhrase = "Erase and open"
+            activity.suggestedInvocationPhrase = UIConstants.strings.eraseAndOpenSiri
             activity.persistentIdentifier = NSUserActivityPersistentIdentifier(activityType.eraseAndOpen.rawValue)
             return activity
         } else {
