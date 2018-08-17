@@ -8,6 +8,7 @@ import SnapKit
 import Telemetry
 import LocalAuthentication
 import StoreKit
+import Intents
 
 class BrowserViewController: UIViewController {
     let appSplashController: AppSplashController
@@ -555,6 +556,7 @@ class BrowserViewController: UIViewController {
     }
 
     func submit(url: URL) {
+        
         // If this is the first navigation, show the browser and the toolbar.
         guard isViewLoaded else { initialUrl = url; return }
 
@@ -570,6 +572,16 @@ class BrowserViewController: UIViewController {
         }
 
         webViewController.load(URLRequest(url: url))
+        if #available(iOS 12.0, *) {
+            let intent = OpenUrlIntent()
+            intent.url = url.absoluteString
+            let interaction = INInteraction(intent: intent, response: nil)
+            interaction.donate { (error) in
+                if let error = error {
+                    print("Donation error: \(error.localizedDescription)")
+                }
+            }
+        }
     }
 
     func openOverylay(text: String) {
