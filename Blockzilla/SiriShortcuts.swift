@@ -10,13 +10,15 @@ class SiriShortcuts {
     enum activityType: String {
         case erase
         case eraseAndOpen = "org.mozilla.ios.Klar.eraseAndOpen"
-        case openURL
+        case openURL = "org.mozilla.ios.Klar.openUrl"
     }
     
     func getActivity(for type: activityType) -> NSUserActivity? {
         switch type {
         case .eraseAndOpen:
             return eraseAndOpenActivity
+        case .openURL:
+            return openUrlActivity
         default:
             break
         }
@@ -32,6 +34,25 @@ class SiriShortcuts {
             activity.isEligibleForPrediction = true
             activity.suggestedInvocationPhrase = UIConstants.strings.eraseAndOpenSiri
             activity.persistentIdentifier = NSUserActivityPersistentIdentifier(activityType.eraseAndOpen.rawValue)
+            return activity
+        } else {
+            return nil
+        }
+    }
+    
+    private var openUrlActivity: NSUserActivity? {
+        if #available(iOS 12.0, *) {
+            let activity = NSUserActivity(activityType: activityType.openURL.rawValue)
+            activity.title = UIConstants.strings.openUrlSiri
+            var url = "google.com"
+            if !url.hasPrefix("http://") && !url.hasPrefix("https://") {
+                url = String(format: "https://%@", url)
+            }
+            activity.userInfo = ["url": url]
+            activity.isEligibleForSearch = false
+            activity.isEligibleForPrediction = true
+            activity.suggestedInvocationPhrase = UIConstants.strings.openUrlSiri
+            activity.persistentIdentifier = NSUserActivityPersistentIdentifier(activityType.openURL.rawValue)
             return activity
         } else {
             return nil
