@@ -93,7 +93,7 @@ class BrowserViewController: UIViewController {
         view.addSubview(mainContainerView)
         
         darkView.isHidden = true
-        darkView.backgroundColor = UIConstants.Photon.Ink80
+        darkView.backgroundColor = UIConstants.colors.background
         darkView.alpha = 0.4
         view.addSubview(darkView)
         darkView.snp.makeConstraints { make in
@@ -454,21 +454,14 @@ class BrowserViewController: UIViewController {
         }
 
         clearBrowser()
-        
-        UIView.animate(withDuration: UIConstants.layout.alphaToZeroDeleteAnimationDuration, animations: {
-            screenshotView.alpha = 0
-        }, completion: nil)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + UIConstants.layout.displayKeyboardDeleteAnimationDuration) {
-            self.urlBar.activateTextField()
-        }
-        
+
         UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, animations: {
             screenshotView.snp.remakeConstraints { make in
                 make.centerX.equalTo(self.mainContainerView)
                 make.top.equalTo(self.mainContainerView.snp.bottom)
                 make.size.equalTo(self.mainContainerView).multipliedBy(0.9)
             }
+            screenshotView.alpha = 0
             self.mainContainerView.layoutIfNeeded()
         }, completion: { _ in
             self.urlBar.activateTextField()
@@ -937,14 +930,14 @@ extension BrowserViewController: URLBarDelegate {
         }
         var actions = [PhotonActionSheetItem]()
         if let clipboardString = UIPasteboard.general.string {
+            let pasteAndGoItem = PhotonActionSheetItem(title: UIConstants.strings.urlPasteAndGo, iconString: "icon_paste_and_go") { action in
+                urlBar.pasteAndGo(clipboardString: clipboardString)
+            }
+            actions.append(pasteAndGoItem)
             let pasteItem = PhotonActionSheetItem(title: UIConstants.strings.urlPaste, iconString: "icon_paste") { action in
                 urlBar.paste(clipboardString: clipboardString)
             }
             actions.append(pasteItem)
-            let pasteAndGoItem = PhotonActionSheetItem(title: UIConstants.strings.urlPasteAndGo, iconString: "icon_paste") { action in
-                urlBar.pasteAndGo(clipboardString: clipboardString)
-            }
-            actions.append(pasteAndGoItem)
         }
         let copyItem = PhotonActionSheetItem(title: UIConstants.strings.copyMenuButton, iconString: "icon_link") { action in
             urlBar.copyToClipboard()
@@ -958,7 +951,6 @@ extension BrowserViewController: URLBarDelegate {
         guard let url = urlBar.url else { return }
         let utils = OpenUtils(url: url, webViewController: webViewController)
         let items = PageActionSheetItems(url: url)
-        let titleItem = PhotonActionSheetItem(title: UIConstants.strings.pageActionsTitle)
         let sharePageItem = PhotonActionSheetItem(title: UIConstants.strings.sharePage, iconString: "icon_openwith_active") { action in
             let shareVC = utils.buildShareViewController(url: url)
             shareVC.becomeFirstResponder()
@@ -978,7 +970,7 @@ extension BrowserViewController: URLBarDelegate {
         shareItems.append(copyItem)
         
         let actionItems = [items.findInPageItem, items.requestDesktopItem]
-        let pageActionsMenu = PhotonActionSheet(actions: [[titleItem], shareItems, actionItems], style: .overCurrentContext)
+        let pageActionsMenu = PhotonActionSheet(title: UIConstants.strings.pageActionsTitle, actions: [shareItems, actionItems], style: .overCurrentContext)
         presentPhotonActionSheet(pageActionsMenu, from: urlBar.pageActionsButton)
     }
 }
@@ -993,7 +985,7 @@ extension BrowserViewController: PhotonActionSheetDelegate {
             popoverVC.sourceView = sender
             popoverVC.sourceRect = CGRect(x: sender.frame.width/2, y: sender.frame.size.height * 0.75, width: 1, height: 1)
             popoverVC.permittedArrowDirections = .up
-            popoverVC.backgroundColor = UIConstants.Photon.Ink80
+            popoverVC.backgroundColor = UIConstants.colors.background
         }
         present(actionSheet, animated: true, completion: nil)
     }
