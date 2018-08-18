@@ -890,12 +890,17 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidActivate(_ urlBar: URLBar) {
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
+        urlBar.showOrHideClearButton(show: false)
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {() -> Void in
             self.topURLBarConstraints.forEach { $0.activate() }
             self.urlBarContainer.alpha = 1
             self.updateFindInPageVisibility(visible: false)
             self.view.layoutIfNeeded()
-        }
+        }, completion: { finished in
+            if finished {
+                urlBar.showOrHideClearButton(show: true)
+            }
+        })
     }
 
     func urlBarDidDeactivate(_ urlBar: URLBar) {
