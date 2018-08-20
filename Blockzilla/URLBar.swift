@@ -419,10 +419,6 @@ class URLBar: UIView {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.pasteAndGo)
     }
 
-    public func showOrHideClearButton(show: Bool) {
-        urlText.rightView?.alpha = show ? 1.0 : 0.0
-    }
-
     //Adds Menu Item
     func addCustomMenu() {
         if UIPasteboard.general.string != nil && urlText.isFirstResponder {
