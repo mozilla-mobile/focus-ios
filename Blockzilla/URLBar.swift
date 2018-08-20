@@ -247,7 +247,9 @@ class URLBar: UIView {
         }
         
         urlBarBorderView.snp.makeConstraints { make in
+            make.leading.greaterThanOrEqualTo(shieldIcon.snp.trailing).priority(.required)
             make.leading.equalTo(shieldIcon.snp.trailing).priority(.medium)
+            make.trailing.lessThanOrEqualTo(deleteButton.snp.leading).priority(.required)
             make.trailing.equalTo(deleteButton.snp.leading).priority(.medium)
             make.height.equalTo(42).priority(.medium)
             make.top.bottom.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
@@ -582,8 +584,8 @@ class URLBar: UIView {
         updateLockIcon()
         updateUrlIcons()
         let _ = urlText.resignFirstResponder()
-        setTextToURL()
         delegate?.urlBarDidDismiss(self)
+        setTextToURL()
         
         cancelButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         hideCancelConstraints.forEach { $0.activate() }
@@ -688,7 +690,7 @@ class URLBar: UIView {
         delegate?.urlBarDidPressPageActions(self)
     }
 
-    fileprivate func setTextToURL() {
+    fileprivate func setTextToURL(displayFullUrl: Bool = false) {
         var fullUrl: String? = nil
         var truncatedURL: String? = nil
 
@@ -699,7 +701,7 @@ class URLBar: UIView {
             components?.password = nil
             fullUrl = components?.url?.absoluteString
             truncatedURL = components?.host
-            urlText.text = isEditing ? fullUrl : truncatedURL
+            urlText.text = displayFullUrl ? fullUrl : truncatedURL
             truncatedUrlText.text = truncatedURL
         }
     }
@@ -730,10 +732,8 @@ class URLBar: UIView {
 
 extension URLBar: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
-        
-        setTextToURL()
 
-        autocompleteTextField.highlightAll()
+        setTextToURL(displayFullUrl: true)
         
         if !isEditing && inBrowsingMode {
             present()
@@ -810,6 +810,11 @@ private class URLTextField: AutocompleteTextField {
 
     override fileprivate func rightViewRect(forBounds bounds: CGRect) -> CGRect {
         return super.rightViewRect(forBounds: bounds).offsetBy(dx: -UIConstants.layout.urlBarWidthInset, dy: 0)
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        guard let autocompleteTextField = textField as? AutocompleteTextField else { return }
+        autocompleteTextField.highlightAll()
     }
 }
 
