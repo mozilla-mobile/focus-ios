@@ -898,7 +898,9 @@ extension BrowserViewController: URLBarDelegate {
             self.view.layoutIfNeeded()
         }, completion: { finished in
             if finished {
-                urlBar.showOrHideClearButton(show: true)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.18) {
+                    urlBar.showOrHideClearButton(show: true)
+                }
             }
         })
     }
