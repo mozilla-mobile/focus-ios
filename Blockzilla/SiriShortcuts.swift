@@ -23,7 +23,7 @@ class SiriShortcuts {
         return nil
     }
     
-    private var eraseAndOpenActivity: NSUserActivity? {
+    private var eraseAndOpenActivity: NSUserActivity? = {
         if #available(iOS 12.0, *) {
             let activity = NSUserActivity(activityType: activityType.eraseAndOpen.rawValue)
             activity.title = UIConstants.strings.eraseAndOpenSiri
@@ -36,5 +36,5 @@ class SiriShortcuts {
         } else {
             return nil
         }
-    }
+    }()
 }

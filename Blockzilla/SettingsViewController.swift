@@ -355,7 +355,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
             cell = searchCell
         case .siri:
-            guard let siriCell = tableView.dequeueReusableCell(withIdentifier: "accessoryCell") as? SettingsTableViewAccessoryCell else { fatalError("No Search Cells!") }
+            guard let siriCell = tableView.dequeueReusableCell(withIdentifier: "accessoryCell") as? SettingsTableViewAccessoryCell else { fatalError("No accessory cells") }
             if indexPath.row == 0 {
                 siriCell.labelText = UIConstants.strings.eraseSiri
                 siriCell.accessibilityIdentifier = "settingsViewController.siriEraseCell"
@@ -364,9 +364,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                     siriCell.labelText = UIConstants.strings.eraseAndOpenSiri
                     siriCell.accessibilityIdentifier = "settingsViewController.siriEraseAndOpenCell"
                     hasAddedActivity(type: .eraseAndOpen) { (result: Bool) in
-                        DispatchQueue.main.async {
-                            siriCell.accessoryLabel.text = result ? UIConstants.strings.Edit : UIConstants.strings.addToSiri
-                        }
+                        siriCell.accessoryLabel.text = result ? UIConstants.strings.Edit : UIConstants.strings.addToSiri
                     }
                 }
             } else {
@@ -642,11 +640,13 @@ extension SettingsViewController: INUIAddVoiceShortcutViewControllerDelegate {
     @available(iOS 12.0, *)
     func hasAddedActivity(type: SiriShortcuts.activityType, _ completion: @escaping (_ result: Bool) -> Void) {
         INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
-            guard let voiceShortcuts = voiceShortcuts else { return }
-            let foundShortcut = voiceShortcuts.filter { (attempt) in
-                attempt.__shortcut.userActivity?.activityType == type.rawValue
-                }.first
-            completion(foundShortcut != nil)
+            DispatchQueue.main.async {
+                guard let voiceShortcuts = voiceShortcuts else { return }
+                let foundShortcut = voiceShortcuts.filter { (attempt) in
+                    attempt.__shortcut.userActivity?.activityType == type.rawValue
+                    }.first
+                completion(foundShortcut != nil)
+            }
         }
     }
 }
