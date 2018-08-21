@@ -39,7 +39,8 @@ class SiriFavoriteViewController: UIViewController {
         textInput.autocapitalizationType = .none
         textInput.autocorrectionType = .no
         textInput.returnKeyType = .done
-        textInput.textColor = UIColor.white
+        textInput.textColor = .white
+        textInput.tintColor = UIConstants.colors.siriTint
         textInput.delegate = self
         if let storedFavorite = UserDefaults.standard.value(forKey: "favoriteUrl") as? String {
             textInput.text = storedFavorite
@@ -74,6 +75,7 @@ class SiriFavoriteViewController: UIViewController {
         }
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(SiriFavoriteViewController.cancelTapped))
+        self.navigationItem.leftBarButtonItem?.tintColor = UIConstants.colors.siriTint
     }
     
     private func setupChangeableUI() {
@@ -82,11 +84,15 @@ class SiriFavoriteViewController: UIViewController {
         let doneButton = UIBarButtonItem(title: UIConstants.strings.Done, style: .done, target: self, action: #selector(SiriFavoriteViewController.doneTapped))
         nextButton.accessibilityIdentifier = "doneButton"
         self.navigationItem.rightBarButtonItem = addedToSiri ? doneButton : nextButton
+        self.navigationItem.rightBarButtonItem?.tintColor = UIConstants.colors.siriTint
         
         guard addedToSiri else { return }
-        let editView = UIView()
+        let editView = EditView()
         editView.backgroundColor = UIConstants.colors.cellBackground
         view.addSubview(editView)
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(SiriFavoriteViewController.editTapped))
+        editView.addGestureRecognizer(tap)
         
         editView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
@@ -95,8 +101,8 @@ class SiriFavoriteViewController: UIViewController {
         }
         
         let editLabel = UILabel()
-        editLabel.text = "Re-record or Delete Shortcut"
-        editLabel.textColor = UIConstants.Photon.Magenta60
+        editLabel.text = UIConstants.strings.editOpenUrl
+        editLabel.textColor = UIConstants.colors.siriTint
         
         editView.addSubview(editLabel)
         editLabel.snp.makeConstraints { make in
@@ -105,19 +111,19 @@ class SiriFavoriteViewController: UIViewController {
         }
         
         let topBorder = UIView()
-        topBorder.backgroundColor = .white
+        topBorder.backgroundColor = UIConstants.colors.settingsSeparator
         editView.addSubview(topBorder)
         topBorder.snp.makeConstraints { make in
-            make.height.equalTo(1)
+            make.height.equalTo(0.5)
             make.top.width.equalToSuperview()
         }
         
         let bottomBorder = UIView()
-        bottomBorder.backgroundColor = .white
+        bottomBorder.backgroundColor = UIConstants.colors.settingsSeparator
         editView.addSubview(bottomBorder)
         bottomBorder.snp.makeConstraints { make in
-            make.height.equalTo(1)
-            make.bottom.width.equalToSuperview()
+            make.height.equalTo(0.5)
+            make.width.bottom.equalToSuperview()
         }
         
     }
@@ -135,6 +141,11 @@ class SiriFavoriteViewController: UIViewController {
         guard #available(iOS 12.0, *) else { return }
         saveFavorite()
         SiriShortcuts().displayAddToSiri(for: .openURL, in: self)
+    }
+    
+    @objc func editTapped() {
+        guard #available(iOS 12.0, *) else { return }
+        SiriShortcuts().manageSiri(for: .openURL, in: self)
     }
     
     private func saveFavorite() {
@@ -186,5 +197,19 @@ extension SiriFavoriteViewController: INUIEditVoiceShortcutViewControllerDelegat
     
     func editVoiceShortcutViewControllerDidCancel(_ controller: INUIEditVoiceShortcutViewController) {
         controller.dismiss(animated: true, completion: nil)
+    }
+}
+
+class EditView: UIView {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.backgroundColor = UIConstants.colors.cellSelected
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.backgroundColor = UIConstants.colors.cellBackground
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.backgroundColor = UIConstants.colors.cellBackground
     }
 }

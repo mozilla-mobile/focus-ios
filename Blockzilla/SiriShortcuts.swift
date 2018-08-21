@@ -86,4 +86,21 @@ class SiriShortcuts {
         editViewController.delegate = viewController as? INUIEditVoiceShortcutViewControllerDelegate
         viewController.present(editViewController, animated: true, completion: nil)
     }
+    
+    @available(iOS 12.0, *)
+    func manageSiri(for activityType: SiriShortcuts.activityType, in viewController: UIViewController) {
+        INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
+            DispatchQueue.main.async {
+                guard let voiceShortcuts = voiceShortcuts else { return }
+                let foundShortcut = voiceShortcuts.filter { (attempt) in
+                    attempt.shortcut.userActivity?.activityType == activityType.rawValue
+                    }.first
+                if let foundShortcut = foundShortcut {
+                    self.displayEditSiri(for: foundShortcut, in: viewController)
+                } else {
+                    self.displayAddToSiri(for: activityType, in: viewController)
+                }
+            }
+        }
+    }
 }

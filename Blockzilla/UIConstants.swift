@@ -47,6 +47,7 @@ struct UIConstants {
         static let settingsSeparator = UIConstants.Photon.Grey50
         static let settingsLink = UIConstants.Photon.Magenta60
         static let settingsDisabled = UIColor(rgb: 0xB2B2B2)
+        static let siriTint = UIConstants.Photon.Magenta60
         static let tableSectionHeader = UIColor(rgb: 0x6D6D72)
         static let toastBackground = UIColor(rgb: 0x414146)
         static let toastText = UIColor.white
@@ -391,6 +392,7 @@ struct UIConstants {
         static let addToSiri = NSLocalizedString("Siri.addTo", value: "Add to Siri", comment: "Button to add a specified shortcut option to Siri.")
         static let favoriteUrlTitle = NSLocalizedString("Siri.favoriteUrl", value: "Open Favorite Site", comment: "Title for screen to add a favorite URL to Siri.")
         static let urlToOpen = NSLocalizedString("Siri.favoriteUrl", value: "URL to open", comment: "Label for input to set a favorite URL to be opened by Siri.")
+        static let editOpenUrl = NSLocalizedString("Siri.editOpenUrl", value: "Re-Record or Delete Shortcut", comment: "Label for button to edit the Siri phrase or delete the Siri functionality.")
         
         static let userDefaultsLaunchThresholdKey = "launchThreshold"
         static let userDefaultsLaunchCountKey = "launchCount"

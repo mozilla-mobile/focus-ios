@@ -283,7 +283,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let myValue = UserDefaults.standard.value(forKey: "favoriteUrl") as? String
         updateSafariEnabledState()
         tableView.reloadData()
     }
@@ -518,7 +517,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             }
             else if indexPath.row == 1 {
                 if #available(iOS 12.0, *) {
-                    manageSiri(for: SiriShortcuts.activityType.eraseAndOpen)
+                    SiriShortcuts().manageSiri(for: SiriShortcuts.activityType.eraseAndOpen, in: self)
                 }
             }
             else {
@@ -615,22 +614,22 @@ extension SettingsViewController: INUIAddVoiceShortcutViewControllerDelegate {
         controller.dismiss(animated: true, completion: nil)
     }
     
-    @available(iOS 12.0, *)
-    func manageSiri(for activityType: SiriShortcuts.activityType) {
-        INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
-            DispatchQueue.main.async {
-                guard let voiceShortcuts = voiceShortcuts else { return }
-                let foundShortcut = voiceShortcuts.filter { (attempt) in
-                    attempt.shortcut.userActivity?.activityType == activityType.rawValue
-                    }.first
-                if let foundShortcut = foundShortcut {
-                    SiriShortcuts().displayEditSiri(for: foundShortcut, in: self)
-                } else {
-                    SiriShortcuts().displayAddToSiri(for: activityType, in: self)
-                }
-            }
-        }
-    }
+//    @available(iOS 12.0, *)
+//    func manageSiri(for activityType: SiriShortcuts.activityType) {
+//        INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
+//            DispatchQueue.main.async {
+//                guard let voiceShortcuts = voiceShortcuts else { return }
+//                let foundShortcut = voiceShortcuts.filter { (attempt) in
+//                    attempt.shortcut.userActivity?.activityType == activityType.rawValue
+//                    }.first
+//                if let foundShortcut = foundShortcut {
+//                    SiriShortcuts().displayEditSiri(for: foundShortcut, in: self)
+//                } else {
+//                    SiriShortcuts().displayAddToSiri(for: activityType, in: self)
+//                }
+//            }
+//        }
+//    }
 }
 
 @available(iOS 12.0, *)
