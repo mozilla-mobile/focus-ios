@@ -579,6 +579,9 @@ class BrowserViewController: UIViewController {
         if url.baseURL == URL(string: savedUrl)?.baseURL {
             userActivity = SiriShortcuts().getActivity(for: .openURL)
         }
+        if urlBar.url == nil {
+            urlBar.url = url
+        }
     }
 
     func openOverylay(text: String) {
@@ -1137,7 +1140,7 @@ extension BrowserViewController: WebControllerDelegate {
     
     func webControllerDidStartNavigation(_ controller: WebController) {
         if (!SearchHistoryUtils.isFromURLBar && !SearchHistoryUtils.isNavigating) {
-//            SearchHistoryUtils.pushSearchToStack(with: (urlBar.url?.absoluteString)!)
+            SearchHistoryUtils.pushSearchToStack(with: (urlBar.url?.absoluteString)!)
         }
         SearchHistoryUtils.isNavigating = false
         SearchHistoryUtils.isFromURLBar = false
