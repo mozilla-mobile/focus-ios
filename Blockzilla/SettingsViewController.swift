@@ -512,13 +512,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 navigationController?.pushViewController(autcompleteSettingViewController, animated: true)
             }
         case .siri:
+            guard #available(iOS 12.0, *) else { return }
             if indexPath.row == 0 {
                 // TODO: Issue #1049
             }
             else if indexPath.row == 1 {
-                if #available(iOS 12.0, *) {
-                    SiriShortcuts().manageSiri(for: SiriShortcuts.activityType.eraseAndOpen, in: self)
-                }
+                SiriShortcuts().manageSiri(for: SiriShortcuts.activityType.eraseAndOpen, in: self)
             }
             else {
                 let siriFavoriteVC = SiriFavoriteViewController()

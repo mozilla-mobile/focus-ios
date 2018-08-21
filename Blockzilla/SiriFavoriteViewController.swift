@@ -6,6 +6,7 @@ import Foundation
 import Intents
 import IntentsUI
 
+@available(iOS 12.0, *)
 class SiriFavoriteViewController: UIViewController {
     private let inputLabel = SmartLabel()
     private let textInput: UITextField = InsetTextField(insetBy: UIConstants.layout.settingsTextPadding)
@@ -18,14 +19,12 @@ class SiriFavoriteViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        guard #available(iOS 12.0, *) else { return }
         SiriShortcuts().hasAddedActivity(type: .openURL) { (result: Bool) in
             self.addedToSiri = result
         }
     }
     
     override func viewDidLoad() {
-        guard #available(iOS 12.0, *) else { return }
         title = UIConstants.strings.favoriteUrlTitle
         view.backgroundColor = UIConstants.colors.background
         
@@ -138,13 +137,11 @@ class SiriFavoriteViewController: UIViewController {
     }
     
     @objc func nextTapped() {
-        guard #available(iOS 12.0, *) else { return }
         saveFavorite()
         SiriShortcuts().displayAddToSiri(for: .openURL, in: self)
     }
     
     @objc func editTapped() {
-        guard #available(iOS 12.0, *) else { return }
         SiriShortcuts().manageSiri(for: .openURL, in: self)
     }
     
@@ -165,6 +162,7 @@ class SiriFavoriteViewController: UIViewController {
     }
 }
 
+@available(iOS 12.0, *)
 extension SiriFavoriteViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
