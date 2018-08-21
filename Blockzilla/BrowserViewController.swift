@@ -1137,7 +1137,7 @@ extension BrowserViewController: WebControllerDelegate {
     
     func webControllerDidStartNavigation(_ controller: WebController) {
         if (!SearchHistoryUtils.isFromURLBar && !SearchHistoryUtils.isNavigating) {
-            SearchHistoryUtils.pushSearchToStack(with: (urlBar.url?.absoluteString)!)
+//            SearchHistoryUtils.pushSearchToStack(with: (urlBar.url?.absoluteString)!)
         }
         SearchHistoryUtils.isNavigating = false
         SearchHistoryUtils.isFromURLBar = false

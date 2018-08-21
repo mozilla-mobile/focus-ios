@@ -276,9 +276,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         case "org.mozilla.ios.Klar.eraseAndOpen":
             browserViewController.resetBrowser(hidePreviousSession: true)
         case "org.mozilla.ios.Klar.openUrl":
-            guard let testString = userActivity.userInfo?["url"] as? String,
-                let myUrl = URL(string: testString) else { return false }
-            browserViewController.submit(url: myUrl)
+            guard let urlString = userActivity.userInfo?["url"] as? String,
+                let url = URL(string: urlString) else { return false }
+            browserViewController.resetBrowser(hidePreviousSession: true)
+            browserViewController.ensureBrowsingMode()
+            browserViewController.submit(url: url)
         default: break
         }
         return true
