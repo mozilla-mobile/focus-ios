@@ -369,7 +369,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 siriCell.labelText = UIConstants.strings.openUrlSiri
                 siriCell.accessibilityIdentifier = "settingsViewController.siriOpenURLCell"
                 SiriShortcuts().hasAddedActivity(type: .openURL) { (result: Bool) in
-                    siriCell.accessoryLabel.text = result ? UIConstants.strings.Edit : UIConstants.strings.addToSiri
+                    siriCell.accessoryLabel.text = result ? UIConstants.strings.Edit : UIConstants.strings.add
                 }
             }
             cell = siriCell
