@@ -6,6 +6,7 @@ import Foundation
 import Intents
 import IntentsUI
 
+@available(iOS 12.0, *)
 class SiriShortcuts {
     enum activityType: String {
         case erase
@@ -25,38 +26,29 @@ class SiriShortcuts {
         return nil
     }
     
-    private var eraseAndOpenActivity: NSUserActivity? = {
-        if #available(iOS 12.0, *) {
-            let activity = NSUserActivity(activityType: activityType.eraseAndOpen.rawValue)
-            activity.title = UIConstants.strings.eraseAndOpenSiri
-            activity.userInfo = [:]
-            activity.isEligibleForSearch = true
-            activity.isEligibleForPrediction = true
-            activity.suggestedInvocationPhrase = UIConstants.strings.eraseAndOpenSiri
-            activity.persistentIdentifier = NSUserActivityPersistentIdentifier(activityType.eraseAndOpen.rawValue)
-            return activity
-        } else {
-            return nil
-        }
+    private var eraseAndOpenActivity: NSUserActivity = {
+        let activity = NSUserActivity(activityType: activityType.eraseAndOpen.rawValue)
+        activity.title = UIConstants.strings.eraseAndOpenSiri
+        activity.userInfo = [:]
+        activity.isEligibleForSearch = true
+        activity.isEligibleForPrediction = true
+        activity.suggestedInvocationPhrase = UIConstants.strings.eraseAndOpenSiri
+        activity.persistentIdentifier = NSUserActivityPersistentIdentifier(activityType.eraseAndOpen.rawValue)
+        return activity
     }()
     
     private var openUrlActivity: NSUserActivity? = {
-        if #available(iOS 12.0, *) {
-            guard let url = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return nil }
-            let activity = NSUserActivity(activityType: activityType.openURL.rawValue)
-            activity.title = UIConstants.strings.openUrlSiri
-            activity.userInfo = ["url": url]
-            activity.isEligibleForSearch = false
-            activity.isEligibleForPrediction = true
-            activity.suggestedInvocationPhrase = UIConstants.strings.openUrlSiri
-            activity.persistentIdentifier = NSUserActivityPersistentIdentifier(activityType.openURL.rawValue)
-            return activity
-        } else {
-            return nil
-        }
+        guard let url = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return nil }
+        let activity = NSUserActivity(activityType: activityType.openURL.rawValue)
+        activity.title = UIConstants.strings.openUrlSiri
+        activity.userInfo = ["url": url]
+        activity.isEligibleForSearch = false
+        activity.isEligibleForPrediction = true
+        activity.suggestedInvocationPhrase = UIConstants.strings.openUrlSiri
+        activity.persistentIdentifier = NSUserActivityPersistentIdentifier(activityType.openURL.rawValue)
+        return activity
     }()
     
-    @available(iOS 12.0, *)
     func hasAddedActivity(type: SiriShortcuts.activityType, _ completion: @escaping (_ result: Bool) -> Void) {
         INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
             DispatchQueue.main.async {
@@ -69,7 +61,6 @@ class SiriShortcuts {
         }
     }
     
-    @available(iOS 12.0, *)
     func displayAddToSiri(for activityType: activityType, in viewController: UIViewController) {
         guard let activity = SiriShortcuts().getActivity(for: activityType) else { return }
         let shortcut = INShortcut(userActivity: activity)
@@ -79,7 +70,6 @@ class SiriShortcuts {
         viewController.present(addViewController, animated: true, completion: nil)
     }
     
-    @available(iOS 12.0, *)
     func displayEditSiri(for shortcut: INVoiceShortcut, in viewController: UIViewController) {
         let editViewController = INUIEditVoiceShortcutViewController(voiceShortcut: shortcut)
         editViewController.modalPresentationStyle = .formSheet
@@ -87,7 +77,6 @@ class SiriShortcuts {
         viewController.present(editViewController, animated: true, completion: nil)
     }
     
-    @available(iOS 12.0, *)
     func manageSiri(for activityType: SiriShortcuts.activityType, in viewController: UIViewController) {
         INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
             DispatchQueue.main.async {

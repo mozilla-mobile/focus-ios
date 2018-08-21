@@ -472,7 +472,9 @@ class BrowserViewController: UIViewController {
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.eraseButton)
         
-        userActivity = SiriShortcuts().getActivity(for: .eraseAndOpen)
+        if #available(iOS 12.0, *) {
+            userActivity = SiriShortcuts().getActivity(for: .eraseAndOpen)
+        }
     }
     
     private func clearBrowser() {
@@ -573,7 +575,7 @@ class BrowserViewController: UIViewController {
         }
 
         webViewController.load(URLRequest(url: url))
-        guard let savedUrl = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return }
+        guard #available(iOS 12.0, *), let savedUrl = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return }
         if url.baseURL == URL(string: savedUrl)?.baseURL {
             userActivity = SiriShortcuts().getActivity(for: .openURL)
         }
