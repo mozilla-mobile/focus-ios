@@ -205,6 +205,10 @@ struct UIConstants {
         static let textLogoOffset: CGFloat = -10 - browserToolbarHeight / 2
         static let urlBarButtonImageSize: CGFloat = 24
         static let urlBarButtonTargetSize: CGFloat = 40
+        static let settingsTextPadding: CGFloat = 10
+        static let siriUrlSectionPadding: CGFloat = 40
+        static let settingsSectionHeight: CGFloat = 44
+        static let separatorHeight: CGFloat = 0.5
     }
 
     struct strings {

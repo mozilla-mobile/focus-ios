@@ -8,7 +8,7 @@ import IntentsUI
 
 class SiriFavoriteViewController: UIViewController {
     private let inputLabel = SmartLabel()
-    private let textInput: UITextField = InsetTextField(insetBy: 10)
+    private let textInput: UITextField = InsetTextField(insetBy: UIConstants.layout.settingsTextPadding)
     private let inputDescription = SmartLabel()
     private var addedToSiri: Bool = false {
         didSet {
@@ -58,20 +58,20 @@ class SiriFavoriteViewController: UIViewController {
         view.addSubview(inputDescription)
         
         inputLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(40)
+            make.top.equalToSuperview().offset(UIConstants.layout.siriUrlSectionPadding)
             make.trailing.equalToSuperview()
-            make.leading.equalToSuperview().offset(10)
+            make.leading.equalToSuperview().offset(UIConstants.layout.settingsTextPadding)
         }
         
         textInput.snp.makeConstraints { make in
-            make.height.equalTo(44)
+            make.height.equalTo(UIConstants.layout.settingsSectionHeight)
             make.leading.trailing.equalToSuperview()
-            make.top.equalTo(inputLabel.snp.bottom).offset(10)
+            make.top.equalTo(inputLabel.snp.bottom).offset(UIConstants.layout.settingsTextPadding)
         }
         
         inputDescription.snp.makeConstraints { make in
-            make.top.equalTo(textInput.snp.bottom).offset(10)
-            make.leading.equalToSuperview().offset(10)
+            make.top.equalTo(textInput.snp.bottom).offset(UIConstants.layout.settingsTextPadding)
+            make.leading.equalToSuperview().offset(UIConstants.layout.settingsTextPadding)
         }
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(SiriFavoriteViewController.cancelTapped))
@@ -96,8 +96,8 @@ class SiriFavoriteViewController: UIViewController {
         
         editView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(44)
-            make.top.equalTo(inputDescription.snp.bottom).offset(40)
+            make.height.equalTo(UIConstants.layout.settingsSectionHeight)
+            make.top.equalTo(inputDescription.snp.bottom).offset(UIConstants.layout.siriUrlSectionPadding)
         }
         
         let editLabel = UILabel()
@@ -106,7 +106,7 @@ class SiriFavoriteViewController: UIViewController {
         
         editView.addSubview(editLabel)
         editLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(10)
+            make.leading.equalToSuperview().offset(UIConstants.layout.settingsTextPadding)
             make.centerY.equalToSuperview()
         }
         
@@ -114,7 +114,7 @@ class SiriFavoriteViewController: UIViewController {
         topBorder.backgroundColor = UIConstants.colors.settingsSeparator
         editView.addSubview(topBorder)
         topBorder.snp.makeConstraints { make in
-            make.height.equalTo(0.5)
+            make.height.equalTo(UIConstants.layout.separatorHeight)
             make.top.width.equalToSuperview()
         }
         
@@ -122,7 +122,7 @@ class SiriFavoriteViewController: UIViewController {
         bottomBorder.backgroundColor = UIConstants.colors.settingsSeparator
         editView.addSubview(bottomBorder)
         bottomBorder.snp.makeConstraints { make in
-            make.height.equalTo(0.5)
+            make.height.equalTo(UIConstants.layout.separatorHeight)
             make.width.bottom.equalToSuperview()
         }
         
