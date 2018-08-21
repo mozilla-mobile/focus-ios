@@ -355,23 +355,23 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
             cell = searchCell
         case .siri:
-            guard let siriCell = tableView.dequeueReusableCell(withIdentifier: "accessoryCell") as? SettingsTableViewAccessoryCell else { fatalError("No accessory cells") }
+            guard #available(iOS 12.0, *), let siriCell = tableView.dequeueReusableCell(withIdentifier: "accessoryCell") as? SettingsTableViewAccessoryCell else { fatalError("No accessory cells") }
             if indexPath.row == 0 {
                 siriCell.labelText = UIConstants.strings.eraseSiri
                 siriCell.accessibilityIdentifier = "settingsViewController.siriEraseCell"
             } else if indexPath.row == 1 {
-                if #available(iOS 12.0, *) {
                     siriCell.labelText = UIConstants.strings.eraseAndOpenSiri
                     siriCell.accessibilityIdentifier = "settingsViewController.siriEraseAndOpenCell"
                     SiriShortcuts().hasAddedActivity(type: .eraseAndOpen) { (result: Bool) in
                         siriCell.accessoryLabel.text = result ? UIConstants.strings.Edit : UIConstants.strings.addToSiri
                     }
-                }
             } else {
                 siriCell.labelText = UIConstants.strings.openUrlSiri
                 siriCell.accessibilityIdentifier = "settingsViewController.siriOpenURLCell"
-//                siriCell.accessoryLabel.text = result ? UIConstants.strings.Edit : UIConstants.strings.addToSiri
-                    }
+                SiriShortcuts().hasAddedActivity(type: .openURL) { (result: Bool) in
+                    siriCell.accessoryLabel.text = result ? UIConstants.strings.Edit : UIConstants.strings.addToSiri
+                }
+            }
             cell = siriCell
         case .mozilla:
             if indexPath.row == 0 {
@@ -613,23 +613,6 @@ extension SettingsViewController: INUIAddVoiceShortcutViewControllerDelegate {
     func addVoiceShortcutViewControllerDidCancel(_ controller: INUIAddVoiceShortcutViewController) {
         controller.dismiss(animated: true, completion: nil)
     }
-    
-//    @available(iOS 12.0, *)
-//    func manageSiri(for activityType: SiriShortcuts.activityType) {
-//        INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
-//            DispatchQueue.main.async {
-//                guard let voiceShortcuts = voiceShortcuts else { return }
-//                let foundShortcut = voiceShortcuts.filter { (attempt) in
-//                    attempt.shortcut.userActivity?.activityType == activityType.rawValue
-//                    }.first
-//                if let foundShortcut = foundShortcut {
-//                    SiriShortcuts().displayEditSiri(for: foundShortcut, in: self)
-//                } else {
-//                    SiriShortcuts().displayAddToSiri(for: activityType, in: self)
-//                }
-//            }
-//        }
-//    }
 }
 
 @available(iOS 12.0, *)
