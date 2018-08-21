@@ -247,7 +247,9 @@ class URLBar: UIView {
         }
         
         urlBarBorderView.snp.makeConstraints { make in
+            make.leading.greaterThanOrEqualTo(shieldIcon.snp.trailing).priority(.required)
             make.leading.equalTo(shieldIcon.snp.trailing).priority(.medium)
+            make.trailing.lessThanOrEqualTo(deleteButton.snp.leading).priority(.required)
             make.trailing.equalTo(deleteButton.snp.leading).priority(.medium)
             make.height.equalTo(42).priority(.medium)
             make.top.bottom.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
@@ -582,8 +584,8 @@ class URLBar: UIView {
         updateLockIcon()
         updateUrlIcons()
         let _ = urlText.resignFirstResponder()
-        setTextToURL()
         delegate?.urlBarDidDismiss(self)
+        setTextToURL()
         
         cancelButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         hideCancelConstraints.forEach { $0.activate() }
@@ -688,10 +690,11 @@ class URLBar: UIView {
         delegate?.urlBarDidPressPageActions(self)
     }
 
-    fileprivate func setTextToURL() {
+    fileprivate func setTextToURL(displayFullUrl: Bool = false) {
         var fullUrl: String? = nil
         var truncatedURL: String? = nil
-
+        var displayText: String? = nil
+        
         if let url = url {
             // Strip the username/password to prevent domain spoofing.
             var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
@@ -699,16 +702,21 @@ class URLBar: UIView {
             components?.password = nil
             fullUrl = components?.url?.absoluteString
             truncatedURL = components?.host
-            urlText.text = isEditing ? fullUrl : truncatedURL
+
+            if let stackValue = SearchHistoryUtils.pullSearchFromStack(), !stackValue.isUrl {
+                displayText = stackValue
+            } else {
+                displayText = truncatedURL
+            }
+
+            urlText.text = displayFullUrl ? fullUrl : displayText
             truncatedUrlText.text = truncatedURL
         }
     }
 
     func collapseUrlBar(expandAlpha: CGFloat, collapseAlpha: CGFloat) {
-        deleteButton.alpha = expandAlpha
         urlBarBorderView.alpha = expandAlpha
         urlBarBackgroundView.alpha = expandAlpha
-        shieldIcon.alpha = expandAlpha
         truncatedUrlText.alpha = collapseAlpha
         collapsedUrlAndLockWrapper.alpha = collapseAlpha
         toolset.backButton.alpha = expandAlpha
@@ -716,6 +724,13 @@ class URLBar: UIView {
         toolset.stopReloadButton.alpha = expandAlpha
         toolset.settingsButton.alpha = expandAlpha
         collapsedTrackingProtectionBadge.alpha = collapseAlpha
+        if isEditing {
+            deleteButton.alpha = collapseAlpha
+            shieldIcon.alpha = collapseAlpha
+        } else {
+            deleteButton.alpha = expandAlpha
+            shieldIcon.alpha = expandAlpha
+        }
         // updating the small lock icon status here in order to prevent the icon from flashing on start up
         let visible = !isEditing && (url?.scheme == "https")
         smallLockIcon.alpha = visible ? collapseAlpha : 0
@@ -730,10 +745,8 @@ class URLBar: UIView {
 
 extension URLBar: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
-        
-        setTextToURL()
 
-        autocompleteTextField.highlightAll()
+        setTextToURL(displayFullUrl: true)
         
         if !isEditing && inBrowsingMode {
             present()
@@ -810,6 +823,11 @@ private class URLTextField: AutocompleteTextField {
 
     override fileprivate func rightViewRect(forBounds bounds: CGRect) -> CGRect {
         return super.rightViewRect(forBounds: bounds).offsetBy(dx: -UIConstants.layout.urlBarWidthInset, dy: 0)
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        guard let autocompleteTextField = textField as? AutocompleteTextField else { return }
+        autocompleteTextField.highlightAll()
     }
 }
 

@@ -59,7 +59,7 @@ struct UIConstants {
         static let urlTextHighlight = UIColor(rgb: 0xB5007F)
         static let urlTextPlaceholder = UIConstants.Photon.Grey10.withAlphaComponent(0.4)
         static let urlTextShadow = UIColor.black
-        static let whatsNew = UIColor(rgb: 0x0A84FF)
+        static let whatsNew = UIConstants.Photon.Teal50
 
         static let inputPlaceholder = UIColor(rgb: 0xb2b2b2)
 
@@ -387,9 +387,10 @@ struct UIConstants {
         static let siriShortcutsTitle = NSLocalizedString("Settinsg.siriShortcutsTitle", value: "SIRI SHORTCUTS", comment: "Title for settings section to enable different Siri Shortcuts.")
         static let eraseSiri = NSLocalizedString("Siri.erase", value: "Erase", comment: "Title of option in settings to set up Siri to erase")
         static let eraseAndOpenSiri = NSLocalizedString("Siri.eraseAndOpen", value: "Erase & Open", comment: "Title of option in settings to set up Siri to erase and then open Focus/Klar. %@ is the application name.")
-        static let openUrlSiri = NSLocalizedString("Siri.openURL", value: "Open Favorite URL", comment: "Title of option in settings to set up Siri to open a specified URL in Focus/Klar.")
+        static let openUrlSiri = NSLocalizedString("Siri.openURL", value: "Open Favorite Site", comment: "Title of option in settings to set up Siri to open a specified URL in Focus/Klar.")
         static let addToSiri = NSLocalizedString("Siri.addTo", value: "Add to Siri", comment: "Button to add a specified shortcut option to Siri.")
-        static let favoriteUrl = NSLocalizedString("Siri.favoriteUrl", value: "Favorite URL", comment: "Label for input to set a favorite URL to be opened by Siri.")
+        static let favoriteUrlTitle = NSLocalizedString("Siri.favoriteUrl", value: "Open Favorite Site", comment: "Title for screen to add a favorite URL to Siri.")
+        static let urlToOpen = NSLocalizedString("Siri.favoriteUrl", value: "URL to open", comment: "Label for input to set a favorite URL to be opened by Siri.")
         
         static let userDefaultsLaunchThresholdKey = "launchThreshold"
         static let userDefaultsLaunchCountKey = "launchCount"

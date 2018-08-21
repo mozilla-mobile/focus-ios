@@ -25,7 +25,7 @@ class SiriShortcuts {
         return nil
     }
     
-    private var eraseAndOpenActivity: NSUserActivity? {
+    private var eraseAndOpenActivity: NSUserActivity? = {
         if #available(iOS 12.0, *) {
             let activity = NSUserActivity(activityType: activityType.eraseAndOpen.rawValue)
             activity.title = UIConstants.strings.eraseAndOpenSiri
@@ -38,9 +38,9 @@ class SiriShortcuts {
         } else {
             return nil
         }
-    }
+    }()
     
-    private var openUrlActivity: NSUserActivity? {
+    private var openUrlActivity: NSUserActivity? = {
         if #available(iOS 12.0, *) {
             guard let url = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return nil }
             let activity = NSUserActivity(activityType: activityType.openURL.rawValue)
@@ -54,5 +54,36 @@ class SiriShortcuts {
         } else {
             return nil
         }
+    }()
+    
+    @available(iOS 12.0, *)
+    func hasAddedActivity(type: SiriShortcuts.activityType, _ completion: @escaping (_ result: Bool) -> Void) {
+        INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
+            DispatchQueue.main.async {
+                guard let voiceShortcuts = voiceShortcuts else { return }
+                let foundShortcut = voiceShortcuts.filter { (attempt) in
+                    attempt.shortcut.userActivity?.activityType == type.rawValue
+                    }.first
+                completion(foundShortcut != nil)
+            }
+        }
+    }
+    
+    @available(iOS 12.0, *)
+    func displayAddToSiri(for activityType: activityType, in viewController: UIViewController) {
+        guard let activity = SiriShortcuts().getActivity(for: activityType) else { return }
+        let shortcut = INShortcut(userActivity: activity)
+        let addViewController = INUIAddVoiceShortcutViewController(shortcut: shortcut)
+        addViewController.modalPresentationStyle = .formSheet
+        addViewController.delegate = viewController as? INUIAddVoiceShortcutViewControllerDelegate
+        viewController.present(addViewController, animated: true, completion: nil)
+    }
+    
+    @available(iOS 12.0, *)
+    func displayEditSiri(for shortcut: INVoiceShortcut, in viewController: UIViewController) {
+        let editViewController = INUIEditVoiceShortcutViewController(voiceShortcut: shortcut)
+        editViewController.modalPresentationStyle = .formSheet
+        editViewController.delegate = viewController as? INUIEditVoiceShortcutViewControllerDelegate
+        viewController.present(editViewController, animated: true, completion: nil)
     }
 }
