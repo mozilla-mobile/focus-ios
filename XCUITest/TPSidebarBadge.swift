@@ -65,21 +65,8 @@ class TrackingProtectionMenu: BaseTestCase {
         // Wait for the menu to open
         waitforExistence(element: app.staticTexts["Tracking Protection"])
 
-        // Check for all 0 tracker count values in menu
-        waitforExistence(element: app.staticTexts["Trackers blocked.Subtitle"])
-        XCTAssertEqual(app.staticTexts["Trackers blocked.Subtitle"].label, "0")
-        
-        waitforExistence(element: app.staticTexts["Ad trackers.Subtitle"])
-        XCTAssertEqual(app.staticTexts["Ad trackers.Subtitle"].label, "0")
-        
-        waitforExistence(element: app.staticTexts["Analytic trackers.Subtitle"])
-        XCTAssertEqual(app.staticTexts["Analytic trackers.Subtitle"].label, "0")
-        
-        waitforExistence(element: app.staticTexts["Social trackers.Subtitle"])
-        XCTAssertEqual(app.staticTexts["Social trackers.Subtitle"].label, "0")
-        
-        waitforExistence(element: app.staticTexts["Content trackers.Subtitle"])
-        XCTAssertEqual(app.staticTexts["Content trackers.Subtitle"].label, "0")
+        // Check tracker values
+        waitForZeroTrackers()
 
         // Close the menu
         waitforHittable(element: app.buttons["PhotonMenu.close"])
@@ -115,6 +102,20 @@ class TrackingProtectionMenu: BaseTestCase {
         // Wait for the sidebar to open
         waitforExistence(element: app.staticTexts["Tracking Protection"])
 
+        // Check tracker values
+        waitForZeroTrackers()
+
+        // Close the menu
+        waitforHittable(element: app.buttons["PhotonMenu.close"])
+        app.buttons["PhotonMenu.close"].tap()
+        
+        // Erase the history
+        waitforHittable(element: app.buttons["URLBar.deleteButton"])
+        app.buttons["URLBar.deleteButton"].tap()
+        waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
+    }
+    
+    private func waitForZeroTrackers() {
         // Check for all 0 tracker count values in menu
         waitforExistence(element: app.staticTexts["Trackers blocked.Subtitle"])
         XCTAssertEqual(app.staticTexts["Trackers blocked.Subtitle"].label, "0")
@@ -130,14 +131,5 @@ class TrackingProtectionMenu: BaseTestCase {
         
         waitforExistence(element: app.staticTexts["Content trackers.Subtitle"])
         XCTAssertEqual(app.staticTexts["Content trackers.Subtitle"].label, "0")
-
-        // Close the menu
-        waitforHittable(element: app.buttons["PhotonMenu.close"])
-        app.buttons["PhotonMenu.close"].tap()
-        
-        // Erase the history
-        waitforHittable(element: app.buttons["URLBar.deleteButton"])
-        app.buttons["URLBar.deleteButton"].tap()
-        waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
     }
 }
