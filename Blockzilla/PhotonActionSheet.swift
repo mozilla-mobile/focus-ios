@@ -572,6 +572,7 @@ private class PhotonActionSheetCell: UITableViewCell {
             disclosureLabel.font  = action.bold ? UIConstants.fonts.actionMenuItemBold : UIConstants.fonts.actionMenuItem
             disclosureLabel.text = action.accessoryText
             disclosureLabel.textColor = titleLabel.textColor
+            disclosureLabel.accessibilityIdentifier = "\(action.title).Subtitle"
             stackView.addArrangedSubview(disclosureLabel)
         case .Switch:
             let toggle = UISwitch()
