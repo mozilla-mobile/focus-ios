@@ -281,6 +281,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             browserViewController.resetBrowser(hidePreviousSession: true)
             browserViewController.ensureBrowsingMode()
             browserViewController.submit(url: url)
+        case "EraseIntent":
+            guard userActivity.interaction?.intent as? EraseIntent != nil else { return false }
+            browserViewController.resetBrowser()
+            return true
         default: break
         }
         return true

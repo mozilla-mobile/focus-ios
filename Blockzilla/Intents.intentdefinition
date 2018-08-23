@@ -24,7 +24,7 @@
 			<key>INIntentLastParameterTag</key>
 			<integer>0</integer>
 			<key>INIntentName</key>
-			<string>Intent</string>
+			<string>Erase</string>
 			<key>INIntentParameterCombinations</key>
 			<dict>
 				<key></key>
