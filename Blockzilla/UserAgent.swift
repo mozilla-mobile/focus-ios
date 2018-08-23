@@ -25,7 +25,7 @@ class UserAgent {
         guard let userAgent = UserAgent.generateUserAgent() else {
             return
         }
-        
+
         userDefaults.set(userAgent, forKey: "UserAgent")
         userDefaults.set(AppInfo.shortVersion, forKey: "LastFocusVersionNumber")
         userDefaults.set(AppInfo.buildNumber, forKey: "LastFocusBuildNumber")
@@ -51,7 +51,7 @@ class UserAgent {
         }
         return nil
     }
-    
+
     private static func generateUserAgent() -> String? {
         let webView = UIWebView()
 
