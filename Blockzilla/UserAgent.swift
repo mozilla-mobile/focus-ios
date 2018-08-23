@@ -25,14 +25,11 @@ class UserAgent {
         guard let userAgent = UserAgent.generateUserAgent() else {
             return
         }
+        
         userDefaults.set(userAgent, forKey: "UserAgent")
-
-        let appVersion = AppInfo.shortVersion
-        let buildNumber = AppInfo.buildNumber
-        let currentiOSVersion = UIDevice.current.systemVersion
-        userDefaults.set(appVersion, forKey: "LastFocusVersionNumber")
-        userDefaults.set(buildNumber, forKey: "LastFocusBuildNumber")
-        userDefaults.set(currentiOSVersion, forKey: "LastDeviceSystemVersionNumber")
+        userDefaults.set(AppInfo.shortVersion, forKey: "LastFocusVersionNumber")
+        userDefaults.set(AppInfo.buildNumber, forKey: "LastFocusBuildNumber")
+        userDefaults.set(UIDevice.current.systemVersion, forKey: "LastDeviceSystemVersionNumber")
 
         setUserAgent(userAgent: userAgent)
     }
