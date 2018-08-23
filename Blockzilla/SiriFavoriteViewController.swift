@@ -27,6 +27,11 @@ class SiriFavoriteViewController: UIViewController {
     }
     
     override func viewDidLoad() {
+        setUpInputUI()
+        setUpEditUI()
+    }
+    
+    private func setUpInputUI() {
         title = UIConstants.strings.favoriteUrlTitle
         view.backgroundColor = UIConstants.colors.background
         
@@ -77,8 +82,6 @@ class SiriFavoriteViewController: UIViewController {
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(SiriFavoriteViewController.cancelTapped))
         self.navigationItem.leftBarButtonItem?.tintColor = UIConstants.colors.siriTint
-        
-        setUpEditUI()
     }
     
     private func setUpEditUI() {
@@ -120,7 +123,6 @@ class SiriFavoriteViewController: UIViewController {
             make.height.equalTo(UIConstants.layout.separatorHeight)
             make.width.bottom.equalToSuperview()
         }
-        
     }
     
     private func setUpRightBarButton() {
@@ -154,14 +156,24 @@ class SiriFavoriteViewController: UIViewController {
     
     private func saveFavorite() -> Bool {
         self.resignFirstResponder()
-        guard var domain = textInput.text, !domain.isEmpty else {
+        guard let domain = textInput.text, !domain.isEmpty else {
             Toast(text: UIConstants.strings.autocompleteAddCustomUrlError).show()
             return false
         }
-        if !domain.hasPrefix("http://") && !domain.hasPrefix("https://") {
-            domain = String(format: "https://%@", domain)
+        let regex = try! NSRegularExpression(pattern: "^(\\s+)?(?:https?:\\/\\/)?(?:www\\.)?", options: [.caseInsensitive])
+        var sanitizedDomain = regex.stringByReplacingMatches(in: domain, options: [], range: NSMakeRange(0, domain.count), withTemplate: "")
+        
+        guard !sanitizedDomain.isEmpty, sanitizedDomain.contains(".") else {
+            Toast(text: UIConstants.strings.autocompleteAddCustomUrlError).show()
+            return false
         }
-        guard let url = URL(string: domain) else {
+        if sanitizedDomain.suffix(1) == "/" {
+            sanitizedDomain = String(sanitizedDomain.dropLast())
+        }
+        if !sanitizedDomain.hasPrefix("http://") && !sanitizedDomain.hasPrefix("https://") {
+            sanitizedDomain = String(format: "https://%@", sanitizedDomain)
+        }
+        guard let url = URL(string: sanitizedDomain) else {
             Toast(text: UIConstants.strings.autocompleteAddCustomUrlError).show()
             return false
         }
