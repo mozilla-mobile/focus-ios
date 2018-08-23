@@ -85,7 +85,6 @@ class SiriFavoriteViewController: UIViewController {
     }
     
     private func setUpEditUI() {
-        
         editView.backgroundColor = UIConstants.colors.cellBackground
         view.addSubview(editView)
         
@@ -184,7 +183,6 @@ class SiriFavoriteViewController: UIViewController {
 
 @available(iOS 12.0, *)
 extension SiriFavoriteViewController: UITextFieldDelegate {
-    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         nextTapped()
         return true
@@ -193,7 +191,6 @@ extension SiriFavoriteViewController: UITextFieldDelegate {
 
 @available(iOS 12.0, *)
 extension SiriFavoriteViewController: INUIAddVoiceShortcutViewControllerDelegate {
-    
     func addVoiceShortcutViewController(_ controller: INUIAddVoiceShortcutViewController, didFinishWith voiceShortcut: INVoiceShortcut?, error: Error?) {
         controller.dismiss(animated: true, completion: nil)
     }
