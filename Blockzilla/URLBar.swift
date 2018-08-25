@@ -311,7 +311,7 @@ class URLBar: UIView {
 
         urlText.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
-            make.trailing.equalTo(pageActionsButton.snp.leading)
+            make.trailing.equalTo(textAndLockContainer)
         }
 
         toolset.settingsButton.snp.makeConstraints { make in
@@ -417,10 +417,6 @@ class URLBar: UIView {
         delegate?.urlBar(self, didSubmitText: clipboardString)
             
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.pasteAndGo)
-    }
-
-    public func showOrHideClearButton(show: Bool) {
-        urlText.rightView?.alpha = show ? 1.0 : 0.0
     }
 
     //Adds Menu Item
