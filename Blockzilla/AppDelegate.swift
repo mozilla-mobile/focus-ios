@@ -241,8 +241,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        print("DOES SIRI REQUEST ERASE?")
-        print(Settings.siriRequestsErase())
+        if Settings.siriRequestsErase() {
+            browserViewController.resetBrowser(hidePreviousSession: true)
+            Settings.setSiriRequestErase(to: false)
+        }
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
 
         if let url = queuedUrl {
