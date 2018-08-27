@@ -54,4 +54,13 @@ struct Settings {
         prefs.set(value, forKey: toggle.rawValue)
         prefs.synchronize()
     }
+    
+    static func siriRequestsErase() -> Bool {
+        return prefs.bool(forKey: "siriRequestsErase")
+    }
+    
+    static func setSiriRequestErase(to value: Bool) {
+        prefs.set(value, forKey: "siriRequestsErase")
+        prefs.synchronize()
+    }
 }

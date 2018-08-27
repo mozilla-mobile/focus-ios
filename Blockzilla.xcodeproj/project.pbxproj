@@ -23,6 +23,9 @@
 		166E4C0321347D150029E2A5 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 166E4C0221347D150029E2A5 /* IntentHandler.swift */; };
 		166E4C0721347D150029E2A5 /* FocusIntentExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 166E4C0021347D150029E2A5 /* FocusIntentExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		166E4C0F21347D760029E2A5 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 16180DBA212F563800AFE3C2 /* Intents.intentdefinition */; };
+		166E4C86213480F60029E2A5 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E251FA1DAF0668005918DC /* AppInfo.swift */; };
+		166E4C87213480FD0029E2A5 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
+		166E4C882134810D0029E2A5 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35C11461E04AADA005FFFEF /* AppConfig.swift */; };
 		16D465B12127891000FEC226 /* SiriFavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D465B02127891000FEC226 /* SiriFavoriteViewController.swift */; };
 		16D7169C2114EF76000C8A66 /* BlockerToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D7169B2114EF72000C8A66 /* BlockerToggle.swift */; };
 		16D7169E2114F00E000C8A66 /* TrackingProtectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D7169D2114F00E000C8A66 /* TrackingProtectionViewController.swift */; };
@@ -1668,7 +1671,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				166E4C0F21347D760029E2A5 /* Intents.intentdefinition in Sources */,
+				166E4C882134810D0029E2A5 /* AppConfig.swift in Sources */,
 				166E4C0321347D150029E2A5 /* IntentHandler.swift in Sources */,
+				166E4C87213480FD0029E2A5 /* Settings.swift in Sources */,
+				166E4C86213480F60029E2A5 /* AppInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
