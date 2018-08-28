@@ -405,6 +405,7 @@ struct UIConstants {
         static let userDefaultsLaunchThresholdKey = "launchThreshold"
         static let userDefaultsLaunchCountKey = "launchCount"
         static let userDefaultsLastReviewRequestDate = "lastReviewRequestDate"
+        static let userDefaultsSiriRequestsErase = "siriRequestsErase"
         static let requestDesktopNotification = "Notification.requestDesktop"
         static let findInPageNotification = "Notification.findInPage"
     }

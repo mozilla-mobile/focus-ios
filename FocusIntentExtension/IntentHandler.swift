@@ -11,9 +11,7 @@ class IntentHandler: INExtension, EraseIntentHandling {
         completion(EraseIntentResponse(code: .success, userActivity: nil ))
     }
     
-    
     override func handler(for intent: INIntent) -> Any {
         return self
     }
-    
 }

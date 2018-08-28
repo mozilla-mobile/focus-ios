@@ -21,6 +21,7 @@ struct Settings {
     fileprivate static let prefs = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
     
     fileprivate static let customDomainSettingKey = "customDomains"
+    private static let siriRequestsEraseKey = "siriRequestsErase"
 
     private static func defaultForToggle(_ toggle: SettingsToggle) -> Bool {
         switch toggle {
@@ -56,11 +57,11 @@ struct Settings {
     }
     
     static func siriRequestsErase() -> Bool {
-        return prefs.bool(forKey: "siriRequestsErase")
+        return prefs.bool(forKey: siriRequestsEraseKey)
     }
     
     static func setSiriRequestErase(to value: Bool) {
-        prefs.set(value, forKey: "siriRequestsErase")
+        prefs.set(value, forKey: siriRequestsEraseKey)
         prefs.synchronize()
     }
 }

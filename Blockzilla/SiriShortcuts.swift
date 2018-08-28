@@ -63,9 +63,11 @@ class SiriShortcuts {
         INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
             DispatchQueue.main.async {
                 guard let voiceShortcuts = voiceShortcuts else { return }
+                // First, check for userActivity, which is for shortcuts that work in the foreground
                 var foundShortcut = voiceShortcuts.filter { (attempt) in
                     attempt.shortcut.userActivity?.activityType == type.rawValue
                     }.first
+                // Next, check for intent, which is used for shortcuts that work in the background
                 if foundShortcut == nil {
                     foundShortcut = voiceShortcuts.filter { (attempt) in
                         attempt.shortcut.intent as? EraseIntent != nil
@@ -80,7 +82,6 @@ class SiriShortcuts {
         var shortcut: INShortcut?
         if let activity = SiriShortcuts().getActivity(for: activityType) {
             shortcut = INShortcut(userActivity: activity)
-            
         } else if let intent = SiriShortcuts().getIntent(for: activityType) {
             shortcut = INShortcut(intent: intent)
         }
