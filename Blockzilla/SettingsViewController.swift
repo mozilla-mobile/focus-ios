@@ -586,6 +586,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         if toggle.setting == .sendAnonymousUsageData {
             Telemetry.default.configuration.isCollectionEnabled = sender.isOn
             Telemetry.default.configuration.isUploadEnabled = sender.isOn
+        } else if toggle.setting == .biometricLogin {
+            UserDefaults.standard.set(false, forKey: TipManager.TipKey.biometricTip)
         }
 
         switch toggle.setting {

@@ -177,6 +177,7 @@ class SiriFavoriteViewController: UIViewController {
             return false
         }
         UserDefaults.standard.set(url.absoluteString, forKey: "favoriteUrl")
+        UserDefaults.standard.set(false, forKey: TipManager.TipKey.siriFavoriteTip)
         return true
     }
 }

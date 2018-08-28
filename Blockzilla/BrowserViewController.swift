@@ -942,6 +942,7 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidLongPress(_ urlBar: URLBar) {
         let customURLItem = PhotonActionSheetItem(title: UIConstants.strings.customURLMenuButton, iconString: "icon_link") { action in
             urlBar.addCustomURL()
+            UserDefaults.standard.set(false, forKey: TipManager.TipKey.autocompleteTip)
         }
         var actions = [PhotonActionSheetItem]()
         if let clipboardString = UIPasteboard.general.string {
@@ -954,7 +955,7 @@ extension BrowserViewController: URLBarDelegate {
             }
             actions.append(pasteItem)
         }
-        let copyItem = PhotonActionSheetItem(title: UIConstants.strings.copyMenuButton, iconString: "icon_link") { action in
+        let copyItem = PhotonActionSheetItem(title: UIConstants.strings.copyAddressButton, iconString: "icon_link") { action in
             urlBar.copyToClipboard()
             Toast(text: UIConstants.strings.copyURLToast).show()
         }
@@ -1015,6 +1016,7 @@ extension BrowserViewController: PhotonActionSheetDelegate {
         let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.trackingProtectionToggle)
         telemetryEvent.addExtra(key: "to", value: enabled)
         Telemetry.default.recordEvent(telemetryEvent)
+        UserDefaults.standard.set(false, forKey: TipManager.TipKey.sitesNotWorkingTip)
         
         webViewController.reload()
     }

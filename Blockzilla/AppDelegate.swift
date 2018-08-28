@@ -54,6 +54,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         // Count number of app launches for requesting a review
         let currentLaunchCount = UserDefaults.standard.integer(forKey: UIConstants.strings.userDefaultsLaunchCountKey)
         UserDefaults.standard.set(currentLaunchCount + 1, forKey: UIConstants.strings.userDefaultsLaunchCountKey)
+        
+        // Set original default values for showing tips & create a TipManager for the session
+        let tipDefaults = [TipManager.TipKey.autocompleteTip : true,
+                           TipManager.TipKey.searchEngineTip : true,
+                           TipManager.TipKey.sitesNotWorkingTip : true,
+                           TipManager.TipKey.siriFavoriteTip : true,
+                           TipManager.TipKey.biometricTip : true]
+        UserDefaults.standard.register(defaults: tipDefaults)
+        let tipManager = TipManager()
     
         // Disable localStorage.
         // We clear the Caches directory after each Erase, but WebKit apparently maintains
