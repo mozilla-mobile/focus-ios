@@ -243,6 +243,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     func applicationDidBecomeActive(_ application: UIApplication) {
         if Settings.siriRequestsErase() {
             browserViewController.resetBrowser(hidePreviousSession: true)
+            browserViewController.photonActionSheetDidDismiss()
             Settings.setSiriRequestErase(to: false)
         }
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
