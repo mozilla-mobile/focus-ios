@@ -308,15 +308,15 @@ class BrowserViewController: UIViewController {
         }
         self.homeView = homeView
         
-//        if canShowTrackerStatsShareButton() && shouldShowTrackerStatsShareButton() {
+        if canShowTrackerStatsShareButton() && shouldShowTrackerStatsShareButton() {
             let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
             
             // Since this is only English locale for now, don't worry about localizing for now
             let shareTrackerStatsLabel = "%@ trackers blocked so far"
             homeView.showTrackerStatsShareButton(text: String(format: shareTrackerStatsLabel, String(numberOfTrackersBlocked)))
-//        } else {
-//            homeView.hideTrackerStatsShareButton()
-//        }
+        } else {
+            homeView.hideTrackerStatsShareButton()
+        }
     }
 
     private func createURLBar() {
