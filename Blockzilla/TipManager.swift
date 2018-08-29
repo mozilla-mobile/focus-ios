@@ -8,12 +8,14 @@ class TipManager {
     
     struct Tip: Equatable {
         var title: String
+        var description: String?
         var identifier: String
         var vcToDisplay: UIViewController?
         
-        init(title: String, identifier: String, vcToDisplay: UIViewController? = nil) {
+        init(title: String, description: String? = nil, identifier: String, vcToDisplay: UIViewController? = nil) {
             self.title = title
             self.identifier = identifier
+            self.description = description
             self.vcToDisplay = vcToDisplay
         }
         
@@ -47,12 +49,12 @@ class TipManager {
         possibleTips.append(shareTrackersTip)
     }
     
-    lazy var autocompleteTip = Tip(title: "Autocomplete your favorite URLs:", identifier: TipKey.autocompleteTip, vcToDisplay: nil)
-    lazy var searchEngineTip = Tip(title: "Use a different search engine:", identifier: TipKey.searchEngineTip, vcToDisplay: SearchSettingsViewController(searchEngineManager: SearchEngineManager(prefs: UserDefaults.standard)))
-    lazy var sitesNotWorkingTip = Tip(title: "Sites not working as expected? Fix it:", identifier: TipKey.sitesNotWorkingTip, vcToDisplay: nil)
-    lazy var biometricTip = Tip(title: "Lock the browser when a site is open:", identifier: TipKey.biometricTip, vcToDisplay: nil)
-    lazy var siriFavoriteTip = Tip(title: "Open your favorite site with Siri:", identifier: TipKey.siriFavoriteTip, vcToDisplay: nil)
-    lazy var shareTrackersTip = Tip(title: "%@ trackers blocked so far", identifier: TipKey.shareTrackersTip, vcToDisplay: nil)
+    lazy var autocompleteTip = Tip(title: "Autocomplete your favorite URLs:", description: "Test", identifier: TipKey.autocompleteTip)
+    lazy var searchEngineTip = Tip(title: "Use a different search engine:", description: "Test", identifier: TipKey.searchEngineTip)
+    lazy var sitesNotWorkingTip = Tip(title: "Sites not working as expected? Fix it:", description: "Test", identifier: TipKey.sitesNotWorkingTip)
+    lazy var biometricTip = Tip(title: "Lock the browser when a site is open:", description: "Test", identifier: TipKey.biometricTip)
+    lazy var siriFavoriteTip = Tip(title: "Open your favorite site with Siri:", description: "Test", identifier: TipKey.siriFavoriteTip)
+    lazy var shareTrackersTip = Tip(title: "%@ trackers blocked so far", identifier: TipKey.shareTrackersTip)
     
     func fetchTip() -> Tip? {
         guard let tip = possibleTips.randomElement(), let indexToRemove = possibleTips.index(of: tip) else { return nil }

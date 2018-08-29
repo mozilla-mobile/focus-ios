@@ -211,6 +211,7 @@ struct UIConstants {
         static let separatorHeight: CGFloat = 0.5
         static let shareTrackersBottomOffset: CGFloat = -20
         static let shareTrackersHeight: CGFloat = 36
+        static let homeViewTextOffset: CGFloat = 5
     }
 
     struct strings {

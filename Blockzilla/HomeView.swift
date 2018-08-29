@@ -14,7 +14,8 @@ class HomeView: UIView {
     private let description2 = SmartLabel()
     private let tipView = UIView()
     private let trackerStatsLabel = SmartLabel()
-    private let tipLabel = SmartLabel()
+    private let tipTitleLabel = SmartLabel()
+    private let tipDescriptionLabel = SmartLabel()
     private let shieldLogo = UIImageView()
     
     let toolbar = HomeViewToolbar()
@@ -30,7 +31,7 @@ class HomeView: UIView {
                     showTrackerStatsShareButton(text: String(format: tip.title, String(numberOfTrackersBlocked)))
                 default:
                     hideTrackerStatsShareButton()
-                    showTextTip(text: tip.title)
+                    showTextTip(tip)
                 }
                 
             }
@@ -59,15 +60,22 @@ class HomeView: UIView {
         description2.numberOfLines = 0
         addSubview(description2)
         
+        addSubview(toolbar)
+        
         addSubview(tipView)
         tipView.isHidden = true
         
-        tipLabel.textColor = UIConstants.colors.defaultFont
-        tipLabel.font = UIConstants.fonts.shareTrackerStatsLabel
-        tipLabel.numberOfLines = 0
-        tipLabel.minimumScaleFactor = 0.65
-        tipView.addSubview(tipLabel)
-        addSubview(toolbar)
+        tipTitleLabel.textColor = UIConstants.colors.defaultFont
+        tipTitleLabel.font = UIConstants.fonts.shareTrackerStatsLabel
+        tipTitleLabel.numberOfLines = 0
+        tipTitleLabel.minimumScaleFactor = 0.65
+        tipView.addSubview(tipTitleLabel)
+        
+        tipDescriptionLabel.textColor = UIConstants.colors.defaultFont
+        tipDescriptionLabel.font = UIConstants.fonts.shareTrackerStatsLabel
+        tipDescriptionLabel.numberOfLines = 0
+        tipDescriptionLabel.minimumScaleFactor = 0.65
+        tipView.addSubview(tipDescriptionLabel)
 
         shieldLogo.image = #imageLiteral(resourceName: "tracking_protection")
         shieldLogo.tintColor = UIColor.white
@@ -102,7 +110,7 @@ class HomeView: UIView {
 
         description2.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
-            make.top.equalTo(description1.snp.bottom).offset(5)
+            make.top.equalTo(description1.snp.bottom).offset(UIConstants.layout.homeViewTextOffset)
         }
         
         tipView.snp.makeConstraints { make in
@@ -113,8 +121,14 @@ class HomeView: UIView {
             make.width.lessThanOrEqualToSuperview().offset(-32)
         }
         
-        tipLabel.snp.makeConstraints { make in
-            make.centerX.centerY.equalToSuperview()
+        tipDescriptionLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+        
+        tipTitleLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(tipDescriptionLabel.snp.top).offset(-UIConstants.layout.homeViewTextOffset)
         }
         
         toolbar.snp.makeConstraints { make in
@@ -167,14 +181,18 @@ class HomeView: UIView {
         trackerStatsShareButton.isHidden = true
     }
     
-    func showTextTip(text: String) {
-        tipLabel.text = text
-        tipLabel.sizeToFit()
-        tipLabel.isHidden = false
+    func showTextTip(_ tip: TipManager.Tip) {
+        tipTitleLabel.text = tip.title
+        tipTitleLabel.sizeToFit()
+        tipTitleLabel.isHidden = false
+        tipDescriptionLabel.text = tip.description
+        tipDescriptionLabel.sizeToFit()
+        tipDescriptionLabel.isHidden = false
     }
     
     func hideTextTip() {
-        tipLabel.isHidden = true
+        tipTitleLabel.isHidden = true
+        tipDescriptionLabel.isHidden = true
     }
         
     
