@@ -71,6 +71,7 @@ class BrowserViewController: UIViewController {
 
     private var shouldEnsureBrowsingMode = false
     private var initialUrl: URL?
+    var tipManager: TipManager?
     
     static let userDefaultsTrackersBlockedKey = "lifetimeTrackersBlocked"
     static let userDefaultsShareTrackerStatsKeyOLD = "shareTrackerStats"
@@ -213,6 +214,10 @@ class BrowserViewController: UIViewController {
         }
         browserToolbar.toolset.setHighlightWhatsNew(shouldHighlight: browserToolbar.toolset.shouldShowWhatsNew())
         browserToolbar.layoutIfNeeded()
+        
+        if let tip = tipManager?.fetchTip() {
+            // display tip
+        }
         
         super.viewWillAppear(animated)
     }

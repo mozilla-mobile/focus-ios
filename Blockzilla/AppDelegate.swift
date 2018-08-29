@@ -62,7 +62,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
                            TipManager.TipKey.siriFavoriteTip : true,
                            TipManager.TipKey.biometricTip : true]
         UserDefaults.standard.register(defaults: tipDefaults)
-        let tipManager = TipManager()
     
         // Disable localStorage.
         // We clear the Caches directory after each Erase, but WebKit apparently maintains
@@ -77,6 +76,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         window = UIWindow(frame: UIScreen.main.bounds)
 
         browserViewController.modalDelegate = self
+        browserViewController.tipManager = TipManager()
         window?.rootViewController = browserViewController
         window?.makeKeyAndVisible()
 
