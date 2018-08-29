@@ -1077,6 +1077,12 @@ extension BrowserViewController: HomeViewDelegate {
         let shareController = UIActivityViewController(activityItems: [text, appStoreUrl as Any], applicationActivities: nil)
         present(shareController, animated: true)
     }
+    
+    func tipTapped() {
+        if #available(iOS 12.0, *) {
+            showSettings()
+        }
+    }
 }
 
 extension BrowserViewController: OverlayViewDelegate {

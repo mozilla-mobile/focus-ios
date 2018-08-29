@@ -45,7 +45,9 @@ class TipManager {
         possibleTips.append(searchEngineTip)
         possibleTips.append(sitesNotWorkingTip)
         possibleTips.append(biometricTip)
-        possibleTips.append(siriFavoriteTip)
+        if #available(iOS 12.0, *) {
+            possibleTips.append(siriFavoriteTip)
+        }
         possibleTips.append(shareTrackersTip)
     }
     
@@ -53,7 +55,8 @@ class TipManager {
     lazy var searchEngineTip = Tip(title: "Use a different search engine:", description: "Test", identifier: TipKey.searchEngineTip)
     lazy var sitesNotWorkingTip = Tip(title: "Sites not working as expected? Fix it:", description: "Test", identifier: TipKey.sitesNotWorkingTip)
     lazy var biometricTip = Tip(title: "Lock the browser when a site is open:", description: "Test", identifier: TipKey.biometricTip)
-    lazy var siriFavoriteTip = Tip(title: "Open your favorite site with Siri:", description: "Test", identifier: TipKey.siriFavoriteTip)
+    @available(iOS 12.0, *)
+    lazy var siriFavoriteTip = Tip(title: "Open your favorite site with Siri:", description: "Test", identifier: TipKey.siriFavoriteTip, vcToDisplay: SiriFavoriteViewController())
     lazy var shareTrackersTip = Tip(title: "%@ trackers blocked so far", identifier: TipKey.shareTrackersTip)
     
     func fetchTip() -> Tip? {

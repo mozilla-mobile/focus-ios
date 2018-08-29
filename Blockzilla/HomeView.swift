@@ -6,6 +6,7 @@ import Foundation
 
 protocol HomeViewDelegate: class {
     func shareTrackerStatsButtonTapped()
+    func tipTapped()
 }
 
 class HomeView: UIView {
@@ -33,7 +34,6 @@ class HomeView: UIView {
                     hideTrackerStatsShareButton()
                     showTextTip(tip)
                 }
-                
             }
         }
     }
@@ -185,7 +185,16 @@ class HomeView: UIView {
         tipTitleLabel.text = tip.title
         tipTitleLabel.sizeToFit()
         tipTitleLabel.isHidden = false
-        tipDescriptionLabel.text = tip.description
+        if let description = tip.description, tip.vcToDisplay != nil {
+            tipDescriptionLabel.attributedText = NSAttributedString(string: description, attributes:
+                [.underlineStyle: NSUnderlineStyle.single.rawValue])
+            tipDescriptionLabel.isUserInteractionEnabled = true
+            let tap = UITapGestureRecognizer(target: self, action: #selector(HomeView.tapTip))
+            tipDescriptionLabel.addGestureRecognizer(tap)
+        } else {
+            tipDescriptionLabel.text = tip.description
+            tipDescriptionLabel.isUserInteractionEnabled = false
+        }
         tipDescriptionLabel.sizeToFit()
         tipDescriptionLabel.isHidden = false
     }
@@ -198,5 +207,9 @@ class HomeView: UIView {
     
     @objc private func shareTapped() {
         delegate?.shareTrackerStatsButtonTapped()
+    }
+    
+    @objc private func tapTip() {
+        delegate?.tipTapped()
     }
 }
