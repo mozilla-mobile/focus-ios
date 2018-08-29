@@ -14,8 +14,28 @@ class HomeView: UIView {
     private let description2 = SmartLabel()
     private let trackerStatsView = UIView()
     private let trackerStatsLabel = SmartLabel()
+    private let tipLabel = SmartLabel()
+    private let shieldLogo = UIImageView()
+    
     let toolbar = HomeViewToolbar()
     let trackerStatsShareButton = UIButton()
+    var tipManager: TipManager? {
+        didSet {
+            if let tipManager = tipManager, let tip = tipManager.fetchTip() {
+                switch tip.identifier {
+                case TipManager.TipKey.shareTrackersTip:
+                    hideTextTip()
+                    let numberOfTrackersBlocked = UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
+                    showTrackerStatsShareButton(text: String(format: tip.title, String(numberOfTrackersBlocked)))
+                default:
+                    hideTrackerStatsShareButton()
+                    showTextTip(text: tip.title)
+                }
+                
+            }
+        }
+    }
+            
     
     init() {
         super.init(frame: CGRect.zero)
@@ -41,9 +61,14 @@ class HomeView: UIView {
         addSubview(trackerStatsView)
         trackerStatsView.isHidden = true
         
+        tipLabel.textColor = UIConstants.colors.defaultFont
+        tipLabel.font = UIConstants.fonts.shareTrackerStatsLabel
+        tipLabel.numberOfLines = 0
+        tipLabel.minimumScaleFactor = 0.65
+        trackerStatsView.addSubview(tipLabel)
         addSubview(toolbar)
-        
-        let shieldLogo = UIImageView(image: #imageLiteral(resourceName: "tracking_protection"))
+
+        shieldLogo.image = #imageLiteral(resourceName: "tracking_protection")
         shieldLogo.tintColor = UIColor.white
         trackerStatsView.addSubview(shieldLogo)
         
@@ -87,6 +112,10 @@ class HomeView: UIView {
             make.width.lessThanOrEqualToSuperview().offset(-32)
         }
         
+        tipLabel.snp.makeConstraints { make in
+            make.centerX.centerY.equalToSuperview()
+        }
+        
         toolbar.snp.makeConstraints { make in
             make.bottom.equalToSuperview()
             make.width.equalToSuperview().priority(.required)
@@ -99,14 +128,14 @@ class HomeView: UIView {
             make.width.greaterThanOrEqualTo(50)
             make.height.equalToSuperview()
         }
-        
+
         trackerStatsLabel.snp.makeConstraints { make in
             make.centerY.equalTo(trackerStatsShareButton.snp.centerY)
             make.left.equalTo(shieldLogo.snp.right).offset(8)
             make.right.equalTo(trackerStatsShareButton.snp.left).offset(-13)
             make.height.equalToSuperview()
         }
-        
+
         shieldLogo.snp.makeConstraints { make in
             make.centerY.equalTo(trackerStatsShareButton.snp.centerY)
             make.left.equalToSuperview()
@@ -123,13 +152,32 @@ class HomeView: UIView {
         trackerStatsView.isHidden = false
         description1.isHidden = true
         description2.isHidden = true
+        shieldLogo.isHidden = false
+        trackerStatsLabel.isHidden = false
+        trackerStatsShareButton.isHidden = false
     }
     
     func hideTrackerStatsShareButton() {
         trackerStatsView.isHidden = true
-        description1.isHidden = false
-        description2.isHidden = false
+        shieldLogo.isHidden = true
+        trackerStatsLabel.isHidden = true
+        trackerStatsShareButton.isHidden = true
+//        description1.isHidden = false
+//        description2.isHidden = false
     }
+    
+    func showTextTip(text: String) {
+        tipLabel.text = text
+        tipLabel.sizeToFit()
+        tipLabel.isHidden = false
+        trackerStatsView.isHidden = false
+    }
+    
+    func hideTextTip() {
+        tipLabel.isHidden = true
+        trackerStatsView.isHidden = true
+    }
+        
     
     @objc private func shareTapped() {
         delegate?.shareTrackerStatsButtonTapped()

@@ -28,6 +28,7 @@ class TipManager {
         static let sitesNotWorkingTip = "sitesNotWorkingTip"
         static let biometricTip = "biometricTip"
         static let siriFavoriteTip = "siriFavoriteTip"
+        static let shareTrackersTip = "shareTrackersTip"
     }
     
     private var possibleTips: [Tip]
@@ -43,6 +44,7 @@ class TipManager {
         possibleTips.append(sitesNotWorkingTip)
         possibleTips.append(biometricTip)
         possibleTips.append(siriFavoriteTip)
+        possibleTips.append(shareTrackersTip)
     }
     
     lazy var autocompleteTip = Tip(title: "Autocomplete your favorite URLs:", identifier: TipKey.autocompleteTip, vcToDisplay: nil)
@@ -50,6 +52,7 @@ class TipManager {
     lazy var sitesNotWorkingTip = Tip(title: "Sites not working as expected? Fix it:", identifier: TipKey.sitesNotWorkingTip, vcToDisplay: nil)
     lazy var biometricTip = Tip(title: "Lock the browser when a site is open:", identifier: TipKey.biometricTip, vcToDisplay: nil)
     lazy var siriFavoriteTip = Tip(title: "Open your favorite site with Siri:", identifier: TipKey.siriFavoriteTip, vcToDisplay: nil)
+    lazy var shareTrackersTip = Tip(title: "%@ trackers blocked so far", identifier: TipKey.shareTrackersTip, vcToDisplay: nil)
     
     func fetchTip() -> Tip? {
         guard let tip = possibleTips.randomElement(), let indexToRemove = possibleTips.index(of: tip) else { return nil }

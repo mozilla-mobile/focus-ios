@@ -215,10 +215,6 @@ class BrowserViewController: UIViewController {
         browserToolbar.toolset.setHighlightWhatsNew(shouldHighlight: browserToolbar.toolset.shouldShowWhatsNew())
         browserToolbar.layoutIfNeeded()
         
-        if let tip = tipManager?.fetchTip() {
-            // display tip
-        }
-        
         super.viewWillAppear(animated)
     }
     
@@ -302,6 +298,7 @@ class BrowserViewController: UIViewController {
         let homeView = HomeView()
         homeView.delegate = self
         homeView.toolbar.toolset.delegate = self
+        homeView.tipManager = tipManager
         homeViewContainer.addSubview(homeView)
 
         homeView.snp.makeConstraints { make in
@@ -314,13 +311,10 @@ class BrowserViewController: UIViewController {
         self.homeView = homeView
         
         if canShowTrackerStatsShareButton() && shouldShowTrackerStatsShareButton() {
-            let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
-            
-            // Since this is only English locale for now, don't worry about localizing for now
-            let shareTrackerStatsLabel = "%@ trackers blocked so far"
-            homeView.showTrackerStatsShareButton(text: String(format: shareTrackerStatsLabel, String(numberOfTrackersBlocked)))
+//            let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
+//            homeView.showTrackerStatsShareButton(text: String(format: shareTrackerStatsLabel, String(numberOfTrackersBlocked)))
         } else {
-            homeView.hideTrackerStatsShareButton()
+//            homeView.hideTrackerStatsShareButton()
         }
     }
 

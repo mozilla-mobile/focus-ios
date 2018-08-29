@@ -55,12 +55,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         let currentLaunchCount = UserDefaults.standard.integer(forKey: UIConstants.strings.userDefaultsLaunchCountKey)
         UserDefaults.standard.set(currentLaunchCount + 1, forKey: UIConstants.strings.userDefaultsLaunchCountKey)
         
-        // Set original default values for showing tips & create a TipManager for the session
+        // Set original default values for showing tips
         let tipDefaults = [TipManager.TipKey.autocompleteTip : true,
                            TipManager.TipKey.searchEngineTip : true,
                            TipManager.TipKey.sitesNotWorkingTip : true,
                            TipManager.TipKey.siriFavoriteTip : true,
-                           TipManager.TipKey.biometricTip : true]
+                           TipManager.TipKey.biometricTip : true,
+                           TipManager.TipKey.shareTrackersTip : true]
         UserDefaults.standard.register(defaults: tipDefaults)
     
         // Disable localStorage.
