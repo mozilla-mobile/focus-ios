@@ -12,7 +12,7 @@ class HomeView: UIView {
     weak var delegate: HomeViewDelegate?
     private let description1 = SmartLabel()
     private let description2 = SmartLabel()
-    private let trackerStatsView = UIView()
+    private let tipView = UIView()
     private let trackerStatsLabel = SmartLabel()
     private let tipLabel = SmartLabel()
     private let shieldLogo = UIImageView()
@@ -22,6 +22,7 @@ class HomeView: UIView {
     var tipManager: TipManager? {
         didSet {
             if let tipManager = tipManager, let tip = tipManager.fetchTip() {
+                showTipView()
                 switch tip.identifier {
                 case TipManager.TipKey.shareTrackersTip:
                     hideTextTip()
@@ -58,25 +59,25 @@ class HomeView: UIView {
         description2.numberOfLines = 0
         addSubview(description2)
         
-        addSubview(trackerStatsView)
-        trackerStatsView.isHidden = true
+        addSubview(tipView)
+        tipView.isHidden = true
         
         tipLabel.textColor = UIConstants.colors.defaultFont
         tipLabel.font = UIConstants.fonts.shareTrackerStatsLabel
         tipLabel.numberOfLines = 0
         tipLabel.minimumScaleFactor = 0.65
-        trackerStatsView.addSubview(tipLabel)
+        tipView.addSubview(tipLabel)
         addSubview(toolbar)
 
         shieldLogo.image = #imageLiteral(resourceName: "tracking_protection")
         shieldLogo.tintColor = UIColor.white
-        trackerStatsView.addSubview(shieldLogo)
+        tipView.addSubview(shieldLogo)
         
         trackerStatsLabel.font = UIConstants.fonts.shareTrackerStatsLabel
         trackerStatsLabel.textColor = UIConstants.colors.defaultFont
         trackerStatsLabel.numberOfLines = 0
         trackerStatsLabel.minimumScaleFactor = 0.65
-        trackerStatsView.addSubview(trackerStatsLabel)
+        tipView.addSubview(trackerStatsLabel)
         
         trackerStatsShareButton.setTitleColor(UIConstants.colors.defaultFont, for: .normal)
         trackerStatsShareButton.titleLabel?.font = UIConstants.fonts.shareTrackerStatsLabel
@@ -87,7 +88,7 @@ class HomeView: UIView {
         trackerStatsShareButton.layer.borderColor = UIConstants.colors.defaultFont.cgColor
         trackerStatsShareButton.layer.borderWidth = 1.0;
         trackerStatsShareButton.layer.cornerRadius = 4
-        trackerStatsView.addSubview(trackerStatsShareButton)
+        tipView.addSubview(trackerStatsShareButton)
 
         textLogo.snp.makeConstraints { make in
             make.centerX.equalTo(self)
@@ -104,7 +105,7 @@ class HomeView: UIView {
             make.top.equalTo(description1.snp.bottom).offset(5)
         }
         
-        trackerStatsView.snp.makeConstraints { make in
+        tipView.snp.makeConstraints { make in
             make.bottom.equalTo(toolbar.snp.top).offset(UIConstants.layout.shareTrackersBottomOffset)
             make.height.equalTo(UIConstants.layout.shareTrackersHeight)
             make.centerX.equalToSuperview()
@@ -146,36 +147,34 @@ class HomeView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func showTipView() {
+        description1.isHidden = true
+        description2.isHidden = true
+        tipView.isHidden = false
+    }
+    
     func showTrackerStatsShareButton(text: String) {
         trackerStatsLabel.text = text
         trackerStatsLabel.sizeToFit()
-        trackerStatsView.isHidden = false
-        description1.isHidden = true
-        description2.isHidden = true
-        shieldLogo.isHidden = false
         trackerStatsLabel.isHidden = false
         trackerStatsShareButton.isHidden = false
+        shieldLogo.isHidden = false
     }
     
     func hideTrackerStatsShareButton() {
-        trackerStatsView.isHidden = true
         shieldLogo.isHidden = true
         trackerStatsLabel.isHidden = true
         trackerStatsShareButton.isHidden = true
-//        description1.isHidden = false
-//        description2.isHidden = false
     }
     
     func showTextTip(text: String) {
         tipLabel.text = text
         tipLabel.sizeToFit()
         tipLabel.isHidden = false
-        trackerStatsView.isHidden = false
     }
     
     func hideTextTip() {
         tipLabel.isHidden = true
-        trackerStatsView.isHidden = true
     }
         
     

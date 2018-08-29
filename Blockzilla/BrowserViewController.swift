@@ -298,7 +298,6 @@ class BrowserViewController: UIViewController {
         let homeView = HomeView()
         homeView.delegate = self
         homeView.toolbar.toolset.delegate = self
-        homeView.tipManager = tipManager
         homeViewContainer.addSubview(homeView)
 
         homeView.snp.makeConstraints { make in
@@ -311,10 +310,10 @@ class BrowserViewController: UIViewController {
         self.homeView = homeView
         
         if canShowTrackerStatsShareButton() && shouldShowTrackerStatsShareButton() {
-//            let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
-//            homeView.showTrackerStatsShareButton(text: String(format: shareTrackerStatsLabel, String(numberOfTrackersBlocked)))
-        } else {
-//            homeView.hideTrackerStatsShareButton()
+            homeView.tipManager = tipManager
+        }
+        else {
+            homeView.tipManager = nil
         }
     }
 
