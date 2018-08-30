@@ -518,9 +518,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             guard #available(iOS 12.0, *) else { return }
             if indexPath.row == 0 {
                 SiriShortcuts().manageSiri(for: SiriShortcuts.activityType.erase, in: self)
+                UserDefaults.standard.set(false, forKey: TipManager.TipKey.siriEraseTip)
             }
             else if indexPath.row == 1 {
                 SiriShortcuts().manageSiri(for: SiriShortcuts.activityType.eraseAndOpen, in: self)
+                UserDefaults.standard.set(false, forKey: TipManager.TipKey.siriEraseTip)
             }
             else {
                 let siriFavoriteVC = SiriFavoriteViewController()
