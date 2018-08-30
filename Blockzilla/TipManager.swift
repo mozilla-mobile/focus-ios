@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import LocalAuthentication
 
 class TipManager {
     
@@ -26,14 +27,16 @@ class TipManager {
     
     class TipKey {
         static let autocompleteTip = "autocompleteTip"
-        static let searchEngineTip = "searchEngineTip"
         static let sitesNotWorkingTip = "sitesNotWorkingTip"
         static let biometricTip = "biometricTip"
         static let siriFavoriteTip = "siriFavoriteTip"
         static let shareTrackersTip = "shareTrackersTip"
+        static let requestDesktopTip = "requestDesktopTip"
+        static let siriEraseTip = "siriEraseTip"
     }
     
     private var possibleTips: [Tip]
+    private let laContext = LAContext()
     
     init() {
         possibleTips = [Tip]()
@@ -41,22 +44,43 @@ class TipManager {
     }
     
     private func addAllTips() {
-        possibleTips.append(searchEngineTip)
-        possibleTips.append(searchEngineTip)
+        possibleTips.append(autocompleteTip)
         possibleTips.append(sitesNotWorkingTip)
-        possibleTips.append(biometricTip)
+        possibleTips.append(requestDesktopTip)
+        possibleTips.append(shareTrackersTip)
+        
+        if laContext.biometryType == .touchID || laContext.biometryType == .faceID {
+            possibleTips.append(biometricTip)
+        }
+        
         if #available(iOS 12.0, *) {
             possibleTips.append(siriFavoriteTip)
+            possibleTips.append(siriEraseTip)
         }
-        possibleTips.append(shareTrackersTip)
     }
     
-    lazy var autocompleteTip = Tip(title: "Autocomplete your favorite URLs:", description: "Test", identifier: TipKey.autocompleteTip)
-    lazy var searchEngineTip = Tip(title: "Use a different search engine:", description: "Test", identifier: TipKey.searchEngineTip)
-    lazy var sitesNotWorkingTip = Tip(title: "Sites not working as expected? Fix it:", description: "Test", identifier: TipKey.sitesNotWorkingTip)
-    lazy var biometricTip = Tip(title: "Lock the browser when a site is open:", description: "Test", identifier: TipKey.biometricTip)
+    lazy var autocompleteTip = Tip(title: "Autocomplete URLs for the sites you use most", description: "Long-press any URL in the address bar", identifier: TipKey.autocompleteTip)
+    
+    lazy var sitesNotWorkingTip = Tip(title: "Site acting strange?", description: "Try turning off Tracking Protection", identifier: TipKey.sitesNotWorkingTip)
+    
+    lazy var biometricTip: Tip = {
+        let titleString = String(format: "Lock %@ even when a site is open", AppInfo.productName)
+        if laContext.biometryType == .faceID {
+            return Tip(title: titleString, description: "Turn on Face ID", identifier: TipKey.biometricTip)
+        }
+        else {
+            return Tip(title: titleString, description: "Turn on Touch ID", identifier: TipKey.biometricTip)
+        }
+    }()
+    
+    lazy var requestDesktopTip = Tip(title: "Get the full desktop site instead", description: "Page Actions > Request Desktop Site", identifier: TipKey.requestDesktopTip)
+    
     @available(iOS 12.0, *)
     lazy var siriFavoriteTip = Tip(title: "Open your favorite site with Siri:", description: "Test", identifier: TipKey.siriFavoriteTip, vcToDisplay: SiriFavoriteViewController())
+    
+    @available(iOS 12.0, *)
+    lazy var siriEraseTip = Tip(title: String(format: "Ask Siri to erase %@ history", AppInfo.productName), description: "Add Siri shortcut", identifier: TipKey.siriEraseTip)
+    
     lazy var shareTrackersTip = Tip(title: "%@ trackers blocked so far", identifier: TipKey.shareTrackersTip)
     
     func fetchTip() -> Tip? {

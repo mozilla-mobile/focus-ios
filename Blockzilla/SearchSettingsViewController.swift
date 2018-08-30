@@ -221,7 +221,6 @@ class SearchSettingsViewController: UITableViewController {
 extension SearchSettingsViewController: AddSearchEngineDelegate {
     func addSearchEngineViewController(_ addSearchEngineViewController: AddSearchEngineViewController, name: String, searchTemplate: String) {
         let engine = searchEngineManager.addEngine(name: name, template: searchTemplate)
-        UserDefaults.standard.set(false, forKey: TipManager.TipKey.searchEngineTip)
         tableView.reloadData()
         delegate?.searchSettingsViewController(self, didSelectEngine: engine)
     }
