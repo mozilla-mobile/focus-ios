@@ -309,7 +309,7 @@ class BrowserViewController: UIViewController {
         }
         self.homeView = homeView
         
-        if canShowTrackerStatsShareButton() && shouldShowTrackerStatsShareButton() {
+        if canShowTips() && shouldShowTips() {
             homeView.tipManager = tipManager
         }
         else {
@@ -698,31 +698,31 @@ class BrowserViewController: UIViewController {
         ]
     }
 
-    func canShowTrackerStatsShareButton() -> Bool {
+    func canShowTips() -> Bool {
         return NSLocale.current.identifier == "en_US" && !AppInfo.isKlar
     }
 
     var showTrackerSemaphore = DispatchSemaphore(value: 1)
-    func flipCoinForShowTrackerButton(percent: Int = 30, userDefaults:UserDefaults = UserDefaults.standard) {
+    func flipCoinForShowTrackerButton(percent: Int = 50, userDefaults:UserDefaults = UserDefaults.standard) {
         showTrackerSemaphore.wait()
 
-        var shouldShowTrackerStatsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
+        var shouldShowTipsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
 
-        if shouldShowTrackerStatsToUser == nil {
+        if shouldShowTipsToUser == nil {
             // Check to see if the user was previously opted into the experiment
-            shouldShowTrackerStatsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD) as! Bool?
+            shouldShowTipsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD) as! Bool?
 
-            if shouldShowTrackerStatsToUser != nil {
+            if shouldShowTipsToUser != nil {
                 // Remove the old flag
                 userDefaults.removeObject(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD)
             }
 
-            if shouldShowTrackerStatsToUser == true {
+            if shouldShowTipsToUser == true {
                 // User has already been opted into the experiment, continue showing the share button
                 userDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
             } else {
                 // User has not been put into a bucket for determining if it should be shown
-                // 30% chance they get put into the group that sees the share button
+                // 50% chance they get put into the group that sees the share button
                 // arc4random_uniform(100) returns an integer 0 through 99 (inclusive)
                 if arc4random_uniform(100) < percent {
                     userDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
@@ -735,13 +735,10 @@ class BrowserViewController: UIViewController {
         showTrackerSemaphore.signal()
     }
 
-    func shouldShowTrackerStatsShareButton(percent: Int = 30, userDefaults:UserDefaults = UserDefaults.standard) -> Bool {
+    func shouldShowTips(percent: Int = 50, userDefaults:UserDefaults = UserDefaults.standard) -> Bool {
         flipCoinForShowTrackerButton(percent:percent, userDefaults:userDefaults)
-
-        let shouldShowTrackerStatsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
-
-        return shouldShowTrackerStatsToUser == true &&
-            getNumberOfLifetimeTrackersBlocked(userDefaults: userDefaults) >= 10
+        let shouldShowTipsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
+        return shouldShowTipsToUser == true
     }
     
     private func getNumberOfLifetimeTrackersBlocked(userDefaults: UserDefaults = UserDefaults.standard) -> Int {

@@ -48,7 +48,10 @@ class TipManager {
         possibleTips.append(autocompleteTip)
         possibleTips.append(sitesNotWorkingTip)
         possibleTips.append(requestDesktopTip)
-        possibleTips.append(shareTrackersTip)
+        
+        if UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey) >= 10 {
+            possibleTips.append(shareTrackersTip)
+        }
         
         if laContext.biometryType == .touchID || laContext.biometryType == .faceID {
             possibleTips.append(biometricTip)
