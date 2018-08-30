@@ -52,11 +52,9 @@ class TipManager {
         if UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey) >= 10 {
             possibleTips.append(shareTrackersTip)
         }
-        
-        if laContext.biometryType == .touchID || laContext.biometryType == .faceID {
+        if laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
             possibleTips.append(biometricTip)
         }
-        
         if #available(iOS 12.0, *) {
             possibleTips.append(siriFavoriteTip)
             possibleTips.append(siriEraseTip)
