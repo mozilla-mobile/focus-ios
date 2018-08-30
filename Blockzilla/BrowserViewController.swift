@@ -1079,8 +1079,14 @@ extension BrowserViewController: HomeViewDelegate {
     }
     
     func tipTapped() {
-        if #available(iOS 12.0, *) {
+        guard let tip = tipManager?.currentTip, tip.showVc else { return }
+        switch tip.identifier {
+        case TipManager.TipKey.biometricTip, TipManager.TipKey.siriEraseTip:
             showSettings()
+        case TipManager.TipKey.siriFavoriteTip:
+            showSettings()
+        default:
+            break
         }
     }
 }

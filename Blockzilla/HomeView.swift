@@ -34,6 +34,7 @@ class HomeView: UIView {
                     hideTrackerStatsShareButton()
                     showTextTip(tip)
                 }
+                tipManager.currentTip = tip
             }
         }
     }
@@ -185,7 +186,7 @@ class HomeView: UIView {
         tipTitleLabel.text = tip.title
         tipTitleLabel.sizeToFit()
         tipTitleLabel.isHidden = false
-        if let description = tip.description, tip.vcToDisplay != nil {
+        if let description = tip.description, tip.showVc {
             tipDescriptionLabel.attributedText = NSAttributedString(string: description, attributes:
                 [.underlineStyle: NSUnderlineStyle.single.rawValue])
             tipDescriptionLabel.isUserInteractionEnabled = true
