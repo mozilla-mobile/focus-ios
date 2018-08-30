@@ -328,7 +328,6 @@ class BrowserViewController: UIViewController {
         urlBar = URLBar()
         urlBar.delegate = self
         urlBar.toolsetDelegate = self
-        urlBar.shrinkFromView = urlBarContainer
         urlBar.showToolset = showsToolsetInURLBar
         mainContainerView.insertSubview(urlBar, aboveSubview: urlBarContainer)
 
@@ -922,7 +921,6 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidDeactivate(_ urlBar: URLBar) {
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
             self.urlBarContainer.alpha = 0
-            self.view.layoutIfNeeded()
         }
     }
 

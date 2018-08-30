@@ -43,6 +43,7 @@ class URLBar: UIView {
     private let smallLockIcon = UIImageView(image: #imageLiteral(resourceName: "icon_https_small"))
     private let urlBarBorderView = UIView()
     private let urlBarBackgroundView = UIView()
+    private let urlBarNonEditingContainer = UIView()
     private let textAndLockContainer = UIView()
     private let collapsedUrlAndLockWrapper = UIView()
     private let collapsedTrackingProtectionBadge = CollapsedTrackingProtectionBadge()
@@ -59,6 +60,7 @@ class URLBar: UIView {
     private var hideToolsetConstraints = [Constraint]()
     private var showToolsetConstraints = [Constraint]()
     private var isEditingConstraints = [Constraint]()
+    private var homeViewConstraints = [Constraint]()
 
     override var canBecomeFirstResponder: Bool {
         return true
@@ -84,6 +86,10 @@ class URLBar: UIView {
         urlBarBorderView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         urlBarBorderView.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         addSubview(urlBarBorderView)
+
+        urlBarNonEditingContainer.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        urlBarNonEditingContainer.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        addSubview(urlBarNonEditingContainer)
 
         urlBarBackgroundView.backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         urlBarBackgroundView.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
@@ -246,18 +252,25 @@ class URLBar: UIView {
             make.size.equalTo(toolset.backButton)
         }
         
-        urlBarBorderView.snp.makeConstraints { make in
+        urlBarNonEditingContainer.snp.makeConstraints { make in
             make.leading.greaterThanOrEqualTo(shieldIcon.snp.trailing).priority(.required)
             make.leading.equalTo(shieldIcon.snp.trailing).priority(.medium)
             make.trailing.lessThanOrEqualTo(deleteButton.snp.leading).priority(.required)
             make.trailing.equalTo(deleteButton.snp.leading).priority(.medium)
             make.height.equalTo(42).priority(.medium)
             make.top.bottom.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
-            
-            isEditingConstraints.append(make.height.equalTo(48).priority(.high).constraint)
-            isEditingConstraints.append(make.leading.greaterThanOrEqualToSuperview().offset(UIConstants.layout.urlBarMargin).constraint)
-            isEditingConstraints.append(make.leading.greaterThanOrEqualTo(cancelButton.snp.trailing).constraint)
-            isEditingConstraints.append(make.trailing.lessThanOrEqualTo(safeAreaLayoutGuide.snp.trailing).offset(-UIConstants.layout.urlBarMargin).constraint)
+        }
+
+        urlBarBorderView.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(urlBarNonEditingContainer).priority(.medium)
+            make.top.bottom.equalTo(urlBarNonEditingContainer).priority(.medium)
+            make.center.equalTo(urlBarNonEditingContainer).priority(.medium)
+            isEditingConstraints.append(make.height.equalTo(48).priority(.required).constraint)
+            isEditingConstraints.append(make.leading.greaterThanOrEqualToSuperview().offset(UIConstants.layout.urlBarMargin).priority(.required).constraint)
+            isEditingConstraints.append(make.leading.greaterThanOrEqualTo(cancelButton.snp.trailing).priority(.required).constraint)
+            isEditingConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide.snp.trailing).offset(-UIConstants.layout.urlBarMargin).priority(.required).constraint)
+            homeViewConstraints.append(make.trailing.equalTo(deleteButton.snp.trailing).offset(-UIConstants.layout.urlBarMargin).priority(.required).constraint)
+            homeViewConstraints.append(make.leading.equalTo(cancelButton.snp.trailing).priority(.required).constraint)
         }
 
         urlBarBackgroundView.snp.makeConstraints { make in
@@ -270,8 +283,6 @@ class URLBar: UIView {
             hideToolsetConstraints.append(make.leading.equalToSuperview().constraint)
             showToolsetConstraints.append(make.leading.equalTo(toolset.stopReloadButton.snp.trailing).offset(UIConstants.layout.urlBarToolsetOffset).constraint)
             make.width.equalTo(UIConstants.layout.urlBarButtonTargetSize).priority(900)
-
-            isEditingConstraints.append(make.width.equalTo(0).constraint)
         }
 
         textAndLockContainer.snp.makeConstraints { make in
@@ -322,8 +333,10 @@ class URLBar: UIView {
         
         cancelButton.snp.makeConstraints { make in
             make.centerY.equalTo(self)
-            make.leading.equalTo(safeAreaLayoutGuide.snp.leading)
+            make.leading.greaterThanOrEqualTo(safeAreaLayoutGuide.snp.leading).priority(.required)
+            make.leading.equalTo(safeAreaLayoutGuide.snp.leading).priority(.medium)
             hideCancelConstraints.append(make.width.equalTo(0).priority(.required).constraint)
+            hideCancelConstraints.append(make.leading.equalTo(safeAreaLayoutGuide.snp.leading).offset(UIConstants.layout.urlBarMargin).priority(.required).constraint)
         }
         hideCancelConstraints.forEach { $0.activate() }
 
@@ -331,7 +344,6 @@ class URLBar: UIView {
             make.centerY.equalToSuperview()
             make.height.equalTo(UIConstants.layout.urlBarButtonTargetSize)
 
-            isEditingConstraints.append(make.width.equalTo(0).constraint)
             hideToolsetConstraints.append(make.trailing.equalToSuperview().constraint)
             showToolsetConstraints.append(make.trailing.greaterThanOrEqualTo(toolset.settingsButton.snp.leading).offset(-UIConstants.layout.urlBarToolsetOffset).constraint)
         }
@@ -374,7 +386,8 @@ class URLBar: UIView {
 
         centeredURLConstraints.forEach { $0.deactivate() }
         showToolsetConstraints.forEach { $0.deactivate() }
-        
+        isEditingConstraints.forEach { $0.deactivate() }
+        homeViewConstraints.forEach({ $0.activate() })
     }
     
     @objc public func activateTextField() {
@@ -570,6 +583,7 @@ class URLBar: UIView {
 
             if self.inBrowsingMode {
                 self.isEditingConstraints.forEach { $0.activate() }
+                self.homeViewConstraints.forEach({ $0.deactivate() })
 
                 // Shrink the URL text background in from the outer URL bar.
                 self.urlBarBackgroundView.alpha = 1
@@ -610,6 +624,8 @@ class URLBar: UIView {
 
             if self.inBrowsingMode {
                 self.isEditingConstraints.forEach { $0.deactivate() }
+                self.homeViewConstraints.forEach { $0.deactivate() }
+
                 // Reveal the URL bar buttons on iPad/landscape.
                 self.updateToolsetConstraints()
 
@@ -833,6 +849,10 @@ private class URLTextField: AutocompleteTextField {
 
     override fileprivate func rightViewRect(forBounds bounds: CGRect) -> CGRect {
         return super.rightViewRect(forBounds: bounds).offsetBy(dx: -UIConstants.layout.urlBarWidthInset, dy: 0)
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        textField.layoutIfNeeded()
     }
 }
 
