@@ -27,12 +27,16 @@ class SiriFavoriteViewController: UIViewController {
     }
     
     override func viewDidLoad() {
+        self.edgesForExtendedLayout = []
         setUpInputUI()
         setUpEditUI()
     }
     
     private func setUpInputUI() {
         title = UIConstants.strings.favoriteUrlTitle
+        navigationController?.navigationBar.barTintColor = UIConstants.colors.background
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIConstants.colors.defaultFont]
+        navigationController?.navigationBar.isTranslucent = false
         view.backgroundColor = UIConstants.colors.background
         
         inputLabel.text = UIConstants.strings.urlToOpen

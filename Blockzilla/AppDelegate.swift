@@ -50,6 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         setupErrorTracking()
         setupTelemetry()
         TPStatsBlocklistChecker.shared.startup()
+        browserViewController.tipManager = TipManager()
 
         // Count number of app launches for requesting a review
         let currentLaunchCount = UserDefaults.standard.integer(forKey: UIConstants.strings.userDefaultsLaunchCountKey)
@@ -78,7 +79,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         window = UIWindow(frame: UIScreen.main.bounds)
 
         browserViewController.modalDelegate = self
-        browserViewController.tipManager = TipManager()
         window?.rootViewController = browserViewController
         window?.makeKeyAndVisible()
 
@@ -277,6 +277,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
     }
     
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        browserViewController.tipManager = TipManager()
+    }
+    
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Record an event indicating that we have entered the background and end our telemetry
         // session. This gets called every time the app goes to background but should not get
@@ -286,6 +290,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         let orientation = UIDevice.current.orientation.isPortrait ? "Portrait" : "Landscape"
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.background, object:
             TelemetryEventObject.app, value: nil, extras: ["orientation": orientation])
+        
+        browserViewController.tipManager = nil
     }
     
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {

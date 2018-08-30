@@ -549,6 +549,20 @@ class BrowserViewController: UIViewController {
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.settingsButton)
     }
+    
+    @available(iOS 12.0, *)
+    private func showSiriFavoriteSettings() {
+        guard let modalDelegate = modalDelegate else { return }
+        
+        urlBar.shouldPresent = false
+        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset)
+        let siriFavoriteViewController = SiriFavoriteViewController()
+        let settingsNavController = UINavigationController(rootViewController: settingsViewController)
+        settingsNavController.pushViewController(siriFavoriteViewController, animated: true)
+        settingsNavController.modalPresentationStyle = .formSheet
+        
+        modalDelegate.presentModal(viewController: settingsNavController, animated: true)
+    }
 
     func ensureBrowsingMode() {
         guard urlBar != nil else { shouldEnsureBrowsingMode = true; return }
@@ -1084,7 +1098,9 @@ extension BrowserViewController: HomeViewDelegate {
         case TipManager.TipKey.biometricTip, TipManager.TipKey.siriEraseTip:
             showSettings()
         case TipManager.TipKey.siriFavoriteTip:
-            showSettings()
+            if #available(iOS 12.0, *) {
+                showSiriFavoriteSettings()
+            }
         default:
             break
         }
