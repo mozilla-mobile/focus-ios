@@ -68,8 +68,7 @@ class TipManager {
     lazy var biometricTip: Tip = {
         if laContext.biometryType == .faceID {
             return Tip(title: UIConstants.strings.biometricTipTitle, description: UIConstants.strings.biometricTipFaceIdDescription, identifier: TipKey.biometricTip, showVc: true)
-        }
-        else {
+        } else {
             return Tip(title: UIConstants.strings.biometricTipTitle, description: UIConstants.strings.biometricTipTouchIdDescription, identifier: TipKey.biometricTip, showVc: true)
         }
     }()
@@ -91,8 +90,7 @@ class TipManager {
         }
         if canShowTip(with: tip.identifier) {
             return tip
-        }
-        else {
+        } else {
             return fetchTip()
         }
     }
