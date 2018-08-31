@@ -1095,11 +1095,14 @@ extension BrowserViewController: HomeViewDelegate {
         guard let tip = tipManager?.currentTip, tip.showVc else { return }
         switch tip.identifier {
         case TipManager.TipKey.biometricTip:
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.biometricTip)
             showSettings()
         case TipManager.TipKey.siriEraseTip:
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.siriEraseTip)
             showSettings(shouldScrollToSiri: true)
         case TipManager.TipKey.siriFavoriteTip:
             if #available(iOS 12.0, *) {
+                Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.siriFavoriteTip)
                 showSiriFavoriteSettings()
             }
         default:
