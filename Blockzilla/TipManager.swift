@@ -61,29 +61,28 @@ class TipManager {
         }
     }
     
-    lazy var autocompleteTip = Tip(title: "Autocomplete URLs for the sites you use most", description: "Long-press any URL in the address bar", identifier: TipKey.autocompleteTip)
+    lazy var autocompleteTip = Tip(title: UIConstants.strings.autocompleteTipTitle, description: UIConstants.strings.autocompleteTipDescription, identifier: TipKey.autocompleteTip)
     
-    lazy var sitesNotWorkingTip = Tip(title: "Site acting strange?", description: "Try turning off Tracking Protection", identifier: TipKey.sitesNotWorkingTip)
+    lazy var sitesNotWorkingTip = Tip(title: UIConstants.strings.sitesNotWorkingTipTitle, description: UIConstants.strings.sitesNotWorkingTipDescription, identifier: TipKey.sitesNotWorkingTip)
     
     lazy var biometricTip: Tip = {
-        let titleString = String(format: "Lock %@ even when a site is open", AppInfo.productName)
         if laContext.biometryType == .faceID {
-            return Tip(title: titleString, description: "Turn on Face ID", identifier: TipKey.biometricTip, showVc: true)
+            return Tip(title: UIConstants.strings.biometricTipTitle, description: UIConstants.strings.biometricTipFaceIdDescription, identifier: TipKey.biometricTip, showVc: true)
         }
         else {
-            return Tip(title: titleString, description: "Turn on Touch ID", identifier: TipKey.biometricTip, showVc: true)
+            return Tip(title: UIConstants.strings.biometricTipTitle, description: UIConstants.strings.biometricTipTouchIdDescription, identifier: TipKey.biometricTip, showVc: true)
         }
     }()
     
-    lazy var requestDesktopTip = Tip(title: "Get the full desktop site instead", description: "Page Actions > Request Desktop Site", identifier: TipKey.requestDesktopTip)
+    lazy var requestDesktopTip = Tip(title: UIConstants.strings.requestDesktopTipTitle, description: UIConstants.strings.requestDesktopTipDescription, identifier: TipKey.requestDesktopTip)
     
     @available(iOS 12.0, *)
-    lazy var siriFavoriteTip = Tip(title: "Ask Siri to open a favorite site", description: "Add a site", identifier: TipKey.siriFavoriteTip, showVc: true)
+    lazy var siriFavoriteTip = Tip(title: UIConstants.strings.siriFavoriteTipTitle, description: UIConstants.strings.siriFavoriteTipDescription, identifier: TipKey.siriFavoriteTip, showVc: true)
     
     @available(iOS 12.0, *)
-    lazy var siriEraseTip = Tip(title: String(format: "Ask Siri to erase %@ history", AppInfo.productName), description: "Add Siri shortcut", identifier: TipKey.siriEraseTip, showVc: true)
+    lazy var siriEraseTip = Tip(title: UIConstants.strings.siriEraseTipTitle, description: UIConstants.strings.siriEraseTipDescription, identifier: TipKey.siriEraseTip, showVc: true)
     
-    lazy var shareTrackersTip = Tip(title: "%@ trackers blocked so far", identifier: TipKey.shareTrackersTip)
+    lazy var shareTrackersTip = Tip(title: UIConstants.strings.shareTrackersTipTitle, identifier: TipKey.shareTrackersTip)
     
     func fetchTip() -> Tip? {
         guard let tip = possibleTips.randomElement(), let indexToRemove = possibleTips.index(of: tip) else { return nil }
@@ -96,7 +95,6 @@ class TipManager {
         else {
             return fetchTip()
         }
-        
     }
     
     private func canShowTip(with id: String) -> Bool {
@@ -109,5 +107,4 @@ class TipManager {
         }
         return defaults.bool(forKey: id)
     }
-
 }
