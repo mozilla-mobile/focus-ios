@@ -535,13 +535,17 @@ class BrowserViewController: UIViewController {
         SKStoreReviewController.requestReview()
     }
 
-    fileprivate func showSettings() {
+    fileprivate func showSettings(shouldScrollToSiri: Bool = false) {
         guard let modalDelegate = modalDelegate else { return }
         
         urlBar.shouldPresent = false
         
-        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset)
-        
+        let settingsViewController: UIViewController!
+        if shouldScrollToSiri {
+            settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset, shouldScrollToSiri: true)
+        } else {
+           settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset)
+        }
         let settingsNavController = UINavigationController(rootViewController: settingsViewController)
         settingsNavController.modalPresentationStyle = .formSheet
         
@@ -555,13 +559,11 @@ class BrowserViewController: UIViewController {
         guard let modalDelegate = modalDelegate else { return }
         
         urlBar.shouldPresent = false
-        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset)
         let siriFavoriteViewController = SiriFavoriteViewController()
-        let settingsNavController = UINavigationController(rootViewController: settingsViewController)
-        settingsNavController.pushViewController(siriFavoriteViewController, animated: true)
-        settingsNavController.modalPresentationStyle = .formSheet
+        let siriFavoriteNavController = UINavigationController(rootViewController: siriFavoriteViewController)
+        siriFavoriteNavController.modalPresentationStyle = .formSheet
         
-        modalDelegate.presentModal(viewController: settingsNavController, animated: true)
+        modalDelegate.presentModal(viewController: siriFavoriteNavController, animated: true)
     }
 
     func ensureBrowsingMode() {
@@ -1097,7 +1099,7 @@ extension BrowserViewController: HomeViewDelegate {
             showSettings()
         case TipManager.TipKey.siriEraseTip:
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.siriEraseTip)
-            showSettings()
+            showSettings(shouldScrollToSiri: true)
         case TipManager.TipKey.siriFavoriteTip:
             if #available(iOS 12.0, *) {
                 Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.siriFavoriteTip)

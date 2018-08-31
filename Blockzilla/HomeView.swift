@@ -12,8 +12,8 @@ protocol HomeViewDelegate: class {
 
 class HomeView: UIView {
     weak var delegate: HomeViewDelegate?
-    private let description1 = SmartLabel()
-    private let description2 = SmartLabel()
+    private let privateBrowsingDescription = SmartLabel()
+    private let browseEraseRepeatTagline = SmartLabel()
     private let tipView = UIView()
     private let trackerStatsLabel = SmartLabel()
     private let tipTitleLabel = SmartLabel()
@@ -49,19 +49,19 @@ class HomeView: UIView {
         let textLogo = UIImageView(image: wordmark)
         addSubview(textLogo)
 
-        description1.textColor = .white
-        description1.font = UIConstants.fonts.homeLabel
-        description1.textAlignment = .center
-        description1.text = UIConstants.strings.homeLabel1
-        description1.numberOfLines = 0
-        addSubview(description1)
+        privateBrowsingDescription.textColor = .white
+        privateBrowsingDescription.font = UIConstants.fonts.homeLabel
+        privateBrowsingDescription.textAlignment = .center
+        privateBrowsingDescription.text = UIConstants.strings.homeLabel1
+        privateBrowsingDescription.numberOfLines = 0
+        addSubview(privateBrowsingDescription)
 
-        description2.textColor = .white
-        description2.font = UIConstants.fonts.homeLabel
-        description2.textAlignment = .center
-        description2.text = UIConstants.strings.homeLabel2
-        description2.numberOfLines = 0
-        addSubview(description2)
+        browseEraseRepeatTagline.textColor = .white
+        browseEraseRepeatTagline.font = UIConstants.fonts.homeLabel
+        browseEraseRepeatTagline.textAlignment = .center
+        browseEraseRepeatTagline.text = UIConstants.strings.homeLabel2
+        browseEraseRepeatTagline.numberOfLines = 0
+        addSubview(browseEraseRepeatTagline)
         
         addSubview(toolbar)
         
@@ -71,13 +71,13 @@ class HomeView: UIView {
         tipTitleLabel.textColor = UIConstants.colors.defaultFont
         tipTitleLabel.font = UIConstants.fonts.shareTrackerStatsLabel
         tipTitleLabel.numberOfLines = 0
-        tipTitleLabel.minimumScaleFactor = 0.65
+        tipTitleLabel.minimumScaleFactor = UIConstants.layout.homeViewLabelMinimumScale
         tipView.addSubview(tipTitleLabel)
         
         tipDescriptionLabel.textColor = UIConstants.colors.defaultFont
         tipDescriptionLabel.font = UIConstants.fonts.shareTrackerStatsLabel
         tipDescriptionLabel.numberOfLines = 0
-        tipDescriptionLabel.minimumScaleFactor = 0.65
+        tipDescriptionLabel.minimumScaleFactor = UIConstants.layout.homeViewLabelMinimumScale
         tipView.addSubview(tipDescriptionLabel)
 
         shieldLogo.image = #imageLiteral(resourceName: "tracking_protection")
@@ -87,7 +87,7 @@ class HomeView: UIView {
         trackerStatsLabel.font = UIConstants.fonts.shareTrackerStatsLabel
         trackerStatsLabel.textColor = UIConstants.colors.defaultFont
         trackerStatsLabel.numberOfLines = 0
-        trackerStatsLabel.minimumScaleFactor = 0.65
+        trackerStatsLabel.minimumScaleFactor = UIConstants.layout.homeViewLabelMinimumScale
         tipView.addSubview(trackerStatsLabel)
         
         trackerStatsShareButton.setTitleColor(UIConstants.colors.defaultFont, for: .normal)
@@ -106,14 +106,14 @@ class HomeView: UIView {
             make.top.equalTo(snp.centerY).offset(UIConstants.layout.textLogoOffset)
         }
 
-        description1.snp.makeConstraints { make in
+        privateBrowsingDescription.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
             make.top.equalTo(textLogo.snp.bottom).offset(25)
         }
 
-        description2.snp.makeConstraints { make in
+        browseEraseRepeatTagline.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
-            make.top.equalTo(description1.snp.bottom).offset(UIConstants.layout.homeViewTextOffset)
+            make.top.equalTo(privateBrowsingDescription.snp.bottom).offset(UIConstants.layout.homeViewTextOffset)
         }
         
         tipView.snp.makeConstraints { make in
@@ -165,8 +165,8 @@ class HomeView: UIView {
     }
     
     func showTipView() {
-        description1.isHidden = true
-        description2.isHidden = true
+        privateBrowsingDescription.isHidden = true
+        browseEraseRepeatTagline.isHidden = true
         tipView.isHidden = false
     }
     
@@ -223,7 +223,6 @@ class HomeView: UIView {
         tipTitleLabel.isHidden = true
         tipDescriptionLabel.isHidden = true
     }
-        
     
     @objc private func shareTapped() {
         delegate?.shareTrackerStatsButtonTapped()
