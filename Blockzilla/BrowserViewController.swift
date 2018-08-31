@@ -535,13 +535,17 @@ class BrowserViewController: UIViewController {
         SKStoreReviewController.requestReview()
     }
 
-    fileprivate func showSettings() {
+    fileprivate func showSettings(shouldScrollToSiri: Bool = false) {
         guard let modalDelegate = modalDelegate else { return }
         
         urlBar.shouldPresent = false
         
-        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset)
-        
+        let settingsViewController: UIViewController!
+        if shouldScrollToSiri {
+            settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset, shouldScrollToSiri: true)
+        } else {
+           settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset)
+        }
         let settingsNavController = UINavigationController(rootViewController: settingsViewController)
         settingsNavController.modalPresentationStyle = .formSheet
         
@@ -1090,8 +1094,10 @@ extension BrowserViewController: HomeViewDelegate {
     func tipTapped() {
         guard let tip = tipManager?.currentTip, tip.showVc else { return }
         switch tip.identifier {
-        case TipManager.TipKey.biometricTip, TipManager.TipKey.siriEraseTip:
+        case TipManager.TipKey.biometricTip:
             showSettings()
+        case TipManager.TipKey.siriEraseTip:
+            showSettings(shouldScrollToSiri: true)
         case TipManager.TipKey.siriFavoriteTip:
             if #available(iOS 12.0, *) {
                 showSiriFavoriteSettings()
