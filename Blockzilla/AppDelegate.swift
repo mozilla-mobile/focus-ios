@@ -50,7 +50,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         setupErrorTracking()
         setupTelemetry()
         TPStatsBlocklistChecker.shared.startup()
-        browserViewController.tipManager = TipManager()
 
         // Count number of app launches for requesting a review
         let currentLaunchCount = UserDefaults.standard.integer(forKey: UIConstants.strings.userDefaultsLaunchCountKey)

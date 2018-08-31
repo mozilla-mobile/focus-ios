@@ -35,6 +35,7 @@ class TipManager {
         static let siriEraseTip = "siriEraseTip"
     }
     
+    static let shared = TipManager()
     private var possibleTips: [Tip]
     private let laContext = LAContext()
     var currentTip: Tip?
@@ -48,16 +49,11 @@ class TipManager {
         possibleTips.append(autocompleteTip)
         possibleTips.append(sitesNotWorkingTip)
         possibleTips.append(requestDesktopTip)
-        
-        if UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey) >= 10 {
-            possibleTips.append(shareTrackersTip)
-        }
+        possibleTips.append(siriFavoriteTip)
+        possibleTips.append(siriEraseTip)
+        possibleTips.append(shareTrackersTip)
         if laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
             possibleTips.append(biometricTip)
-        }
-        if #available(iOS 12.0, *) {
-            possibleTips.append(siriFavoriteTip)
-            possibleTips.append(siriEraseTip)
         }
     }
     
@@ -75,10 +71,8 @@ class TipManager {
     
     lazy var requestDesktopTip = Tip(title: UIConstants.strings.requestDesktopTipTitle, description: UIConstants.strings.requestDesktopTipDescription, identifier: TipKey.requestDesktopTip)
     
-    @available(iOS 12.0, *)
     lazy var siriFavoriteTip = Tip(title: UIConstants.strings.siriFavoriteTipTitle, description: UIConstants.strings.siriFavoriteTipDescription, identifier: TipKey.siriFavoriteTip, showVc: true)
     
-    @available(iOS 12.0, *)
     lazy var siriEraseTip = Tip(title: UIConstants.strings.siriEraseTipTitle, description: UIConstants.strings.siriEraseTipDescription, identifier: TipKey.siriEraseTip, showVc: true)
     
     lazy var shareTrackersTip = Tip(title: UIConstants.strings.shareTrackersTipTitle, identifier: TipKey.shareTrackersTip)
@@ -98,8 +92,10 @@ class TipManager {
     private func canShowTip(with id: String) -> Bool {
         let defaults = UserDefaults.standard
         switch id {
-        case TipKey.siriFavoriteTip:
+        case TipKey.siriFavoriteTip, TipKey.siriEraseTip:
             guard #available(iOS 12.0, *) else { return false }
+        case TipKey.shareTrackersTip:
+            guard UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey) >= 10 else { return false }
         default:
             break
         }

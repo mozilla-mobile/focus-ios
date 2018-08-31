@@ -77,8 +77,9 @@ class BrowserViewController: UIViewController {
     static let userDefaultsShareTrackerStatsKeyOLD = "shareTrackerStats"
     static let userDefaultsShareTrackerStatsKeyNEW = "shareTrackerStatsNew"
 
-    init(appSplashController: AppSplashController) {
+    init(appSplashController: AppSplashController, tipManager: TipManager = TipManager.shared) {
         self.appSplashController = appSplashController
+        self.tipManager = tipManager
         
         super.init(nibName: nil, bundle: nil)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
@@ -295,7 +296,13 @@ class BrowserViewController: UIViewController {
     }
 
     private func createHomeView() {
-        let homeView = HomeView()
+        let homeView: HomeView
+        if canShowTips() && shouldShowTips() {
+            homeView = HomeView(tipManager: tipManager)
+        }
+        else {
+            homeView = HomeView()
+        }
         homeView.delegate = self
         homeView.toolbar.toolset.delegate = self
         homeViewContainer.addSubview(homeView)
@@ -309,12 +316,7 @@ class BrowserViewController: UIViewController {
         }
         self.homeView = homeView
         
-        if canShowTips() && shouldShowTips() {
-            homeView.tipManager = tipManager
-        }
-        else {
-            homeView.tipManager = nil
-        }
+
     }
 
     private func createURLBar() {
@@ -540,12 +542,7 @@ class BrowserViewController: UIViewController {
         
         urlBar.shouldPresent = false
         
-        let settingsViewController: UIViewController!
-        if shouldScrollToSiri {
-            settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset, shouldScrollToSiri: true)
-        } else {
-           settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset)
-        }
+        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset, shouldScrollToSiri: shouldScrollToSiri)
         let settingsNavController = UINavigationController(rootViewController: settingsViewController)
         settingsNavController.modalPresentationStyle = .formSheet
         

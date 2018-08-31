@@ -21,28 +21,10 @@ class HomeView: UIView {
     
     let toolbar = HomeViewToolbar()
     let trackerStatsShareButton = UIButton()
-    var tipManager: TipManager? {
-        didSet {
-            if let tipManager = tipManager, let tip = tipManager.fetchTip() {
-                showTipView()
-                switch tip.identifier {
-                case TipManager.TipKey.shareTrackersTip:
-                    hideTextTip()
-                    let numberOfTrackersBlocked = UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
-                    showTrackerStatsShareButton(text: String(format: tip.title, String(numberOfTrackersBlocked)))
-                default:
-                    hideTrackerStatsShareButton()
-                    showTextTip(tip)
-                }
-                tipManager.currentTip = tip
-            }
-        }
-    }
-            
     
-    init() {
+    init(tipManager: TipManager? = nil) {
         super.init(frame: CGRect.zero)
-
+        
         let wordmark = AppInfo.config.wordmark
         let textLogo = UIImageView(image: wordmark)
         addSubview(textLogo)
@@ -155,6 +137,20 @@ class HomeView: UIView {
         shieldLogo.snp.makeConstraints { make in
             make.centerY.equalTo(trackerStatsShareButton.snp.centerY)
             make.left.equalToSuperview()
+        }
+        
+        if let tipManager = tipManager, let tip = tipManager.fetchTip() {
+            showTipView()
+            switch tip.identifier {
+            case TipManager.TipKey.shareTrackersTip:
+                hideTextTip()
+                let numberOfTrackersBlocked = UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
+                showTrackerStatsShareButton(text: String(format: tip.title, String(numberOfTrackersBlocked)))
+            default:
+                hideTrackerStatsShareButton()
+                showTextTip(tip)
+            }
+            tipManager.currentTip = tip
         }
     }
 
