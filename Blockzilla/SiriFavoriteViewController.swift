@@ -139,11 +139,13 @@ class SiriFavoriteViewController: UIViewController {
     
     @objc func cancelTapped() {
         self.navigationController?.popViewController(animated: true)
+        self.dismiss(animated: true, completion: nil)
     }
     
     @objc func doneTapped() {
         if saveFavorite() {
             self.navigationController?.popViewController(animated: true)
+            self.dismiss(animated: true, completion: nil)
         }
     }
     

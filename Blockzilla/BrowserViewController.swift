@@ -555,13 +555,11 @@ class BrowserViewController: UIViewController {
         guard let modalDelegate = modalDelegate else { return }
         
         urlBar.shouldPresent = false
-        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset)
         let siriFavoriteViewController = SiriFavoriteViewController()
-        let settingsNavController = UINavigationController(rootViewController: settingsViewController)
-        settingsNavController.pushViewController(siriFavoriteViewController, animated: true)
-        settingsNavController.modalPresentationStyle = .formSheet
+        let siriFavoriteNavController = UINavigationController(rootViewController: siriFavoriteViewController)
+        siriFavoriteNavController.modalPresentationStyle = .formSheet
         
-        modalDelegate.presentModal(viewController: settingsNavController, animated: true)
+        modalDelegate.presentModal(viewController: siriFavoriteNavController, animated: true)
     }
 
     func ensureBrowsingMode() {
