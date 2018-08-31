@@ -214,7 +214,7 @@ struct UIConstants {
         static let homeViewTextOffset: CGFloat = 5
         static let homeViewLabelMinimumScale: CGFloat = 0.65
     }
-    
+
     struct strings {
         static let aboutLearnMoreButton = NSLocalizedString("About.learnMoreButton", value: "Learn more", comment: "Button on About screen")
         static let aboutMissionLabel = NSLocalizedString("About.missionLabel", value: "%@ is produced by Mozilla. Our mission is to foster a healthy, open Internet.", comment: "Label on About screen")
@@ -427,8 +427,5 @@ struct UIConstants {
         static let siriEraseTipTitle = String(format: "Ask Siri to erase %@ history:", AppInfo.productName)
         static let siriEraseTipDescription = "Add Siri shortcut"
         static let shareTrackersTipTitle = "%@ trackers blocked so far"
-        
-        
-        
     }
 }

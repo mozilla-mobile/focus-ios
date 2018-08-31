@@ -204,7 +204,6 @@ class HomeView: UIView {
         tipTitleLabel.isHidden = true
         tipDescriptionLabel.isHidden = true
     }
-        
     
     @objc private func shareTapped() {
         delegate?.shareTrackerStatsButtonTapped()
