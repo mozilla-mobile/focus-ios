@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Telemetry
 
 protocol HomeViewDelegate: class {
     func shareTrackerStatsButtonTapped()
@@ -146,6 +147,7 @@ class HomeView: UIView {
                 hideTextTip()
                 let numberOfTrackersBlocked = UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
                 showTrackerStatsShareButton(text: String(format: tip.title, String(numberOfTrackersBlocked)))
+                Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.trackerStatsShareButton)
             default:
                 hideTrackerStatsShareButton()
                 showTextTip(tip)
@@ -194,6 +196,23 @@ class HomeView: UIView {
         }
         tipDescriptionLabel.sizeToFit()
         tipDescriptionLabel.isHidden = false
+        
+        switch tip.identifier {
+        case TipManager.TipKey.autocompleteTip:
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.autocompleteTip)
+        case TipManager.TipKey.biometricTip:
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.biometricTip)
+        case TipManager.TipKey.requestDesktopTip:
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.requestDesktopTip)
+        case TipManager.TipKey.siriEraseTip:
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.siriEraseTip)
+        case TipManager.TipKey.siriFavoriteTip:
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.siriFavoriteTip)
+        case TipManager.TipKey.sitesNotWorkingTip:
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.sitesNotWorkingTip)
+        default:
+            break
+        }
     }
     
     func hideTextTip() {
