@@ -28,6 +28,8 @@
 		166E4C87213480FD0029E2A5 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
 		166E4C882134810D0029E2A5 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35C11461E04AADA005FFFEF /* AppConfig.swift */; };
 		16837EA62135EFCC000424BB /* TipManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16837EA52135EFCC000424BB /* TipManager.swift */; };
+		16837F4C213F3D77000424BB /* Intents.strings in Resources */ = {isa = PBXBuildFile; fileRef = 16837F4F213F3D77000424BB /* Intents.strings */; };
+		16837F4D213F3D77000424BB /* Intents.strings in Resources */ = {isa = PBXBuildFile; fileRef = 16837F4F213F3D77000424BB /* Intents.strings */; };
 		16D465B12127891000FEC226 /* SiriFavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D465B02127891000FEC226 /* SiriFavoriteViewController.swift */; };
 		16D7169C2114EF76000C8A66 /* BlockerToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D7169B2114EF72000C8A66 /* BlockerToggle.swift */; };
 		16D7169E2114F00E000C8A66 /* TrackingProtectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D7169D2114F00E000C8A66 /* TrackingProtectionViewController.swift */; };
@@ -66,7 +68,7 @@
 		747ADA181FC38EFC00970132 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747ADA171FC38EFC00970132 /* IntroViewController.swift */; };
 		74F94FF21FD9CA070047E629 /* Intro.strings in Resources */ = {isa = PBXBuildFile; fileRef = 74F94FF41FD9CA070047E629 /* Intro.strings */; };
 		A57245250F88CCA4993E55B2 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4C4943B406FCA9B74B4E186 /* CoreText.framework */; };
-		A89766DA1F57DCA9008183C5 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		A89766DA1F57DCA9008183C5 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		B3481A551FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3481A541FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift */; };
 		B3AFC2BC1F7C0B9F001AEF38 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AFC2BB1F7C0B9F001AEF38 /* WebViewController.swift */; };
 		B3CD41C91FD1027000AEBD58 /* InsetTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3CD41C81FD1027000AEBD58 /* InsetTextField.swift */; };
@@ -268,6 +270,8 @@
 		166E4C0421347D150029E2A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		166E4C1021347DB50029E2A5 /* FocusIntentExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FocusIntentExtension.entitlements; sourceTree = "<group>"; };
 		16837EA52135EFCC000424BB /* TipManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipManager.swift; sourceTree = "<group>"; };
+		16837F4E213F3D77000424BB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Intents.strings; sourceTree = "<group>"; };
+		16837F50213F3EB8000424BB /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Intents.strings; sourceTree = "<group>"; };
 		16938BFB21010C2B00DCD489 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		16938BFC21010C2C00DCD489 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Localizable.strings; sourceTree = "<group>"; };
 		16938BFD21010C2C00DCD489 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Intro.strings; sourceTree = "<group>"; };
@@ -1254,6 +1258,7 @@
 				D3426AEE1DB846BB0016DA5A /* topdomains.txt */,
 				E4BF2DDD1BACE8CA00DA9D68 /* Assets.xcassets */,
 				E40AFC761DDDE96D00DA5651 /* InfoPlist.strings */,
+				16837F4F213F3D77000424BB /* Intents.strings */,
 				D343DCC41C44356500D7EEE8 /* Localizable.strings */,
 				D3BFCB3D1BD14F4E00AD22D1 /* LocalWebServer */,
 				746BD9251F75C43C00BE8DB9 /* DataExtensions.swift */,
@@ -1516,6 +1521,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				16837F4D213F3D77000424BB /* Intents.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1524,7 +1530,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				742C99D41F3A3AD200717D69 /* Assets.xcassets in Resources */,
-				A89766DA1F57DCA9008183C5 /* BuildFile in Resources */,
+				A89766DA1F57DCA9008183C5 /* (null) in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1562,6 +1568,7 @@
 				E47F9AEA1DB9329D00A93285 /* Adjust-Focus.plist in Resources */,
 				D38EDB961DCA8A9400E28196 /* LaunchScreen.storyboard in Resources */,
 				E40AFC741DDDE96D00DA5651 /* InfoPlist.strings in Resources */,
+				16837F4C213F3D77000424BB /* Intents.strings in Resources */,
 				D343DCC21C44356500D7EEE8 /* Localizable.strings in Resources */,
 				EB84F9712093815500BA6739 /* effective_tld_names.dat in Resources */,
 				D3E2C8FB1D9F17AC00DEBE3D /* disconnect-advertising.json in Resources */,
@@ -1846,6 +1853,15 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		16837F4F213F3D77000424BB /* Intents.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				16837F4E213F3D77000424BB /* en */,
+				16837F50213F3EB8000424BB /* de */,
+			);
+			name = Intents.strings;
+			sourceTree = "<group>";
+		};
 		74F94FF41FD9CA070047E629 /* Intro.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
