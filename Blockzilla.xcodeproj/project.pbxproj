@@ -958,6 +958,7 @@
 		745DC5DB1F39221100661635 /* OpenInFocus */ = {
 			isa = PBXGroup;
 			children = (
+				16938C0321010C2D00DCD489 /* InfoPlist.strings */,
 				745DC5DC1F39221100661635 /* ActionViewController.swift */,
 				745DC5E11F39221100661635 /* Info.plist */,
 				742C99D31F3A3AD200717D69 /* Assets.xcassets */,
@@ -1846,6 +1847,16 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		16938C0321010C2D00DCD489 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				16938C0221010C2D00DCD489 /* bg */,
+				16938C0D210129AD00DCD489 /* mr */,
+				16938C1221012A0400DCD489 /* gu-IN */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		74F94FF41FD9CA070047E629 /* Intro.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
