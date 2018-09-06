@@ -245,7 +245,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         navigationBar.tintColor = UIConstants.colors.navigationButton
         navigationBar.titleTextAttributes = [.foregroundColor: UIConstants.colors.navigationTitle]
         
-        let navBarBorderRect = CGRect(x: 0.0, y: 0.0, width: 1.0, height: 0.5)
+        let navBarBorderRect = CGRect(x: 0.0, y: 0.0, width: 1.0, height: 0.25)
         UIGraphicsBeginImageContextWithOptions(navBarBorderRect.size, false, 0.0)
         UIConstants.colors.settingsNavBorder.setFill()
         UIRectFill(navBarBorderRect)
