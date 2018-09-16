@@ -166,9 +166,17 @@ class OverlayView: UIView {
                     let duration = animated ? UIConstants.layout.searchButtonAnimationDuration : 0
                     self.topBorder.animateHidden(query.isEmpty, duration: duration)
                     self.searchButton.animateHidden(query.isEmpty, duration: duration)
+<<<<<<< HEAD
                     self.findInPageButton.animateHidden(query.isEmpty || hideFindInPage, duration: duration, completion: {
                         self.updateCopyConstraint(showCopyButton: showCopyButton)
                     })
+=======
+                    self.searchBorder.animateHidden(query.isEmpty, duration: duration)
+                    self.findInPageButton.animateHidden(query.isEmpty || hideFindInPage, duration: duration, completion: {
+                        self.updateCopyConstraint(showCopyButton: showCopyButton)
+                    })
+                    self.findInPageBorder.animateHidden((query.isEmpty || hideFindInPage), duration: duration)
+>>>>>>> master
                 } else {
                     self.updateCopyConstraint(showCopyButton: showCopyButton)
                 }

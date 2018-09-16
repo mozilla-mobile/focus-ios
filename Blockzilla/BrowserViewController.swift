@@ -10,6 +10,13 @@ import LocalAuthentication
 import StoreKit
 
 class BrowserViewController: UIViewController {
+<<<<<<< HEAD
+=======
+    private class DrawerView: UIView {
+        override var intrinsicContentSize: CGSize { return CGSize(width: 320, height: 0) }
+    }
+    
+>>>>>>> master
     let appSplashController: AppSplashController
 
     private var context = LAContext()
@@ -79,6 +86,10 @@ class BrowserViewController: UIViewController {
         self.appSplashController = appSplashController
         
         super.init(nibName: nil, bundle: nil)
+<<<<<<< HEAD
+=======
+        drawerContainerView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+>>>>>>> master
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
     }
     

@@ -196,6 +196,7 @@ struct UIConstants {
         static let urlBarShadowOffset = CGSize(width: 0, height: 2)
         static let urlBarWidthInset: CGFloat = 8
         static let urlBarBorderInset: CGFloat = 4
+<<<<<<< HEAD
         static let deleteButtonInset: CGFloat = -12
         static let urlBarIconInset: CGFloat = 8
         static let settingsDefaultTitleOffset = 3
@@ -204,6 +205,8 @@ struct UIConstants {
         static let textLogoOffset: CGFloat = -10 - browserToolbarHeight / 2
         static let urlBarButtonImageSize: CGFloat = 24
         static let urlBarButtonTargetSize: CGFloat = 40
+=======
+>>>>>>> master
     }
 
     struct strings {

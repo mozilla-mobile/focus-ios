@@ -7,17 +7,27 @@ import Telemetry
 
 protocol AppSplashController {
     var splashView: UIView { get }
+<<<<<<< HEAD
     
     func toggleSplashView(hide: Bool)
 }
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashController {
+=======
+
+    func toggleSplashView(hide: Bool)
+}
+
+@UIApplicationMain
+class AppDelegate: UIResponder, UIApplicationDelegate, AppSplashController {
+>>>>>>> master
     static let prefIntroDone = "IntroDone"
     static let prefIntroVersion = 2
     static let prefWhatsNewDone = "WhatsNewDone"
     static let prefWhatsNewCounter = "WhatsNewCounter"
     static var needsAuthenticated = false
+<<<<<<< HEAD
     
     // This enum can be expanded to support all new shortcuts added to menu.
     enum ShortcutIdentifier: String {
@@ -30,6 +40,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         }
     }
     
+=======
+
+>>>>>>> master
     var window: UIWindow?
 
     var splashView: UIView = UIView()
@@ -40,7 +53,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     private var queuedUrl: URL?
     private var queuedString: String?
 
+<<<<<<< HEAD
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+=======
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+>>>>>>> master
         if AppInfo.testRequestsReset() {
             if let bundleID = Bundle.main.bundleIdentifier {
                 UserDefaults.standard.removePersistentDomain(forName: bundleID)
@@ -237,7 +254,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
     func applicationWillResignActive(_ application: UIApplication) {
         toggleSplashView(hide: false)
+<<<<<<< HEAD
         browserViewController.exitFullScreenVideo()
+=======
+>>>>>>> master
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {

@@ -11,13 +11,21 @@
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
+<<<<<<< HEAD
 	<string>7.0</string>
+=======
+	<string>6.1</string>
+>>>>>>> master
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
 	<string>XPC!</string>
 	<key>CFBundleShortVersionString</key>
+<<<<<<< HEAD
 	<string>7.0</string>
+=======
+	<string>6.1</string>
+>>>>>>> master
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
