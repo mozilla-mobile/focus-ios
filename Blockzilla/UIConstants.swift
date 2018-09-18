@@ -409,6 +409,8 @@ struct UIConstants {
         static let urlToOpen = NSLocalizedString("Siri.urlToOpen", value: "URL to open", comment: "Label for input to set a favorite URL to be opened by Siri.")
         static let editOpenUrl = NSLocalizedString("Siri.editOpenUrl", value: "Re-Record or Delete Shortcut", comment: "Label for button to edit the Siri phrase or delete the Siri functionality.")
         static let add = NSLocalizedString("Siri.add", value: "Add", comment: "Button to add a favorite URL to Siri.")
+        static let siriCommandErase = NSLocalizedString("Siri.commandErase", value: "Erase", comment: "Verbal command given by the user to erase browsing history")
+
         
         static let userDefaultsLaunchThresholdKey = "launchThreshold"
         static let userDefaultsLaunchCountKey = "launchCount"
