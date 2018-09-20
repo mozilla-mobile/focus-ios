@@ -1,0 +1,18 @@
+/* (No Comment) */
+"NSCameraUsageDescription" = "Isto te permitte de prender e inviar photos.";
+
+/* (No Comment) */
+"NSFaceIDUsageDescription" = "Isto te lassa disblocar le application.";
+
+/* (No Comment) */
+"NSLocationWhenInUseUsageDescription" = "Le sitos web visitate pote requirer tu geolocalisation.";
+
+/* (No Comment) */
+"NSMicrophoneUsageDescription" = "Isto te permitte de prender e inviar videos.";
+
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "Isto te permitte de salvar e inviar photos.";
+
+/* (No Comment) */
+"NSPhotoLibraryUsageDescription" = "Isto te permitte de salvar e inviar photos.";
+

@@ -15,6 +15,15 @@
 		0BBBED411DD3823C00F9C565 /* BaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBBED401DD3823C00F9C565 /* BaseTestCase.swift */; };
 		0BBBED431DD3B78300F9C565 /* SettingAppearanceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBBED421DD3B78300F9C565 /* SettingAppearanceTest.swift */; };
 		0BC928CE1E366A6E004AC581 /* AsianLocaleTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */; };
+		16938C0121010C2D00DCD489 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 16938C0321010C2D00DCD489 /* InfoPlist.strings */; };
+		1D199EF220D813D300CDF976 /* DragAndDropTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D199EF120D813D300CDF976 /* DragAndDropTest.swift */; };
+		1D3BEDF920C5E6C70019B722 /* FindInPage.js in Resources */ = {isa = PBXBuildFile; fileRef = 1D3BEDF820C5E6C70019B722 /* FindInPage.js */; };
+		1D3BEDFB20C5E76B0019B722 /* FindInPageBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3BEDFA20C5E76A0019B722 /* FindInPageBar.swift */; };
+		1D3FEEA120C0A73D00FFAA8C /* RequestDesktopTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3FEEA020C0A73D00FFAA8C /* RequestDesktopTest.swift */; };
+		1D47758820C1E66000C074AE /* CopyTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D47758720C1E66000C074AE /* CopyTest.swift */; };
+		1DD317E120BF1B3000DFA44E /* OnboardingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD317E020BF1B3000DFA44E /* OnboardingTest.swift */; };
+		1DE6DA2220BF410400CE337B /* QuickAddAutocompleteURLTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE6DA2120BF410400CE337B /* QuickAddAutocompleteURLTest.swift */; };
+		1DE903CE20C751D7002E53ED /* FindInPageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE903CD20C751D7002E53ED /* FindInPageTest.swift */; };
 		2825C3665AB14081B262F767 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D051AC1857A0EEEBB833D15 /* SystemConfiguration.framework */; };
 		2B36326E97D2E67E9C684B4B /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80D9AA926EFBD788739486EB /* CoreTelephony.framework */; };
 		2F2F84BCF076B21DE42D1F29 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C652A61E213D254A86DF5736 /* CoreMedia.framework */; };
@@ -93,7 +102,6 @@
 		D3BFCB3F1BD14F5900AD22D1 /* LocalWebServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BFCB3E1BD14F5900AD22D1 /* LocalWebServer.swift */; };
 		D3BFCB5B1BD15CD000AD22D1 /* rights-klar.html in Resources */ = {isa = PBXBuildFile; fileRef = D3BFCB5A1BD15CD000AD22D1 /* rights-klar.html */; };
 		D3C047BD1DCBD8ED00402FFB /* SearchEngines.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3C047BC1DCBD8ED00402FFB /* SearchEngines.plist */; };
-		D3CD375B1DD3B51900468250 /* FirstRunViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CD375A1DD3B51900468250 /* FirstRunViewController.swift */; };
 		D3DA77851DC2C307009C114E /* ErrorPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DA77841DC2C307009C114E /* ErrorPage.swift */; };
 		D3DA778C1DC2C60E009C114E /* errorPage.html in Resources */ = {isa = PBXBuildFile; fileRef = D3DA778B1DC2C60E009C114E /* errorPage.html */; };
 		D3E251EA1DAD714C005918DC /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E251E71DAD714C005918DC /* InstructionsView.swift */; };
@@ -125,6 +133,8 @@
 		D5ABA3DA1FCC846800D5C060 /* AutocompleteSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5ABA3D81FCC846800D5C060 /* AutocompleteSettingViewController.swift */; };
 		D5B10AAB1FD5EFA40044523A /* OnePasswordExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 747ADA1D1FCE0B7B00970132 /* OnePasswordExtension.framework */; };
 		D5F72FB31FA7D1C50071DD9B /* TrackingProtectionSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F72FB21FA7D1C50071DD9B /* TrackingProtectionSummaryViewController.swift */; };
+		D803D37420EF1A49001F2819 /* UserAgentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D803D37320EF1A49001F2819 /* UserAgentTests.swift */; };
+		D831FEE2205247A400EAE19A /* BrowserViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEE1205247A400EAE19A /* BrowserViewControllerTests.swift */; };
 		D8E0152C1FB4136E00CA3B9F /* AddSearchEngineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E0152B1FB4136E00CA3B9F /* AddSearchEngineViewController.swift */; };
 		D8E0155F1FCF409F00CA3B9F /* SearchEngineManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E0155E1FCF409F00CA3B9F /* SearchEngineManagerTests.swift */; };
 		D8E0156E1FD9E40F00CA3B9F /* DomainCompletionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E0156D1FD9E40F00CA3B9F /* DomainCompletionTests.swift */; };
@@ -147,6 +157,10 @@
 		E4BF2DF51BACE92400DA9D68 /* ContentBlocker.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E4BF2DEC1BACE92400DA9D68 /* ContentBlocker.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E4BF2E111BAD8AC500DA9D68 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
 		E4BF2E121BAD8AC500DA9D68 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
+		EB84F96D2093799900BA6739 /* TrackingProtectionPageStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB84F96C2093799800BA6739 /* TrackingProtectionPageStats.swift */; };
+		EB84F96F209380CE00BA6739 /* URLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB84F96E209380CE00BA6739 /* URLExtensions.swift */; };
+		EB84F9712093815500BA6739 /* effective_tld_names.dat in Resources */ = {isa = PBXBuildFile; fileRef = EB84F9702093815500BA6739 /* effective_tld_names.dat */; };
+		EBE44F4E20ADDF6A005AFEA6 /* SmartLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE44F4D20ADDF6A005AFEA6 /* SmartLabel.swift */; };
 		F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F805722E1DBEE504004339C1 /* WebCacheUtils.swift */; };
 		F84AFE751DE77FE6005C4DD1 /* LaunchScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE721DE77FE6005C4DD1 /* LaunchScreen.png */; };
 		F84AFE761DE77FE6005C4DD1 /* LaunchScreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE731DE77FE6005C4DD1 /* LaunchScreen@2x.png */; };
@@ -219,7 +233,30 @@
 		0BBBED401DD3823C00F9C565 /* BaseTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTestCase.swift; sourceTree = "<group>"; };
 		0BBBED421DD3B78300F9C565 /* SettingAppearanceTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingAppearanceTest.swift; sourceTree = "<group>"; };
 		0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsianLocaleTest.swift; sourceTree = "<group>"; };
+		16938BFB21010C2B00DCD489 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		16938BFC21010C2C00DCD489 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Localizable.strings; sourceTree = "<group>"; };
+		16938BFD21010C2C00DCD489 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Intro.strings; sourceTree = "<group>"; };
+		16938BFE21010C2D00DCD489 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		16938C0221010C2D00DCD489 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		16938C09210129AC00DCD489 /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = mr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		16938C0A210129AC00DCD489 /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = mr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		16938C0B210129AD00DCD489 /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = mr.lproj/Intro.strings; sourceTree = "<group>"; };
+		16938C0C210129AD00DCD489 /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = mr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		16938C0D210129AD00DCD489 /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = mr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		16938C0E21012A0200DCD489 /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		16938C0F21012A0200DCD489 /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		16938C1021012A0300DCD489 /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/Intro.strings"; sourceTree = "<group>"; };
+		16938C1121012A0300DCD489 /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		16938C1221012A0400DCD489 /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		1D051AC1857A0EEEBB833D15 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		1D199EF120D813D300CDF976 /* DragAndDropTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragAndDropTest.swift; sourceTree = "<group>"; };
+		1D3BEDF820C5E6C70019B722 /* FindInPage.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FindInPage.js; sourceTree = "<group>"; };
+		1D3BEDFA20C5E76A0019B722 /* FindInPageBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindInPageBar.swift; sourceTree = "<group>"; };
+		1D3FEEA020C0A73D00FFAA8C /* RequestDesktopTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestDesktopTest.swift; sourceTree = "<group>"; };
+		1D47758720C1E66000C074AE /* CopyTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyTest.swift; sourceTree = "<group>"; };
+		1DD317E020BF1B3000DFA44E /* OnboardingTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTest.swift; sourceTree = "<group>"; };
+		1DE6DA2120BF410400CE337B /* QuickAddAutocompleteURLTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAddAutocompleteURLTest.swift; sourceTree = "<group>"; };
+		1DE903CD20C751D7002E53ED /* FindInPageTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindInPageTest.swift; sourceTree = "<group>"; };
 		29B90C056305836CB297FF79 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		427B752EF11959F9C38B12D6 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4F1284851FC5E242001A775B /* TPSettingsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPSettingsTest.swift; sourceTree = "<group>"; };
@@ -461,7 +498,6 @@
 		D3C70C671DDE795300CEE458 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D3C70C711DDFCA4800CEE458 /* Klar.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Klar.entitlements; sourceTree = "<group>"; };
 		D3C70C721DDFCA7000CEE458 /* KlarEnterprise.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = KlarEnterprise.entitlements; sourceTree = "<group>"; };
-		D3CD375A1DD3B51900468250 /* FirstRunViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstRunViewController.swift; sourceTree = "<group>"; };
 		D3DA77841DC2C307009C114E /* ErrorPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorPage.swift; sourceTree = "<group>"; };
 		D3DA778B1DC2C60E009C114E /* errorPage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = errorPage.html; sourceTree = "<group>"; };
 		D3E251E71DAD714C005918DC /* InstructionsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionsView.swift; sourceTree = "<group>"; };
@@ -489,6 +525,8 @@
 		D5ABA3D71FCC846800D5C060 /* AddCustomDomainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCustomDomainViewController.swift; sourceTree = "<group>"; };
 		D5ABA3D81FCC846800D5C060 /* AutocompleteSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteSettingViewController.swift; sourceTree = "<group>"; };
 		D5F72FB21FA7D1C50071DD9B /* TrackingProtectionSummaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionSummaryViewController.swift; sourceTree = "<group>"; };
+		D803D37320EF1A49001F2819 /* UserAgentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgentTests.swift; sourceTree = "<group>"; };
+		D831FEE1205247A400EAE19A /* BrowserViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerTests.swift; sourceTree = "<group>"; };
 		D8E0152B1FB4136E00CA3B9F /* AddSearchEngineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSearchEngineViewController.swift; sourceTree = "<group>"; };
 		D8E0155C1FCF409F00CA3B9F /* ClientTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClientTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8E0155E1FCF409F00CA3B9F /* SearchEngineManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineManagerTests.swift; sourceTree = "<group>"; };
@@ -582,6 +620,18 @@
 		E436961C1E4AC70F0023D5F0 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E436961D1E4AC70F0023D5F0 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E436961E1E4AC70F0023D5F0 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E447176720B5C33C00CC8507 /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/Intro.strings; sourceTree = "<group>"; };
+		E447176820B5C33C00CC8507 /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E447176C20B5C33C00CC8507 /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E447176D20B5C33C00CC8507 /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E447176E20B5C3D600CC8507 /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E447177020B5C3D600CC8507 /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E447177120B5C3D600CC8507 /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/Intro.strings; sourceTree = "<group>"; };
+		E447177220B5C3D600CC8507 /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E447177420B5C3F300CC8507 /* hy-AM */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hy-AM"; path = "hy-AM.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		E447177520B5C3F300CC8507 /* hy-AM */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hy-AM"; path = "hy-AM.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		E447177620B5C3F300CC8507 /* hy-AM */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hy-AM"; path = "hy-AM.lproj/Intro.strings"; sourceTree = "<group>"; };
+		E447177720B5C3F300CC8507 /* hy-AM */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hy-AM"; path = "hy-AM.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		E44A34671E0A18C100BFD777 /* SnapshotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SnapshotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E44A34691E0A18C100BFD777 /* SnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotTests.swift; sourceTree = "<group>"; };
 		E44A346B1E0A18C100BFD777 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -740,6 +790,10 @@
 		E4D0AB881E300EFE00DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E4D0AB891E300EFF00DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E4D0AB8A1E300F0000DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		EB84F96C2093799800BA6739 /* TrackingProtectionPageStats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrackingProtectionPageStats.swift; path = Lib/TrackingProtection/TrackingProtectionPageStats.swift; sourceTree = "<group>"; };
+		EB84F96E209380CE00BA6739 /* URLExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLExtensions.swift; sourceTree = "<group>"; };
+		EB84F9702093815500BA6739 /* effective_tld_names.dat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = effective_tld_names.dat; sourceTree = "<group>"; };
+		EBE44F4D20ADDF6A005AFEA6 /* SmartLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartLabel.swift; sourceTree = "<group>"; };
 		F4C4943B406FCA9B74B4E186 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		F805722E1DBEE504004339C1 /* WebCacheUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebCacheUtils.swift; sourceTree = "<group>"; };
 		F84AFE721DE77FE6005C4DD1 /* LaunchScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchScreen.png; sourceTree = "<group>"; };
@@ -813,6 +867,12 @@
 		0BA39A841DD2B8E4005F970A /* XCUITest */ = {
 			isa = PBXGroup;
 			children = (
+				1D199EF120D813D300CDF976 /* DragAndDropTest.swift */,
+				1DE903CD20C751D7002E53ED /* FindInPageTest.swift */,
+				1D47758720C1E66000C074AE /* CopyTest.swift */,
+				1D3FEEA020C0A73D00FFAA8C /* RequestDesktopTest.swift */,
+				1DE6DA2120BF410400CE337B /* QuickAddAutocompleteURLTest.swift */,
+				1DD317E020BF1B3000DFA44E /* OnboardingTest.swift */,
 				0B4868651F2250A3008C3C09 /* PastenGoTest.swift */,
 				0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */,
 				0B0D6BC31F3CDDBB00497D08 /* CollapsedURLTest.swift */,
@@ -842,6 +902,7 @@
 		745DC5DB1F39221100661635 /* OpenInFocus */ = {
 			isa = PBXGroup;
 			children = (
+				16938C0321010C2D00DCD489 /* InfoPlist.strings */,
 				745DC5DC1F39221100661635 /* ActionViewController.swift */,
 				745DC5E11F39221100661635 /* Info.plist */,
 				742C99D31F3A3AD200717D69 /* Assets.xcassets */,
@@ -999,8 +1060,10 @@
 			children = (
 				D8E0155E1FCF409F00CA3B9F /* SearchEngineManagerTests.swift */,
 				D8E015601FCF409F00CA3B9F /* Info.plist */,
+				D831FEE1205247A400EAE19A /* BrowserViewControllerTests.swift */,
 				D8E0156D1FD9E40F00CA3B9F /* DomainCompletionTests.swift */,
 				050E8B1D2064FECE00DF6090 /* StringExtensionTest.swift */,
+				D803D37320EF1A49001F2819 /* UserAgentTests.swift */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";
@@ -1057,6 +1120,8 @@
 		E4BF2DD51BACE8CA00DA9D68 /* Blockzilla */ = {
 			isa = PBXGroup;
 			children = (
+				EB84F9702093815500BA6739 /* effective_tld_names.dat */,
+				EB84F96C2093799800BA6739 /* TrackingProtectionPageStats.swift */,
 				74F94FF41FD9CA070047E629 /* Intro.strings */,
 				D50939A81FBF807A005D4316 /* Settings.bundle */,
 				B3AFC2B91F7C0B66001AEF38 /* Modules */,
@@ -1072,6 +1137,8 @@
 				F84AFE741DE77FE6005C4DD1 /* LaunchScreen@3x.png */,
 				D38EDB951DCA8A9400E28196 /* LaunchScreen.storyboard */,
 				B3481A541FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift */,
+				1D3BEDF820C5E6C70019B722 /* FindInPage.js */,
+				1D3BEDFA20C5E76A0019B722 /* FindInPageBar.swift */,
 				747ADA171FC38EFC00970132 /* IntroViewController.swift */,
 				D30179C21BCC6F65009AD388 /* AboutViewController.swift */,
 				74584E341FA1077000AF2582 /* SettingsContentViewController.swift */,
@@ -1088,7 +1155,6 @@
 				D5ABA3D71FCC846800D5C060 /* AddCustomDomainViewController.swift */,
 				D3DA77841DC2C307009C114E /* ErrorPage.swift */,
 				D30AEEBA1DE4CB1B0096A2E7 /* FileManagerExtensions.swift */,
-				D3CD375A1DD3B51900468250 /* FirstRunViewController.swift */,
 				D3561B2A1DB5925100A5EEAF /* GradientBackgroundView.swift */,
 				D3E3CA7C1DA827AD0079C94B /* HomeView.swift */,
 				D3E2C9681DA3024800DEBE3D /* InsetButton.swift */,
@@ -1103,6 +1169,7 @@
 				D3E54FD01DEFB063003E1AFF /* SearchEngineManager.swift */,
 				D3E54FDF1DF0E221003E1AFF /* SearchSettingsViewController.swift */,
 				D33A1AB01BC48FAC0003D929 /* SettingsViewController.swift */,
+				EBE44F4D20ADDF6A005AFEA6 /* SmartLabel.swift */,
 				D34E70341DA874AA00BABDCC /* StringExtensions.swift */,
 				E40AFB131DC939FF00DA5651 /* SupportUtils.swift */,
 				D0967A801EC50002009D937F /* TelemetryIntegration.swift */,
@@ -1111,6 +1178,7 @@
 				D392887E1BC5E47E0016A9A0 /* UIConstants.swift */,
 				D3E54FDD1DF0E0D6003E1AFF /* UIImageExtensions.swift */,
 				D32F71D21BCEF67C006D44FC /* UIViewExtensions.swift */,
+				EB84F96E209380CE00BA6739 /* URLExtensions.swift */,
 				D3E2C96A1DA3069000DEBE3D /* URIFixup.swift */,
 				D3E2C9601DA2F7C600DEBE3D /* URLBar.swift */,
 				D3426B021DBAE3800016DA5A /* URLBarContainer.swift */,
@@ -1262,7 +1330,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0910;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = Mozilla;
 				TargetAttributes = {
 					0BA39A821DD2B8E4005F970A = {
@@ -1319,6 +1387,7 @@
 				en,
 				Base,
 				de,
+				an,
 			);
 			mainGroup = E4BF2DCA1BACE8CA00DA9D68;
 			productRefGroup = E4BF2DD41BACE8CA00DA9D68 /* Products */;
@@ -1349,6 +1418,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				742C99D41F3A3AD200717D69 /* Assets.xcassets in Resources */,
+				16938C0121010C2D00DCD489 /* InfoPlist.strings in Resources */,
 				A89766DA1F57DCA9008183C5 /* (null) in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1373,6 +1443,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3B3232E1BD16A0F00B0EEE4 /* licenses.html in Resources */,
+				1D3BEDF920C5E6C70019B722 /* FindInPage.js in Resources */,
 				E4BF2DDE1BACE8CA00DA9D68 /* Assets.xcassets in Resources */,
 				B3F4A3171FA136E70029A6F2 /* preload.js in Resources */,
 				6616A36F1BD17EFA00C7E493 /* style.css in Resources */,
@@ -1387,6 +1458,7 @@
 				D38EDB961DCA8A9400E28196 /* LaunchScreen.storyboard in Resources */,
 				E40AFC741DDDE96D00DA5651 /* InfoPlist.strings in Resources */,
 				D343DCC21C44356500D7EEE8 /* Localizable.strings in Resources */,
+				EB84F9712093815500BA6739 /* effective_tld_names.dat in Resources */,
 				D3E2C8FB1D9F17AC00DEBE3D /* disconnect-advertising.json in Resources */,
 				D362D2AB1C4EAF940041980A /* rights-focus.html in Resources */,
 				D3E2C8FC1D9F17AC00DEBE3D /* disconnect-analytics.json in Resources */,
@@ -1431,7 +1503,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if echo $OTHER_SWIFT_FLAGS | grep -q -e \"-DFOCUS\"; then\n  echo \"Copying Focus-only Carthage frameworks\"\n  /usr/local/bin/carthage copy-frameworks\nelse\n  echo \"Skipping Build Phase for copying Focus-only Carthage frameworks\"\nfi\n";
+			shellScript = "if echo $SWIFT_ACTIVE_COMPILATION_CONDITIONS | grep -q -e \"FOCUS\"; then\n  echo \"Copying Focus-only Carthage frameworks\"\n  /usr/local/bin/carthage copy-frameworks\nelse\n  echo \"Skipping Build Phase for copying Focus-only Carthage frameworks\"\nfi\n";
 		};
 		D38D693F1C471AC7003EF211 /* Run Script (Carthage) */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1446,6 +1518,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Telemetry.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Sentry.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/OnePasswordExtension.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Deferred.framework",
 			);
 			name = "Run Script (Carthage)";
 			outputPaths = (
@@ -1475,14 +1548,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1DE903CE20C751D7002E53ED /* FindInPageTest.swift in Sources */,
 				0BBBED431DD3B78300F9C565 /* SettingAppearanceTest.swift in Sources */,
+				1D199EF220D813D300CDF976 /* DragAndDropTest.swift in Sources */,
 				0BBBED411DD3823C00F9C565 /* BaseTestCase.swift in Sources */,
+				1D47758820C1E66000C074AE /* CopyTest.swift in Sources */,
 				0B37F9A61E2FCAD4002DF74B /* SearchProviderTest.swift in Sources */,
+				1DD317E120BF1B3000DFA44E /* OnboardingTest.swift in Sources */,
 				0B70C1631DE6128900CEF7E0 /* WebsiteMemoryTest.swift in Sources */,
 				4F582F7B1F44A10F006C744B /* OpenInFocusTest.swift in Sources */,
 				0BC928CE1E366A6E004AC581 /* AsianLocaleTest.swift in Sources */,
+				1D3FEEA120C0A73D00FFAA8C /* RequestDesktopTest.swift in Sources */,
 				4F1284861FC5E242001A775B /* TPSettingsTest.swift in Sources */,
 				4FE4E6F61FBB5E2C001BB779 /* TPSidebarBadge.swift in Sources */,
+				1DE6DA2220BF410400CE337B /* QuickAddAutocompleteURLTest.swift in Sources */,
 				0BA39A861DD2B8E4005F970A /* WebsiteAccessTest.swift in Sources */,
 				0B0D6BC41F3CDDBB00497D08 /* CollapsedURLTest.swift in Sources */,
 			);
@@ -1500,6 +1579,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D803D37420EF1A49001F2819 /* UserAgentTests.swift in Sources */,
+				D831FEE2205247A400EAE19A /* BrowserViewControllerTests.swift in Sources */,
 				D8E0155F1FCF409F00CA3B9F /* SearchEngineManagerTests.swift in Sources */,
 				050E8B1E2064FECE00DF6090 /* StringExtensionTest.swift in Sources */,
 				D8E0156E1FD9E40F00CA3B9F /* DomainCompletionTests.swift in Sources */,
@@ -1540,6 +1621,7 @@
 				746BD9241F758FDA00BE8DB9 /* Bytes.swift in Sources */,
 				D3E54FCF1DEFAE80003E1AFF /* OpenSearchParser.swift in Sources */,
 				E40AFB101DC9014700DA5651 /* UserAgent.swift in Sources */,
+				EB84F96D2093799900BA6739 /* TrackingProtectionPageStats.swift in Sources */,
 				74584E351FA1077000AF2582 /* SettingsContentViewController.swift in Sources */,
 				D5F72FB31FA7D1C50071DD9B /* TrackingProtectionSummaryViewController.swift in Sources */,
 				7460BD671F58B1B10096B745 /* GradientProgressBar.swift in Sources */,
@@ -1550,11 +1632,13 @@
 				B3CD41C91FD1027000AEBD58 /* InsetTextField.swift in Sources */,
 				D30179071BC6CB19009AD388 /* BlockerEnabledDetector.swift in Sources */,
 				B3481A551FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift in Sources */,
+				EBE44F4E20ADDF6A005AFEA6 /* SmartLabel.swift in Sources */,
 				D37DE55D1BCDBD6100906364 /* WaveView.swift in Sources */,
 				E4BF2DD71BACE8CA00DA9D68 /* AppDelegate.swift in Sources */,
 				746D78FB1F4E0095002EB522 /* ShareSheetActivities.swift in Sources */,
 				D3E2C9691DA3024800DEBE3D /* InsetButton.swift in Sources */,
 				F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */,
+				1D3BEDFB20C5E76B0019B722 /* FindInPageBar.swift in Sources */,
 				D30DF93E1DC1634F0064736C /* Toast.swift in Sources */,
 				D33A1AB11BC48FAC0003D929 /* SettingsViewController.swift in Sources */,
 				747ADA181FC38EFC00970132 /* IntroViewController.swift in Sources */,
@@ -1564,6 +1648,7 @@
 				E47F9AEE1DB9338600A93285 /* AdjustIntegration.swift in Sources */,
 				D3E54FD11DEFB063003E1AFF /* SearchEngineManager.swift in Sources */,
 				D392881D1BC5CF180016A9A0 /* UIColorExtensions.swift in Sources */,
+				EB84F96F209380CE00BA6739 /* URLExtensions.swift in Sources */,
 				D3E3CA7D1DA827AD0079C94B /* HomeView.swift in Sources */,
 				D8E0152C1FB4136E00CA3B9F /* AddSearchEngineViewController.swift in Sources */,
 				D3E251EB1DAD714C005918DC /* SafariInstructionsViewController.swift in Sources */,
@@ -1582,7 +1667,6 @@
 				B3CD41CC1FD1CAF000AEBD58 /* PaddedSwitch.swift in Sources */,
 				D3E251EA1DAD714C005918DC /* InstructionsView.swift in Sources */,
 				D3561B2B1DB5925100A5EEAF /* GradientBackgroundView.swift in Sources */,
-				D3CD375B1DD3B51900468250 /* FirstRunViewController.swift in Sources */,
 				D3E2C96D1DA3077400DEBE3D /* CharacterSetExtensions.swift in Sources */,
 				D3E2C96F1DA3093D00DEBE3D /* BrowserToolbar.swift in Sources */,
 				746BD91A1F75881D00BE8DB9 /* SentryIntegration.swift in Sources */,
@@ -1632,6 +1716,16 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		16938C0321010C2D00DCD489 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				16938C0221010C2D00DCD489 /* bg */,
+				16938C0D210129AD00DCD489 /* mr */,
+				16938C1221012A0400DCD489 /* gu-IN */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		74F94FF41FD9CA070047E629 /* Intro.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1702,6 +1796,12 @@
 				74F9507C1FD9D0710047E629 /* ast */,
 				74F9507E1FD9D08A0047E629 /* ar */,
 				74F950801FD9D0A00047E629 /* af */,
+				E447176720B5C33C00CC8507 /* an */,
+				E447177120B5C3D600CC8507 /* ia */,
+				E447177620B5C3F300CC8507 /* hy-AM */,
+				16938BFD21010C2C00DCD489 /* bg */,
+				16938C0B210129AD00DCD489 /* mr */,
+				16938C1021012A0300DCD489 /* gu-IN */,
 			);
 			name = Intro.strings;
 			sourceTree = "<group>";
@@ -1776,6 +1876,12 @@
 				74F9502F1FD9CC980047E629 /* kn */,
 				74F950381FD9CCD90047E629 /* ka */,
 				74F950721FD9CFA30047E629 /* bs */,
+				E447176D20B5C33C00CC8507 /* an */,
+				E447177220B5C3D600CC8507 /* ia */,
+				E447177720B5C3F300CC8507 /* hy-AM */,
+				16938BFC21010C2C00DCD489 /* bg */,
+				16938C0A210129AC00DCD489 /* mr */,
+				16938C0F21012A0200DCD489 /* gu-IN */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1850,6 +1956,12 @@
 				74F9502E1FD9CC970047E629 /* kn */,
 				74F950371FD9CCD90047E629 /* ka */,
 				74F950711FD9CFA30047E629 /* bs */,
+				E447176C20B5C33C00CC8507 /* an */,
+				E447176E20B5C3D600CC8507 /* ia */,
+				E447177420B5C3F300CC8507 /* hy-AM */,
+				16938BFB21010C2B00DCD489 /* bg */,
+				16938C09210129AC00DCD489 /* mr */,
+				16938C0E21012A0200DCD489 /* gu-IN */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -2058,6 +2170,12 @@
 				74F950301FD9CC980047E629 /* kn */,
 				74F950391FD9CCDA0047E629 /* ka */,
 				74F950741FD9CFA40047E629 /* bs */,
+				E447176820B5C33C00CC8507 /* an */,
+				E447177020B5C3D600CC8507 /* ia */,
+				E447177520B5C3F300CC8507 /* hy-AM */,
+				16938BFE21010C2D00DCD489 /* bg */,
+				16938C0C210129AD00DCD489 /* mr */,
+				16938C1121012A0300DCD489 /* gu-IN */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -2114,7 +2232,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = mozilla.XCUITest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "KLAR DEBUG";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/XCUITest/XCUITests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
@@ -2165,6 +2283,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = mozilla.XCUITest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "FOCUS DEBUG";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/XCUITest/XCUITests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
@@ -2383,7 +2502,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "Klar Share Profile";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "KLAR DEBUG";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -2439,6 +2558,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "Focus Share Profile";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "FOCUS DEBUG";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -2491,8 +2611,8 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.ShareExtension;
 				PRODUCT_NAME = ShareExtension;
-				PROVISIONING_PROFILE = "bbbf3651-0c25-4720-884b-f9253d8feccd";
-				PROVISIONING_PROFILE_SPECIFIER = "Klar Share Profile";
+				PROVISIONING_PROFILE = "19a73a45-cb96-420d-96d5-2b7b2954781e";
+				PROVISIONING_PROFILE_SPECIFIER = "Klar Share Extension Distribution";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -2547,8 +2667,8 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.ShareExtension;
 				PRODUCT_NAME = ShareExtension;
-				PROVISIONING_PROFILE = "8e299321-8c8c-4811-bafe-ac535f64344c";
-				PROVISIONING_PROFILE_SPECIFIER = "Focus Share Profile";
+				PROVISIONING_PROFILE = "2c2c3eef-8a98-49d6-a31f-754ddff5867b";
+				PROVISIONING_PROFILE_SPECIFIER = "Focus Share";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -2682,12 +2802,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -2712,6 +2834,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = FOCUS;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -2742,10 +2865,9 @@
 					"-framework",
 					BuddyBuildSDK,
 				);
-				OTHER_SWIFT_FLAGS = "-DFOCUS";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.enterprise;
 				PRODUCT_NAME = "Firefox Focus";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = BUDDYBUILD;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "FOCUS BUDDYBUILD";
 				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -2784,12 +2906,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -2814,6 +2938,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = KLAR;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -2844,10 +2969,9 @@
 					"-framework",
 					BuddyBuildSDK,
 				);
-				OTHER_SWIFT_FLAGS = "-DKLAR";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.enterprise;
 				PRODUCT_NAME = "Firefox Klar";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = BUDDYBUILD;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "KLAR BUDDYBUILD";
 				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -2937,12 +3061,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -2974,6 +3100,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = FOCUS;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -3002,12 +3129,11 @@
 					"-framework",
 					BuddyBuildSDK,
 				);
-				OTHER_SWIFT_FLAGS = "-DFOCUS";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus;
 				PRODUCT_NAME = "Firefox Focus";
 				PROVISIONING_PROFILE = "12379ceb-99e8-48c2-b270-64131bd2fb24";
 				PROVISIONING_PROFILE_SPECIFIER = "Focus Development Profile";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG BUDDYBUILD";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "FOCUS DEBUG BUDDYBUILD";
 				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -3026,6 +3152,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.ContentBlocker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "FOCUS DEBUG";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				VALID_ARCHS = arm64;
@@ -3046,12 +3173,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -3076,6 +3205,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = FOCUS;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -3102,7 +3232,6 @@
 				INFOPLIST_FILE = Blockzilla/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_SWIFT_FLAGS = "-DFOCUS";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus;
 				PRODUCT_NAME = "Firefox Focus";
 				PROVISIONING_PROFILE = "a0e006fd-308f-466b-8037-c39e3e78188e";
@@ -3195,11 +3324,11 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "KLAR DEBUG";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Firefox Focus.app/Firefox Focus";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Firefox Klar.app/Firefox Klar";
 			};
 			name = KlarDebug;
 		};
@@ -3257,6 +3386,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "FOCUS DEBUG";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3322,7 +3452,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Firefox Focus.app/Firefox Focus";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Firefox Klar.app/Firefox Klar";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = KlarRelease;
@@ -3508,7 +3638,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Firefox Focus.app/Firefox Focus";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Firefox Klar.app/Firefox Klar";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = KlarEnterprise;
@@ -3562,8 +3692,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.blockzilla.ScreenshotTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "KLAR DEBUG";
+				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = Blockzilla;
 			};
@@ -3611,7 +3741,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.blockzilla.ScreenshotTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "FOCUS DEBUG";
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = Blockzilla;
 				VALIDATE_PRODUCT = YES;
@@ -3660,7 +3791,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.blockzilla.ScreenshotTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = Blockzilla;
 				VALIDATE_PRODUCT = YES;
@@ -3709,7 +3840,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.blockzilla.ScreenshotTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = Blockzilla;
 				VALIDATE_PRODUCT = YES;
@@ -3758,7 +3889,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.blockzilla.ScreenshotTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = Blockzilla;
 				VALIDATE_PRODUCT = YES;
@@ -3807,7 +3938,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.blockzilla.ScreenshotTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = Blockzilla;
 				VALIDATE_PRODUCT = YES;
@@ -3828,12 +3959,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -3865,6 +3998,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = KLAR;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -3884,12 +4018,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -3914,6 +4050,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = KLAR;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -3943,10 +4080,9 @@
 					"-framework",
 					BuddyBuildSDK,
 				);
-				OTHER_SWIFT_FLAGS = "-DKLAR";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar;
 				PRODUCT_NAME = "Firefox Klar";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG BUDDYBUILD";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "KLAR DEBUG BUDDYBUILD";
 				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -3974,10 +4110,9 @@
 				INFOPLIST_FILE = Blockzilla/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_SWIFT_FLAGS = "-DKLAR";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar;
 				PRODUCT_NAME = "Firefox Klar";
-				PROVISIONING_PROFILE = "2eae84bd-8fb1-4984-b330-8c4a90e69457";
+				PROVISIONING_PROFILE = "3d0198ab-c4fb-4dd9-8140-927873f44e85";
 				PROVISIONING_PROFILE_SPECIFIER = "Klar Distribution";
 				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
@@ -3997,6 +4132,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.ContentBlocker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "KLAR DEBUG";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				VALID_ARCHS = arm64;
@@ -4015,7 +4151,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.ContentBlocker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "761240c5-5a7a-4f61-aefd-c3cf2e67a8dd";
+				PROVISIONING_PROFILE = "2255b2ac-3bcf-4a39-99f9-fd5ccf21c3c9";
 				PROVISIONING_PROFILE_SPECIFIER = "Klar ContentBlocker Distribution";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;

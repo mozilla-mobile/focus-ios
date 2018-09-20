@@ -54,8 +54,16 @@ class AppInfo {
     open class func isSimulator() -> Bool {
         return ProcessInfo.processInfo.environment["SIMULATOR_ROOT"] != nil
     }
+    
+    open class func isTesting() -> Bool {
+        return ProcessInfo.processInfo.arguments.contains("testMode")
+    }
 
     static var isBetaBuild: Bool {
         return (Bundle.main.infoDictionary?["CFBundleIdentifier"] as? String)?.contains("enterprise") ?? false
+    }
+    
+    open class func testRequestsReset() -> Bool {
+        return ProcessInfo.processInfo.arguments.contains("testMode")
     }
 }

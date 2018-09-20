@@ -1,0 +1,393 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Իմանալ ավելին";
+
+/* Label on About screen */
+"About.missionLabel" = "%@-ը ստեղծվել է Mozilla-ի կողմից: Մեր առաքելությունն է նպաստել առողջ, բաց համացանցին:";
+
+/* Label on About screen */
+"About.privateBullet1" = "Որոնել և ընտրել անմիջապես հավելվածից";
+
+/* Label on About screen */
+"About.privateBullet2" = "Արգելափակել հետագծումները (կամ թարմացրեք կարգավորումները՝ թույլատրելու համար հետագծումները)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Ջնջեք՝ cookie-ները, որոնման և դիտարկման պատմությունը մաքրելու համար";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Օգտագործել որպես գաղտնի դիտարկիչ";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Օգնություն";
+
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "Գաղտնիության դրույթներ";
+
+/* Label for row in About screen */
+"About.rowRights" = "Ձեր իրավունքները";
+
+/* Label on About screen */
+"About.safariBullet1" = "Արգելափակել հետագծումները՝ գաղտնիությունը լավարկելու համար";
+
+/* Label on About screen */
+"About.safariBullet2" = "Արգելափակել վեբ տառատեսակները՝ էջի չափը նվազեցնելու համար";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Օգտագործել որպես Safari-ի ընդլայնում.";
+
+/* (No Comment) */
+"About.screenTitle" = "Մասին";
+
+/* Label on About screen */
+"About.topLabel" = "%@-ը տալիս է ձեզ կառավարում:";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Հավելել հարմարեցված URL";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Ստուգեք մուտքագրված URL-ն:";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Օրինակ՝ example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "URL՝ ավելացնելու համար";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Տեղադրեք կամ մուտքագրեք URL-ն";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Հավելել հարմարեցված URL";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "Ավելացնել և կառավարել հարմարեցված ինքնալրացվող URL-ները:";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "Հարմարեցված URLներ";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "ՀԱՐՄԱՐԵՑՎԱԾ URL ՑԱՆԿ";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Նոր հարմարեցված URL է ավելացվել:";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Միացրեք՝ ունենալու համար %1$s ինքնալրացում աեվլի քան 450 հանրահայտ URL-ների համար:";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "Ինքնալրացում";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "ԼՌԵԼՅԱՅՆ URL ՑԱՆԿ";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Անջատել";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Չկան հարմարեցված URL-ներ՝ ցուցադրելու համար";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Միացնել";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Նախորդը";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Փոխանցել";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Կրկին բեռնել";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Կարգավորումներ";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "Համօգտագործել";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Կանգնեցնել";
+
+/* Label on button to cancel edits */
+"Cancel" = "Չեղարկել";
+
+/* Label on button to complete edits */
+"Done" = "Պատրաստ է";
+
+/* Label on button to allow edits */
+"Edit" = "Խմբագրել";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Կրկին փորձել";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "Չեղարկել";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@-ը  ցանկանում է բացել այլ հավելված";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "Բացել";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "Զանգ";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Չեղարկել";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "Էլ. փոստ";
+
+/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitleWithPlaceholder" = "Դուք հետևում եք %S-ին։";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "Բացել App Store-ը";
+
+/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"ExternalLink.openAppStoreTitle" = "%@-ը ցանկանում է բացել App Store-ը:";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "Բացել Քարտեզները";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "Լավ, հասկացա";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "Ինքնաշխատ արգելափակել առցանց հետագծումները դիտարկելիս: Ապա հպեք՝ ջնջելու այցելած էջերը, որոնումները, cookie-ները և գաղտնաբառերը ձեր սարքից:";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Դիտարկեք այնպես, որ ոչ ոք Ձեզ չի հետևում:";
+
+/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
+"Focus.handoffSyncing" = "Apple Handoff-ը համաժամեցնում է";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "Ինքնաշխատ գաղտնի դիտարկիչ:";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "Դիտարկեք: Ջնջեք: Կրկնեք:";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "Չեղարկել";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Փորձեք Գաղտնի դիտարկումը";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "Ավելին";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari­";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Հպեք Safari, ընտրեք բովանդակության արգելափակիչներ";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "Միացնել %@-ը";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@-ը միացրած չէ:";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Բացել կարգավորումները";
+
+/* Save button label */
+"Save" = "Պահպանել";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Ավելացնել որոնողական հանգույց";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "Ավելացնել որոնողական հանգույց";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Ավելացնել որոնիչ";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "ՏԵՂԱԴՐՎԱԾ ՈՐՈՆԻՉՆԵՐ";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Ցուցադրվող անունը";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Նոր որոնիչը ավելացվել է:";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Վերականգնել հիմնական որոնիչը";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Որոնել որոնիչ";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Որոնել տողը՝ օգտագործելու համար";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Տեղադրեք կամ մուտքագրեք որոնիչի տողը: Եթե անհրաժեշտ է՝ փոխարինեք որոնվող բառը հետևյալով՝ %s:";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL ինքնալրացում";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Բովանդակության այլ հետագծումների արգելափակումը կարող է ընդհատել որոշ տեսանյութեր և վեբ էջեր:";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "Ոչ, շնորհակալ եմ";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "Ես հասկանում եմ";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla-ն ձգտում է հավաքել միայն այն, ինչ պետք է՝ %1$s-ը լավարկելու համար:";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Իմանալ ավելին";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Կարգավորումներ";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Որոնիչներ";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "ՈՐՈՆԵԼ";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "ԻՆՏԵԳՐՈՒՄ";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "ԱՐՏԱԴՐՈՂԱԿԱՆՈՒԹՅՈՒՆ";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "ԳԱՂՏՆԻՈՒԹՅՈՒՆ";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "Արգելափակեք գովազդի հետագծումները";
+
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "Որոշ գովազդներ հետևում են կայքի այցելուներին, եթե անգամ չեք սեղմում գովազդին";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "Արգելափակել վերլուծական հետագծումները";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "Օգտագործվում է հավաքելու, վերլուծելու և ակտիվությունը չափելու համար, ինչպես օրինակ՝ հպումը և գլորումը:";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Արգելափակել վեբ տառատեսակները";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "Արգելափակել այլ բովանդակության հետագծումները";
+
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "Միացնելու դեպքում որոշ էջեր կարող են անսպասելի վարք ցուցադրել";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "Արգելափակել սոցիալական հետագծումները";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "Ներկառուցված կայքերում՝ հետևելուհ ամար ձեր այցելուներին և ցուցադրելու համար գործառությունը, ինչպես օրինակ՝ կոճակների համօգտագործում";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "Կարող է ընդհատել որոշ տեսանյութեր և վեբ էջեր";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari­-ից";
+
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "Ուղարկել օգտագործման տվյալները";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "Ինչն է նոր";
+
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
+"ShareMenu.GetFirefox" = "Ստանալ Firefox-ը";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "Բացել %@-ում";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Չեղարկել";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Տեղադրել և Առաջ";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "ՋՆՋԵԼ";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Դիտարկումների պատմությունը ջնջվել է:";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Մուտքագրեք կայքի հասցե կամ որոնում";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Որոնել %@-ը ";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Արգելել հետագծումները";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Բացել %@-ում";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Ընտրել տեղադրության գոտին";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "Ձեր պատճենած հղումը՝ %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "Կրկնօրինակել Նկարը";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Պատճենել հղումը";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "Պահպանել պատկերը";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "Համօգտագործել հղումը";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1%@-ը ցանկանում է բացել %2%@-ը";
+
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "Հնարավորություն է տալիս պահպանել Camera Roll-ը";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "Բացել կարգավորումները";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@”-ը ցանկանում է մատչել ձեր լուսանկարները";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Օրինակ՝ example.com/search/?q=%s";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Գովազդի արգելափակում";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Վերլուծական հետագծումներ";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Բովանդակության հետագծումներ";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Հետագծման պաշտպանություն";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "Իմանալ ավելին";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Սոցիալական հետագծումներ";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "Անջատել, մինչև կփակեք %@-ը կամ հպեք ՋՆՋԵԼ:";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Հետագծման պաշտպանություն";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "Ընտրեք՝ %@-ը արգելափակի գովազդը, վերլուծական, սոցիալական, թե այլ հետագծումները:";
+

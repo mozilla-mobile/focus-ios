@@ -34,7 +34,7 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Përdoreni si një zgjerim të Safari-t:";
 
-/* Title for the About screen */
+/* (No Comment) */
 "About.screenTitle" = "Rreth";
 
 /* Label on About screen */
@@ -60,6 +60,9 @@
 
 /* Description for adding and managing custom autocomplete URLs */
 "Autocomplete.customDescriptoin" = "Shtoni dhe administroni URLra vetjake vetëplotësimesh.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "URL Vetjake";
 
 /* Title for the default URL list section */
 "Autocomplete.customTitle" = "LISTË URLsh VETJAKE";

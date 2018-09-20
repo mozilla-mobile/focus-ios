@@ -17,40 +17,28 @@ class SettingAppearanceTest: BaseTestCase {
     
     // Check for the basic appearance of the Settings Menu
     func testCheckSetting() {
+        waitforHittable(element: app.buttons["Settings"])
         app.buttons["Settings"].tap()
         
-        
-        app.tables.firstMatch.swipeUp()
-
         // Check About page
+        app.tables.firstMatch.swipeUp()
         let aboutCell = app.cells["settingsViewController.about"]
-        waitforExistence(element: aboutCell)
+        waitforHittable(element: aboutCell)
         aboutCell.tap()
         
         let tablesQuery = app.tables
         
         // Check Help page, wait until the webpage is shown
+        waitforHittable(element: tablesQuery.staticTexts["Help"])
         tablesQuery.staticTexts["Help"].tap()
-        if app.label == "Firefox Focus" {
-            waitforExistence(element: app.staticTexts["What is Firefox Focus?"])
-            app.navigationBars["Firefox_Focus.SettingsContentView"].buttons["About"].tap()
-        } else {
-            waitforExistence(element: app.staticTexts["Firefox Klar"])
-            app.navigationBars["Firefox_Klar.SettingsContentView"].buttons["About"].tap()
-        }
+        app.navigationBars.buttons.element(boundBy: 0).tap()
         
         // Check Your Rights page, until the text is displayed
         tablesQuery.staticTexts["Your Rights"].tap()
-        if app.label == "Firefox Focus" {
-            waitforExistence(element: app.staticTexts["Your Rights"])
-            app.navigationBars["Firefox_Focus.SettingsContentView"].buttons["About"].tap()
-        } else {
-            waitforExistence(element: app.staticTexts["Ihre Rechte"])
-            app.navigationBars["Firefox_Klar.SettingsContentView"].buttons["About"].tap()
-        }
+        app.navigationBars.buttons.element(boundBy: 0).tap()
         
-        // Go to Settings
-        app.navigationBars["About"].buttons["Settings"].tap()
+        // Go back to Settings
+        app.navigationBars.buttons.element(boundBy: 0).tap()
         
         //Check the initial state of the switch values
         let safariSwitch = app.tables.switches["Safari"]
@@ -74,7 +62,7 @@ class SettingAppearanceTest: BaseTestCase {
         
         // Swipe up
         waitforExistence(element: app.tables.switches["BlockerToggle.BlockAds"])
-        app.tables.children(matching: .cell).element(boundBy: 0).swipeUp()
+        app.tables.firstMatch.swipeUp()
         
         XCTAssertEqual(app.tables.switches["BlockerToggle.BlockAds"].value as! String, "1")
         XCTAssertEqual(app.tables.switches["BlockerToggle.BlockAnalytics"].value as! String, "1")
@@ -99,40 +87,40 @@ class SettingAppearanceTest: BaseTestCase {
         otherContentSwitch.tap()
         alertsQuery.buttons["No, Thanks"].tap()
         XCTAssertEqual(otherContentSwitch.value as! String, "0")
+        
+        // Check navigate to app store review and back
+        let reviewCell = app.cells["settingsViewController.rateFocus"]
+        let safariApp = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.mobilesafari")!
+        
+        waitforHittable(element: reviewCell)
+        reviewCell.tap()
+        waitforExistence(element: safariApp)
+        XCTAssert(safariApp.state == .runningForeground)
+        app.activate()
     }
     
     func testOpenInSafari() {
         let safariapp = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.mobilesafari")!
-        // Enter 'mozilla' on the search field
-        let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
+        loadWebPage("https://www.google.com", waitForLoadToFinish: true)
         
-        let label = app.textFields["Search or enter address"]
-        searchOrEnterAddressTextField.typeText("https://www.google.com\n")
-        
-        // Check the correct site is reached
-        waitForWebPageLoad()
-        waitForValueContains(element: label, value: "https://www.google")
-        
+        waitforHittable(element: app.buttons["Share"])
         app.buttons["Share"].tap()
-        let button = app.buttons["Open in Safari"]
-        waitforExistence(element: button)
-
-        let appName = app.label
-        app.buttons["Open in Safari"].tap()
-
+        let findInPage = app.buttons["Find in Page"]
+        waitforHittable(element: findInPage)
+        findInPage.swipeLeft()
+        
+        let safariButton = app.buttons["Open in Safari"]
+        waitforHittable(element: safariButton)
+        safariButton.tap()
+        
         // Now in Safari
         let safariLabel = safariapp.otherElements["Address"]
         waitForValueContains(element: safariLabel, value: "google")
-        if appName == "Firefox Focus" {
-            XCTAssertTrue(safariapp.buttons["Return to Firefox Focus"].exists)
-            safariapp.statusBars.buttons["Return to Firefox Focus"].tap()
-        } else {
-            XCTAssertTrue(safariapp.buttons["Return to Firefox Klar"].exists)
-            safariapp.statusBars.buttons["Return to Firefox Klar"].tap()
-        }
+        
+        // Go back to Focus
+        app.activate()
         
         // Now back to Focus
-        waitForValueContains(element: label, value: "https://www.google")
         waitForWebPageLoad()
         app.buttons["ERASE"].tap()
         waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
@@ -140,16 +128,17 @@ class SettingAppearanceTest: BaseTestCase {
     
     func testDisableAutocomplete() {
         // Navigate to Settings
+        waitforHittable(element: app.buttons["Settings"])
         app.buttons["Settings"].tap()
         
         // Navigate to Autocomplete Settings
+        waitforHittable(element: app.tables.cells["SettingsViewController.autocompleteCell"])
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
         
         // Verify that autocomplete is enabled
         waitforExistence(element: app.tables.switches["toggleAutocompleteSwitch"])
         let toggle = app.tables.switches["toggleAutocompleteSwitch"]
         XCTAssertEqual(toggle.value as! String, "1")
-
         
         // Turn autocomplete off
         toggle.tap()
@@ -161,31 +150,40 @@ class SettingAppearanceTest: BaseTestCase {
     
     func testAddRemoveCustomDomain() {
         // Navigate to Settings
+        waitforHittable(element: app.buttons["Settings"])
         app.buttons["Settings"].tap()
         
         // Navigate to Autocomplete Settings
+        waitforHittable(element: app.tables.cells["SettingsViewController.autocompleteCell"])
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
         
         // Navigate to the customURL list
+        waitforHittable(element: app.tables.cells["customURLS"])
         app.tables.cells["customURLS"].tap()
 
         // Navigate to add domain screen
+        waitforHittable(element: app.tables.cells["addCustomDomainCell"])
         app.tables.cells["addCustomDomainCell"].tap()
         
         // Edit Text Field
         let urlInput = app.textFields["urlInput"]
         urlInput.typeText("mozilla.org")
+        waitforHittable(element: app.navigationBars.buttons["saveButton"])
         app.navigationBars.buttons["saveButton"].tap()
         
         // Validate that the new domain shows up in the Autocomplete Settings
-        XCTAssertTrue(app.tables.cells["mozilla.org"].exists)
+        waitforExistence(element: app.tables.cells["mozilla.org"])
         
         // Start Editing
+        waitforHittable(element: app.navigationBars.buttons["editButton"])
         app.navigationBars.buttons["editButton"].tap()
+        waitforHittable(element:  app.tables.cells["mozilla.org"].buttons["Delete mozilla.org"])
         app.tables.cells["mozilla.org"].buttons["Delete mozilla.org"].tap()
+        waitforHittable(element: app.tables.cells["mozilla.org"].buttons["Delete"])
         app.tables.cells["mozilla.org"].buttons["Delete"].tap()
         
         // Finish Editing
+        waitforHittable(element: app.navigationBars.buttons["editButton"])
         app.navigationBars.buttons["editButton"].tap()
         
         // Validate that the domain is gone

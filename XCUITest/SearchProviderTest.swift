@@ -19,19 +19,14 @@ class SearchProviderTest: BaseTestCase {
 	
     func testSearchProvider() {
 		// Removing Twitter since it seems to be blocked from BB devices
-		let searchEngines = ["Google", "Yahoo", "DuckDuckGo", "Wikipedia", "Amazon.com"]
+		let searchEngines = ["Google", "DuckDuckGo", "Wikipedia", "Amazon.com"]
 		
 		for searchEngine in searchEngines {
 			changeSearchProvider(provider: searchEngine)
 			doSearch(searchWord: "mozilla", provider: searchEngine)
             waitforEnable(element: app.buttons["ERASE"])
 			app.buttons["ERASE"].tap()
-
-            // Disabling this check since BB seem to intermittently miss this popup which disappears after 1~2 seconds
-            // The popup is also checked in PastenGOTest
-            //waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
-            waitforExistence(element: app.staticTexts["Browse. Erase. Repeat."])
-            waitforExistence(element: app.staticTexts["Automatic private browsing."])
+            checkForHomeScreen()
 		}
 	}
     
@@ -105,14 +100,6 @@ class SearchProviderTest: BaseTestCase {
                     waitForValueContains(element: app.webViews.textFields["Search"], value: searchWord)
                 } else if app.webViews.otherElements["Search"].exists {
                     waitForValueContains(element: app.webViews.otherElements["Search"], value: searchWord)
-                }
-            case "Yahoo":
-				waitForValueContains(element: urlbarUrltextTextField, value: "https://search.yahoo.com")
-                
-                if app.otherElements["banner"].searchFields["Search"].exists {
-                   waitForValueContains(element: app.otherElements["banner"].searchFields["Search"], value: searchWord)
-                } else if app.webViews.otherElements[searchWord + " - - Yahoo Search Results"].exists {
-                    XCTAssertTrue(true)
                 }
            case "DuckDuckGo":
 				waitForValueContains(element: urlbarUrltextTextField, value: "https://duckduckgo.com/?q=mozilla")

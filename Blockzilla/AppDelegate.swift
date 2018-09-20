@@ -5,31 +5,49 @@
 import UIKit
 import Telemetry
 
-@UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
-    var window: UIWindow?
+protocol AppSplashController {
+    var splashView: UIView { get }
 
-    private var splashView: UIView?
+    func toggleSplashView(hide: Bool)
+}
+
+@UIApplicationMain
+class AppDelegate: UIResponder, UIApplicationDelegate, AppSplashController {
     static let prefIntroDone = "IntroDone"
     static let prefIntroVersion = 2
-    private let browserViewController = BrowserViewController()
-    private var queuedUrl: URL?
-    private var queuedString: String?
     static let prefWhatsNewDone = "WhatsNewDone"
     static let prefWhatsNewCounter = "WhatsNewCounter"
+    static var needsAuthenticated = false
+
+    var window: UIWindow?
+
+    var splashView: UIView = UIView()
+    private lazy var browserViewController = {
+        BrowserViewController(appSplashController: self)
+    }()
+
+    private var queuedUrl: URL?
+    private var queuedString: String?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        if AppInfo.testRequestsReset() {
+            if let bundleID = Bundle.main.bundleIdentifier {
+                UserDefaults.standard.removePersistentDomain(forName: bundleID)
+            }
+        }
         setupContinuousDeploymentTooling()
         setupErrorTracking()
         setupTelemetry()
+        TPStatsBlocklistChecker.shared.startup()
 
+        // Count number of app launches for requesting a review
+        let currentLaunchCount = UserDefaults.standard.integer(forKey: UIConstants.strings.userDefaultsLaunchCountKey)
+        UserDefaults.standard.set(currentLaunchCount + 1, forKey: UIConstants.strings.userDefaultsLaunchCountKey)
+    
         // Disable localStorage.
         // We clear the Caches directory after each Erase, but WebKit apparently maintains
         // localStorage in-memory (bug 1319208), so we just disable it altogether.
         UserDefaults.standard.set(false, forKey: "WebKitLocalStorageEnabledPreferenceKey")
-
-        // Set up our custom user agent.
-        UserAgent.setup()
 
         // Re-register the blocking lists at startup in case they've changed.
         Utils.reloadSafariContentBlocker()
@@ -52,6 +70,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let prefIntroDone = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone)
 
+        if AppInfo.isTesting() {
+            let firstRunViewController = IntroViewController()
+            rootViewController.present(firstRunViewController, animated: false, completion: nil)
+            return true
+        }
+        
         let needToShowFirstRunExperience = prefIntroDone < AppDelegate.prefIntroVersion
         if needToShowFirstRunExperience {
             // Show the first run UI asynchronously to avoid the "unbalanced calls to begin/end appearance transitions" warning.
@@ -59,20 +83,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 // Set the prefIntroVersion viewed number in the same context as the presentation.
                 UserDefaults.standard.set(AppDelegate.prefIntroVersion, forKey: AppDelegate.prefIntroDone)
                 UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
-                
-                var firstRunViewController: UIViewController
-                
-                // Random number range [0 - 99], Coin Flip for A/B testing of Onboarding
-                let shouldShowNewIntro = arc4random_uniform(UInt32(100)) >= 50
-                if  shouldShowNewIntro {
-                    firstRunViewController = IntroViewController()
-                    Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.coinFlip, object: TelemetryEventObject.onboarding)
-
-                } else {
-                    firstRunViewController = FirstRunViewController()
-                    Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.coinFlip, object: TelemetryEventObject.firstRun)
-                }
-                rootViewController.present(firstRunViewController, animated: false, completion: nil)
+                rootViewController.present(IntroViewController(), animated: false, completion: nil)
             }
         }
         
@@ -94,7 +105,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
+    func application(_ application: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             return false
         }
@@ -167,7 +178,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     fileprivate func displaySplashAnimation() {
-        let splashView = UIView()
+        let splashView = self.splashView
         splashView.backgroundColor = UIConstants.colors.background
         window!.addSubview(splashView)
 
@@ -192,19 +203,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }, completion: { success in
                 splashView.isHidden = true
                 logoImage.layer.transform = CATransform3DIdentity
-                self.splashView = splashView
             })
         })
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-        splashView?.animateHidden(false, duration: 0)
+        toggleSplashView(hide: false)
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
 
-        splashView?.animateHidden(true, duration: 0.25)
         if let url = queuedUrl {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openedFromExtension, object: TelemetryEventObject.app)
 
@@ -225,9 +234,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // session. This gets called every time the app goes to background but should not get
         // called for *temporary* interruptions such as an incoming phone call until the user
         // takes action and we are officially backgrounded.
+        AppDelegate.needsAuthenticated = true
         let orientation = UIDevice.current.orientation.isPortrait ? "Portrait" : "Landscape"
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.background, object:
             TelemetryEventObject.app, value: nil, extras: ["orientation": orientation])
+    }
+    
+    func toggleSplashView(hide: Bool) {
+        let duration = 0.25
+        splashView.animateHidden(hide, duration: duration)
+        
+        if !hide {
+            browserViewController.deactivateUrlBarOnHomeView()
+        } else {
+            browserViewController.activateUrlBarOnHomeView()
+        }
     }
 }
 
@@ -267,7 +288,8 @@ extension AppDelegate {
         telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockSocial, withDefaultValue: Settings.getToggle(.blockSocial))
         telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockOther, withDefaultValue: Settings.getToggle(.blockOther))
         telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockFonts, withDefaultValue: Settings.getToggle(.blockFonts))
-        
+        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.biometricLogin, withDefaultValue: Settings.getToggle(.biometricLogin))
+
         #if DEBUG
             telemetryConfig.updateChannel = "debug"
             telemetryConfig.isCollectionEnabled = false
@@ -280,8 +302,11 @@ extension AppDelegate {
         
         Telemetry.default.beforeSerializePing(pingType: CorePingBuilder.PingType) { (inputDict) -> [String : Any?] in
             var outputDict = inputDict // make a mutable copy
-            
-            outputDict["showTrackerStatsShare"] =  self.browserViewController.shouldShowTrackerStatsShareButton()
+
+            if self.browserViewController.canShowTrackerStatsShareButton() { // Klar users are not included in this experiment
+                self.browserViewController.flipCoinForShowTrackerButton() // Force a coin flip if one has not been flipped yet
+                outputDict["showTrackerStatsSharePhase2"] = UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
+            }
             
             return outputDict
         }

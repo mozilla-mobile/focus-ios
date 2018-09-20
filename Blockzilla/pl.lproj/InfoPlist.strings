@@ -2,10 +2,16 @@
 "NSCameraUsageDescription" = "Pozwoli to robić i wgrywać zdjęcia.";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "Pozwoli to odblokowywać aplikację.";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Pozwoli to odwiedzanym stronom żądać informacji o położeniu.";
 
 /* (No Comment) */
 "NSMicrophoneUsageDescription" = "Pozwoli to kręcić i wgrywać filmy.";
+
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "Pozwoli to zachowywać i wgrywać zdjęcia.";
 
 /* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "Pozwoli to zachowywać i wgrywać zdjęcia.";

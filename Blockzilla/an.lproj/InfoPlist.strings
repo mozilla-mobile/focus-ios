@@ -1,0 +1,18 @@
+/* (No Comment) */
+"NSCameraUsageDescription" = "Esto te permite de fer y cargar fotos.";
+
+/* (No Comment) */
+"NSFaceIDUsageDescription" = "This lets you unlock the app.";
+
+/* (No Comment) */
+"NSLocationWhenInUseUsageDescription" = "Los puestos web que vesites pueden demandar la tuya ubicación.";
+
+/* (No Comment) */
+"NSMicrophoneUsageDescription" = "Esto te permite de fer y cargar videos.";
+
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "Esto de permite d'alzar y cargar fotos.";
+
+/* (No Comment) */
+"NSPhotoLibraryUsageDescription" = "Esto de permite d'alzar y cargar fotos.";
+
