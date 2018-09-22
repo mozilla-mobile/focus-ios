@@ -147,7 +147,7 @@ def overlayForEngine(engine):
         return None
     return Overlay(path)
 
-def writeToPlist(root, fileName):
+def writeToFile(root, fileName):
     plist = etree.tostring(root, encoding="utf-8", pretty_print=True)
     with open(fileName, "w") as outfile:
         outfile.write(plist)
@@ -165,7 +165,7 @@ def writeVisibleEngineList(engines):
             values.append(value)
         root.append(values)
 
-    writeToPlist(root, "SearchEngines.plist")
+    writeToFile(root, "SearchEngines.plist")
 
 def writeSearchEngineDefaultList(searchEngineDefaults):
     root = etree.Element('dict')
@@ -177,7 +177,7 @@ def writeSearchEngineDefaultList(searchEngineDefaults):
         value.text = searchEngineDefaults[locale]
         root.append(value)
 
-    writeToPlist(root, "SearchEngineDefaults.plist")
+    writeToFile(root, "SearchEngineDefaults.plist")
 
 class Scraper:
     def pluginsFileURL(self): pass
