@@ -546,14 +546,6 @@
     <string>twitter</string>
     <string>wikipedia-ru</string>
   </array>
-  <key>ru-UA</key>
-  <array>
-    <string>google</string>
-    <string>yandex-ru</string>
-    <string>duckduckgo</string>
-    <string>twitter</string>
-    <string>wikipedia-ru</string>
-  </array>
   <key>sk</key>
   <array>
     <string>google</string>
@@ -642,14 +634,6 @@
     <string>wikipedia-uk</string>
     <string>yandex-market</string>
   </array>
-  <key>uk-UA</key>
-  <array>
-    <string>google</string>
-    <string>duckduckgo</string>
-    <string>twitter</string>
-    <string>wikipedia-uk</string>
-    <string>yandex-market</string>
-  </array>
   <key>ur</key>
   <array>
     <string>google</string>
@@ -674,12 +658,6 @@
     <string>taobao</string>
     <string>wikipedia-zh-CN</string>
   </array>
-  <key>zh-HK</key>
-  <array>
-    <string>google</string>
-    <string>duckduckgo</string>
-    <string>wikipedia-zh-TW</string>
-  </array>
   <key>zh-TW</key>
   <array>
     <string>google</string>
@@ -687,4 +665,3 @@
     <string>wikipedia-zh-TW</string>
   </array>
 </dict>
-

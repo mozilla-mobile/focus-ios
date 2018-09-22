@@ -35,6 +35,7 @@ def main():
     with open(LIST_PATH) as list:
         plugins = json.load(list)
 
+    searchDefaults = {}
     engines = {}
 
     # Import engines from the l10n repos.
@@ -55,6 +56,7 @@ def main():
                 print("skipping %s" % code)
                 continue
 
+            searchDefaults[code] = regions[region]["searchDefault"]
             visibleEngines = regions[region]["visibleDefaultEngines"]
             downloadEngines(code, L10nScraper(locale), visibleEngines)
             engines[code] = visibleEngines
@@ -70,6 +72,9 @@ def main():
 
     # Make sure fallback directories contain any skipped engines.
     verifyEngines(engines)
+
+    # Write the search default name for each locale.
+    writeSearchDefaultList(searchDefaults)
 
     # Write the list of engine names for each locale.
     writeList(engines)
@@ -149,6 +154,7 @@ def writeList(engines):
         key.text = locale
         root.append(key)
         values = etree.Element('array')
+
         for engine in engines[locale]:
             value = etree.Element('string')
             value.text = engine
@@ -159,6 +165,19 @@ def writeList(engines):
     with open("SearchEngines.plist", "w") as outfile:
         outfile.write(plist)
 
+def writeSearchDefaultList(searchDefaults):
+    root = etree.Element('dict')
+    for locale in sorted(searchDefaults.keys()):
+        key = etree.Element('key')
+        key.text = locale
+        root.append(key)
+        value = etree.Element('string')
+        value.text = searchDefaults[locale]
+        root.append(value)
+
+    plist = etree.tostring(root, encoding="utf-8", pretty_print=True)
+    with open("SearchDefaults.plist", "w") as outfile:
+        outfile.write(plist)
 
 class Scraper:
     def pluginsFileURL(self): pass
