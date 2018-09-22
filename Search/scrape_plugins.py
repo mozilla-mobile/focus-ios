@@ -73,11 +73,11 @@ def main():
     # Make sure fallback directories contain any skipped engines.
     verifyEngines(engines)
 
-    # Write the search engine default name for each locale.
-    writeSearchEngineDefaultList(searchEngineDefaults)
+    # Save the search engine default name for each locale.
+    saveDefaultSearchEngines(searchEngineDefaults)
 
-    # Write the list of engine names for each locale.
-    writeVisibleEngineList(engines)
+    # Save the list of engine names for each locale.
+    saveSearchEngines(engines)
 
 def downloadEngines(locale, scraper, engines):
     directory = os.path.join("SearchPlugins", locale)
@@ -152,7 +152,7 @@ def writeToFile(root, fileName):
     with open(fileName, "w") as outfile:
         outfile.write(plist)
 
-def writeVisibleEngineList(engines):
+def saveSearchEngines(engines):
     root = etree.Element('dict')
     for locale in sorted(engines.keys()):
         key = etree.Element('key')
@@ -167,7 +167,7 @@ def writeVisibleEngineList(engines):
 
     writeToFile(root, "SearchEngines.plist")
 
-def writeSearchEngineDefaultList(searchEngineDefaults):
+def saveDefaultSearchEngines(searchEngineDefaults):
     root = etree.Element('dict')
     for locale in sorted(searchEngineDefaults.keys()):
         key = etree.Element('key')
