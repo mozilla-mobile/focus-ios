@@ -104,17 +104,14 @@ class SearchEngineManager {
         if components.count == 3 {
             components.remove(at: 1)
         }
-        //let searchPaths = [components.joined(separator: "-"), components[0], "default"]
-        let searchPaths = ["kk", components[0], "default"]
         
+        let searchPaths = [components.joined(separator: "-"), components[0], "default"]
         let parser = OpenSearchParser(pluginMode: true)
         let pluginsPath = Bundle.main.url(forResource: "SearchPlugins", withExtension: nil)!
         let enginesPath = Bundle.main.path(forResource: "SearchEngines", ofType: "plist")!
         let searchEngineDefaultPath = Bundle.main.path(forResource: "SearchEngineDefaults", ofType: "plist")!
-        
         let engineMap = NSDictionary(contentsOfFile: enginesPath) as! [String: [String]]
         let searchEngineDefaultMap = NSDictionary(contentsOfFile: searchEngineDefaultPath)as! [String: String]
-        
         let engines = searchPaths.compactMap { engineMap[$0] }.first!
         
         // Find and parse the engines for this locale.
@@ -135,26 +132,19 @@ class SearchEngineManager {
         let customEngines = readCustomEngines()
         self.engines.append(contentsOf: customEngines)
 
-//        // Set default search engine pref
-//        if prefs.string(forKey: SearchEngineManager.prefKeyEngine) == nil {
-//            let targetSearchEngineDefault = searchEngineDefaultMap[searchPaths[0]]
-//            var searchEngineDefault = self.engines.first?.name
-//
-//            for engine in self.engines {
-//                if engine.name == targetSearchEngineDefault {
-//                    searchEngineDefault = engine.name
-//                    break
-//                }
-//            }
-//
-//            prefs.set(searchEngineDefault, forKey: SearchEngineManager.prefKeyEngine)
-//        }
-        
         // Set default search engine pref
-        print("searchDefaultMap[searchPaths[0]]: \(searchEngineDefaultMap[searchPaths[0]])")
         if prefs.string(forKey: SearchEngineManager.prefKeyEngine) == nil {
-            print("self.engines.first?.name:  \(self.engines.first?.name)")
-            prefs.set(self.engines.first?.name, forKey: SearchEngineManager.prefKeyEngine)
+            let targetSearchEngineDefault = searchEngineDefaultMap[searchPaths[0]]
+            var searchEngineDefault = self.engines.first?.name
+
+            for engine in self.engines {
+                if engine.name == targetSearchEngineDefault {
+                    searchEngineDefault = engine.name
+                    break
+                }
+            }
+
+            prefs.set(searchEngineDefault, forKey: SearchEngineManager.prefKeyEngine)
         }
 
         sortEnginesAlphabetically()
