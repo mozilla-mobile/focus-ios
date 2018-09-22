@@ -35,7 +35,7 @@ def main():
     with open(LIST_PATH) as list:
         plugins = json.load(list)
 
-    searchDefaults = {}
+    searchEngineDefaults = {}
     engines = {}
 
     # Import engines from the l10n repos.
@@ -56,7 +56,7 @@ def main():
                 print("skipping %s" % code)
                 continue
 
-            searchDefaults[code] = regions[region]["searchDefault"]
+            searchEngineDefaults[code] = regions[region]["searchDefault"]
             visibleEngines = regions[region]["visibleDefaultEngines"]
             downloadEngines(code, L10nScraper(locale), visibleEngines)
             engines[code] = visibleEngines
@@ -73,11 +73,11 @@ def main():
     # Make sure fallback directories contain any skipped engines.
     verifyEngines(engines)
 
-    # Write the search default name for each locale.
-    writeSearchDefaultList(searchDefaults)
+    # Write the search engine default name for each locale.
+    writeSearchEngineDefaultList(searchEngineDefaults)
 
     # Write the list of engine names for each locale.
-    writeList(engines)
+    writeVisibleEngineList(engines)
 
 def downloadEngines(locale, scraper, engines):
     directory = os.path.join("SearchPlugins", locale)
@@ -147,7 +147,12 @@ def overlayForEngine(engine):
         return None
     return Overlay(path)
 
-def writeList(engines):
+def writeToPlist(root, fileName):
+    plist = etree.tostring(root, encoding="utf-8", pretty_print=True)
+    with open(fileName, "w") as outfile:
+        outfile.write(plist)
+
+def writeVisibleEngineList(engines):
     root = etree.Element('dict')
     for locale in sorted(engines.keys()):
         key = etree.Element('key')
@@ -161,23 +166,19 @@ def writeList(engines):
             values.append(value)
         root.append(values)
 
-    plist = etree.tostring(root, encoding="utf-8", pretty_print=True)
-    with open("SearchEngines.plist", "w") as outfile:
-        outfile.write(plist)
+    writeToPlist(root, "SearchEngines.plist")
 
-def writeSearchDefaultList(searchDefaults):
+def writeSearchEngineDefaultList(searchEngineDefaults):
     root = etree.Element('dict')
-    for locale in sorted(searchDefaults.keys()):
+    for locale in sorted(searchEngineDefaults.keys()):
         key = etree.Element('key')
         key.text = locale
         root.append(key)
         value = etree.Element('string')
-        value.text = searchDefaults[locale]
+        value.text = searchEngineDefaults[locale]
         root.append(value)
 
-    plist = etree.tostring(root, encoding="utf-8", pretty_print=True)
-    with open("SearchDefaults.plist", "w") as outfile:
-        outfile.write(plist)
+    writeToPlist(root, "SearchEngineDefaults.plist")
 
 class Scraper:
     def pluginsFileURL(self): pass
