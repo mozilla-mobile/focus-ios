@@ -159,7 +159,6 @@ def writeVisibleEngineList(engines):
         key.text = locale
         root.append(key)
         values = etree.Element('array')
-
         for engine in engines[locale]:
             value = etree.Element('string')
             value.text = engine
