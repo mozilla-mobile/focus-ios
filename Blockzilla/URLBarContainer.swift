@@ -44,9 +44,9 @@ class URLBarContainer: UIView {
     
     var color: barState = .editing {
         didSet {
-            backgroundDark.animateHidden(color != .dark, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
-            backgroundBright.animateHidden(color != .bright, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
-            backgroundEditing.animateHidden(color != .editing, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+            backgroundDark.animateHidden(color != .dark, duration: 0)
+            backgroundBright.animateHidden(color != .bright, duration: 0)
+            backgroundEditing.animateHidden(color != .editing, duration: 0)
         }
     }
 
