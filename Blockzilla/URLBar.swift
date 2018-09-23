@@ -311,7 +311,7 @@ class URLBar: UIView {
 
         urlText.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
-            make.trailing.equalTo(textAndLockContainer)
+            make.trailing.equalTo(pageActionsButton.snp.leading)
         }
 
         toolset.settingsButton.snp.makeConstraints { make in
