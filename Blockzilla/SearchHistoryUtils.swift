@@ -71,7 +71,7 @@ class SearchHistoryUtils {
             
             for index in 0..<currentStack.count {
                 if (currentStack[index].isCurrentSearch && index + 1 < currentStack.count) {
-                    
+                  
                     currentStack[index + 1].isCurrentSearch = true
                     currentStack[index].isCurrentSearch = false
                     break
