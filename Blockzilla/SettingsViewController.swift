@@ -100,7 +100,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             case .search: return 2
             case .siri: return 3
             case .integration: return 1
-            case .mozilla: return 2
+            case .mozilla: return 3
             }
         }
         
@@ -188,26 +188,34 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let usageDataSubtitle = String(format: UIConstants.strings.detailTextSendUsageData, AppInfo.productName)
         let usageDataToggle = BlockerToggle(label: UIConstants.strings.labelSendAnonymousUsageData, setting: SettingsToggle.sendAnonymousUsageData, subtitle: usageDataSubtitle)
         let safariToggle = BlockerToggle(label: UIConstants.strings.toggleSafari, setting: SettingsToggle.safari)
+        let homeScreenTipsToggle = BlockerToggle(label: UIConstants.strings.toggleHomeScreenTips, setting: SettingsToggle.homeScreenTips)
+        
         var toggles = [Int : BlockerToggle]()
         if let biometricToggle = createBiometricLoginToggleIfAvailable() {
             toggles = [
                 1: blockFontsToggle,
                 2: biometricToggle,
                 3: usageDataToggle,
-                6: safariToggle
+                6: safariToggle,
+                7: homeScreenTipsToggle
             ]
-        }
-        else {
+        } else {
             toggles = [
                 1: blockFontsToggle,
                 2: usageDataToggle,
-                5: safariToggle
+                5: safariToggle,
+                6: homeScreenTipsToggle
             ]
         }
         if #available(iOS 12.0, *) {
             if let safariRow = toggles.first(where: { $1 == safariToggle })?.key {
                 toggles.removeValue(forKey: safariRow)
-                toggles[(safariRow +  Section.siri.numberOfRows)] = safariToggle
+                toggles[(safariRow + Section.siri.numberOfRows)] = safariToggle
+            }
+            
+            if let homeScreenTipsRow = toggles.first(where: { $1 == homeScreenTipsToggle })?.key {
+                toggles.removeValue(forKey: homeScreenTipsRow)
+                toggles[(homeScreenTipsRow + Section.siri.numberOfRows)] = homeScreenTipsToggle
             }
         }
         return toggles
@@ -398,6 +406,15 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             cell = siriCell
         case .mozilla:
             if indexPath.row == 0 {
+                cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "toggleCell")
+                let toggle = toggleForIndexPath(indexPath)
+                cell.textLabel?.text = toggle.label
+                cell.textLabel?.numberOfLines = 0
+                cell.accessoryView = PaddedSwitch(switchView: toggle.toggle)
+                cell.detailTextLabel?.text = toggle.subtitle
+                cell.detailTextLabel?.numberOfLines = 0
+                cell.selectionStyle = .none
+            } else if indexPath.row == 1 {
                 cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
                 cell.textLabel?.text = String(format: UIConstants.strings.aboutTitle, AppInfo.productName)
                 cell.accessibilityIdentifier = "settingsViewController.about"
@@ -549,9 +566,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 navigationController?.pushViewController(siriFavoriteVC, animated: true)
             }
         case .mozilla:
-            if indexPath.row == 0 {
+            if indexPath.row == 1 {
                 aboutClicked()
-            } else if indexPath.row == 1 {
+            } else if indexPath.row == 2 {
                 let appId = AppInfo.config.appId
                 if let reviewURL = URL(string: "https://itunes.apple.com/app/id\(appId)?action=write-review"), UIApplication.shared.canOpenURL(reviewURL) {
                     UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
