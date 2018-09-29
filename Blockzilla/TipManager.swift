@@ -78,6 +78,7 @@ class TipManager {
     lazy var shareTrackersTip = Tip(title: UIConstants.strings.shareTrackersTipTitle, identifier: TipKey.shareTrackersTip)
     
     func fetchTip() -> Tip? {
+        guard UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?.bool(forKey: SettingsToggle.homeScreenTips.rawValue) == true else { return shareTrackersTip }
         guard let tip = possibleTips.randomElement(), let indexToRemove = possibleTips.index(of: tip) else { return nil }
         if tip.identifier != TipKey.shareTrackersTip {
             possibleTips.remove(at: indexToRemove)
