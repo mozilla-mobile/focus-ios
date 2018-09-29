@@ -294,6 +294,8 @@ struct UIConstants {
         static let settingsBlockOtherYes = NSLocalizedString("Settings.blockOtherYes", value: "I Understand", comment: "Button label for accepting Content blocker alert")
         static let settingsSearchTitle = NSLocalizedString("Settings.searchTitle2", value: "SEARCH", comment: "Title for the search selection screen")
         static let settingsSearchLabel = NSLocalizedString("Settings.searchLabel", value: "Search Engine", comment: "Label for the search engine in the search screen")
+        static let settingsSearchSuggestions = NSLocalizedString("Settings.searchSuggestions",value: "Get Search Suggestions",comment: "Label for the Search Suggestions toggle row")
+        static let detailTextSearchSuggestion = NSLocalizedString("Settings.detailTextSearchSuggestion", value: "%@ will send what you type in the address bar to your search engine.", comment: "Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar)")
         static let settingsAutocompleteSection = NSLocalizedString("Settings.autocompleteSection", value: "URL Autocomplete", comment: "Title for the URL Autocomplete row")
         static let settingsTitle = NSLocalizedString("Settings.screenTitle", value: "Settings", comment: "Title for settings screen")
         static let settingsToggleOtherSubtitle = NSLocalizedString("Settings.toggleOtherSubtitle", value: "May break some videos and Web pages", comment: "Label subtitle for toggle on main screen")
