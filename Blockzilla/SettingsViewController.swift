@@ -13,12 +13,12 @@ import IntentsUI
 class SettingsTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+
         let backgroundColorView = UIView()
         backgroundColorView.backgroundColor = UIConstants.colors.cellSelected
         selectedBackgroundView = backgroundColorView
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -28,7 +28,7 @@ class SettingsTableViewAccessoryCell: SettingsTableViewCell {
     private let newLabel = SmartLabel()
     let accessoryLabel = SmartLabel()
     private let spacerView = UIView()
-    
+
     var accessoryLabelText: String? {
         get { return accessoryLabel.text }
         set {
@@ -36,7 +36,7 @@ class SettingsTableViewAccessoryCell: SettingsTableViewCell {
             accessoryLabel.sizeToFit()
         }
     }
-    
+
     var labelText: String? {
         get { return newLabel.text }
         set {
@@ -44,45 +44,45 @@ class SettingsTableViewAccessoryCell: SettingsTableViewCell {
             newLabel.sizeToFit()
         }
     }
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         newLabel.numberOfLines = 0
         newLabel.lineBreakMode = .byWordWrapping
         textLabel?.numberOfLines = 0
         textLabel?.text = " "
-        
+
         contentView.addSubview(accessoryLabel)
         contentView.addSubview(newLabel)
         contentView.addSubview(spacerView)
-        
+
         newLabel.textColor = UIConstants.colors.settingsTextLabel
         accessoryLabel.textColor = UIConstants.colors.settingsDetailLabel
         accessoryType = .disclosureIndicator
-        
+
         accessoryLabel.setContentHuggingPriority(.required, for: .horizontal)
         accessoryLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         accessoryLabel.snp.makeConstraints { make in
             make.trailing.centerY.equalToSuperview()
         }
-        
+
         newLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         newLabel.setContentCompressionResistancePriority(.required, for: .vertical)
-        
+
         spacerView.snp.makeConstraints { make in
             make.top.bottom.leading.equalToSuperview()
             make.trailing.equalTo(textLabel!.snp.leading)
         }
-        
+
         newLabel.snp.makeConstraints { make in
             make.leading.equalTo(spacerView.snp.trailing)
             make.top.equalToSuperview().offset(11)
             make.bottom.equalToSuperview().offset(-11)
             make.trailing.equalTo(accessoryLabel.snp.leading).offset(-10)
         }
-        
+
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -91,7 +91,7 @@ class SettingsTableViewAccessoryCell: SettingsTableViewCell {
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     enum Section: String {
         case privacy, search, siri, integration, mozilla
-        
+
         var numberOfRows: Int {
             switch self {
             case .privacy:
@@ -113,7 +113,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             case .mozilla: return UIConstants.strings.toggleSectionMozilla
             }
         }
-        
+
         static func getSections() -> [Section] {
             if #available(iOS 12.0, *) {
                 return [.privacy, .search, .siri, integration, .mozilla]
@@ -125,7 +125,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     
-    
+
     enum BiometryType {
         enum Status {
             case hasIdentities
@@ -168,7 +168,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     fileprivate let tableView = UITableView(frame: .zero, style: .grouped)
-    
+
     // Hold a strong reference to the block detector so it isn't deallocated
     // in the middle of its detection.
     private let detector = BlockerEnabledDetector.makeInstance()
@@ -217,33 +217,33 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         return toggles
     }
-    
+
     /// Used to calculate cell heights.
     private lazy var dummyToggleCell: UITableViewCell = {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "dummyCell")
         cell.accessoryView = PaddedSwitch(switchView: UISwitch())
         return cell
     }()
-    
+
     private var shouldScrollToSiri: Bool
     init(searchEngineManager: SearchEngineManager, whatsNew: WhatsNewDelegate, shouldScrollToSiri: Bool = false) {
         self.searchEngineManager = searchEngineManager
         self.whatsNew = whatsNew
         self.shouldScrollToSiri = shouldScrollToSiri
         super.init(nibName: nil, bundle: nil)
-        
+
         tableView.register(SettingsTableViewAccessoryCell.self, forCellReuseIdentifier: "accessoryCell")
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         view.backgroundColor = UIConstants.colors.background
-        
+
         title = UIConstants.strings.settingsTitle
-        
+
         let navigationBar = navigationController!.navigationBar
         navigationBar.isTranslucent = false
         navigationBar.barTintColor = UIConstants.colors.settingsNavBar
@@ -262,7 +262,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSettings))
         doneButton.tintColor = UIConstants.Photon.Magenta60
         navigationItem.leftBarButtonItem = doneButton
-        
+
         highlightsButton = UIBarButtonItem(title: UIConstants.strings.whatsNewTitle, style: .plain, target: self, action: #selector(whatsNewClicked))
         highlightsButton?.image = UIImage(named: "highlight")
         highlightsButton?.accessibilityIdentifier = "SettingsViewController.whatsNewButton"
@@ -271,12 +271,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         if whatsNew.shouldShowWhatsNew() {
             highlightsButton?.tintColor = UIConstants.colors.whatsNew
         }
-        
+
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
         }
-        
+
         tableView.dataSource = self
         tableView.delegate = self
         tableView.backgroundColor = UIConstants.colors.background
@@ -284,7 +284,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.separatorColor = UIConstants.colors.settingsSeparator
         tableView.allowsSelection = true
         tableView.estimatedRowHeight = 44
-        
+
         toggles = initialToggles
         for toggleArray in toggles {
             for blockerToggle in toggleArray {
@@ -297,7 +297,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         NotificationCenter.default.addObserver(self, selector: #selector(applicationDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateSafariEnabledState()
@@ -312,7 +312,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             shouldScrollToSiri = false
         }
     }
-    
+
     @objc private func applicationDidBecomeActive() {
         // On iOS 9, we detect the blocker status by loading an invisible SafariViewController
         // in the current view. We can only run the detector if the view is visible; otherwise,
@@ -321,7 +321,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             updateSafariEnabledState()
         }
     }
-    
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -356,11 +356,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         if ((sec + 1) > toggles.count) || ((row + 1) > toggles[sec].count) {
             return nil
         }
-        
         guard let toggle = toggles[sec][row] else { return BlockerToggle(label: "Error", setting: SettingsToggle.blockAds) }
         return toggle
     }
-    
+
     @objc func tappedLearnMoreFooter(gestureRecognizer: UIGestureRecognizer) {
         guard let url = SupportUtils.URLForTopic(topic: "usage-data") else { return }
         let contentViewController = SettingsContentViewController(url: url)
@@ -457,26 +456,26 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         default:
             cell = getToggleCell(indexPath: indexPath);
         }
-        
+
         cell.backgroundColor = UIConstants.colors.cellBackground
         cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
         cell.layoutMargins = UIEdgeInsets.zero
         cell.detailTextLabel?.textColor = UIConstants.colors.settingsDetailLabel
-        
+
         cell.textLabel?.setupShrinkage()
         cell.detailTextLabel?.setupShrinkage()
-        
+
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return sections[section].numberOfRows
     }
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
     }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         // Height for the Search Engine and Learn More row.
         if indexPath.section == 0 { return UITableView.automaticDimension }
@@ -484,7 +483,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             (indexPath.section == 4 && indexPath.row >= 1) {
             return 44
         }
-        
+
         // We have to manually calculate the cell height since UITableViewCell doesn't correctly
         // layout multiline detailTextLabels.
         if let toggle = toggleForIndexPath(indexPath){
@@ -502,45 +501,45 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             return UITableView.automaticDimension
         }
     }
-    
+
     private func heightForLabel(_ label: UILabel, width: CGFloat, text: String) -> CGFloat {
         let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
         let attrs: [NSAttributedString.Key: Any] = [.font: label.font]
         let boundingRect = NSString(string: text).boundingRect(with: size, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: attrs, context: nil)
         return boundingRect.height
     }
-    
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         var groupingOffset = UIConstants.layout.settingsDefaultTitleOffset
         
         if sections[section] == .privacy {
             groupingOffset = UIConstants.layout.settingsFirstTitleOffset
         }
-        
+
         // Hack: We want the header view's margin to match the cells, so we create an empty
         // cell with a blank space as text to layout the text label. From there, we can define
         // constraints for our custom label based on the cell's label.
         let cell = UITableViewCell()
         cell.textLabel?.text = " "
         cell.backgroundColor = UIConstants.colors.background
-        
+
         let label = SmartLabel()
         label.text = sections[section].headerText
         label.textColor = UIConstants.colors.tableSectionHeader
         label.font = UIConstants.fonts.tableSectionHeader
         cell.contentView.addSubview(label)
-        
+
         label.snp.makeConstraints { make in
             make.leading.trailing.equalTo(cell.textLabel!)
             make.centerY.equalTo(cell.textLabel!).offset(groupingOffset)
         }
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return sections[section] == .privacy ? 50 : 30
     }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         switch sections[indexPath.section] {
@@ -584,23 +583,23 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         default: break
         }
     }
-    
+
     private func updateSafariEnabledState() {
         guard let index = Section.getSections().index(where: { $0 == Section.integration }),
             let safariToggle = toggles[index][0]?.toggle else { return }
         safariToggle.isEnabled = false
-        
+
         detector.detectEnabled(view) { [weak self] enabled in
             safariToggle.isOn = enabled && Settings.getToggle(.safari)
             safariToggle.isEnabled = true
             self?.isSafariEnabled = enabled
         }
     }
-    
+
     @objc private func dismissSettings() {
         self.dismiss(animated: true, completion: nil)
     }
-    
+
     @objc private func aboutClicked() {
         navigationController!.pushViewController(AboutViewController(), animated: true)
     }
@@ -613,15 +612,15 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         
         whatsNew.didShowWhatsNew()
     }
-    
+
     @objc private func toggleSwitched(_ sender: UISwitch) {
         let toggle = toggles.filter {$0.filter { $0?.toggle == sender } != []}[0].filter {$0?.toggle == sender }[0]!
-        
+
         func updateSetting() {
             let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: "setting", value: toggle.setting.rawValue)
             telemetryEvent.addExtra(key: "to", value: sender.isOn)
             Telemetry.default.recordEvent(telemetryEvent)
-            
+
             Settings.set(sender.isOn, forToggle: toggle.setting)
             ContentBlockerHelper.shared.reload()
             Utils.reloadSafariContentBlocker()
@@ -635,7 +634,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         } else if toggle.setting == .biometricLogin {
             UserDefaults.standard.set(false, forKey: TipManager.TipKey.biometricTip)
         }
-        
+
         switch toggle.setting {
         case .safari where sender.isOn && !isSafariEnabled:
             let instructionsViewController = SafariInstructionsViewController()
