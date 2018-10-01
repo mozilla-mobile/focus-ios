@@ -109,10 +109,8 @@ class SearchEngineManager {
         let parser = OpenSearchParser(pluginMode: true)
         let pluginsPath = Bundle.main.url(forResource: "SearchPlugins", withExtension: nil)!
         let enginesPath = Bundle.main.path(forResource: "SearchEngines", ofType: "plist")!
-        let searchEngineDefaultPath = Bundle.main.path(forResource: "SearchEngineDefaults", ofType: "plist")!
-        let engineMap = NSDictionary(contentsOfFile: enginesPath) as! [String: [String]]
-        let searchEngineDefaultMap = NSDictionary(contentsOfFile: searchEngineDefaultPath)as! [String: String]
-        let engines = searchPaths.compactMap { engineMap[$0] }.first!
+        let engineMap = NSDictionary(contentsOfFile: enginesPath) as! [String: NSDictionary]
+        let engines = searchPaths.compactMap{engineMap[$0]?["visibleEngines"]}.first as! [String]
         
         // Find and parse the engines for this locale.
         self.engines = engines.compactMap { name in
@@ -134,16 +132,13 @@ class SearchEngineManager {
 
         // Set default search engine pref
         if prefs.string(forKey: SearchEngineManager.prefKeyEngine) == nil {
-            let targetSearchEngineDefault = searchEngineDefaultMap[searchPaths[0]]
+            let targetSearchEngineDefault = engineMap[searchPaths[0]]?["searchEngineDefault"] as? String
             var searchEngineDefault = self.engines.first?.name
-
-            for engine in self.engines {
-                if engine.name == targetSearchEngineDefault {
-                    searchEngineDefault = engine.name
-                    break
-                }
+            
+            if targetSearchEngineDefault != nil {
+                searchEngineDefault = self.engines.first(where: { $0.name == targetSearchEngineDefault })?.name
             }
-
+            
             prefs.set(searchEngineDefault, forKey: SearchEngineManager.prefKeyEngine)
         }
 
