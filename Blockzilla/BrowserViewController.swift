@@ -696,6 +696,10 @@ class BrowserViewController: UIViewController {
             UIKeyCommand(input: "]", modifierFlags: .command, action: #selector(BrowserViewController.goForward), discoverabilityTitle: UIConstants.strings.browserForward),
         ]
     }
+    
+    func refreshTipsDisplay() {
+        createHomeView()
+    }
 
     func canShowTips() -> Bool {
         return NSLocale.current.identifier == "en_US" && !AppInfo.isKlar

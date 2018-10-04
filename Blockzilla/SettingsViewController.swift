@@ -657,6 +657,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             Telemetry.default.configuration.isUploadEnabled = sender.isOn
         } else if toggle.setting == .biometricLogin {
             UserDefaults.standard.set(false, forKey: TipManager.TipKey.biometricTip)
+        } else if toggle.setting == .showHomeScreenTips {
+            if let browserViewController = presentingViewController as? BrowserViewController {
+                browserViewController.refreshTipsDisplay()
+            }
         }
 
         switch toggle.setting {
