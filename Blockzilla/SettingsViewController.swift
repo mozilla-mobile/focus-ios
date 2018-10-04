@@ -100,7 +100,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             case .search: return 2
             case .siri: return 3
             case .integration: return 1
-            case .mozilla: return 3
+            case .mozilla:
+                // Show tips option should not be displayed for users that do not see tips
+                return UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) ? 3 : 2
             }
         }
         
@@ -199,6 +201,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 6: safariToggle,
                 7: homeScreenTipsToggle
             ]
+            
+            if !UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) {
+                toggles[7] = nil
+            }
         } else {
             toggles = [
                 1: blockFontsToggle,
@@ -206,6 +212,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 5: safariToggle,
                 6: homeScreenTipsToggle
             ]
+            
+            if !UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) {
+                toggles[6] = nil
+            }
         }
         if #available(iOS 12.0, *) {
             if let safariRow = toggles.first(where: { $1 == safariToggle })?.key {
@@ -367,6 +377,18 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        func createToggleCell(for toggle: BlockerToggle) -> UITableViewCell {
+            let cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "toggleCell")
+            cell.textLabel?.text = toggle.label
+            cell.textLabel?.numberOfLines = 0
+            cell.accessoryView = PaddedSwitch(switchView: toggle.toggle)
+            cell.detailTextLabel?.text = toggle.subtitle
+            cell.detailTextLabel?.numberOfLines = 0
+            cell.selectionStyle = .none
+            
+            return cell
+        }
+        
         var cell: UITableViewCell
         switch sections[indexPath.section] {
         case .search:
@@ -404,17 +426,21 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
             }
             cell = siriCell
-        case .mozilla:
+        case .mozilla where UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW):
             if indexPath.row == 0 {
-                cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "toggleCell")
                 let toggle = toggleForIndexPath(indexPath)
-                cell.textLabel?.text = toggle.label
-                cell.textLabel?.numberOfLines = 0
-                cell.accessoryView = PaddedSwitch(switchView: toggle.toggle)
-                cell.detailTextLabel?.text = toggle.subtitle
-                cell.detailTextLabel?.numberOfLines = 0
-                cell.selectionStyle = .none
+                cell = createToggleCell(for: toggle)
             } else if indexPath.row == 1 {
+                cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
+                cell.textLabel?.text = String(format: UIConstants.strings.aboutTitle, AppInfo.productName)
+                cell.accessibilityIdentifier = "settingsViewController.about"
+            } else {
+                cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "ratingCell")
+                cell.textLabel?.text = String(format: UIConstants.strings.ratingSetting, AppInfo.productName)
+                cell.accessibilityIdentifier = "settingsViewController.rateFocus"
+            }
+        case .mozilla where !UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW):
+            if indexPath.row == 0 {
                 cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
                 cell.textLabel?.text = String(format: UIConstants.strings.aboutTitle, AppInfo.productName)
                 cell.accessibilityIdentifier = "settingsViewController.about"
@@ -430,14 +456,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.accessibilityIdentifier = "settingsViewController.trackingCell"
                 cell.accessoryType = .disclosureIndicator
             } else {
-                cell = UITableViewCell(style: .subtitle, reuseIdentifier: "toggleCell")
                 let toggle = toggleForIndexPath(indexPath)
-                cell.textLabel?.text = toggle.label
-                cell.textLabel?.numberOfLines = 0
-                cell.accessoryView = PaddedSwitch(switchView: toggle.toggle)
-                cell.detailTextLabel?.text = toggle.subtitle
-                cell.detailTextLabel?.numberOfLines = 0
-                cell.selectionStyle = .none
+                cell = createToggleCell(for: toggle)
+                
                 if toggle.label == UIConstants.strings.labelSendAnonymousUsageData {
                     let selector = #selector(tappedLearnMoreFooter)
                     let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.settingsLink])
@@ -565,10 +586,19 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 let siriFavoriteVC = SiriFavoriteViewController()
                 navigationController?.pushViewController(siriFavoriteVC, animated: true)
             }
-        case .mozilla:
+        case .mozilla where UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW):
             if indexPath.row == 1 {
                 aboutClicked()
             } else if indexPath.row == 2 {
+                let appId = AppInfo.config.appId
+                if let reviewURL = URL(string: "https://itunes.apple.com/app/id\(appId)?action=write-review"), UIApplication.shared.canOpenURL(reviewURL) {
+                    UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
+                }
+            }
+        case .mozilla where !UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW):
+            if indexPath.row == 0 {
+                aboutClicked()
+            } else if indexPath.row == 1 {
                 let appId = AppInfo.config.appId
                 if let reviewURL = URL(string: "https://itunes.apple.com/app/id\(appId)?action=write-review"), UIApplication.shared.canOpenURL(reviewURL) {
                     UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
