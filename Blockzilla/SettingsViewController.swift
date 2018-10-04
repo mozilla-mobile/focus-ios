@@ -186,7 +186,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     private func getSectionIndex(_ section: Section) -> Int? {
         return Section.getSections().index(where: { $0 == section })
     }
-    
+
     private func initializeToggles() {
         let blockFontsToggle = BlockerToggle(label: UIConstants.strings.labelBlockFonts, setting: SettingsToggle.blockFonts)
         let usageDataSubtitle = String(format: UIConstants.strings.detailTextSendUsageData, AppInfo.productName)
@@ -286,7 +286,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 toggles[i]?[j] = blockerToggle
             }
         }
-        
+
         NotificationCenter.default.addObserver(self, selector: #selector(applicationDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
 
@@ -352,15 +352,15 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let contentViewController = SettingsContentViewController(url: url)
         navigationController?.pushViewController(contentViewController, animated: true)
     }
-    
+
     @objc func tappedLearnMoreFooter(gestureRecognizer: UIGestureRecognizer) {
         tappedFooter(topic: "usage-data")
     }
-    
+
     @objc func tappedLearnMoreSearchSuggestionsFooter(gestureRecognizer: UIGestureRecognizer) {
         tappedFooter(topic: "search-suggestions")
     }
-    
+
     private func getToggleCell(indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = UITableViewCell(style: .subtitle, reuseIdentifier: "toggleCell")
         let toggle = toggleForIndexPath(indexPath)
@@ -386,7 +386,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         return cell;
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell
         switch sections[indexPath.section] {
@@ -416,17 +416,17 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case .siri:
             guard #available(iOS 12.0, *), let siriCell = tableView.dequeueReusableCell(withIdentifier: "accessoryCell") as? SettingsTableViewAccessoryCell else { fatalError("No accessory cells") }
             if indexPath.row == 0 {
-                    siriCell.labelText = UIConstants.strings.eraseSiri
-                    siriCell.accessibilityIdentifier = "settingsViewController.siriEraseCell"
-                    SiriShortcuts().hasAddedActivity(type: .erase) { (result: Bool) in
-                        siriCell.accessoryLabel.text = result ? UIConstants.strings.Edit : UIConstants.strings.addToSiri
-                    }
-            } else if indexPath.row == 1 {
-                siriCell.labelText = UIConstants.strings.eraseAndOpenSiri
-                siriCell.accessibilityIdentifier = "settingsViewController.siriEraseAndOpenCell"
-                SiriShortcuts().hasAddedActivity(type: .eraseAndOpen) { (result: Bool) in
+                siriCell.labelText = UIConstants.strings.eraseSiri
+                siriCell.accessibilityIdentifier = "settingsViewController.siriEraseCell"
+                SiriShortcuts().hasAddedActivity(type: .erase) { (result: Bool) in
                     siriCell.accessoryLabel.text = result ? UIConstants.strings.Edit : UIConstants.strings.addToSiri
                 }
+            } else if indexPath.row == 1 {
+                    siriCell.labelText = UIConstants.strings.eraseAndOpenSiri
+                    siriCell.accessibilityIdentifier = "settingsViewController.siriEraseAndOpenCell"
+                    SiriShortcuts().hasAddedActivity(type: .eraseAndOpen) { (result: Bool) in
+                        siriCell.accessoryLabel.text = result ? UIConstants.strings.Edit : UIConstants.strings.addToSiri
+                    }
             } else {
                 siriCell.labelText = UIConstants.strings.openUrlSiri
                 siriCell.accessibilityIdentifier = "settingsViewController.siriOpenURLCell"
@@ -483,7 +483,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let accessoryWidth = dummyToggleCell.accessoryView!.frame.width
         let insetsWidth = 2 * tableView.separatorInset.left
         let width = tableWidth - accessoryWidth - insetsWidth
-            
+
         var height = heightForLabel(dummyToggleCell.textLabel!, width: width, text: toggle.label)
         if let subtitle = toggle.subtitle {
             height += heightForLabel(dummyToggleCell.detailTextLabel!, width: width, text: subtitle)
