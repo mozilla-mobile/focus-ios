@@ -343,9 +343,6 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "Face ID can unlock %@ if a URL is already open in the app";
 
-/* Show home screen tips toggle label on settings screen */
-"Settings.toggleHomeScreenTips" = "Show home screen tips";
-
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "May break some videos and Web pages";
 
