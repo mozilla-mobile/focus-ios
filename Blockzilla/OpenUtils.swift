@@ -17,9 +17,13 @@ class OpenUtils: NSObject {
         self.webViewController = webViewController
     }
 
-    func buildShareViewController(url: URL) -> UIActivityViewController {
-        var activityItems: [Any] = [url]
+    func buildShareViewController(title: String?, url: URL) -> UIActivityViewController {
+        var activityItems: [Any] = []
         
+        if let title = title {
+            activityItems.append(title)
+        }
+        //activityItems.append(url)
         activityItems.append(self)
 
         let printFormatter = UIPrintFormatter()
