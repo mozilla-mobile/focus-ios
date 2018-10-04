@@ -384,7 +384,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             let tapGesture = UITapGestureRecognizer(target: self, action: selector)
             cell.addGestureRecognizer(tapGesture)
         }
-        return cell;
+        return cell
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
