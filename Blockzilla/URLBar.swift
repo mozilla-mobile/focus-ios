@@ -72,7 +72,7 @@ class URLBar: UIView {
         addGestureRecognizer(singleTap)
 
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(urlBarDidLongPress))
-        self.addGestureRecognizer(longPress)
+        textAndLockContainer.addGestureRecognizer(longPress)
         
         addSubview(toolset.backButton)
         addSubview(toolset.forwardButton)
