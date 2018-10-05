@@ -59,6 +59,8 @@ class WebViewController: UIViewController, WebController {
             delegate?.webController(self, didUpdateTrackingProtectionStatus: trackingProtectionStatus)
         }
     }
+    
+    private var pendingRequests = [String: URLRequest]()
 
     fileprivate var trackingInformation = TPPageStats() {
         didSet {
@@ -240,6 +242,28 @@ extension WebViewController: WKNavigationDelegate {
         guard error.code != Int(CFNetworkErrors.cfurlErrorCancelled.rawValue), let errorUrl = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL else { return }
         let errorPageData = ErrorPage(error: error).data
         webView.load(errorPageData, mimeType: "", characterEncodingName: "", baseURL: errorUrl)
+    }
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
+        let response = navigationResponse.response
+        
+        // We can only show this content in the web view if this web view is not pending
+        // download via the context menu.
+        let canShowInWebView = navigationResponse.canShowMIMEType // && (webView != pendingDownloadWebView)
+        
+        // Check if this response should be handed off to Passbook.
+        if let passbookHelper = OpenPassBookHelper(request: nil, response: response, canShowInWebView: canShowInWebView, forceDownload: false, browserViewController: self) {
+            // Clear the network activity indicator since our helper is handling the request.
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            
+            // Open our helper and cancel this response from the webview.
+            passbookHelper.open()
+            decisionHandler(.cancel)
+            return
+        }
+        
+        decisionHandler(.allow)
+
     }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {

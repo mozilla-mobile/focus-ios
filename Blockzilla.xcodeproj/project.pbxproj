@@ -46,6 +46,8 @@
 		2696EB04211F540600F0C73F /* SearchHistoryUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2696EB03211F540600F0C73F /* SearchHistoryUtils.swift */; };
 		2825C3665AB14081B262F767 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D051AC1857A0EEEBB833D15 /* SystemConfiguration.framework */; };
 		2B36326E97D2E67E9C684B4B /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80D9AA926EFBD788739486EB /* CoreTelephony.framework */; };
+		2B8BF78C2166E3B3005CE7F4 /* OpenInHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B8BF78B2166E3B3005CE7F4 /* OpenInHelper.swift */; };
+		2B8BF78E2166E4B4005CE7F4 /* DownloadQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B8BF78D2166E4B4005CE7F4 /* DownloadQueue.swift */; };
 		2F2F84BCF076B21DE42D1F29 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C652A61E213D254A86DF5736 /* CoreMedia.framework */; };
 		34056D10515852F370C83A01 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAB8E622E994545108473554 /* QuartzCore.framework */; };
 		4285B8E0671F40DA543A2E58 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29B90C056305836CB297FF79 /* AssetsLibrary.framework */; };
@@ -370,6 +372,8 @@
 		1DE903CD20C751D7002E53ED /* FindInPageTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindInPageTest.swift; sourceTree = "<group>"; };
 		2696EB03211F540600F0C73F /* SearchHistoryUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHistoryUtils.swift; sourceTree = "<group>"; };
 		29B90C056305836CB297FF79 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		2B8BF78B2166E3B3005CE7F4 /* OpenInHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenInHelper.swift; sourceTree = "<group>"; };
+		2B8BF78D2166E4B4005CE7F4 /* DownloadQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadQueue.swift; sourceTree = "<group>"; };
 		427B752EF11959F9C38B12D6 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4F1284851FC5E242001A775B /* TPSettingsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPSettingsTest.swift; sourceTree = "<group>"; };
 		4F582F7A1F44A10F006C744B /* OpenInFocusTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenInFocusTest.swift; sourceTree = "<group>"; };
@@ -1259,6 +1263,8 @@
 				B3AFC2B91F7C0B66001AEF38 /* Modules */,
 				B31DAAC71F7D87E800A11A74 /* Lib */,
 				D3E54FD41DEFB25B003E1AFF /* SearchPlugins */,
+				2B8BF78D2166E4B4005CE7F4 /* DownloadQueue.swift */,
+				2B8BF78B2166E3B3005CE7F4 /* OpenInHelper.swift */,
 				D30179C51BCD78E1009AD388 /* Blockzilla-Bridging-Header.h */,
 				D3DA778B1DC2C60E009C114E /* errorPage.html */,
 				E47F9AE91DB9329D00A93285 /* Adjust-Focus.plist */,
@@ -1868,6 +1874,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B8BF78C2166E3B3005CE7F4 /* OpenInHelper.swift in Sources */,
 				D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */,
 				16837EA62135EFCC000424BB /* TipManager.swift in Sources */,
 				163BFFE62125EE260007CEBC /* SiriShortcuts.swift in Sources */,
@@ -1939,6 +1946,7 @@
 				D3E2C96B1DA3069000DEBE3D /* URIFixup.swift in Sources */,
 				D3DA77851DC2C307009C114E /* ErrorPage.swift in Sources */,
 				D3426AE91DB7F4060016DA5A /* KeyboardHelper.swift in Sources */,
+				2B8BF78E2166E4B4005CE7F4 /* DownloadQueue.swift in Sources */,
 				B3CD41CC1FD1CAF000AEBD58 /* PaddedSwitch.swift in Sources */,
 				D3E251EA1DAD714C005918DC /* InstructionsView.swift in Sources */,
 				D3561B2B1DB5925100A5EEAF /* GradientBackgroundView.swift in Sources */,
