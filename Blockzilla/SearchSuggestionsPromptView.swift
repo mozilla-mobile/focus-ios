@@ -16,7 +16,8 @@ protocol SearchSuggestionsPromptViewDelegate: class {
 class SearchSuggestionsPromptView: UIView {
     weak var delegate: SearchSuggestionsPromptViewDelegate? // unsure if ? is correct
     private let promptContainer = UIView()
-    private let promptLabel = UILabel()
+    private let titleLabel = UILabel()
+    private let descriptionLabel = UILabel()
     private let enableButton = InsetButton()
     private let disableButton = InsetButton()
     private let buttonTopBorder = UIView()
@@ -38,24 +39,43 @@ class SearchSuggestionsPromptView: UIView {
             make.centerX.centerY.equalTo(self)
         }
         
-        // promptLabel
-        promptLabel.text = "Show Search Suggestions?"
-        promptLabel.textColor = UIConstants.colors.settingsTextLabel
-        promptLabel.font = UIConstants.fonts.settingsInputLabel
-        //promptLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
-        promptContainer.addSubview(promptLabel)
+        // titleLabel
+        titleLabel.text = "Show Search Suggestions?"
+        titleLabel.textColor = UIConstants.colors.settingsTextLabel
+        titleLabel.font = UIConstants.fonts.settingsInputLabel
+        //titleLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
+        promptContainer.addSubview(titleLabel)
 
-        promptLabel.snp.makeConstraints{ make in
-            make.centerX.centerY.equalTo(promptContainer)
+        titleLabel.snp.makeConstraints{ make in
+            make.top.equalTo(promptContainer.snp.top)
+//            make.leading.equalTo(promptContainer)
+//            make.trailing.equalTo(promptContainer)
+            make.centerX.equalTo(promptContainer)
+        }
+        
+        // descriptionLabel
+        descriptionLabel.text = "To get suggestions, Focus needs to send what you type in the address bar to the search engine"
+        descriptionLabel.textColor = UIConstants.colors.settingsTextLabel
+        descriptionLabel.font = UIConstants.fonts.settingsDescriptionText
+        descriptionLabel.numberOfLines = 2
+        descriptionLabel.textAlignment = NSTextAlignment.center
+        descriptionLabel.lineBreakMode = .byWordWrapping
+        promptContainer.addSubview(descriptionLabel)
+        
+        descriptionLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom)
+            make.leading.equalTo(promptContainer).offset(10)
+            make.trailing.equalTo(promptContainer).offset(-10)
+            make.centerX.equalTo(promptContainer)
         }
         
         // buttonTopBorder
         buttonTopBorder.backgroundColor = UIConstants.colors.settingsNavBorder
         addSubview(buttonTopBorder)
         
-        buttonTopBorder.snp.makeConstraints {make in
+        buttonTopBorder.snp.makeConstraints { make in
             make.leading.trailing.equalTo(promptContainer)
-            make.top.equalTo(promptLabel.snp.bottom)
+            make.top.equalTo(descriptionLabel.snp.bottom)
             make.height.equalTo(0.5)
         }
         
@@ -63,7 +83,7 @@ class SearchSuggestionsPromptView: UIView {
         buttonSideBorder.backgroundColor = UIConstants.colors.settingsNavBorder
         addSubview(buttonSideBorder)
         
-        buttonSideBorder.snp.makeConstraints {make in
+        buttonSideBorder.snp.makeConstraints { make in
             make.top.equalTo(buttonTopBorder.snp.bottom)
             make.bottom.equalTo(promptContainer.snp.bottom)
             make.height.equalTo(50)
@@ -82,10 +102,9 @@ class SearchSuggestionsPromptView: UIView {
 
         disableButton.snp.makeConstraints { make in
             make.top.equalTo(buttonTopBorder.snp.bottom)
-            make.leading.equalTo(promptContainer.snp.leading)
             make.bottom.equalTo(promptContainer.snp.bottom)
-            make.height.equalTo(50)
-            make.width.equalTo(50)
+            make.leading.equalTo(promptContainer.snp.leading)
+            make.trailing.equalTo(buttonSideBorder.snp.leading)
         }
         
         // enableButton
@@ -98,10 +117,10 @@ class SearchSuggestionsPromptView: UIView {
 
         enableButton.snp.makeConstraints { make in
             make.top.equalTo(buttonTopBorder.snp.bottom)
-            make.trailing.equalTo(promptContainer.snp.trailing)
             make.bottom.equalTo(promptContainer.snp.bottom)
-            make.height.equalTo(50)
-            make.width.equalTo(50)
+            make.leading.equalTo(buttonSideBorder.snp.trailing)
+            make.trailing.equalTo(promptContainer.snp.trailing)
+
         }
         
     }
