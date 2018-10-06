@@ -574,21 +574,15 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
 
-    private func updateGenericToggle(_ toggle: UISwitch, settingsToggle: SettingsToggle) -> Bool {
-        toggle.isEnabled = false
-        var isEnabled: Bool = false
-        detector.detectEnabled(view) { [weak self] enabled in
-            toggle.isOn = enabled && Settings.getToggle(settingsToggle)
-            toggle.isEnabled = true
-            isEnabled = enabled
-        }
-        return isEnabled
-    }
-
     private func updateSafariEnabledState() {
         guard let index = getSectionIndex(Section.integration),
             let safariToggle = toggles[index]?[0]?.toggle else { return }
-        self.isSafariEnabled = updateGenericToggle(safariToggle, settingsToggle: .safari)
+        safariToggle.isEnabled = false
+        detector.detectEnabled(view) { [weak self] enabled in
+            safariToggle.isOn = enabled && Settings.getToggle(.safari)
+            safariToggle.isEnabled = true
+            self?.isSafariEnabled = enabled
+        }
     }
 
     @objc private func dismissSettings() {
