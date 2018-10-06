@@ -340,7 +340,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         toggle.toggle.isEnabled = biometryType.hasIdentities
         return toggle
     }
-    
+
     private func toggleForIndexPath(_ indexPath: IndexPath) -> BlockerToggle {
         guard let toggle = toggles[indexPath.section]?[indexPath.row]
             else {return BlockerToggle(label: "Error", setting: SettingsToggle.blockAds)}
