@@ -578,6 +578,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         guard let index = getSectionIndex(Section.integration),
             let safariToggle = toggles[index]?[0]?.toggle else { return }
         safariToggle.isEnabled = false
+
         detector.detectEnabled(view) { [weak self] enabled in
             safariToggle.isOn = enabled && Settings.getToggle(.safari)
             safariToggle.isEnabled = true
