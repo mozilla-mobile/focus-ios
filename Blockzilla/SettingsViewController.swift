@@ -196,16 +196,16 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let safariToggle = BlockerToggle(label: UIConstants.strings.toggleSafari, setting: SettingsToggle.safari)
         if let privacyIndex = getSectionIndex(Section.privacy) {
             if let biometricToggle = createBiometricLoginToggleIfAvailable() {
-                toggles[privacyIndex] =  [1: blockFontsToggle, 2: biometricToggle, 3:usageDataToggle]
+                toggles[privacyIndex] =  [1: blockFontsToggle, 2: biometricToggle, 3: usageDataToggle]
             } else {
-                toggles[privacyIndex] = [1:blockFontsToggle,2:usageDataToggle]
+                toggles[privacyIndex] = [1: blockFontsToggle, 2: usageDataToggle]
             }
         }
         if let searchIndex = getSectionIndex(Section.search) {
-            toggles[searchIndex] = [2:searchSuggestionToggle]
+            toggles[searchIndex] = [2: searchSuggestionToggle]
         }
-        if let integIndex = getSectionIndex(Section.integration) {
-            toggles[integIndex] = [0:safariToggle]
+        if let integrationIndex = getSectionIndex(Section.integration) {
+            toggles[integrationIndex] = [0: safariToggle]
         }
     }
 
@@ -277,13 +277,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.estimatedRowHeight = 44
 
         initializeToggles()
-        for (i,toggleArray) in toggles{
-            for (j, blockerToggle) in toggleArray{
+        for (sectionIndex, toggleArray) in toggles{
+            for (cellIndex, blockerToggle) in toggleArray{
                 let toggle = blockerToggle.toggle
                 toggle.onTintColor = UIConstants.colors.toggleOn
                 toggle.addTarget(self, action: #selector(toggleSwitched(_:)), for: .valueChanged)
                 toggle.isOn = Settings.getToggle(blockerToggle.setting)
-                toggles[i]?[j] = blockerToggle
+                toggles[sectionIndex]?[cellIndex] = blockerToggle
             }
         }
 
@@ -295,7 +295,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         updateSafariEnabledState()
         tableView.reloadData()
         if shouldScrollToSiri {
-            guard let siriSection = sections.index(where: {$0 == Section.siri}) else {
+            guard let siriSection = getSectionIndex(Section.siri) else {
                 shouldScrollToSiri = false
                 return
             }
@@ -354,11 +354,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     @objc func tappedLearnMoreFooter(gestureRecognizer: UIGestureRecognizer) {
-        tappedFooter(topic: "usage-data")
+        tappedFooter(topic: UIConstants.strings.sumoTopicUsageData)
     }
 
     @objc func tappedLearnMoreSearchSuggestionsFooter(gestureRecognizer: UIGestureRecognizer) {
-        tappedFooter(topic: "search-suggestions")
+        tappedFooter(topic: UIConstants.strings.sumoTopicSearchSuggestion)
     }
 
     private func getToggleCell(indexPath: IndexPath) -> UITableViewCell {
@@ -400,7 +400,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell = getToggleCell(indexPath: indexPath)
             }
         case .search:
-            if(indexPath.row < 2){
+            if indexPath.row < 2 {
                 guard let searchCell = tableView.dequeueReusableCell(withIdentifier: "accessoryCell") as? SettingsTableViewAccessoryCell else { fatalError("Accessory cells do not exist") }
                 let autocompleteLabel = Settings.getToggle(.enableDomainAutocomplete) || Settings.getToggle(.enableCustomDomainAutocomplete) ? UIConstants.strings.autocompleteCustomEnabled : UIConstants.strings.autocompleteCustomDisabled
                 let labels : (label : String, accessoryLabel : String, identifier : String) = indexPath.row == 0 ?
@@ -574,16 +574,21 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
 
-    private func updateSafariEnabledState() {
-        guard let index = Section.getSections().index(where: { $0 == Section.integration }),
-            let safariToggle = toggles[index]?[0]?.toggle else { return }
-        safariToggle.isEnabled = false
-
+    private func updateGenericToggle(_ toggle: UISwitch, settingsToggle: SettingsToggle) -> Bool {
+        toggle.isEnabled = false
+        var isEnabled: Bool = false
         detector.detectEnabled(view) { [weak self] enabled in
-            safariToggle.isOn = enabled && Settings.getToggle(.safari)
-            safariToggle.isEnabled = true
-            self?.isSafariEnabled = enabled
+            toggle.isOn = enabled && Settings.getToggle(settingsToggle)
+            toggle.isEnabled = true
+            isEnabled = enabled
         }
+        return isEnabled
+    }
+
+    private func updateSafariEnabledState() {
+        guard let index = getSectionIndex(Section.integration),
+            let safariToggle = toggles[index]?[0]?.toggle else { return }
+        self.isSafariEnabled = updateGenericToggle(safariToggle, settingsToggle: .safari)
     }
 
     @objc private func dismissSettings() {
@@ -597,14 +602,14 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     @objc private func whatsNewClicked() {
         highlightsButton?.tintColor = UIColor.white
         
-        guard let url = SupportUtils.URLForTopic(topic: "whats-new-focus-ios-7") else { return }
+        guard let url = SupportUtils.URLForTopic(topic: UIConstants.strings.sumoTopicWhatsNew) else { return }
         navigationController?.pushViewController(SettingsContentViewController(url: url), animated: true)
         
         whatsNew.didShowWhatsNew()
     }
 
     @objc private func toggleSwitched(_ sender: UISwitch) {
-        let toggle = toggles.values.filter {$0.values.filter { $0.toggle == sender } != []}[0].values.filter {$0.toggle == sender }[0]
+        let toggle = toggles.values.filter {$0.values.filter {$0.toggle == sender} != []}[0].values.filter {$0.toggle == sender}[0]
 
         func updateSetting() {
             let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: "setting", value: toggle.setting.rawValue)
