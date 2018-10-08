@@ -186,7 +186,7 @@ class URLBar: UIView {
         cancelButton.setImage(myImage, for: .normal)
         
         cancelButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
-        cancelButton.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
+        cancelButton.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
         cancelButton.accessibilityIdentifier = "URLBar.cancelButton"
         cancelButton.contentEdgeInsets = UIEdgeInsets(top: UIConstants.layout.urlBarMargin,
                                                       left: UIConstants.layout.urlBarMargin,
@@ -589,8 +589,14 @@ class URLBar: UIView {
             self.layoutIfNeeded()
         }
     }
-
-    @objc func dismiss(completion: (() -> ())? = nil) {
+    
+    /* This separate @objc function is necessary as selector methods cannot pass paramaters. Calling
+     dismiss() directly from a selector (even with a nil completion handler) results in a crash. */
+    @objc func cancelPressed() {
+        dismiss()
+    }
+    
+    func dismiss(completion: (() -> ())? = nil) {
         guard isEditing else {
             completion?()
             return
