@@ -16,7 +16,7 @@ protocol OverlayViewDelegate: class {
 class OverlayView: UIView {
     weak var delegate: OverlayViewDelegate?
     private var searchButtonGroup = [InsetButton]()
-    private let searchSuggestionsCount = 5
+    private let searchSuggestionsCount = 4 // Five search buttons in total since indexing starts from 0.
     private var presented = false
     private var searchQuery = ""
     private let copyButton = UIButton()
@@ -28,7 +28,7 @@ class OverlayView: UIView {
         super.init(frame: CGRect.zero)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
         
-        for _ in 1...self.searchSuggestionsCount {
+        for _ in 0...self.searchSuggestionsCount {
             let searchButton = InsetButton()
             searchButton.isHidden = true
             searchButton.accessibilityIdentifier = "OverlayView.searchButton"
@@ -58,7 +58,7 @@ class OverlayView: UIView {
         self.searchButtonGroup[0].snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
         }
-        for i in 1...self.searchSuggestionsCount - 1 {
+        for i in 1...self.searchSuggestionsCount {
             self.searchButtonGroup[i].snp.makeConstraints { make in
                 make.top.equalTo(searchButtonGroup[i - 1].snp.bottom)
                 make.leading.trailing.equalTo(safeAreaLayoutGuide)
@@ -81,7 +81,7 @@ class OverlayView: UIView {
         addSubview(findInPageButton)
         
         findInPageButton.snp.makeConstraints { make in
-            make.top.equalTo(searchButtonGroup[searchSuggestionsCount - 1].snp.bottom)
+            make.top.equalTo(searchButtonGroup[searchSuggestionsCount].snp.bottom)
             make.leading.trailing.equalTo(safeAreaLayoutGuide)
             make.height.equalTo(56)
         }
@@ -206,7 +206,7 @@ class OverlayView: UIView {
             } else if findInPageButton.isHidden {
                 copyButton.snp.remakeConstraints { make in
                     make.leading.trailing.equalTo(safeAreaLayoutGuide)
-                    make.top.equalTo(searchButtonGroup[searchSuggestionsCount - 1].snp.bottom)
+                    make.top.equalTo(searchButtonGroup[searchSuggestionsCount].snp.bottom)
                     make.height.equalTo(56)
                 }
             } else {
