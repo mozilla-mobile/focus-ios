@@ -1,10 +1,6 @@
-//
-//  SearchSuggestionsPromptView.swift
-//  Blockzilla
-//
-//  Created by Janice Lee on 2018-10-03.
-//  Copyright © 2018 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
 import SnapKit
@@ -94,7 +90,6 @@ class SearchSuggestionsPromptView: UIView {
         disableButton.accessibilityIdentifier = "SearchSuggestionsPromptView.disableButton"
         disableButton.setTitle(UIConstants.strings.searchSuggestionsPromptDisable, for: .normal)
         disableButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
-        disableButton.backgroundColor = UIConstants.Photon.Ink70.withAlphaComponent(0.9)
         disableButton.layer.cornerRadius = 8.0
         addSubview(disableButton)
 
@@ -108,7 +103,6 @@ class SearchSuggestionsPromptView: UIView {
         enableButton.accessibilityIdentifier = "SearchSuggestionsPromptView.enableButton"
         enableButton.setTitle(UIConstants.strings.searchSuggestionsPromptEnable, for: .normal)
         enableButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.bold)
-        enableButton.backgroundColor = UIConstants.Photon.Ink70.withAlphaComponent(0.9)
         enableButton.layer.cornerRadius = 8.0
         addSubview(enableButton)
 
@@ -117,7 +111,6 @@ class SearchSuggestionsPromptView: UIView {
             make.bottom.trailing.equalTo(promptContainer)
             make.leading.equalTo(buttonBorderMiddle.snp.trailing)
         }
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
