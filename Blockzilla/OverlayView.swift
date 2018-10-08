@@ -23,6 +23,7 @@ class OverlayView: UIView {
     private let findInPageButton = InsetButton()
     private let topBorder = UIView()
     public var currentURL = ""
+    private let searchSuggestionsPromptView = SearchSuggestionsPromptView()
 
     init() {
         super.init(frame: CGRect.zero)
@@ -101,6 +102,15 @@ class OverlayView: UIView {
         copyButton.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
             make.height.equalTo(56)
+        }
+        
+        searchSuggestionsPromptView.backgroundColor = UIConstants.colors.background
+        addSubview(searchSuggestionsPromptView)
+        
+        searchSuggestionsPromptView.snp.makeConstraints { make in
+            make.top.equalTo(searchButton.snp.bottom)
+            make.leading.trailing.equalTo(safeAreaLayoutGuide)
+            make.height.greaterThanOrEqualTo(80)
         }
     }
 

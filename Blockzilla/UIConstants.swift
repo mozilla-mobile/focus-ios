@@ -201,6 +201,7 @@ struct UIConstants {
         static let urlBarBorderInset: CGFloat = 4
         static let deleteButtonInset: CGFloat = -12
         static let urlBarIconInset: CGFloat = 8
+        static let searchSuggestionsPromptCornerRadius: CGFloat = 12
         static let settingsDefaultTitleOffset = 3
         static let settingsFirstTitleOffset = 16
         static let urlBarToolsetOffset: CGFloat = 60
@@ -290,6 +291,10 @@ struct UIConstants {
         static let safariInstructionsNotEnabled = String(format: NSLocalizedString("Safari.instructionsNotEnabled", value: "%@ is not enabled.", comment: "Error label when the blocker is not enabled, shown in the intro and main app when disabled"), AppInfo.productName)
         static let searchButton = NSLocalizedString("URL.searchLabel", value: "Search for %@", comment: "Label displayed for search button when typing in the URL bar")
         static let findInPageButton = NSLocalizedString("URL.findOnPageLabel", value: "Find in page: %@", comment: "Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page.")
+        static let searchSuggestionsPromptMessage = NSLocalizedString("SearchSuggestions.promptMessage", value: "To get suggestions, Focus needs to send what you type in the address bar to the search engine.", comment: "Label for search suggestions prompt message")
+        static let searchSuggestionsPromptTitle = NSLocalizedString("SearchSuggestions.promptTitle", value: "Show Search Suggestions?", comment: "Title for search suggestions prompt")
+        static let searchSuggestionsPromptDisable = NSLocalizedString("SearchSuggestions.promptDisable", value: "No", comment: "Label for disable option on search suggestions prompt")
+        static let searchSuggestionsPromptEnable = NSLocalizedString("SearchSuggestions.promptEnable", value: "Yes", comment: "Label for enable option on search suggestions prompt")
         static let settingsBlockOtherMessage = NSLocalizedString("Settings.blockOtherMessage", value: "Blocking other content trackers may break some videos and Web pages.", comment: "Alert message shown when toggling the Content blocker")
         static let settingsBlockOtherNo = NSLocalizedString("Settings.blockOtherNo", value: "No, Thanks", comment: "Button label for declining Content blocker alert")
         static let settingsBlockOtherYes = NSLocalizedString("Settings.blockOtherYes", value: "I Understand", comment: "Button label for accepting Content blocker alert")
