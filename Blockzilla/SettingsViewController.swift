@@ -385,7 +385,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.detailTextLabel?.text = toggle.subtitle
             cell.detailTextLabel?.numberOfLines = 0
             cell.selectionStyle = .none
-            
             return cell
         }
         
