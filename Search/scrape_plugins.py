@@ -74,7 +74,7 @@ def main():
     # Make sure fallback directories contain any skipped engines.
     verifyEngines(engines)
 
-    # Save the list of engine names for each locale.
+    # Save the list of visible engine names and search engine defaults for each locale.
     saveSearchEngines(engines, searchEngineDefaults)
 
 def downloadEngines(locale, scraper, engines):
