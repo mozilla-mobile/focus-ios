@@ -950,7 +950,7 @@ extension BrowserViewController: URLBarDelegate {
         let utils = OpenUtils(url: url, webViewController: webViewController)
         let items = PageActionSheetItems(url: url)
         let sharePageItem = PhotonActionSheetItem(title: UIConstants.strings.sharePage, iconString: "icon_openwith_active") { action in
-            let shareVC = utils.buildShareViewController(url: url)
+            let shareVC = utils.buildShareViewController(url: url, printFormatter: self.webViewController.printFormatter)
             shareVC.becomeFirstResponder()
             self.present(shareVC, animated: true, completion: nil)
         }
