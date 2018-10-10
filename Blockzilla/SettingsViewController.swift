@@ -201,10 +201,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 6: safariToggle,
                 7: homeScreenTipsToggle
             ]
-            
-            if !UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) {
-                toggles[7] = nil
-            }
         } else {
             toggles = [
                 1: blockFontsToggle,
@@ -212,17 +208,19 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 5: safariToggle,
                 6: homeScreenTipsToggle
             ]
-            
-            if !UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) {
-                toggles[6] = nil
-            }
         }
-        if #available(iOS 12.0, *) {
-            if let safariRow = toggles.first(where: { $1 == safariToggle })?.key {
+        
+        if let safariRow = toggles.first(where: { $1 == safariToggle })?.key {
+            if !UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) {
+                toggles.removeValue(forKey: safariRow + 1)
+            }
+            
+            if #available(iOS 12.0, *) {
                 toggles.removeValue(forKey: safariRow)
                 toggles[(safariRow + Section.siri.numberOfRows)] = safariToggle
             }
-            
+        }
+        if #available(iOS 12.0, *) {
             if let homeScreenTipsRow = toggles.first(where: { $1 == homeScreenTipsToggle })?.key {
                 toggles.removeValue(forKey: homeScreenTipsRow)
                 toggles[(homeScreenTipsRow + Section.siri.numberOfRows)] = homeScreenTipsToggle
