@@ -22,7 +22,6 @@ class SearchSuggestionsPromptView: UIView {
     init() {
         super.init(frame: CGRect.zero)
         
-        // promptContainer
         promptContainer.backgroundColor = UIConstants.Photon.Ink70.withAlphaComponent(0.9)
         promptContainer.layer.cornerRadius = UIConstants.layout.searchSuggestionsPromptCornerRadius
         addSubview(promptContainer)
@@ -34,7 +33,6 @@ class SearchSuggestionsPromptView: UIView {
             make.trailing.equalTo(self).offset(-6)
         }
         
-        // promptTitle
         promptTitle.text = UIConstants.strings.searchSuggestionsPromptTitle
         promptTitle.textColor = UIConstants.Photon.Grey10
         promptTitle.font = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.bold)
@@ -49,7 +47,6 @@ class SearchSuggestionsPromptView: UIView {
             make.trailing.equalTo(promptContainer).offset(-10)
         }
         
-        // promptMessage
         promptMessage.text = UIConstants.strings.searchSuggestionsPromptMessage
         promptMessage.textColor = UIConstants.Photon.Grey10
         promptMessage.font = UIFont.systemFont(ofSize: 14)
@@ -64,7 +61,6 @@ class SearchSuggestionsPromptView: UIView {
             make.trailing.equalTo(promptContainer).offset(-10)
         }
         
-        // buttonBorderTop
         buttonBorderTop.backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         addSubview(buttonBorderTop)
         
@@ -74,7 +70,6 @@ class SearchSuggestionsPromptView: UIView {
             make.height.equalTo(0.5)
         }
         
-        // buttonBorderMiddle
         buttonBorderMiddle.backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         addSubview(buttonBorderMiddle)
         
@@ -86,7 +81,6 @@ class SearchSuggestionsPromptView: UIView {
             make.centerX.equalTo(self)
         }
 
-        // disableButton
         disableButton.accessibilityIdentifier = "SearchSuggestionsPromptView.disableButton"
         disableButton.setTitle(UIConstants.strings.searchSuggestionsPromptDisable, for: .normal)
         disableButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
@@ -99,7 +93,6 @@ class SearchSuggestionsPromptView: UIView {
             make.trailing.equalTo(buttonBorderMiddle.snp.leading)
         }
         
-        // enableButton
         enableButton.accessibilityIdentifier = "SearchSuggestionsPromptView.enableButton"
         enableButton.setTitle(UIConstants.strings.searchSuggestionsPromptEnable, for: .normal)
         enableButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.bold)
