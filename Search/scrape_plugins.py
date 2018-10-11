@@ -177,6 +177,7 @@ def saveSearchEngines(engines, searchEngineDefaults):
     with open("SearchEngines.plist", "w") as outfile:
         outfile.write(plist)
 
+
 class Scraper:
     def pluginsFileURL(self): pass
 
