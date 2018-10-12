@@ -377,12 +377,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             let learnMoreButton = UIButton()
             learnMoreButton.setTitle(UIConstants.strings.learnMore, for: UIControl.State.normal)
             learnMoreButton.setTitleColor(UIConstants.colors.settingsLink, for: UIControl.State.normal)
-            if let cellFont = cell.textLabel?.font {
+            if let cellFont = cell.detailTextLabel?.font {
                 learnMoreButton.titleLabel?.font = UIFont(name: cellFont.fontName,size: cellFont.pointSize)
             }
             let tapGesture = UITapGestureRecognizer(target: self, action: selector)
             learnMoreButton.addGestureRecognizer(tapGesture)
             cell.contentView.addSubview(learnMoreButton)
+            //Adjust the offsets to allow the button to fit.
             cell.textLabel?.snp.makeConstraints { make in
                 make.top.equalToSuperview().offset(8)
                 make.left.equalToSuperview().offset(14)
@@ -505,7 +506,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             height += heightForLabel(dummyToggleCell.detailTextLabel!, width: width, text: subtitle)
             if toggle.label == UIConstants.strings.labelSendAnonymousUsageData ||
                 toggle.label == UIConstants.strings.settingsSearchSuggestions  {
-                height += 15
+                height += 10
             }
         }
         return height + 22
