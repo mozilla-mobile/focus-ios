@@ -278,7 +278,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         initializeToggles()
         for (sectionIndex, toggleArray) in toggles{
-            for (cellIndex, blockerToggle) in toggleArray{
+            for (cellIndex, blockerToggle) in toggleArray {
                 let toggle = blockerToggle.toggle
                 toggle.onTintColor = UIConstants.colors.toggleOn
                 toggle.addTarget(self, action: #selector(toggleSwitched(_:)), for: .valueChanged)
@@ -343,7 +343,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     private func toggleForIndexPath(_ indexPath: IndexPath) -> BlockerToggle {
         guard let toggle = toggles[indexPath.section]?[indexPath.row]
-            else {return BlockerToggle(label: "Error", setting: SettingsToggle.blockAds)}
+            else { return BlockerToggle(label: "Error", setting: SettingsToggle.blockAds)}
         return toggle
     }
 
@@ -372,18 +372,35 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         cell.selectionStyle = .none
         //Add "Learn More" button recognition
         if toggle.label == UIConstants.strings.labelSendAnonymousUsageData ||
-            toggle.label == UIConstants.strings.settingsSearchSuggestions{
-            guard let subtitle = toggle.subtitle else { return cell }
+            toggle.label == UIConstants.strings.settingsSearchSuggestions {
             let selector = toggle.label == UIConstants.strings.labelSendAnonymousUsageData ? #selector(tappedLearnMoreFooter) : #selector(tappedLearnMoreSearchSuggestionsFooter)
-            let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.settingsLink])
-            let space = NSAttributedString(string: " ", attributes: [:])
-            let attributedSubtitle = NSMutableAttributedString(string: subtitle)
-            attributedSubtitle.append(space)
-            attributedSubtitle.append(learnMore)
-            cell.detailTextLabel?.attributedText = attributedSubtitle
+            let learnMoreButton = UIButton()
+            learnMoreButton.setTitle(UIConstants.strings.learnMore, for: UIControl.State.normal)
+            learnMoreButton.setTitleColor(UIConstants.colors.settingsLink, for: UIControl.State.normal)
+            if let cellFont = cell.textLabel?.font {
+                learnMoreButton.titleLabel?.font = UIFont(name: cellFont.fontName,size: cellFont.pointSize)
+            }
             let tapGesture = UITapGestureRecognizer(target: self, action: selector)
-            cell.addGestureRecognizer(tapGesture)
+            learnMoreButton.addGestureRecognizer(tapGesture)
+            cell.contentView.addSubview(learnMoreButton)
+            cell.textLabel?.snp.makeConstraints { make in
+                make.top.equalToSuperview().offset(8)
+                make.left.equalToSuperview().offset(14)
+            }
+            cell.detailTextLabel?.snp.makeConstraints { make in
+                if let lineHeight = cell.textLabel?.font.lineHeight {
+                    make.top.equalToSuperview().offset(10 + lineHeight)
+                    make.left.equalToSuperview().offset(14)
+                    make.trailing.equalToSuperview()
+                }
+            }
+            learnMoreButton.snp.makeConstraints { make in
+                make.left.equalToSuperview().offset(14)
+                make.bottom.equalToSuperview().offset(4)
+            }
         }
+        cell.detailTextLabel?.text = toggle.subtitle
+        cell.detailTextLabel?.numberOfLines = 0
         return cell
     }
 
@@ -470,7 +487,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         // Height for the Search Engine and Learn More row.
-        if indexPath.section == 0 { return UITableView.automaticDimension }
         if indexPath.section == 5 ||
             (indexPath.section == 4 && indexPath.row >= 1) {
             return 44
@@ -487,8 +503,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         var height = heightForLabel(dummyToggleCell.textLabel!, width: width, text: toggle.label)
         if let subtitle = toggle.subtitle {
             height += heightForLabel(dummyToggleCell.detailTextLabel!, width: width, text: subtitle)
+            if toggle.label == UIConstants.strings.labelSendAnonymousUsageData ||
+                toggle.label == UIConstants.strings.settingsSearchSuggestions  {
+                height += 15
+            }
         }
-
         return height + 22
     }
 
@@ -604,7 +623,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     @objc private func toggleSwitched(_ sender: UISwitch) {
-        let toggle = toggles.values.filter {$0.values.filter {$0.toggle == sender} != []}[0].values.filter {$0.toggle == sender}[0]
+        let toggle = toggles.values.filter { $0.values.filter { $0.toggle == sender } != []}[0].values.filter { $0.toggle == sender }[0]
 
         func updateSetting() {
             let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: "setting", value: toggle.setting.rawValue)
