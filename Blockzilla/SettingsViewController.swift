@@ -509,6 +509,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 height += 10
             }
         }
+
         return height + 22
     }
 

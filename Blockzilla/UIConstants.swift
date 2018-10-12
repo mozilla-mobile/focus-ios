@@ -233,7 +233,6 @@ struct UIConstants {
         static let aboutSafariBullet1 = NSLocalizedString("About.safariBullet1", value: "Block trackers for improved privacy", comment: "Label on About screen")
         static let aboutSafariBullet2 = NSLocalizedString("About.safariBullet2", value: "Block Web fonts to reduce page size", comment: "Label on About screen")
         static let whatsNewTitle = NSLocalizedString("Settings.whatsNewTitle", value: "What’s New", comment: "Title for What's new screen")
-        static let sumoTopicWhatsNew = NSLocalizedString("Settings.whatsNew", value: "whats-new-focus-ios-7", comment: "URL for what's new in this release")
         static let aboutTopLabel = NSLocalizedString("About.topLabel", value: "%@ puts you in control.", comment: "Label on About screen")
         static let biometricReason = NSLocalizedString("BiometricPrompt.reason", value: "Unlock %@ when re-opening in order to prevent unauthorized access.", comment: "%@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app.")
         static let touchIdReason = NSLocalizedString("touchId.reason", value: "Use Touch ID to return to %@", comment: "%@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app.")
@@ -434,6 +433,7 @@ struct UIConstants {
         static let siriEraseTipTitle = String(format: "Ask Siri to erase %@ history:", AppInfo.productName)
         static let siriEraseTipDescription = "Add Siri shortcut"
         static let shareTrackersTipTitle = "%@ trackers blocked so far"
+        static let sumoTopicWhatsNew = "whats-new-focus-ios-7"
         static let encodingNameUTF8 = "utf-8"
     }
 }
