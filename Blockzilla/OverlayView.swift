@@ -15,7 +15,8 @@ protocol OverlayViewDelegate: class {
 
 class OverlayView: UIView {
     weak var delegate: OverlayViewDelegate?
-    private let searchButton = InsetButton()
+    private var searchButtonGroup = [InsetButton]()
+    private let searchSuggestionsCount = 4 // Five search buttons in total since indexing starts from 0.
     private var presented = false
     private var searchQuery = ""
     private let copyButton = UIButton()
@@ -27,17 +28,21 @@ class OverlayView: UIView {
         super.init(frame: CGRect.zero)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
         
-        searchButton.isHidden = true
-        searchButton.accessibilityIdentifier = "OverlayView.searchButton"
-        searchButton.alpha = 0
-        searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .normal)
-        searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .highlighted)
-        searchButton.backgroundColor = UIConstants.colors.background
-        searchButton.titleLabel?.font = UIConstants.fonts.searchButton
-        searchButton.backgroundColor = UIConstants.colors.background
-        setUpOverlayButton(button: searchButton)
-        searchButton.addTarget(self, action: #selector(didPressSearch), for: .touchUpInside)
-        addSubview(searchButton)
+        for _ in 0...self.searchSuggestionsCount {
+            let searchButton = InsetButton()
+            searchButton.isHidden = true
+            searchButton.accessibilityIdentifier = "OverlayView.searchButton"
+            searchButton.alpha = 0
+            searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .normal)
+            searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .highlighted)
+            searchButton.backgroundColor = UIConstants.colors.background
+            searchButton.titleLabel?.font = UIConstants.fonts.searchButton
+            searchButton.backgroundColor = UIConstants.colors.background
+            setUpOverlayButton(button: searchButton)
+            searchButton.addTarget(self, action: #selector(didPressSearch), for: .touchUpInside)
+            self.searchButtonGroup.append(searchButton)
+            addSubview(searchButton)
+        }
         
         topBorder.isHidden = true
         topBorder.alpha = 0
@@ -46,12 +51,19 @@ class OverlayView: UIView {
         
         topBorder.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
-            make.top.equalTo(searchButton.snp.top)
+            make.top.equalTo(searchButtonGroup[0].snp.top)
             make.height.equalTo(1)
         }
 
-        searchButton.snp.makeConstraints { make in
+        self.searchButtonGroup[0].snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
+        }
+        for i in 1...self.searchSuggestionsCount {
+            self.searchButtonGroup[i].snp.makeConstraints { make in
+                make.top.equalTo(searchButtonGroup[i - 1].snp.bottom)
+                make.leading.trailing.equalTo(safeAreaLayoutGuide)
+                make.height.equalTo(56)
+            }
         }
         
         let padding = UIConstants.layout.searchButtonInset
@@ -69,7 +81,7 @@ class OverlayView: UIView {
         addSubview(findInPageButton)
         
         findInPageButton.snp.makeConstraints { make in
-            make.top.equalTo(searchButton.snp.bottom)
+            make.top.equalTo(searchButtonGroup[searchSuggestionsCount].snp.bottom)
             make.leading.trailing.equalTo(safeAreaLayoutGuide)
             make.height.equalTo(56)
         }
@@ -162,10 +174,12 @@ class OverlayView: UIView {
                 }
                 
                 // Show or hide the search button depending on whether there's entered text.
-                if self.searchButton.isHidden != query.isEmpty {
+                if self.searchButtonGroup[0].isHidden != query.isEmpty {
                     let duration = animated ? UIConstants.layout.searchButtonAnimationDuration : 0
                     self.topBorder.animateHidden(query.isEmpty, duration: duration)
-                    self.searchButton.animateHidden(query.isEmpty, duration: duration)
+                    self.searchButtonGroup.forEach { searchButton in
+                        searchButton.animateHidden(query.isEmpty, duration: duration)
+                    }
                     self.findInPageButton.animateHidden(query.isEmpty || hideFindInPage, duration: duration, completion: {
                         self.updateCopyConstraint(showCopyButton: showCopyButton)
                     })
@@ -173,7 +187,9 @@ class OverlayView: UIView {
                     self.updateCopyConstraint(showCopyButton: showCopyButton)
                 }
 
-                self.setAttributedButtonTitle(phrase: query, button: self.searchButton, localizedStringFormat: UIConstants.strings.searchButton)
+                self.searchButtonGroup.forEach { searchButton in
+                    self.setAttributedButtonTitle(phrase: query, button: searchButton, localizedStringFormat: UIConstants.strings.searchButton)
+                }
                 self.setAttributedButtonTitle(phrase: query, button: self.findInPageButton, localizedStringFormat: UIConstants.strings.findInPageButton)
             }
         }
@@ -182,7 +198,7 @@ class OverlayView: UIView {
     fileprivate func updateCopyConstraint(showCopyButton: Bool) {
         if showCopyButton {
             copyButton.isHidden = false
-            if searchButton.isHidden || searchQuery.isEmpty {
+            if searchButtonGroup[0].isHidden || searchQuery.isEmpty {
                 copyButton.snp.remakeConstraints { make in
                     make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
                     make.height.equalTo(56)
@@ -190,7 +206,7 @@ class OverlayView: UIView {
             } else if findInPageButton.isHidden {
                 copyButton.snp.remakeConstraints { make in
                     make.leading.trailing.equalTo(safeAreaLayoutGuide)
-                    make.top.equalTo(searchButton.snp.bottom)
+                    make.top.equalTo(searchButtonGroup[searchSuggestionsCount].snp.bottom)
                     make.height.equalTo(56)
                 }
             } else {
