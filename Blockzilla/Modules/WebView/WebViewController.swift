@@ -68,6 +68,10 @@ class WebViewController: UIViewController, WebController {
         }
     }
 
+    var pageTitle: String? {
+        return browserView.title
+    }
+    
     var printFormatter: UIPrintFormatter { return browserView.viewPrintFormatter() }
     var scrollView: UIScrollView { return browserView.scrollView }
 
