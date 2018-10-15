@@ -35,7 +35,6 @@ class OverlayView: UIView {
         
         searchSuggestionsPromptView.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
-            make.height.greaterThanOrEqualTo(80)
         }
         
         for _ in 0...self.searchSuggestionsCount {
@@ -56,7 +55,6 @@ class OverlayView: UIView {
 
         topBorder.isHidden = true
         topBorder.alpha = 0
-//        topBorder.backgroundColor = UIConstants.Photon.Grey90.withAlphaComponent(0.4)
         topBorder.backgroundColor = UIColor(rgb: 0x42455A)
         addSubview(topBorder)
         
@@ -117,6 +115,11 @@ class OverlayView: UIView {
         copyButton.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
             make.height.equalTo(56)
+        }
+        
+        if UserDefaults.standard.bool(forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt) {
+            topBorder.backgroundColor = UIConstants.Photon.Grey90.withAlphaComponent(0.4)
+            hideSearchSuggestionsPrompt()
         }
     }
 
@@ -273,7 +276,20 @@ class OverlayView: UIView {
             self.isUserInteractionEnabled = true
         }
     }
+    
+    func setSearchSuggestionsPromptViewDelegate(delegate: SearchSuggestionsPromptViewDelegate) {
+        searchSuggestionsPromptView.delegate = delegate
+    }
+    
+    func hideSearchSuggestionsPrompt() {
+        searchSuggestionsPromptView.isHidden = true
+        searchSuggestionsPromptView.snp.makeConstraints { make in
+            make.height.equalTo(0)
+        }
+        topBorder.backgroundColor = UIConstants.Photon.Grey90.withAlphaComponent(0.4)
+    }
 }
+
 extension URL {
     public func isWebPage() -> Bool {
         let schemes = ["http", "https"]

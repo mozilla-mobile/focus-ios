@@ -6,11 +6,13 @@ import Foundation
 import SnapKit
 
 protocol SearchSuggestionsPromptViewDelegate: class {
-    
+    func searchSuggestionsPromptViewEnable(_ searchSuggestionsPromptView: SearchSuggestionsPromptView)
+    func searchSuggestionsPromptViewDisable(_ searchSuggestionsPromptView: SearchSuggestionsPromptView)
 }
 
 class SearchSuggestionsPromptView: UIView {
-    weak var delegate: SearchSuggestionsPromptViewDelegate? // unsure if ? is correct
+    weak var delegate: SearchSuggestionsPromptViewDelegate?
+    static let respondedToSearchSuggestionsPrompt = "SearchSuggestionPrompt"
     private let promptContainer = UIView()
     private let promptTitle = UILabel()
     private let promptMessage = UILabel()
@@ -47,7 +49,7 @@ class SearchSuggestionsPromptView: UIView {
             make.trailing.equalTo(promptContainer).offset(-10)
         }
         
-        promptMessage.text = UIConstants.strings.searchSuggestionsPromptMessage
+        promptMessage.text = String(format: UIConstants.strings.searchSuggestionsPromptMessage, AppInfo.productName)
         promptMessage.textColor = UIConstants.Photon.Grey10
         promptMessage.font = UIFont.systemFont(ofSize: 14)
         promptMessage.textAlignment = NSTextAlignment.center
@@ -85,6 +87,7 @@ class SearchSuggestionsPromptView: UIView {
         disableButton.setTitle(UIConstants.strings.searchSuggestionsPromptDisable, for: .normal)
         disableButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
         disableButton.layer.cornerRadius = 8.0
+        disableButton.addTarget(self, action: #selector(didPressDisable), for: .touchUpInside)
         addSubview(disableButton)
 
         disableButton.snp.makeConstraints { make in
@@ -97,6 +100,7 @@ class SearchSuggestionsPromptView: UIView {
         enableButton.setTitle(UIConstants.strings.searchSuggestionsPromptEnable, for: .normal)
         enableButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.bold)
         enableButton.layer.cornerRadius = 8.0
+        enableButton.addTarget(self, action: #selector(didPressEnable), for: .touchUpInside)
         addSubview(enableButton)
 
         enableButton.snp.makeConstraints { make in
@@ -108,6 +112,14 @@ class SearchSuggestionsPromptView: UIView {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc private func didPressDisable() {
+        delegate?.searchSuggestionsPromptViewDisable(self)
+    }
+    
+    @objc private func didPressEnable() {
+        delegate?.searchSuggestionsPromptViewEnable(self)
     }
     
     

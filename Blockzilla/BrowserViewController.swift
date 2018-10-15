@@ -130,6 +130,7 @@ class BrowserViewController: UIViewController {
         overlayView.alpha = 0
         overlayView.delegate = self
         overlayView.backgroundColor = UIConstants.colors.overlayBackground
+        overlayView.setSearchSuggestionsPromptViewDelegate(delegate: self)
         mainContainerView.addSubview(overlayView)
 
         background.snp.makeConstraints { make in
@@ -1126,6 +1127,17 @@ extension BrowserViewController: OverlayViewDelegate {
             urlBar.url = overlayURL
         }
         urlBar.dismiss()
+    }
+}
+
+extension BrowserViewController: SearchSuggestionsPromptViewDelegate {
+    func searchSuggestionsPromptViewEnable(_ searchSuggestionsPromptView: SearchSuggestionsPromptView) {
+        UserDefaults.standard.set(true, forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt)
+        overlayView.hideSearchSuggestionsPrompt()
+    }
+    func searchSuggestionsPromptViewDisable(_ searchSuggestionsPromptView: SearchSuggestionsPromptView) {
+        UserDefaults.standard.set(true, forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt)
+        overlayView.hideSearchSuggestionsPrompt()
     }
 }
 
