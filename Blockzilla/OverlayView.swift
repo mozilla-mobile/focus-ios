@@ -37,6 +37,17 @@ class OverlayView: UIView {
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
         }
         
+        topBorder.isHidden = true
+        topBorder.alpha = 0
+        topBorder.backgroundColor = UIColor(rgb: 0x42455A)
+        addSubview(topBorder)
+        
+        topBorder.snp.makeConstraints { make in
+            make.top.equalTo(searchSuggestionsPromptView.snp.bottom)
+            make.leading.trailing.equalTo(self)
+            make.height.equalTo(1)
+        }
+        
         for _ in 0...self.searchSuggestionsCount {
             let searchButton = InsetButton()
             searchButton.isHidden = true
@@ -51,21 +62,6 @@ class OverlayView: UIView {
             searchButton.addTarget(self, action: #selector(didPressSearch), for: .touchUpInside)
             self.searchButtonGroup.append(searchButton)
             addSubview(searchButton)
-        }
-
-        topBorder.isHidden = true
-        topBorder.alpha = 0
-        topBorder.backgroundColor = UIColor(rgb: 0x42455A)
-        addSubview(topBorder)
-        
-        topBorder.snp.makeConstraints { make in
-//            make.leading.trailing.equalTo(self)
-//            make.top.equalTo(searchButton.snp.top)
-//            make.height.equalTo(1)
-            
-            make.top.equalTo(searchSuggestionsPromptView.snp.bottom)
-            make.leading.trailing.equalTo(self)
-            make.height.equalTo(1)
         }
 
         self.searchButtonGroup[0].snp.makeConstraints { make in

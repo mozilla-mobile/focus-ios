@@ -1131,12 +1131,15 @@ extension BrowserViewController: OverlayViewDelegate {
 }
 
 extension BrowserViewController: SearchSuggestionsPromptViewDelegate {
-    func searchSuggestionsPromptViewEnable(_ searchSuggestionsPromptView: SearchSuggestionsPromptView) {
-        UserDefaults.standard.set(true, forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt)
-        overlayView.hideSearchSuggestionsPrompt()
-    }
     func searchSuggestionsPromptViewDisable(_ searchSuggestionsPromptView: SearchSuggestionsPromptView) {
         UserDefaults.standard.set(true, forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt)
+        Settings.set(false, forToggle: SettingsToggle.enableSearchSuggestions)
+        overlayView.hideSearchSuggestionsPrompt()
+    }
+    
+    func searchSuggestionsPromptViewEnable(_ searchSuggestionsPromptView: SearchSuggestionsPromptView) {
+        UserDefaults.standard.set(true, forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt)
+        Settings.set(true, forToggle: SettingsToggle.enableSearchSuggestions)
         overlayView.hideSearchSuggestionsPrompt()
     }
 }

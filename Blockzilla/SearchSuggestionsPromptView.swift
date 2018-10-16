@@ -13,19 +13,20 @@ protocol SearchSuggestionsPromptViewDelegate: class {
 class SearchSuggestionsPromptView: UIView {
     weak var delegate: SearchSuggestionsPromptViewDelegate?
     static let respondedToSearchSuggestionsPrompt = "SearchSuggestionPrompt"
-    private let promptContainer = UIView()
-    private let promptTitle = UILabel()
-    private let promptMessage = UILabel()
-    private let enableButton = InsetButton()
-    private let disableButton = InsetButton()
-    private let buttonBorderTop = UIView()
     private let buttonBorderMiddle = UIView()
+    private let buttonBorderTop = UIView()
+    private let disableButton = InsetButton()
+    private let enableButton = InsetButton()
+    private let promptContainer = UIView()
+    private let promptCornerRadius: CGFloat = 12
+    private let promptMessage = UILabel()
+    private let promptTitle = UILabel()
     
     init() {
         super.init(frame: CGRect.zero)
         
         promptContainer.backgroundColor = UIConstants.Photon.Ink70.withAlphaComponent(0.9)
-        promptContainer.layer.cornerRadius = UIConstants.layout.searchSuggestionsPromptCornerRadius
+        promptContainer.layer.cornerRadius = promptCornerRadius
         addSubview(promptContainer)
         
         promptContainer.snp.makeConstraints{ make in
@@ -121,6 +122,4 @@ class SearchSuggestionsPromptView: UIView {
     @objc private func didPressEnable() {
         delegate?.searchSuggestionsPromptViewEnable(self)
     }
-    
-    
 }
