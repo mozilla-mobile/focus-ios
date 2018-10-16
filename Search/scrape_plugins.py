@@ -36,6 +36,7 @@ def main():
         plugins = json.load(list)
 
     engines = {}
+    searchEngineDefaults = {}
 
     # Import engines from the l10n repos.
     locales = plugins["locales"]
@@ -58,12 +59,14 @@ def main():
             visibleEngines = regions[region]["visibleDefaultEngines"]
             downloadEngines(code, L10nScraper(locale), visibleEngines)
             engines[code] = visibleEngines
+            searchEngineDefaults[code] = regions[region]["searchDefault"]
 
     # Import default engines from the core repo.
     print("adding defaults...")
     defaultEngines = EnScraper().getFileList()
     downloadEngines("default", EnScraper(), defaultEngines)
     engines['default'] = plugins['default']['visibleDefaultEngines']
+    searchEngineDefaults['default'] = plugins['default']['searchDefault']
 
     # Remove Bing.
     if "bing" in engines['default']: engines['default'].remove('bing')
@@ -71,8 +74,8 @@ def main():
     # Make sure fallback directories contain any skipped engines.
     verifyEngines(engines)
 
-    # Write the list of engine names for each locale.
-    writeList(engines)
+    # Save the list of visible engine names and search engine default for each locale.
+    saveSearchEngines(engines, searchEngineDefaults)
 
 def downloadEngines(locale, scraper, engines):
     directory = os.path.join("SearchPlugins", locale)
@@ -142,19 +145,34 @@ def overlayForEngine(engine):
         return None
     return Overlay(path)
 
-def writeList(engines):
+def saveSearchEngines(engines, searchEngineDefaults):
     root = etree.Element('dict')
     for locale in sorted(engines.keys()):
         key = etree.Element('key')
         key.text = locale
         root.append(key)
-        values = etree.Element('array')
-        for engine in engines[locale]:
-            value = etree.Element('string')
-            value.text = engine
-            values.append(value)
-        root.append(values)
 
+        localeDict = etree.Element('dict')
+        searchEngineDefaultKey = etree.Element('key')
+        searchEngineDefaultKey.text = 'searchEngineDefault'
+        localeDict.append(searchEngineDefaultKey)
+
+        searchEngineDefaultValue = etree.Element('string')
+        searchEngineDefaultValue.text = searchEngineDefaults[locale]
+        localeDict.append(searchEngineDefaultValue)
+
+        visibleEnginesKey = etree.Element('key')
+        visibleEnginesKey.text = 'visibleEngines'
+        localeDict.append(visibleEnginesKey)
+
+        visibleEnginesValue = etree.Element('array')
+        for engine in engines[locale]:
+            visibleEngine = etree.Element('string')
+            visibleEngine.text = engine
+            visibleEnginesValue.append(visibleEngine)
+        localeDict.append(visibleEnginesValue)
+        root.append(localeDict)
+    
     plist = etree.tostring(root, encoding="utf-8", pretty_print=True)
     with open("SearchEngines.plist", "w") as outfile:
         outfile.write(plist)
