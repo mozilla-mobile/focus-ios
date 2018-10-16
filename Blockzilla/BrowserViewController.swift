@@ -332,9 +332,6 @@ class BrowserViewController: UIViewController {
         urlBar.showToolset = showsToolsetInURLBar
         mainContainerView.insertSubview(urlBar, aboveSubview: urlBarContainer)
 
-        let dragInteraction = UIDragInteraction(delegate: self)
-        urlBar.addInteraction(dragInteraction)
-        
         urlBar.snp.makeConstraints { make in
             urlBarTopConstraint = make.top.equalTo(mainContainerView.safeAreaLayoutGuide.snp.top).constraint
             topURLBarConstraints = [
@@ -694,6 +691,10 @@ class BrowserViewController: UIViewController {
             UIKeyCommand(input: "]", modifierFlags: .command, action: #selector(BrowserViewController.goForward), discoverabilityTitle: UIConstants.strings.browserForward),
         ]
     }
+    
+    func refreshTipsDisplay() {
+        createHomeView()
+    }
 
     func canShowTips() -> Bool {
         return NSLocale.current.identifier == "en_US" && !AppInfo.isKlar
@@ -708,31 +709,7 @@ class BrowserViewController: UIViewController {
     }
 }
 
-extension BrowserViewController: UIDragInteractionDelegate, UIDropInteractionDelegate {
-    func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
-        guard let url = urlBar.url, let itemProvider = NSItemProvider(contentsOf: url) else { return [] }
-        let dragItem = UIDragItem(itemProvider: itemProvider)
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.drag, object: TelemetryEventObject.searchBar)
-        return [dragItem]
-    }
-
-    func dragInteraction(_ interaction: UIDragInteraction, previewForLifting item: UIDragItem, session: UIDragSession) -> UITargetedDragPreview? {
-        let params = UIDragPreviewParameters()
-        params.backgroundColor = UIColor.clear
-        return UITargetedDragPreview(view: urlBar.draggableUrlTextView, parameters: params)
-    }
- 
-    func dragInteraction(_ interaction: UIDragInteraction, sessionDidMove session: UIDragSession) {
-        for item in session.items {
-            item.previewProvider = {
-                guard let url = self.urlBar.url else {
-                    return UIDragPreview(view: UIView())
-                }
-                return UIDragPreview(for: url)
-            }
-        }
-    }
-    
+extension BrowserViewController: UIDropInteractionDelegate {
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
         return session.canLoadObjects(ofClass: URL.self)
     }
@@ -936,12 +913,7 @@ extension BrowserViewController: URLBarDelegate {
         let utils = OpenUtils(url: url, webViewController: webViewController)
         let items = PageActionSheetItems(url: url)
         let sharePageItem = PhotonActionSheetItem(title: UIConstants.strings.sharePage, iconString: "icon_openwith_active") { action in
-            let shareVC = utils.buildShareViewController(url: url)
-            
-            // Exact frame dimensions taken from presentPhotonActionSheet
-            shareVC.popoverPresentationController?.sourceView = urlBar.pageActionsButton
-            shareVC.popoverPresentationController?.sourceRect = CGRect(x: urlBar.pageActionsButton.frame.width/2, y: urlBar.pageActionsButton.frame.size.height * 0.75, width: 1, height: 1)
-            
+            let shareVC = utils.buildShareViewController(url: url, printFormatter: self.webViewController.printFormatter)
             shareVC.becomeFirstResponder()
             self.present(shareVC, animated: true, completion: nil)
         }
