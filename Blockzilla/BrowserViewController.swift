@@ -22,6 +22,10 @@ class BrowserViewController: UIViewController {
     
     var modalDelegate: ModalDelegate?
 
+      let localiz = NSLocalizedString("testing", comment: "comment")
+    
+    
+    
     fileprivate var keyboardState: KeyboardState?
     fileprivate let browserToolbar = BrowserToolbar()
     fileprivate var homeView: HomeView?
