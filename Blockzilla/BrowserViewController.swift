@@ -22,6 +22,7 @@ class BrowserViewController: UIViewController {
     
     var modalDelegate: ModalDelegate?
 
+    static let lintingCheck = NSLocalizedString("testing", comment: "this is a test")
     fileprivate var keyboardState: KeyboardState?
     fileprivate let browserToolbar = BrowserToolbar()
     fileprivate var homeView: HomeView?
