@@ -31,6 +31,7 @@ class OverlayView: UIView {
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
         
         searchSuggestionsPrompt.backgroundColor = UIConstants.colors.background
+        searchSuggestionsPrompt.clipsToBounds = true
         addSubview(searchSuggestionsPrompt)
         
         searchSuggestionsPrompt.snp.makeConstraints { make in
@@ -39,7 +40,7 @@ class OverlayView: UIView {
         
         topBorder.isHidden = true
         topBorder.alpha = 0
-        topBorder.backgroundColor = UIColor(rgb: 0x42455A)
+        topBorder.backgroundColor = UIConstants.Photon.Grey90.withAlphaComponent(0.4)
         addSubview(topBorder)
         
         topBorder.snp.makeConstraints { make in
@@ -284,24 +285,22 @@ class OverlayView: UIView {
     
     func hideSearchSuggestionsPrompt() {
         topBorder.backgroundColor = UIConstants.Photon.Grey90.withAlphaComponent(0.4)
-        searchSuggestionsPrompt.isHidden = true
-        
-        searchSuggestionsPrompt.snp.remakeConstraints { make in
-            make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
-            make.height.equalTo(0)
-        }
+        searchSuggestionsPrompt.animateHidden(true, duration: UIConstants.layout.searchButtonAnimationDuration, completion: {
+            self.searchSuggestionsPrompt.snp.remakeConstraints { make in
+                make.top.leading.trailing.equalTo(self.safeAreaLayoutGuide)
+                make.height.equalTo(0)
+            }
+        })
     }
     
     func showSearchSuggestionsPrompt() {
         topBorder.backgroundColor = UIColor(rgb: 0x42455A)
-        searchSuggestionsPrompt.isHidden = false
-        
         searchSuggestionsPrompt.snp.remakeConstraints { make in
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
         }
+        searchSuggestionsPrompt.animateHidden(false, duration: UIConstants.layout.searchButtonAnimationDuration)
     }
 }
-
 extension URL {
     public func isWebPage() -> Bool {
         let schemes = ["http", "https"]
