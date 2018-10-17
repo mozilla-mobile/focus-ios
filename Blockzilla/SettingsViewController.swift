@@ -651,6 +651,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             let instructionsViewController = SafariInstructionsViewController()
             navigationController!.pushViewController(instructionsViewController, animated: true)
             updateSetting()
+        case .enableSearchSuggestions:
+            UserDefaults.standard.set(true, forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt)
+            updateSetting()
         default:
             updateSetting()
         }

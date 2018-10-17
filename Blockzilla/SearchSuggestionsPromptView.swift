@@ -6,8 +6,7 @@ import Foundation
 import SnapKit
 
 protocol SearchSuggestionsPromptViewDelegate: class {
-    func searchSuggestionsPromptViewEnable(_ searchSuggestionsPromptView: SearchSuggestionsPromptView)
-    func searchSuggestionsPromptViewDisable(_ searchSuggestionsPromptView: SearchSuggestionsPromptView)
+    func searchSuggestionsPromptView(_ searchSuggestionsPromptView: SearchSuggestionsPromptView, didEnable: Bool)
 }
 
 class SearchSuggestionsPromptView: UIView {
@@ -116,10 +115,10 @@ class SearchSuggestionsPromptView: UIView {
     }
     
     @objc private func didPressDisable() {
-        delegate?.searchSuggestionsPromptViewDisable(self)
+        delegate?.searchSuggestionsPromptView(self, didEnable: false)
     }
     
     @objc private func didPressEnable() {
-        delegate?.searchSuggestionsPromptViewEnable(self)
+        delegate?.searchSuggestionsPromptView(self, didEnable: true)
     }
 }

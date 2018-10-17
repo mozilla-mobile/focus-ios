@@ -17,10 +17,10 @@ class OverlayView: UIView {
     weak var delegate: OverlayViewDelegate?
     private let copyButton = UIButton()
     private let findInPageButton = InsetButton()
+    private let searchSuggestionsPrompt = SearchSuggestionsPromptView()
     private let searchButton = InsetButton()
     private var searchButtonGroup = [InsetButton]()
     private let searchSuggestionsCount = 4 // Five search buttons in total since indexing starts from 0.
-    private let searchSuggestionsPromptView = SearchSuggestionsPromptView()
     private let topBorder = UIView()
     public var currentURL = ""
     private var presented = false
@@ -30,10 +30,10 @@ class OverlayView: UIView {
         super.init(frame: CGRect.zero)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
         
-        searchSuggestionsPromptView.backgroundColor = UIConstants.colors.background
-        addSubview(searchSuggestionsPromptView)
+        searchSuggestionsPrompt.backgroundColor = UIConstants.colors.background
+        addSubview(searchSuggestionsPrompt)
         
-        searchSuggestionsPromptView.snp.makeConstraints { make in
+        searchSuggestionsPrompt.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
         }
         
@@ -43,7 +43,7 @@ class OverlayView: UIView {
         addSubview(topBorder)
         
         topBorder.snp.makeConstraints { make in
-            make.top.equalTo(searchSuggestionsPromptView.snp.bottom)
+            make.top.equalTo(searchSuggestionsPrompt.snp.bottom)
             make.leading.trailing.equalTo(self)
             make.height.equalTo(1)
         }
@@ -111,11 +111,6 @@ class OverlayView: UIView {
         copyButton.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
             make.height.equalTo(56)
-        }
-        
-        if UserDefaults.standard.bool(forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt) {
-            topBorder.backgroundColor = UIConstants.Photon.Grey90.withAlphaComponent(0.4)
-            hideSearchSuggestionsPrompt()
         }
     }
 
@@ -201,6 +196,16 @@ class OverlayView: UIView {
                 } else {
                     self.updateCopyConstraint(showCopyButton: showCopyButton)
                 }
+                
+                if query.isEmpty {
+                    self.hideSearchSuggestionsPrompt()
+                } else {
+                    if UserDefaults.standard.bool(forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt) {
+                        self.hideSearchSuggestionsPrompt()
+                    } else {
+                        self.showSearchSuggestionsPrompt()
+                    }
+                }
 
                 self.searchButtonGroup.forEach { searchButton in
                     self.setAttributedButtonTitle(phrase: query, button: searchButton, localizedStringFormat: UIConstants.strings.searchButton)
@@ -274,15 +279,26 @@ class OverlayView: UIView {
     }
     
     func setSearchSuggestionsPromptViewDelegate(delegate: SearchSuggestionsPromptViewDelegate) {
-        searchSuggestionsPromptView.delegate = delegate
+        searchSuggestionsPrompt.delegate = delegate
     }
     
     func hideSearchSuggestionsPrompt() {
-        searchSuggestionsPromptView.isHidden = true
-        searchSuggestionsPromptView.snp.makeConstraints { make in
+        topBorder.backgroundColor = UIConstants.Photon.Grey90.withAlphaComponent(0.4)
+        searchSuggestionsPrompt.isHidden = true
+        
+        searchSuggestionsPrompt.snp.remakeConstraints { make in
+            make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
             make.height.equalTo(0)
         }
-        topBorder.backgroundColor = UIConstants.Photon.Grey90.withAlphaComponent(0.4)
+    }
+    
+    func showSearchSuggestionsPrompt() {
+        topBorder.backgroundColor = UIColor(rgb: 0x42455A)
+        searchSuggestionsPrompt.isHidden = false
+        
+        searchSuggestionsPrompt.snp.remakeConstraints { make in
+            make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
+        }
     }
 }
 

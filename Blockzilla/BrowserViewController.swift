@@ -91,7 +91,6 @@ class BrowserViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setupBiometrics()
         view.addSubview(mainContainerView)
         
@@ -1131,15 +1130,9 @@ extension BrowserViewController: OverlayViewDelegate {
 }
 
 extension BrowserViewController: SearchSuggestionsPromptViewDelegate {
-    func searchSuggestionsPromptViewDisable(_ searchSuggestionsPromptView: SearchSuggestionsPromptView) {
+    func searchSuggestionsPromptView(_ searchSuggestionsPromptView: SearchSuggestionsPromptView, didEnable: Bool) {
         UserDefaults.standard.set(true, forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt)
-        Settings.set(false, forToggle: SettingsToggle.enableSearchSuggestions)
-        overlayView.hideSearchSuggestionsPrompt()
-    }
-    
-    func searchSuggestionsPromptViewEnable(_ searchSuggestionsPromptView: SearchSuggestionsPromptView) {
-        UserDefaults.standard.set(true, forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt)
-        Settings.set(true, forToggle: SettingsToggle.enableSearchSuggestions)
+        Settings.set(didEnable, forToggle: SettingsToggle.enableSearchSuggestions)
         overlayView.hideSearchSuggestionsPrompt()
     }
 }
