@@ -26,7 +26,7 @@ class OverlayView: UIView {
     init() {
         super.init(frame: CGRect.zero)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
-        
+
         searchButton.isHidden = true
         searchButton.accessibilityIdentifier = "OverlayView.searchButton"
         searchButton.alpha = 0
@@ -38,12 +38,12 @@ class OverlayView: UIView {
         setUpOverlayButton(button: searchButton)
         searchButton.addTarget(self, action: #selector(didPressSearch), for: .touchUpInside)
         addSubview(searchButton)
-        
+
         topBorder.isHidden = true
         topBorder.alpha = 0
         topBorder.backgroundColor = UIConstants.Photon.Grey90.withAlphaComponent(0.4)
         addSubview(topBorder)
-        
+
         topBorder.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
             make.top.equalTo(searchButton.snp.top)
@@ -53,7 +53,7 @@ class OverlayView: UIView {
         searchButton.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
         }
-        
+
         let padding = UIConstants.layout.searchButtonInset
         findInPageButton.titleLabel?.font = UIConstants.fonts.copyButton
         findInPageButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
@@ -67,7 +67,7 @@ class OverlayView: UIView {
             findInPageButton.contentHorizontalAlignment = .left
         }
         addSubview(findInPageButton)
-        
+
         findInPageButton.snp.makeConstraints { make in
             make.top.equalTo(searchButton.snp.bottom)
             make.leading.trailing.equalTo(safeAreaLayoutGuide)
@@ -85,7 +85,7 @@ class OverlayView: UIView {
         }
         copyButton.addTarget(self, action: #selector(didPressCopy), for: .touchUpInside)
         addSubview(copyButton)
-        
+
         copyButton.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
             make.height.equalTo(56)
@@ -103,7 +103,7 @@ class OverlayView: UIView {
         } else {
             button.contentHorizontalAlignment = .left
         }
-        
+
         let padding = UIConstants.layout.searchButtonInset
         button.imageEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         if UIView.userInterfaceLayoutDirection(for: button.semanticContentAttribute) == .rightToLeft {
@@ -112,7 +112,7 @@ class OverlayView: UIView {
             button.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding * 2, bottom: padding, right: padding)
         }
     }
-    
+
     /**
      
      Localize and style 'phrase' text for use as a button title.
@@ -136,15 +136,15 @@ class OverlayView: UIView {
 
         return attributedString
     }
-    
+
     func setAttributedButtonTitle(phrase: String, button: InsetButton, localizedStringFormat: String) {
-        
+
         let attributedString = getAttributedButtonTitle(phrase: phrase,
                                                         localizedStringFormat: localizedStringFormat)
-        
+
         button.setAttributedTitle(attributedString, for: .normal)
     }
-    
+
     func setSearchQuery(query: String, animated: Bool, hideFindInPage: Bool) {
         searchQuery = query
         let query = query.trimmingCharacters(in: .whitespaces)
@@ -154,13 +154,13 @@ class OverlayView: UIView {
         UIPasteboard.general.urlAsync() { handoffUrl in
             DispatchQueue.main.async {
                 if let url = handoffUrl, url.isWebPage() {
-                    let attributedTitle = NSMutableAttributedString(string: UIConstants.strings.copiedLink, attributes: [.foregroundColor : UIConstants.Photon.Grey10])
-                    let attributedCopiedUrl = NSMutableAttributedString(string: url.absoluteString, attributes: [.font: UIConstants.fonts.copyButtonQuery, .foregroundColor : UIConstants.Photon.Grey10])
+                    let attributedTitle = NSMutableAttributedString(string: UIConstants.strings.copiedLink, attributes: [.foregroundColor: UIConstants.Photon.Grey10])
+                    let attributedCopiedUrl = NSMutableAttributedString(string: url.absoluteString, attributes: [.font: UIConstants.fonts.copyButtonQuery, .foregroundColor: UIConstants.Photon.Grey10])
                     attributedTitle.append(attributedCopiedUrl)
                     self.copyButton.setAttributedTitle(attributedTitle, for: .normal)
                     showCopyButton = url.isWebPage()
                 }
-                
+
                 // Show or hide the search button depending on whether there's entered text.
                 if self.searchButton.isHidden != query.isEmpty {
                     let duration = animated ? UIConstants.layout.searchButtonAnimationDuration : 0
@@ -260,7 +260,7 @@ extension OverlayView: KeyboardHelperDelegate {
 }
 
 extension UIPasteboard {
-    
+
     //
     // As of iOS 11: macOS/iOS's Universal Clipboard feature causes UIPasteboard to block.
     //

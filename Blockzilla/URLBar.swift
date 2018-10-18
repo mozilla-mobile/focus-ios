@@ -30,7 +30,7 @@ class URLBar: UIView {
     var inBrowsingMode: Bool = false
     var shouldPresent = false
     fileprivate(set) var isEditing = false
-    
+
     private let cancelButton = InsetButton()
     fileprivate let deleteButton = InsetButton()
     fileprivate let domainCompletion = DomainCompletion(completionSources: [TopDomainsCompletionSource(), CustomCompletionSource()])
@@ -46,7 +46,7 @@ class URLBar: UIView {
     private let textAndLockContainer = UIView()
     private let collapsedUrlAndLockWrapper = UIView()
     private let collapsedTrackingProtectionBadge = CollapsedTrackingProtectionBadge()
-    
+
     let pageActionsButton = InsetButton()
     let shieldIcon = TrackingProtectionBadge()
 
@@ -63,7 +63,7 @@ class URLBar: UIView {
     override var canBecomeFirstResponder: Bool {
         return true
     }
-    
+
     convenience init() {
         self.init(frame: CGRect.zero)
 
@@ -73,12 +73,12 @@ class URLBar: UIView {
 
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(urlBarDidLongPress))
         self.addGestureRecognizer(longPress)
-        
+
         addSubview(toolset.backButton)
         addSubview(toolset.forwardButton)
         addSubview(toolset.stopReloadButton)
         addSubview(toolset.settingsButton)
-        
+
         urlBarBorderView.backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.1)
         urlBarBorderView.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
         urlBarBorderView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
@@ -116,7 +116,7 @@ class URLBar: UIView {
         lockIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         lockIcon.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         textAndLockContainer.addSubview(lockIcon)
-        
+
         pageActionsButton.isHidden = true
         pageActionsButton.alpha = 0
         pageActionsButton.setImage(#imageLiteral(resourceName: "icon_page_action"), for: .normal)
@@ -124,7 +124,7 @@ class URLBar: UIView {
         pageActionsButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         pageActionsButton.addTarget(self, action: #selector(didPressPageActions), for: .touchUpInside)
         pageActionsButton.accessibilityIdentifier = "URLBar.pageActionsButton"
-        pageActionsButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 8, bottom: 8 ,right: 10)
+        pageActionsButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 8, bottom: 8, right: 10)
         textAndLockContainer.addSubview(pageActionsButton)
 
         smallLockIcon.alpha = 0
@@ -143,7 +143,7 @@ class URLBar: UIView {
         truncatedUrlText.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         truncatedUrlText.isScrollEnabled = false
         truncatedUrlText.accessibilityIdentifier = "Collapsed.truncatedUrlText"
-        
+
         collapsedTrackingProtectionBadge.alpha = 0
         collapsedTrackingProtectionBadge.tintColor = .white
         collapsedTrackingProtectionBadge.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
@@ -176,12 +176,12 @@ class URLBar: UIView {
         urlText.accessibilityIdentifier = "URLBar.urlText"
         urlText.placeholder = UIConstants.strings.urlTextPlaceholder
         textAndLockContainer.addSubview(urlText)
-        
+
         cancelButton.isHidden = true
         cancelButton.alpha = 0
         let myImage = UIImage(named: "icon_cancel")
         cancelButton.setImage(myImage, for: .normal)
-        
+
         cancelButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         cancelButton.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
         cancelButton.accessibilityIdentifier = "URLBar.cancelButton"
@@ -190,7 +190,7 @@ class URLBar: UIView {
                                                       bottom: UIConstants.layout.urlBarMargin,
                                                       right: UIConstants.layout.urlBarMargin)
         addSubview(cancelButton)
-        
+
         deleteButton.isHidden = true
         deleteButton.alpha = 0
         deleteButton.setImage(#imageLiteral(resourceName: "icon_delete"), for: .normal)
@@ -208,11 +208,10 @@ class URLBar: UIView {
         progressBar.alpha = 0
         addSubview(progressBar)
 
-        var toolsetButtonWidthMultiplier : CGFloat {
+        var toolsetButtonWidthMultiplier: CGFloat {
             if UIDevice.current.userInterfaceIdiom == .pad {
                 return 0.04
-            }
-            else {
+            } else {
                 return 0.05
             }
         }
@@ -233,7 +232,7 @@ class URLBar: UIView {
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
         }
-        
+
         toolset.settingsButton.snp.makeConstraints { make in
             make.trailing.equalTo(safeAreaLayoutGuide)
             make.centerY.equalTo(self)
@@ -245,7 +244,7 @@ class URLBar: UIView {
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
         }
-        
+
         urlBarBorderView.snp.makeConstraints { make in
             make.leading.greaterThanOrEqualTo(shieldIcon.snp.trailing).priority(.required)
             make.leading.equalTo(shieldIcon.snp.trailing).priority(.medium)
@@ -253,7 +252,7 @@ class URLBar: UIView {
             make.trailing.equalTo(deleteButton.snp.leading).priority(.medium)
             make.height.equalTo(42).priority(.medium)
             make.top.bottom.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
-            
+
             isEditingConstraints.append(make.height.equalTo(48).priority(.high).constraint)
             isEditingConstraints.append(make.leading.greaterThanOrEqualToSuperview().offset(UIConstants.layout.urlBarMargin).constraint)
             isEditingConstraints.append(make.leading.greaterThanOrEqualTo(cancelButton.snp.trailing).constraint)
@@ -282,13 +281,13 @@ class URLBar: UIView {
             centeredURLConstraints.append(make.centerX.equalToSuperview().constraint)
             fullWidthURLTextConstraints.append(make.trailing.equalToSuperview().constraint)
         }
-        
+
         pageActionsButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.trailing.equalTo(textAndLockContainer).priority(.required)
             make.width.equalTo(UIConstants.layout.urlBarButtonTargetSize).priority(900)
-            
-            hidePageActionsConstraints.append(contentsOf:[
+
+            hidePageActionsConstraints.append(contentsOf: [
                 make.size.equalTo(0).constraint
                 ])
         }
@@ -319,7 +318,7 @@ class URLBar: UIView {
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
         }
-        
+
         cancelButton.snp.makeConstraints { make in
             make.centerY.equalTo(self)
             make.leading.equalTo(safeAreaLayoutGuide.snp.leading)
@@ -351,7 +350,7 @@ class URLBar: UIView {
                 make.width.equalTo(0).constraint
             ])
         }
-        
+
         collapsedTrackingProtectionBadge.snp.makeConstraints { make in
             make.leading.equalTo(self).offset(10)
             make.width.height.equalTo(smallLockIcon)
@@ -374,19 +373,19 @@ class URLBar: UIView {
 
         centeredURLConstraints.forEach { $0.deactivate() }
         showToolsetConstraints.forEach { $0.deactivate() }
-        
+
     }
-    
+
     @objc public func activateTextField() {
         urlText.isUserInteractionEnabled = true
         urlText.becomeFirstResponder()
     }
-    
+
     public func dismissTextField() {
         urlText.isUserInteractionEnabled = false
         urlText.endEditing(true)
     }
-    
+
     @objc private func displayURLContextMenu(sender: UILongPressGestureRecognizer) {
         if sender.state == .began {
             self.becomeFirstResponder()
@@ -394,37 +393,37 @@ class URLBar: UIView {
             UIMenuController.shared.setMenuVisible(true, animated: true)
         }
     }
-    
+
     @objc func addCustomURL() {
         guard let url = self.url else { return }
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.quickAddCustomDomainButton)
         delegate?.urlBar(self, didAddCustomURL: url)
     }
-    
+
     @objc func copyToClipboard() {
         UIPasteboard.general.string = self.url?.absoluteString ?? ""
     }
-    
+
     @objc func paste(clipboardString: String) {
         present()
         urlText.text = clipboardString
         activateTextField()
     }
-    
+
     @objc func pasteAndGo(clipboardString: String) {
         present()
         delegate?.urlBarDidActivate(self)
         delegate?.urlBar(self, didSubmitText: clipboardString)
-            
+
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.pasteAndGo)
     }
-    
+
     @objc func pasteAndGoFromContextMenu() {
         guard let clipboardString = UIPasteboard.general.string else { return }
         present()
         delegate?.urlBarDidActivate(self)
         delegate?.urlBar(self, didSubmitText: clipboardString)
-        
+
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.pasteAndGo)
     }
 
@@ -531,7 +530,7 @@ class URLBar: UIView {
         let duration = UIConstants.layout.urlBarTransitionAnimationDuration / 2
 
         pageActionsButton.animateHidden(!visible, duration: duration)
-        
+
         self.layoutIfNeeded()
 
         UIView.animate(withDuration: duration) {
@@ -586,14 +585,14 @@ class URLBar: UIView {
             self.layoutIfNeeded()
         }
     }
-    
+
     /* This separate @objc function is necessary as selector methods pass sender by default. Calling
      dismiss() directly from a selector would pass the sender as "completion" which results in a crash. */
     @objc func cancelPressed() {
         dismiss()
     }
-    
-    func dismiss(completion: (() -> ())? = nil) {
+
+    func dismiss(completion: (() -> Void)? = nil) {
         guard isEditing else {
             completion?()
             return
@@ -602,10 +601,10 @@ class URLBar: UIView {
         isEditing = false
         updateLockIcon()
         updateUrlIcons()
-        let _ = urlText.resignFirstResponder()
+        _ = urlText.resignFirstResponder()
         delegate?.urlBarDidDismiss(self)
         setTextToURL()
-        
+
         cancelButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         hideCancelConstraints.forEach { $0.activate() }
 
@@ -690,7 +689,7 @@ class URLBar: UIView {
     @objc private func didTapShieldIcon() {
         delegate?.urlBarDidTapShield(self)
     }
-    
+
     @objc func urlBarDidLongPress(sender: UILongPressGestureRecognizer) {
         if sender.state == .began {
             delegate?.urlBarDidLongPress(self)
@@ -707,16 +706,16 @@ class URLBar: UIView {
 
         delegate?.urlBarDidDeactivate(self)
     }
-    
+
     @objc private func didPressPageActions() {
         delegate?.urlBarDidPressPageActions(self)
     }
 
     fileprivate func setTextToURL(displayFullUrl: Bool = false) {
-        var fullUrl: String? = nil
-        var truncatedURL: String? = nil
-        var displayText: String? = nil
-        
+        var fullUrl: String?
+        var truncatedURL: String?
+        var displayText: String?
+
         if let url = url {
             // Strip the username/password to prevent domain spoofing.
             var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
@@ -758,7 +757,7 @@ class URLBar: UIView {
         smallLockIcon.alpha = visible ? collapseAlpha : 0
         self.layoutIfNeeded()
     }
-    
+
     func updateTrackingProtectionBadge(trackingStatus: TrackingProtectionStatus) {
         shieldIcon.updateState(trackingStatus: trackingStatus)
         collapsedTrackingProtectionBadge.updateState(trackingStatus: trackingStatus)
@@ -775,7 +774,7 @@ extension URLBar: AutocompleteTextFieldDelegate {
             present()
             delegate?.urlBarDidActivate(self)
         }
-        
+
         // When text.characters.count == 0, it is the HomeView
         if let text = autocompleteTextField.text, !isEditing, text.count == 0 {
             shouldPresent = true
@@ -785,19 +784,19 @@ extension URLBar: AutocompleteTextFieldDelegate {
     }
 
     func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool {
-        
+
         if let autocompleteText = autocompleteTextField.text, autocompleteText != userInputText {
             Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.autofill))
         }
         userInputText = nil
-        
+
         delegate?.urlBar(self, didSubmitText: autocompleteTextField.text ?? "")
         return true
     }
 
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didTextChange text: String) {
         userInputText = text
-        
+
         autocompleteTextField.rightView?.isHidden = text.isEmpty
 
         if !isEditing && shouldPresent {
@@ -810,13 +809,13 @@ extension URLBar: AutocompleteTextFieldDelegate {
 }
 
 private class URLTextField: AutocompleteTextField {
-    
+
     // Disable user interaction on resign so that touch and hold on URL bar creates menu
     override func resignFirstResponder() -> Bool {
         isUserInteractionEnabled = false
         return super.resignFirstResponder()
     }
-    
+
     override var placeholder: String? {
         didSet {
             attributedPlaceholder = NSAttributedString(string: placeholder ?? "", attributes: [.foregroundColor: UIConstants.colors.urlTextPlaceholder])
@@ -847,7 +846,7 @@ private class URLTextField: AutocompleteTextField {
     override fileprivate func rightViewRect(forBounds bounds: CGRect) -> CGRect {
         return super.rightViewRect(forBounds: bounds).offsetBy(dx: -UIConstants.layout.urlBarWidthInset, dy: 0)
     }
-    
+
     private func textFieldDidEndEditing(_ textField: UITextField) {
         textField.layoutIfNeeded()
     }
@@ -865,7 +864,7 @@ class TrackingProtectionBadge: UIView {
 
     func setupViews() {
         trackingProtectionOff.alpha = 0
-        
+
         addSubview(trackingProtectionOff)
         addSubview(trackingProtectionOn)
 
@@ -881,11 +880,11 @@ class TrackingProtectionBadge: UIView {
             make.width.equalTo(UIConstants.layout.urlBarButtonImageSize)
         }
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func updateState(trackingStatus: TrackingProtectionStatus) {
         switch trackingStatus {
         case .on:
@@ -902,11 +901,11 @@ class CollapsedTrackingProtectionBadge: TrackingProtectionBadge {
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
-    
+
     override func setupViews() {
         addSubview(trackingProtectionOff)
         addSubview(trackingProtectionOn)
-        
+
         trackingProtectionOn.snp.makeConstraints { make in
             make.leading.centerY.equalTo(self)
             make.width.height.equalTo(18)
@@ -917,7 +916,7 @@ class CollapsedTrackingProtectionBadge: TrackingProtectionBadge {
             make.width.height.equalTo(18)
         }
     }
-    
+
     override func updateState(trackingStatus: TrackingProtectionStatus) {
         switch trackingStatus {
         case .on:
@@ -928,7 +927,7 @@ class CollapsedTrackingProtectionBadge: TrackingProtectionBadge {
             trackingProtectionOn.alpha = 0
         }
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

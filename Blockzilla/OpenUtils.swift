@@ -19,7 +19,7 @@ class OpenUtils: NSObject {
 
     func buildShareViewController(url: URL) -> UIActivityViewController {
         var activityItems: [Any] = [url]
-        
+
         activityItems.append(self)
 
         let printFormatter = UIPrintFormatter()
@@ -27,7 +27,7 @@ class OpenUtils: NSObject {
         printInfo.jobName = url.absoluteString
         printInfo.outputType = .general
         activityItems.append(printInfo)
-        
+
         let renderer = UIPrintPageRenderer()
         renderer.addPrintFormatter(printFormatter, startingAtPageAt: 0)
         activityItems.append(renderer)
@@ -44,13 +44,13 @@ class OpenUtils: NSObject {
             if !completed {
                 return
             }
-            
+
             // Bug 1392418 - When copying a url using the share extension there are 2 urls in the pasteboard.
             // Make sure the pasteboard only has one url.
             if let url = UIPasteboard.general.urls?.first {
                 UIPasteboard.general.urls = [url]
             }
-            
+
             if self.isPasswordManagerActivityType(activityType.map { $0.rawValue }) {
                 Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.autofill)
                 if let logins = returnedItems {
@@ -67,7 +67,7 @@ extension OpenUtils: UIActivityItemSource {
     func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
         return selectedURL
     }
-    
+
     // IMPORTANT: This method needs Swift compiler optimization DISABLED to prevent a nasty
     // crash from happening in release builds. It seems as though the check for `nil` may
     // get removed by the optimizer which leads to a crash when that happens.
@@ -79,7 +79,7 @@ extension OpenUtils: UIActivityItemSource {
             return selectedURL
         }
     }
-    
+
     func activityViewController(_ activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: UIActivity.ActivityType?) -> String {
         if let type = activityType, isPasswordManagerActivityType(type.rawValue) {
             return browserFillIdentifier
@@ -99,14 +99,14 @@ private extension OpenUtils {
             || (activityType == "com.lastpass.ilastpass.LastPassExt")
             || (activityType == "in.sinew.Walletx.WalletxExt")
             || (activityType == "com.8bit.bitwarden.find-login-action-extension")
-        
+
     }
-    
+
     func findLoginExtensionItem() {
         // Add 1Password to share sheet
         webViewController.createPasswordManagerExtensionItem()
     }
-    
+
     func fillPasswords(returnedItems: [AnyObject]) {
         webViewController.fillPasswords(returnedItems: returnedItems)
     }
