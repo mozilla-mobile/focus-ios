@@ -297,7 +297,7 @@ class BrowserViewController: UIViewController {
 
     private func createHomeView() {
         let homeView: HomeView
-        if canShowTips() && shouldShowTips() {
+        if canShowTips() {
             homeView = HomeView(tipManager: tipManager)
         }
         else {
@@ -332,9 +332,6 @@ class BrowserViewController: UIViewController {
         urlBar.showToolset = showsToolsetInURLBar
         mainContainerView.insertSubview(urlBar, aboveSubview: urlBarContainer)
 
-        let dragInteraction = UIDragInteraction(delegate: self)
-        urlBar.addInteraction(dragInteraction)
-        
         urlBar.snp.makeConstraints { make in
             urlBarTopConstraint = make.top.equalTo(mainContainerView.safeAreaLayoutGuide.snp.top).constraint
             topURLBarConstraints = [
@@ -394,36 +391,34 @@ class BrowserViewController: UIViewController {
             if findInPageBar == nil {
                 Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.findInPageBar)
                 
-                urlBar.dismiss()
-                let findInPageBar = FindInPageBar()
-                self.findInPageBar = findInPageBar
-                let fillerView = UIView()
-                self.fillerView = fillerView
-                fillerView.backgroundColor = UIConstants.Photon.Grey70
-                findInPageBar.text = text
-                findInPageBar.delegate = self
-                
-                alertStackView.addArrangedSubview(findInPageBar)
-                mainContainerView.insertSubview(fillerView, belowSubview: browserToolbar)
-
-                updateViewConstraints()
-                
-                UIView.animate(withDuration: 2.0, animations: {
-                    findInPageBar.snp.makeConstraints { make in
+                urlBar.dismiss {
+                    // Start our animation after urlBar dismisses
+                    let findInPageBar = FindInPageBar()
+                    self.findInPageBar = findInPageBar
+                    let fillerView = UIView()
+                    self.fillerView = fillerView
+                    fillerView.backgroundColor = UIConstants.Photon.Grey70
+                    findInPageBar.text = text
+                    findInPageBar.delegate = self
+                    
+                    self.alertStackView.addArrangedSubview(findInPageBar)
+                    self.mainContainerView.insertSubview(fillerView, belowSubview: self.browserToolbar)
+                    
+                    findInPageBar.snp.makeConstraints{ make in
                         make.height.equalTo(UIConstants.ToolbarHeight)
                         make.leading.trailing.equalTo(self.alertStackView)
                         make.bottom.equalTo(self.alertStackView.snp.bottom)
                     }
-                }) { (_) in
                     fillerView.snp.makeConstraints { make in
                         make.top.equalTo(self.alertStackView.snp.bottom)
                         make.bottom.equalTo(self.view)
                         make.leading.trailing.equalTo(self.alertStackView)
                     }
+
+                    self.view.layoutIfNeeded()
+                    self.findInPageBar?.becomeFirstResponder()
                 }
             }
-            
-            self.findInPageBar?.becomeFirstResponder()
         } else if let findInPageBar = self.findInPageBar {
             findInPageBar.endEditing(true)
             webViewController.evaluate("__firefox__.findDone()", completion: nil)
@@ -620,7 +615,7 @@ class BrowserViewController: UIViewController {
             self.urlBar.showToolset = self.showsToolsetInURLBar
 
             if self.homeView == nil && self.scrollBarState != .expanded {
-                self.urlBar.collapseUrlBar(expandAlpha: 0, collapseAlpha: 1)
+                self.hideToolbars()
             }
 
             self.browserToolbar.animateHidden(self.homeView != nil || self.showsToolsetInURLBar, duration: coordinator.transitionDuration, completion: {
@@ -700,45 +695,6 @@ class BrowserViewController: UIViewController {
     func canShowTips() -> Bool {
         return NSLocale.current.identifier == "en_US" && !AppInfo.isKlar
     }
-
-    var showTrackerSemaphore = DispatchSemaphore(value: 1)
-    func flipCoinForShowTrackerButton(percent: Int = 50, userDefaults:UserDefaults = UserDefaults.standard) {
-        showTrackerSemaphore.wait()
-
-        var shouldShowTipsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
-
-        if shouldShowTipsToUser == nil {
-            // Check to see if the user was previously opted into the experiment
-            shouldShowTipsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD) as! Bool?
-
-            if shouldShowTipsToUser != nil {
-                // Remove the old flag
-                userDefaults.removeObject(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD)
-            }
-
-            if shouldShowTipsToUser == true {
-                // User has already been opted into the experiment, continue showing the share button
-                userDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
-            } else {
-                // User has not been put into a bucket for determining if it should be shown
-                // 50% chance they get put into the group that sees the share button
-                // arc4random_uniform(100) returns an integer 0 through 99 (inclusive)
-                if arc4random_uniform(100) < percent {
-                    userDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
-                } else {
-                    userDefaults.set(false, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
-                }
-            }
-        }
-
-        showTrackerSemaphore.signal()
-    }
-
-    func shouldShowTips(percent: Int = 50, userDefaults:UserDefaults = UserDefaults.standard) -> Bool {
-        flipCoinForShowTrackerButton(percent:percent, userDefaults:userDefaults)
-        let shouldShowTipsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
-        return shouldShowTipsToUser == true
-    }
     
     private func getNumberOfLifetimeTrackersBlocked(userDefaults: UserDefaults = UserDefaults.standard) -> Int {
         return userDefaults.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
@@ -749,31 +705,7 @@ class BrowserViewController: UIViewController {
     }
 }
 
-extension BrowserViewController: UIDragInteractionDelegate, UIDropInteractionDelegate {
-    func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
-        guard let url = urlBar.url, let itemProvider = NSItemProvider(contentsOf: url) else { return [] }
-        let dragItem = UIDragItem(itemProvider: itemProvider)
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.drag, object: TelemetryEventObject.searchBar)
-        return [dragItem]
-    }
-
-    func dragInteraction(_ interaction: UIDragInteraction, previewForLifting item: UIDragItem, session: UIDragSession) -> UITargetedDragPreview? {
-        let params = UIDragPreviewParameters()
-        params.backgroundColor = UIColor.clear
-        return UITargetedDragPreview(view: urlBar.draggableUrlTextView, parameters: params)
-    }
- 
-    func dragInteraction(_ interaction: UIDragInteraction, sessionDidMove session: UIDragSession) {
-        for item in session.items {
-            item.previewProvider = {
-                guard let url = self.urlBar.url else {
-                    return UIDragPreview(view: UIView())
-                }
-                return UIDragPreview(for: url)
-            }
-        }
-    }
-    
+extension BrowserViewController: UIDropInteractionDelegate {
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
         return session.canLoadObjects(ofClass: URL.self)
     }
@@ -977,7 +909,12 @@ extension BrowserViewController: URLBarDelegate {
         let utils = OpenUtils(url: url, webViewController: webViewController)
         let items = PageActionSheetItems(url: url)
         let sharePageItem = PhotonActionSheetItem(title: UIConstants.strings.sharePage, iconString: "icon_openwith_active") { action in
-            let shareVC = utils.buildShareViewController(url: url)
+            let shareVC = utils.buildShareViewController(url: url, printFormatter: self.webViewController.printFormatter)
+            
+            // Exact frame dimensions taken from presentPhotonActionSheet
+            shareVC.popoverPresentationController?.sourceView = urlBar.pageActionsButton
+            shareVC.popoverPresentationController?.sourceRect = CGRect(x: urlBar.pageActionsButton.frame.width/2, y: urlBar.pageActionsButton.frame.size.height * 0.75, width: 1, height: 1)
+            
             shareVC.becomeFirstResponder()
             self.present(shareVC, animated: true, completion: nil)
         }
@@ -1077,6 +1014,8 @@ extension BrowserViewController: BrowserToolsetDelegate {
 extension BrowserViewController: HomeViewDelegate {
     
     func shareTrackerStatsButtonTapped() {
+        guard let trackerStatsShareButton = homeView?.trackerStatsShareButton else { return }
+        
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.share, object: TelemetryEventObject.trackerStatsShareButton)
         
         let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
@@ -1085,6 +1024,10 @@ extension BrowserViewController: HomeViewDelegate {
         let shareTrackerStatsText = "%@, the privacy browser from Mozilla, has already blocked %@ trackers for me. Fewer ads and trackers following me around means faster browsing! Get Focus for yourself here"
         let text = String(format: shareTrackerStatsText + " ", AppInfo.productName, String(numberOfTrackersBlocked))
         let shareController = UIActivityViewController(activityItems: [text, appStoreUrl as Any], applicationActivities: nil)
+        // Exact frame dimensions taken from presentPhotonActionSheet
+        shareController.popoverPresentationController?.sourceView = trackerStatsShareButton
+        shareController.popoverPresentationController?.sourceRect = CGRect(x: trackerStatsShareButton.frame.width/2, y: 0, width: 1, height: 1)
+        
         present(shareController, animated: true)
     }
     

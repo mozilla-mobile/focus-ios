@@ -69,10 +69,13 @@ class URLBar: UIView {
 
         let singleTap = UITapGestureRecognizer(target: self, action: #selector(didSingleTap(sender:)))
         singleTap.numberOfTapsRequired = 1
-        addGestureRecognizer(singleTap)
+        textAndLockContainer.addGestureRecognizer(singleTap)
 
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(urlBarDidLongPress))
-        self.addGestureRecognizer(longPress)
+        textAndLockContainer.addGestureRecognizer(longPress)
+
+        let dragInteraction = UIDragInteraction(delegate: self)
+        textAndLockContainer.addInteraction(dragInteraction)
         
         addSubview(toolset.backButton)
         addSubview(toolset.forwardButton)
@@ -183,7 +186,7 @@ class URLBar: UIView {
         cancelButton.setImage(myImage, for: .normal)
         
         cancelButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
-        cancelButton.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
+        cancelButton.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
         cancelButton.accessibilityIdentifier = "URLBar.cancelButton"
         cancelButton.contentEdgeInsets = UIEdgeInsets(top: UIConstants.layout.urlBarMargin,
                                                       left: UIConstants.layout.urlBarMargin,
@@ -531,7 +534,7 @@ class URLBar: UIView {
         let duration = UIConstants.layout.urlBarTransitionAnimationDuration / 2
 
         pageActionsButton.animateHidden(!visible, duration: duration)
-        shieldIcon.animateHidden(!visible, duration: duration)
+        
         self.layoutIfNeeded()
 
         UIView.animate(withDuration: duration) {
@@ -556,6 +559,7 @@ class URLBar: UIView {
         shouldPresent = false
         updateLockIcon()
         updateUrlIcons()
+        shieldIcon.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         toolset.settingsButton.isEnabled = true
         delegate?.urlBarDidFocus(self)
 
@@ -585,9 +589,18 @@ class URLBar: UIView {
             self.layoutIfNeeded()
         }
     }
-
-    @objc func dismiss() {
-        guard isEditing else { return }
+    
+    /* This separate @objc function is necessary as selector methods pass sender by default. Calling
+     dismiss() directly from a selector would pass the sender as "completion" which results in a crash. */
+    @objc func cancelPressed() {
+        dismiss()
+    }
+    
+    func dismiss(completion: (() -> ())? = nil) {
+        guard isEditing else {
+            completion?()
+            return
+        }
 
         isEditing = false
         updateLockIcon()
@@ -600,14 +613,15 @@ class URLBar: UIView {
         hideCancelConstraints.forEach { $0.activate() }
 
         if inBrowsingMode {
+            shieldIcon.animateHidden(false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
             deleteButton.animateHidden(false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         } else {
             deactivate()
         }
 
         self.layoutIfNeeded()
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
 
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
             if self.inBrowsingMode {
                 self.isEditingConstraints.forEach { $0.deactivate() }
                 // Reveal the URL bar buttons on iPad/landscape.
@@ -622,6 +636,8 @@ class URLBar: UIView {
             }
 
             self.layoutIfNeeded()
+        }) { ( _ ) in
+            completion?()
         }
     }
 
@@ -794,6 +810,33 @@ extension URLBar: AutocompleteTextFieldDelegate {
 
         delegate?.urlBar(self, didEnterText: text)
     }
+}
+
+extension URLBar: UIDragInteractionDelegate {
+    func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
+        guard let url = url, let itemProvider = NSItemProvider(contentsOf: url) else { return [] }
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.drag, object: TelemetryEventObject.searchBar)
+        return [dragItem]
+    }
+    
+    func dragInteraction(_ interaction: UIDragInteraction, previewForLifting item: UIDragItem, session: UIDragSession) -> UITargetedDragPreview? {
+        let params = UIDragPreviewParameters()
+        params.backgroundColor = UIColor.clear
+        return UITargetedDragPreview(view: draggableUrlTextView, parameters: params)
+    }
+    
+    func dragInteraction(_ interaction: UIDragInteraction, sessionDidMove session: UIDragSession) {
+        for item in session.items {
+            item.previewProvider = {
+                guard let url = self.url else {
+                    return UIDragPreview(view: UIView())
+                }
+                return UIDragPreview(for: url)
+            }
+        }
+    }
+
 }
 
 private class URLTextField: AutocompleteTextField {
