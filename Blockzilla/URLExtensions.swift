@@ -124,9 +124,9 @@ extension URL {
 
         if keyValues?.count ?? 0 > 0 {
             for pair in keyValues! {
-                let kv = pair.components(separatedBy: "=")
-                if kv.count > 1 {
-                    results[kv[0]] = kv[1]
+                let keyVals = pair.components(separatedBy: "=")
+                if keyVals.count > 1 {
+                    results[keyVals[0]] = keyVals[1]
                 }
             }
         }

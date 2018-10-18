@@ -79,7 +79,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell
-        if (indexPath.section == 0) {
+        if indexPath.section == 0 {
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: "enableCell")
             cell.textLabel?.text = UIConstants.strings.autocompleteLabel
 
