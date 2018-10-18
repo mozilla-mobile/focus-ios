@@ -186,7 +186,7 @@ class URLBar: UIView {
         cancelButton.setImage(myImage, for: .normal)
         
         cancelButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
-        cancelButton.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
+        cancelButton.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
         cancelButton.accessibilityIdentifier = "URLBar.cancelButton"
         cancelButton.contentEdgeInsets = UIEdgeInsets(top: UIConstants.layout.urlBarMargin,
                                                       left: UIConstants.layout.urlBarMargin,
@@ -589,9 +589,18 @@ class URLBar: UIView {
             self.layoutIfNeeded()
         }
     }
-
-    @objc func dismiss() {
-        guard isEditing else { return }
+    
+    /* This separate @objc function is necessary as selector methods pass sender by default. Calling
+     dismiss() directly from a selector would pass the sender as "completion" which results in a crash. */
+    @objc func cancelPressed() {
+        dismiss()
+    }
+    
+    func dismiss(completion: (() -> ())? = nil) {
+        guard isEditing else {
+            completion?()
+            return
+        }
 
         isEditing = false
         updateLockIcon()
@@ -611,8 +620,8 @@ class URLBar: UIView {
         }
 
         self.layoutIfNeeded()
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
 
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
             if self.inBrowsingMode {
                 self.isEditingConstraints.forEach { $0.deactivate() }
                 // Reveal the URL bar buttons on iPad/landscape.
@@ -627,6 +636,8 @@ class URLBar: UIView {
             }
 
             self.layoutIfNeeded()
+        }) { ( _ ) in
+            completion?()
         }
     }
 
