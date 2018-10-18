@@ -38,6 +38,7 @@ protocol WebControllerDelegate: class {
     func webControllerShouldScrollToTop(_ controller: WebController) -> Bool
     func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus)
     func webController(_ controller: WebController, didUpdateFindInPageResults currentResult: Int?, totalResults: Int?)
+    func webController(_ controller: WebController, didOpenAMPURL url: URL)
 }
 
 class WebViewController: UIViewController, WebController {
@@ -91,6 +92,7 @@ class WebViewController: UIViewController, WebController {
         trackingProtectionStatus = .on(TPPageStats())
         browserView = WKWebView()
         setupWebview()
+        self.browserView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
     }
 
     // Browser proxy methods
@@ -201,6 +203,18 @@ class WebViewController: UIViewController, WebController {
     
     func evaluate(_ javascript: String, completion: ((Any?, Error?) -> Void)?) {
         browserView.evaluateJavaScript(javascript, completionHandler: completion)
+    }
+
+    override func viewDidLoad() {
+        self.browserView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
+    }
+
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == #keyPath(WKWebView.url) {
+            if let url = browserView.url {
+                self.delegate?.webController(self, didOpenAMPURL: url)
+            }
+        }
     }
 }
 
