@@ -171,6 +171,7 @@ class OverlayView: UIView {
     func setSearchQuery(query: String, animated: Bool, hideFindInPage: Bool) {
         searchQuery = query
         let query = query.trimmingCharacters(in: .whitespaces)
+        let duration = animated ? UIConstants.layout.searchButtonAnimationDuration : 0
 
         var showCopyButton = false
 
@@ -186,7 +187,6 @@ class OverlayView: UIView {
                 
                 // Show or hide the search button depending on whether there's entered text.
                 if self.searchButtonGroup[0].isHidden != query.isEmpty {
-                    let duration = animated ? UIConstants.layout.searchButtonAnimationDuration : 0
                     self.topBorder.animateHidden(query.isEmpty, duration: duration)
                     self.searchButtonGroup.forEach { searchButton in
                         searchButton.animateHidden(query.isEmpty, duration: duration)
@@ -199,12 +199,15 @@ class OverlayView: UIView {
                 }
                 
                 if query.isEmpty {
-                    self.hideSearchSuggestionsPrompt()
+                    self.hideSearchSuggestionsPrompt(duration: duration)
+                    //print("hiding because query is empty")
                 } else {
                     if UserDefaults.standard.bool(forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt) {
-                        self.hideSearchSuggestionsPrompt()
+                        self.hideSearchSuggestionsPrompt(duration: duration)
+                        //print("hiding because user already responded")
                     } else {
-                        self.showSearchSuggestionsPrompt()
+                        self.showSearchSuggestionsPrompt(duration: duration)
+                        //print("showing because there's some text in the bar & user hasn't responded yet")
                     }
                 }
 
@@ -283,9 +286,9 @@ class OverlayView: UIView {
         searchSuggestionsPrompt.delegate = delegate
     }
     
-    func hideSearchSuggestionsPrompt() {
+    func hideSearchSuggestionsPrompt(duration: TimeInterval = 0) {
         topBorder.backgroundColor = UIConstants.Photon.Grey90.withAlphaComponent(0.4)
-        searchSuggestionsPrompt.animateHidden(true, duration: UIConstants.layout.searchButtonAnimationDuration, completion: {
+        searchSuggestionsPrompt.animateHidden(true, duration: duration, completion: {
             self.searchSuggestionsPrompt.snp.remakeConstraints { make in
                 make.top.leading.trailing.equalTo(self.safeAreaLayoutGuide)
                 make.height.equalTo(0)
@@ -293,12 +296,12 @@ class OverlayView: UIView {
         })
     }
     
-    func showSearchSuggestionsPrompt() {
+    func showSearchSuggestionsPrompt(duration: TimeInterval = 0) {
         topBorder.backgroundColor = UIColor(rgb: 0x42455A)
         searchSuggestionsPrompt.snp.remakeConstraints { make in
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
         }
-        searchSuggestionsPrompt.animateHidden(false, duration: UIConstants.layout.searchButtonAnimationDuration)
+        searchSuggestionsPrompt.animateHidden(false, duration: duration)
     }
 }
 extension URL {

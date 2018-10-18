@@ -29,8 +29,8 @@ class SearchSuggestionsPromptView: UIView {
         addSubview(promptContainer)
         
         promptContainer.snp.makeConstraints{ make in
-            make.top.equalTo(self).offset(8)
-            make.bottom.equalTo(self).offset(-8)
+            make.top.equalTo(self).offset(8).priority(.medium)
+            make.bottom.equalTo(self).offset(-8).priority(.medium)
             make.leading.equalTo(self).offset(6)
             make.trailing.equalTo(self).offset(-6)
         }
@@ -44,7 +44,7 @@ class SearchSuggestionsPromptView: UIView {
         promptContainer.addSubview(promptTitle)
 
         promptTitle.snp.makeConstraints{ make in
-            make.top.equalTo(promptContainer).offset(20)
+            make.top.equalTo(promptContainer).offset(20).priority(.medium)
             make.leading.equalTo(promptContainer).offset(10)
             make.trailing.equalTo(promptContainer).offset(-10)
         }
@@ -58,7 +58,7 @@ class SearchSuggestionsPromptView: UIView {
         promptContainer.addSubview(promptMessage)
         
         promptMessage.snp.makeConstraints { make in
-            make.top.equalTo(promptTitle.snp.bottom).offset(5)
+            make.top.equalTo(promptTitle.snp.bottom).offset(5).priority(.medium)
             make.leading.equalTo(promptContainer).offset(10)
             make.trailing.equalTo(promptContainer).offset(-10)
         }
@@ -67,19 +67,19 @@ class SearchSuggestionsPromptView: UIView {
         addSubview(buttonBorderTop)
         
         buttonBorderTop.snp.makeConstraints { make in
-            make.top.equalTo(promptMessage.snp.bottom).offset(20)
+            make.top.equalTo(promptMessage.snp.bottom).offset(20).priority(.medium)
             make.leading.trailing.equalTo(promptContainer)
-            make.height.equalTo(0.5)
+            make.height.equalTo(0.5).priority(.medium)
         }
         
         buttonBorderMiddle.backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         addSubview(buttonBorderMiddle)
         
         buttonBorderMiddle.snp.makeConstraints { make in
-            make.top.equalTo(buttonBorderTop.snp.bottom)
-            make.bottom.equalTo(promptContainer)
+            make.top.equalTo(buttonBorderTop.snp.bottom).priority(.medium)
+            make.bottom.equalTo(promptContainer).priority(.medium)
             make.width.equalTo(0.5)
-            make.height.equalTo(40)
+            make.height.equalTo(40).priority(.medium)
             make.centerX.equalTo(self)
         }
 

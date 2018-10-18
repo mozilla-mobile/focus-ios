@@ -1134,7 +1134,7 @@ extension BrowserViewController: SearchSuggestionsPromptViewDelegate {
     func searchSuggestionsPromptView(_ searchSuggestionsPromptView: SearchSuggestionsPromptView, didEnable: Bool) {
         UserDefaults.standard.set(true, forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt)
         Settings.set(didEnable, forToggle: SettingsToggle.enableSearchSuggestions)
-        overlayView.hideSearchSuggestionsPrompt()
+        overlayView.hideSearchSuggestionsPrompt(duration: 0)
     }
 }
 
