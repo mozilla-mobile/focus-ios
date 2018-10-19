@@ -91,7 +91,7 @@ class SettingsTableViewAccessoryCell: SettingsTableViewCell {
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     enum Section: String {
         case privacy, search, siri, integration, mozilla
-        
+
         var numberOfRows: Int {
             switch self {
             case .privacy:
@@ -105,7 +105,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 return UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) ? 3 : 2
             }
         }
-        
+
         var headerText: String? {
             switch self {
             case .privacy: return UIConstants.strings.toggleSectionPrivacy
@@ -119,48 +119,45 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         static func getSections() -> [Section] {
             if #available(iOS 12.0, *) {
                 return [.privacy, .search, .siri, integration, .mozilla]
-            }
-            else {
+            } else {
                 return [.privacy, .search, integration, .mozilla]
             }
         }
     }
-    
-    
 
     enum BiometryType {
         enum Status {
             case hasIdentities
             case hasNoIdentities
-            
+
             init(_ hasIdentities: Bool) {
                 self = hasIdentities ? .hasIdentities : .hasNoIdentities
             }
         }
-        
+
         case faceID(Status), touchID(Status), none
-        
+
         private static let NO_IDENTITY_ERROR = -7
-        
+
         var hasBiometry: Bool {
             switch self {
             case .touchID, .faceID: return true
             case .none: return false
             }
         }
-        
+
         var hasIdentities: Bool {
             switch self {
             case .touchID(Status.hasIdentities), .faceID(Status.hasIdentities): return true
             default: return false
             }
         }
-        
+
         init(context: LAContext) {
             var biometricError: NSError?
             guard context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &biometricError) else { self = .none; return }
             let status = Status(biometricError.map({ $0.code != BiometryType.NO_IDENTITY_ERROR }) ?? true)
-            
+
             switch context.biometryType {
             case .faceID: self = .faceID(status)
             case .touchID: self = .touchID(status)
@@ -168,7 +165,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         }
     }
-    
+
     fileprivate let tableView = UITableView(frame: .zero, style: .grouped)
 
     // Hold a strong reference to the block detector so it isn't deallocated
@@ -183,16 +180,16 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         Section.getSections()
     }()
 
-    private var toggles = [Int : BlockerToggle]()
+    private var toggles = [Int: BlockerToggle]()
 
-    private var initialToggles : [Int : BlockerToggle]  {
+    private var initialToggles: [Int: BlockerToggle] {
         let blockFontsToggle = BlockerToggle(label: UIConstants.strings.labelBlockFonts, setting: SettingsToggle.blockFonts)
         let usageDataSubtitle = String(format: UIConstants.strings.detailTextSendUsageData, AppInfo.productName)
         let usageDataToggle = BlockerToggle(label: UIConstants.strings.labelSendAnonymousUsageData, setting: SettingsToggle.sendAnonymousUsageData, subtitle: usageDataSubtitle)
         let safariToggle = BlockerToggle(label: UIConstants.strings.toggleSafari, setting: SettingsToggle.safari)
         let homeScreenTipsToggle = BlockerToggle(label: UIConstants.strings.toggleHomeScreenTips, setting: SettingsToggle.showHomeScreenTips)
-        
-        var toggles = [Int : BlockerToggle]()
+
+        var toggles = [Int: BlockerToggle]()
         if let biometricToggle = createBiometricLoginToggleIfAvailable() {
             toggles = [
                 1: blockFontsToggle,
@@ -209,12 +206,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 6: homeScreenTipsToggle
             ]
         }
-        
+
         if let safariRow = toggles.first(where: { $1 == safariToggle })?.key {
             if !UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) {
                 toggles.removeValue(forKey: safariRow + 1)
             }
-            
+
             if #available(iOS 12.0, *) {
                 toggles.removeValue(forKey: safariRow)
                 toggles[(safariRow + Section.siri.numberOfRows)] = safariToggle
@@ -260,7 +257,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         navigationBar.barTintColor = UIConstants.colors.settingsNavBar
         navigationBar.tintColor = UIConstants.colors.navigationButton
         navigationBar.titleTextAttributes = [.foregroundColor: UIConstants.colors.navigationTitle]
-        
+
         let navBarBorderRect = CGRect(x: 0.0, y: 0.0, width: 1.0, height: 0.25)
         UIGraphicsBeginImageContextWithOptions(navBarBorderRect.size, false, 0.0)
         UIConstants.colors.settingsNavBorder.setFill()
@@ -269,7 +266,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             UIGraphicsEndImageContext()
             navigationController?.navigationBar.shadowImage = borderImage
         }
-        
+
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSettings))
         doneButton.tintColor = UIConstants.Photon.Magenta60
         navigationItem.leftBarButtonItem = doneButton
@@ -278,7 +275,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         highlightsButton?.image = UIImage(named: "highlight")
         highlightsButton?.accessibilityIdentifier = "SettingsViewController.whatsNewButton"
         navigationItem.rightBarButtonItem = highlightsButton
-        
+
         if whatsNew.shouldShowWhatsNew() {
             highlightsButton?.tintColor = UIConstants.colors.whatsNew
         }
@@ -318,7 +315,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 return
             }
             let siriIndexPath = IndexPath(row: 0, section: siriSection)
-            tableView.scrollToRow(at: siriIndexPath, at: .none , animated: false)
+            tableView.scrollToRow(at: siriIndexPath, at: .none, animated: false)
             shouldScrollToSiri = false
         }
     }
@@ -335,13 +332,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
-    
+
     fileprivate func createBiometricLoginToggleIfAvailable() -> BlockerToggle? {
         guard biometryType.hasBiometry else { return nil }
-        
+
         let label: String
         let subtitle: String
-        
+
         switch biometryType {
             case .faceID:
                 label = UIConstants.strings.labelFaceIDLogin
@@ -353,7 +350,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 // Unknown biometric type
                 return nil
         }
-        
+
         let toggle = BlockerToggle(label: label, setting: SettingsToggle.biometricLogin, subtitle: subtitle)
         toggle.toggle.isEnabled = biometryType.hasIdentities
         return toggle
@@ -385,7 +382,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.selectionStyle = .none
             return cell
         }
-        
+
         var cell: UITableViewCell
         switch sections[indexPath.section] {
         case .search:
@@ -455,10 +452,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             } else {
                 let toggle = toggleForIndexPath(indexPath)
                 cell = createToggleCell(for: toggle)
-                
+
                 if toggle.label == UIConstants.strings.labelSendAnonymousUsageData {
                     let selector = #selector(tappedLearnMoreFooter)
-                    let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.settingsLink])
+                    let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor: UIConstants.colors.settingsLink])
                     let space = NSAttributedString(string: " ", attributes: [:])
                     guard let subtitle = toggle.subtitle else { return cell }
                     let attributedSubtitle = NSMutableAttributedString(string: subtitle)
@@ -523,7 +520,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         var groupingOffset = UIConstants.layout.settingsDefaultTitleOffset
-        
+
         if sections[section] == .privacy {
             groupingOffset = UIConstants.layout.settingsFirstTitleOffset
         }
@@ -574,12 +571,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             if indexPath.row == 0 {
                 SiriShortcuts().manageSiri(for: SiriShortcuts.activityType.erase, in: self)
                 UserDefaults.standard.set(false, forKey: TipManager.TipKey.siriEraseTip)
-            }
-            else if indexPath.row == 1 {
+            } else if indexPath.row == 1 {
                 SiriShortcuts().manageSiri(for: SiriShortcuts.activityType.eraseAndOpen, in: self)
                 UserDefaults.standard.set(false, forKey: TipManager.TipKey.siriEraseTip)
-            }
-            else {
+            } else {
                 let siriFavoriteVC = SiriFavoriteViewController()
                 navigationController?.pushViewController(siriFavoriteVC, animated: true)
             }
@@ -624,13 +619,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     @objc private func aboutClicked() {
         navigationController!.pushViewController(AboutViewController(), animated: true)
     }
-    
+
     @objc private func whatsNewClicked() {
         highlightsButton?.tintColor = UIColor.white
-        
+
         guard let url = SupportUtils.URLForTopic(topic: "whats-new-focus-ios-7") else { return }
         navigationController?.pushViewController(SettingsContentViewController(url: url), animated: true)
-        
+
         whatsNew.didShowWhatsNew()
     }
 
@@ -646,7 +641,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             ContentBlockerHelper.shared.reload()
             Utils.reloadSafariContentBlocker()
         }
-        
+
         // First check if the user changed the anonymous usage data setting and follow that choice right
         // here. Otherwise it will be delayed until the application restarts.
         if toggle.setting == .sendAnonymousUsageData {
@@ -664,7 +659,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         default:
             updateSetting()
         }
-        
+
         // This update must occur after the setting has been updated to properly take effect.
         if toggle.setting == .showHomeScreenTips {
             if let browserViewController = presentingViewController as? BrowserViewController {
@@ -685,7 +680,7 @@ extension SettingsViewController: INUIAddVoiceShortcutViewControllerDelegate {
     func addVoiceShortcutViewController(_ controller: INUIAddVoiceShortcutViewController, didFinishWith voiceShortcut: INVoiceShortcut?, error: Error?) {
         controller.dismiss(animated: true, completion: nil)
     }
-    
+
     @available(iOS 12.0, *)
     func addVoiceShortcutViewControllerDidCancel(_ controller: INUIAddVoiceShortcutViewController) {
         controller.dismiss(animated: true, completion: nil)
@@ -697,11 +692,11 @@ extension SettingsViewController: INUIEditVoiceShortcutViewControllerDelegate {
     func editVoiceShortcutViewController(_ controller: INUIEditVoiceShortcutViewController, didUpdate voiceShortcut: INVoiceShortcut?, error: Error?) {
         controller.dismiss(animated: true, completion: nil)
     }
-    
+
     func editVoiceShortcutViewController(_ controller: INUIEditVoiceShortcutViewController, didDeleteVoiceShortcutWithIdentifier deletedVoiceShortcutIdentifier: UUID) {
         controller.dismiss(animated: true, completion: nil)
     }
-    
+
     func editVoiceShortcutViewControllerDidCancel(_ controller: INUIEditVoiceShortcutViewController) {
         controller.dismiss(animated: true, completion: nil)
     }

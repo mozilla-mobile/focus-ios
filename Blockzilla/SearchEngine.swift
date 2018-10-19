@@ -12,20 +12,20 @@ class SearchEngine: NSObject, NSCoding {
     private let searchTemplate: String
     private let suggestionsTemplate: String?
 
-    init(name: String, image: UIImage?, searchTemplate: String, suggestionsTemplate: String?, isCustom:Bool = false) {
+    init(name: String, image: UIImage?, searchTemplate: String, suggestionsTemplate: String?, isCustom: Bool = false) {
         self.name = name
         self.image = image ?? SearchEngine.generateImage(name: name)
         self.searchTemplate = searchTemplate
         self.suggestionsTemplate = suggestionsTemplate
         self.isCustom = isCustom
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         guard let name = aDecoder.decodeObject(forKey: "name") as? String,
             let searchTemplate = aDecoder.decodeObject(forKey: "searchTemplate") as? String else {
                 return nil
         }
-        
+
         self.name = name
         self.searchTemplate = searchTemplate
         image = aDecoder.decodeObject(forKey: "image") as? UIImage
@@ -41,29 +41,28 @@ class SearchEngine: NSObject, NSCoding {
         let localeString = NSLocale.current.identifier
         guard let urlString = searchTemplate.replacingOccurrences(of: "{searchTerms}", with: escaped)
             .replacingOccurrences(of: "{moz:locale}", with: localeString)
-            .addingPercentEncoding(withAllowedCharacters: .urlAllowed) else
-        {
+            .addingPercentEncoding(withAllowedCharacters: .urlAllowed) else {
             assertionFailure("Invalid search URL")
             return nil
         }
 
         return URL(string: urlString)
     }
-    
+
     func encode(with aCoder: NSCoder) {
         aCoder.encode(name, forKey: "name")
         aCoder.encode(image, forKey: "image")
         aCoder.encode(searchTemplate, forKey: "searchTemplate")
         aCoder.encode(suggestionsTemplate, forKey: "suggestionsTemplate")
     }
-    
+
     func getNameOrCustom() -> String {
         return isCustom ? "custom" : name
     }
-    
+
     private static func generateImage(name: String) -> UIImage {
         let faviconLetter = name.uppercased()[name.startIndex]
-        
+
         var faviconImage = UIImage()
 
         let faviconLabel = SmartLabel(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
@@ -76,7 +75,7 @@ class SearchEngine: NSObject, NSCoding {
         faviconLabel.layer.render(in: UIGraphicsGetCurrentContext()!)
         faviconImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
-        
+
         return faviconImage
     }
 }
