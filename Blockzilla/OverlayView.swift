@@ -4,6 +4,7 @@
 
 import Foundation
 import SnapKit
+import Telemetry
 
 protocol OverlayViewDelegate: class {
     func overlayViewDidTouchEmptyArea(_ overlayView: OverlayView)
@@ -11,6 +12,18 @@ protocol OverlayViewDelegate: class {
     func overlayView(_ overlayView: OverlayView, didSearchForQuery query: String)
     func overlayView(_ overlayView: OverlayView, didSubmitText text: String)
     func overlayView(_ overlayView: OverlayView, didSearchOnPage query: String)
+}
+
+class IndexedInsetButton: InsetButton {
+    private var index: Int = 0
+
+    func setIndex(_ i:Int){
+        index = i
+    }
+
+    func getIndex() -> Int{
+        return index
+    }
 }
 
 class OverlayView: UIView {
@@ -28,8 +41,8 @@ class OverlayView: UIView {
         super.init(frame: CGRect.zero)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
         
-        for _ in 0...self.searchSuggestionsCount {
-            let searchButton = InsetButton()
+        for i in 0...self.searchSuggestionsCount {
+            let searchButton = IndexedInsetButton()
             searchButton.isHidden = true
             searchButton.accessibilityIdentifier = "OverlayView.searchButton"
             searchButton.alpha = 0
@@ -38,8 +51,9 @@ class OverlayView: UIView {
             searchButton.backgroundColor = UIConstants.colors.background
             searchButton.titleLabel?.font = UIConstants.fonts.searchButton
             searchButton.backgroundColor = UIConstants.colors.background
+            searchButton.setIndex(i)
             setUpOverlayButton(button: searchButton)
-            searchButton.addTarget(self, action: #selector(didPressSearch), for: .touchUpInside)
+            searchButton.addTarget(self, action: #selector(didPressSearch(Sender:)), for: .touchUpInside)
             self.searchButtonGroup.append(searchButton)
             addSubview(searchButton)
         }
@@ -222,7 +236,9 @@ class OverlayView: UIView {
         layoutIfNeeded()
     }
 
-    @objc private func didPressSearch() {
+    @objc private func didPressSearch(Sender: IndexedInsetButton) {
+        let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: "search_suggestion_used_at_index", value: String(Sender.getIndex()))
+        Telemetry.default.recordEvent(telemetryEvent)
         delegate?.overlayView(self, didSearchForQuery: searchQuery)
     }
     @objc private func didPressCopy() {

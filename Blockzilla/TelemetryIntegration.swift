@@ -66,4 +66,6 @@ class TelemetryEventObject {
     public static let requestDesktopTip = "request_desktop_tip"
     public static let siriFavoriteTip = "siri_favorite_tip"
     public static let siriEraseTip = "siri_erase_tip"
+    public static let searchSuggestionPrompt = "search_suggestion_prompt"
+    public static let searchSuggestionUsed = "search_suggestion_used_at_index"
 }
