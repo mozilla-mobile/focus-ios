@@ -4,54 +4,10 @@
 
 import Alamofire
 import Foundation
-//import Shared
+
 let SearchSuggestClientErrorDomain = "org.mozilla.firefox.SearchSuggestClient"
 let SearchSuggestClientErrorInvalidEngine = 0
 let SearchSuggestClientErrorInvalidResponse = 1
-
-private let TypeSuggest = "application/x-suggestions+json"
-
-extension CharacterSet {
-    public static let URLAllowed = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=%")
-    public static let SearchTermsAllowed = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789*-_.")
-}
-
-class SuggestionCreator {
-    fileprivate let suggestTemplate: String?
-    
-    fileprivate let SearchTermComponent = "{searchTerms}"
-    fileprivate let LocaleTermComponent = "{moz:locale}"
-    
-    init(engine: SearchEngine) {
-        //self.suggestTemplate = suggestTemplate
-        self.suggestTemplate = "https://www.google.com/complete/search?client=firefox&q={searchTerms}"
-    }
-    
-    /**
-     * Returns the search suggestion URL for the given query.
-     */
-    func suggestURLForQuery(_ query: String) -> URL? {
-        if let suggestTemplate = suggestTemplate {
-            if let escapedQuery = query.addingPercentEncoding(withAllowedCharacters: .SearchTermsAllowed) {
-                // Escape the search template as well in case it contains not-safe characters like symbols
-                let templateAllowedSet = NSMutableCharacterSet()
-                templateAllowedSet.formUnion(with: .URLAllowed)
-                
-                // Allow brackets since we use them in our template as our insertion point
-                templateAllowedSet.formUnion(with: CharacterSet(charactersIn: "{}"))
-                
-                if let encodedSearchTemplate = suggestTemplate.addingPercentEncoding(withAllowedCharacters: templateAllowedSet as CharacterSet) {
-                    let localeString = Locale.current.identifier
-                    let urlString = encodedSearchTemplate
-                        .replacingOccurrences(of: SearchTermComponent, with: escapedQuery, options: .literal, range: nil)
-                        .replacingOccurrences(of: LocaleTermComponent, with: localeString, options: .literal, range: nil)
-                    return URL(string: urlString)
-                }
-            }
-        }
-        return nil
-    }
-}
 
 
 /*
@@ -61,10 +17,9 @@ class SuggestionCreator {
  * Query callbacks that must run even if they are cancelled should wrap their contents in `withExtendendLifetime`.
  */
 class SearchSuggestClient {
-    fileprivate let suggestionCreator: SuggestionCreator
     fileprivate weak var request: Request?
-    
-     lazy fileprivate var alamofire: SessionManager = {
+    private var engine: SearchEngine
+    lazy fileprivate var alamofire: SessionManager = {
          let configuration = URLSessionConfiguration.ephemeral
          var defaultHeaders = SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
          configuration.httpAdditionalHeaders = defaultHeaders
@@ -72,12 +27,12 @@ class SearchSuggestClient {
      }()
     
     init(){
-        self.suggestionCreator = SuggestionCreator(engine: SearchEngineManager(prefs: UserDefaults.standard).activeEngine)
+        engine = SearchEngineManager(prefs: UserDefaults.standard).activeEngine
     }
     
     func getSuggestions(_ query: String, callback: @escaping (_ response: [String]?, _ error: NSError?) -> Void) {
         cancelPendingRequest()
-        let url = suggestionCreator.suggestURLForQuery(query)
+        let url = engine.urlForSuggestions(query)
         if url == nil {
             let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidEngine, userInfo: nil)
             callback(nil, error)
@@ -102,14 +57,15 @@ class SearchSuggestClient {
                     return
                 }
                 
-                let suggestions = array?[1] as? [String]
-                if suggestions == nil {
-                    let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
-                    callback(nil, error)
+                if var suggestions = array?[1] as? [String] {
+                    if let searchWord = array?[0] as? String {
+                        suggestions.insert(searchWord, at: 0)
+                    }
+                    callback(suggestions, nil)
                     return
                 }
-                
-                callback(suggestions!, nil)
+                let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
+                callback(nil, error)
         }
         
     }
