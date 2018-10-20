@@ -6,14 +6,13 @@ import Foundation
 
 extension CharacterSet {
     public static let URLAllowed = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=%")
-    public static let SearchTermsAllowed = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789*-_.")
+    //public static let SearchTermsAllowed = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789*-_.")
 }
 
 class SearchEngine: NSObject, NSCoding {
     let name: String
     let image: UIImage?
     var isCustom: Bool = false
-
     private let searchTemplate: String
     private let suggestionsTemplate: String?
     private let SearchTermComponent = "{searchTerms}"
@@ -38,13 +37,10 @@ class SearchEngine: NSObject, NSCoding {
         image = aDecoder.decodeObject(forKey: "image") as? UIImage
         suggestionsTemplate = aDecoder.decodeObject(forKey: "suggestionsTemplate") as? String
     }
-        
-    /**
-    * Returns the search suggestion URL for the given query.
-    */
+
     func urlForSuggestions(_ query: String) -> URL? {
         if let suggestTemplate = suggestionsTemplate {
-            if let escapedQuery = query.addingPercentEncoding(withAllowedCharacters: .SearchTermsAllowed) {
+            if let escaped = query.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed) {
                 // Escape the search template as well in case it contains not-safe characters like symbols
                 let templateAllowedSet = NSMutableCharacterSet()
                 templateAllowedSet.formUnion(with: .URLAllowed)
@@ -55,7 +51,7 @@ class SearchEngine: NSObject, NSCoding {
                 if let encodedSearchTemplate = suggestTemplate.addingPercentEncoding(withAllowedCharacters: templateAllowedSet as CharacterSet) {
                     let localeString = Locale.current.identifier
                     let urlString = encodedSearchTemplate
-                        .replacingOccurrences(of: SearchTermComponent, with: escapedQuery, options: .literal, range: nil)
+                        .replacingOccurrences(of: SearchTermComponent, with: escaped, options: .literal, range: nil)
                         .replacingOccurrences(of: LocaleTermComponent, with: localeString, options: .literal, range: nil)
                     return URL(string: urlString)
                 }
@@ -71,8 +67,8 @@ class SearchEngine: NSObject, NSCoding {
         }
 
         let localeString = NSLocale.current.identifier
-        guard let urlString = searchTemplate.replacingOccurrences(of: "{searchTerms}", with: escaped)
-            .replacingOccurrences(of: "{moz:locale}", with: localeString)
+        guard let urlString = searchTemplate.replacingOccurrences(of: SearchTermComponent, with: escaped)
+            .replacingOccurrences(of: LocaleTermComponent, with: localeString)
             .addingPercentEncoding(withAllowedCharacters: .urlAllowed) else
         {
             assertionFailure("Invalid search URL")

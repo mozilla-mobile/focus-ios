@@ -28,7 +28,7 @@ class IndexedInsetButton: InsetButton {
 class OverlayView: UIView {
     weak var delegate: OverlayViewDelegate?
     private var searchButtonGroup = [IndexedInsetButton]()
-    private var searchSuggestionsMaxIndex = 4
+    private var searchSuggestionsMaxIndex : Int
     private var presented = false
     private var searchQueryArray : [String] = []
     private let copyButton = UIButton()
@@ -37,25 +37,11 @@ class OverlayView: UIView {
     public var currentURL = ""
 
     init() {
+        searchSuggestionsMaxIndex = 0
         super.init(frame: CGRect.zero)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
         
-        for i in 0...self.searchSuggestionsMaxIndex {
-            let searchButton = IndexedInsetButton()
-            searchButton.isHidden = true
-            searchButton.accessibilityIdentifier = "OverlayView.searchButton"
-            searchButton.alpha = 0
-            searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .normal)
-            searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .highlighted)
-            searchButton.backgroundColor = UIConstants.colors.background
-            searchButton.titleLabel?.font = UIConstants.fonts.searchButton
-            searchButton.backgroundColor = UIConstants.colors.background
-            setUpOverlayButton(button: searchButton)
-            searchButton.setIndex(i)
-            searchButton.addTarget(self, action: #selector(didPressSearch(sender:)), for: .touchUpInside)
-            self.searchButtonGroup.append(searchButton)
-            addSubview(searchButton)
-        }
+        correctNumberOfButtons()
         
         topBorder.isHidden = true
         topBorder.alpha = 0
@@ -70,15 +56,6 @@ class OverlayView: UIView {
 
         self.searchButtonGroup[0].snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
-        }
-        if searchSuggestionsMaxIndex >= 1 {
-            for i in 1...self.searchSuggestionsMaxIndex {
-                self.searchButtonGroup[i].snp.makeConstraints { make in
-                    make.top.equalTo(searchButtonGroup[i - 1].snp.bottom)
-                    make.leading.trailing.equalTo(safeAreaLayoutGuide)
-                    make.height.equalTo(56)
-                }
-            }
         }
         
         let padding = UIConstants.layout.searchButtonInset
@@ -123,6 +100,42 @@ class OverlayView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func correctNumberOfButtons() {
+        if searchSuggestionsMaxIndex >= searchButtonGroup.count{
+            for i in searchButtonGroup.count...searchSuggestionsMaxIndex {
+                let searchButton = IndexedInsetButton()
+                searchButton.isHidden = true
+                searchButton.accessibilityIdentifier = "OverlayView.searchButton"
+                searchButton.alpha = 0
+                searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .normal)
+                searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .highlighted)
+                searchButton.backgroundColor = UIConstants.colors.background
+                searchButton.titleLabel?.font = UIConstants.fonts.searchButton
+                searchButton.backgroundColor = UIConstants.colors.background
+                setUpOverlayButton(button: searchButton)
+                searchButton.setIndex(i)
+                searchButton.addTarget(self, action: #selector(didPressSearch(sender:)), for: .touchUpInside)
+                self.searchButtonGroup.append(searchButton)
+                self.addSubview(searchButton)
+            }
+        } else if searchSuggestionsMaxIndex < searchButtonGroup.count - 1 {
+            for index in stride(from: searchButtonGroup.count - 1, to: searchSuggestionsMaxIndex, by: -1) {
+                searchButtonGroup[index].removeFromSuperview()
+                searchButtonGroup.remove(at: index)
+            }
+        }
+
+        if searchSuggestionsMaxIndex >= 1 {
+            for i in 1...searchSuggestionsMaxIndex {
+                self.searchButtonGroup[i].snp.makeConstraints { make in
+                    make.top.equalTo(searchButtonGroup[i - 1].snp.bottom)
+                    make.leading.trailing.equalTo(safeAreaLayoutGuide)
+                    make.height.equalTo(56)
+                }
+            }
+        }
+    }
+    
     func setUpOverlayButton (button: InsetButton) {
         button.titleLabel?.lineBreakMode = .byTruncatingTail
         if UIView.userInterfaceLayoutDirection(for: button.semanticContentAttribute) == .rightToLeft {
@@ -175,12 +188,9 @@ class OverlayView: UIView {
     func setSearchQuery(queryArray: [String], animated: Bool, hideFindInPage: Bool) {
         if queryArray.count == 0 {return}
         searchQueryArray = queryArray
-        searchSuggestionsMaxIndex = min(max(queryArray.count - 1,0),4)
-        for query in searchQueryArray {
-            let query = query.trimmingCharacters(in: .whitespaces)
-        }
-
+        searchSuggestionsMaxIndex = min(queryArray.count - 1,4)
         var showCopyButton = false
+        correctNumberOfButtons()
 
         UIPasteboard.general.urlAsync() { handoffUrl in
             DispatchQueue.main.async {
