@@ -16,50 +16,15 @@ extension CharacterSet {
     public static let SearchTermsAllowed = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789*-_.")
 }
 
-class OpenSearchEngine: NSObject, NSCoding {
-    static let PreferredIconSize = 30
-    
-    let shortName: String
-    let engineID: String?
-    let image: UIImage
-    let isCustomEngine: Bool
+class SuggestionCreator {
     fileprivate let suggestTemplate: String?
     
     fileprivate let SearchTermComponent = "{searchTerms}"
     fileprivate let LocaleTermComponent = "{moz:locale}"
     
-    init(engineID: String?, shortName: String, image: UIImage, suggestTemplate: String?, isCustomEngine: Bool) {
-        self.shortName = shortName
-        self.image = image
-        self.suggestTemplate = suggestTemplate
-        self.isCustomEngine = isCustomEngine
-        self.engineID = engineID
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        // this catches the cases where bool encoded in Swift 2 needs to be decoded with decodeObject, but a Bool encoded in swift 3 needs
-        // to be decoded using decodeBool. This catches the upgrade case to ensure that we are always able to fetch a keyed valye for isCustomEngine
-        // http://stackoverflow.com/a/40034694
-        let isCustomEngine = aDecoder.decodeBool(forKey: "isCustomEngine")
-        guard let searchTemplate = aDecoder.decodeObject(forKey: "searchTemplate") as? String,
-            let shortName = aDecoder.decodeObject(forKey: "shortName") as? String,
-            let image = aDecoder.decodeObject(forKey: "image") as? UIImage else {
-                assertionFailure()
-                return nil
-        }
-        
-        self.shortName = shortName
-        self.isCustomEngine = isCustomEngine
-        self.image = image
-        self.engineID = aDecoder.decodeObject(forKey: "engineID") as? String
-        self.suggestTemplate = nil
-    }
-    
-    func encode(with aCoder: NSCoder) {
-        aCoder.encode(shortName, forKey: "shortName")
-        aCoder.encode(isCustomEngine, forKey: "isCustomEngine")
-        aCoder.encode(image, forKey: "image")
-        aCoder.encode(engineID, forKey: "engineID")
+    init(engine: SearchEngine) {
+        //self.suggestTemplate = suggestTemplate
+        self.suggestTemplate = "https://www.google.com/complete/search?client=firefox&q={searchTerms}"
     }
     
     /**
@@ -67,29 +32,23 @@ class OpenSearchEngine: NSObject, NSCoding {
      */
     func suggestURLForQuery(_ query: String) -> URL? {
         if let suggestTemplate = suggestTemplate {
-            return getURLFromTemplate(suggestTemplate, query: query)
-        }
-        return nil
-    }
-    
-    fileprivate func getURLFromTemplate(_ searchTemplate: String, query: String) -> URL? {
-        if let escapedQuery = query.addingPercentEncoding(withAllowedCharacters: .SearchTermsAllowed) {
-            // Escape the search template as well in case it contains not-safe characters like symbols
-            let templateAllowedSet = NSMutableCharacterSet()
-            templateAllowedSet.formUnion(with: .URLAllowed)
-            
-            // Allow brackets since we use them in our template as our insertion point
-            templateAllowedSet.formUnion(with: CharacterSet(charactersIn: "{}"))
-            
-            if let encodedSearchTemplate = searchTemplate.addingPercentEncoding(withAllowedCharacters: templateAllowedSet as CharacterSet) {
-                let localeString = Locale.current.identifier
-                let urlString = encodedSearchTemplate
-                    .replacingOccurrences(of: SearchTermComponent, with: escapedQuery, options: .literal, range: nil)
-                    .replacingOccurrences(of: LocaleTermComponent, with: localeString, options: .literal, range: nil)
-                return URL(string: urlString)
+            if let escapedQuery = query.addingPercentEncoding(withAllowedCharacters: .SearchTermsAllowed) {
+                // Escape the search template as well in case it contains not-safe characters like symbols
+                let templateAllowedSet = NSMutableCharacterSet()
+                templateAllowedSet.formUnion(with: .URLAllowed)
+                
+                // Allow brackets since we use them in our template as our insertion point
+                templateAllowedSet.formUnion(with: CharacterSet(charactersIn: "{}"))
+                
+                if let encodedSearchTemplate = suggestTemplate.addingPercentEncoding(withAllowedCharacters: templateAllowedSet as CharacterSet) {
+                    let localeString = Locale.current.identifier
+                    let urlString = encodedSearchTemplate
+                        .replacingOccurrences(of: SearchTermComponent, with: escapedQuery, options: .literal, range: nil)
+                        .replacingOccurrences(of: LocaleTermComponent, with: localeString, options: .literal, range: nil)
+                    return URL(string: urlString)
+                }
             }
         }
-        
         return nil
     }
 }
@@ -102,26 +61,23 @@ class OpenSearchEngine: NSObject, NSCoding {
  * Query callbacks that must run even if they are cancelled should wrap their contents in `withExtendendLifetime`.
  */
 class SearchSuggestClient {
-    fileprivate let searchEngine: OpenSearchEngine
+    fileprivate let suggestionCreator: SuggestionCreator
     fileprivate weak var request: Request?
     
      lazy fileprivate var alamofire: SessionManager = {
-     let configuration = URLSessionConfiguration.ephemeral
-     var defaultHeaders = SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
-     configuration.httpAdditionalHeaders = defaultHeaders
-     return SessionManager(configuration: configuration)
+         let configuration = URLSessionConfiguration.ephemeral
+         var defaultHeaders = SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
+         configuration.httpAdditionalHeaders = defaultHeaders
+         return SessionManager(configuration: configuration)
      }()
     
     init(){
-        let engine = SearchEngineManager(prefs: UserDefaults.standard).activeEngine
-        let engineName = engine.getNameOrCustom();
-        let webServerBase = engine.urlForQuery("")
-        self.searchEngine = OpenSearchEngine(engineID: engineName,shortName: engineName, image: UIImage(), suggestTemplate: "https://www.google.com/complete/search?client=firefox&q={searchTerms}", isCustomEngine: SearchEngineManager(prefs: UserDefaults.standard).activeEngine.isCustom)
+        self.suggestionCreator = SuggestionCreator(engine: SearchEngineManager(prefs: UserDefaults.standard).activeEngine)
     }
     
     func getSuggestions(_ query: String, callback: @escaping (_ response: [String]?, _ error: NSError?) -> Void) {
         cancelPendingRequest()
-        let url = searchEngine.suggestURLForQuery(query)
+        let url = suggestionCreator.suggestURLForQuery(query)
         if url == nil {
             let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidEngine, userInfo: nil)
             callback(nil, error)
