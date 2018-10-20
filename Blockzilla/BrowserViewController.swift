@@ -31,6 +31,7 @@ class BrowserViewController: UIViewController {
     fileprivate var urlBar: URLBar!
     fileprivate var topURLBarConstraints = [Constraint]()
     fileprivate let requestHandler = RequestHandler()
+    fileprivate let searchSuggestClient = SearchSuggestClient()
     fileprivate var findInPageBar: FindInPageBar?
     fileprivate var fillerView: UIView?
     fileprivate let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
@@ -816,10 +817,20 @@ extension BrowserViewController: URLBarDelegate {
         }
     }
     
+    func searchSuggestionsRecieved(_ suggestions: [String]?, _ error: NSError?) -> Void {
+        let isOnHomeView = homeView != nil
+        if suggestions == nil {return}
+        overlayView.setSearchQuery(queryArray: suggestions!, animated: true, hideFindInPage: isOnHomeView)
+    }
+    
     func urlBar(_ urlBar: URLBar, didEnterText text: String) {
         // Hide find in page if the home view is displayed
         let isOnHomeView = homeView != nil
-        overlayView.setSearchQuery(query: text, animated: true, hideFindInPage: isOnHomeView)
+        if Settings.getToggle(.enableSearchSuggestions) {
+            searchSuggestClient.getSuggestions(text,callback: searchSuggestionsRecieved)
+        } else {
+            overlayView.setSearchQuery(queryArray: [text], animated: true, hideFindInPage: isOnHomeView)
+        }
     }
 
     func urlBarDidPressScrollTop(_: URLBar, tap: UITapGestureRecognizer) {

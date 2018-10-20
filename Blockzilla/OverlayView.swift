@@ -13,12 +13,24 @@ protocol OverlayViewDelegate: class {
     func overlayView(_ overlayView: OverlayView, didSearchOnPage query: String)
 }
 
+class IndexedInsetButton: InsetButton {
+    private var index: Int = 0
+    
+    func setIndex(_ i:Int){
+        index = i
+    }
+    
+    func getIndex() -> Int{
+        return index
+    }
+}
+
 class OverlayView: UIView {
     weak var delegate: OverlayViewDelegate?
-    private var searchButtonGroup = [InsetButton]()
-    private let searchSuggestionsCount = 4 // Five search buttons in total since indexing starts from 0.
+    private var searchButtonGroup = [IndexedInsetButton]()
+    private var searchSuggestionsMaxIndex = 4
     private var presented = false
-    private var searchQuery = ""
+    private var searchQueryArray : [String] = []
     private let copyButton = UIButton()
     private let findInPageButton = InsetButton()
     private let topBorder = UIView()
@@ -28,8 +40,8 @@ class OverlayView: UIView {
         super.init(frame: CGRect.zero)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
         
-        for _ in 0...self.searchSuggestionsCount {
-            let searchButton = InsetButton()
+        for i in 0...self.searchSuggestionsMaxIndex {
+            let searchButton = IndexedInsetButton()
             searchButton.isHidden = true
             searchButton.accessibilityIdentifier = "OverlayView.searchButton"
             searchButton.alpha = 0
@@ -39,7 +51,8 @@ class OverlayView: UIView {
             searchButton.titleLabel?.font = UIConstants.fonts.searchButton
             searchButton.backgroundColor = UIConstants.colors.background
             setUpOverlayButton(button: searchButton)
-            searchButton.addTarget(self, action: #selector(didPressSearch), for: .touchUpInside)
+            searchButton.setIndex(i)
+            searchButton.addTarget(self, action: #selector(didPressSearch(sender:)), for: .touchUpInside)
             self.searchButtonGroup.append(searchButton)
             addSubview(searchButton)
         }
@@ -58,11 +71,13 @@ class OverlayView: UIView {
         self.searchButtonGroup[0].snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
         }
-        for i in 1...self.searchSuggestionsCount {
-            self.searchButtonGroup[i].snp.makeConstraints { make in
-                make.top.equalTo(searchButtonGroup[i - 1].snp.bottom)
-                make.leading.trailing.equalTo(safeAreaLayoutGuide)
-                make.height.equalTo(56)
+        if searchSuggestionsMaxIndex >= 1 {
+            for i in 1...self.searchSuggestionsMaxIndex {
+                self.searchButtonGroup[i].snp.makeConstraints { make in
+                    make.top.equalTo(searchButtonGroup[i - 1].snp.bottom)
+                    make.leading.trailing.equalTo(safeAreaLayoutGuide)
+                    make.height.equalTo(56)
+                }
             }
         }
         
@@ -70,7 +85,7 @@ class OverlayView: UIView {
         findInPageButton.titleLabel?.font = UIConstants.fonts.copyButton
         findInPageButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         findInPageButton.titleLabel?.lineBreakMode = .byTruncatingTail
-        findInPageButton.addTarget(self, action: #selector(didPressFindOnPage), for: .touchUpInside)
+        findInPageButton.addTarget(self, action: #selector(didPressFindOnPage(sender:)), for: .touchUpInside)
         findInPageButton.accessibilityIdentifier = "FindInPageBar.button"
         findInPageButton.backgroundColor = UIConstants.colors.background
         if UIView.userInterfaceLayoutDirection(for: findInPageButton.semanticContentAttribute) == .rightToLeft {
@@ -81,7 +96,7 @@ class OverlayView: UIView {
         addSubview(findInPageButton)
         
         findInPageButton.snp.makeConstraints { make in
-            make.top.equalTo(searchButtonGroup[searchSuggestionsCount].snp.bottom)
+            make.top.equalTo(searchButtonGroup[searchSuggestionsMaxIndex].snp.bottom)
             make.leading.trailing.equalTo(safeAreaLayoutGuide)
             make.height.equalTo(56)
         }
@@ -157,9 +172,13 @@ class OverlayView: UIView {
         button.setAttributedTitle(attributedString, for: .normal)
     }
     
-    func setSearchQuery(query: String, animated: Bool, hideFindInPage: Bool) {
-        searchQuery = query
-        let query = query.trimmingCharacters(in: .whitespaces)
+    func setSearchQuery(queryArray: [String], animated: Bool, hideFindInPage: Bool) {
+        if queryArray.count == 0 {return}
+        searchQueryArray = queryArray
+        searchSuggestionsMaxIndex = min(max(queryArray.count - 1,0),4)
+        for query in searchQueryArray {
+            let query = query.trimmingCharacters(in: .whitespaces)
+        }
 
         var showCopyButton = false
 
@@ -174,13 +193,13 @@ class OverlayView: UIView {
                 }
                 
                 // Show or hide the search button depending on whether there's entered text.
-                if self.searchButtonGroup[0].isHidden != query.isEmpty {
+                if self.searchButtonGroup[0].isHidden != queryArray.isEmpty {
                     let duration = animated ? UIConstants.layout.searchButtonAnimationDuration : 0
-                    self.topBorder.animateHidden(query.isEmpty, duration: duration)
+                    self.topBorder.animateHidden(queryArray.isEmpty, duration: duration)
                     self.searchButtonGroup.forEach { searchButton in
-                        searchButton.animateHidden(query.isEmpty, duration: duration)
+                        searchButton.animateHidden(queryArray.isEmpty, duration: duration)
                     }
-                    self.findInPageButton.animateHidden(query.isEmpty || hideFindInPage, duration: duration, completion: {
+                    self.findInPageButton.animateHidden(queryArray.isEmpty || hideFindInPage, duration: duration, completion: {
                         self.updateCopyConstraint(showCopyButton: showCopyButton)
                     })
                 } else {
@@ -188,9 +207,9 @@ class OverlayView: UIView {
                 }
 
                 self.searchButtonGroup.forEach { searchButton in
-                    self.setAttributedButtonTitle(phrase: query, button: searchButton, localizedStringFormat: UIConstants.strings.searchButton)
+                    self.setAttributedButtonTitle(phrase: self.searchQueryArray[searchButton.getIndex()], button: searchButton, localizedStringFormat: UIConstants.strings.searchButton)
                 }
-                self.setAttributedButtonTitle(phrase: query, button: self.findInPageButton, localizedStringFormat: UIConstants.strings.findInPageButton)
+                self.setAttributedButtonTitle(phrase: self.searchQueryArray[0], button: self.findInPageButton, localizedStringFormat: UIConstants.strings.findInPageButton)
             }
         }
     }
@@ -198,7 +217,7 @@ class OverlayView: UIView {
     fileprivate func updateCopyConstraint(showCopyButton: Bool) {
         if showCopyButton {
             copyButton.isHidden = false
-            if searchButtonGroup[0].isHidden || searchQuery.isEmpty {
+            if searchButtonGroup[0].isHidden || searchQueryArray.isEmpty {
                 copyButton.snp.remakeConstraints { make in
                     make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
                     make.height.equalTo(56)
@@ -206,7 +225,7 @@ class OverlayView: UIView {
             } else if findInPageButton.isHidden {
                 copyButton.snp.remakeConstraints { make in
                     make.leading.trailing.equalTo(safeAreaLayoutGuide)
-                    make.top.equalTo(searchButtonGroup[searchSuggestionsCount].snp.bottom)
+                    make.top.equalTo(searchButtonGroup[searchSuggestionsMaxIndex].snp.bottom)
                     make.height.equalTo(56)
                 }
             } else {
@@ -222,14 +241,14 @@ class OverlayView: UIView {
         layoutIfNeeded()
     }
 
-    @objc private func didPressSearch() {
-        delegate?.overlayView(self, didSearchForQuery: searchQuery)
+    @objc private func didPressSearch(sender: IndexedInsetButton ) {
+        delegate?.overlayView(self, didSearchForQuery: searchQueryArray[sender.getIndex()])
     }
     @objc private func didPressCopy() {
         delegate?.overlayView(self, didSubmitText: UIPasteboard.general.string!)
     }
-    @objc private func didPressFindOnPage() {
-        delegate?.overlayView(self, didSearchOnPage: searchQuery)
+    @objc private func didPressFindOnPage(sender: IndexedInsetButton) {
+        delegate?.overlayView(self, didSearchOnPage: searchQueryArray[sender.getIndex()])
     }
     @objc private func didPressSettings() {
         delegate?.overlayViewDidPressSettings(self)
@@ -241,7 +260,7 @@ class OverlayView: UIView {
     }
 
     func dismiss() {
-        setSearchQuery(query: "", animated: false, hideFindInPage: true)
+        setSearchQuery(queryArray: [], animated: false, hideFindInPage: true)
         self.isUserInteractionEnabled = false
         copyButton.isHidden = true
         animateHidden(true, duration: UIConstants.layout.overlayAnimationDuration) {
@@ -250,7 +269,7 @@ class OverlayView: UIView {
     }
 
     func present() {
-        setSearchQuery(query: "", animated: false, hideFindInPage: true)
+        setSearchQuery(queryArray: [], animated: false, hideFindInPage: true)
         self.isUserInteractionEnabled = false
         copyButton.isHidden = false
         animateHidden(false, duration: UIConstants.layout.overlayAnimationDuration) {
