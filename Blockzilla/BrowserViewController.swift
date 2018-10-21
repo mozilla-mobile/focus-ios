@@ -899,9 +899,7 @@ extension BrowserViewController: URLBarDelegate {
             self.updateFindInPageVisibility(visible: false)
             self.view.layoutIfNeeded()
         }) { (success) in
-            if(self.urlBar.isClearButtonHidden()) {
-                self.urlBar.showClearButton()
-            }
+            self.urlBar.displayClearButton(shouldDisplay: true)
         }
     }
 
