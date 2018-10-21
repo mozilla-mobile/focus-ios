@@ -24,7 +24,7 @@ class OverlayView: UIView {
     private let searchSuggestionsPrompt = SearchSuggestionsPromptView()
     private let topBorder = UIView()
     public var currentURL = ""
-    
+
     init() {
         super.init(frame: CGRect.zero)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
@@ -297,24 +297,6 @@ class OverlayView: UIView {
         }
         
     }
-    
-//    func hideSearchSuggestionsPrompt(duration: TimeInterval = 0) {
-//        topBorder.backgroundColor = UIConstants.Photon.Grey90.withAlphaComponent(0.4)
-//        searchSuggestionsPrompt.animateHidden(true, duration: duration, completion: {
-//            self.searchSuggestionsPrompt.snp.remakeConstraints { make in
-//                make.top.leading.trailing.equalTo(self.safeAreaLayoutGuide)
-//                make.height.equalTo(0)
-//            }
-//        })
-//    }
-//
-//    func showSearchSuggestionsPrompt(duration: TimeInterval = 0) {
-//        topBorder.backgroundColor = UIColor(rgb: 0x42455A)
-//        searchSuggestionsPrompt.snp.remakeConstraints { make in
-//            make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
-//        }
-//        searchSuggestionsPrompt.animateHidden(false, duration: duration)
-//    }
 }
 extension URL {
     public func isWebPage() -> Bool {
