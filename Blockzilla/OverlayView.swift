@@ -116,6 +116,7 @@ class OverlayView: UIView {
                 searchButton.addTarget(self, action: #selector(didPressSearch(sender:)), for: .touchUpInside)
                 searchButtonGroup.append(searchButton)
                 addSubview(searchButton)
+
                 if i > 0 {
                     self.searchButtonGroup[i].snp.makeConstraints { make in
                         make.top.equalTo(searchButtonGroup[i - 1].snp.bottom)
