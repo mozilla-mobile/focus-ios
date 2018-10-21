@@ -19,15 +19,25 @@ class HomeView: UIView {
     private let tipTitleLabel = SmartLabel()
     private let tipDescriptionLabel = SmartLabel()
     private let shieldLogo = UIImageView()
+    private let textLogo = UIImageView()
     
     let toolbar = HomeViewToolbar()
     let trackerStatsShareButton = UIButton()
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if UIDevice.current.orientation.isLandscape {
+            hideTextLogo()
+        } else {
+            showTextLogo()
+        }
+    }
     
     init(tipManager: TipManager? = nil) {
         super.init(frame: CGRect.zero)
         
         let wordmark = AppInfo.config.wordmark
-        let textLogo = UIImageView(image: wordmark)
+        textLogo.image = wordmark
         addSubview(textLogo)
 
         privateBrowsingDescription.textColor = .white
@@ -112,7 +122,7 @@ class HomeView: UIView {
         
         tipTitleLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.bottom.equalTo(tipDescriptionLabel.snp.top).offset(-UIConstants.layout.homeViewTextOffset)
+            make.bottom.equalTo(tipDescriptionLabel.snp.top).offset(UIConstants.layout.homeViewTextOffset)
         }
         
         toolbar.snp.makeConstraints { make in
@@ -178,6 +188,14 @@ class HomeView: UIView {
         shieldLogo.isHidden = true
         trackerStatsLabel.isHidden = true
         trackerStatsShareButton.isHidden = true
+    }
+    
+    func hideTextLogo() {
+        textLogo.isHidden = true
+    }
+    
+    func showTextLogo() {
+        textLogo.isHidden = false
     }
     
     func showTextTip(_ tip: TipManager.Tip) {
