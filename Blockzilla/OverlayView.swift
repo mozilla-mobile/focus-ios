@@ -54,7 +54,7 @@ class OverlayView: UIView {
             findInPageButton.contentHorizontalAlignment = .left
         }
         addSubview(findInPageButton)
-
+        
         findInPageButton.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
             make.height.equalTo(56)
@@ -90,7 +90,7 @@ class OverlayView: UIView {
         }
         copyButton.addTarget(self, action: #selector(didPressCopy), for: .touchUpInside)
         addSubview(copyButton)
-
+        
         copyButton.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
             make.height.equalTo(56)
@@ -176,7 +176,7 @@ class OverlayView: UIView {
         } else {
             button.contentHorizontalAlignment = .left
         }
-
+        
         let padding = UIConstants.layout.searchButtonInset
         button.imageEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         if UIView.userInterfaceLayoutDirection(for: button.semanticContentAttribute) == .rightToLeft {
@@ -185,9 +185,9 @@ class OverlayView: UIView {
             button.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding * 2, bottom: padding, right: padding)
         }
     }
-
+    
     /**
-
+     
      Localize and style 'phrase' text for use as a button title.
      
      - Parameter phrase: The phrase text for a button title
@@ -226,6 +226,7 @@ class OverlayView: UIView {
             searchSuggestionsMaxIndex = -1
         }
         var showCopyButton = false
+
         correctNumberOfButtons()
         adjustForFindInPage(hidden:hideFindInPage)
         UIPasteboard.general.urlAsync() { handoffUrl in
