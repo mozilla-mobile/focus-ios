@@ -17,7 +17,6 @@ class SearchSuggestionsPromptView: UIView {
     private let disableButton = InsetButton()
     private let enableButton = InsetButton()
     private let promptContainer = UIView()
-    private let promptCornerRadius: CGFloat = 12
     private let promptMessage = UILabel()
     private let promptTitle = UILabel()
     
@@ -25,7 +24,7 @@ class SearchSuggestionsPromptView: UIView {
         super.init(frame: CGRect.zero)
         
         promptContainer.backgroundColor = UIConstants.Photon.Ink70.withAlphaComponent(0.9)
-        promptContainer.layer.cornerRadius = promptCornerRadius
+        promptContainer.layer.cornerRadius = UIConstants.layout.searchSuggestionsPromptCornerRadius
         addSubview(promptContainer)
         
         promptContainer.snp.makeConstraints{ make in
@@ -43,7 +42,7 @@ class SearchSuggestionsPromptView: UIView {
         promptTitle.lineBreakMode = .byWordWrapping
         promptContainer.addSubview(promptTitle)
 
-        promptTitle.snp.makeConstraints{ make in
+        promptTitle.snp.makeConstraints { make in
             make.top.equalTo(promptContainer).offset(20).priority(.medium)
             make.leading.equalTo(promptContainer).offset(10)
             make.trailing.equalTo(promptContainer).offset(-10)
@@ -86,7 +85,7 @@ class SearchSuggestionsPromptView: UIView {
         disableButton.accessibilityIdentifier = "SearchSuggestionsPromptView.disableButton"
         disableButton.setTitle(UIConstants.strings.searchSuggestionsPromptDisable, for: .normal)
         disableButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
-        disableButton.layer.cornerRadius = 8.0
+        disableButton.layer.cornerRadius = UIConstants.layout.searchSuggestionsPromptButtonRadius
         disableButton.addTarget(self, action: #selector(didPressDisable), for: .touchUpInside)
         addSubview(disableButton)
 
@@ -99,7 +98,7 @@ class SearchSuggestionsPromptView: UIView {
         enableButton.accessibilityIdentifier = "SearchSuggestionsPromptView.enableButton"
         enableButton.setTitle(UIConstants.strings.searchSuggestionsPromptEnable, for: .normal)
         enableButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.bold)
-        enableButton.layer.cornerRadius = 8.0
+        enableButton.layer.cornerRadius = UIConstants.layout.searchSuggestionsPromptButtonRadius
         enableButton.addTarget(self, action: #selector(didPressEnable), for: .touchUpInside)
         addSubview(enableButton)
 

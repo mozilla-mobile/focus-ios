@@ -15,16 +15,15 @@ protocol OverlayViewDelegate: class {
 
 class OverlayView: UIView {
     weak var delegate: OverlayViewDelegate?
+    private var searchButtonGroup = [InsetButton]()
+    private let searchSuggestionsCount = 4 // Five search buttons in total since indexing starts from 0.
+    private var presented = false
+    private var searchQuery = ""
     private let copyButton = UIButton()
     private let findInPageButton = InsetButton()
     private let searchSuggestionsPrompt = SearchSuggestionsPromptView()
-    private let searchButton = InsetButton()
-    private var searchButtonGroup = [InsetButton]()
-    private let searchSuggestionsCount = 4 // Five search buttons in total since indexing starts from 0.
     private let topBorder = UIView()
     public var currentURL = ""
-    private var presented = false
-    private var searchQuery = ""
     
     init() {
         super.init(frame: CGRect.zero)
@@ -36,17 +35,6 @@ class OverlayView: UIView {
         
         searchSuggestionsPrompt.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
-        }
-        
-        topBorder.isHidden = true
-        topBorder.alpha = 0
-        topBorder.backgroundColor = UIConstants.Photon.Grey90.withAlphaComponent(0.4)
-        addSubview(topBorder)
-        
-        topBorder.snp.makeConstraints { make in
-            make.top.equalTo(searchSuggestionsPrompt.snp.bottom)
-            make.leading.trailing.equalTo(self)
-            make.height.equalTo(1)
         }
         
         for _ in 0...self.searchSuggestionsCount {
@@ -63,6 +51,17 @@ class OverlayView: UIView {
             searchButton.addTarget(self, action: #selector(didPressSearch), for: .touchUpInside)
             self.searchButtonGroup.append(searchButton)
             addSubview(searchButton)
+        }
+        
+        topBorder.isHidden = true
+        topBorder.alpha = 0
+        topBorder.backgroundColor = UIConstants.Photon.Grey90.withAlphaComponent(0.4)
+        addSubview(topBorder)
+        
+        topBorder.snp.makeConstraints { make in
+            make.top.equalTo(searchSuggestionsPrompt.snp.bottom)
+            make.leading.trailing.equalTo(safeAreaLayoutGuide)
+            make.height.equalTo(1)
         }
 
         self.searchButtonGroup[0].snp.makeConstraints { make in
@@ -194,21 +193,15 @@ class OverlayView: UIView {
                     self.findInPageButton.animateHidden(query.isEmpty || hideFindInPage, duration: duration, completion: {
                         self.updateCopyConstraint(showCopyButton: showCopyButton)
                     })
+                    
+                    if UserDefaults.standard.bool(forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt)
+                        || query.isEmpty {
+                        self.displaySearchSuggestionsPrompt(hide: true, duration: duration)
+                    } else {
+                        self.displaySearchSuggestionsPrompt(hide: false, duration: duration)
+                    }
                 } else {
                     self.updateCopyConstraint(showCopyButton: showCopyButton)
-                }
-                
-                if query.isEmpty {
-                    self.hideSearchSuggestionsPrompt(duration: duration)
-                    //print("hiding because query is empty")
-                } else {
-                    if UserDefaults.standard.bool(forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt) {
-                        self.hideSearchSuggestionsPrompt(duration: duration)
-                        //print("hiding because user already responded")
-                    } else {
-                        self.showSearchSuggestionsPrompt(duration: duration)
-                        //print("showing because there's some text in the bar & user hasn't responded yet")
-                    }
                 }
 
                 self.searchButtonGroup.forEach { searchButton in
@@ -286,23 +279,42 @@ class OverlayView: UIView {
         searchSuggestionsPrompt.delegate = delegate
     }
     
-    func hideSearchSuggestionsPrompt(duration: TimeInterval = 0) {
-        topBorder.backgroundColor = UIConstants.Photon.Grey90.withAlphaComponent(0.4)
-        searchSuggestionsPrompt.animateHidden(true, duration: duration, completion: {
-            self.searchSuggestionsPrompt.snp.remakeConstraints { make in
-                make.top.leading.trailing.equalTo(self.safeAreaLayoutGuide)
-                make.height.equalTo(0)
+    func displaySearchSuggestionsPrompt(hide: Bool, duration: TimeInterval = 0) {
+        topBorder.backgroundColor = hide ? UIConstants.Photon.Grey90.withAlphaComponent(0.4) : UIColor(rgb: 0x42455A)
+        
+        if hide {
+            searchSuggestionsPrompt.animateHidden(true, duration: duration, completion: {
+                self.searchSuggestionsPrompt.snp.remakeConstraints { make in
+                    make.top.leading.trailing.equalTo(self.safeAreaLayoutGuide)
+                    make.height.equalTo(0)
+                }
+            })
+        } else {
+            searchSuggestionsPrompt.snp.remakeConstraints { make in
+                make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
             }
-        })
+            searchSuggestionsPrompt.animateHidden(false, duration: duration)
+        }
+        
     }
     
-    func showSearchSuggestionsPrompt(duration: TimeInterval = 0) {
-        topBorder.backgroundColor = UIColor(rgb: 0x42455A)
-        searchSuggestionsPrompt.snp.remakeConstraints { make in
-            make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
-        }
-        searchSuggestionsPrompt.animateHidden(false, duration: duration)
-    }
+//    func hideSearchSuggestionsPrompt(duration: TimeInterval = 0) {
+//        topBorder.backgroundColor = UIConstants.Photon.Grey90.withAlphaComponent(0.4)
+//        searchSuggestionsPrompt.animateHidden(true, duration: duration, completion: {
+//            self.searchSuggestionsPrompt.snp.remakeConstraints { make in
+//                make.top.leading.trailing.equalTo(self.safeAreaLayoutGuide)
+//                make.height.equalTo(0)
+//            }
+//        })
+//    }
+//
+//    func showSearchSuggestionsPrompt(duration: TimeInterval = 0) {
+//        topBorder.backgroundColor = UIColor(rgb: 0x42455A)
+//        searchSuggestionsPrompt.snp.remakeConstraints { make in
+//            make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
+//        }
+//        searchSuggestionsPrompt.animateHidden(false, duration: duration)
+//    }
 }
 extension URL {
     public func isWebPage() -> Bool {
