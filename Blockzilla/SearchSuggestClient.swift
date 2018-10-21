@@ -9,7 +9,6 @@ let SearchSuggestClientErrorDomain = "org.mozilla.firefox.SearchSuggestClient"
 let SearchSuggestClientErrorInvalidEngine = 0
 let SearchSuggestClientErrorInvalidResponse = 1
 
-
 /*
  * Clients of SearchSuggestionClient should retain the object during the
  * lifetime of the search suggestion query, as requests are canceled during destruction.
@@ -25,11 +24,11 @@ class SearchSuggestClient {
          configuration.httpAdditionalHeaders = defaultHeaders
          return SessionManager(configuration: configuration)
      }()
-    
+
     init(){
         engine = SearchEngineManager(prefs: UserDefaults.standard).activeEngine
     }
-    
+
     func getSuggestions(_ query: String, callback: @escaping (_ response: [String]?, _ error: NSError?) -> Void) {
         cancelPendingRequest()
         let url = engine.urlForSuggestions(query)
@@ -38,7 +37,7 @@ class SearchSuggestClient {
             callback(nil, error)
             return
         }
-        
+
         request = alamofire.request(url!)
             .validate(statusCode: 200..<300)
             .responseJSON { response in
@@ -46,7 +45,7 @@ class SearchSuggestClient {
                     callback(nil, error as NSError?)
                     return
                 }
-                
+
                 // The response will be of the following format:
                 //    ["foobar",["foobar","foobar2000 mac","foobar skins",...]]
                 // That is, an array of at least two elements: the search term and an array of suggestions.
@@ -56,7 +55,7 @@ class SearchSuggestClient {
                     callback(nil, error)
                     return
                 }
-                
+
                 if var suggestions = array?[1] as? [String] {
                     if let searchWord = array?[0] as? String {
                         suggestions.insert(searchWord, at: 0)
@@ -67,9 +66,8 @@ class SearchSuggestClient {
                 let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
                 callback(nil, error)
         }
-        
     }
-    
+
     func cancelPendingRequest() {
         request?.cancel()
     }

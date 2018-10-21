@@ -816,18 +816,15 @@ extension BrowserViewController: URLBarDelegate {
             Toast(text: UIConstants.strings.autocompleteCustomURLAdded).show()
         }
     }
-    
-    func searchSuggestionsRecieved(_ suggestions: [String]?, _ error: NSError?) -> Void {
-        let isOnHomeView = homeView != nil
-        if suggestions == nil {return}
-        overlayView.setSearchQuery(queryArray: suggestions!, animated: true, hideFindInPage: isOnHomeView)
-    }
-    
+
     func urlBar(_ urlBar: URLBar, didEnterText text: String) {
         // Hide find in page if the home view is displayed
         let isOnHomeView = homeView != nil
         if Settings.getToggle(.enableSearchSuggestions) {
-            searchSuggestClient.getSuggestions(text,callback: searchSuggestionsRecieved)
+            searchSuggestClient.getSuggestions(text,callback: {suggestions, error in
+                if suggestions == nil {return}
+                self.overlayView.setSearchQuery(queryArray: suggestions!, animated: true, hideFindInPage: isOnHomeView)
+            })
         } else {
             overlayView.setSearchQuery(queryArray: [text], animated: true, hideFindInPage: isOnHomeView)
         }

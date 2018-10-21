@@ -6,7 +6,6 @@ import Foundation
 
 extension CharacterSet {
     public static let URLAllowed = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=%")
-    //public static let SearchTermsAllowed = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789*-_.")
 }
 
 class SearchEngine: NSObject, NSCoding {
@@ -44,10 +43,10 @@ class SearchEngine: NSObject, NSCoding {
                 // Escape the search template as well in case it contains not-safe characters like symbols
                 let templateAllowedSet = NSMutableCharacterSet()
                 templateAllowedSet.formUnion(with: .URLAllowed)
-                    
+
                 // Allow brackets since we use them in our template as our insertion point
                 templateAllowedSet.formUnion(with: CharacterSet(charactersIn: "{}"))
-                    
+
                 if let encodedSearchTemplate = suggestTemplate.addingPercentEncoding(withAllowedCharacters: templateAllowedSet as CharacterSet) {
                     let localeString = Locale.current.identifier
                     let urlString = encodedSearchTemplate
@@ -59,7 +58,7 @@ class SearchEngine: NSObject, NSCoding {
         }
         return nil
     }
-    
+
     func urlForQuery(_ query: String) -> URL? {
         guard let escaped = query.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed) else {
             assertionFailure("Invalid search URL")
