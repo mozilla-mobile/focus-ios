@@ -816,7 +816,7 @@ extension BrowserViewController: URLBarDelegate {
             Toast(text: UIConstants.strings.autocompleteCustomURLAdded).show()
         }
     }
-
+    
     func urlBar(_ urlBar: URLBar, didEnterText text: String) {
         // Hide find in page if the home view is displayed
         let isOnHomeView = homeView != nil
