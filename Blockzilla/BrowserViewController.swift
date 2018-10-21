@@ -823,13 +823,18 @@ extension BrowserViewController: URLBarDelegate {
         if Settings.getToggle(.enableSearchSuggestions) {
             searchSuggestClient.getSuggestions(text,callback: {suggestions, error in
                 if suggestions == nil {
-                    self.overlayView.setSearchQuery(queryArray: [], animated: true, hideFindInPage: true)
+                    //self.overlayView.setSearchQuery(queryArray: [], animated: true, hideFindInPage: true)
+                    self.overlayView.setSearchQuery(query: text, animated: true, hideFindInPage: isOnHomeView)
                 } else {
-                    self.overlayView.setSearchQuery(queryArray: suggestions!, animated: true, hideFindInPage: isOnHomeView)
+                    //self.overlayView.setSearchQuery(queryArray: suggestions!, animated: true, hideFindInPage: isOnHomeView)
+                    self.overlayView.setSearchQuery(query: text, animated: true, hideFindInPage: isOnHomeView)
                 }
             })
         } else {
-            overlayView.setSearchQuery(queryArray: [text], animated: true, hideFindInPage: isOnHomeView && text != "")
+            //overlayView.setSearchQuery(queryArray: [text], animated: true, hideFindInPage: isOnHomeView && text != "")
+            overlayView.setSearchQuery(query: text, animated: true, hideFindInPage: isOnHomeView)
+            
+            
         }
     }
 
