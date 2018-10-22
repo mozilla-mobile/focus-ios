@@ -18,9 +18,7 @@ class OpenUtils: NSObject {
     }
 
     func buildShareViewController(url: URL, printFormatter: UIPrintFormatter?) -> UIActivityViewController {
-        var activityItems: [Any] = [url]
-        
-        activityItems.append(self)
+        var activityItems: [Any] = [self]
 
         if let printFormatter = printFormatter {
             let printInfo = UIPrintInfo(dictionary: nil)
