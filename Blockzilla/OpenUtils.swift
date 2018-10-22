@@ -17,10 +17,8 @@ class OpenUtils: NSObject {
         self.webViewController = webViewController
     }
 
-    func buildShareViewController(url: URL, printFormatter: UIPrintFormatter?) -> UIActivityViewController {
-        var activityItems = [Any]()
-
-        activityItems.append(selectedURL)
+    func buildShareViewController() -> UIActivityViewController {
+        var activityItems: [Any] = [selectedURL]
 
         let printInfo = UIPrintInfo(dictionary: nil)
         printInfo.jobName = selectedURL.absoluteString
