@@ -193,13 +193,9 @@ class OverlayView: UIView {
                     self.findInPageButton.animateHidden(query.isEmpty || hideFindInPage, duration: duration, completion: {
                         self.updateCopyConstraint(showCopyButton: showCopyButton)
                     })
-                    
-                    if UserDefaults.standard.bool(forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt)
-                        || query.isEmpty {
-                        self.displaySearchSuggestionsPrompt(hide: true, duration: duration)
-                    } else {
-                        self.displaySearchSuggestionsPrompt(hide: false, duration: duration)
-                    }
+                    let shouldHideSearchSuggestionsPrompt = UserDefaults.standard.bool(forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt)
+                        || query.isEmpty
+                    self.displaySearchSuggestionsPrompt(hide: shouldHideSearchSuggestionsPrompt, duration: duration)
                 } else {
                     self.updateCopyConstraint(showCopyButton: showCopyButton)
                 }
