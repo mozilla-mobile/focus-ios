@@ -4,14 +4,11 @@
 
 import Foundation
 
-extension CharacterSet {
-    public static let URLAllowed = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=%")
-}
-
 class SearchEngine: NSObject, NSCoding {
     let name: String
     let image: UIImage?
     var isCustom: Bool = false
+
     private let searchTemplate: String
     private let suggestionsTemplate: String?
     private let SearchTermComponent = "{searchTerms}"
@@ -42,7 +39,7 @@ class SearchEngine: NSObject, NSCoding {
             if let escaped = query.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed) {
                 // Escape the search template as well in case it contains not-safe characters like symbols
                 let templateAllowedSet = NSMutableCharacterSet()
-                templateAllowedSet.formUnion(with: .URLAllowed)
+                templateAllowedSet.formUnion(with: .urlAllowed)
 
                 // Allow brackets since we use them in our template as our insertion point
                 templateAllowedSet.formUnion(with: CharacterSet(charactersIn: "{}"))
