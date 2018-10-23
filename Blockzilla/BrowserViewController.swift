@@ -833,8 +833,6 @@ extension BrowserViewController: URLBarDelegate {
         } else {
             //overlayView.setSearchQuery(queryArray: [text], animated: true, hideFindInPage: isOnHomeView && text != "")
             overlayView.setSearchQuery(query: text, animated: true, hideFindInPage: isOnHomeView)
-            
-            
         }
     }
 

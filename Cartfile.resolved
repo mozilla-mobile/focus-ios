@@ -1,5 +1,4 @@
 github "AgileBits/onepassword-extension" "a614e290396346e3cb69e4951656eb8033390f8c"
-github "Alamofire/Alamofire" "4.7.3"
 github "SnapKit/SnapKit" "4.0.0"
 github "adjust/ios_sdk" "v4.14.2"
 github "cezheng/Fuzi" "2.0.2"
