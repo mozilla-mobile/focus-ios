@@ -26,6 +26,8 @@ This branch works with Xcode 10.0 and supports iOS 11.0+.
 
 This branch is written in Swift 4.2.
 
+Pull requests should be submitted with master as the base branch, and should also be written in Swift 4.2.
+
 Build Instructions for Master
 ------------------
 
@@ -46,3 +48,8 @@ Build Instructions for Master
 
 5. Open `Blockzilla.xcodeproj` in Xcode.
 6. Build the `Focus` scheme in Xcode.
+
+Upcoming Release (Version 8.0)
+------------------
+
+Features planned for the next release can be found in the [V8.0 milestone](https://github.com/mozilla-mobile/focus-ios/milestone/29). If you would like to work on a feature that is not in this milestone, please reach out to @sblatz to ensure the proper UX and design work has been completed for it. That being said, all bug fixes or issues labeled [help wanted](https://github.com/mozilla-mobile/focus-ios/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22) are fair game. 
