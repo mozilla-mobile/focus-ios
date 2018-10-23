@@ -179,6 +179,7 @@
 		EB84F96F209380CE00BA6739 /* URLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB84F96E209380CE00BA6739 /* URLExtensions.swift */; };
 		EB84F9712093815500BA6739 /* effective_tld_names.dat in Resources */ = {isa = PBXBuildFile; fileRef = EB84F9702093815500BA6739 /* effective_tld_names.dat */; };
 		EBE44F4E20ADDF6A005AFEA6 /* SmartLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE44F4D20ADDF6A005AFEA6 /* SmartLabel.swift */; };
+		F7B3E49D2165C32B00118785 /* SearchSuggestionsPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B3E49C2165C32B00118785 /* SearchSuggestionsPromptView.swift */; };
 		F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F805722E1DBEE504004339C1 /* WebCacheUtils.swift */; };
 		F84AFE751DE77FE6005C4DD1 /* LaunchScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE721DE77FE6005C4DD1 /* LaunchScreen.png */; };
 		F84AFE761DE77FE6005C4DD1 /* LaunchScreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE731DE77FE6005C4DD1 /* LaunchScreen@2x.png */; };
@@ -905,6 +906,7 @@
 		EB84F9702093815500BA6739 /* effective_tld_names.dat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = effective_tld_names.dat; sourceTree = "<group>"; };
 		EBE44F4D20ADDF6A005AFEA6 /* SmartLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartLabel.swift; sourceTree = "<group>"; };
 		F4C4943B406FCA9B74B4E186 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		F7B3E49C2165C32B00118785 /* SearchSuggestionsPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSuggestionsPromptView.swift; sourceTree = "<group>"; };
 		F805722E1DBEE504004339C1 /* WebCacheUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebCacheUtils.swift; sourceTree = "<group>"; };
 		F84AFE721DE77FE6005C4DD1 /* LaunchScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchScreen.png; sourceTree = "<group>"; };
 		F84AFE731DE77FE6005C4DD1 /* LaunchScreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LaunchScreen@2x.png"; sourceTree = "<group>"; };
@@ -1299,6 +1301,7 @@
 				D3E54FCE1DEFAE80003E1AFF /* OpenSearchParser.swift */,
 				D36C1BA91DB02EBB0073C1AB /* OpenUtils.swift */,
 				D3426AEA1DB7F8AA0016DA5A /* OverlayView.swift */,
+				F7B3E49C2165C32B00118785 /* SearchSuggestionsPromptView.swift */,
 				16D716A4211503CD000C8A66 /* PageActionSheetItems.swift */,
 				16074B6C2114364C003B671F /* PhotonActionSheet.swift */,
 				D3E251E81DAD714C005918DC /* SafariInstructionsViewController.swift */,
@@ -1900,6 +1903,7 @@
 				7460BD671F58B1B10096B745 /* GradientProgressBar.swift in Sources */,
 				D3E54FE01DF0E221003E1AFF /* SearchSettingsViewController.swift in Sources */,
 				16D7169C2114EF76000C8A66 /* BlockerToggle.swift in Sources */,
+				F7B3E49D2165C32B00118785 /* SearchSuggestionsPromptView.swift in Sources */,
 				D33E9B241E1D93DD00A39A44 /* RequestHandler.swift in Sources */,
 				D3426AF61DB84E7A0016DA5A /* SearchEngine.swift in Sources */,
 				746BD9261F75C43C00BE8DB9 /* DataExtensions.swift in Sources */,
