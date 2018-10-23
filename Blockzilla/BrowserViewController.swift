@@ -707,6 +707,12 @@ class BrowserViewController: UIViewController {
     private func setNumberOfLifetimeTrackersBlocked(numberOfTrackers: Int) {
         UserDefaults.standard.set(numberOfTrackers, forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
     }
+    
+    func updateURLBar() {
+        if webViewController.url?.absoluteString != "about:blank" {
+            urlBar.url = webViewController.url
+        }
+    }
 }
 
 extension BrowserViewController: UIDropInteractionDelegate {
@@ -855,11 +861,14 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidActivate(_ urlBar: URLBar) {
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
+        
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
             self.topURLBarConstraints.forEach { $0.activate() }
             self.urlBarContainer.alpha = 1
             self.updateFindInPageVisibility(visible: false)
             self.view.layoutIfNeeded()
+        }) { (_) in
+            self.urlBar.displayClearButton(shouldDisplay: true)
         }
     }
 
@@ -913,7 +922,7 @@ extension BrowserViewController: URLBarDelegate {
         let utils = OpenUtils(url: url, webViewController: webViewController)
         let items = PageActionSheetItems(url: url)
         let sharePageItem = PhotonActionSheetItem(title: UIConstants.strings.sharePage, iconString: "icon_openwith_active") { action in
-            let shareVC = utils.buildShareViewController(url: url, printFormatter: self.webViewController.printFormatter)
+            let shareVC = utils.buildShareViewController()
             
             // Exact frame dimensions taken from presentPhotonActionSheet
             shareVC.popoverPresentationController?.sourceView = urlBar.pageActionsButton
@@ -1134,20 +1143,19 @@ extension BrowserViewController: WebControllerDelegate {
         browserToolbar.color = .loading
         toggleURLBarBackground(isBright: false)
         showToolbars()
-        
-        if webViewController.url?.absoluteString != "about:blank" {
-            urlBar.url = webViewController.url
-        }
+        updateURLBar()
     }
 
     func webControllerDidFinishNavigation(_ controller: WebController) {
-        if webViewController.url?.absoluteString != "about:blank" {
-            urlBar.url = webViewController.url
-        }
+        updateURLBar()
         urlBar.isLoading = false
         toggleToolbarBackground()
         toggleURLBarBackground(isBright: !urlBar.isEditing)
         urlBar.progressBar.hideProgressBar()
+    }
+    
+    func webControllerURLDidChange(_ controller: WebController) {
+        updateURLBar()
     }
 
     func webController(_ controller: WebController, didFailNavigationWithError error: Error) {
