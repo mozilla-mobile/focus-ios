@@ -98,7 +98,7 @@ class SettingsTableViewAccessoryCell: SettingsTableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupDynamicFont() {
+    private func setupDynamicFont() {
         newLabel.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
         accessoryLabel.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
     }
