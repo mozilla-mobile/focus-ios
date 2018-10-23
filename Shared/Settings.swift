@@ -11,6 +11,7 @@ enum SettingsToggle: String {
     case blockSocial = "BlockSocial"
     case blockOther = "BlockOther"
     case blockFonts = "BlockFonts"
+    case showHomeScreenTips = "HomeScreenTips"
     case safari = "Safari"
     case sendAnonymousUsageData = "SendAnonymousUsageData"
     case enableDomainAutocomplete = "enableDomainAutocomplete"
@@ -21,6 +22,7 @@ struct Settings {
     fileprivate static let prefs = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
     
     fileprivate static let customDomainSettingKey = "customDomains"
+    private static let siriRequestsEraseKey = "siriRequestsErase"
 
     private static func defaultForToggle(_ toggle: SettingsToggle) -> Bool {
         switch toggle {
@@ -30,6 +32,7 @@ struct Settings {
         case .blockSocial: return true
         case .blockOther: return false
         case .blockFonts: return false
+        case .showHomeScreenTips: return true
         case .safari: return true
         case .sendAnonymousUsageData: return AppInfo.isKlar ? false : true
         case .enableDomainAutocomplete: return true
@@ -52,6 +55,15 @@ struct Settings {
 
     static func set(_ value: Bool, forToggle toggle: SettingsToggle) {
         prefs.set(value, forKey: toggle.rawValue)
+        prefs.synchronize()
+    }
+    
+    static func siriRequestsErase() -> Bool {
+        return prefs.bool(forKey: siriRequestsEraseKey)
+    }
+    
+    static func setSiriRequestErase(to value: Bool) {
+        prefs.set(value, forKey: siriRequestsEraseKey)
         prefs.synchronize()
     }
 }
