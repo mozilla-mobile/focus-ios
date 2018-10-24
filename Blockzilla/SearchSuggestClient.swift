@@ -8,12 +8,6 @@ let SearchSuggestClientErrorDomain = "org.mozilla.firefox.SearchSuggestClient"
 let SearchSuggestClientErrorInvalidEngine = 0
 let SearchSuggestClientErrorInvalidResponse = 1
 
-/*
- * Clients of SearchSuggestionClient should retain the object during the
- * lifetime of the search suggestion query, as requests are canceled during destruction.
- *
- * Query callbacks that must run even if they are cancelled should wrap their contents in `withExtendendLifetime`.
- */
 class SearchSuggestClient {
     private var engine: SearchEngine
     private var request: NSMutableURLRequest?
@@ -39,11 +33,11 @@ class SearchSuggestClient {
                 guard let myData = data, let array = try JSONSerialization.jsonObject(with: myData, options: []) as? [Any] else {
                     throw NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
                 }
-
+                
                 if array.count < 2 {
                     throw NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
                 }
-
+                
                 if var suggestions = array[1] as? [String] {
                     if let searchWord = array[0] as? String {
                         suggestions.insert(searchWord, at: 0)
@@ -56,6 +50,6 @@ class SearchSuggestClient {
                 callback(nil, error)
                 return
             }
-        }.resume()
+            }.resume()
     }
 }
