@@ -17,14 +17,13 @@ class SearchSuggestClient {
     }
     
     func getSuggestions(_ query: String, callback: @escaping (_ response: [String]?, _ error: NSError?) -> Void) {
-        let url = engine.urlForSuggestions(query)
-        if url == nil {
+        guard let url = engine.urlForSuggestions(query) else {
             let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidEngine, userInfo: nil)
             callback(nil, error)
             return
         }
         
-        let request = URLRequest(url:url!)
+        let request = URLRequest(url:url)
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             do {
                 // The response will be of the following format:
