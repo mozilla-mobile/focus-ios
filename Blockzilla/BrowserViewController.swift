@@ -131,6 +131,7 @@ class BrowserViewController: UIViewController {
         overlayView.alpha = 0
         overlayView.delegate = self
         overlayView.backgroundColor = UIConstants.colors.overlayBackground
+        overlayView.setSearchSuggestionsPromptViewDelegate(delegate: self)
         mainContainerView.addSubview(overlayView)
 
         background.snp.makeConstraints { make in
@@ -820,13 +821,16 @@ extension BrowserViewController: URLBarDelegate {
     func urlBar(_ urlBar: URLBar, didEnterText text: String) {
         // Hide find in page if the home view is displayed
         let isOnHomeView = homeView != nil
-        if Settings.getToggle(.enableSearchSuggestions) {
+        if Settings.getToggle(.enableSearchSuggestions) && text != "" {
             searchSuggestClient.getSuggestions(text,callback: {suggestions, error in
-                if suggestions == nil {
+                guard let suggestions = suggestions else {
                     self.overlayView.setSearchQuery(queryArray: [], animated: true, hideFindInPage: true)
-                } else {
-                    self.overlayView.setSearchQuery(queryArray: suggestions!, animated: true, hideFindInPage: isOnHomeView)
+                    return
                 }
+                if suggestions[0] == urlBar.userInputText {
+                    self.overlayView.setSearchQuery(queryArray: suggestions, animated: true, hideFindInPage: isOnHomeView)
+                }
+                return
             })
         } else {
             overlayView.setSearchQuery(queryArray: [text], animated: true, hideFindInPage: isOnHomeView && text != "")
@@ -1137,6 +1141,14 @@ extension BrowserViewController: OverlayViewDelegate {
             urlBar.url = overlayURL
         }
         urlBar.dismiss()
+    }
+}
+
+extension BrowserViewController: SearchSuggestionsPromptViewDelegate {
+    func searchSuggestionsPromptView(_ searchSuggestionsPromptView: SearchSuggestionsPromptView, didEnable: Bool) {
+        UserDefaults.standard.set(true, forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt)
+        Settings.set(didEnable, forToggle: SettingsToggle.enableSearchSuggestions)
+        overlayView.displaySearchSuggestionsPrompt(hide: true)
     }
 }
 

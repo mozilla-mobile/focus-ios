@@ -34,6 +34,7 @@ class OverlayView: UIView {
     private let copyButton = UIButton()
     private let findInPageButton = InsetButton()
     private var findInPageHidden = false
+    private let searchSuggestionsPrompt = SearchSuggestionsPromptView()
     private let topBorder = UIView()
     public var currentURL = ""
 
@@ -247,7 +248,6 @@ class OverlayView: UIView {
                     self.findInPageButton.animateHidden(queryArray.isEmpty || hideFindInPage, duration: duration, completion: {
                         self.updateCopyConstraint(showCopyButton: showCopyButton)
                     })
-
                     for index in 0...self.searchSuggestionsMaxIndex {
                         self.setAttributedButtonTitle(phrase: self.searchQueryArray[index], button: self.searchButtonGroup[index], localizedStringFormat: UIConstants.strings.searchButton)
                     }
@@ -319,6 +319,29 @@ class OverlayView: UIView {
         animateHidden(false, duration: UIConstants.layout.overlayAnimationDuration) {
             self.isUserInteractionEnabled = true
         }
+    }
+    
+    func setSearchSuggestionsPromptViewDelegate(delegate: SearchSuggestionsPromptViewDelegate) {
+        searchSuggestionsPrompt.delegate = delegate
+    }
+    
+    func displaySearchSuggestionsPrompt(hide: Bool, duration: TimeInterval = 0) {
+        topBorder.backgroundColor = hide ? UIConstants.Photon.Grey90.withAlphaComponent(0.4) : UIColor(rgb: 0x42455A)
+        
+        if hide {
+            searchSuggestionsPrompt.animateHidden(true, duration: duration, completion: {
+                self.searchSuggestionsPrompt.snp.remakeConstraints { make in
+                    make.top.leading.trailing.equalTo(self.safeAreaLayoutGuide)
+                    make.height.equalTo(0)
+                }
+            })
+        } else {
+            searchSuggestionsPrompt.snp.remakeConstraints { make in
+                make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
+            }
+            searchSuggestionsPrompt.animateHidden(false, duration: duration)
+        }
+        
     }
 }
 extension URL {
