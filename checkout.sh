@@ -10,13 +10,14 @@ if ! hash python; then
 fi
 
 ver=$(python -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]\).*/\1\2/')
-echo $ver
 if [ "$ver" -lt "27" ]; then
     echo "This script requires python 2.7 or greater"
     exit 1
 elif [ "$ver" -eq "27" ]; then
+    echo "Python 27 detected. Running build-disconnect2.py"
     ./build-disconnect2.py
 elif [ "$ver" -gt "27" ]; then
+    echo "Python ${ver} detected. Running build-disconnect3.py"
     ./build-disconnect3.py
 fi
 
