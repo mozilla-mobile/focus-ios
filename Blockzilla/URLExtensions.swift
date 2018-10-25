@@ -104,9 +104,7 @@ extension URL {
     public func withQueryParams(_ params: [URLQueryItem]) -> URL {
         var components = URLComponents(url: self, resolvingAgainstBaseURL: false)!
         var items = (components.queryItems ?? [])
-        for param in params {
-            items.append(param)
-        }
+        items.append(contentsOf: params)
         components.queryItems = items
         return components.url!
     }

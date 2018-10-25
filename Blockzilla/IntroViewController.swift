@@ -49,18 +49,17 @@ class PageControl: UIView {
     var delegate: PageControlDelegate?
     
     func addPages() {
-        var buttonArray = [UIButton]()
         
         // Ensure we have at least one button
         if numberOfPages == 0 {
             return
         }
         
-        for _ in 0..<numberOfPages {
+        let buttonArray = [UIButton].init(repeating: {
             let button = UIButton(frame: CGRect(x: 0, y: 0, width: 6, height: 6))
             button.setImage(UIImage(imageLiteralResourceName: "page_indicator"), for: .normal)
-            buttonArray.append(button)
-        }
+            return button
+            }(), count: numberOfPages)
         
         // Enable the buttons to be tapped to switch to a new page
         buttonArray.forEach() { button in
