@@ -17,21 +17,22 @@ class OpenUtils: NSObject {
         self.webViewController = webViewController
     }
 
-    func buildShareViewController(url: URL) -> UIActivityViewController {
-        var activityItems: [Any] = [url]
-        
-        activityItems.append(self)
+    func buildShareViewController() -> UIActivityViewController {
+        var activityItems: [Any] = [selectedURL]
 
-        let printFormatter = UIPrintFormatter()
         let printInfo = UIPrintInfo(dictionary: nil)
-        printInfo.jobName = url.absoluteString
+        printInfo.jobName = selectedURL.absoluteString
         printInfo.outputType = .general
         activityItems.append(printInfo)
-        
+
         let renderer = UIPrintPageRenderer()
-        renderer.addPrintFormatter(printFormatter, startingAtPageAt: 0)
+        renderer.addPrintFormatter(webViewController.printFormatter, startingAtPageAt: 0)
         activityItems.append(renderer)
 
+        if let title = webViewController.pageTitle {
+            activityItems.append(TitleActivityItemProvider(title: title))
+        }
+        
         let shareController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
 
         // This needs to be ready by the time the share menu has been displayed and

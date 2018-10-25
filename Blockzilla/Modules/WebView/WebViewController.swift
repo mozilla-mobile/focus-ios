@@ -27,6 +27,7 @@ protocol WebControllerDelegate: class {
     func webControllerDidStartProvisionalNavigation(_ controller: WebController)
     func webControllerDidStartNavigation(_ controller: WebController)
     func webControllerDidFinishNavigation(_ controller: WebController)
+    func webControllerURLDidChange(_ controller: WebController)
     func webController(_ controller: WebController, didFailNavigationWithError error: Error)
     func webController(_ controller: WebController, didUpdateCanGoBack canGoBack: Bool)
     func webController(_ controller: WebController, didUpdateCanGoForward canGoForward: Bool)
@@ -38,6 +39,7 @@ protocol WebControllerDelegate: class {
     func webControllerShouldScrollToTop(_ controller: WebController) -> Bool
     func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus)
     func webController(_ controller: WebController, didUpdateFindInPageResults currentResult: Int?, totalResults: Int?)
+    func webController(_ controller: WebController, didOpenAMPURL url: URL)
 }
 
 class WebViewController: UIViewController, WebController {
@@ -53,6 +55,7 @@ class WebViewController: UIViewController, WebController {
     private var browserView = WKWebView()
     var onePasswordExtensionItem: NSExtensionItem!
     private var progressObserver: NSKeyValueObservation?
+    private var urlObserver: NSKeyValueObservation?
     private var userAgent: UserAgent?
     private var trackingProtectionStatus = TrackingProtectionStatus.on(TPPageStats()) {
         didSet {
@@ -68,6 +71,10 @@ class WebViewController: UIViewController, WebController {
         }
     }
 
+    var pageTitle: String? {
+        return browserView.title
+    }
+    
     var printFormatter: UIPrintFormatter { return browserView.viewPrintFormatter() }
     var scrollView: UIScrollView { return browserView.scrollView }
 
@@ -87,6 +94,7 @@ class WebViewController: UIViewController, WebController {
         trackingProtectionStatus = .on(TPPageStats())
         browserView = WKWebView()
         setupWebview()
+        self.browserView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
     }
 
     // Browser proxy methods
@@ -128,6 +136,10 @@ class WebViewController: UIViewController, WebController {
 
         progressObserver = browserView.observe(\WKWebView.estimatedProgress) { (webView, value) in
             self.delegate?.webController(self, didUpdateEstimatedProgress: webView.estimatedProgress)
+        }
+        
+        urlObserver = browserView.observe(\WKWebView.url, options: .new) { (webview, value) in
+            self.delegate?.webControllerURLDidChange(self)
         }
 
         setupBlockLists()
@@ -198,6 +210,18 @@ class WebViewController: UIViewController, WebController {
     func evaluate(_ javascript: String, completion: ((Any?, Error?) -> Void)?) {
         browserView.evaluateJavaScript(javascript, completionHandler: completion)
     }
+
+    override func viewDidLoad() {
+        self.browserView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
+    }
+
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == #keyPath(WKWebView.url) {
+            if let url = browserView.url {
+                self.delegate?.webController(self, didOpenAMPURL: url)
+            }
+        }
+    }
 }
 
 extension WebViewController: UIScrollViewDelegate {
@@ -239,7 +263,7 @@ extension WebViewController: WKNavigationDelegate {
         let error = error as NSError
         guard error.code != Int(CFNetworkErrors.cfurlErrorCancelled.rawValue), let errorUrl = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL else { return }
         let errorPageData = ErrorPage(error: error).data
-        webView.load(errorPageData, mimeType: "", characterEncodingName: "", baseURL: errorUrl)
+        webView.load(errorPageData, mimeType: "", characterEncodingName: UIConstants.strings.encodingNameUTF8, baseURL: errorUrl)
     }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
