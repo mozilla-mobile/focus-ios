@@ -824,7 +824,11 @@ extension BrowserViewController: URLBarDelegate {
         if Settings.getToggle(.enableSearchSuggestions) && text != "" {
             searchSuggestClient.getSuggestions(text,callback: {suggestions, error in
                 guard let suggestions = suggestions else {
-                    self.overlayView.setSearchQuery(queryArray: [], animated: true, hideFindInPage: true)
+                    if let word = urlBar.userInputText {
+                        self.overlayView.setSearchQuery(queryArray: [word], animated: true, hideFindInPage: true)
+                    } else {
+                        self.overlayView.setSearchQuery(queryArray: [], animated: true, hideFindInPage: true)
+                    }
                     return
                 }
                 if suggestions[0] == urlBar.userInputText {
