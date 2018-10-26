@@ -25,9 +25,18 @@ class IndexedInsetButton: InsetButton {
     }
 }
 
+enum ButtonViews: String {
+    case searchGroup = "searchGroup"
+    case findInPage = "findInPage"
+    case searchPrompt = "searchPrompt"
+    case copyButton = "copyButton"
+    case topBorder = "topBorder"
+}
+
 class OverlayView: UIView {
     weak var delegate: OverlayViewDelegate?
     private var searchButtonGroup = [IndexedInsetButton]()
+    private let buttonHeight = 56
     private var searchSuggestionsMaxIndex : Int
     private let maxNumberSuggestions = 4
     private var presented = false
@@ -36,13 +45,77 @@ class OverlayView: UIView {
     private let findInPageButton = InsetButton()
     private let searchSuggestionsPrompt = SearchSuggestionsPromptView()
     private let topBorder = UIView()
+    private let buttonsInOrder : [ButtonViews] = [.topBorder,.searchPrompt,.findInPage,.copyButton,.searchGroup]
+    private var currentExpandedButtons : [ButtonViews] = [.topBorder,.searchPrompt]
     public var currentURL = ""
 
     init() {
         searchSuggestionsMaxIndex = Settings.getToggle(.enableSearchSuggestions) ? maxNumberSuggestions : 0
         super.init(frame: CGRect.zero)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
+
+        //Make All Buttons
+        searchSuggestionsPrompt.backgroundColor = UIConstants.colors.background
+        searchSuggestionsPrompt.clipsToBounds = true
+        addSubview(searchSuggestionsPrompt)
+
+        topBorder.isHidden = true
+        topBorder.alpha = 0
+        topBorder.backgroundColor = UIConstants.Photon.Grey90.withAlphaComponent(0.4)
+        addSubview(topBorder)
+
         let padding = UIConstants.layout.searchButtonInset
+        makeFindInPageButton(withPadding: padding)
+        for i in 0...searchSuggestionsMaxIndex {
+            makeSearchButton(atIndex: i)
+        }
+        makeCopyButton(withPadding: padding)
+
+        //Set Constraints
+        topBorder.snp.makeConstraints { make in
+            make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
+            make.height.equalTo(1)
+        }
+
+        searchSuggestionsPrompt.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(safeAreaLayoutGuide)
+            make.top.equalTo(topBorder.snp.bottom)
+        }
+        
+        findInPageButton.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(safeAreaLayoutGuide)
+            make.top.equalTo(searchSuggestionsPrompt.snp.bottom)
+            make.height.equalTo(0)
+        }
+        findInPageButton.animateHidden(true, duration: 0)
+
+        copyButton.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(safeAreaLayoutGuide)
+            make.top.equalTo(findInPageButton.snp.bottom)
+            make.height.equalTo(0)
+        }
+        copyButton.animateHidden(true, duration: 0)
+
+        for i in 0...searchSuggestionsMaxIndex {
+            self.searchButtonGroup[i].snp.makeConstraints { make in
+                if i == 0 {
+                    make.top.equalTo(self.searchSuggestionsPrompt.snp.bottom)
+                }
+                else {
+                    make.top.equalTo(searchButtonGroup[i - 1].snp.bottom)
+                }
+                make.leading.trailing.equalTo(safeAreaLayoutGuide)
+                make.height.equalTo(0)
+            }
+            self.searchButtonGroup[i].animateHidden(true, duration: 0)
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func makeFindInPageButton(withPadding padding:CGFloat) {
         findInPageButton.titleLabel?.font = UIConstants.fonts.copyButton
         findInPageButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         findInPageButton.titleLabel?.lineBreakMode = .byTruncatingTail
@@ -55,30 +128,9 @@ class OverlayView: UIView {
             findInPageButton.contentHorizontalAlignment = .left
         }
         addSubview(findInPageButton)
-        
-        findInPageButton.snp.makeConstraints { make in
-            make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
-            make.height.equalTo(56)
-        }
-        findInPageButton.animateHidden(true, duration: 0)
-        correctNumberOfButtons(by: searchSuggestionsMaxIndex)
-
-        topBorder.isHidden = true
-        topBorder.alpha = 0
-        topBorder.backgroundColor = UIConstants.Photon.Grey90.withAlphaComponent(0.4)
-        addSubview(topBorder)
-
-        topBorder.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(self)
-            make.top.equalTo(findInPageButton.snp.top)
-            make.height.equalTo(1)
-        }
-
-        self.searchButtonGroup[0].snp.makeConstraints { make in
-            make.top.equalTo(findInPageButton.snp.bottom)
-            make.leading.trailing.equalTo(safeAreaLayoutGuide)
-        }
-
+    }
+    
+    func makeCopyButton(withPadding padding:CGFloat) {
         copyButton.titleLabel?.font = UIConstants.fonts.copyButton
         copyButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         copyButton.titleLabel?.lineBreakMode = .byTruncatingTail
@@ -90,45 +142,39 @@ class OverlayView: UIView {
         }
         copyButton.addTarget(self, action: #selector(didPressCopy), for: .touchUpInside)
         addSubview(copyButton)
-        
-        copyButton.snp.makeConstraints { make in
-            make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
-            make.height.equalTo(56)
-        }
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    func makeSearchButton(atIndex i: Int) {
+        let searchButton = IndexedInsetButton()
+        searchButton.accessibilityIdentifier = "OverlayView.searchButton"
+        searchButton.alpha = 0
+        searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .normal)
+        searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .highlighted)
+        searchButton.backgroundColor = UIConstants.colors.background
+        searchButton.titleLabel?.font = UIConstants.fonts.searchButton
+        searchButton.backgroundColor = UIConstants.colors.background
+        setUpOverlayButton(button: searchButton)
+        searchButton.setIndex(i)
+        searchButton.addTarget(self, action: #selector(didPressSearch(sender:)), for: .touchUpInside)
+        searchButtonGroup.append(searchButton)
+        addSubview(searchButton)
     }
 
-    func correctNumberOfButtons(by numberOfButtonsToReveal: Int) {
-        if searchSuggestionsMaxIndex >= searchButtonGroup.count{
-            for i in searchButtonGroup.count...searchSuggestionsMaxIndex {
-                let searchButton = IndexedInsetButton()
-                searchButton.accessibilityIdentifier = "OverlayView.searchButton"
-                searchButton.alpha = 0
-                searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .normal)
-                searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .highlighted)
-                searchButton.backgroundColor = UIConstants.colors.background
-                searchButton.titleLabel?.font = UIConstants.fonts.searchButton
-                searchButton.backgroundColor = UIConstants.colors.background
-                setUpOverlayButton(button: searchButton)
-                searchButton.setIndex(i)
-                searchButton.addTarget(self, action: #selector(didPressSearch(sender:)), for: .touchUpInside)
-                searchButtonGroup.append(searchButton)
-                addSubview(searchButton)
-
+    func correctNumberOfSearchButtons(by numberOfButtonsToReveal: Int) {
+        // Create more buttons if just turned on SearchSuggestions
+        if maxNumberSuggestions >= searchButtonGroup.count{
+            for i in searchButtonGroup.count...maxNumberSuggestions {
+                makeSearchButton(atIndex: i)
+                
                 self.searchButtonGroup[i].snp.makeConstraints { make in
-                    if i > 0 {
-                        make.top.equalTo(searchButtonGroup[i - 1].snp.bottom)
-                    } else {
-                        make.top.equalTo(findInPageButton.snp.bottom)
-                    }
+                    make.top.equalTo(searchButtonGroup[i - 1].snp.bottom)
                     make.leading.trailing.equalTo(safeAreaLayoutGuide)
-                    make.height.equalTo(56)
+                    make.height.equalTo(0)
                 }
             }
-        } else if numberOfButtonsToReveal < 0 {
+        }
+        //Hide Buttons if too many showing
+        if numberOfButtonsToReveal < 0 {
             for i in numberOfButtonsToReveal ... -1 {
                 let index = searchSuggestionsMaxIndex - i
                 searchButtonGroup[index].animateHidden(true, duration: 0)
@@ -139,14 +185,88 @@ class OverlayView: UIView {
                     findInPageButton.snp.updateConstraints { (make) in
                         make.height.equalTo(0)
                     }
+                    remakeConstraintsAfterHidingButtons(.findInPage, .searchGroup)
                 }
             }
-        } else if numberOfButtonsToReveal > 0 {
+        }
+        //Show buttons if some currently hidden
+        else if numberOfButtonsToReveal > 0 {
             for i in 0 ... numberOfButtonsToReveal - 1 {
                 let index = searchSuggestionsMaxIndex - i
                 searchButtonGroup[index].animateHidden(false, duration: 0)
-                searchButtonGroup[index].snp.updateConstraints{ (make) in
+                searchButtonGroup[index].snp.updateConstraints { (make) in
                     make.height.equalTo(56)
+                }
+            }
+        }
+    }
+
+    func getButton(_ button:ButtonViews) -> UIView {
+        switch(button) {
+        case .copyButton:
+            return self.copyButton
+        case .findInPage:
+            return self.findInPageButton
+        case .searchGroup:
+            return self.searchButtonGroup[0]
+        case .searchPrompt:
+            return self.searchSuggestionsPrompt
+        case .topBorder:
+            return self.topBorder
+        }
+    }
+
+    func remakeConstraintsAfterHidingButtons(_ buttons: ButtonViews ...) {
+        var lowestIndexRemoved:Int = 100
+        for button in buttons {
+            if let index = currentExpandedButtons.firstIndex(of: button) {
+                currentExpandedButtons.remove(at: index)
+                lowestIndexRemoved = min(lowestIndexRemoved,index)
+            }
+        }
+        // Only have to move buttons up if a button above them is hidden
+        if lowestIndexRemoved < currentExpandedButtons.count {
+            moveTheButtons(fromIndex: lowestIndexRemoved)
+        }
+    }
+
+    func remakeConstraintsAfterRevealingButtons(_ buttons: ButtonViews ...) {
+        var lowestIndexAdded:Int = 100
+        for button in buttons {
+            var index: Int = 0
+            var bvcurrent = currentExpandedButtons[index]
+            for bv in buttonsInOrder {
+                if bv == button {continue}
+                if bv == bvcurrent {
+                    index = index + 1
+                    bvcurrent = currentExpandedButtons[index]
+                }
+            }
+            currentExpandedButtons.insert(button, at: index)
+            lowestIndexAdded = min(lowestIndexAdded,index)
+        }
+        moveTheButtons(fromIndex: lowestIndexAdded)
+    }
+
+    func moveTheButtons(fromIndex lowestIndexEffected:Int) {
+        for i in lowestIndexEffected...currentExpandedButtons.count - 1 {
+            if i == 0 {
+                let theButton = getButton(currentExpandedButtons[i])
+                theButton.snp.updateConstraints{ (make) in
+                    make.top.equalTo(safeAreaLayoutGuide)
+                }
+            } else {
+                let topButton = getButton(currentExpandedButtons[i-1])
+                let bottomButton = getButton(currentExpandedButtons[i])
+                bottomButton.snp.updateConstraints { (make) in
+                    make.top.equalTo(topButton.snp.bottom)
+                }
+                if currentExpandedButtons[i] == .searchGroup && searchSuggestionsMaxIndex > 0 {
+                    for index in 1...searchSuggestionsMaxIndex {
+                        searchButtonGroup[index].snp.updateConstraints{ (make) in
+                            make.top.equalTo(searchButtonGroup[index-1].snp.bottom)
+                        }
+                    }
                 }
             }
         }
@@ -241,7 +361,7 @@ class OverlayView: UIView {
         }
         var showCopyButton = false
 
-        correctNumberOfButtons(by: searchSuggestionsMaxIndex - oldMax)
+        correctNumberOfSearchButtons(by: searchSuggestionsMaxIndex - oldMax)
         let willHide = hideFindInPage || searchSuggestionsMaxIndex < 0
         if findInPageButton.isHidden != willHide{
             adjustForFindInPage(hidden: willHide)
@@ -256,6 +376,10 @@ class OverlayView: UIView {
                     showCopyButton = url.isWebPage()
                 }
                 let emptyArray = self.searchSuggestionsMaxIndex < 0
+                let duration = animated ? UIConstants.layout.searchButtonAnimationDuration : 0
+                let shouldHideSearchSuggestionsPrompt = emptyArray ||
+                    UserDefaults.standard.bool(forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt)
+                self.displaySearchSuggestionsPrompt(hide: shouldHideSearchSuggestionsPrompt, duration: duration)
                 if !emptyArray {
                     for index in 0...self.searchSuggestionsMaxIndex {
                         self.setAttributedButtonTitle(phrase: self.searchQueryArray[index], button: self.searchButtonGroup[index], localizedStringFormat: UIConstants.strings.searchButton)
@@ -263,7 +387,6 @@ class OverlayView: UIView {
                     self.setAttributedButtonTitle(phrase: self.searchQueryArray[0], button: self.findInPageButton, localizedStringFormat: UIConstants.strings.findInPageButton)
                 }
                 if emptyArray != self.findInPageButton.isHidden {
-                    let duration = animated ? UIConstants.layout.searchButtonAnimationDuration : 0
                     self.topBorder.animateHidden(emptyArray, duration: duration)
                     self.findInPageButton.animateHidden(emptyArray || hideFindInPage, duration: duration, completion: {
                         self.updateCopyConstraint(showCopyButton: showCopyButton)
@@ -345,22 +468,28 @@ class OverlayView: UIView {
         topBorder.backgroundColor = hide ? UIConstants.Photon.Grey90.withAlphaComponent(0.4) : UIColor(rgb: 0x42455A)
         
         if hide {
-            searchSuggestionsPrompt.animateHidden(true, duration: duration, completion: {
-                self.searchSuggestionsPrompt.snp.remakeConstraints { make in
-                    make.top.leading.trailing.equalTo(self.topBorder.snp.bottom)
-                    make.height.equalTo(0)
-                }
-                self.updateViewBelowOther(top: self.findInPageButton, bottom: self.searchSuggestionsPrompt)
-                self.updateAllSearchButtonsBelowView(self.findInPageButton)
-            })
-        } else {
-            searchSuggestionsPrompt.snp.remakeConstraints { make in
-                make.top.leading.trailing.equalTo(topBorder.snp.bottom)
-            }
-            self.updateViewBelowOther(top: self.findInPageButton, bottom: self.searchSuggestionsPrompt)
-            self.updateAllSearchButtonsBelowView(self.findInPageButton)
+            //self.searchSuggestionsPrompt.snp.remakeConstraints { (make) in
+            //    make.top.leading.trailing.equalTo(self.safeAreaLayoutGuide)
+            //    make.height.equalTo(0)
+            //}
+            //  self.topBorder.snp.updateConstraints{ (make) in
+            //      make.top.equalTo(self.safeAreaLayoutGuide)
+            //  }
+            //self.updateViewBelowOther(top: self.findInPageButton, bottom: self.topBorder)
+            //self.updateAllSearchButtonsBelowView(self.findInPageButton)
             
-            searchSuggestionsPrompt.animateHidden(false, duration: duration)
+            //searchSuggestionsPrompt.animateHidden(true, duration: duration, completion: {
+                
+            //})
+        } else {
+            //searchSuggestionsPrompt.snp.remakeConstraints { make in
+            //    make.bottom.leading.trailing.equalTo(topBorder.snp.top)
+            //}
+            //self.updateViewBelowOther(top: self.topBorder, bottom: self.searchSuggestionsPrompt)
+            //self.updateViewBelowOther(top: self.findInPageButton, bottom: self.topBorder)
+            //self.updateAllSearchButtonsBelowView(self.findInPageButton)
+            
+            //searchSuggestionsPrompt.animateHidden(false, duration: duration)
         }
         
     }
