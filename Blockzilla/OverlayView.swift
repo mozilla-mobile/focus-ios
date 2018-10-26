@@ -239,16 +239,18 @@ class OverlayView: UIView {
         outer: for button in buttons {
             if currentExpandedButtons.contains(button) {continue}
             var index: Int = 0
-            var bvcurrent = currentExpandedButtons[index]
-            for bv in buttonsInOrder {
-                if bv == button {break}
-                if bv == bvcurrent {
-                    index = index + 1
-                    if currentExpandedButtons.count < index {
-                        bvcurrent = currentExpandedButtons[index]
-                        continue
+            if currentExpandedButtons.count > 0 {
+                var bvcurrent = currentExpandedButtons[index]
+                for bv in buttonsInOrder {
+                    if bv == button {break}
+                    if bv == bvcurrent {
+                        index = index + 1
+                        if currentExpandedButtons.count < index {
+                            bvcurrent = currentExpandedButtons[index]
+                            continue
+                        }
+                        break
                     }
-                    break
                 }
             }
             currentExpandedButtons.insert(button, at: index)
@@ -264,14 +266,13 @@ class OverlayView: UIView {
             if currentExpandedButtons[i] == .topBorder {
                 height = 1
             }
-            if currentExpandedButtons[i] == .searchPrompt {
-                height = 150
-            }
             if i == 0 {
                 let theButton = getButton(currentExpandedButtons[i])
                 theButton.snp.remakeConstraints{ (make) in
                     make.leading.trailing.top.equalTo(safeAreaLayoutGuide)
-                    make.height.equalTo(height)
+                    if currentExpandedButtons[i] != .searchPrompt {
+                        make.height.equalTo(height)
+                    }
                 }
             } else {
                 let topButton = getButton(currentExpandedButtons[i-1])
@@ -279,7 +280,9 @@ class OverlayView: UIView {
                 bottomButton.snp.remakeConstraints { (make) in
                     make.top.equalTo(topButton.snp.bottom)
                     make.leading.trailing.equalTo(safeAreaLayoutGuide)
-                    make.height.equalTo(height)
+                    if currentExpandedButtons[i] != .searchPrompt {
+                        make.height.equalTo(height)
+                    }
                 }
                 if currentExpandedButtons[i] == .searchGroup && searchSuggestionsMaxIndex > 0 {
                     for index in 1...searchSuggestionsMaxIndex {
