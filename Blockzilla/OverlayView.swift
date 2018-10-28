@@ -15,16 +15,17 @@ protocol OverlayViewDelegate: class {
 
 class IndexedInsetButton: InsetButton {
     private var index: Int = 0
-
-    func setIndex(_ i:Int){
+    func setIndex(_ i:Int) {
         index = i
     }
-
-    func getIndex() -> Int{
+    func getIndex() -> Int {
         return index
     }
 }
 
+/*Int value indicates vertical priority.
+  If all are visible, topBorder will be at the top, and searchGroup will be at the bottom.
+*/
 enum ButtonViews: Int {
     case topBorder = 0
     case searchPrompt = 1
@@ -50,7 +51,7 @@ class OverlayView: UIView {
 
     init() {
         searchSuggestionsMaxIndex = Settings.getToggle(.enableSearchSuggestions) ? maxNumberSuggestions : 0
-        needToRemakeConstraints = false
+        needToRemakeConstraints = true
         super.init(frame: CGRect.zero)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
 
@@ -71,9 +72,9 @@ class OverlayView: UIView {
         }
         makeCopyButton(withPadding: padding)
 
-        moveTheButtons()
-        hideButtons(.searchPrompt, .searchGroup, .copyButton, .findInPage, .topBorder)
-        moveTheButtons()
+        // Hack to warm-up constraints so doesn't glitch on first search.
+        setSearchQuery(queryArray: ["j","a"], animated: false, hideFindInPage: false)
+        setSearchQuery(queryArray: [], animated: false, hideFindInPage: true)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -138,8 +139,7 @@ class OverlayView: UIView {
                 let index = searchSuggestionsMaxIndex - i
                 searchButtonGroup[index].animateHidden(true, duration: 0)
                 if index == 0 {
-                    //findInPageButton.animateHidden(true, duration: 0)
-                    hideButtons(.findInPage, .searchGroup)
+                    hideButtons(.searchGroup)
                 }
             }
         }
@@ -172,23 +172,37 @@ class OverlayView: UIView {
 
     func hideButtons(_ buttons: ButtonViews ...) {
         for button in buttons {
-            buttonViewsVisible[button.rawValue] = false
-            let theButton = getButton(button)
-            if button != ButtonViews.searchPrompt{
-                theButton.snp.updateConstraints { (make) in
-                    make.height.equalTo(0)
+            if buttonViewsVisible[button.rawValue] {
+                buttonViewsVisible[button.rawValue] = false
+                let theButton = getButton(button)
+                if button != ButtonViews.searchPrompt {
+                    theButton.snp.updateConstraints { (make) in
+                        make.height.equalTo(0)
+                    }
                 }
+                if button == .searchGroup && searchSuggestionsMaxIndex > 0 {
+                    for index in 1...searchSuggestionsMaxIndex {
+                        searchButtonGroup[index].snp.updateConstraints { (make) in
+                            make.height.equalTo(0)
+                        }
+                    }
+                }
+                needToRemakeConstraints = true
             }
         }
     }
 
     func revealButtons(_ buttons: ButtonViews ...) {
         for button in buttons {
-            buttonViewsVisible[button.rawValue] = true
+            if !buttonViewsVisible[button.rawValue] {
+                buttonViewsVisible[button.rawValue] = true
+                needToRemakeConstraints = true
+            }
         }
     }
 
     func moveTheButtons() {
+        if !needToRemakeConstraints { return }
         var previousIndex : Int?
         for i in 0...buttonViewsVisible.count - 1 {
             //If view isn't visible, skip it.
@@ -227,6 +241,7 @@ class OverlayView: UIView {
             }
             previousIndex = i
         }
+        needToRemakeConstraints = false
     }
 
     func adjustForFindInPage(hidden:Bool){
