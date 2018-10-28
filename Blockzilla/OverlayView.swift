@@ -138,6 +138,9 @@ class OverlayView: UIView {
             for i in numberOfButtonsToReveal ... -1 {
                 let index = searchSuggestionsMaxIndex - i
                 searchButtonGroup[index].animateHidden(true, duration: 0)
+                searchButtonGroup[index].snp.updateConstraints { (make) in
+                    make.height.equalTo(0)
+                }
                 if index == 0 {
                     hideButtons(.searchGroup)
                 }
@@ -146,11 +149,18 @@ class OverlayView: UIView {
         //Show buttons if some currently hidden
         else if numberOfButtonsToReveal > 0 {
             for i in 0 ... numberOfButtonsToReveal - 1 {
-                let index = searchSuggestionsMaxIndex - i
+                let index = searchSuggestionsMaxIndex - numberOfButtonsToReveal + 1 + i
+                searchButtonGroup[index].animateHidden(false, duration: 0)
                 if index == 0 {
                     revealButtons(.searchGroup)
+                    moveTheButtons()
+                } else {
+                    searchButtonGroup[index].snp.remakeConstraints { (make) in
+                        make.height.equalTo(buttonHeight)
+                        make.top.equalTo(searchButtonGroup[index-1].snp.bottom)
+                        make.leading.trailing.equalTo(safeAreaLayoutGuide)
+                    }
                 }
-                searchButtonGroup[index].animateHidden(false, duration: 0)
             }
         }
     }
@@ -178,13 +188,6 @@ class OverlayView: UIView {
                 if button != ButtonViews.searchPrompt {
                     theButton.snp.updateConstraints { (make) in
                         make.height.equalTo(0)
-                    }
-                }
-                if button == .searchGroup && searchSuggestionsMaxIndex > 0 {
-                    for index in 1...searchSuggestionsMaxIndex {
-                        searchButtonGroup[index].snp.updateConstraints { (make) in
-                            make.height.equalTo(0)
-                        }
                     }
                 }
                 needToRemakeConstraints = true
@@ -233,7 +236,8 @@ class OverlayView: UIView {
                 }
             } else {
                 theButton.snp.remakeConstraints{ (make) in
-                    make.leading.trailing.top.equalTo(safeAreaLayoutGuide)
+                    make.leading.trailing.equalTo(safeAreaLayoutGuide)
+                    make.top.equalTo(self.snp.top)
                     if buttonView != .searchPrompt {
                         make.height.equalTo(height)
                     }
@@ -242,14 +246,6 @@ class OverlayView: UIView {
             previousIndex = i
         }
         needToRemakeConstraints = false
-    }
-
-    func adjustForFindInPage(hidden:Bool){
-        if hidden {
-            hideButtons(.findInPage)
-        } else {
-            revealButtons(.findInPage)
-        }
     }
 
     func setUpOverlayButton (button: InsetButton) {
@@ -314,7 +310,7 @@ class OverlayView: UIView {
         correctNumberOfSearchButtons(by: searchSuggestionsMaxIndex - oldMax)
         let willHide = hideFindInPage || searchSuggestionsMaxIndex < 0
         if findInPageButton.isHidden != willHide {
-            adjustForFindInPage(hidden: willHide)
+             willHide ? hideButtons(.findInPage) : revealButtons(.findInPage)
         }
         var showCopyButton = false
         UIPasteboard.general.urlAsync() { handoffUrl in
