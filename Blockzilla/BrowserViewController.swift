@@ -1089,6 +1089,21 @@ extension BrowserViewController: OverlayViewDelegate {
         self.find(query, function: "find")
     }
     
+    func overlayView(_ overlayView: OverlayView, didAddToAutocomplete query: String) {
+        let autocompleteSource = CustomCompletionSource()
+        
+        switch autocompleteSource.add(suggestion: query) {
+        case .error(.duplicateDomain):
+            break
+        case .error(let error):
+            guard !error.message.isEmpty else { return }
+            Toast(text: error.message).show()
+        case .success:
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.customDomain)
+            Toast(text: UIConstants.strings.autocompleteCustomURLAdded).show()
+        }
+    }
+    
     func overlayView(_ overlayView: OverlayView, didSubmitText text: String) {
         let text = text.trimmingCharacters(in: .whitespaces)
         guard !text.isEmpty else {
