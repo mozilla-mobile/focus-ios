@@ -29,8 +29,8 @@ class IndexedInsetButton: InsetButton {
 enum ButtonViews: Int {
     case topBorder = 0
     case searchPrompt = 1
-    case findInPage = 2
-    case copyButton = 3
+    case copyButton = 2
+    case findInPage = 3
     case searchGroup = 4
 }
 
@@ -46,7 +46,7 @@ class OverlayView: UIView {
     private let findInPageButton = InsetButton()
     private let searchSuggestionsPrompt = SearchSuggestionsPromptView()
     private let topBorder = UIView()
-    private var buttonViewsVisible : [Bool] = [true,true,true,true,true]
+    private var buttonViewsVisible : [Bool] = Array(repeating: true, count: 5)
     public var currentURL = ""
 
     init() {
@@ -72,8 +72,8 @@ class OverlayView: UIView {
         }
         makeCopyButton(withPadding: padding)
 
-        // Hack to warm-up constraints so doesn't glitch on first search.
-        setSearchQuery(queryArray: ["j","a"], animated: false, hideFindInPage: false)
+        // Warm-up constraints.
+        moveTheButtons()
         setSearchQuery(queryArray: [], animated: false, hideFindInPage: true)
     }
 
@@ -81,7 +81,7 @@ class OverlayView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func makeFindInPageButton(withPadding padding:CGFloat) {
+    private func makeFindInPageButton(withPadding padding:CGFloat) {
         findInPageButton.titleLabel?.font = UIConstants.fonts.copyButton
         findInPageButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         findInPageButton.titleLabel?.lineBreakMode = .byTruncatingTail
@@ -96,7 +96,7 @@ class OverlayView: UIView {
         addSubview(findInPageButton)
     }
     
-    func makeCopyButton(withPadding padding:CGFloat) {
+    private func makeCopyButton(withPadding padding:CGFloat) {
         copyButton.titleLabel?.font = UIConstants.fonts.copyButton
         copyButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         copyButton.titleLabel?.lineBreakMode = .byTruncatingTail
@@ -110,7 +110,7 @@ class OverlayView: UIView {
         addSubview(copyButton)
     }
 
-    func makeSearchButton(atIndex i: Int) {
+    private func makeSearchButton(atIndex i: Int) {
         let searchButton = IndexedInsetButton()
         searchButton.accessibilityIdentifier = "OverlayView.searchButton"
         searchButton.alpha = 0
@@ -126,7 +126,7 @@ class OverlayView: UIView {
         addSubview(searchButton)
     }
 
-    func correctNumberOfSearchButtons(by numberOfButtonsToReveal: Int) {
+    private func updateNumberOfSearchButtonsDisplayed(amount numberRowsToAdjust: Int) {
         // Create more buttons if just turned on SearchSuggestions
         if maxNumberSuggestions >= searchButtonGroup.count{
             for i in searchButtonGroup.count...maxNumberSuggestions {
@@ -134,8 +134,8 @@ class OverlayView: UIView {
             }
         }
         //Hide Buttons if too many showing
-        if numberOfButtonsToReveal < 0 {
-            for i in numberOfButtonsToReveal ... -1 {
+        if numberRowsToAdjust < 0 {
+            for i in numberRowsToAdjust ... -1 {
                 let index = searchSuggestionsMaxIndex - i
                 searchButtonGroup[index].animateHidden(true, duration: 0)
                 searchButtonGroup[index].snp.updateConstraints { (make) in
@@ -147,9 +147,9 @@ class OverlayView: UIView {
             }
         }
         //Show buttons if some currently hidden
-        else if numberOfButtonsToReveal > 0 {
-            for i in 0 ... numberOfButtonsToReveal - 1 {
-                let index = searchSuggestionsMaxIndex - numberOfButtonsToReveal + 1 + i
+        else if numberRowsToAdjust > 0 {
+            for i in 0 ... numberRowsToAdjust - 1 {
+                let index = searchSuggestionsMaxIndex - numberRowsToAdjust + 1 + i
                 searchButtonGroup[index].animateHidden(false, duration: 0)
                 if index == 0 {
                     revealButtons(.searchGroup)
@@ -165,8 +165,8 @@ class OverlayView: UIView {
         }
     }
 
-    func getButton(_ button:ButtonViews) -> UIView {
-        switch(button) {
+    private func getButton(_ button:ButtonViews) -> UIView {
+        switch button {
         case .copyButton:
             return self.copyButton
         case .findInPage:
@@ -180,7 +180,7 @@ class OverlayView: UIView {
         }
     }
 
-    func hideButtons(_ buttons: ButtonViews ...) {
+    private func hideButtons(_ buttons: ButtonViews ...) {
         for button in buttons {
             if buttonViewsVisible[button.rawValue] {
                 buttonViewsVisible[button.rawValue] = false
@@ -195,7 +195,7 @@ class OverlayView: UIView {
         }
     }
 
-    func revealButtons(_ buttons: ButtonViews ...) {
+    private func revealButtons(_ buttons: ButtonViews ...) {
         for button in buttons {
             if !buttonViewsVisible[button.rawValue] {
                 buttonViewsVisible[button.rawValue] = true
@@ -204,7 +204,7 @@ class OverlayView: UIView {
         }
     }
 
-    func moveTheButtons() {
+    private func moveTheButtons() {
         if !needToRemakeConstraints { return }
         var previousIndex : Int?
         for i in 0...buttonViewsVisible.count - 1 {
@@ -307,7 +307,7 @@ class OverlayView: UIView {
             searchSuggestionsMaxIndex = -1
         }
 
-        correctNumberOfSearchButtons(by: searchSuggestionsMaxIndex - oldMax)
+        updateNumberOfSearchButtonsDisplayed(amount: searchSuggestionsMaxIndex - oldMax)
         let willHide = hideFindInPage || searchSuggestionsMaxIndex < 0
         if findInPageButton.isHidden != willHide {
              willHide ? hideButtons(.findInPage) : revealButtons(.findInPage)
@@ -400,7 +400,7 @@ class OverlayView: UIView {
         searchSuggestionsPrompt.delegate = delegate
     }
     
-    func displaySearchSuggestionsPrompt(hide: Bool, duration: TimeInterval = 0) {
+    private func displaySearchSuggestionsPrompt(hide: Bool, duration: TimeInterval = 0) {
         topBorder.backgroundColor = hide ? UIConstants.Photon.Grey90.withAlphaComponent(0.4) : UIColor(rgb: 0x42455A)
         if hide && !searchSuggestionsPrompt.isHidden {
             self.hideButtons(.searchPrompt)
