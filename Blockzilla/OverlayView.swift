@@ -16,7 +16,7 @@ protocol OverlayViewDelegate: class {
 class OverlayView: UIView {
     weak var delegate: OverlayViewDelegate?
     private var searchButtonGroup = [InsetButton]()
-    private let searchSuggestionsCount = 4 // Five search buttons in total since indexing starts from 0.
+    private let searchSuggestionsCount = 5 // Five search buttons in total since indexing starts from 0.
     private var presented = false
     private var searchQueryArray = [String]()
     private let copyButton = UIButton()
@@ -91,7 +91,7 @@ class OverlayView: UIView {
         addSubview(findInPageButton)
         
         findInPageButton.snp.makeConstraints { make in
-            make.top.equalTo(searchButtonGroup[searchSuggestionsCount].snp.bottom)
+            make.top.equalTo(searchButtonGroup[0].snp.bottom)
             make.leading.trailing.equalTo(safeAreaLayoutGuide)
             make.height.equalTo(56)
         }
@@ -201,10 +201,24 @@ class OverlayView: UIView {
                 }
                 
                 // Handle updating of other search buttons based on how many search suggestions there are.
-                // Should be max(7, searchSuggestionCount) where max INCLUDES the find in page and copy url button
-                for index in 0..<self.searchButtonGroup.count {
-                    if index >= self.searchQueryArray.count { break } // Hacky because I'm too lazy to make this for loop proper for a demo :P
+                // Should be min(7, searchSuggestionCount) where max INCLUDES the find in page and copy url button
+                
+                var buttonsToShow = min(self.searchQueryArray.count, self.searchButtonGroup.count)
+                
+                if self.searchQueryArray[0] == "" {buttonsToShow = 0}
+                
+                print(buttonsToShow)
+                
+                // Show the buttons we need:
+                for index in 0..<buttonsToShow {
+                    self.searchButtonGroup[index].animateHidden(false, duration: 0)
                     self.setAttributedButtonTitle(phrase: self.searchQueryArray[index], button: self.searchButtonGroup[index], localizedStringFormat: UIConstants.strings.searchButton)
+                }
+                
+                // Hide the buttons we're not using!
+                
+                for index in buttonsToShow..<self.searchButtonGroup.count {
+                    self.searchButtonGroup[index].animateHidden(true, duration: 0)
                 }
                 
                 self.setAttributedButtonTitle(phrase: query, button: self.findInPageButton, localizedStringFormat: UIConstants.strings.findInPageButton)
