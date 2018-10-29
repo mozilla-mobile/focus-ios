@@ -96,7 +96,7 @@ class OverlayView: UIView {
         }
         addSubview(findInPageButton)
     }
-    
+
     private func makeCopyButton(withPadding padding:CGFloat) {
         copyButton.titleLabel?.font = UIConstants.fonts.copyButton
         copyButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
@@ -166,8 +166,8 @@ class OverlayView: UIView {
         }
     }
 
-    private func getButton(_ button:ButtonViews) -> UIView {
-        switch button {
+    private func getButton(_ buttonView:ButtonViews) -> UIView {
+        switch buttonView {
         case .copyButton:
             return self.copyButton
         case .findInPage:
@@ -181,12 +181,12 @@ class OverlayView: UIView {
         }
     }
 
-    private func hideButtons(_ buttons: ButtonViews ...) {
-        for button in buttons {
-            if buttonViewsVisible[button.rawValue] {
-                buttonViewsVisible[button.rawValue] = false
-                let theButton = getButton(button)
-                if button != ButtonViews.searchPrompt {
+    private func hideButtons(_ buttonViews: ButtonViews ...) {
+        for buttonType in buttonViews {
+            if buttonViewsVisible[buttonType.rawValue] {
+                buttonViewsVisible[buttonType.rawValue] = false
+                let theButton = getButton(buttonType)
+                if buttonType != ButtonViews.searchPrompt {
                     theButton.snp.updateConstraints { (make) in
                         make.height.equalTo(0)
                     }
@@ -213,10 +213,12 @@ class OverlayView: UIView {
             if !buttonViewsVisible[i] {continue}
             var height = UIConstants.layout.overlayButtonSize
             let buttonView = ButtonViews(rawValue: i)!
+            //Get the actual button referenced by the buttonView enum
             let theButton = getButton(buttonView)
             if ButtonViews(rawValue: i) == .topBorder {
                 height = 1
             }
+            // If it's not the top view, snap it to the bottom of the one above it
             if let topIndex = previousIndex {
                 let topButton = getButton(ButtonViews(rawValue: topIndex)!)
                 theButton.snp.remakeConstraints { (make) in
@@ -226,6 +228,7 @@ class OverlayView: UIView {
                         make.height.equalTo(height)
                     }
                 }
+                // Snap each search suggestion to the bottom of the one prior to it in searchButtonGroup
                 if buttonView == .searchGroup && searchSuggestionsMaxIndex > 0 {
                     for index in 1...searchSuggestionsMaxIndex {
                         searchButtonGroup[index].snp.remakeConstraints { (make) in
@@ -235,7 +238,9 @@ class OverlayView: UIView {
                         }
                     }
                 }
-            } else {
+            }
+            // If it is the top view snap it to the top.
+            else {
                 theButton.snp.remakeConstraints { (make) in
                     make.leading.trailing.equalTo(safeAreaLayoutGuide)
                     make.top.equalTo(self.snp.top)
@@ -276,6 +281,21 @@ class OverlayView: UIView {
      - Returns: An NSAttributedString with `phrase` localized and styled appropriately.
      
      */
+
+    func getAttributedButtonTitle(phrase: String,
+                                  localizedStringFormat: String) -> NSAttributedString {
+        let attributedString = NSMutableAttributedString(string: localizedStringFormat, attributes: [.foregroundColor: UIConstants.Photon.Grey10])
+        let phraseString = NSAttributedString(string: phrase, attributes: [.font: UIConstants.fonts.copyButtonQuery,
+                                                                           .foregroundColor: UIConstants.Photon.Grey10])
+
+        guard let range = attributedString.string.range(of: "%@") else { return phraseString }
+
+        let replaceRange = NSRange(range, in: attributedString.string)
+        attributedString.replaceCharacters(in: replaceRange, with: phraseString)
+
+        return attributedString
+    }
+
     func setAttributedButtonTitle(phrase: String, button: InsetButton, localizedStringFormat: String) {
         
         let attributedString = getAttributedButtonTitle(phrase: phrase,
@@ -284,20 +304,6 @@ class OverlayView: UIView {
         button.setAttributedTitle(attributedString, for: .normal)
     }
 
-    func getAttributedButtonTitle(phrase: String,
-                                  localizedStringFormat: String) -> NSAttributedString {
-        let attributedString = NSMutableAttributedString(string: localizedStringFormat, attributes: [.foregroundColor: UIConstants.Photon.Grey10])
-        let phraseString = NSAttributedString(string: phrase, attributes: [.font: UIConstants.fonts.copyButtonQuery,
-                                                                           .foregroundColor: UIConstants.Photon.Grey10])
-        
-        guard let range = attributedString.string.range(of: "%@") else { return phraseString }
-        
-        let replaceRange = NSRange(range, in: attributedString.string)
-        attributedString.replaceCharacters(in: replaceRange, with: phraseString)
-        
-        return attributedString
-    }
-    
     func setSearchQuery(queryArray: [String], animated: Bool, hideFindInPage: Bool) {
         asyncDispatchGroup.enter()
         searchQueryArray = queryArray
