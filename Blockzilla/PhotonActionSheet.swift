@@ -33,7 +33,19 @@ private struct PhotonActionSheetUX {
     static let TitleHeaderHeight: CGFloat = 36
     static let SeparatorHeaderHeight: CGFloat = 12
     static let SeparatorColor = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
-    static let TableViewBackgroundColor = UIConstants.Photon.Ink90.withAlphaComponent(PhotonActionSheetUX.BackgroundAlpha)
+    
+    static var TableViewBackgroundColor: UIColor {
+        get {
+            if UIAccessibility.isReduceTransparencyEnabled {
+                // It'd be better to compute this colour by blending Ink90 with grey to emulate the layering
+                // done when reduce transparency is disabled
+                return UIColor(rgb: 0x454558)
+            } else {
+                return UIConstants.Photon.Ink90.withAlphaComponent(PhotonActionSheetUX.BackgroundAlpha)
+            }
+        }
+    }
+    
     static let BlurAlpha: CGFloat = 0.7
 }
 
@@ -77,7 +89,19 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     weak var delegate: PhotonActionSheetDelegate?
     fileprivate(set) var actions: [[PhotonActionSheetItem]]
     
-    private var tintColor = UIConstants.Photon.Grey10
+    private var tintColor: UIColor {
+        get {
+            // Light grey is darkened, which reduces contrast on a dark background,
+            // so use white instead when the user has enabled the Increase Contrast
+            // accessibility setting
+            if UIAccessibility.isDarkerSystemColorsEnabled {
+                return UIConstants.Photon.White100
+            } else {
+                return UIConstants.Photon.Grey10
+            }
+        }
+    }
+    
     private var heightConstraint: Constraint?
     var tableView = UITableView(frame: .zero, style: .grouped)
     var darkenedBackgroundView = UIView()
@@ -127,17 +151,16 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         view.addSubview(tableView)
         view.accessibilityIdentifier = "Action Sheet"
         
-        // In a popover the popover provides the blur background
-        // Not using a background color allows the view to style correctly with the popover arrow
-        if self.popoverPresentationController == nil {
-            tableView.backgroundColor = PhotonActionSheetUX.TableViewBackgroundColor
-            let blurEffect = UIBlurEffect(style: .regular)
-            let blurEffectView = UIVisualEffectView(effect: blurEffect)
-            blurEffectView.alpha = PhotonActionSheetUX.BlurAlpha
-            tableView.backgroundView = blurEffectView
-        } else {
-            tableView.backgroundColor = .clear
+        NotificationCenter.default.addObserver(forName: UIAccessibility.reduceTransparencyStatusDidChangeNotification, object: nil, queue: nil)  { _ in
+            self.updateActionSheetBackground()
         }
+        
+        NotificationCenter.default.addObserver(forName: UIAccessibility.darkerSystemColorsStatusDidChangeNotification, object: nil, queue: nil)  { _ in
+            // Is there a better way to have the text redrawn to make sure contrast isn't affected?
+            self.tableView.reloadData()
+        }
+        
+        updateActionSheetBackground()
         
         let width = min(self.view.frame.size.width, PhotonActionSheetUX.MaxWidth) - (PhotonActionSheetUX.Padding * 2)
         
@@ -199,6 +222,25 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
         if UIDevice.current.userInterfaceIdiom == .pad {
             self.preferredContentSize = self.tableView.contentSize
+        }
+    }
+    
+    private func updateActionSheetBackground() {
+        // In a popover the popover provides the blur background
+        // Not using a background color allows the view to style correctly with the popover arrow
+        if self.popoverPresentationController == nil {
+            tableView.backgroundColor = PhotonActionSheetUX.TableViewBackgroundColor
+            
+            if !UIAccessibility.isReduceTransparencyEnabled {
+                let blurEffect = UIBlurEffect(style: .regular)
+                let blurEffectView = UIVisualEffectView(effect: blurEffect)
+                blurEffectView.alpha = PhotonActionSheetUX.BlurAlpha
+                tableView.backgroundView = blurEffectView
+            } else {
+                tableView.backgroundView = nil
+            }
+        } else {
+            tableView.backgroundColor = .clear
         }
     }
     
