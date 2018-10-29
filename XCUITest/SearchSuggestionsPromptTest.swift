@@ -20,19 +20,28 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         super.tearDown()
     }
     
-    func testEnableHidesPrompt() {
-        // Check search suggestions toggle is OFF initially
+    func checkToggle(isOn: Bool) {
+        let targetValue = isOn ? "1" : "0"
+        
         waitforHittable(element: app.buttons["Settings"])
         app.buttons["Settings"].tap()
-        let toggle = app.tables.switches["BlockerToggle.enableSearchSuggestions"]
-        XCTAssertEqual(toggle.value as! String, "0")
+        XCTAssertEqual(app.tables.switches["BlockerToggle.enableSearchSuggestions"].value as! String, targetValue)
+    }
+    
+    func typeInURLBar() {
+        app.textFields["Search or enter address"].tap()
+        app.textFields["Search or enter address"].typeText("mozilla")
+    }
+    
+    func testEnableHidesPrompt() {
+        // Check search suggestions toggle is OFF
+        checkToggle(isOn: false)
         
         // Activate prompt by typing in URL bar
         app.buttons["SettingsViewController.doneButton"].tap()
-        app.textFields["Search or enter address"].tap()
-        app.textFields["Search or enter address"].typeText("mozilla")
+        typeInURLBar()
 
-        // Ensure that prompt shows
+        // Prompt should display
         waitforExistence(element: app.otherElements["SearchSuggestionsPromptView"])
 
         // Press enable
@@ -40,29 +49,21 @@ class SearchSuggestionsPromptTest: BaseTestCase {
 
         // Ensure prompt disappears
         waitforNoExistence(element: app.otherElements["SearchSuggestionsPromptView"])
-        
-        // 
-        XCTAssertTrue(UserDefaults.standard.bool(forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt))
 
-        // Check search suggestions toggle is OFF in settings
+        // Check search suggestions toggle is ON
         app.buttons["URLBar.cancelButton"].tap()
-        app.buttons["Settings"].tap()
-        XCTAssertEqual(toggle.value as! String, "1")
+        checkToggle(isOn: true)
     }
     
     func testDisableHidesPrompt() {
-        // Ensure search suggestions toggle is OFF initially
-        waitforHittable(element: app.buttons["Settings"])
-        app.buttons["Settings"].tap()
-        let toggle = app.tables.switches["BlockerToggle.enableSearchSuggestions"]
-        XCTAssertEqual(toggle.value as! String, "0")
+        // Check search suggestions toggle is OFF
+        checkToggle(isOn: false)
         
         // Activate prompt by typing in URL bar
         app.buttons["SettingsViewController.doneButton"].tap()
-        app.textFields["Search or enter address"].tap()
-        app.textFields["Search or enter address"].typeText("mozilla")
+        typeInURLBar()
         
-        // Ensure prompt shows
+        // Prompt should display
         waitforExistence(element: app.otherElements["SearchSuggestionsPromptView"])
         
         // Press disable
@@ -73,24 +74,20 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         
         // Ensure search suggestions toggle is OFF in settings
         app.buttons["URLBar.cancelButton"].tap()
-        app.buttons["Settings"].tap()
-        XCTAssertEqual(toggle.value as! String, "0")
+        checkToggle(isOn: false)
     }
     
     func testEnableToggleHidesPrompt() {
-        // Ensure search suggestions toggle is OFF initially
-        waitforHittable(element: app.buttons["Settings"])
-        app.buttons["Settings"].tap()
-        let toggle = app.tables.switches["BlockerToggle.enableSearchSuggestions"]
-        XCTAssertEqual(toggle.value as! String, "0")
+        // Check search suggestions toggle is OFF
+        checkToggle(isOn: false)
         
         // Turn toggle ON
+        let toggle = app.tables.switches["BlockerToggle.enableSearchSuggestions"]
         toggle.tap()
         
-        // Type in URL Bar, prompt should not show
+        // Prompt should not display
         app.buttons["SettingsViewController.doneButton"].tap()
-        app.textFields["Search or enter address"].tap()
-        app.textFields["Search or enter address"].typeText("mozilla")
+        typeInURLBar()
         waitforNoExistence(element: app.otherElements["SearchSuggestionsPromptView"])
     }
 }
