@@ -217,6 +217,7 @@ struct UIConstants {
         static let shareTrackersHeight: CGFloat = 36
         static let homeViewTextOffset: CGFloat = 5
         static let homeViewLabelMinimumScale: CGFloat = 0.65
+        static let overlayButtonSize: Int = 56
     }
 
     struct strings {
