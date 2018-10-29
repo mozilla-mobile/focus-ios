@@ -181,6 +181,7 @@
 		EB84F96F209380CE00BA6739 /* URLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB84F96E209380CE00BA6739 /* URLExtensions.swift */; };
 		EB84F9712093815500BA6739 /* effective_tld_names.dat in Resources */ = {isa = PBXBuildFile; fileRef = EB84F9702093815500BA6739 /* effective_tld_names.dat */; };
 		EBE44F4E20ADDF6A005AFEA6 /* SmartLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE44F4D20ADDF6A005AFEA6 /* SmartLabel.swift */; };
+		F74E8109218183F400D18535 /* SearchSuggestionsPromptTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74E8108218183F400D18535 /* SearchSuggestionsPromptTest.swift */; };
 		F7B3E49D2165C32B00118785 /* SearchSuggestionsPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B3E49C2165C32B00118785 /* SearchSuggestionsPromptView.swift */; };
 		F7FF8B5B2194084000CCA80F /* UIDeviceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FF8B5A2194084000CCA80F /* UIDeviceExtensions.swift */; };
 		F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F805722E1DBEE504004339C1 /* WebCacheUtils.swift */; };
@@ -911,6 +912,7 @@
 		EB84F9702093815500BA6739 /* effective_tld_names.dat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = effective_tld_names.dat; sourceTree = "<group>"; };
 		EBE44F4D20ADDF6A005AFEA6 /* SmartLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartLabel.swift; sourceTree = "<group>"; };
 		F4C4943B406FCA9B74B4E186 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		F74E8108218183F400D18535 /* SearchSuggestionsPromptTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSuggestionsPromptTest.swift; sourceTree = "<group>"; };
 		F7B3E49C2165C32B00118785 /* SearchSuggestionsPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSuggestionsPromptView.swift; sourceTree = "<group>"; };
 		F7FF8B5A2194084000CCA80F /* UIDeviceExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDeviceExtensions.swift; sourceTree = "<group>"; };
 		F805722E1DBEE504004339C1 /* WebCacheUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebCacheUtils.swift; sourceTree = "<group>"; };
@@ -1016,6 +1018,7 @@
 				4FE4E6F51FBB5E2C001BB779 /* TPSidebarBadge.swift */,
 				4F1284851FC5E242001A775B /* TPSettingsTest.swift */,
 				166E4BFA212F7DEC0029E2A5 /* UserAgentTest.swift */,
+				F74E8108218183F400D18535 /* SearchSuggestionsPromptTest.swift */,
 			);
 			path = XCUITest;
 			sourceTree = "<group>";
@@ -1828,6 +1831,7 @@
 				4F1284861FC5E242001A775B /* TPSettingsTest.swift in Sources */,
 				4FE4E6F61FBB5E2C001BB779 /* TPSidebarBadge.swift in Sources */,
 				1DE6DA2220BF410400CE337B /* QuickAddAutocompleteURLTest.swift in Sources */,
+				F74E8109218183F400D18535 /* SearchSuggestionsPromptTest.swift in Sources */,
 				0BA39A861DD2B8E4005F970A /* WebsiteAccessTest.swift in Sources */,
 				0B0D6BC41F3CDDBB00497D08 /* CollapsedURLTest.swift in Sources */,
 			);
