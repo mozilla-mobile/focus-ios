@@ -25,6 +25,7 @@ class IndexedInsetButton: InsetButton {
 
 /*Int value indicates vertical priority.
   If all are visible, topBorder will be at the top, and searchGroup will be at the bottom.
+ Note: SearchGroup is just the first element, if it is not at the bottom some other logic will need to change.
 */
 enum ButtonViews: Int {
     case topBorder = 0
@@ -316,13 +317,15 @@ class OverlayView: UIView {
         UIPasteboard.general.urlAsync() { handoffUrl in
             self.asyncDispatchGroup.enter()
             DispatchQueue.main.async {
+                var showCopyButton = false
                 if let url = handoffUrl, url.isWebPage() {
                     let attributedTitle = NSMutableAttributedString(string: UIConstants.strings.copiedLink, attributes: [.foregroundColor : UIConstants.Photon.Grey10])
                     let attributedCopiedUrl = NSMutableAttributedString(string: url.absoluteString, attributes: [.font: UIConstants.fonts.copyButtonQuery, .foregroundColor : UIConstants.Photon.Grey10])
                     attributedTitle.append(attributedCopiedUrl)
                     self.copyButton.setAttributedTitle(attributedTitle, for: .normal)
-                    self.updateCopyConstraint(showCopyButton: url.isWebPage())
+                    showCopyButton = url.isWebPage()
                 }
+                self.updateCopyConstraint(showCopyButton: showCopyButton)
                 let emptyArray = self.searchSuggestionsMaxIndex < 0
                 let duration = animated ? UIConstants.layout.searchButtonAnimationDuration : 0
                 let shouldHideSearchSuggestionsPrompt = emptyArray ||
