@@ -18,7 +18,7 @@ class OverlayView: UIView {
     private var searchButtonGroup = [InsetButton]()
     private let searchSuggestionsCount = 4 // Five search buttons in total since indexing starts from 0.
     private var presented = false
-    private var searchQuery = ""
+    private var searchQueryArray = [String]()
     private let copyButton = UIButton()
     private let findInPageButton = InsetButton()
     private let searchSuggestionsPrompt = SearchSuggestionsPromptView()
@@ -167,9 +167,9 @@ class OverlayView: UIView {
         button.setAttributedTitle(attributedString, for: .normal)
     }
     
-    func setSearchQuery(query: String, animated: Bool, hideFindInPage: Bool) {
-        searchQuery = query
-        let query = query.trimmingCharacters(in: .whitespaces)
+    func setSearchQuery(queryArray: [String], animated: Bool, hideFindInPage: Bool) {
+        searchQueryArray = queryArray
+        let query = queryArray[0].trimmingCharacters(in: .whitespaces)
         let duration = animated ? UIConstants.layout.searchButtonAnimationDuration : 0
 
         var showCopyButton = false
@@ -199,10 +199,14 @@ class OverlayView: UIView {
                 } else {
                     self.updateCopyConstraint(showCopyButton: showCopyButton)
                 }
-
-                self.searchButtonGroup.forEach { searchButton in
-                    self.setAttributedButtonTitle(phrase: query, button: searchButton, localizedStringFormat: UIConstants.strings.searchButton)
+                
+                // Handle updating of other search buttons based on how many search suggestions there are.
+                // Should be max(7, searchSuggestionCount) where max INCLUDES the find in page and copy url button
+                for index in 0..<self.searchButtonGroup.count {
+                    if index >= self.searchQueryArray.count { break } // Hacky because I'm too lazy to make this for loop proper for a demo :P
+                    self.setAttributedButtonTitle(phrase: self.searchQueryArray[index], button: self.searchButtonGroup[index], localizedStringFormat: UIConstants.strings.searchButton)
                 }
+                
                 self.setAttributedButtonTitle(phrase: query, button: self.findInPageButton, localizedStringFormat: UIConstants.strings.findInPageButton)
             }
         }
@@ -211,7 +215,7 @@ class OverlayView: UIView {
     fileprivate func updateCopyConstraint(showCopyButton: Bool) {
         if showCopyButton {
             copyButton.isHidden = false
-            if searchButtonGroup[0].isHidden || searchQuery.isEmpty {
+            if searchButtonGroup[0].isHidden || searchQueryArray[0].isEmpty {
                 copyButton.snp.remakeConstraints { make in
                     make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
                     make.height.equalTo(56)
@@ -236,13 +240,13 @@ class OverlayView: UIView {
     }
 
     @objc private func didPressSearch() {
-        delegate?.overlayView(self, didSearchForQuery: searchQuery)
+        delegate?.overlayView(self, didSearchForQuery: searchQueryArray[0])
     }
     @objc private func didPressCopy() {
         delegate?.overlayView(self, didSubmitText: UIPasteboard.general.string!)
     }
     @objc private func didPressFindOnPage() {
-        delegate?.overlayView(self, didSearchOnPage: searchQuery)
+        delegate?.overlayView(self, didSearchOnPage: searchQueryArray[0])
     }
     @objc private func didPressSettings() {
         delegate?.overlayViewDidPressSettings(self)
@@ -254,7 +258,7 @@ class OverlayView: UIView {
     }
 
     func dismiss() {
-        setSearchQuery(query: "", animated: false, hideFindInPage: true)
+        setSearchQuery(queryArray: [""], animated: false, hideFindInPage: true)
         self.isUserInteractionEnabled = false
         copyButton.isHidden = true
         animateHidden(true, duration: UIConstants.layout.overlayAnimationDuration) {
@@ -263,7 +267,7 @@ class OverlayView: UIView {
     }
 
     func present() {
-        setSearchQuery(query: "", animated: false, hideFindInPage: true)
+        setSearchQuery(queryArray: [""], animated: false, hideFindInPage: true)
         self.isUserInteractionEnabled = false
         copyButton.isHidden = false
         animateHidden(false, duration: UIConstants.layout.overlayAnimationDuration) {
