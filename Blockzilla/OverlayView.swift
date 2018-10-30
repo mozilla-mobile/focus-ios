@@ -246,7 +246,7 @@ class OverlayView: UIView {
             if searchSuggestionsVisible > 0 {
                 make.top.equalTo(searchButtonGroup[searchSuggestionsVisible-1].snp.bottom)
             } else {
-                make.top.equalTo(safeAreaLayoutGuide)
+                make.top.equalTo(topBorder.snp.bottom)
             }
             make.height.equalTo(UIConstants.layout.overlayButtonHeight)
         }
