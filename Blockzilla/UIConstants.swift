@@ -181,6 +181,8 @@ struct UIConstants {
         static let lockIconInset: Float = 4
         static let navigationDoneOffset: Float = -10
         static let overlayAnimationDuration: TimeInterval = 0.25
+        static let overlayButtonHeight: Int = 56
+        static let numberOfSearchSuggestions: Int = 5
         static let progressVisibilityAnimationDuration: TimeInterval = 0.25
         static let searchButtonInset: CGFloat = 15
         static let searchButtonAnimationDuration: TimeInterval = 0.1
