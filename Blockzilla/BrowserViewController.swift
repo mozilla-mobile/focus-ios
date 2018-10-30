@@ -711,6 +711,7 @@ class BrowserViewController: UIViewController {
     func updateURLBar() {
         if webViewController.url?.absoluteString != "about:blank" {
             urlBar.url = webViewController.url
+            overlayView.currentURL = urlBar.url?.absoluteString ?? ""
         }
     }
 }
