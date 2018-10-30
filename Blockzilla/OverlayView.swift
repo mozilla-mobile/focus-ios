@@ -223,15 +223,11 @@ class OverlayView: UIView {
 
                 if firstElementHidden != query.isEmpty {
                     self.topBorder.animateHidden(query.isEmpty, duration: duration)
-                    self.findInPageButton.animateHidden(query.isEmpty || hideFindInPage, duration: duration, completion: {
-                        if numberSearchSuggestionsChanged {
-                            self.updateFindInPagePlacement()
-                        }
+                    if numberSearchSuggestionsChanged {
+                        self.findInPageButton.animateHidden(query.isEmpty || hideFindInPage, duration: 0)
+                        self.updateFindInPagePlacement()
                         self.updateCopyConstraint(showCopyButton: showCopyButton)
-                    })
-                    let shouldHideSearchSuggestionsPrompt = UserDefaults.standard.bool(forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt)
-                        || query.isEmpty
-                    self.displaySearchSuggestionsPrompt(hide: shouldHideSearchSuggestionsPrompt, duration: duration)
+                    }
                 } else {
                     if numberSearchSuggestionsChanged {
                         self.updateFindInPagePlacement()
@@ -256,6 +252,7 @@ class OverlayView: UIView {
                 make.height.equalTo(UIConstants.layout.overlayButtonHeight)
             }
         }
+        layoutIfNeeded()
     }
 
     fileprivate func updateCopyConstraint(showCopyButton: Bool) {
@@ -316,6 +313,11 @@ class OverlayView: UIView {
         setSearchQuery(queryArray: [""], animated: false, hideFindInPage: true)
         self.isUserInteractionEnabled = false
         copyButton.isHidden = false
+        
+        let shouldHideSearchSuggestionsPrompt = UserDefaults.standard.bool(forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt)
+        self.displaySearchSuggestionsPrompt(hide: shouldHideSearchSuggestionsPrompt, duration: 0)
+        self.findInPageButton.animateHidden(true, duration: 0)
+
         animateHidden(false, duration: UIConstants.layout.overlayAnimationDuration) {
             self.isUserInteractionEnabled = true
         }
