@@ -833,7 +833,6 @@ extension BrowserViewController: URLBarDelegate {
                 }
                 
                 if suggestions[0] == urlBar.userInputText {
-                    print("USING")
                     self.overlayView.setSearchQuery(queryArray: suggestions, animated: true, hideFindInPage: isOnHomeView)
                 }
                 return

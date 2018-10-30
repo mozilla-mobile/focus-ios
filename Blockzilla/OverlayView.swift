@@ -200,17 +200,15 @@ class OverlayView: UIView {
                     self.copyButton.setAttributedTitle(attributedTitle, for: .normal)
                     showCopyButton = url.isWebPage()
                 }
-                
-                
-                // To flag whether FindInPage and Copy need to move if more/less search suggestions showing.
-                let buttonsVisibleBefore = self.searchSuggestionsVisible
+
                 let firstElementHidden = self.searchButtonGroup[0].isHidden
                 // Handle updating of other search buttons based on how many search suggestions there are.
-                // Should be min(7, searchSuggestionCount) where max INCLUDES the find in page and copy url button
+                let buttonsVisibleBefore = self.searchSuggestionsVisible
                 self.searchSuggestionsVisible = min(self.searchQueryArray.count, self.searchButtonGroup.count)
-                
                 if self.searchQueryArray[0] == "" {self.searchSuggestionsVisible = 0}
-                
+                // To flag whether FindInPage and Copy need to move if more/less search suggestions showing.
+                let numberSearchSuggestionsChanged = buttonsVisibleBefore != self.searchSuggestionsVisible
+
                 // Show the buttons we need:
                 for index in 0..<self.searchSuggestionsVisible {
                     self.searchButtonGroup[index].animateHidden(false, duration: 0)
@@ -225,11 +223,8 @@ class OverlayView: UIView {
 
                 if firstElementHidden != query.isEmpty {
                     self.topBorder.animateHidden(query.isEmpty, duration: duration)
-                    /*self.searchButtonGroup.forEach { searchButton in
-                        searchButton.animateHidden(query.isEmpty, duration: duration)
-                    }*/
                     self.findInPageButton.animateHidden(query.isEmpty || hideFindInPage, duration: duration, completion: {
-                        if buttonsVisibleBefore != self.searchSuggestionsVisible {
+                        if numberSearchSuggestionsChanged {
                             self.updateFindInPagePlacement()
                         }
                         self.updateCopyConstraint(showCopyButton: showCopyButton)
@@ -238,7 +233,7 @@ class OverlayView: UIView {
                         || query.isEmpty
                     self.displaySearchSuggestionsPrompt(hide: shouldHideSearchSuggestionsPrompt, duration: duration)
                 } else {
-                    if buttonsVisibleBefore != self.searchSuggestionsVisible {
+                    if numberSearchSuggestionsChanged {
                         self.updateFindInPagePlacement()
                     }
                     self.updateCopyConstraint(showCopyButton: showCopyButton)
