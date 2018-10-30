@@ -224,14 +224,16 @@ class OverlayView: UIView {
                 if firstElementHidden != query.isEmpty {
                     self.topBorder.animateHidden(query.isEmpty, duration: duration)
                     if numberSearchSuggestionsChanged {
-                        self.findInPageButton.animateHidden(query.isEmpty || hideFindInPage, duration: 0)
                         self.updateFindInPagePlacement()
-                        self.updateCopyConstraint(showCopyButton: showCopyButton)
+                        self.findInPageButton.animateHidden(query.isEmpty || hideFindInPage, duration: 0, completion: {
+                            self.updateCopyConstraint(showCopyButton: showCopyButton)
+                        })
                     }
                 } else {
                     if numberSearchSuggestionsChanged {
                         self.updateFindInPagePlacement()
                     }
+                    
                     self.updateCopyConstraint(showCopyButton: showCopyButton)
                 }
             }
@@ -246,11 +248,7 @@ class OverlayView: UIView {
             } else {
                 make.top.equalTo(safeAreaLayoutGuide)
             }
-            if findInPageButton.isHidden {
-                make.height.equalTo(0)
-            } else {
-                make.height.equalTo(UIConstants.layout.overlayButtonHeight)
-            }
+            make.height.equalTo(UIConstants.layout.overlayButtonHeight)
         }
         layoutIfNeeded()
     }
@@ -312,12 +310,12 @@ class OverlayView: UIView {
     func present() {
         setSearchQuery(queryArray: [""], animated: false, hideFindInPage: true)
         self.isUserInteractionEnabled = false
+        findInPageButton.isHidden = true
         copyButton.isHidden = false
         
         let shouldHideSearchSuggestionsPrompt = UserDefaults.standard.bool(forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt)
-        self.displaySearchSuggestionsPrompt(hide: shouldHideSearchSuggestionsPrompt, duration: 0)
-        self.findInPageButton.animateHidden(true, duration: 0)
-
+        displaySearchSuggestionsPrompt(hide: shouldHideSearchSuggestionsPrompt, duration: 0)
+        
         animateHidden(false, duration: UIConstants.layout.overlayAnimationDuration) {
             self.isUserInteractionEnabled = true
         }
