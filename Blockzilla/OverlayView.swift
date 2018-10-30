@@ -75,6 +75,7 @@ class OverlayView: UIView {
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
         }
 
+        findInPageButton.isHidden = true
         findInPageButton.titleLabel?.font = UIConstants.fonts.copyButton
         findInPageButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         findInPageButton.titleLabel?.lineBreakMode = .byTruncatingTail
