@@ -23,16 +23,13 @@ class IndexedInsetButton: InsetButton {
     }
 }
 
-/*Int value indicates vertical priority.
-  If all are visible, topBorder will be at the top, and searchGroup will be at the bottom.
- Note: SearchGroup is just the first element, if it is not at the bottom some other logic will need to change.
-*/
+// Value indicates vertical priority. If all are visible, searchPrompt will be top, and findInPage will be bottom.
 enum ButtonViews: Int {
     case topBorder = 0
     case searchPrompt = 1
-    case copyButton = 2
-    case findInPage = 3
-    case searchGroup = 4
+    case searchGroup = 2
+    case copyButton = 3
+    case findInPage = 4
 }
 
 class OverlayView: UIView {
@@ -220,7 +217,10 @@ class OverlayView: UIView {
             }
             // If it's not the top view, snap it to the bottom of the one above it
             if let topIndex = previousIndex {
-                let topButton = getButton(ButtonViews(rawValue: topIndex)!)
+                var topButton = getButton(ButtonViews(rawValue: topIndex)!)
+                if ButtonViews(rawValue: topIndex) == .searchGroup {
+                    topButton = searchButtonGroup[searchSuggestionsMaxIndex]
+                }
                 theButton.snp.remakeConstraints { (make) in
                     make.top.equalTo(topButton.snp.bottom)
                     make.leading.trailing.equalTo(safeAreaLayoutGuide)
