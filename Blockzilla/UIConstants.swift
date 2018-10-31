@@ -397,6 +397,7 @@ struct UIConstants {
         static let autocompleteAddCustomUrlExample = NSLocalizedString("Autocomplete.addCustomUrlExample", value: "Example: example.com", comment: "A label displaying an example URL")
         static let autocompleteEmptyState = NSLocalizedString("Autocomplete.emptyState", value: "No Custom URLs to display", comment: "Label for button to add a custom URL")
         static let autocompleteCustomURLAdded = NSLocalizedString("Autocomplete.customUrlAdded", value: "New Custom URL added.", comment: "Label for toast alerting a custom URL has been added")
+        static let autocompleteCustomURLDuplicate = NSLocalizedString("Autocomplete.duplicateUrl", value: "URL already exists", comment: "Label for toast alerting that the custom URL being added is a duplicateß")
 
         static let findInPagePreviousLabel = NSLocalizedString("FindInPage.PreviousResult", value: "Find previous in page", comment: "Accessibility label for previous result button in Find in Page Toolbar.")
         static let findInPageNextLabel = NSLocalizedString("FindInPage.NextResult", value: "Find next in page", comment: "Accessibility label for next result button in Find in Page Toolbar.")

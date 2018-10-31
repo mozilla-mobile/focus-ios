@@ -1095,7 +1095,7 @@ extension BrowserViewController: OverlayViewDelegate {
         
         switch autocompleteSource.add(suggestion: query) {
         case .error(.duplicateDomain):
-            break
+            Toast(text: UIConstants.strings.autocompleteCustomURLDuplicate).show()
         case .error(let error):
             guard !error.message.isEmpty else { return }
             Toast(text: error.message).show()
