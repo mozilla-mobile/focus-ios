@@ -1091,8 +1091,9 @@ extension BrowserViewController: OverlayViewDelegate {
     }
     
     func overlayView(_ overlayView: OverlayView, didAddToAutocomplete query: String) {
-        let autocompleteSource = CustomCompletionSource()
-        
+        urlBar.dismiss()
+
+        let autocompleteSource = CustomCompletionSource()        
         switch autocompleteSource.add(suggestion: query) {
         case .error(.duplicateDomain):
             Toast(text: UIConstants.strings.autocompleteCustomURLDuplicate).show()
