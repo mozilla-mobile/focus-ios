@@ -819,26 +819,25 @@ extension BrowserViewController: URLBarDelegate {
     }
     
     func urlBar(_ urlBar: URLBar, didEnterText text: String) {
-        // Hide find in page if the home view is displayed
-        let isOnHomeView = homeView != nil
-        if Settings.getToggle(.enableSearchSuggestions) && text != "" {
-            searchSuggestClient.getSuggestions(text, callback: { suggestions, error in
-                guard let suggestions = suggestions else {
-                    if let word = urlBar.userInputText {
-                        self.overlayView.setSearchQuery(queryArray: [word], animated: true, hideFindInPage: isOnHomeView)
-                    } else {
-                        self.overlayView.setSearchQuery(queryArray: [], animated: true, hideFindInPage: true)
-                    }
+        let trimmedText = text.trimmingCharacters(in: .whitespaces)
+        let isOnHomeView = homeView != nil 
+
+        if Settings.getToggle(.enableSearchSuggestions) && !trimmedText.isEmpty {
+            searchSuggestClient.getSuggestions(trimmedText, callback: { suggestions, error in
+                let userInputText = urlBar.userInputText?.trimmingCharacters(in: .whitespaces) ?? ""
+                
+                // Check if this callback is stale (new user input has been requested)
+                if userInputText.isEmpty || userInputText != trimmedText {
                     return
                 }
                 
-                if suggestions[0] == urlBar.userInputText {
-                    self.overlayView.setSearchQuery(queryArray: suggestions, animated: true, hideFindInPage: isOnHomeView)
+                if userInputText == trimmedText {
+                    let suggestions = suggestions ?? [trimmedText]
+                    self.overlayView.setSearchQuery(suggestions: suggestions, hideFindInPage: isOnHomeView || text.isEmpty)
                 }
-                return
             })
         } else {
-            overlayView.setSearchQuery(queryArray: [text], animated: true, hideFindInPage: isOnHomeView && text != "")
+            overlayView.setSearchQuery(suggestions: [trimmedText], hideFindInPage: isOnHomeView || text.isEmpty)
         }
     }
 
@@ -1153,12 +1152,9 @@ extension BrowserViewController: SearchSuggestionsPromptViewDelegate {
     func searchSuggestionsPromptView(_ searchSuggestionsPromptView: SearchSuggestionsPromptView, didEnable: Bool) {
         UserDefaults.standard.set(true, forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt)
         Settings.set(didEnable, forToggle: SettingsToggle.enableSearchSuggestions)
-        overlayView.displaySearchSuggestionsPrompt(hide: true)
-        if didEnable {
-            overlayView.approvedSearchSuggestions()
-            if let urlbar = self.urlBar, let value = self.urlBar?.userInputText {
-                urlBar(urlbar, didEnterText: value)
-            }
+        overlayView.updateSearchSuggestionsPrompt(hidden: true)
+        if didEnable, let urlbar = self.urlBar, let value = self.urlBar?.userInputText {
+            urlBar(urlbar, didEnterText: value)
         }
     }
 }
