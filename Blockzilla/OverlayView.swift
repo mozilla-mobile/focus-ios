@@ -205,8 +205,10 @@ class OverlayView: UIView {
         if showCopyButton {
             copyButton.isHidden = false
             if searchButton.isHidden || searchQuery.isEmpty {
+                let topConstraint: ConstraintRelatableTarget = addToAutocompleteButton.isHidden ? safeAreaLayoutGuide : addToAutocompleteButton.snp.bottom
                 copyButton.snp.remakeConstraints { make in
-                    make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
+                    make.top.equalTo(topConstraint)
+                    make.leading.trailing.equalTo(safeAreaLayoutGuide)
                     make.height.equalTo(56)
                 }
             } else if findInPageButton.isHidden {
