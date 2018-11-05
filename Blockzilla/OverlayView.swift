@@ -212,7 +212,7 @@ class OverlayView: UIView {
                 // Show the buttons we need:
                 for index in 0..<self.searchSuggestionsVisible {
                     self.searchButtonGroup[index].animateHidden(false, duration: 0)
-                    self.setAttributedButtonTitle(phrase: self.searchQueryArray[index], button: self.searchButtonGroup[index], localizedStringFormat: UIConstants.strings.searchButton)
+                    self.setAttributedButtonTitle(phrase: self.searchQueryArray[index], button: self.searchButtonGroup[index], localizedStringFormat: Settings.getToggle(.enableSearchSuggestions) ? "" : UIConstants.strings.searchButton)
                 }
                 
                 // Hide the buttons we're not using!
