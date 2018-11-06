@@ -243,7 +243,7 @@ class OverlayView: UIView {
         copyButton.snp.remakeConstraints { make in
             if !findInPageHidden {
                 make.top.equalTo(findInPageButton.snp.bottom)
-            } else if lastSearchButtonIndex >= 0 && !searchButtonGroup[lastSearchButtonIndex].isHidden{
+            } else if lastSearchButtonIndex >= 0 && !searchButtonGroup[lastSearchButtonIndex].isHidden {
                 make.top.equalTo(searchButtonGroup[lastSearchButtonIndex].snp.bottom)
             } else {
                 make.top.equalTo(topBorder.snp.bottom)
