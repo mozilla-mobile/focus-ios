@@ -174,7 +174,6 @@ struct UIConstants {
     struct layout {
         static let browserToolbarDisabledOpacity: CGFloat = 0.3
         static let browserToolbarHeight: CGFloat = 44
-        static let copyButtonAnimationDuration: TimeInterval = 0.1
         static let deleteAnimationDuration: TimeInterval = 0.25
         static let alphaToZeroDeleteAnimationDuration: TimeInterval = deleteAnimationDuration * (2 / 3)
         static let displayKeyboardDeleteAnimationDuration: TimeInterval = deleteAnimationDuration * (1 / 3)
@@ -185,7 +184,6 @@ struct UIConstants {
         static let numberOfSearchSuggestions: Int = 5
         static let progressVisibilityAnimationDuration: TimeInterval = 0.25
         static let searchButtonInset: CGFloat = 15
-        static let searchButtonAnimationDuration: TimeInterval = 0.1
         static let searchSuggestionsPromptCornerRadius: CGFloat = 12 
         static let searchSuggestionsPromptButtonRadius: CGFloat = 8
         static let toastAnimationDuration: TimeInterval = 0.3
