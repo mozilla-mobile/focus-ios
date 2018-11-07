@@ -47,7 +47,7 @@ class OverlayView: UIView {
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
         }
         
-        for i in 0..<UIConstants.layout.numberOfSearchSuggestions  {
+        for i in 0..<UIConstants.layout.maxNumberOfSuggestions  {
             makeSearchSuggestionButton(atIndex: i)
         }
         
@@ -64,7 +64,7 @@ class OverlayView: UIView {
             make.top.equalTo(topBorder.snp.bottom)
             make.leading.trailing.equalTo(safeAreaLayoutGuide)
         }
-        for i in 1..<UIConstants.layout.numberOfSearchSuggestions  {
+        for i in 1..<UIConstants.layout.maxNumberOfSuggestions  {
             self.searchButtonGroup[i].snp.makeConstraints { make in
                 make.top.equalTo(searchButtonGroup[i - 1].snp.bottom)
                 make.leading.trailing.equalTo(safeAreaLayoutGuide)
