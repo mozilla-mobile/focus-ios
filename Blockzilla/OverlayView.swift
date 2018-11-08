@@ -33,6 +33,7 @@ class OverlayView: UIView {
     private let findInPageButton = InsetButton()
     private let searchSuggestionsPrompt = SearchSuggestionsPromptView()
     private let topBorder = UIView()
+    private let maxNumOfSuggestions = UIDevice.current.isSmallDevice() ? UIConstants.layout.smallDeviceMaxNumSuggestions : UIConstants.layout.largeDeviceMaxNumSuggestions
     public var currentURL = ""
 
     init() {
@@ -47,7 +48,7 @@ class OverlayView: UIView {
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
         }
         
-        for i in 0..<UIConstants.layout.maxNumberOfSuggestions  {
+        for i in 0..<maxNumOfSuggestions  {
             makeSearchSuggestionButton(atIndex: i)
         }
         
@@ -64,7 +65,7 @@ class OverlayView: UIView {
             make.top.equalTo(topBorder.snp.bottom)
             make.leading.trailing.equalTo(safeAreaLayoutGuide)
         }
-        for i in 1..<UIConstants.layout.maxNumberOfSuggestions  {
+        for i in 1..<maxNumOfSuggestions  {
             self.searchButtonGroup[i].snp.makeConstraints { make in
                 make.top.equalTo(searchButtonGroup[i - 1].snp.bottom)
                 make.leading.trailing.equalTo(safeAreaLayoutGuide)

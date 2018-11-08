@@ -181,7 +181,8 @@ struct UIConstants {
         static let navigationDoneOffset: Float = -10
         static let overlayAnimationDuration: TimeInterval = 0.25
         static let overlayButtonHeight: Int = 56
-        static let maxNumberOfSuggestions: Int = 4
+        static let smallDeviceMaxNumSuggestions: Int = 4
+        static let largeDeviceMaxNumSuggestions: Int = 5
         static let progressVisibilityAnimationDuration: TimeInterval = 0.25
         static let searchButtonInset: CGFloat = 15
         static let searchSuggestionsPromptCornerRadius: CGFloat = 12 
