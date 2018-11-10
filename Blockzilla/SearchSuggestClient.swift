@@ -39,7 +39,9 @@ class SearchSuggestClient {
                 
                 if var suggestions = array[1] as? [String] {
                     if let searchWord = array[0] as? String {
-                        suggestions.insert(searchWord, at: 0)
+                        if !suggestions.contains(searchWord) {
+                            suggestions.insert(searchWord, at: 0)
+                        }
                     }
                     callback(suggestions, nil)
                     return
