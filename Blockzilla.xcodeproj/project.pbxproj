@@ -182,6 +182,7 @@
 		EB84F9712093815500BA6739 /* effective_tld_names.dat in Resources */ = {isa = PBXBuildFile; fileRef = EB84F9702093815500BA6739 /* effective_tld_names.dat */; };
 		EBE44F4E20ADDF6A005AFEA6 /* SmartLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE44F4D20ADDF6A005AFEA6 /* SmartLabel.swift */; };
 		F7B3E49D2165C32B00118785 /* SearchSuggestionsPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B3E49C2165C32B00118785 /* SearchSuggestionsPromptView.swift */; };
+		F7FF8B5B2194084000CCA80F /* UIDeviceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FF8B5A2194084000CCA80F /* UIDeviceExtensions.swift */; };
 		F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F805722E1DBEE504004339C1 /* WebCacheUtils.swift */; };
 		F84AFE751DE77FE6005C4DD1 /* LaunchScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE721DE77FE6005C4DD1 /* LaunchScreen.png */; };
 		F84AFE761DE77FE6005C4DD1 /* LaunchScreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE731DE77FE6005C4DD1 /* LaunchScreen@2x.png */; };
@@ -911,6 +912,7 @@
 		EBE44F4D20ADDF6A005AFEA6 /* SmartLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartLabel.swift; sourceTree = "<group>"; };
 		F4C4943B406FCA9B74B4E186 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		F7B3E49C2165C32B00118785 /* SearchSuggestionsPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSuggestionsPromptView.swift; sourceTree = "<group>"; };
+		F7FF8B5A2194084000CCA80F /* UIDeviceExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDeviceExtensions.swift; sourceTree = "<group>"; };
 		F805722E1DBEE504004339C1 /* WebCacheUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebCacheUtils.swift; sourceTree = "<group>"; };
 		F84AFE721DE77FE6005C4DD1 /* LaunchScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchScreen.png; sourceTree = "<group>"; };
 		F84AFE731DE77FE6005C4DD1 /* LaunchScreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LaunchScreen@2x.png"; sourceTree = "<group>"; };
@@ -1345,6 +1347,7 @@
 				746BD9271F75C45A00BE8DB9 /* DictionaryExtensions.swift */,
 				D8E0152B1FB4136E00CA3B9F /* AddSearchEngineViewController.swift */,
 				2696EB03211F540600F0C73F /* SearchHistoryUtils.swift */,
+				F7FF8B5A2194084000CCA80F /* UIDeviceExtensions.swift */,
 			);
 			path = Blockzilla;
 			sourceTree = "<group>";
@@ -1921,6 +1924,7 @@
 				D37DE55D1BCDBD6100906364 /* WaveView.swift in Sources */,
 				E4BF2DD71BACE8CA00DA9D68 /* AppDelegate.swift in Sources */,
 				D3E2C9691DA3024800DEBE3D /* InsetButton.swift in Sources */,
+				F7FF8B5B2194084000CCA80F /* UIDeviceExtensions.swift in Sources */,
 				F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */,
 				1D3BEDFB20C5E76B0019B722 /* FindInPageBar.swift in Sources */,
 				D30DF93E1DC1634F0064736C /* Toast.swift in Sources */,
