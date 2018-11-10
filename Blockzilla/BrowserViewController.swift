@@ -1113,7 +1113,7 @@ extension BrowserViewController: OverlayViewDelegate {
         if let url = searchEngineManager.activeEngine.urlForQuery(query) {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.selectQuery, object: TelemetryEventObject.searchBar)
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
-            submit(url: url)
+            urlBar(urlBar, didSubmitText: query)
             urlBar.url = url
         }
 
