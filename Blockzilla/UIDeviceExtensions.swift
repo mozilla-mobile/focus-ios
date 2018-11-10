@@ -16,8 +16,8 @@ extension UIDevice {
         return identifier
     }
     
-    // Checks if device is an iPhone 5s
+    // Checks if device is an iPhone 5s, iPhone SE, or iPod Touch 6th gen
     func isSmallDevice() -> Bool {
-        return UIDevice.current.modelName == "iPhone6,1" || UIDevice.current.modelName == "iPhone6,2"
+        return UIDevice.current.modelName == "iPhone6,1" || UIDevice.current.modelName == "iPhone6,2" || UIDevice.current.modelName == "iPod7,1" || UIDevice.current.modelName == "iPhone8,4"
     }
 }
