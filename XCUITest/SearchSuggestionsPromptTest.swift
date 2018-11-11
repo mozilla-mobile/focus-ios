@@ -16,10 +16,6 @@ class SearchSuggestionsPromptTest: BaseTestCase {
     }
     
     override func tearDown() {
-//        waitforHittable(element: app.buttons["Settings"])
-//        app.buttons["Settings"].tap()
-//        app.tables.switches["BlockerToggle.enableSearchSuggestions"].tap()
-        
         app.terminate()
         super.tearDown()
     }
@@ -29,16 +25,16 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         XCTAssertEqual(app.tables.switches["BlockerToggle.enableSearchSuggestions"].value as! String, targetValue)
     }
     
+    func turnOffToggle() {
+        app.tables.switches["BlockerToggle.enableSearchSuggestions"].tap()
+    }
+    
     func typeInURLBar(text: String) {
         app.textFields["Search or enter address"].tap()
         app.textFields["Search or enter address"].typeText(text)
     }
     
     func checkSuggestions() {
-        // Typing in URL bar should show search suggestions
-        //waitforExistence(element: app.textFields["Search or enter address"])
-        //typeInURLBar(text: "g")
-        
         // Check search cells are displayed correctly
         let firstSuggestion = app.buttons.matching(identifier: "OverlayView.searchButton").element(boundBy: 0)
         let secondSuggestion = app.buttons.matching(identifier: "OverlayView.searchButton").element(boundBy: 1)
@@ -86,6 +82,7 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         waitforHittable(element: app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
         checkToggle(isOn: true)
+        turnOffToggle()
     }
     
     func testDisableThroughPrompt() {
@@ -134,16 +131,34 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         
         // Prompt should not display
         app.buttons["SettingsViewController.doneButton"].tap()
-        typeInURLBar(text: "mozilla")
+        typeInURLBar(text: "g")
         waitforNoExistence(element: app.otherElements["SearchSuggestionsPromptView"])
+        
+        // Ensure search suggestions are shown
+        checkSuggestions()
+        
+        // Turn off toggle
+        waitforHittable(element: app.buttons["HomeView.settingsButton"])
+        app.buttons["HomeView.settingsButton"].tap()
+        turnOffToggle()
     }
     
-    func testDisplaysRetrievedSuggestions() {
-        // Turn on search suggestions
-        waitforHittable(element: app.buttons["Settings"])
-        app.buttons["Settings"].tap()
-        app.tables.switches["BlockerToggle.enableSearchSuggestions"].tap()
+    func testEnableThenDisable() {
+        // Enable search suggestions and check suggestions
+        // Disable search suggestions
+        testEnableThroughPrompt()
+        
+        // Ensure only one search cell is shown
         app.buttons["SettingsViewController.doneButton"].tap()
+        typeInURLBar(text: "g")
+        
+        let suggestion = app.buttons.matching(identifier: "OverlayView.searchButton").element(boundBy: 0)
+        waitforExistence(element: suggestion)
+        XCTAssertEqual("Search for g", suggestion.label)
+        
+        // Tap on suggestion
+        suggestion.tap()
+        waitForValueContains(element: app.textFields["URLBar.urlText"], value: "www.google.com")
     }
     
 }
