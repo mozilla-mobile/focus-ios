@@ -104,8 +104,14 @@ class OverlayView: UIView {
         let searchButton = IndexedInsetButton()
         searchButton.isHidden = true
         searchButton.accessibilityIdentifier = "OverlayView.searchButton"
-        searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .normal)
-        searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .highlighted)
+        if(true) { //insert link icon when suggestion is a link
+            searchButton.setImage(#imageLiteral(resourceName: "icon_link"), for: .normal)
+            searchButton.setImage(#imageLiteral(resourceName: "icon_link"), for: .highlighted)
+        }
+        else {
+            searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .normal)
+            searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .highlighted)
+        }
         searchButton.backgroundColor = UIConstants.colors.background
         searchButton.titleLabel?.font = UIConstants.fonts.searchButton
         searchButton.backgroundColor = UIConstants.colors.background
