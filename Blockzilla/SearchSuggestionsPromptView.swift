@@ -4,6 +4,7 @@
 
 import Foundation
 import SnapKit
+import Telemetry
 
 protocol SearchSuggestionsPromptViewDelegate: class {
     func searchSuggestionsPromptView(_ searchSuggestionsPromptView: SearchSuggestionsPromptView, didEnable: Bool)
@@ -114,9 +115,12 @@ class SearchSuggestionsPromptView: UIView {
     
     @objc private func didPressDisable() {
         delegate?.searchSuggestionsPromptView(self, didEnable: false)
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.searchSuggestions, object: TelemetryEventObject.searchSuggestionsOff)
+
     }
     
     @objc private func didPressEnable() {
         delegate?.searchSuggestionsPromptView(self, didEnable: true)
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.searchSuggestions, object: TelemetryEventObject.searchSuggestionsOn)
     }
 }
