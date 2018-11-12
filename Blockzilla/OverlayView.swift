@@ -4,6 +4,7 @@
 
 import Foundation
 import SnapKit
+import Telemetry
 
 protocol OverlayViewDelegate: class {
     func overlayViewDidTouchEmptyArea(_ overlayView: OverlayView)
@@ -257,6 +258,14 @@ class OverlayView: UIView {
 
     @objc private func didPressSearch(sender: IndexedInsetButton) {
         delegate?.overlayView(self, didSearchForQuery: searchSuggestions[sender.getIndex()])
+        
+        if !Settings.getToggle(.enableSearchSuggestions) { return }
+        if sender.getIndex() == 0 {
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.searchSuggestions, object: TelemetryEventObject.searchSuggestionNotSelected)
+        }
+        else {
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.searchSuggestions, object: TelemetryEventObject.searchSuggestionSelected)
+        }
     }
     @objc private func didPressCopy() {
         delegate?.overlayView(self, didSubmitText: UIPasteboard.general.string!)

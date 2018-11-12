@@ -33,6 +33,7 @@ class TelemetryEventMethod {
     public static let drag = "drag"
     public static let drop = "drop"
     public static let siri = "siri"
+    public static let searchSuggestions = "search_suggestions"
 }
 
 class TelemetryEventObject {
@@ -66,4 +67,8 @@ class TelemetryEventObject {
     public static let requestDesktopTip = "request_desktop_tip"
     public static let siriFavoriteTip = "siri_favorite_tip"
     public static let siriEraseTip = "siri_erase_tip"
+    public static let searchSuggestionsOn = "search_suggestions_on"
+    public static let searchSuggestionsOff = "search_suggestions_off"
+    public static let searchSuggestionSelected = "search_suggestion_selected"
+    public static let searchSuggestionNotSelected = "search_suggestion_not_selected"
 }
