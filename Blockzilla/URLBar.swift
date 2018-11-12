@@ -790,6 +790,8 @@ extension URLBar: AutocompleteTextFieldDelegate {
         if let text = autocompleteTextField.text, !isEditing, text.count == 0 {
             shouldPresent = true
         }
+        
+        print("test pr")
 
         return true
     }
