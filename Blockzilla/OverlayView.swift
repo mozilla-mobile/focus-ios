@@ -182,7 +182,6 @@ class OverlayView: UIView {
                     let attributedTitle = NSMutableAttributedString(string: UIConstants.strings.copiedLink, attributes: [.foregroundColor : UIConstants.Photon.Grey10])
                     let attributedCopiedUrl = NSMutableAttributedString(string: url.absoluteString, attributes: [.font: UIConstants.fonts.copyButtonQuery, .foregroundColor : UIConstants.Photon.Grey10])
                     attributedTitle.append(attributedCopiedUrl)
-                    
                     self.copyButton.setAttributedTitle(attributedTitle, for: .normal)
                     copyButtonHidden = !url.isWebPage()
                 }
@@ -260,12 +259,10 @@ class OverlayView: UIView {
     @objc private func didPressSearch(sender: IndexedInsetButton) {
         delegate?.overlayView(self, didSearchForQuery: searchSuggestions[sender.getIndex()])
         
-        if(sender.getIndex() == 0) {
-            //Ping that default text has been selected instead of search suggestion
+        if sender.getIndex() == 0 {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.searchSuggestions, object: TelemetryEventObject.searchSuggestionNotSelected)
         }
         else {
-            //Ping that a search suggestion has been selected instead of default text
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.searchSuggestions, object: TelemetryEventObject.searchSuggestionSelected)
         }
     }
