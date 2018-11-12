@@ -259,6 +259,7 @@ class OverlayView: UIView {
     @objc private func didPressSearch(sender: IndexedInsetButton) {
         delegate?.overlayView(self, didSearchForQuery: searchSuggestions[sender.getIndex()])
         
+        if !Settings.getToggle(.enableSearchSuggestions) { return }
         if sender.getIndex() == 0 {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.searchSuggestions, object: TelemetryEventObject.searchSuggestionNotSelected)
         }
