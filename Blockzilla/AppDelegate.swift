@@ -45,6 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             if let bundleID = Bundle.main.bundleIdentifier {
                 UserDefaults.standard.removePersistentDomain(forName: bundleID)
             }
+            UserDefaults.standard.removePersistentDomain(forName: AppInfo.sharedContainerIdentifier)
         }
         setupContinuousDeploymentTooling()
         setupErrorTracking()
