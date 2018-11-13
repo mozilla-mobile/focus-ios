@@ -9,15 +9,10 @@ let SearchSuggestClientErrorInvalidEngine = 0
 let SearchSuggestClientErrorInvalidResponse = 1
 
 class SearchSuggestClient {
-    private var engine: SearchEngine
     private var request: NSMutableURLRequest?
     
-    init(){
-        engine = SearchEngineManager(prefs: UserDefaults.standard).activeEngine
-    }
-    
     func getSuggestions(_ query: String, callback: @escaping (_ response: [String]?, _ error: NSError?) -> Void) {
-        guard let url = engine.urlForSuggestions(query) else {
+        guard let url = SearchEngineManager(prefs: UserDefaults.standard).activeEngine.urlForSuggestions(query) else {
             let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidEngine, userInfo: nil)
             callback(nil, error)
             return
