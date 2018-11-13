@@ -33,7 +33,6 @@ class TelemetryEventMethod {
     public static let drag = "drag"
     public static let drop = "drop"
     public static let siri = "siri"
-    public static let searchSuggestions = "search_suggestions"
 }
 
 class TelemetryEventObject {

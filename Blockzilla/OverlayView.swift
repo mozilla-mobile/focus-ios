@@ -261,10 +261,9 @@ class OverlayView: UIView {
         
         if !Settings.getToggle(.enableSearchSuggestions) { return }
         if sender.getIndex() == 0 {
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.searchSuggestions, object: TelemetryEventObject.searchSuggestionNotSelected)
-        }
-        else {
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.searchSuggestions, object: TelemetryEventObject.searchSuggestionSelected)
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionNotSelected)
+        } else {
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionSelected)
         }
     }
     @objc private func didPressCopy() {

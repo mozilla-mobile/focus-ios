@@ -786,7 +786,7 @@ extension URLBar: AutocompleteTextFieldDelegate {
         delegate?.urlBar(self, didSubmitText: autocompleteTextField.text ?? "")
         
         if Settings.getToggle(.enableSearchSuggestions) {
-            Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.searchSuggestions, object: TelemetryEventObject.searchSuggestionNotSelected))
+            Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionNotSelected))
         }
         
         return true
