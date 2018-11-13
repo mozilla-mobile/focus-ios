@@ -170,12 +170,11 @@ class OverlayView: UIView {
         button.setAttributedTitle(attributedString, for: .normal)
     }
     
-    func setURLicon(phrase: String, button: InsetButton) {
+    private func setURLicon(phrase: String, button: InsetButton) {
         if phrase.isUrl {
             button.setImage(#imageLiteral(resourceName: "icon_link"), for: .normal)
             button.setImage(#imageLiteral(resourceName: "icon_link"), for: .highlighted)
-        }
-        else {
+        } else {
             button.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .normal)
             button.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .highlighted)
         }
