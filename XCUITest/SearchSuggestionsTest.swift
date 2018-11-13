@@ -1,10 +1,6 @@
-//
-//  SearchSuggestionsPromptTest.swift
-//  XCUITest
-//
-//  Created by Janice Lee on 2018-10-24.
-//  Copyright © 2018 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import XCTest
 
@@ -52,11 +48,16 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         app.textFields["Search or enter address"].typeText(text)
     }
     
-    func testEnableThroughPrompt() {
+    func checkToggleStartsOff() {
         // Check search suggestions toggle is initially OFF
         waitforHittable(element: app.buttons["Settings"])
         app.buttons["Settings"].tap()
         checkToggle(isOn: false)
+    }
+    
+    func testEnableThroughPrompt() {
+        // Check search suggestions toggle is initially OFF
+        checkToggleStartsOff()
         
         // Activate prompt by typing in URL bar
         app.buttons["SettingsViewController.doneButton"].tap()
@@ -82,9 +83,7 @@ class SearchSuggestionsPromptTest: BaseTestCase {
     
     func testDisableThroughPrompt() {
         // Check search suggestions toggle is initially OFF
-        waitforHittable(element: app.buttons["Settings"])
-        app.buttons["Settings"].tap()
-        checkToggle(isOn: false)
+        checkToggleStartsOff()
         
         // Activate prompt by typing in URL bar
         app.buttons["SettingsViewController.doneButton"].tap()
@@ -115,10 +114,8 @@ class SearchSuggestionsPromptTest: BaseTestCase {
     }
     
     func testEnableThroughToggle() {
-        // Check search suggestions toggle is OFF
-        waitforHittable(element: app.buttons["Settings"])
-        app.buttons["Settings"].tap()
-        checkToggle(isOn: false)
+        // Check search suggestions toggle is initially OFF
+        checkToggleStartsOff()
         
         // Turn toggle ON
         app.tables.switches["BlockerToggle.enableSearchSuggestions"].tap()
@@ -134,9 +131,7 @@ class SearchSuggestionsPromptTest: BaseTestCase {
 
     func testEnableThenDisable() {
         // Check search suggestions toggle is initially OFF
-        waitforHittable(element: app.buttons["Settings"])
-        app.buttons["Settings"].tap()
-        checkToggle(isOn: false)
+        checkToggleStartsOff()
         
         // Activate prompt by typing in URL bar
         app.buttons["SettingsViewController.doneButton"].tap()
