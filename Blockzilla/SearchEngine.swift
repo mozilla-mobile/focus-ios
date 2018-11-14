@@ -57,7 +57,8 @@ class SearchEngine: NSObject, NSCoding {
     }
 
     func urlForQuery(_ query: String) -> URL? {
-        guard let escaped = query.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed) else {
+        let trimmed = query.trimmingCharacters(in: .whitespaces)
+        guard let escaped = trimmed.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed) else {
             assertionFailure("Invalid search URL")
             return nil
         }
