@@ -1110,11 +1110,10 @@ extension BrowserViewController: OverlayViewDelegate {
     }
 
     func overlayView(_ overlayView: OverlayView, didSearchForQuery query: String) {
-        if let url = searchEngineManager.activeEngine.urlForQuery(query) {
+        if searchEngineManager.activeEngine.urlForQuery(query) != nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.selectQuery, object: TelemetryEventObject.searchBar)
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
             urlBar(urlBar, didSubmitText: query)
-            urlBar.url = url
         }
 
         urlBar.dismiss()
