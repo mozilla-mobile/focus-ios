@@ -24,21 +24,18 @@ class SearchSuggestionsPromptTest: BaseTestCase {
     func checkSuggestions() {
         // Check search cells are displayed correctly
         let firstSuggestion = app.buttons.matching(identifier: "OverlayView.searchButton").element(boundBy: 0)
-        let secondSuggestion = app.buttons.matching(identifier: "OverlayView.searchButton").element(boundBy: 1)
-        let thirdSuggestion = app.buttons.matching(identifier: "OverlayView.searchButton").element(boundBy: 2)
-        let fourthSuggestion = app.buttons.matching(identifier: "OverlayView.searchButton").element(boundBy: 3)
-        
         waitforExistence(element: firstSuggestion)
-        waitforExistence(element: secondSuggestion)
-        waitforExistence(element: thirdSuggestion)
-        waitforExistence(element: fourthSuggestion)
+        waitforExistence(element: app.buttons.matching(identifier: "OverlayView.searchButton").element(boundBy: 1))
+        waitforExistence(element: app.buttons.matching(identifier: "OverlayView.searchButton").element(boundBy: 2))
+        waitforExistence(element: app.buttons.matching(identifier: "OverlayView.searchButton").element(boundBy: 3))
         
-        XCTAssertEqual("g", firstSuggestion.label)
-        XCTAssertEqual("gmail", secondSuggestion.label)
-        XCTAssertEqual("google", thirdSuggestion.label)
-        XCTAssertEqual("google maps", fourthSuggestion.label)
+        let predicate = NSPredicate(format: "label BEGINSWITH 'g'")
+        let predicateQuery = app.buttons.matching(predicate)
         
-        // Check tapping on suggestion leads to correct page
+        // Confirm that we have at least four suggestions starting with "g"
+        XCTAssert(predicateQuery.count >= 4)
+        
+        // Check tapping on first suggestion leads to correct page
         firstSuggestion.tap()
         waitForValueContains(element: app.textFields["URLBar.urlText"], value: "g")
     }
@@ -49,7 +46,6 @@ class SearchSuggestionsPromptTest: BaseTestCase {
     }
     
     func checkToggleStartsOff() {
-        // Check search suggestions toggle is initially OFF
         waitforHittable(element: app.buttons["Settings"])
         app.buttons["Settings"].tap()
         checkToggle(isOn: false)
