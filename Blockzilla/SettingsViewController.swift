@@ -252,6 +252,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSettings))
         doneButton.tintColor = UIConstants.Photon.Magenta60
+        doneButton.accessibilityIdentifier = "SettingsViewController.doneButton"
         navigationItem.leftBarButtonItem = doneButton
 
         highlightsButton = UIBarButtonItem(title: UIConstants.strings.whatsNewTitle, style: .plain, target: self, action: #selector(whatsNewClicked))
