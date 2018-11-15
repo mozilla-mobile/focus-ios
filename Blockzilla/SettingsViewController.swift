@@ -88,6 +88,106 @@ class SettingsTableViewAccessoryCell: SettingsTableViewCell {
     }
 }
 
+class SettingsTableViewToggleCell: SettingsTableViewCell {
+    private let newLabel = SmartLabel()
+    private let newDetailLabel = SmartLabel()
+    private let spacerView = UIView()
+    var navigationController: UINavigationController?
+    
+    init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, toggle: BlockerToggle) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        newLabel.numberOfLines = 0
+        newLabel.text = toggle.label
+        textLabel?.numberOfLines = 0
+        textLabel?.text = toggle.label
+        
+        newDetailLabel.numberOfLines = 0
+        newDetailLabel.text = toggle.subtitle
+        detailTextLabel?.numberOfLines = 0
+        detailTextLabel?.text = nil
+        
+        backgroundColor = UIConstants.colors.cellBackground
+        newLabel.textColor = UIConstants.colors.settingsTextLabel
+        textLabel?.textColor = UIConstants.colors.settingsTextLabel
+        layoutMargins = UIEdgeInsets.zero
+        newDetailLabel.textColor = UIConstants.colors.settingsDetailLabel
+        detailTextLabel?.textColor = UIConstants.colors.settingsDetailLabel
+        
+        accessoryView = PaddedSwitch(switchView: toggle.toggle)
+        selectionStyle = .none
+        
+        // Add "Learn More" button recognition
+        if toggle.label == UIConstants.strings.labelSendAnonymousUsageData || toggle.label == UIConstants.strings.settingsSearchSuggestions {
+            
+            addSubview(newLabel)
+            addSubview(newDetailLabel)
+            addSubview(spacerView)
+            
+            textLabel?.isHidden = true
+            
+            let selector = toggle.label == UIConstants.strings.labelSendAnonymousUsageData ? #selector(tappedLearnMoreFooter) : #selector(tappedLearnMoreSearchSuggestionsFooter)
+            let learnMoreButton = UIButton()
+            learnMoreButton.setTitle(UIConstants.strings.learnMore, for: .normal)
+            learnMoreButton.setTitleColor(UIConstants.colors.settingsLink, for: .normal)
+            if let cellFont = detailTextLabel?.font {
+                learnMoreButton.titleLabel?.font = UIFont(name: cellFont.fontName, size: cellFont.pointSize)
+            }
+            let tapGesture = UITapGestureRecognizer(target: self, action: selector)
+            learnMoreButton.addGestureRecognizer(tapGesture)
+            addSubview(learnMoreButton)
+            
+            // Adjust the offsets to allow the buton to fit
+            spacerView.snp.makeConstraints { make in
+                make.top.bottom.leading.equalToSuperview()
+                make.trailing.equalTo(textLabel!.snp.leading)
+            }
+            
+            newLabel.snp.makeConstraints { make in
+                make.leading.equalTo(spacerView.snp.trailing)
+                make.top.equalToSuperview().offset(8)
+            }
+            
+            learnMoreButton.snp.makeConstraints { make in
+                make.leading.equalTo(spacerView.snp.trailing)
+                make.bottom.equalToSuperview().offset(4)
+            }
+            
+            newDetailLabel.snp.makeConstraints { make in
+                let lineHeight = newLabel.font.lineHeight
+                make.top.equalToSuperview().offset(10 + lineHeight)
+                make.leading.equalTo(spacerView.snp.trailing)
+                make.trailing.equalTo(contentView)
+                
+                if let learnMoreHeight = learnMoreButton.titleLabel?.font.lineHeight {
+                    make.bottom.equalToSuperview().offset(-8 - learnMoreHeight)
+                }
+            }
+            
+            newLabel.setupShrinkage()
+            newDetailLabel.setupShrinkage()
+        }
+    }
+    
+    private func tappedFooter(topic: String) {
+        guard let url = SupportUtils.URLForTopic(topic: topic) else { return }
+        let contentViewController = SettingsContentViewController(url: url)
+        navigationController?.pushViewController(contentViewController, animated: true)
+    }
+    
+    @objc func tappedLearnMoreFooter(gestureRecognizer: UIGestureRecognizer) {
+        tappedFooter(topic: UIConstants.strings.sumoTopicUsageData)
+    }
+    
+    @objc func tappedLearnMoreSearchSuggestionsFooter(gestureRecognizer: UIGestureRecognizer) {
+        tappedFooter(topic: UIConstants.strings.sumoTopicSearchSuggestion)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     enum Section: String {
         case privacy, search, siri, integration, mozilla
@@ -348,64 +448,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         return toggle
     }
 
-    private func tappedFooter(topic: String) {
-        guard let url = SupportUtils.URLForTopic(topic: topic) else { return }
-        let contentViewController = SettingsContentViewController(url: url)
-        navigationController?.pushViewController(contentViewController, animated: true)
-    }
-
-    @objc func tappedLearnMoreFooter(gestureRecognizer: UIGestureRecognizer) {
-        tappedFooter(topic: UIConstants.strings.sumoTopicUsageData)
-    }
-
-    @objc func tappedLearnMoreSearchSuggestionsFooter(gestureRecognizer: UIGestureRecognizer) {
-        tappedFooter(topic: UIConstants.strings.sumoTopicSearchSuggestion)
-    }
-
-    private func getToggleCell(indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = UITableViewCell(style: .subtitle, reuseIdentifier: "toggleCell")
-        let toggle = toggleForIndexPath(indexPath)
-        cell.textLabel?.text = toggle.label
-        cell.textLabel?.numberOfLines = 0
-        cell.accessoryView = PaddedSwitch(switchView: toggle.toggle)
-        cell.detailTextLabel?.text = toggle.subtitle
-        cell.detailTextLabel?.numberOfLines = 0
-        cell.selectionStyle = .none
-        //Add "Learn More" button recognition
-        if toggle.label == UIConstants.strings.labelSendAnonymousUsageData ||
-            toggle.label == UIConstants.strings.settingsSearchSuggestions {
-            let selector = toggle.label == UIConstants.strings.labelSendAnonymousUsageData ? #selector(tappedLearnMoreFooter) : #selector(tappedLearnMoreSearchSuggestionsFooter)
-            let learnMoreButton = UIButton()
-            learnMoreButton.setTitle(UIConstants.strings.learnMore, for: UIControl.State.normal)
-            learnMoreButton.setTitleColor(UIConstants.colors.settingsLink, for: UIControl.State.normal)
-            if let cellFont = cell.detailTextLabel?.font {
-                learnMoreButton.titleLabel?.font = UIFont(name: cellFont.fontName,size: cellFont.pointSize)
-            }
-            let tapGesture = UITapGestureRecognizer(target: self, action: selector)
-            learnMoreButton.addGestureRecognizer(tapGesture)
-            cell.contentView.addSubview(learnMoreButton)
-            //Adjust the offsets to allow the button to fit.
-            cell.textLabel?.snp.makeConstraints { make in
-                make.top.equalToSuperview().offset(8)
-                make.left.equalToSuperview().offset(14)
-            }
-            cell.detailTextLabel?.snp.makeConstraints { make in
-                if let lineHeight = cell.textLabel?.font.lineHeight {
-                    make.top.equalToSuperview().offset(10 + lineHeight)
-                    make.left.equalToSuperview().offset(14)
-                    make.trailing.equalToSuperview()
-                }
-            }
-            learnMoreButton.snp.makeConstraints { make in
-                make.left.equalToSuperview().offset(14)
-                make.bottom.equalToSuperview().offset(4)
-            }
-        }
-        cell.detailTextLabel?.text = toggle.subtitle
-        cell.detailTextLabel?.numberOfLines = 0
-        return cell
-    }
-
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell
         switch sections[indexPath.section] {
@@ -416,7 +458,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.accessibilityIdentifier = "settingsViewController.trackingCell"
                 cell.accessoryType = .disclosureIndicator
             } else {
-                cell = getToggleCell(indexPath: indexPath)
+                let toggle = toggleForIndexPath(indexPath)
+                cell = SettingsTableViewToggleCell(style: .subtitle, reuseIdentifier: "toggleCell", toggle: toggle)
+                (cell as? SettingsTableViewToggleCell)?.navigationController = navigationController
             }
         case .search:
             if indexPath.row < 2 {
@@ -430,7 +474,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 searchCell.accessibilityIdentifier = labels.identifier
                 cell = searchCell
             } else {
-                cell = getToggleCell(indexPath: indexPath)
+                let toggle = toggleForIndexPath(indexPath)
+                cell = SettingsTableViewToggleCell(style: .subtitle, reuseIdentifier: "toggleCell", toggle: toggle)
+                (cell as? SettingsTableViewToggleCell)?.navigationController = navigationController
             }
         case .siri:
             guard #available(iOS 12.0, *), let siriCell = tableView.dequeueReusableCell(withIdentifier: "accessoryCell") as? SettingsTableViewAccessoryCell else { fatalError("No accessory cells") }
@@ -465,7 +511,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.accessibilityIdentifier = "settingsViewController.rateFocus"
             }
         default:
-            cell = getToggleCell(indexPath: indexPath)
+            let toggle = toggleForIndexPath(indexPath)
+            cell = SettingsTableViewToggleCell(style: .subtitle, reuseIdentifier: "toggleCell", toggle: toggle)
+            (cell as? SettingsTableViewToggleCell)?.navigationController = navigationController
         }
 
         cell.backgroundColor = UIConstants.colors.cellBackground
