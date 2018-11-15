@@ -35,25 +35,25 @@ class SearchEngine: NSObject, NSCoding {
     }
 
     func urlForSuggestions(_ query: String) -> URL? {
-        if let suggestTemplate = suggestionsTemplate {
-            if let escaped = query.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed) {
-                // Escape the search template as well in case it contains not-safe characters like symbols
-                let templateAllowedSet = NSMutableCharacterSet()
-                templateAllowedSet.formUnion(with: .urlAllowed)
-
-                // Allow brackets since we use them in our template as our insertion point
-                templateAllowedSet.formUnion(with: CharacterSet(charactersIn: "{}"))
-
-                if let encodedSearchTemplate = suggestTemplate.addingPercentEncoding(withAllowedCharacters: templateAllowedSet as CharacterSet) {
-                    let localeString = Locale.current.identifier
-                    let urlString = encodedSearchTemplate
-                        .replacingOccurrences(of: SearchTermComponent, with: escaped, options: .literal, range: nil)
-                        .replacingOccurrences(of: LocaleTermComponent, with: localeString, options: .literal, range: nil)
-                    return URL(string: urlString)
-                }
-            }
+        // Escape the search template as well in case it contains not-safe characters like symbols
+        let templateAllowedSet = NSMutableCharacterSet()
+        templateAllowedSet.formUnion(with: .urlAllowed)
+        // Allow brackets since we use them in our template as our insertion point
+        templateAllowedSet.formUnion(with: CharacterSet(charactersIn: "{}"))
+        
+        let trimmed = query.trimmingCharacters(in: .whitespaces)
+        guard let suggestTemplate = suggestionsTemplate,
+            let escaped = trimmed.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed),
+            let encodedSearchTemplate = suggestTemplate.addingPercentEncoding(withAllowedCharacters: templateAllowedSet as CharacterSet) else {
+                assertionFailure("Invalid search URL")
+                return nil
         }
-        return nil
+        
+        let localeString = Locale.current.identifier
+        let urlString = encodedSearchTemplate
+            .replacingOccurrences(of: SearchTermComponent, with: escaped, options: .literal, range: nil)
+            .replacingOccurrences(of: LocaleTermComponent, with: localeString, options: .literal, range: nil)
+        return URL(string: urlString)
     }
 
     func urlForQuery(_ query: String) -> URL? {
