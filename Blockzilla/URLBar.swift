@@ -675,6 +675,7 @@ class URLBar: UIView {
 
     @objc private func didPressClear() {
         urlText.text = nil
+        userInputText = nil
         urlText.rightView?.isHidden = true
         delegate?.urlBar(self, didEnterText: "")
     }

@@ -70,6 +70,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    private let searchSuggestionsDebouncer = Debouncer(timeInterval: 0.1)
     private var shouldEnsureBrowsingMode = false
     private var initialUrl: URL?
     var tipManager: TipManager?
@@ -823,19 +824,22 @@ extension BrowserViewController: URLBarDelegate {
         let isOnHomeView = homeView != nil 
 
         if Settings.getToggle(.enableSearchSuggestions) && !trimmedText.isEmpty {
-            searchSuggestClient.getSuggestions(trimmedText, callback: { suggestions, error in
-                let userInputText = urlBar.userInputText?.trimmingCharacters(in: .whitespaces) ?? ""
-                
-                // Check if this callback is stale (new user input has been requested)
-                if userInputText.isEmpty || userInputText != trimmedText {
-                    return
-                }
-                
-                if userInputText == trimmedText {
-                    let suggestions = suggestions ?? [trimmedText]
-                    self.overlayView.setSearchQuery(suggestions: suggestions, hideFindInPage: isOnHomeView || text.isEmpty)
-                }
-            })
+            searchSuggestionsDebouncer.renewInterval()
+            searchSuggestionsDebouncer.completion = {
+                self.searchSuggestClient.getSuggestions(trimmedText, callback: { suggestions, error in
+                    let userInputText = urlBar.userInputText?.trimmingCharacters(in: .whitespaces) ?? ""
+                    
+                    // Check if this callback is stale (new user input has been requested)
+                    if userInputText.isEmpty || userInputText != trimmedText {
+                        return
+                    }
+                    
+                    if userInputText == trimmedText {
+                        let suggestions = suggestions ?? [trimmedText]
+                        self.overlayView.setSearchQuery(suggestions: suggestions, hideFindInPage: isOnHomeView || text.isEmpty)
+                    }
+                })
+            }
         } else {
             overlayView.setSearchQuery(suggestions: [trimmedText], hideFindInPage: isOnHomeView || text.isEmpty)
         }
