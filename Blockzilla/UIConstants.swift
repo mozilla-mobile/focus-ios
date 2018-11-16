@@ -446,7 +446,6 @@ struct UIConstants {
         static let shareTrackersTipTitle = "%@ trackers blocked so far"
         static let sumoTopicWhatsNew = "whats-new-focus-ios-7"
         static let encodingNameUTF8 = "utf-8"
-        static let encodingNameUTF8 = "utf-8"
         static let googleAmpURLPrefix = "https://www.google.com/amp/s/"
     }
 }

@@ -249,10 +249,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         }
         if let searchIndex = getSectionIndex(Section.search) {
-            toggles[searchIndex] = [2: searchSuggestionToggle]
+            toggles[searchIndex] = searchSuggestionToggle
         }
         if let integrationIndex = getSectionIndex(Section.integration) {
-            toggles[integrationIndex] = [0: safariToggle]
+            toggles[integrationIndex] = safariToggle
         }
     }
 

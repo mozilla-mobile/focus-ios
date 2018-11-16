@@ -33,7 +33,6 @@ class OverlayView: UIView {
     private var searchQuery = ""
     private var searchSuggestions = [String]()
     private var searchButtonGroup = [IndexedInsetButton]()
-    private var presented = false
     private let copyButton = UIButton()
     private let findInPageButton = InsetButton()
     private let searchSuggestionsPrompt = SearchSuggestionsPromptView()
@@ -331,7 +330,7 @@ class OverlayView: UIView {
         setSearchQuery(suggestions: [""], hideFindInPage: true)
         self.isUserInteractionEnabled = false
         copyButton.isHidden = false
-        addToAutocompleteButton.animateHidden(currentURL.isEmpty, duration: UIConstants.layout.searchButtonAnimationDuration)
+        addToAutocompleteButton.animateHidden(currentURL.isEmpty, duration: 0)
         animateHidden(false, duration: UIConstants.layout.overlayAnimationDuration) {
             self.isUserInteractionEnabled = true
         }
