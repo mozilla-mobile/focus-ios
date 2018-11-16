@@ -214,38 +214,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let safariToggle = BlockerToggle(label: UIConstants.strings.toggleSafari, setting: SettingsToggle.safari)
         let homeScreenTipsToggle = BlockerToggle(label: UIConstants.strings.toggleHomeScreenTips, setting: SettingsToggle.showHomeScreenTips)
         
-        var toggles = [Int : BlockerToggle]()
-        if let biometricToggle = createBiometricLoginToggleIfAvailable() {
-            toggles = [
-                1: blockFontsToggle,
-                2: biometricToggle,
-                3: usageDataToggle,
-                6: safariToggle,
-                7: homeScreenTipsToggle
-            ]
-        } else {
-            toggles = [
-                1: blockFontsToggle,
-                2: usageDataToggle,
-                5: safariToggle,
-                6: homeScreenTipsToggle
-            ]
-        }
-        
-        if let safariRow = toggles.first(where: { $1 == safariToggle })?.key {
-            if !TipManager.shared.shouldShowTips() {
-                toggles.removeValue(forKey: safariRow + 1)
-            }
-            
-            if #available(iOS 12.0, *) {
-                toggles.removeValue(forKey: safariRow)
-                toggles[(safariRow + Section.siri.numberOfRows)] = safariToggle
-            }
-        }
-        if #available(iOS 12.0, *) {
-            if let homeScreenTipsRow = toggles.first(where: { $1 == homeScreenTipsToggle })?.key {
-                toggles.removeValue(forKey: homeScreenTipsRow)
-                toggles[(homeScreenTipsRow + Section.siri.numberOfRows)] = homeScreenTipsToggle
+        if let privacyIndex = getSectionIndex(Section.privacy) {
+            if let biometricToggle = createBiometricLoginToggleIfAvailable() {
+                toggles[privacyIndex] =  [1: blockFontsToggle, 2: biometricToggle, 3: usageDataToggle]
+            } else {
+                toggles[privacyIndex] = [1: blockFontsToggle, 2: usageDataToggle]
             }
         }
         if let searchIndex = getSectionIndex(Section.search) {
@@ -253,6 +226,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         if let integrationIndex = getSectionIndex(Section.integration) {
             toggles[integrationIndex] = [0: safariToggle]
+        }
+        if let mozillaIndex = getSectionIndex(Section.mozilla) {
+            toggles[mozillaIndex] = [0: homeScreenTipsToggle]
         }
     }
 
@@ -454,17 +430,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        func createToggleCell(for toggle: BlockerToggle) -> UITableViewCell {
-            let cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "toggleCell")
-            cell.textLabel?.text = toggle.label
-            cell.textLabel?.numberOfLines = 0
-            cell.accessoryView = PaddedSwitch(switchView: toggle.toggle)
-            cell.detailTextLabel?.text = toggle.subtitle
-            cell.detailTextLabel?.numberOfLines = 0
-            cell.selectionStyle = .none
-            return cell
-        }
-        
         var cell: UITableViewCell
         switch sections[indexPath.section] {
         case .privacy:
@@ -514,8 +479,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             cell = siriCell
         case .mozilla where TipManager.shared.shouldShowTips():
             if indexPath.row == 0 {
-                let toggle = toggleForIndexPath(indexPath)
-                cell = createToggleCell(for: toggle)
+                cell = getToggleCell(indexPath: indexPath)
             } else if indexPath.row == 1 {
                 cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
                 cell.textLabel?.text = String(format: UIConstants.strings.aboutTitle, AppInfo.productName)
@@ -536,28 +500,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.accessibilityIdentifier = "settingsViewController.rateFocus"
             }
         default:
-            if sections[indexPath.section] == .privacy && indexPath.row == 0 {
-                cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "trackingCell")
-                cell.textLabel?.text = String(format: UIConstants.strings.trackingProtectionLabel)
-                cell.accessibilityIdentifier = "settingsViewController.trackingCell"
-                cell.accessoryType = .disclosureIndicator
-            } else {
-                let toggle = toggleForIndexPath(indexPath)
-                cell = createToggleCell(for: toggle)
-                
-                if toggle.label == UIConstants.strings.labelSendAnonymousUsageData {
-                    let selector = #selector(tappedLearnMoreFooter)
-                    let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.settingsLink])
-                    let space = NSAttributedString(string: " ", attributes: [:])
-                    guard let subtitle = toggle.subtitle else { return cell }
-                    let attributedSubtitle = NSMutableAttributedString(string: subtitle)
-                    attributedSubtitle.append(space)
-                    attributedSubtitle.append(learnMore)
-                    cell.detailTextLabel?.attributedText = attributedSubtitle
-                    let tapGesture = UITapGestureRecognizer(target: self, action: selector)
-                    cell.addGestureRecognizer(tapGesture)
-                }
-            }
+            cell = getToggleCell(indexPath: indexPath)
         }
 
         cell.backgroundColor = UIConstants.colors.cellBackground
@@ -756,15 +699,14 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case .enableSearchSuggestions:
             UserDefaults.standard.set(true, forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt)
             updateSetting()
-        default:
+        case .showHomeScreenTips:
             updateSetting()
-        }
-        
-        // This update must occur after the setting has been updated to properly take effect.
-        if toggle.setting == .showHomeScreenTips {
+            // This update must occur after the setting has been updated to properly take effect.
             if let browserViewController = presentingViewController as? BrowserViewController {
                 browserViewController.refreshTipsDisplay()
             }
+        default:
+            updateSetting()
         }
     }
 }
