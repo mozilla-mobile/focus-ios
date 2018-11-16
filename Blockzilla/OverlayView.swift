@@ -220,6 +220,9 @@ class OverlayView: UIView {
                 }
                
                 self.updateSearchSuggestionsPrompt(hidden: searchSuggestionsPromptHidden)
+                
+                // Hide the autocomplete button on home screen and when the user is typing
+                self.addToAutocompleteButton.animateHidden(self.searchButton.isHidden == self.searchQuery.isEmpty, duration: 0)
                 self.topBorder.backgroundColor =  searchSuggestionsPromptHidden ? UIConstants.Photon.Grey90.withAlphaComponent(0.4) : UIColor(rgb: 0x42455A)
                 self.updateSearchButtons()
                 
