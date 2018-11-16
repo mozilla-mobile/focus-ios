@@ -27,6 +27,7 @@ protocol WebControllerDelegate: class {
     func webControllerDidStartProvisionalNavigation(_ controller: WebController)
     func webControllerDidStartNavigation(_ controller: WebController)
     func webControllerDidFinishNavigation(_ controller: WebController)
+    func webControllerURLDidChange(_ controller: WebController, url: URL)
     func webController(_ controller: WebController, didFailNavigationWithError error: Error)
     func webController(_ controller: WebController, didUpdateCanGoBack canGoBack: Bool)
     func webController(_ controller: WebController, didUpdateCanGoForward canGoForward: Bool)
@@ -48,11 +49,19 @@ class WebViewController: UIViewController, WebController {
         
         static var allValues: [ScriptHandlers] { return [.focusTrackingProtection, .focusTrackingProtectionPostLoad, .findInPageHandler] }
     }
+    
+    private enum KVOConstants: String, CaseIterable {
+        case URL = "URL"
+        case canGoBack = "canGoBack"
+        case canGoForward = "canGoForward"
+    }
+    
     weak var delegate: WebControllerDelegate?
 
-    private var browserView = WKWebView()
+    private var browserView: WKWebView!
     var onePasswordExtensionItem: NSExtensionItem!
     private var progressObserver: NSKeyValueObservation?
+    private var urlObserver: NSKeyValueObservation?
     private var userAgent: UserAgent?
     private var trackingProtectionStatus = TrackingProtectionStatus.on(TPPageStats()) {
         didSet {
@@ -68,6 +77,10 @@ class WebViewController: UIViewController, WebController {
         }
     }
 
+    var pageTitle: String? {
+        return browserView.title
+    }
+    
     var printFormatter: UIPrintFormatter { return browserView.viewPrintFormatter() }
     var scrollView: UIScrollView { return browserView.scrollView }
 
@@ -85,8 +98,8 @@ class WebViewController: UIViewController, WebController {
         browserView.navigationDelegate = nil
         browserView.removeFromSuperview()
         trackingProtectionStatus = .on(TPPageStats())
-        browserView = WKWebView()
         setupWebview()
+        self.browserView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
     }
 
     // Browser proxy methods
@@ -119,6 +132,10 @@ class WebViewController: UIViewController, WebController {
     func stop() { browserView.stopLoading() }
 
     private func setupWebview() {
+        let wvConfig = WKWebViewConfiguration()
+        wvConfig.websiteDataStore = WKWebsiteDataStore.nonPersistent()
+        browserView = WKWebView(frame: .zero, configuration: wvConfig)
+        
         browserView.allowsBackForwardNavigationGestures = true
         browserView.allowsLinkPreview = false
         browserView.scrollView.clipsToBounds = false
@@ -138,6 +155,8 @@ class WebViewController: UIViewController, WebController {
         browserView.snp.makeConstraints { make in
             make.edges.equalTo(view.snp.edges)
         }
+        
+        KVOConstants.allCases.forEach { browserView.addObserver(self, forKeyPath: $0.rawValue, options: .new, context: nil) }
     }
 
     @objc private func reloadBlockers(_ blockLists: [WKContentRuleList]) {
@@ -146,12 +165,7 @@ class WebViewController: UIViewController, WebController {
             blockLists.forEach(self.browserView.configuration.userContentController.add)
         }
     }
-
-    fileprivate func updateBackForwardState(webView: WKWebView) {
-        delegate?.webController(self, didUpdateCanGoBack: canGoBack)
-        delegate?.webController(self, didUpdateCanGoForward: canGoForward)
-    }
-
+    
     private func setupBlockLists() {
         ContentBlockerHelper.shared.getBlockLists { lists in
             self.reloadBlockers(lists)
@@ -198,6 +212,29 @@ class WebViewController: UIViewController, WebController {
     func evaluate(_ javascript: String, completion: ((Any?, Error?) -> Void)?) {
         browserView.evaluateJavaScript(javascript, completionHandler: completion)
     }
+
+    override func viewDidLoad() {
+        self.browserView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
+    }
+
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        guard let kp = keyPath, let path = KVOConstants(rawValue: kp) else {
+            assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
+            return
+        }
+        
+        switch path {
+        case .URL:
+            guard let url = browserView.url else { break }
+            delegate?.webControllerURLDidChange(self, url: url)
+        case .canGoBack:
+            guard let canGoBack = change?[.newKey] as? Bool else { break }
+            delegate?.webController(self, didUpdateCanGoBack: canGoBack)
+        case .canGoForward:
+            guard let canGoForward = change?[.newKey] as? Bool else { break }
+            delegate?.webController(self, didUpdateCanGoForward: canGoForward)
+        }
+    }
 }
 
 extension WebViewController: UIScrollViewDelegate {
@@ -222,8 +259,6 @@ extension WebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         delegate?.webControllerDidStartNavigation(self)
         if case .on = trackingProtectionStatus { trackingInformation = TPPageStats() }
-
-        updateBackForwardState(webView: webView)
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {

@@ -49,6 +49,17 @@ class SettingsTableViewAccessoryCell: SettingsTableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         newLabel.numberOfLines = 0
         newLabel.lineBreakMode = .byWordWrapping
+        setupDynamicFont()
+        
+        if #available(iOS 10.0, *) {
+            newLabel.adjustsFontForContentSizeCategory = true
+            accessoryLabel.adjustsFontForContentSizeCategory = true
+        } else {
+            NotificationCenter.default.addObserver(forName: UIContentSizeCategory.didChangeNotification, object: nil, queue: nil)  { _ in
+                self.setupDynamicFont()
+            }
+        }
+        
         textLabel?.numberOfLines = 0
         textLabel?.text = " "
 
@@ -86,6 +97,11 @@ class SettingsTableViewAccessoryCell: SettingsTableViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    private func setupDynamicFont() {
+        newLabel.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
+        accessoryLabel.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
+    }
 }
 
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -100,7 +116,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             case .search: return 3
             case .siri: return 3
             case .integration: return 1
-            case .mozilla: return 2
+            case .mozilla:
+                // Show tips option should not be displayed for users that do not see tips
+                return TipManager.shared.shouldShowTips() ? 3 : 2
             }
         }
         
@@ -194,11 +212,40 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let searchSuggestionSubtitle = String(format: UIConstants.strings.detailTextSearchSuggestion, AppInfo.productName)
         let searchSuggestionToggle = BlockerToggle(label: UIConstants.strings.settingsSearchSuggestions, setting: SettingsToggle.enableSearchSuggestions, subtitle: searchSuggestionSubtitle)
         let safariToggle = BlockerToggle(label: UIConstants.strings.toggleSafari, setting: SettingsToggle.safari)
-        if let privacyIndex = getSectionIndex(Section.privacy) {
-            if let biometricToggle = createBiometricLoginToggleIfAvailable() {
-                toggles[privacyIndex] =  [1: blockFontsToggle, 2: biometricToggle, 3: usageDataToggle]
-            } else {
-                toggles[privacyIndex] = [1: blockFontsToggle, 2: usageDataToggle]
+        let homeScreenTipsToggle = BlockerToggle(label: UIConstants.strings.toggleHomeScreenTips, setting: SettingsToggle.showHomeScreenTips)
+        
+        var toggles = [Int : BlockerToggle]()
+        if let biometricToggle = createBiometricLoginToggleIfAvailable() {
+            toggles = [
+                1: blockFontsToggle,
+                2: biometricToggle,
+                3: usageDataToggle,
+                6: safariToggle,
+                7: homeScreenTipsToggle
+            ]
+        } else {
+            toggles = [
+                1: blockFontsToggle,
+                2: usageDataToggle,
+                5: safariToggle,
+                6: homeScreenTipsToggle
+            ]
+        }
+        
+        if let safariRow = toggles.first(where: { $1 == safariToggle })?.key {
+            if !TipManager.shared.shouldShowTips() {
+                toggles.removeValue(forKey: safariRow + 1)
+            }
+            
+            if #available(iOS 12.0, *) {
+                toggles.removeValue(forKey: safariRow)
+                toggles[(safariRow + Section.siri.numberOfRows)] = safariToggle
+            }
+        }
+        if #available(iOS 12.0, *) {
+            if let homeScreenTipsRow = toggles.first(where: { $1 == homeScreenTipsToggle })?.key {
+                toggles.removeValue(forKey: homeScreenTipsRow)
+                toggles[(homeScreenTipsRow + Section.siri.numberOfRows)] = homeScreenTipsToggle
             }
         }
         if let searchIndex = getSectionIndex(Section.search) {
@@ -407,6 +454,17 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        func createToggleCell(for toggle: BlockerToggle) -> UITableViewCell {
+            let cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "toggleCell")
+            cell.textLabel?.text = toggle.label
+            cell.textLabel?.numberOfLines = 0
+            cell.accessoryView = PaddedSwitch(switchView: toggle.toggle)
+            cell.detailTextLabel?.text = toggle.subtitle
+            cell.detailTextLabel?.numberOfLines = 0
+            cell.selectionStyle = .none
+            return cell
+        }
+        
         var cell: UITableViewCell
         switch sections[indexPath.section] {
         case .privacy:
@@ -454,7 +512,20 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
             }
             cell = siriCell
-        case .mozilla:
+        case .mozilla where TipManager.shared.shouldShowTips():
+            if indexPath.row == 0 {
+                let toggle = toggleForIndexPath(indexPath)
+                cell = createToggleCell(for: toggle)
+            } else if indexPath.row == 1 {
+                cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
+                cell.textLabel?.text = String(format: UIConstants.strings.aboutTitle, AppInfo.productName)
+                cell.accessibilityIdentifier = "settingsViewController.about"
+            } else {
+                cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "ratingCell")
+                cell.textLabel?.text = String(format: UIConstants.strings.ratingSetting, AppInfo.productName)
+                cell.accessibilityIdentifier = "settingsViewController.rateFocus"
+            }
+        case .mozilla where !TipManager.shared.shouldShowTips():
             if indexPath.row == 0 {
                 cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
                 cell.textLabel?.text = String(format: UIConstants.strings.aboutTitle, AppInfo.productName)
@@ -465,7 +536,28 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.accessibilityIdentifier = "settingsViewController.rateFocus"
             }
         default:
-            cell = getToggleCell(indexPath: indexPath)
+            if sections[indexPath.section] == .privacy && indexPath.row == 0 {
+                cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "trackingCell")
+                cell.textLabel?.text = String(format: UIConstants.strings.trackingProtectionLabel)
+                cell.accessibilityIdentifier = "settingsViewController.trackingCell"
+                cell.accessoryType = .disclosureIndicator
+            } else {
+                let toggle = toggleForIndexPath(indexPath)
+                cell = createToggleCell(for: toggle)
+                
+                if toggle.label == UIConstants.strings.labelSendAnonymousUsageData {
+                    let selector = #selector(tappedLearnMoreFooter)
+                    let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.settingsLink])
+                    let space = NSAttributedString(string: " ", attributes: [:])
+                    guard let subtitle = toggle.subtitle else { return cell }
+                    let attributedSubtitle = NSMutableAttributedString(string: subtitle)
+                    attributedSubtitle.append(space)
+                    attributedSubtitle.append(learnMore)
+                    cell.detailTextLabel?.attributedText = attributedSubtitle
+                    let tapGesture = UITapGestureRecognizer(target: self, action: selector)
+                    cell.addGestureRecognizer(tapGesture)
+                }
+            }
         }
 
         cell.backgroundColor = UIConstants.colors.cellBackground
@@ -583,7 +675,16 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 let siriFavoriteVC = SiriFavoriteViewController()
                 navigationController?.pushViewController(siriFavoriteVC, animated: true)
             }
-        case .mozilla:
+        case .mozilla where TipManager.shared.shouldShowTips():
+            if indexPath.row == 1 {
+                aboutClicked()
+            } else if indexPath.row == 2 {
+                let appId = AppInfo.config.appId
+                if let reviewURL = URL(string: "https://itunes.apple.com/app/id\(appId)?action=write-review"), UIApplication.shared.canOpenURL(reviewURL) {
+                    UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
+                }
+            }
+        case .mozilla where !TipManager.shared.shouldShowTips():
             if indexPath.row == 0 {
                 aboutClicked()
             } else if indexPath.row == 1 {
@@ -617,9 +718,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     @objc private func whatsNewClicked() {
-        highlightsButton?.tintColor = UIColor.white
-        
+        highlightsButton?.tintColor = UIColor.white        
         guard let url = SupportUtils.URLForTopic(topic: UIConstants.strings.sumoTopicWhatsNew) else { return }
+
         navigationController?.pushViewController(SettingsContentViewController(url: url), animated: true)
         
         whatsNew.didShowWhatsNew()
@@ -657,6 +758,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             updateSetting()
         default:
             updateSetting()
+        }
+        
+        // This update must occur after the setting has been updated to properly take effect.
+        if toggle.setting == .showHomeScreenTips {
+            if let browserViewController = presentingViewController as? BrowserViewController {
+                browserViewController.refreshTipsDisplay()
+            }
         }
     }
 }
