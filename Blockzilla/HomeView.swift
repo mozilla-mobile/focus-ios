@@ -24,17 +24,15 @@ class HomeView: UIView {
     let toolbar = HomeViewToolbar()
     let trackerStatsShareButton = UIButton()
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        if UIDevice.current.orientation.isLandscape {
-            hideTextLogo()
-        } else {
-            showTextLogo()
-        }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     init(tipManager: TipManager? = nil) {
         super.init(frame: CGRect.zero)
+        
+        rotated()
+        NotificationCenter.default.addObserver(self, selector: #selector(HomeView.rotated), name: UIDevice.orientationDidChangeNotification, object: nil)
         
         let wordmark = AppInfo.config.wordmark
         textLogo.image = wordmark
@@ -108,7 +106,7 @@ class HomeView: UIView {
         }
         
         tipView.snp.makeConstraints { make in
-            make.bottom.equalTo(toolbar.snp.top).offset(UIConstants.layout.shareTrackersBottomOffset)
+            make.centerY.equalToSuperview().offset(UIConstants.layout.shareTrackersHeight/3)
             make.height.equalTo(UIConstants.layout.shareTrackersHeight)
             make.centerX.equalToSuperview()
             make.width.greaterThanOrEqualTo(280)
@@ -190,11 +188,19 @@ class HomeView: UIView {
         trackerStatsShareButton.isHidden = true
     }
     
-    func hideTextLogo() {
+    @objc private func rotated() {
+        if UIDevice.current.orientation.isLandscape {
+            hideTextLogo()
+        } else {
+            showTextLogo()
+        }
+    }
+    
+    private func hideTextLogo() {
         textLogo.isHidden = true
     }
     
-    func showTextLogo() {
+    private func showTextLogo() {
         textLogo.isHidden = false
     }
     
