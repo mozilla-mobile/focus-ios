@@ -394,7 +394,7 @@ struct UIConstants {
 
         static let autocompleteCustomSectionTitle = NSLocalizedString("Autocomplete.customTitle", value: "CUSTOM URL LIST", comment: "Title for the default URL list section")
         static let autocompleteManageSitesLabel = NSLocalizedString("Autocomplete.manageSites", value: "Manage Sites", comment: "Label for button taking you to your custom Autocomplete URL list")
-        static let autocompleteManageSitesDesc = NSLocalizedString("Autocomplete.mySitesDesc", value: "Enable to have %@ autocomplete your favorite URLs.", comment: "Description for adding and managing custom autocomplete URLs")
+        static let autocompleteManageSitesDesc = NSLocalizedString("Autocomplete.mySitesDesc", value: "Enable to have %@ autocomplete your favorite URLs.", comment: "Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar.")
         static let autocompleteCustomEnabled = NSLocalizedString("Autocomplete.enabled", value: "Enabled", comment: "label describing URL Autocomplete as enabled")
         static let autocompleteCustomDisabled = NSLocalizedString("Autocomplete.disabled", value: "Disabled", comment: "label describing URL Autocomplete as disabled")
 
