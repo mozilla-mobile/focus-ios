@@ -305,7 +305,6 @@ struct UIConstants {
         static let settingsSearchLabel = NSLocalizedString("Settings.searchLabel", value: "Search Engine", comment: "Label for the search engine in the search screen")
         static let settingsSearchSuggestions = NSLocalizedString("Settings.searchSuggestions",value: "Get Search Suggestions",comment: "Label for the Search Suggestions toggle row")
         static let detailTextSearchSuggestion = NSLocalizedString("Settings.detailTextSearchSuggestion", value: "%@ will send what you type in the address bar to your search engine.", comment: "Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar)")
-        static let sumoTopicSearchSuggestion = NSLocalizedString("Settings.searchSuggestions", value: "search-suggestions-focus-ios", comment: "URL for the learn more of the search suggestions toggle")
         static let settingsAutocompleteSection = NSLocalizedString("Settings.autocompleteSection", value: "URL Autocomplete", comment: "Title for the URL Autocomplete row")
         static let settingsTitle = NSLocalizedString("Settings.screenTitle", value: "Settings", comment: "Title for settings screen")
         static let settingsToggleOtherSubtitle = NSLocalizedString("Settings.toggleOtherSubtitle", value: "May break some videos and Web pages", comment: "Label subtitle for toggle on main screen")
@@ -446,6 +445,7 @@ struct UIConstants {
         static let shareTrackersTipTitle = "%@ trackers blocked so far"
         static let sumoTopicWhatsNew = "whats-new-focus-ios-8"
         static let klarSumoTopicWhatsNew = "whats-new-firefox-klar-ios-version-8"
+        static let sumoTopicSearchSuggestion = "search-suggestions-focus-ios"
         static let encodingNameUTF8 = "utf-8"
         static let googleAmpURLPrefix = "https://www.google.com/amp/s/"
     }
