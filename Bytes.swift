@@ -42,8 +42,8 @@ open class Bytes {
         return b64.data(using: String.Encoding.ascii, allowLossyConversion: false)
     }
 
+    // Not yet implemented
     func fromHex(_ str: String) -> Data {
-        // TODO
         return Data()
     }
 }
