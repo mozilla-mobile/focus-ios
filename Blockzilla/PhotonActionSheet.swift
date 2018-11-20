@@ -1,9 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- 
- Ported with modifications from Firefox iOS (https://github.com/mozilla-mobile/firefox-ios)
- 
  */
 
 import Foundation
@@ -37,6 +34,7 @@ private struct PhotonActionSheetUX {
     static let BlurAlpha: CGFloat = 0.7
 }
 
+// Ported with modifications from Firefox iOS (https://github.com/mozilla-mobile/firefox-ios)
 public struct PhotonActionSheetItem {
     public enum IconAlignment {
         case left

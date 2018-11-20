@@ -100,7 +100,7 @@ class ActionViewController: SLComposeServiceViewController {
         // From http://stackoverflow.com/questions/24297273/openurl-not-work-in-action-extension
         var responder = self as UIResponder?
         let selectorOpenURL = sel_registerName("openURL:")
-        while (responder != nil) {
+        while responder != nil {
             if responder!.responds(to: selectorOpenURL) {
                 responder!.callSelector(selector: selectorOpenURL, object: url, delay: 0)
             }

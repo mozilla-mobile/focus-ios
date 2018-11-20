@@ -77,7 +77,7 @@ class PageControl: UIView {
     }
 
     func selectIndex(_ index: Int) {
-        let buttons = stack.arrangedSubviews as! [UIButton]
+        guard let buttons = stack.arrangedSubviews as? [UIButton] else { return }
         for button in buttons {
             button.isSelected = false
             button.alpha = 0.3

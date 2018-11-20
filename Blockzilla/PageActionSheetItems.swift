@@ -37,9 +37,9 @@ class PageActionSheetItems {
         // Code pulled from https://github.com/GoogleChrome/OpenInChrome
         // Replace the URL Scheme with the Chrome equivalent.
         var chromeScheme: String?
-        if (self.url.scheme == "http") {
+        if self.url.scheme == "http" {
             chromeScheme = "googlechrome"
-        } else if (self.url.scheme == "https") {
+        } else if self.url.scheme == "https" {
             chromeScheme = "googlechromes"
         }
 

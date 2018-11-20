@@ -723,9 +723,9 @@ class URLBar: UIView {
     }
 
     fileprivate func setTextToURL(displayFullUrl: Bool = false) {
-        var fullUrl: String? = nil
-        var truncatedURL: String? = nil
-        var displayText: String? = nil
+        var fullUrl: String?
+        var truncatedURL: String?
+        var displayText: String?
 
         if let url = url {
             // Strip the username/password to prevent domain spoofing.

@@ -101,7 +101,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell
-        if (indexPath.row == domains.count) {
+        if indexPath.row == domains.count {
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: "addCustomDomainCell")
             cell.textLabel?.text = UIConstants.strings.autocompleteAddCustomUrlWithPlus
             cell.accessoryType = .disclosureIndicator

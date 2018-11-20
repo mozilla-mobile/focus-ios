@@ -118,7 +118,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        var url: URL? = nil
+        var url: URL?
         switch (indexPath as NSIndexPath).row {
         case 1:
             url = URL(string: "https://support.mozilla.org/\(AppInfo.config.supportPath)")
