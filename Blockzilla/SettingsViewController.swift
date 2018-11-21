@@ -447,6 +447,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             else { return BlockerToggle(label: "Error", setting: SettingsToggle.blockAds)}
         return toggle
     }
+    
+    private func setupToggleCell(indexPath: IndexPath, navigationController: UINavigationController?) -> SettingsTableViewToggleCell {
+        let toggle = toggleForIndexPath(indexPath)
+        let cell = SettingsTableViewToggleCell(style: .subtitle, reuseIdentifier: "toggleCell", toggle: toggle)
+        cell.navigationController = navigationController
+        return cell
+    }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell
@@ -458,9 +465,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.accessibilityIdentifier = "settingsViewController.trackingCell"
                 cell.accessoryType = .disclosureIndicator
             } else {
-                let toggle = toggleForIndexPath(indexPath)
-                cell = SettingsTableViewToggleCell(style: .subtitle, reuseIdentifier: "toggleCell", toggle: toggle)
-                (cell as? SettingsTableViewToggleCell)?.navigationController = navigationController
+                cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
             }
         case .search:
             if indexPath.row < 2 {
@@ -474,9 +479,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 searchCell.accessibilityIdentifier = labels.identifier
                 cell = searchCell
             } else {
-                let toggle = toggleForIndexPath(indexPath)
-                cell = SettingsTableViewToggleCell(style: .subtitle, reuseIdentifier: "toggleCell", toggle: toggle)
-                (cell as? SettingsTableViewToggleCell)?.navigationController = navigationController
+                cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
             }
         case .siri:
             guard #available(iOS 12.0, *), let siriCell = tableView.dequeueReusableCell(withIdentifier: "accessoryCell") as? SettingsTableViewAccessoryCell else { fatalError("No accessory cells") }
@@ -511,9 +514,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.accessibilityIdentifier = "settingsViewController.rateFocus"
             }
         default:
-            let toggle = toggleForIndexPath(indexPath)
-            cell = SettingsTableViewToggleCell(style: .subtitle, reuseIdentifier: "toggleCell", toggle: toggle)
-            (cell as? SettingsTableViewToggleCell)?.navigationController = navigationController
+            cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
         }
 
         cell.backgroundColor = UIConstants.colors.cellBackground
