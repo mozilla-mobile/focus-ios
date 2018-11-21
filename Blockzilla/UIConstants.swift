@@ -297,6 +297,7 @@ struct UIConstants {
         static let searchSuggestionsPromptTitle = NSLocalizedString("SearchSuggestions.promptTitle", value: "Show Search Suggestions?", comment: "Title for search suggestions prompt")
         static let searchSuggestionsPromptDisable = NSLocalizedString("SearchSuggestions.promptDisable", value: "No", comment: "Label for disable option on search suggestions prompt")
         static let searchSuggestionsPromptEnable = NSLocalizedString("SearchSuggestions.promptEnable", value: "Yes", comment: "Label for enable option on search suggestions prompt")
+        static let addToAutocompleteButton = NSLocalizedString("URL.addToAutocompleteLabel", value: "Add link to autocomplete", comment: "Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete.")
         static let settingsBlockOtherMessage = NSLocalizedString("Settings.blockOtherMessage", value: "Blocking other content trackers may break some videos and Web pages.", comment: "Alert message shown when toggling the Content blocker")
         static let settingsBlockOtherNo = NSLocalizedString("Settings.blockOtherNo", value: "No, Thanks", comment: "Button label for declining Content blocker alert")
         static let settingsBlockOtherYes = NSLocalizedString("Settings.blockOtherYes", value: "I Understand", comment: "Button label for accepting Content blocker alert")
@@ -309,6 +310,7 @@ struct UIConstants {
         static let settingsTitle = NSLocalizedString("Settings.screenTitle", value: "Settings", comment: "Title for settings screen")
         static let settingsToggleOtherSubtitle = NSLocalizedString("Settings.toggleOtherSubtitle", value: "May break some videos and Web pages", comment: "Label subtitle for toggle on main screen")
         static let learnMore = NSLocalizedString("Settings.learnMore", value: "Learn more.", comment: "Subtitle for Send Anonymous Usage Data toggle on main screen")
+        static let toggleHomeScreenTips = NSLocalizedString("Settings.toggleHomeScreenTips", value: "Show home screen tips", comment: "Show home screen tips toggle label on settings screen")
         static let toggleSectionIntegration = NSLocalizedString("Settings.sectionIntegration", value: "INTEGRATION", comment: "Label for Safari integration section") // deprecated
         static let toggleSectionSafari = NSLocalizedString("Settings.safariTitle", value: "SAFARI INTEGRATION", comment: "Label for Safari integration section")
         static let toggleSectionMozilla = NSLocalizedString("Settings.sectionMozilla", value: "MOZILLA", comment: "Section label for Mozilla toggles")
@@ -386,13 +388,14 @@ struct UIConstants {
         static let done = NSLocalizedString("Done", value: "Done", comment: "Label on button to complete edits")
         static let cancelLabel = NSLocalizedString("Cancel", value: "Cancel", comment: "Label on button to cancel edits")
 
-        static let autocompleteLabel = NSLocalizedString("Autocomplete.defaultLabel", value: "Autocomplete", comment: "Label for enabling or disabling autocomplete")
+        static let autocompleteMySites = NSLocalizedString("Autocomplete.mySites", value: "My Sites", comment: "Label for enabling or disabling autocomplete")
+        static let autocompleteTopSites = NSLocalizedString("Autocomplete.topSites", value: "Top Sites", comment: "Label for enabling or disabling top sites")
         static let autocompleteDefaultSectionTitle = NSLocalizedString("Autocomplete.defaultTitle", value: "DEFAULT URL LIST", comment: "Title for the default URL list section")
-        static let autocompleteDefaultDescription = NSLocalizedString("Autocomplete.defaultDescriptoin", value: "Enable to have %@ autocomplete over 450 popular URLs in the address bar.", comment: "Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar.")
+        static let autocompleteTopSitesDesc = NSLocalizedString("Autocomplete.defaultDescriptoin", value: "Enable to have %@ autocomplete over 450 popular URLs in the address bar.", comment: "Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar.")
 
         static let autocompleteCustomSectionTitle = NSLocalizedString("Autocomplete.customTitle", value: "CUSTOM URL LIST", comment: "Title for the default URL list section")
-        static let autocompleteCustomSectionLabel = NSLocalizedString("Autocomplete.customLabel", value: "Custom URLs", comment: "Label for button taking you to your custom Autocomplete URL list")
-        static let autocompleteCustomDescription = NSLocalizedString("Autocomplete.customDescriptoin", value: "Add and manage custom autocomplete URLs.", comment: "Description for adding and managing custom autocomplete URLs")
+        static let autocompleteManageSitesLabel = NSLocalizedString("Autocomplete.manageSites", value: "Manage Sites", comment: "Label for button taking you to your custom Autocomplete URL list")
+        static let autocompleteManageSitesDesc = NSLocalizedString("Autocomplete.mySitesDesc", value: "Enable to have %@ autocomplete your favorite URLs.", comment: "Description for adding and managing custom autocomplete URLs")
         static let autocompleteCustomEnabled = NSLocalizedString("Autocomplete.enabled", value: "Enabled", comment: "label describing URL Autocomplete as enabled")
         static let autocompleteCustomDisabled = NSLocalizedString("Autocomplete.disabled", value: "Disabled", comment: "label describing URL Autocomplete as disabled")
 
@@ -406,6 +409,7 @@ struct UIConstants {
         static let autocompleteAddCustomUrlExample = NSLocalizedString("Autocomplete.addCustomUrlExample", value: "Example: example.com", comment: "A label displaying an example URL")
         static let autocompleteEmptyState = NSLocalizedString("Autocomplete.emptyState", value: "No Custom URLs to display", comment: "Label for button to add a custom URL")
         static let autocompleteCustomURLAdded = NSLocalizedString("Autocomplete.customUrlAdded", value: "New Custom URL added.", comment: "Label for toast alerting a custom URL has been added")
+        static let autocompleteCustomURLDuplicate = NSLocalizedString("Autocomplete.duplicateUrl", value: "URL already exists", comment: "Label for toast alerting that the custom URL being added is a duplicateß")
 
         static let findInPagePreviousLabel = NSLocalizedString("FindInPage.PreviousResult", value: "Find previous in page", comment: "Accessibility label for previous result button in Find in Page Toolbar.")
         static let findInPageNextLabel = NSLocalizedString("FindInPage.NextResult", value: "Find next in page", comment: "Accessibility label for next result button in Find in Page Toolbar.")
@@ -442,5 +446,6 @@ struct UIConstants {
         static let shareTrackersTipTitle = "%@ trackers blocked so far"
         static let sumoTopicWhatsNew = "whats-new-focus-ios-7"
         static let encodingNameUTF8 = "utf-8"
+        static let googleAmpURLPrefix = "https://www.google.com/amp/s/"
     }
 }

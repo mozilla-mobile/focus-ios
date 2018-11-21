@@ -70,13 +70,12 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    private let searchSuggestionsDebouncer = Debouncer(timeInterval: 0.1)
     private var shouldEnsureBrowsingMode = false
     private var initialUrl: URL?
     var tipManager: TipManager?
     
     static let userDefaultsTrackersBlockedKey = "lifetimeTrackersBlocked"
-    static let userDefaultsShareTrackerStatsKeyOLD = "shareTrackerStats"
-    static let userDefaultsShareTrackerStatsKeyNEW = "shareTrackerStatsNew"
 
     init(appSplashController: AppSplashController, tipManager: TipManager = TipManager.shared) {
         self.appSplashController = appSplashController
@@ -299,7 +298,7 @@ class BrowserViewController: UIViewController {
 
     private func createHomeView() {
         let homeView: HomeView
-        if canShowTips() && shouldShowTips() {
+        if TipManager.shared.shouldShowTips() {
             homeView = HomeView(tipManager: tipManager)
         }
         else {
@@ -393,36 +392,34 @@ class BrowserViewController: UIViewController {
             if findInPageBar == nil {
                 Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.findInPageBar)
                 
-                urlBar.dismiss()
-                let findInPageBar = FindInPageBar()
-                self.findInPageBar = findInPageBar
-                let fillerView = UIView()
-                self.fillerView = fillerView
-                fillerView.backgroundColor = UIConstants.Photon.Grey70
-                findInPageBar.text = text
-                findInPageBar.delegate = self
-                
-                alertStackView.addArrangedSubview(findInPageBar)
-                mainContainerView.insertSubview(fillerView, belowSubview: browserToolbar)
-
-                updateViewConstraints()
-                
-                UIView.animate(withDuration: 2.0, animations: {
-                    findInPageBar.snp.makeConstraints { make in
+                urlBar.dismiss {
+                    // Start our animation after urlBar dismisses
+                    let findInPageBar = FindInPageBar()
+                    self.findInPageBar = findInPageBar
+                    let fillerView = UIView()
+                    self.fillerView = fillerView
+                    fillerView.backgroundColor = UIConstants.Photon.Grey70
+                    findInPageBar.text = text
+                    findInPageBar.delegate = self
+                    
+                    self.alertStackView.addArrangedSubview(findInPageBar)
+                    self.mainContainerView.insertSubview(fillerView, belowSubview: self.browserToolbar)
+                    
+                    findInPageBar.snp.makeConstraints{ make in
                         make.height.equalTo(UIConstants.ToolbarHeight)
                         make.leading.trailing.equalTo(self.alertStackView)
                         make.bottom.equalTo(self.alertStackView.snp.bottom)
                     }
-                }) { (_) in
                     fillerView.snp.makeConstraints { make in
                         make.top.equalTo(self.alertStackView.snp.bottom)
                         make.bottom.equalTo(self.view)
                         make.leading.trailing.equalTo(self.alertStackView)
                     }
+
+                    self.view.layoutIfNeeded()
+                    self.findInPageBar?.becomeFirstResponder()
                 }
             }
-            
-            self.findInPageBar?.becomeFirstResponder()
         } else if let findInPageBar = self.findInPageBar {
             findInPageBar.endEditing(true)
             webViewController.evaluate("__firefox__.findDone()", completion: nil)
@@ -486,6 +483,8 @@ class BrowserViewController: UIViewController {
         webViewController.reset()
         webViewContainer.isHidden = true
         browserToolbar.isHidden = true
+        browserToolbar.canGoBack = false
+        browserToolbar.canGoForward = false
         urlBar.removeFromSuperview()
         urlBarContainer.alpha = 0
         createHomeView()
@@ -538,8 +537,6 @@ class BrowserViewController: UIViewController {
 
     fileprivate func showSettings(shouldScrollToSiri: Bool = false) {
         guard let modalDelegate = modalDelegate else { return }
-        
-        urlBar.shouldPresent = false
         
         let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset, shouldScrollToSiri: shouldScrollToSiri)
         let settingsNavController = UINavigationController(rootViewController: settingsViewController)
@@ -619,7 +616,7 @@ class BrowserViewController: UIViewController {
             self.urlBar.showToolset = self.showsToolsetInURLBar
 
             if self.homeView == nil && self.scrollBarState != .expanded {
-                self.urlBar.collapseUrlBar(expandAlpha: 0, collapseAlpha: 1)
+                self.hideToolbars()
             }
 
             self.browserToolbar.animateHidden(self.homeView != nil || self.showsToolsetInURLBar, duration: coordinator.transitionDuration, completion: {
@@ -695,48 +692,9 @@ class BrowserViewController: UIViewController {
             UIKeyCommand(input: "]", modifierFlags: .command, action: #selector(BrowserViewController.goForward), discoverabilityTitle: UIConstants.strings.browserForward),
         ]
     }
-
-    func canShowTips() -> Bool {
-        return NSLocale.current.identifier == "en_US" && !AppInfo.isKlar
-    }
-
-    var showTrackerSemaphore = DispatchSemaphore(value: 1)
-    func flipCoinForShowTrackerButton(percent: Int = 50, userDefaults:UserDefaults = UserDefaults.standard) {
-        showTrackerSemaphore.wait()
-
-        var shouldShowTipsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
-
-        if shouldShowTipsToUser == nil {
-            // Check to see if the user was previously opted into the experiment
-            shouldShowTipsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD) as! Bool?
-
-            if shouldShowTipsToUser != nil {
-                // Remove the old flag
-                userDefaults.removeObject(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD)
-            }
-
-            if shouldShowTipsToUser == true {
-                // User has already been opted into the experiment, continue showing the share button
-                userDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
-            } else {
-                // User has not been put into a bucket for determining if it should be shown
-                // 50% chance they get put into the group that sees the share button
-                // arc4random_uniform(100) returns an integer 0 through 99 (inclusive)
-                if arc4random_uniform(100) < percent {
-                    userDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
-                } else {
-                    userDefaults.set(false, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
-                }
-            }
-        }
-
-        showTrackerSemaphore.signal()
-    }
-
-    func shouldShowTips(percent: Int = 50, userDefaults:UserDefaults = UserDefaults.standard) -> Bool {
-        flipCoinForShowTrackerButton(percent:percent, userDefaults:userDefaults)
-        let shouldShowTipsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
-        return shouldShowTipsToUser == true
+    
+    func refreshTipsDisplay() {
+        createHomeView()
     }
     
     private func getNumberOfLifetimeTrackersBlocked(userDefaults: UserDefaults = UserDefaults.standard) -> Int {
@@ -745,6 +703,13 @@ class BrowserViewController: UIViewController {
     
     private func setNumberOfLifetimeTrackersBlocked(numberOfTrackers: Int) {
         UserDefaults.standard.set(numberOfTrackers, forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
+    }
+    
+    func updateURLBar() {
+        if webViewController.url?.absoluteString != "about:blank" {
+            urlBar.url = webViewController.url
+            overlayView.currentURL = urlBar.url?.absoluteString ?? ""
+        }
     }
 }
 
@@ -823,19 +788,22 @@ extension BrowserViewController: URLBarDelegate {
         let isOnHomeView = homeView != nil 
 
         if Settings.getToggle(.enableSearchSuggestions) && !trimmedText.isEmpty {
-            searchSuggestClient.getSuggestions(trimmedText, callback: { suggestions, error in
-                let userInputText = urlBar.userInputText?.trimmingCharacters(in: .whitespaces) ?? ""
-                
-                // Check if this callback is stale (new user input has been requested)
-                if userInputText.isEmpty || userInputText != trimmedText {
-                    return
-                }
-                
-                if userInputText == trimmedText {
-                    let suggestions = suggestions ?? [trimmedText]
-                    self.overlayView.setSearchQuery(suggestions: suggestions, hideFindInPage: isOnHomeView || text.isEmpty)
-                }
-            })
+            searchSuggestionsDebouncer.renewInterval()
+            searchSuggestionsDebouncer.completion = {
+                self.searchSuggestClient.getSuggestions(trimmedText, callback: { suggestions, error in
+                    let userInputText = urlBar.userInputText?.trimmingCharacters(in: .whitespaces) ?? ""
+                    
+                    // Check if this callback is stale (new user input has been requested)
+                    if userInputText.isEmpty || userInputText != trimmedText {
+                        return
+                    }
+                    
+                    if userInputText == trimmedText {
+                        let suggestions = suggestions ?? [trimmedText]
+                        self.overlayView.setSearchQuery(suggestions: suggestions, hideFindInPage: isOnHomeView || text.isEmpty)
+                    }
+                })
+            }
         } else {
             overlayView.setSearchQuery(suggestions: [trimmedText], hideFindInPage: isOnHomeView || text.isEmpty)
         }
@@ -911,11 +879,14 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidActivate(_ urlBar: URLBar) {
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
+        
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
             self.topURLBarConstraints.forEach { $0.activate() }
             self.urlBarContainer.alpha = 1
             self.updateFindInPageVisibility(visible: false)
             self.view.layoutIfNeeded()
+        }) { (_) in
+            self.urlBar.displayClearButton(shouldDisplay: true)
         }
     }
 
@@ -969,7 +940,12 @@ extension BrowserViewController: URLBarDelegate {
         let utils = OpenUtils(url: url, webViewController: webViewController)
         let items = PageActionSheetItems(url: url)
         let sharePageItem = PhotonActionSheetItem(title: UIConstants.strings.sharePage, iconString: "icon_openwith_active") { action in
-            let shareVC = utils.buildShareViewController(url: url, printFormatter: self.webViewController.printFormatter)
+            let shareVC = utils.buildShareViewController()
+            
+            // Exact frame dimensions taken from presentPhotonActionSheet
+            shareVC.popoverPresentationController?.sourceView = urlBar.pageActionsButton
+            shareVC.popoverPresentationController?.sourceRect = CGRect(x: urlBar.pageActionsButton.frame.width/2, y: urlBar.pageActionsButton.frame.size.height * 0.75, width: 1, height: 1)
+            
             shareVC.becomeFirstResponder()
             self.present(shareVC, animated: true, completion: nil)
         }
@@ -1043,13 +1019,29 @@ extension BrowserViewController: BrowserToolsetDelegate {
     }
     
     func browserToolsetDidPressBack(_ browserToolset: BrowserToolset) {
-        SearchHistoryUtils.goBack()
+        guard let navigatingFromAmpSite = urlBar.url?.absoluteString.hasPrefix(UIConstants.strings.googleAmpURLPrefix) else { return }
+        
+        // Make sure our navigation is not pushed to the SearchHistoryUtils stack (since it already exists there)
+        SearchHistoryUtils.isFromURLBar = true
+
+        if !navigatingFromAmpSite {
+            SearchHistoryUtils.goBack()
+        }
+        
         webViewController.goBack()
     }
 
     func browserToolsetDidPressForward(_ browserToolset: BrowserToolset) {
-        SearchHistoryUtils.goForward()
+        // Make sure our navigation is not pushed to the SearchHistoryUtils stack (since it already exists there)
+        SearchHistoryUtils.isFromURLBar = true
         webViewController.goForward()
+
+        // Check if we're navigating to an AMP site *after* the URL bar is updated. This is intentionally after the goForward call.
+        guard let navigatingToAmpSite = urlBar.url?.absoluteString.hasPrefix(UIConstants.strings.googleAmpURLPrefix) else { return }
+        
+        if !navigatingToAmpSite {
+            SearchHistoryUtils.goForward()
+        }
     }
 
     func browserToolsetDidPressReload(_ browserToolset: BrowserToolset) {
@@ -1069,6 +1061,8 @@ extension BrowserViewController: BrowserToolsetDelegate {
 extension BrowserViewController: HomeViewDelegate {
     
     func shareTrackerStatsButtonTapped() {
+        guard let trackerStatsShareButton = homeView?.trackerStatsShareButton else { return }
+        
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.share, object: TelemetryEventObject.trackerStatsShareButton)
         
         let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
@@ -1077,6 +1071,10 @@ extension BrowserViewController: HomeViewDelegate {
         let shareTrackerStatsText = "%@, the privacy browser from Mozilla, has already blocked %@ trackers for me. Fewer ads and trackers following me around means faster browsing! Get Focus for yourself here"
         let text = String(format: shareTrackerStatsText + " ", AppInfo.productName, String(numberOfTrackersBlocked))
         let shareController = UIActivityViewController(activityItems: [text, appStoreUrl as Any], applicationActivities: nil)
+        // Exact frame dimensions taken from presentPhotonActionSheet
+        shareController.popoverPresentationController?.sourceView = trackerStatsShareButton
+        shareController.popoverPresentationController?.sourceRect = CGRect(x: trackerStatsShareButton.frame.width/2, y: 0, width: 1, height: 1)
+        
         present(shareController, animated: true)
     }
     
@@ -1124,6 +1122,22 @@ extension BrowserViewController: OverlayViewDelegate {
         self.find(query, function: "find")
     }
     
+    func overlayView(_ overlayView: OverlayView, didAddToAutocomplete query: String) {
+        urlBar.dismiss()
+
+        let autocompleteSource = CustomCompletionSource()        
+        switch autocompleteSource.add(suggestion: query) {
+        case .error(.duplicateDomain):
+            Toast(text: UIConstants.strings.autocompleteCustomURLDuplicate).show()
+        case .error(let error):
+            guard !error.message.isEmpty else { return }
+            Toast(text: error.message).show()
+        case .success:
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.customDomain)
+            Toast(text: UIConstants.strings.autocompleteCustomURLAdded).show()
+        }
+    }
+    
     func overlayView(_ overlayView: OverlayView, didSubmitText text: String) {
         let text = text.trimmingCharacters(in: .whitespaces)
         guard !text.isEmpty else {
@@ -1159,6 +1173,7 @@ extension BrowserViewController: SearchSuggestionsPromptViewDelegate {
 }
 
 extension BrowserViewController: WebControllerDelegate {
+
     func webControllerDidStartProvisionalNavigation(_ controller: WebController) {
         urlBar.dismiss()
         updateFindInPageVisibility(visible: false)
@@ -1183,21 +1198,21 @@ extension BrowserViewController: WebControllerDelegate {
         urlBar.isLoading = true
         browserToolbar.color = .loading
         toggleURLBarBackground(isBright: false)
-        showToolbars()
-        
-        if webViewController.url?.absoluteString != "about:blank" {
-            urlBar.url = webViewController.url
-        }
+        updateURLBar()
     }
 
     func webControllerDidFinishNavigation(_ controller: WebController) {
-        if webViewController.url?.absoluteString != "about:blank" {
-            urlBar.url = webViewController.url
-        }
+        updateURLBar()
         urlBar.isLoading = false
         toggleToolbarBackground()
         toggleURLBarBackground(isBright: !urlBar.isEditing)
         urlBar.progressBar.hideProgressBar()
+    }
+    
+    func webControllerURLDidChange(_ controller: WebController, url: URL) {
+        showToolbars()
+        updateURLBar()
+        urlBar.url = url
     }
 
     func webController(_ controller: WebController, didFailNavigationWithError error: Error) {

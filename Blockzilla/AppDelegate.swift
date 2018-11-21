@@ -110,10 +110,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         }
         
         // Don't highlight whats new on a fresh install (prefIntroDone == 0 on a fresh install)
-        if prefIntroDone != 0 && UserDefaults.standard.string(forKey: AppDelegate.prefWhatsNewDone) != AppInfo.shortVersion {
-            
-            let counter = UserDefaults.standard.integer(forKey: AppDelegate.prefWhatsNewCounter)
-            switch counter {
+        if let lastShownWhatsNew = UserDefaults.standard.string(forKey: AppDelegate.prefWhatsNewDone)?.first, let currentMajorRelease = AppInfo.shortVersion.first {
+            if prefIntroDone != 0 && lastShownWhatsNew != currentMajorRelease  {
+
+                let counter = UserDefaults.standard.integer(forKey: AppDelegate.prefWhatsNewCounter)
+                switch counter {
                 case 4:
                     // Shown three times, remove counter
                     UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
@@ -121,6 +122,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
                 default:
                     // Show highlight
                     UserDefaults.standard.set(counter+1, forKey: AppDelegate.prefWhatsNewCounter)
+                }
             }
         }
         
@@ -213,7 +215,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         return CFURLCreateStringByReplacingPercentEscapes(
             kCFAllocatorDefault,
             string as CFString,
-            "[]." as CFString) as String
+            "" as CFString) as String
     }
 
     fileprivate func displaySplashAnimation() {
@@ -374,17 +376,6 @@ extension AppDelegate {
             telemetryConfig.isCollectionEnabled = Settings.getToggle(.sendAnonymousUsageData)
             telemetryConfig.isUploadEnabled = Settings.getToggle(.sendAnonymousUsageData)
         #endif
-        
-        Telemetry.default.beforeSerializePing(pingType: CorePingBuilder.PingType) { (inputDict) -> [String : Any?] in
-            var outputDict = inputDict // make a mutable copy
-
-            if self.browserViewController.canShowTips() { // Klar users are not included in this experiment
-                self.browserViewController.flipCoinForShowTrackerButton() // Force a coin flip if one has not been flipped yet
-                outputDict["showTrackerStatsSharePhase2"] = UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
-            }
-            
-            return outputDict
-        }
         
         Telemetry.default.add(pingBuilderType: CorePingBuilder.self)
         Telemetry.default.add(pingBuilderType: FocusEventPingBuilder.self)
