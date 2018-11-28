@@ -1021,11 +1021,15 @@ extension BrowserViewController: BrowserToolsetDelegate {
     }
 
     private func handleNavigationBack() {
-        guard let navigatingFromAmpSite = urlBar.url?.absoluteString.hasPrefix(UIConstants.strings.googleAmpURLPrefix) else { return }
+        // Check if the previous site we were on was AMP
+        guard let navigatingFromAmpSite = SearchHistoryUtils.pullSearchFromStack()?.hasPrefix(UIConstants.strings.googleAmpURLPrefix) else {
+            return
+        }
 
         // Make sure our navigation is not pushed to the SearchHistoryUtils stack (since it already exists there)
         SearchHistoryUtils.isFromURLBar = true
 
+        // This function is now getting called after our new url is set!!
         if !navigatingFromAmpSite {
             SearchHistoryUtils.goBack()
         }
@@ -1039,7 +1043,7 @@ extension BrowserViewController: BrowserToolsetDelegate {
         // Make sure our navigation is not pushed to the SearchHistoryUtils stack (since it already exists there)
         SearchHistoryUtils.isFromURLBar = true
 
-        // Check if we're navigating to an AMP site *after* the URL bar is updated. This is intentionally after the goForward call.
+        // Check if we're navigating to an AMP site *after* the URL bar is updated. This is intentionally grabbing the NEW url
         guard let navigatingToAmpSite = urlBar.url?.absoluteString.hasPrefix(UIConstants.strings.googleAmpURLPrefix) else { return }
 
         if !navigatingToAmpSite {
@@ -1192,10 +1196,15 @@ extension BrowserViewController: WebControllerDelegate {
         }
     }
 
+    func webControllerDidReload(_ controller: WebController) {
+        SearchHistoryUtils.isReload = true
+    }
+
     func webControllerDidStartNavigation(_ controller: WebController) {
-        if !SearchHistoryUtils.isFromURLBar && !SearchHistoryUtils.isNavigating {
+        if !SearchHistoryUtils.isFromURLBar && !SearchHistoryUtils.isNavigating && !SearchHistoryUtils.isReload {
             SearchHistoryUtils.pushSearchToStack(with: (urlBar.url?.absoluteString)!)
         }
+        SearchHistoryUtils.isReload = false
         SearchHistoryUtils.isNavigating = false
         SearchHistoryUtils.isFromURLBar = false
         urlBar.isLoading = true

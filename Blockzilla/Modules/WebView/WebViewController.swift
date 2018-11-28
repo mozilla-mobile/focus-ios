@@ -29,6 +29,7 @@ protocol WebControllerDelegate: class {
     func webControllerDidFinishNavigation(_ controller: WebController)
     func webControllerDidNavigateBack(_ controller: WebController)
     func webControllerDidNavigateForward(_ controller: WebController)
+    func webControllerDidReload(_ controller: WebController)
     func webControllerURLDidChange(_ controller: WebController, url: URL)
     func webController(_ controller: WebController, didFailNavigationWithError error: Error)
     func webController(_ controller: WebController, didUpdateCanGoBack canGoBack: Bool)
@@ -283,13 +284,18 @@ extension WebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         let present: (UIViewController) -> Void = { self.present($0, animated: true, completion: nil) }
 
-        if navigationAction.navigationType == .backForward {
-            let navigatingBack = webView.backForwardList.backList.filter { $0 == currentBackForwardItem }.count == 0
-            if navigatingBack {
-                delegate?.webControllerDidNavigateBack(self)
-            } else {
-                delegate?.webControllerDidNavigateForward(self)
-            }
+        switch navigationAction.navigationType {
+            case .backForward:
+                let navigatingBack = webView.backForwardList.backList.filter { $0 == currentBackForwardItem }.count == 0
+                if navigatingBack {
+                    delegate?.webControllerDidNavigateBack(self)
+                } else {
+                    delegate?.webControllerDidNavigateForward(self)
+                }
+            case .reload:
+                delegate?.webControllerDidReload(self)
+            default:
+                break
         }
 
         currentBackForwardItem = webView.backForwardList.currentItem
