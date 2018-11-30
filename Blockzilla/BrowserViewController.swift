@@ -629,9 +629,9 @@ class BrowserViewController: UIViewController {
         let leader = "..."
         let headCharactersCount = (truncateLimit - leader.count) / 2
         let tailCharactersCount = Int(ceil(Double(truncateLimit - leader.count) / 2.0))
-        
+
         let truncatedTitle = title.count <= truncateLimit ? title : String("\(title.prefix(headCharactersCount))\(leader)\(title.suffix(tailCharactersCount))")
-        
+
         let alertController = UIAlertController(title: truncatedTitle, message: nil, preferredStyle: .actionSheet)
 
         if let link = link {
