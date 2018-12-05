@@ -98,6 +98,7 @@ class WebViewController: UIViewController, WebController {
     }
 
     func reset() {
+        userAgent?.setup()
         browserView.load(URLRequest(url: URL(string: "about:blank")!))
         browserView.navigationDelegate = nil
         browserView.removeFromSuperview()
@@ -118,6 +119,7 @@ class WebViewController: UIViewController, WebController {
             return
         }
 
+        userAgent?.setDesktopUserAgent()
         browserView.customUserAgent = UserAgent.getDesktopUserAgent()
 
         if currentItem.url != currentItem.initialURL {

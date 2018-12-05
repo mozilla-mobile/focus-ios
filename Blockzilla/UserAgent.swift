@@ -94,4 +94,8 @@ class UserAgent {
         userDefaults.register(defaults: ["UserAgent": userAgent])
         userDefaults.synchronize()
     }
+    
+    public func setDesktopUserAgent() {
+        setUserAgent(userAgent: UserAgent.getDesktopUserAgent())
+    }
 }
