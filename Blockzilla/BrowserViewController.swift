@@ -625,14 +625,12 @@ class BrowserViewController: UIViewController {
 
     fileprivate func presentImageActionSheet(title: String, link: String?, saveAction: @escaping () -> Void, copyAction: @escaping () -> Void) {
 
-        let truncateLimit = 160
-        let leader = "..."
-        let headCharactersCount = (truncateLimit - leader.count) / 2
-        let tailCharactersCount = Int(ceil(Double(truncateLimit - leader.count) / 2.0))
+        var normalizedTitle = title
+        if (title.count > UIConstants.layout.truncateCharactersLimit) {
+            normalizedTitle = String("\(title.prefix(UIConstants.layout.truncateHeadCharactersCount))\(UIConstants.strings.truncateLeader)\(title.suffix(UIConstants.layout.truncateTailCharactersCount))")
+        }
 
-        let truncatedTitle = title.count <= truncateLimit ? title : String("\(title.prefix(headCharactersCount))\(leader)\(title.suffix(tailCharactersCount))")
-
-        let alertController = UIAlertController(title: truncatedTitle, message: nil, preferredStyle: .actionSheet)
+        let alertController = UIAlertController(title: normalizedTitle, message: nil, preferredStyle: .actionSheet)
 
         if let link = link {
             alertController.addAction(UIAlertAction(title: UIConstants.strings.copyLink, style: .default) { _ in
