@@ -626,7 +626,7 @@ class BrowserViewController: UIViewController {
     fileprivate func presentImageActionSheet(title: String, link: String?, saveAction: @escaping () -> Void, copyAction: @escaping () -> Void) {
 
         var normalizedTitle = title
-        if (title.count > UIConstants.layout.truncateCharactersLimit) {
+        if title.count > UIConstants.layout.truncateCharactersLimit {
             normalizedTitle = String("\(title.prefix(UIConstants.layout.truncateHeadCharactersCount))\(UIConstants.strings.truncateLeader)\(title.suffix(UIConstants.layout.truncateTailCharactersCount))")
         }
 
