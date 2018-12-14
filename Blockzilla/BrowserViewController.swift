@@ -186,9 +186,14 @@ class BrowserViewController: UIViewController {
 
         // Listen for request desktop site notifications
         NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification), object: nil, queue: nil) { _ in
-            self.webViewController.requestDesktop()
+            self.webViewController.requestUserAgentChange()
         }
-
+        
+        // Listen for request mobile site notifications
+        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestMobileNotification), object: nil, queue: nil) { _ in
+            self.webViewController.requestUserAgentChange()
+        }
+        
         let dropInteraction = UIDropInteraction(delegate: self)
         view.addInteraction(dropInteraction)
 
@@ -961,7 +966,10 @@ extension BrowserViewController: URLBarDelegate {
         }
         shareItems.append(copyItem)
 
-        let actionItems = [items.findInPageItem, items.requestDesktopItem]
+        var actionItems = [items.findInPageItem]
+        
+        webViewController.userAgentString == UserAgent.getDesktopUserAgent() ? actionItems.append(items.requestMobileItem) : actionItems.append(items.requestDesktopItem)
+        
         let pageActionsMenu = PhotonActionSheet(title: UIConstants.strings.pageActionsTitle, actions: [shareItems, actionItems], style: .overCurrentContext)
         presentPhotonActionSheet(pageActionsMenu, from: urlBar.pageActionsButton)
     }
@@ -1004,7 +1012,7 @@ extension BrowserViewController: BrowserToolsetDelegate {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Request Desktop Site", style: .default, handler: { (action) in
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.requestDesktop)
-            self.webViewController.requestDesktop()
+            self.webViewController.requestUserAgentChange()
         }))
         alert.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
 
