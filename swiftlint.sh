@@ -10,7 +10,7 @@ if [ $? -eq 1 ]; then
 fi
 
 swiftlint autocorrect -- $FILES
-swiftlint lint $FILES
+swiftlint lint --strict $FILES
 RESULT=$?
 git add .
 exit $RESULT
