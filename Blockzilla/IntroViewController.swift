@@ -296,6 +296,8 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
             make.width.equalTo(280)
             make.height.equalTo(212)
         }
+        
+        if (introView.alpha == 0) { return }
 
         let titleLabel = UILabel()
         titleLabel.numberOfLines = 2
