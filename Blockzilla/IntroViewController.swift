@@ -296,8 +296,6 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
             make.width.equalTo(280)
             make.height.equalTo(212)
         }
-        
-        if (introView.alpha == 0) { return }
 
         let titleLabel = UILabel()
         titleLabel.numberOfLines = 2
@@ -326,7 +324,6 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
         textLabel.textColor = UIConstants.colors.firstRunMessage
         textLabel.font = UIConstants.fonts.firstRunMessage
 
-        if (textLabel.isHidden) { return}
         introView.addSubview(textLabel)
         textLabel.snp.makeConstraints({ (make) -> Void in
             make.top.equalTo(titleLabel.snp.bottom).offset(16)
