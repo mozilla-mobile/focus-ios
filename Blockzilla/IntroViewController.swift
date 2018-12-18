@@ -324,6 +324,7 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
         textLabel.textColor = UIConstants.colors.firstRunMessage
         textLabel.font = UIConstants.fonts.firstRunMessage
 
+        if (textLabel.isHidden) { return}
         introView.addSubview(textLabel)
         textLabel.snp.makeConstraints({ (make) -> Void in
             make.top.equalTo(titleLabel.snp.bottom).offset(16)
