@@ -1010,8 +1010,11 @@ extension BrowserViewController: BrowserToolsetDelegate {
         urlBar.dismiss()
 
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Request Desktop Site", style: .default, handler: { (action) in
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.requestDesktop)
+        let title = webViewController.userAgentString == UserAgent.getDesktopUserAgent() ? "Request Mobile Site" : "Request Desktop Site"
+        let object = webViewController.userAgentString == UserAgent.getDesktopUserAgent() ? TelemetryEventObject.requestMobile : TelemetryEventObject.requestDesktop
+
+        alert.addAction(UIAlertAction(title: title, style: .default, handler: { (action) in
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: object)
             self.webViewController.requestUserAgentChange()
         }))
         alert.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
