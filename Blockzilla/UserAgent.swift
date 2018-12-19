@@ -91,7 +91,7 @@ class UserAgent {
         let userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/605.1.12 (KHTML, like Gecko) Version/11.1 Safari/605.1.12"
         return String(userAgent)
     }
-    
+
     public func getUserAgent() -> String? {
         let userAgent = isDesktopMode ? UserAgent.getDesktopUserAgent() : userDefaults.string(forKey: "UserAgent")
         return userAgent
@@ -101,7 +101,7 @@ class UserAgent {
         userDefaults.register(defaults: ["UserAgent": userAgent])
         userDefaults.synchronize()
     }
-    
+
     public func changeUserAgent() {
         if isDesktopMode {
             setup()

@@ -188,12 +188,12 @@ class BrowserViewController: UIViewController {
         NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification), object: nil, queue: nil) { _ in
             self.webViewController.requestUserAgentChange()
         }
-        
+
         // Listen for request mobile site notifications
         NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestMobileNotification), object: nil, queue: nil) { _ in
             self.webViewController.requestUserAgentChange()
         }
-        
+
         let dropInteraction = UIDropInteraction(delegate: self)
         view.addInteraction(dropInteraction)
 
@@ -967,9 +967,9 @@ extension BrowserViewController: URLBarDelegate {
         shareItems.append(copyItem)
 
         var actionItems = [items.findInPageItem]
-        
+
         webViewController.userAgentString == UserAgent.getDesktopUserAgent() ? actionItems.append(items.requestMobileItem) : actionItems.append(items.requestDesktopItem)
-        
+
         let pageActionsMenu = PhotonActionSheet(title: UIConstants.strings.pageActionsTitle, actions: [shareItems, actionItems], style: .overCurrentContext)
         presentPhotonActionSheet(pageActionsMenu, from: urlBar.pageActionsButton)
     }

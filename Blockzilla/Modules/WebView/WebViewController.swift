@@ -84,7 +84,7 @@ class WebViewController: UIViewController, WebController {
     var pageTitle: String? {
         return browserView.title
     }
-    
+
     var userAgentString: String? {
         return self.userAgent?.getUserAgent()
     }
