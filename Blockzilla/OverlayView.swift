@@ -176,15 +176,13 @@ class OverlayView: UIView {
 		let attributedString = NSMutableAttributedString(string: localizedStringFormat, attributes: [.foregroundColor: UIConstants.Photon.Grey10])
 		let phraseString = NSAttributedString(string: phrase, attributes: [.font: UIConstants.fonts.copyButtonQuery,
 																		   .foregroundColor: UIConstants.Photon.Grey10])
-		
 		if phrase != searchQuery {
 			let searchString = NSAttributedString(string: searchQuery, attributes: [.font: UIConstants.fonts.copyButtonQuery,
 																					.foregroundColor: UIConstants.Photon.Grey10])
 			// split suggestion into searchQuery and suggested part
 			let suggestion = phrase.components(separatedBy: searchQuery)
-			
 			// suggestion was split
-			if suggestion.count > 1{
+			if suggestion.count > 1 {
 				let restOfSuggestion = NSAttributedString(string: suggestion[1], attributes: [
 					.foregroundColor: UIConstants.colors.searchSuggestion])
 				attributedString.append(searchString)
@@ -192,7 +190,6 @@ class OverlayView: UIView {
 				return attributedString
 			}
 		}
-		
 		guard let range = attributedString.string.range(of: "%@") else { return phraseString }
 		
 		let replaceRange = NSRange(range, in: attributedString.string)
