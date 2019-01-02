@@ -191,10 +191,8 @@ class OverlayView: UIView {
 			}
 		}
 		guard let range = attributedString.string.range(of: "%@") else { return phraseString }
-		
 		let replaceRange = NSRange(range, in: attributedString.string)
 		attributedString.replaceCharacters(in: replaceRange, with: phraseString)
-		
 		return attributedString
 	}
 
