@@ -621,11 +621,9 @@ class URLBar: UIView {
         if inBrowsingMode {
             shieldIcon.animateHidden(false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
             deleteButton.animateHidden(false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
-        } else {
-            deactivate()
         }
 
-        self.layoutIfNeeded()
+        deactivate()
 
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
             if self.inBrowsingMode {

@@ -131,7 +131,7 @@ class SearchEngineManager {
         self.engines.append(contentsOf: customEngines)
 
         // Set default search engine pref
-        if prefs.string(forKey: SearchEngineManager.prefKeyEngine) == nil {
+         if prefs.string(forKey: SearchEngineManager.prefKeyEngine) == nil {
             prefs.set(self.engines.first?.name, forKey: SearchEngineManager.prefKeyEngine)
         }
 
