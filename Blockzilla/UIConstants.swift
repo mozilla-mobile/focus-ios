@@ -34,9 +34,9 @@ struct UIConstants {
         static let focusRed = UIColor(rgb: 0xE63D2F)
         static let focusViolet = UIColor(rgb: 0x95368C)
         static let gradientBackground = UIColor(rgb: 0x363B40)
-        static let gradientLeft = UIColor(rgb: 0xD70022)
-        static let gradientMiddle = UIColor(rgb: 0xB5007F)
-        static let gradientRight = UIColor(rgb: 0x440071)
+        static let gradientLeft = UIConstants.Photon.Red60
+        static let gradientMiddle = UIConstants.Photon.Magenta70
+        static let gradientRight = UIConstants.Photon.Purple80
         static let navigationButton = UIConstants.Photon.Grey10
         static let navigationTitle = UIConstants.Photon.Grey10
         static let overlayBackground = UIColor(white: 0, alpha: 0.8)
@@ -48,7 +48,7 @@ struct UIConstants {
         static let settingsSeparator = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         static let settingsLink = UIConstants.Photon.Magenta40
         static let settingsDisabled = UIColor(rgb: 0xB2B2B2)
-        static let siriTint = UIConstants.Photon.Magenta60
+        static let siriTint = UIConstants.Photon.Magenta40
         static let tableSectionHeader = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
         static let toastBackground = UIColor(rgb: 0x414146)
         static let toastText = UIColor.white
@@ -58,7 +58,7 @@ struct UIConstants {
         static let toolbarButtonNormal = UIColor.darkGray
         static let urlTextBackground = UIColor(white: 1, alpha: 0.2)
         static let urlTextFont = UIConstants.Photon.Grey10
-        static let urlTextHighlight = UIColor(rgb: 0xB5007F)
+        static let urlTextHighlight = UIConstants.Photon.Magenta40
         static let urlTextPlaceholder = UIConstants.Photon.Grey10.withAlphaComponent(0.4)
         static let urlTextShadow = UIColor.black
         static let whatsNew = UIConstants.Photon.Teal50
