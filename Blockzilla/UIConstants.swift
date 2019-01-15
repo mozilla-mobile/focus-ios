@@ -10,20 +10,14 @@ struct UIConstants {
     static var ToolbarHeight: CGFloat = 46
 
     struct colors {
+        static let actionMenuItemSubtitleLabel = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
         static let background = UIConstants.Photon.Ink90
         static let buttonHighlight = UIColor(rgb: 0x333333)
-        static let cellSelected = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         static let cellBackground = UIConstants.Photon.Ink80
-        static let copyButtonBorder = UIColor(rgb: 0x5F6368, alpha: 0.8)
+        static let cellSelected = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         static let defaultFont = UIColor(rgb: 0xE1E5EA)
-        static let deleteButtonBackground = UIColor(white: 1, alpha: 0.2)
-        static let deleteButtonBorder = UIColor(white: 1, alpha: 0.5)
-        static let firstRunButton = UIColor.white
-        static let firstRunNextButton = UIColor(rgb: 0x9400FF)
-        static let firstRunButtonBackground = UIColor(white: 1, alpha: 0.2)
-        static let firstRunButtonBorder = UIColor(white: 1, alpha: 0.3)
-        static let firstRunDisclaimer = UIColor(white: 1, alpha: 0.5)
         static let firstRunMessage = UIColor(rgb: 0x737373)
+        static let firstRunNextButton = UIColor(rgb: 0x9400FF)
         static let firstRunTitle = UIColor(rgb: 0x212121)
         static let focusLightBlue = UIColor(rgb: 0x00A7E0)
         static let focusDarkBlue = UIColor(rgb: 0x005DA5)
@@ -37,41 +31,29 @@ struct UIConstants {
         static let gradientLeft = UIColor(rgb: 0xD70022)
         static let gradientMiddle = UIColor(rgb: 0xB5007F)
         static let gradientRight = UIColor(rgb: 0x440071)
+        static let inputPlaceholder = UIColor(rgb: 0xb2b2b2)
         static let navigationButton = UIConstants.Photon.Grey10
         static let navigationTitle = UIConstants.Photon.Grey10
         static let overlayBackground = UIColor(white: 0, alpha: 0.8)
-        static let progressBar = UIColor(rgb: 0xC86DD7)
 		static let searchSuggestion = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
-        static let settingsButtonBorder = UIColor(rgb: 0x5F6368, alpha: 0.8)
-        static let settingsTextLabel = UIConstants.Photon.Grey10
         static let settingsDetailLabel = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
-        static let settingsSeparator = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
-        static let settingsLink = UIConstants.Photon.Magenta40
         static let settingsDisabled = UIColor(rgb: 0xB2B2B2)
+        static let settingsLink = UIConstants.Photon.Magenta40
+        static let settingsNavBar = UIConstants.Photon.Ink80.withAlphaComponent(0.9)
+        static let settingsNavBorder = UIConstants.Photon.Grey10.withAlphaComponent(0.5)
+        static let settingsSeparator = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
+        static let settingsTextLabel = UIConstants.Photon.Grey10
         static let siriTint = UIConstants.Photon.Magenta60
         static let tableSectionHeader = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
         static let toastBackground = UIColor(rgb: 0x414146)
         static let toastText = UIColor.white
-        static let toggleOn = UIConstants.Photon.Magenta40
         static let toggleOff = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
-        static let toolbarBorder = UIColor(rgb: 0x5F6368)
+        static let toggleOn = UIConstants.Photon.Magenta40
         static let toolbarButtonNormal = UIColor.darkGray
-        static let urlTextBackground = UIColor(white: 1, alpha: 0.2)
         static let urlTextFont = UIConstants.Photon.Grey10
         static let urlTextHighlight = UIColor(rgb: 0xB5007F)
         static let urlTextPlaceholder = UIConstants.Photon.Grey10.withAlphaComponent(0.4)
-        static let urlTextShadow = UIColor.black
         static let whatsNew = UIConstants.Photon.Teal50
-        static let settingsNavBar = UIConstants.Photon.Ink80.withAlphaComponent(0.9)
-        static let settingsNavBorder = UIConstants.Photon.Grey10.withAlphaComponent(0.5)
-        static let actionMenuItemSubtitleLabel = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
-
-        static let inputPlaceholder = UIColor(rgb: 0xb2b2b2)
-
-        static let trackingProtectionPrimary = UIColor(rgb: 0xFFFFFF)
-        static let trackingProtectionSecondary = UIColor(rgb: 0xB2B2B2)
-        static let trackingProtectionBreakdownBackground = UIColor(rgb: 0x414146)
-        static let trackingProtectionLearnMore = UIColor(rgb: 0x0A84FF)
     }
 
     struct Photon {
