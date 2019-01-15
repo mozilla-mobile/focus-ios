@@ -16,12 +16,11 @@ struct UIConstants {
         static let cellBackground = UIConstants.Photon.Ink80
         static let cellSelected = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         static let defaultFont = UIColor(rgb: 0xE1E5EA)
-        static let firstRunMessage = UIColor(rgb: 0x737373)
-        static let firstRunNextButton = UIColor(rgb: 0x9400FF)
+        static let firstRunMessage = UIConstants.Photon.Grey50
+        static let firstRunNextButton = UIConstants.Photon.Purple50
         static let firstRunTitle = UIColor(rgb: 0x212121)
         static let focusLightBlue = UIColor(rgb: 0x00A7E0)
         static let focusDarkBlue = UIColor(rgb: 0x005DA5)
-        static let focusBlue = UIColor(rgb: 0x00A7E0)
         static let focusGreen = UIColor(rgb: 0x7ED321)
         static let focusMaroon = UIColor(rgb: 0xE63D2F)
         static let focusOrange = UIColor(rgb: 0xF26C23)
