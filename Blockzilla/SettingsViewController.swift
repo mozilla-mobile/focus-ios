@@ -364,7 +364,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             context.cgContext.fill(navBarBorderRect)
         })
         navigationController?.navigationBar.shadowImage = borderImage
-        
+
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSettings))
         doneButton.tintColor = UIConstants.Photon.Magenta40
         doneButton.accessibilityIdentifier = "SettingsViewController.doneButton"
