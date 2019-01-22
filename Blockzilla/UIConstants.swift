@@ -30,10 +30,11 @@ struct UIConstants {
         static let gradientLeft = UIConstants.Photon.Red60
         static let gradientMiddle = UIConstants.Photon.Magenta70
         static let gradientRight = UIConstants.Photon.Purple80
+        static let inputPlaceholder = UIColor(rgb: 0xb2b2b2)
         static let navigationButton = UIConstants.Photon.Grey10
         static let navigationTitle = UIConstants.Photon.Grey10
         static let overlayBackground = UIColor(white: 0, alpha: 0.8)
-		    static let searchSuggestion = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
+        static let searchSuggestion = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
         static let settingsDetailLabel = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
         static let settingsDisabled = UIColor(rgb: 0xB2B2B2)
         static let settingsLink = UIConstants.Photon.Magenta40
