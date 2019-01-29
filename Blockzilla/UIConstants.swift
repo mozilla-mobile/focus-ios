@@ -206,6 +206,8 @@ struct UIConstants {
         static let truncateCharactersLimit = 160
         static let truncateHeadCharactersCount = (truncateCharactersLimit - UIConstants.strings.truncateLeader.count) / 2
         static let truncateTailCharactersCount = Int(ceil(Double(truncateCharactersLimit - UIConstants.strings.truncateLeader.count) / 2.0))
+        static let homeTipTitleLableOffset: CGFloat = 3
+        static let homePrivateBrowsingDescriptionLabelTopOffset: CGFloat = 5
     }
 
     struct strings {
