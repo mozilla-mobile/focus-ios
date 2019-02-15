@@ -45,7 +45,6 @@ class NoInternetConnectionTest: BaseTestCase {
 
 	func testConnectivity() {
 		if !ReachabilityTest.isConnectedToNetwork() {
-			let app = XCUIApplication()
 			loadWebPage("mozilla.com")
 			let noInternetConnection = app.staticTexts["The Internet connection appears to be offline."]
 			XCTAssertEqual("The Internet connection appears to be offline.", noInternetConnection.label)
