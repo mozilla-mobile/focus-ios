@@ -105,7 +105,7 @@ class HomeView: UIView {
         }
 
         tipView.snp.makeConstraints { make in
-            make.centerY.equalToSuperview().offset(UIConstants.layout.shareTrackersHeight/3)
+            make.bottom.equalTo(toolbar.snp.top).offset(UIConstants.layout.shareTrackersBottomOffset)
             make.height.equalTo(UIConstants.layout.shareTrackersHeight)
             make.centerX.equalToSuperview()
             make.width.greaterThanOrEqualTo(280)
