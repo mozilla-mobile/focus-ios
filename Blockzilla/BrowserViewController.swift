@@ -216,6 +216,9 @@ class BrowserViewController: UIViewController {
         if let homeViewToolset = homeView?.toolbar.toolset {
             homeViewToolset.setHighlightWhatsNew(shouldHighlight: homeViewToolset.shouldShowWhatsNew())
             homeView?.toolbar.layoutIfNeeded()
+            if let tipManager = tipManager {
+                homeView?.setTip(tipManager: tipManager)
+            }
         }
         browserToolbar.toolset.setHighlightWhatsNew(shouldHighlight: browserToolbar.toolset.shouldShowWhatsNew())
         browserToolbar.layoutIfNeeded()

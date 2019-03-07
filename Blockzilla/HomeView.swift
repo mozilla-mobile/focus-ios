@@ -147,7 +147,17 @@ class HomeView: UIView {
             make.left.equalToSuperview()
         }
 
-        if let tipManager = tipManager, let tip = tipManager.fetchTip() {
+        if let tipManager = tipManager {
+            setTip(tipManager: tipManager)
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setTip(tipManager: TipManager) {
+        if let tip = tipManager.fetchTip() {
             showTipView()
             switch tip.identifier {
             case TipManager.TipKey.shareTrackersTip:
@@ -163,17 +173,13 @@ class HomeView: UIView {
         }
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func showTipView() {
+    private func showTipView() {
         privateBrowsingDescription.isHidden = true
         browseEraseRepeatTagline.isHidden = true
         tipView.isHidden = false
     }
 
-    func showTrackerStatsShareButton(text: String) {
+    private func showTrackerStatsShareButton(text: String) {
         trackerStatsLabel.text = text
         trackerStatsLabel.sizeToFit()
         trackerStatsLabel.isHidden = false
@@ -181,7 +187,7 @@ class HomeView: UIView {
         shieldLogo.isHidden = false
     }
 
-    func hideTrackerStatsShareButton() {
+    private func hideTrackerStatsShareButton() {
         shieldLogo.isHidden = true
         trackerStatsLabel.isHidden = true
         trackerStatsShareButton.isHidden = true
@@ -203,7 +209,7 @@ class HomeView: UIView {
         textLogo.isHidden = false
     }
 
-    func showTextTip(_ tip: TipManager.Tip) {
+    private func showTextTip(_ tip: TipManager.Tip) {
         tipTitleLabel.text = tip.title
         tipTitleLabel.sizeToFit()
         tipTitleLabel.isHidden = false
@@ -238,7 +244,7 @@ class HomeView: UIView {
         }
     }
 
-    func hideTextTip() {
+    private func hideTextTip() {
         tipTitleLabel.isHidden = true
         tipDescriptionLabel.isHidden = true
     }
