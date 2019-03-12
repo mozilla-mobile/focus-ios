@@ -51,12 +51,12 @@ class TipManager {
     }
 
     private func addAllTips() {
-//        possibleTips.append(autocompleteTip)
-//        possibleTips.append(sitesNotWorkingTip)
-//        possibleTips.append(requestDesktopTip)
-//        possibleTips.append(siriFavoriteTip)
-//        possibleTips.append(siriEraseTip)
-//        possibleTips.append(shareTrackersTip)
+        possibleTips.append(autocompleteTip)
+        possibleTips.append(sitesNotWorkingTip)
+        possibleTips.append(requestDesktopTip)
+        possibleTips.append(siriFavoriteTip)
+        possibleTips.append(siriEraseTip)
+        possibleTips.append(shareTrackersTip)
         possibleTips.append(biometricTip)
 
     }
