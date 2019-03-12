@@ -692,6 +692,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     @objc private func dismissSettings() {
+        if let browserViewController = presentingViewController as? BrowserViewController {
+            browserViewController.refreshTipsDisplay()
+        }
         self.dismiss(animated: true, completion: nil)
     }
 

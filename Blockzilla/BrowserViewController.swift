@@ -302,6 +302,7 @@ class BrowserViewController: UIViewController {
     private func createHomeView() {
         let homeView: HomeView
         if TipManager.shared.shouldShowTips() {
+            tipManager?.loadTips()
             homeView = HomeView(tipManager: tipManager)
         } else {
             homeView = HomeView()
@@ -318,7 +319,7 @@ class BrowserViewController: UIViewController {
             homeView.removeFromSuperview()
         }
         self.homeView = homeView
-
+        homeView.setNeedsDisplay()
     }
 
     private func createURLBar() {

@@ -45,16 +45,20 @@ class TipManager {
         addAllTips()
     }
 
+    public func loadTips() {
+        possibleTips = [Tip]()
+        addAllTips()
+    }
+
     private func addAllTips() {
-        possibleTips.append(autocompleteTip)
-        possibleTips.append(sitesNotWorkingTip)
-        possibleTips.append(requestDesktopTip)
-        possibleTips.append(siriFavoriteTip)
-        possibleTips.append(siriEraseTip)
-        possibleTips.append(shareTrackersTip)
-        if laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
-            possibleTips.append(biometricTip)
-        }
+//        possibleTips.append(autocompleteTip)
+//        possibleTips.append(sitesNotWorkingTip)
+//        possibleTips.append(requestDesktopTip)
+//        possibleTips.append(siriFavoriteTip)
+//        possibleTips.append(siriEraseTip)
+//        possibleTips.append(shareTrackersTip)
+        possibleTips.append(biometricTip)
+
     }
 
     lazy var autocompleteTip = Tip(title: UIConstants.strings.autocompleteTipTitle, description: UIConstants.strings.autocompleteTipDescription, identifier: TipKey.autocompleteTip)
@@ -94,11 +98,14 @@ class TipManager {
 
     private func canShowTip(with id: String) -> Bool {
         let defaults = UserDefaults.standard
+
         switch id {
         case TipKey.siriFavoriteTip, TipKey.siriEraseTip:
             guard #available(iOS 12.0, *) else { return false }
         case TipKey.shareTrackersTip:
             guard UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey) >= 10 else { return false }
+        case TipKey.biometricTip:
+            return shouldShowBiometricTips()
         default:
             break
         }
@@ -107,5 +114,10 @@ class TipManager {
 
     func shouldShowTips() -> Bool {
         return NSLocale.current.identifier == "en_US" && !AppInfo.isKlar
+    }
+
+    func shouldShowBiometricTips() -> Bool {
+        let isBiometricLoginEnabled = Settings.getToggle(.biometricLogin)
+        return !isBiometricLoginEnabled && laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil)
     }
 }
