@@ -424,7 +424,7 @@ extension WebViewController: WKScriptMessageHandler {
         guard let url = components.url else { return }
 
         let enabled = Utils.getEnabledLists().compactMap { BlocklistName(rawValue: $0) }
-        TPStatsBlocklistChecker.shared.isBlocked(url: url, enabledLists: enabled).uponQueue(.main) { listItem in
+        TPStatsBlocklistChecker.shared.isBlocked(url: url, enabledLists: enabled).upon(DispatchQueue.main) { (listItem) in
             if let listItem = listItem {
                 self.trackingInformation = self.trackingInformation.create(byAddingListItem: listItem)
             }

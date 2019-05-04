@@ -563,6 +563,7 @@ class URLBar: UIView {
     }
 
     func fillUrlBar(text: String) {
+        print("filling url bar: \(text)")
         urlText.text = text
     }
 
@@ -777,7 +778,7 @@ class URLBar: UIView {
         delegate?.urlBarDidPressPageActions(self)
     }
 
-    private func setTextToURL(displayFullUrl: Bool = false) {
+    private func setTextToURL(displayFullUrl: Bool = false, enteringEdit: Bool = false) {
         var fullUrl: String?
         var truncatedURL: String?
         var displayText: String?
@@ -790,13 +791,20 @@ class URLBar: UIView {
             fullUrl = components?.url?.absoluteString
             truncatedURL = components?.host
 
+            var shouldDisplaySearchTerm = false
             if let stackValue = SearchHistoryUtils.pullSearchFromStack(), !stackValue.isUrl {
+                shouldDisplaySearchTerm = true
                 displayText = stackValue
             } else {
                 displayText = truncatedURL
             }
 
-            urlText.text = displayFullUrl ? fullUrl : displayText
+            if enteringEdit {
+                urlText.text = shouldDisplaySearchTerm ? displayText : fullUrl
+            } else {
+                urlText.text = displayText
+            }
+
             truncatedUrlText.text = truncatedURL
         }
     }
@@ -839,7 +847,7 @@ class URLBar: UIView {
 extension URLBar: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
 
-        setTextToURL(displayFullUrl: true)
+        setTextToURL(enteringEdit: true)
         autocompleteTextField.highlightAll()
 
         if !isEditing && inBrowsingMode {

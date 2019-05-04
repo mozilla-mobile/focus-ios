@@ -47,7 +47,7 @@ class TPStatsBlocklistChecker {
 
         guard let blockLists = blockLists, let host = url.host, !host.isEmpty else {
             // TP Stats init isn't complete yet
-            deferred.fill(nil)
+            deferred.fill(with: nil)
             return deferred
         }
 
@@ -55,7 +55,7 @@ class TPStatsBlocklistChecker {
         let whitelistRegex = [NSRegularExpression]()
 
         DispatchQueue.global().async {
-            deferred.fill(blockLists.urlIsInList(url, whitelistedDomains: whitelistRegex).flatMap { return enabledLists.contains($0) ? $0 : nil })
+            deferred.fill(with: blockLists.urlIsInList(url, whitelistedDomains: whitelistRegex).flatMap { return enabledLists.contains($0) ? $0 : nil })
         }
         return deferred
     }
