@@ -117,6 +117,11 @@ class WebViewController: UIViewController, WebController {
     func goBack() { browserView.goBack() }
     func goForward() { browserView.goForward() }
     func reload() { browserView.reload() }
+    func go(to item: WKBackForwardListItem) { browserView.go(to: item) }
+
+    func history() -> [WKBackForwardListItem] {
+        return browserView.backForwardList.backList
+    }
 
     @available(iOS 9, *)
     func requestUserAgentChange() {

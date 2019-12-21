@@ -6,7 +6,7 @@ import XCTest
 
 // Note: this test is tested as part of the base test case, and thus is disabled here.
 
-class CopyTest: BaseTestCase {
+class HistoryTest: BaseTestCase {
 
     override func setUp() {
         super.setUp()
@@ -18,20 +18,16 @@ class CopyTest: BaseTestCase {
         super.tearDown()
     }
 
-    func testCopyMenuItem() {
+    func testHistoryItem() {
         let urlBarTextField = app.textFields["URLBar.urlText"]
         loadWebPage("http://localhost:6573/licenses.html")
-
-        // Must offset textfield press to support 5S.
-        urlBarTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx: 10, dy: 0)).press(forDuration: 1.5)
-        waitforHittable(element: app.cells["Copy Address"])
-        app.cells["Copy Address"].tap()
-        waitforNoExistence(element: app.cells["Copy Address"])
-
         loadWebPage("bing.com")
-        urlBarTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx: 10, dy: 0)).press(forDuration: 1.5)
-        waitforHittable(element: app.cells["Paste & Go"])
-        app.cells["Paste & Go"].tap()
+        loadWebPage("https://www.google.com")
+
+        waitforHittable(element: app.buttons["Back"])
+        app.buttons["Back"].press(forDuration: 1)
+        app.cells["http://localhost:6573/licenses.html"].tap()
+        waitforNoExistence(element: app.menuItems["Back"])
 
         waitForWebPageLoad()
         guard let text = urlBarTextField.value as? String else {
@@ -39,6 +35,7 @@ class CopyTest: BaseTestCase {
             return
         }
 
+        print("url: \(text)")
         XCTAssert(text == "localhost")
     }
 }

@@ -51,6 +51,7 @@ public struct PhotonActionSheetItem {
     public private(set) var iconString: String?
     public private(set) var iconURL: URL?
     public private(set) var iconAlignment: IconAlignment
+    public private(set) var adjustsFontSizeToFitWidth: Bool
 
     public var isEnabled: Bool
     public private(set) var accessory: PhotonActionSheetCellAccessoryType
@@ -58,7 +59,7 @@ public struct PhotonActionSheetItem {
     public private(set) var bold: Bool = false
     public private(set) var handler: ((PhotonActionSheetItem) -> Void)?
 
-    init(title: String, text: String? = nil, textStyle: TextStyle = .normal, iconString: String? = nil, iconAlignment: IconAlignment = .left, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, bold: Bool? = false, handler: ((PhotonActionSheetItem) -> Void)? = nil) {
+    init(title: String, text: String? = nil, textStyle: TextStyle = .normal, iconString: String? = nil, iconAlignment: IconAlignment = .left, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, bold: Bool? = false, adjustsFontSizeToFitWidth: Bool? = true, handler: ((PhotonActionSheetItem) -> Void)? = nil) {
         self.title = title
         self.iconString = iconString
         self.iconAlignment = iconAlignment
@@ -69,6 +70,7 @@ public struct PhotonActionSheetItem {
         self.textStyle = textStyle
         self.accessoryText = accessoryText
         self.bold = bold ?? false
+        self.adjustsFontSizeToFitWidth = adjustsFontSizeToFitWidth ?? true
     }
 }
 
@@ -543,7 +545,7 @@ private class PhotonActionSheetCell: UITableViewCell {
         titleLabel.textColor = self.tintColor
         titleLabel.textColor = action.accessory == .Text ? titleLabel.textColor.withAlphaComponent(0.6) : titleLabel.textColor
         titleLabel.numberOfLines = 1
-        titleLabel.adjustsFontSizeToFitWidth = true
+        titleLabel.adjustsFontSizeToFitWidth = action.adjustsFontSizeToFitWidth
         titleLabel.minimumScaleFactor = 0.5
 
         subtitleLabel.text = action.text

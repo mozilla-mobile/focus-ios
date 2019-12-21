@@ -51,6 +51,7 @@
 		30DFF98021810BF20055707C /* SearchSuggestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DFF97F21810BF20055707C /* SearchSuggestClient.swift */; };
 		31421EB12176492A0015F48B /* TitleActivityItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31421EB02176492A0015F48B /* TitleActivityItemProvider.swift */; };
 		34056D10515852F370C83A01 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAB8E622E994545108473554 /* QuartzCore.framework */; };
+		354B182920328BAF46F87EB7 /* HistoryTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354B1536E914FFD95C0F797C /* HistoryTest.swift */; };
 		4285B8E0671F40DA543A2E58 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29B90C056305836CB297FF79 /* AssetsLibrary.framework */; };
 		4F1284861FC5E242001A775B /* TPSettingsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1284851FC5E242001A775B /* TPSettingsTest.swift */; };
 		4F582F7B1F44A10F006C744B /* OpenInFocusTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F582F7A1F44A10F006C744B /* OpenInFocusTest.swift */; };
@@ -381,6 +382,7 @@
 		29B90C056305836CB297FF79 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		30DFF97F21810BF20055707C /* SearchSuggestClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSuggestClient.swift; sourceTree = "<group>"; };
 		31421EB02176492A0015F48B /* TitleActivityItemProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleActivityItemProvider.swift; sourceTree = "<group>"; };
+		354B1536E914FFD95C0F797C /* HistoryTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTest.swift; sourceTree = "<group>"; };
 		427B752EF11959F9C38B12D6 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4F1284851FC5E242001A775B /* TPSettingsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPSettingsTest.swift; sourceTree = "<group>"; };
 		4F582F7A1F44A10F006C744B /* OpenInFocusTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenInFocusTest.swift; sourceTree = "<group>"; };
@@ -1025,6 +1027,7 @@
 				4F1284851FC5E242001A775B /* TPSettingsTest.swift */,
 				166E4BFA212F7DEC0029E2A5 /* UserAgentTest.swift */,
 				F74E8108218183F400D18535 /* SearchSuggestionsTest.swift */,
+				354B1536E914FFD95C0F797C /* HistoryTest.swift */,
 			);
 			path = XCUITest;
 			sourceTree = "<group>";
@@ -1835,6 +1838,7 @@
 				F74E8109218183F400D18535 /* SearchSuggestionsTest.swift in Sources */,
 				0BA39A861DD2B8E4005F970A /* WebsiteAccessTest.swift in Sources */,
 				0B0D6BC41F3CDDBB00497D08 /* CollapsedURLTest.swift in Sources */,
+				354B182920328BAF46F87EB7 /* HistoryTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

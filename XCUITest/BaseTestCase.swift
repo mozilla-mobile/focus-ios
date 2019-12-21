@@ -147,16 +147,21 @@ class BaseTestCase: XCTestCase {
     func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true) {
         let storedUrl = UIPasteboard.general.string
         let app = XCUIApplication()
-        let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
+        let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
 
         UIPasteboard.general.string = url
         waitforHittable(element: searchOrEnterAddressTextField)
 
         // Must press this way in order to support iPhone 5s
-        searchOrEnterAddressTextField.tap()
-        searchOrEnterAddressTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx: 10, dy: 0)).press(forDuration: 1.5)
-        waitforExistence(element: app.menuItems["Paste & Go"])
-        app.menuItems["Paste & Go"].tap()
+        if let title = searchOrEnterAddressTextField.value as? String, title != "Search or enter address" {
+            searchOrEnterAddressTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx: 10, dy: 0)).press(forDuration: 1.5)
+            waitforExistence(element: app.cells["Paste & Go"])
+            app.cells["Paste & Go"].tap()
+        } else {
+            searchOrEnterAddressTextField.tap()
+            waitforExistence(element: app.menuItems["Paste & Go"])
+            app.menuItems["Paste & Go"].tap()
+        }
 
         if waitForLoadToFinish {
             let finishLoadingTimeout: TimeInterval = 30
@@ -166,7 +171,9 @@ class BaseTestCase: XCTestCase {
                     description: "Problem loading \(url)",
                 timeout: finishLoadingTimeout)
         }
-        UIPasteboard.general.string = storedUrl
+        if let url = storedUrl as? String {
+            UIPasteboard.general.string = url
+        }
     }
 
     private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 5.0) {

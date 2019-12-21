@@ -6,6 +6,7 @@ import Foundation
 
 protocol BrowserToolsetDelegate: class {
     func browserToolsetDidPressBack(_ browserToolbar: BrowserToolset)
+    func browserToolsetDidLongPressBack(_ browserToolbar: BrowserToolset)
     func browserToolsetDidPressForward(_ browserToolbar: BrowserToolset)
     func browserToolsetDidPressReload(_ browserToolbar: BrowserToolset)
     func browserToolsetDidLongPressReload(_ browserToolbar: BrowserToolset)
@@ -26,6 +27,8 @@ class BrowserToolset {
         backButton.setImage(#imageLiteral(resourceName: "icon_back_active"), for: .normal)
         backButton.setImage(#imageLiteral(resourceName: "icon_back_active").alpha(0.4), for: .disabled)
         backButton.addTarget(self, action: #selector(didPressBack), for: .touchUpInside)
+        backButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(didLongPressBack)))
+
         backButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         backButton.accessibilityLabel = UIConstants.strings.browserBack
         backButton.isEnabled = false
@@ -83,6 +86,12 @@ class BrowserToolset {
 
     @objc private func didPressBack() {
         delegate?.browserToolsetDidPressBack(self)
+    }
+
+    @objc private func didLongPressBack(sender: UILongPressGestureRecognizer) {
+        if sender.state == .began && canGoBack {
+            delegate?.browserToolsetDidLongPressBack(self)
+        }
     }
 
     @objc private func didPressForward() {

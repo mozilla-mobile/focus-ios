@@ -1016,6 +1016,23 @@ extension BrowserViewController: BrowserToolsetDelegate {
         webViewController.goBack()
     }
 
+    func browserToolsetDidLongPressBack(_ browserToolset: BrowserToolset) {
+       let history = webViewController.history()
+
+        let actions: [[PhotonActionSheetItem]] = history.map { item in
+            if let title = item.title, !title.isEmpty {
+                return PhotonActionSheetItem(title: "\(title) - \(item.url.absoluteString)", adjustsFontSizeToFitWidth: false) { action in
+                    self.webViewController.go(to: item)
+                }
+            }
+            return PhotonActionSheetItem(title: item.url.absoluteString, adjustsFontSizeToFitWidth: false) { action in
+                self.webViewController.go(to: item)
+            }
+        }.map { item in [item] }
+        let urlContextMenu = PhotonActionSheet(actions: actions.reversed(), style: .overCurrentContext)
+        presentPhotonActionSheet(urlContextMenu, from: urlBar)
+    }
+
     private func handleNavigationBack() {
         // Check if the previous site we were on was AMP
         guard let navigatingFromAmpSite = SearchHistoryUtils.pullSearchFromStack()?.hasPrefix(UIConstants.strings.googleAmpURLPrefix) else {
