@@ -27,7 +27,7 @@ class InsetButton: UIButton {
 
     @objc private func didTouchDismiss() {
         UIView.animate(withDuration: 0.1) {
-            self.alpha = 0.5
+            self.alpha = 1
         }
     }
 
