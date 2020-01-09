@@ -14,10 +14,11 @@ protocol URLBarDelegate: class {
     func urlBarDidActivate(_ urlBar: URLBar)
     func urlBarDidDeactivate(_ urlBar: URLBar)
     func urlBarDidFocus(_ urlBar: URLBar)
-    func urlBarDidPressScrollTop(_: URLBar, tap: UITapGestureRecognizer)
+    func urlBarDidTapText(_: URLBar, tap: UITapGestureRecognizer)
     func urlBarDidDismiss(_ urlBar: URLBar)
     func urlBarDidPressDelete(_ urlBar: URLBar)
     func urlBarDidTapShield(_ urlBar: URLBar)
+    func urlBarDidSingleTap(_ urlBar: URLBar)
     func urlBarDidLongPress(_ urlBar: URLBar)
     func urlBarDidPressPageActions(_ urlBar: URLBar)
 }
@@ -136,8 +137,12 @@ class URLBar: UIView {
 
     convenience init() {
         self.init(frame: CGRect.zero)
+        
+        let urlBarSingleTap = UITapGestureRecognizer(target: self, action: #selector(didSingleTapUrlBar(sender:)))
+        urlBarSingleTap.numberOfTapsRequired = 1
+        addGestureRecognizer(urlBarSingleTap)
 
-        let singleTap = UITapGestureRecognizer(target: self, action: #selector(didSingleTap(sender:)))
+        let singleTap = UITapGestureRecognizer(target: self, action: #selector(didSingleTapTextAndLockContainer(sender:)))
         singleTap.numberOfTapsRequired = 1
         textAndLockContainer.addGestureRecognizer(singleTap)
 
@@ -705,8 +710,12 @@ class URLBar: UIView {
         completion?()
     }
 
-    @objc private func didSingleTap(sender: UITapGestureRecognizer) {
-        delegate?.urlBarDidPressScrollTop(self, tap: sender)
+    @objc private func didSingleTapTextAndLockContainer(sender: UITapGestureRecognizer) {
+        delegate?.urlBarDidTapText(self, tap: sender)
+    }
+    
+    @objc private func didSingleTapUrlBar(sender: UITapGestureRecognizer) {
+        delegate?.urlBarDidSingleTap(self)
     }
 
     /// Show the URL toolset buttons if we're on iPad/landscape and not editing; hide them otherwise.
