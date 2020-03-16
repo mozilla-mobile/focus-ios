@@ -1,0 +1,24 @@
+[36360][environment] CWD = /Users/pawan/Desktop/focus-ios
+[36360][environment] No .inferconfig file found
+[36360][environment] Project root = /Users/pawan/Desktop/focus-ios
+[36360][environment] INFER_ARGS =   @/var/folders/w1/mtpjv25d4gx_d_cllwwldf980000gn/T/args.tmp.f1d109
+[36360][environment]   ++Contents of '/var/folders/w1/mtpjv25d4gx_d_cllwwldf980000gn/T/args.tmp.f1d109':
+[36360][environment]     run
+[36360][environment]   
+[36360][environment] command line arguments:   infer run -- xcodebuild -target Blockzilla
+[36360][environment]                           -configuration FocusDebugActive checkers: biabduction (C/C++/ObjC, Java), fragment retains view (Java), inefficient keyset iterator (Java), liveness (C/C++/ObjC), RacerD (C/C++/ObjC, Java), SIOF (C/C++/ObjC), uninitialized variables (C/C++/ObjC), Starvation analysis (C/C++/ObjC, Java)
+[36360][environment] Infer log identifier is 
+Infer version v0.17.0
+[36360][environment] Copyright 2009 - present Facebook. All Rights Reserved.
+[36360][environment] 
+[36360][   progress] Capturing in xcodebuild mode...
+[36360][ intern err]   /usr/local/Cellar/infer/0.17.0/lib/infer/infer/bin/../lib/python/infer.py
+  -j 8 --project-root /Users/pawan/Desktop/focus-ios --out
+  /Users/pawan/Desktop/focus-ios/infer-out -- xcodebuild -target Blockzilla
+  -configuration FocusDebug:
+  exited with code 65
+[36360][ intern err] Raised at file "string.ml", line 145, characters 16-31
+Called from file "string.ml" (inlined), line 149, characters 17-46
+Called from file "src/string.ml", line 407, characters 12-33
+Called from file "src/string.ml", line 416, characters 11-33
+

@@ -1,0 +1,19 @@
+[INFO] output of locale.getdefaultlocale(): ('en_CA', 'UTF-8')
+[INFO] encoding we chose in the end: UTF-8
+[INFO] Running command /usr/local/Cellar/infer/0.17.0/lib/infer/infer/bin/../lib/python/infer.py -j 8 --project-root /Users/pawan/Desktop/focus-ios --out /Users/pawan/Desktop/focus-ios/infer-out -- xcodebuild -target Blockzilla -configuration FocusDebug
+[INFO] Path to infer script /usr/local/Cellar/infer/0.17.0/lib/infer/infer/bin/../lib/python/infer.py (/usr/local/Cellar/infer/0.17.0/lib/infer/infer/lib/python/infer.py)
+[INFO] Platform: Darwin-19.2.0-x86_64-i386-64bit
+[INFO] PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+[INFO] SHELL=/bin/zsh
+[INFO] PWD=/Users/pawan/Desktop/focus-ios
+[INFO] Xcode version:
+Xcode 11.3
+Build version 11C29
+
+[INFO] clang version:
+Apple clang version 11.0.0 (clang-1100.0.33.16)
+Target: x86_64-apple-darwin19.2.0
+Thread model: posix
+InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
+
+[ERROR] Error during capture phase, exiting
