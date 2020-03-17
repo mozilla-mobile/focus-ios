@@ -1218,6 +1218,7 @@ extension BrowserViewController: WebControllerDelegate {
     }
 
     func webControllerURLDidChange(_ controller: WebController, url: URL) {
+        updateURLBar()
         showToolbars()
     }
 
