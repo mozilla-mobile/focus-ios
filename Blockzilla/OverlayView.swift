@@ -216,7 +216,23 @@ class OverlayView: UIView {
         searchQuery = suggestions[0]
         searchSuggestions = searchQuery.isEmpty ? [] : suggestions
         let searchSuggestionsPromptHidden = UserDefaults.standard.bool(forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt) || searchQuery.isEmpty
+        var copyButtonHidden = true
 
+        
+//        if UIPasteboard.general.hasURLs {
+//            UIPasteboard.general.urlAsync() { handoffUrl in
+//                DispatchQueue.main.async {
+//                    if let url = handoffUrl, url.isWebPage() {
+//                        let attributedTitle = NSMutableAttributedString(string: UIConstants.strings.copiedLink, attributes: [.foregroundColor: UIConstants.Photon.Grey10])
+//                        let attributedCopiedUrl = NSMutableAttributedString(string: url.absoluteString, attributes: [.font: UIConstants.fonts.copyButtonQuery, .foregroundColor: UIConstants.Photon.Grey10])
+//                        attributedTitle.append(attributedCopiedUrl)
+//                        self.copyButton.setAttributedTitle(attributedTitle, for: .normal)
+//                        copyButtonHidden = !url.isWebPage()
+//                    }
+//                }
+//            }
+//        }
+        
         DispatchQueue.main.async {
             self.updateSearchSuggestionsPrompt(hidden: searchSuggestionsPromptHidden)
 
@@ -231,7 +247,7 @@ class OverlayView: UIView {
                 lastSearchButtonIndex: lastSearchButtonIndex
             )
             self.updateCopyConstraints(
-                copyButtonHidden: true,
+                copyButtonHidden: copyButtonHidden,
                 findInPageHidden: hideFindInPage,
                 lastSearchButtonIndex: lastSearchButtonIndex
             )
