@@ -491,10 +491,13 @@ class URLBar: UIView {
 
     //Adds Menu Item
     func addCustomMenu() {
-        if UIPasteboard.general.string != nil && urlText.isFirstResponder {
-            let lookupMenu = UIMenuItem(title: UIConstants.strings.urlPasteAndGo, action: #selector(pasteAndGoFromContextMenu))
-            UIMenuController.shared.menuItems = [lookupMenu]
+        if #available(iOS 14.0, *) {
+            print(UIPasteboard.DetectionPattern.probableWebURL)
         }
+//        if UIPasteboard.general.string != nil && urlText.isFirstResponder {
+        let lookupMenu = UIMenuItem(title: UIConstants.strings.urlPasteAndGo, action: #selector(pasteAndGoFromContextMenu))
+        UIMenuController.shared.menuItems = [lookupMenu]
+//        }
     }
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         addCustomMenu()
