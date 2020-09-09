@@ -1,4 +1,4 @@
-xcodevers=`xcodebuild -scheme Focus  -showBuildSettings  | grep -i 'SDK_VERSION =' | sed 's/[ ]*SDK_VERSION = //' | awk NF=1 FPAT=..`
+xcodevers=`xcodebuild -scheme Focus  -showBuildSettings  | grep -i 'SDK_VERSION =' | sed 's/[ ]*SDK_VERSION = //' | colrm 3`
 echo Xcode SDK: "$xcodevers"
 if [[ "$xcodevers" != "13" ]]; then
   echo XCode 12 version detected! ••• Please ensure this is correct. ••• 
