@@ -6,17 +6,18 @@
 #brew unlink carthage
 #brew install https://github.com/Homebrew/homebrew-core/raw/a1222d4ca1e3b81374df2d7620f8d47503f6a8f2/Formula/carthage.rb
 
-c7550f832f23d2c00bf0c014351719839593c641
+#git clone https://github.com/Carthage/Carthage.git
+#
+#cd Carthage
+#
+#git checkout c7550f832f23d2c00bf0c014351719839593c641
+#
+#make install
+#
+#cd ..
 
-git clone https://github.com/Carthage/Carthage.git
-
-cd Carthage
-
-git checkout c7550f832f23d2c00bf0c014351719839593c641
-
-make install
-
-cd ..
+brew extract --version=0.34.0 carthage carthage/custom
+brew install carthage@0.34.0
 
 carthage version
 
