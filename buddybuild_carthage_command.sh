@@ -12,7 +12,7 @@ git clone https://github.com/Carthage/Carthage.git
 
 cd Carthage
 
-git checkout c7550f832f23d2c00bf0c014351719839593c641
+git checkout 25ad8c8ed71afe218aed9a7f7631543ce8adf858
 
 make install
 
