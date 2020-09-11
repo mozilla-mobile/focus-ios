@@ -1,3 +1,11 @@
+# use 0.34.0 because of cross-volume bug with 0.35.0 on BuddyBuild
+# https://github.com/Carthage/Carthage/issues/3003
+brew uninstall carthage
+wget https://github.com/Carthage/Carthage/releases/download/0.34.0/Carthage.pkg
+installer -pkg Carthage.pkg -target CurrentUserHomeDirectory
+cd /usr/local/bin && ln -s ~/usr/local/bin/carthage .
+cd -
+
 xcodevers=`xcodebuild -scheme Focus  -showBuildSettings  | grep -i 'SDK_VERSION =' | sed 's/[ ]*SDK_VERSION = //' | colrm 3`
 echo Xcode SDK: "$xcodevers"
 if [[ "$xcodevers" != "13" ]]; then
