@@ -95,6 +95,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
         if AppInfo.isTesting() {
             let firstRunViewController = IntroViewController()
+            firstRunViewController.modalPresentationStyle = .fullScreen
             self.browserViewController.present(firstRunViewController, animated: false, completion: nil)
             return true
         }
@@ -150,8 +151,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         }
 
         let query = getQuery(url: url)
+        let isHttpScheme = scheme == "http" || scheme == "https"
 
-        if host == "open-url" {
+        if isHttpScheme {
+            if application.applicationState == .active {
+                // If we are active then we can ask the BVC to open the new tab right away.
+                // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
+                browserViewController.submit(url: url)
+            } else {
+                queuedUrl = url
+            }
+        } else if host == "open-url" {
             let urlString = unescape(string: query["url"]) ?? ""
             guard let url = URL(string: urlString) else { return false }
 
@@ -162,7 +172,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             } else {
                 queuedUrl = url
             }
-        } else if host == "open-text" {
+        } else if host == "open-text" || isHttpScheme {
             let text = unescape(string: query["text"]) ?? ""
 
             if application.applicationState == .active {
@@ -384,16 +394,6 @@ extension AppDelegate {
 
         // Start the telemetry session and record an event indicating that we have entered the
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
-
-        // Only include Adjust SDK in Focus and NOT in Klar builds.
-        #if FOCUS
-            // Always initialize Adjust, otherwise the SDK is in a bad state. We disable it
-            // immediately so that no data is collected or sent.
-            AdjustIntegration.applicationDidFinishLaunching()
-            if !Settings.getToggle(.sendAnonymousUsageData) {
-                AdjustIntegration.enabled = false
-            }
-        #endif
     }
 
     func presentModal(viewController: UIViewController, animated: Bool) {
