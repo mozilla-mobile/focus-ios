@@ -2894,10 +2894,10 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_ENTITLEMENTS = FocusIntentExtension/FocusIntentExtension.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 43AQ936H96;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -2915,6 +2915,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.FocusIntentExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -2959,7 +2960,7 @@
 				CODE_SIGN_ENTITLEMENTS = FocusIntentExtension/FocusIntentExtension.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 43AQ936H96;
@@ -2980,6 +2981,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.FocusIntentExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "bitrise klar focusintentextension";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -3024,7 +3026,7 @@
 				CODE_SIGN_ENTITLEMENTS = FocusIntentExtension/FocusIntentExtension.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 43AQ936H96;
@@ -3045,6 +3047,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.FocusIntentExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "bitrise focus focusintentextension";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -3347,7 +3350,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.ShareExtension;
 				PRODUCT_NAME = ShareExtension;
 				PROVISIONING_PROFILE = "19a73a45-cb96-420d-96d5-2b7b2954781e";
-				PROVISIONING_PROFILE_SPECIFIER = "Klar Share Extension Distribution";
+				PROVISIONING_PROFILE_SPECIFIER = "bitrise klar shareextension";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -3403,7 +3406,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.ShareExtension;
 				PRODUCT_NAME = ShareExtension;
 				PROVISIONING_PROFILE = "2c2c3eef-8a98-49d6-a31f-754ddff5867b";
-				PROVISIONING_PROFILE_SPECIFIER = "Focus Share";
+				PROVISIONING_PROFILE_SPECIFIER = "bitrise focus shareextension";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -3967,7 +3970,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus;
 				PRODUCT_NAME = "Firefox Focus";
 				PROVISIONING_PROFILE = "a0e006fd-308f-466b-8037-c39e3e78188e";
-				PROVISIONING_PROFILE_SPECIFIER = "Focus Distribution";
+				PROVISIONING_PROFILE_SPECIFIER = "bitrise focus";
 				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				VALID_ARCHS = arm64;
@@ -3987,7 +3990,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.ContentBlocker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "c9ecd7a2-c454-4991-a6d0-fcea18c3a475";
-				PROVISIONING_PROFILE_SPECIFIER = "Focus ContentBlocker Distribution";
+				PROVISIONING_PROFILE_SPECIFIER = "bitrise focus contentblocker2";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				VALID_ARCHS = arm64;
@@ -4843,7 +4846,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar;
 				PRODUCT_NAME = "Firefox Klar";
 				PROVISIONING_PROFILE = "3d0198ab-c4fb-4dd9-8140-927873f44e85";
-				PROVISIONING_PROFILE_SPECIFIER = "Klar Distribution";
+				PROVISIONING_PROFILE_SPECIFIER = "bitrise klar";
 				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				VALID_ARCHS = arm64;
@@ -4881,7 +4884,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.ContentBlocker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "2255b2ac-3bcf-4a39-99f9-fd5ccf21c3c9";
-				PROVISIONING_PROFILE_SPECIFIER = "Klar ContentBlocker Distribution";
+				PROVISIONING_PROFILE_SPECIFIER = "bitrise klar contentblocker";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				VALID_ARCHS = arm64;
