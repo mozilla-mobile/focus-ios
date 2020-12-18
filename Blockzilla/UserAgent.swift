@@ -24,10 +24,7 @@ class UserAgent {
             return
         }
 
-        guard let userAgent = UserAgent.generateUserAgent() else {
-            return
-        }
-
+        let userAgent = UserAgent.mobileUserAgent()
         userDefaults.set(userAgent, forKey: "UserAgent")
         userDefaults.set(AppInfo.shortVersion, forKey: "LastFocusVersionNumber")
         userDefaults.set(AppInfo.buildNumber, forKey: "LastFocusBuildNumber")
@@ -54,41 +51,8 @@ class UserAgent {
         return nil
     }
 
-    private static func generateUserAgent() -> String? {
-        let webView = UIWebView()
-
-        let userAgent = webView.stringByEvaluatingJavaScript(from: "navigator.userAgent")!
-
-        // Extract the WebKit version and use it as the Safari version.
-        let webKitVersionRegex = try! NSRegularExpression(pattern: "AppleWebKit/([^ ]+) ", options: [])
-
-        let match = webKitVersionRegex.firstMatch(in: userAgent, options: [],
-                                                  range: NSRange(location: 0, length: userAgent.count))
-
-        if match == nil {
-            print("Error: Unable to determine WebKit version in UA.")
-            return userAgent     // Fall back to Safari's.
-        }
-
-        let webKitVersion = (userAgent as NSString).substring(with: match!.range(at: 1))
-
-        // Insert version before the Mobile/ section.
-        let mobileRange = (userAgent as NSString).range(of: "Mobile/")
-        if mobileRange.location == NSNotFound {
-            print("Error: Unable to find Mobile section in UA.")
-            return userAgent     // Fall back to Safari's.
-        }
-
-        let mutableUA = NSMutableString(string: userAgent)
-        mutableUA.insert("FxiOS/\(AppInfo.shortVersion) ", at: mobileRange.location)
-
-        let focusUA = "\(mutableUA) Safari/\(webKitVersion)"
-
-        return focusUA
-    }
-
     public static func getDesktopUserAgent() -> String {
-        let userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/605.1.12 (KHTML, like Gecko) Version/11.1 Safari/605.1.12"
+        let userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15"
         return String(userAgent)
     }
 
@@ -108,5 +72,60 @@ class UserAgent {
             setUserAgent(userAgent: UserAgent.getDesktopUserAgent())
             isDesktopMode = true
         }
+    }
+
+    public static func mobileUserAgent() -> String {
+        return UserAgentBuilder.defaultMobileUserAgent().userAgent()
+    }
+}
+
+struct UserAgentExtras {
+    public static let uaBitSafari = "Safari/605.1.15"
+    public static let uaBitMobile = "Mobile/15E148"
+    public static let uaBitFx = "FxiOS/\(AppInfo.shortVersion)"
+    public static let product = "Mozilla/5.0"
+    public static let platform = "AppleWebKit/605.1.15"
+    public static let platformDetails = "(KHTML, like Gecko)"
+    // For iPad, we need to append this to the default UA for google.com to show correct page
+    public static let uaBitGoogleIpad = "Version/13.0.3"
+}
+
+public struct UserAgentBuilder {
+    // User agent components
+    fileprivate var product = ""
+    fileprivate var systemInfo = ""
+    fileprivate var platform = ""
+    fileprivate var platformDetails = ""
+    fileprivate var extensions = ""
+
+    init(product: String, systemInfo: String, platform: String, platformDetails: String, extensions: String) {
+        self.product = product
+        self.systemInfo = systemInfo
+        self.platform = platform
+        self.platformDetails = platformDetails
+        self.extensions = extensions
+    }
+
+    public func userAgent() -> String {
+        let userAgentItems = [product, systemInfo, platform, platformDetails, extensions]
+        return removeEmptyComponentsAndJoin(uaItems: userAgentItems)
+    }
+
+    public func clone(product: String? = nil, systemInfo: String? = nil, platform: String? = nil, platformDetails: String? = nil, extensions: String? = nil) -> String {
+        let userAgentItems = [product ?? self.product, systemInfo ?? self.systemInfo, platform ?? self.platform, platformDetails ?? self.platformDetails, extensions ?? self.extensions]
+        return removeEmptyComponentsAndJoin(uaItems: userAgentItems)
+    }
+
+    /// Helper method to remove the empty components from user agent string that contain only whitespaces or are just empty
+    private func removeEmptyComponentsAndJoin(uaItems: [String]) -> String {
+        return uaItems.filter { !$0.isEmptyOrWhitespace() }.joined(separator: " ")
+    }
+
+    public static func defaultMobileUserAgent() -> UserAgentBuilder {
+        return UserAgentBuilder(product: UserAgentExtras.product, systemInfo: "(\(UIDevice.current.model); CPU OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)", platform: UserAgentExtras.platform, platformDetails: UserAgentExtras.platformDetails, extensions: "FxiOS/\(AppInfo.shortVersion)  \(UserAgentExtras.uaBitMobile) \(UserAgentExtras.uaBitSafari)")
+    }
+
+    public static func defaultDesktopUserAgent() -> UserAgentBuilder {
+        return UserAgentBuilder(product: UserAgentExtras.product, systemInfo: "(Macintosh; Intel Mac OS X 10.15)", platform: UserAgentExtras.platform, platformDetails: UserAgentExtras.platformDetails, extensions: "FxiOS/\(AppInfo.shortVersion) \(UserAgentExtras.uaBitSafari)")
     }
 }
