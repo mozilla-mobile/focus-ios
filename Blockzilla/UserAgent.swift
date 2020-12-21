@@ -24,12 +24,9 @@ enum UserAgentMode {
 
 class UserAgent {
     static let shared = UserAgent()
-
     private var userDefaults: UserDefaults
     private var defaultUserAgentDesktop = false
     private var forcedMode: UserAgentMode?
-
-//    var browserUserAgent: String?
 
     init(userDefaults: UserDefaults = UserDefaults.standard) {
         self.userDefaults = userDefaults
@@ -40,38 +37,8 @@ class UserAgent {
         if #available(iOS 15.0, *), UIDevice.current.userInterfaceIdiom == .pad {
             defaultUserAgentDesktop = true
         }
-//        if let cachedUserAgent = cachedUserAgent() {
-//            setUserAgent(userAgent: cachedUserAgent)
-//            return
-//        }
-//
-//        let userAgent = getUserAgent()
-//        userDefaults.set(userAgent, forKey: "UserAgent")
-//        userDefaults.set(AppInfo.shortVersion, forKey: "LastFocusVersionNumber")
-//        userDefaults.set(AppInfo.buildNumber, forKey: "LastFocusBuildNumber")
-//        userDefaults.set(UIDevice.current.systemVersion, forKey: "LastDeviceSystemVersionNumber")
-//
-//        setUserAgent(userAgent: userAgent)
     }
 
-//    private func cachedUserAgent() -> String? {
-//        let currentiOSVersion = UIDevice.current.systemVersion
-//        let lastiOSVersion = userDefaults.string(forKey: "LastDeviceSystemVersionNumber")
-//        let currentFocusVersion = AppInfo.shortVersion
-//        let lastFocusVersion = userDefaults.string(forKey: "LastFocusVersionNumber")
-//        let currentFocusBuild = AppInfo.buildNumber
-//        let lastFocusBuild = userDefaults.string(forKey: "LastFocusBuildNumber")
-//
-//        if let focusUA = userDefaults.string(forKey: "UserAgent") {
-//            if lastiOSVersion == currentiOSVersion
-//                && lastFocusVersion == currentFocusVersion
-//                && lastFocusBuild == currentFocusBuild {
-//                return focusUA
-//            }
-//        }
-//        return nil
-//    }
-//
     public static func getDesktopUserAgent() -> String {
         return "\(UserAgentExtras.product) \(UserAgentExtras.systemInfoDesktop) \(UserAgentExtras.platform) \(UserAgentExtras.platformDetails) \(UserAgentExtras.uaBitGoogleIpad) \(UserAgentExtras.uaBitSafari)"
     }
@@ -85,10 +52,6 @@ class UserAgent {
         let userAgent = isDesktop ? UserAgent.getDesktopUserAgent() : UserAgent.mobileUserAgent()
         return userAgent
     }
-
-//    private func setUserAgent(userAgent: String) {
-//        userDefaults.register(defaults: ["UserAgent": userAgent])
-//    }
 
     public func changeUserAgent() {
         guard forcedMode == nil else {

@@ -136,10 +136,6 @@ class WebViewController: UIViewController, WebController {
         UserDefaults.standard.set(false, forKey: TipManager.TipKey.requestDesktopTip)
     }
 
-//    func resetUA() {
-//        browserView.customUserAgent = userAgent?.browserUserAgent
-//    }
-
     func stop() { browserView.stopLoading() }
 
     private func setupWebview() {
@@ -276,7 +272,6 @@ extension WebViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         delegate?.webControllerDidFinishNavigation(self)
-//        self.resetUA()
     }
 
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
