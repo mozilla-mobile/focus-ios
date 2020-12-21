@@ -136,9 +136,9 @@ class WebViewController: UIViewController, WebController {
         UserDefaults.standard.set(false, forKey: TipManager.TipKey.requestDesktopTip)
     }
 
-    func resetUA() {
-        browserView.customUserAgent = userAgent?.browserUserAgent
-    }
+//    func resetUA() {
+//        browserView.customUserAgent = userAgent?.browserUserAgent
+//    }
 
     func stop() { browserView.stopLoading() }
 
@@ -154,6 +154,7 @@ class WebViewController: UIViewController, WebController {
         browserView.scrollView.delegate = self
         browserView.navigationDelegate = self
         browserView.uiDelegate = self
+        browserView.customUserAgent = userAgent?.getUserAgent()
 
         progressObserver = browserView.observe(\WKWebView.estimatedProgress) { (webView, value) in
             self.delegate?.webController(self, didUpdateEstimatedProgress: webView.estimatedProgress)
@@ -275,7 +276,7 @@ extension WebViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         delegate?.webControllerDidFinishNavigation(self)
-        self.resetUA()
+//        self.resetUA()
     }
 
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
