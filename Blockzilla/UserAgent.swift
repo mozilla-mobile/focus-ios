@@ -39,7 +39,7 @@ class UserAgent {
         }
     }
 
-    public static func getDesktopUserAgent() -> String {
+    public static func desktopUserAgent() -> String {
         return "\(UserAgentExtras.product) \(UserAgentExtras.systemInfoDesktop) \(UserAgentExtras.platform) \(UserAgentExtras.platformDetails) \(UserAgentExtras.uaBitGoogleIpad) \(UserAgentExtras.uaBitSafari)"
     }
 
@@ -49,7 +49,7 @@ class UserAgent {
 
     public func getUserAgent() -> String {
         let isDesktop: Bool = forcedMode == nil ? defaultUserAgentDesktop : forcedMode! == .desktop ? true : false
-        let userAgent = isDesktop ? UserAgent.getDesktopUserAgent() : UserAgent.mobileUserAgent()
+        let userAgent = isDesktop ? UserAgent.desktopUserAgent() : UserAgent.mobileUserAgent()
         return userAgent
     }
 
