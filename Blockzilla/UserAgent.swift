@@ -34,7 +34,7 @@ class UserAgent {
     }
 
     func setup() {
-        if #available(iOS 15.0, *), UIDevice.current.userInterfaceIdiom == .pad {
+        if #available(iOS 13.0, *), UIDevice.current.userInterfaceIdiom == .pad {
             defaultUserAgentDesktop = true
         }
     }
