@@ -20,7 +20,7 @@ class CollapsedURLTest: BaseTestCase {
         let app = XCUIApplication()
 
         // Go to mozilla.org
-        loadWebPage("http://localhost:6573/licenses.html\n")
+        loadWebPage("https://www.example.com\n")
 
         // Wait for the website to load
         waitforExistence(element: app.webViews.otherElements["Licenses"])

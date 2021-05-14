@@ -18,7 +18,7 @@ class FindInPageTest: BaseTestCase {
 
     func testFindInPageURLBarElement() {
         // Navigate to website
-        loadWebPage("http://localhost:6573/licenses.html\n")
+        loadWebPage("https://www.example.com\n")
         waitForWebPageLoad()
         
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
@@ -45,7 +45,7 @@ class FindInPageTest: BaseTestCase {
 
     func testActivityMenuFindInPageAction() {
         // Navigate to website
-        loadWebPage("http://localhost:6573/licenses.html\n")
+        loadWebPage("https://www.example.com\n")
         waitforExistence(element: app.buttons["URLBar.pageActionsButton"])
         app.buttons["URLBar.pageActionsButton"].tap()
 

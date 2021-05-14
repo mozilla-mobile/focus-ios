@@ -35,7 +35,7 @@ class WebsiteAccessTests: BaseTestCase {
         // BB CI seems to hang intermittently where http to https redirection occurs.
         // Providing straight URL to avoid the error - and use internal website
         app.buttons["icon clear"].tap()
-        loadWebPage("http://localhost:6573/licenses.html\n")
+        loadWebPage("https://www.example.com\n")
         waitForValueContains(element: label, value: "localhost")
 
         // Erase the history
