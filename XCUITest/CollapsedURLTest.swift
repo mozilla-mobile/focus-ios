@@ -19,11 +19,11 @@ class CollapsedURLTest: BaseTestCase {
     func testCheckCollapsedURL() {
         let app = XCUIApplication()
 
-        // Go to mozilla.org
-        loadWebPage("https://www.example.com\n")
+        // Visit a page that scrolls
+        loadWebPage("https://news.ycombinator.com") //
 
         // Wait for the website to load
-        waitforExistence(element: app.webViews.otherElements["Licenses"])
+        waitforExistence(element: app.webViews.otherElements["Hacker News"])
         let webView = app.webViews.children(matching: .other).element
         app.swipeUp()
         app.swipeUp()
@@ -31,7 +31,7 @@ class CollapsedURLTest: BaseTestCase {
         waitforExistence(element: collapsedTruncatedurltextTextView)
 
         XCTAssertTrue(collapsedTruncatedurltextTextView.isHittable)
-        XCTAssertEqual(collapsedTruncatedurltextTextView.value as? String, "localhost")
+        XCTAssertEqual(collapsedTruncatedurltextTextView.value as? String, "news.ycombinator.com")
 
         // After swiping down, the collapsed URL should not be displayed
         app.swipeDown()
