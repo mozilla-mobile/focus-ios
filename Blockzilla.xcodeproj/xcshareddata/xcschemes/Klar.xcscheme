@@ -46,6 +46,11 @@
                BlueprintName = "ClientTests"
                ReferencedContainer = "container:Blockzilla.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "SearchEngineTests/testResponseConsistency()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO">
@@ -58,7 +63,13 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "CopyTest/testCopyMenuItem()">
+                  Identifier = "CopyTest">
+               </Test>
+               <Test
+                  Identifier = "FindInPageTest/testActivityMenuFindInPageAction()">
+               </Test>
+               <Test
+                  Identifier = "FindInPageTest/testFindInPageURLBarElement()">
                </Test>
                <Test
                   Identifier = "QuickAddAutocompleteURLTest/testURLContextMenu()">
@@ -71,6 +82,12 @@
                </Test>
                <Test
                   Identifier = "SettingAppearanceTest/testOpenInSafari()">
+               </Test>
+               <Test
+                  Identifier = "UserAgentTest">
+               </Test>
+               <Test
+                  Identifier = "WebsiteAccessTests/testAutocompleteCustomDomain()">
                </Test>
             </SkippedTests>
          </TestableReference>
