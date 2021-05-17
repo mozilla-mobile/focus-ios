@@ -7,17 +7,6 @@ import XCTest
 // Note: this test is tested as part of the base test case, and thus is disabled here.
 
 class CopyTest: BaseTestCase {
-
-    override func setUp() {
-        super.setUp()
-        dismissFirstRunUI()
-    }
-
-    override func tearDown() {
-        app.terminate()
-        super.tearDown()
-    }
-
     func testCopyMenuItem() {
         let urlBarTextField = app.textFields["URLBar.urlText"]
         loadWebPage("https://www.example.com")
