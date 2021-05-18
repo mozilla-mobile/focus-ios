@@ -58,7 +58,7 @@ class SearchEngineTests: XCTestCase {
         XCTAssertEqual(normalSearchURL, testSearchURL)
     }
 
-    /* This test is failing intermittently
+    /* This test is failing intermittently, issue 1821
     func testGetSuggestions() {
         client.getSuggestions(NORMAL_SEARCH, callback: { response, error in
             XCTAssertThrowsError(error)
