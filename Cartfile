@@ -1,2 +1,1 @@
-github "mozilla-mobile/telemetry-ios" ~> 1.1
 github "AgileBits/onepassword-extension" "new/carthage+ios10"
