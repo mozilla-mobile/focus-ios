@@ -146,7 +146,6 @@
 		D5B10AAB1FD5EFA40044523A /* OnePasswordExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 747ADA1D1FCE0B7B00970132 /* OnePasswordExtension.framework */; };
 		D5D067FB252F945D00C35227 /* metrics.yaml in Resources */ = {isa = PBXBuildFile; fileRef = D5D067FA252F945D00C35227 /* metrics.yaml */; };
 		D5D2F02B252FA6AE00761DC8 /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D2F02A252FA6AE00761DC8 /* Metrics.swift */; };
-		D5D2F041252FA71B00761DC8 /* Glean.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5D067F0252F926E00C35227 /* Glean.framework */; };
 		D803D37420EF1A49001F2819 /* UserAgentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D803D37320EF1A49001F2819 /* UserAgentTests.swift */; };
 		D831FEE2205247A400EAE19A /* BrowserViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEE1205247A400EAE19A /* BrowserViewControllerTests.swift */; };
 		D8E0152C1FB4136E00CA3B9F /* AddSearchEngineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E0152B1FB4136E00CA3B9F /* AddSearchEngineViewController.swift */; };
@@ -189,6 +188,7 @@
 		F84AFE751DE77FE6005C4DD1 /* LaunchScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE721DE77FE6005C4DD1 /* LaunchScreen.png */; };
 		F84AFE761DE77FE6005C4DD1 /* LaunchScreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE731DE77FE6005C4DD1 /* LaunchScreen@2x.png */; };
 		F84AFE771DE77FE6005C4DD1 /* LaunchScreen@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE741DE77FE6005C4DD1 /* LaunchScreen@3x.png */; };
+		F8624522265583EA0047D861 /* Glean in Frameworks */ = {isa = PBXBuildFile; productRef = F8624521265583EA0047D861 /* Glean */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -633,7 +633,6 @@
 		D597608B1F9FEFB300A2D212 /* TrackingProtection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtection.swift; sourceTree = "<group>"; };
 		D5ABA3D71FCC846800D5C060 /* AddCustomDomainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCustomDomainViewController.swift; sourceTree = "<group>"; };
 		D5ABA3D81FCC846800D5C060 /* AutocompleteSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteSettingViewController.swift; sourceTree = "<group>"; };
-		D5D067F0252F926E00C35227 /* Glean.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Glean.framework; path = Carthage/Build/iOS/Glean.framework; sourceTree = "<group>"; };
 		D5D067FA252F945D00C35227 /* metrics.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = metrics.yaml; sourceTree = "<group>"; };
 		D5D2F02A252FA6AE00761DC8 /* Metrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metrics.swift; sourceTree = "<group>"; };
 		D803D37320EF1A49001F2819 /* UserAgentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgentTests.swift; sourceTree = "<group>"; };
@@ -968,10 +967,10 @@
 				4285B8E0671F40DA543A2E58 /* AssetsLibrary.framework in Frameworks */,
 				A57245250F88CCA4993E55B2 /* CoreText.framework in Frameworks */,
 				2B36326E97D2E67E9C684B4B /* CoreTelephony.framework in Frameworks */,
-				D5D2F041252FA71B00761DC8 /* Glean.framework in Frameworks */,
 				D00A44111EB8F80A00DB0218 /* Telemetry.framework in Frameworks */,
 				2825C3665AB14081B262F767 /* SystemConfiguration.framework in Frameworks */,
 				F8324C78264DA5F1007E4BFA /* Sentry in Frameworks */,
+				F8624522265583EA0047D861 /* Glean in Frameworks */,
 				34056D10515852F370C83A01 /* QuartzCore.framework in Frameworks */,
 				5AFDBB0CF3A9FBA175D2B693 /* AVFoundation.framework in Frameworks */,
 				F8324CBA264DC8ED007E4BFA /* Fuzi in Frameworks */,
@@ -1157,7 +1156,6 @@
 		D77FE464056F274978E025ED /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D5D067F0252F926E00C35227 /* Glean.framework */,
 				163BFFE32124F8E10007CEBC /* IntentsUI.framework */,
 				163BFFE12124EBAF0007CEBC /* Intents.framework */,
 				747ADA1D1FCE0B7B00970132 /* OnePasswordExtension.framework */,
@@ -1474,6 +1472,7 @@
 				F8324C2E264C807C007E4BFA /* SnapKit */,
 				F8324CB9264DC8ED007E4BFA /* Fuzi */,
 				F8324C77264DA5F1007E4BFA /* Sentry */,
+				F8624521265583EA0047D861 /* Glean */,
 			);
 			productName = Blockzilla;
 			productReference = E4BF2DD31BACE8CA00DA9D68 /* Firefox Klar.app */;
@@ -1654,6 +1653,7 @@
 				F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */,
 				F8324CB8264DC8ED007E4BFA /* XCRemoteSwiftPackageReference "Fuzi" */,
 				F8324C76264DA5F1007E4BFA /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+				F8624520265583EA0047D861 /* XCRemoteSwiftPackageReference "glean-swift" */,
 			);
 			productRefGroup = E4BF2DD41BACE8CA00DA9D68 /* Products */;
 			projectDirPath = "";
@@ -1772,7 +1772,6 @@
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/Telemetry.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/OnePasswordExtension.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Glean.framework",
 			);
 			name = "Run Script (Carthage)";
 			outputPaths = (
@@ -5211,6 +5210,14 @@
 				version = 3.1.3;
 			};
 		};
+		F8624520265583EA0047D861 /* XCRemoteSwiftPackageReference "glean-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/badboy/glean-swift/";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 38.0.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -5228,6 +5235,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F8324CB8264DC8ED007E4BFA /* XCRemoteSwiftPackageReference "Fuzi" */;
 			productName = Fuzi;
+		};
+		F8624521265583EA0047D861 /* Glean */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F8624520265583EA0047D861 /* XCRemoteSwiftPackageReference "glean-swift" */;
+			productName = Glean;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
