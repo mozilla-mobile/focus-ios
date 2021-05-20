@@ -46,13 +46,8 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            cd content-blocker-lib-ios/ContentBlockerGen && swift run
-        title: NPM, ContentBlockerGen
+            ./checkout.sh
+        title: ContentBlockerGen
     - cache-push@2:
         inputs:
         - cache_paths: |
@@ -122,13 +117,8 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            cd content-blocker-lib-ios/ContentBlockerGen && swift run
-        title: NPM, ContentBlockerGen
+            ./checkout.sh
+        title: ContentBlockerGen
     - xcode-build-for-simulator@0:
         inputs:
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
@@ -167,12 +157,7 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            cd content-blocker-lib-ios/ContentBlockerGen && swift run
+            ./checkout.sh
         title: NPM, ContentBlockerGen
     - set-xcode-build-number@1:
         inputs:
@@ -203,13 +188,8 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            cd content-blocker-lib-ios/ContentBlockerGen && swift run
-        title: NPM, ContentBlockerGen
+            ./checkout.sh
+        title: ContentBlockerGen
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
