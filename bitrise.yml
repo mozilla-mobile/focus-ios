@@ -21,9 +21,6 @@ workflows:
     - script@1.1.5:
         title: Do anything with Script step
     - certificate-and-profile-installer@1.9.3: {}
-    - carthage@3.1.4:
-        inputs:
-        - carthage_command: bootstrap
     - xcode-test@1.18.14:
         inputs:
         - project_path: "$BITRISE_PROJECT_PATH"
@@ -46,27 +43,6 @@ workflows:
     - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
     - script@1:
-        title: Workaround carthage lipo bug
-        inputs:
-        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
-            log\nset -x\n\necho 'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64
-            arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig\necho 'EXCLUDED_ARCHS=$(inherited)
-            $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))'
-            >> /tmp/tmp.xcconfig\necho 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig\necho
-            'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig\necho 'GCC_TREAT_WARNINGS_AS_ERRORS=NO'
-            >> /tmp/tmp.xcconfig\nexport XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig\nenvman
-            add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig "
-    - carthage@3.2:
-        inputs:
-        - carthage_options: " --platform ios --cache-builds"
-        - carthage_command: bootstrap
-    - script@1:
-        inputs:
-        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
-            log\nset -x\n\n\nrm /tmp/tmp.xcconfig \nenvman add --key XCODE_XCCONFIG_FILE
-            --value ''"
-        title: remove carthage lipo workaround
-    - script@1:
         inputs:
         - content: |-
             #!/usr/bin/env bash
@@ -81,7 +57,6 @@ workflows:
         inputs:
         - cache_paths: |
             $BITRISE_CACHE_DIR
-            ./Carthage -> ./Carthage/Cachefile
     - set-xcode-build-number@1:
         inputs:
         - plist_path: Blockzilla/Info.plist
@@ -122,10 +97,6 @@ workflows:
 
             ./build-disconnect.py
     - certificate-and-profile-installer@1.9.3: {}
-    - carthage@3.1.4:
-        inputs:
-        - carthage_options: "--platform ios"
-        - carthage_command: bootstrap
     - xcode-test@1.18.14:
         inputs:
         - project_path: "$BITRISE_PROJECT_PATH"
@@ -135,7 +106,6 @@ workflows:
         inputs:
         - cache_paths: |
             $BITRISE_CACHE_DIR
-            ./Carthage -> ./Carthage/Cachefile
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
@@ -146,27 +116,6 @@ workflows:
     - git-clone@4: {}
     - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
-    - script@1:
-        title: Workaround carthage lipo bug
-        inputs:
-        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
-            log\nset -x\n\necho 'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64
-            arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig\necho 'EXCLUDED_ARCHS=$(inherited)
-            $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))'
-            >> /tmp/tmp.xcconfig\necho 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig\necho
-            'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig\necho 'GCC_TREAT_WARNINGS_AS_ERRORS=NO'
-            >> /tmp/tmp.xcconfig\nexport XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig\nenvman
-            add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig "
-    - carthage@3.2:
-        inputs:
-        - carthage_options: "--platform ios"
-        - carthage_command: bootstrap
-    - script@1:
-        inputs:
-        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
-            log\nset -x\n\n\nrm /tmp/tmp.xcconfig \nenvman add --key XCODE_XCCONFIG_FILE
-            --value ''"
-        title: remove carthage lipo workaround
     - script@1:
         inputs:
         - content: |-
@@ -201,7 +150,6 @@ workflows:
         inputs:
         - cache_paths: |
             $BITRISE_CACHE_DIR
-            ./Carthage -> ./Carthage/Cachefile
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
@@ -212,27 +160,6 @@ workflows:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@4: {}
     - certificate-and-profile-installer@1: {}
-    - script@1:
-        title: Workaround carthage lipo bug
-        inputs:
-        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
-            log\nset -x\n\necho 'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64
-            arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig\necho 'EXCLUDED_ARCHS=$(inherited)
-            $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))'
-            >> /tmp/tmp.xcconfig\necho 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig\necho
-            'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig\necho 'GCC_TREAT_WARNINGS_AS_ERRORS=NO'
-            >> /tmp/tmp.xcconfig\nexport XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig\nenvman
-            add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig "
-    - carthage@3.2:
-        inputs:
-        - carthage_options: " --platform ios --cache-builds"
-        - carthage_command: bootstrap
-    - script@1:
-        inputs:
-        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
-            log\nset -x\n\n\nrm /tmp/tmp.xcconfig \nenvman add --key XCODE_XCCONFIG_FILE
-            --value ''"
-        title: remove carthage lipo workaround
     - script@1:
         inputs:
         - content: |-
@@ -269,27 +196,6 @@ workflows:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@4: {}
     - certificate-and-profile-installer@1: {}
-    - script@1:
-        title: Workaround carthage lipo bug
-        inputs:
-        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
-            log\nset -x\n\necho 'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64
-            arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig\necho 'EXCLUDED_ARCHS=$(inherited)
-            $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))'
-            >> /tmp/tmp.xcconfig\necho 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig\necho
-            'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig\necho 'GCC_TREAT_WARNINGS_AS_ERRORS=NO'
-            >> /tmp/tmp.xcconfig\nexport XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig\nenvman
-            add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig "
-    - carthage@3.2:
-        inputs:
-        - carthage_options: " --platform ios --cache-builds"
-        - carthage_command: bootstrap
-    - script@1:
-        inputs:
-        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
-            log\nset -x\n\n\nrm /tmp/tmp.xcconfig \nenvman add --key XCODE_XCCONFIG_FILE
-            --value ''"
-        title: remove carthage lipo workaround
     - script@1:
         inputs:
         - content: |-
@@ -385,7 +291,6 @@ workflows:
         inputs:
         - cache_paths: |
             $BITRISE_CACHE_DIR
-            ./Carthage -> ./Carthage/Cachefile
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
@@ -396,27 +301,6 @@ workflows:
     - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
     - script@1:
-        title: Workaround carthage lipo bug
-        inputs:
-        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
-            log\nset -x\n\necho 'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64
-            arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig\necho 'EXCLUDED_ARCHS=$(inherited)
-            $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))'
-            >> /tmp/tmp.xcconfig\necho 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig\necho
-            'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig\necho 'GCC_TREAT_WARNINGS_AS_ERRORS=NO'
-            >> /tmp/tmp.xcconfig\nexport XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig\nenvman
-            add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig "
-    - carthage@3.2:
-        inputs:
-        - carthage_options: "--platform ios"
-        - carthage_command: bootstrap
-    - script@1:
-        inputs:
-        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
-            log\nset -x\n\n\nrm /tmp/tmp.xcconfig \nenvman add --key XCODE_XCCONFIG_FILE
-            --value ''"
-        title: remove carthage lipo workaround
-    - script@1:
         inputs:
         - content: |-
             #!/usr/bin/env bash
@@ -441,7 +325,6 @@ workflows:
         inputs:
         - cache_paths: |
             $BITRISE_CACHE_DIR
-            ./Carthage -> ./Carthage/Cachefile
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
@@ -452,27 +335,6 @@ workflows:
     - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
     - script@1:
-        title: Workaround carthage lipo bug
-        inputs:
-        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
-            log\nset -x\n\necho 'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64
-            arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig\necho 'EXCLUDED_ARCHS=$(inherited)
-            $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))'
-            >> /tmp/tmp.xcconfig\necho 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig\necho
-            'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig\necho 'GCC_TREAT_WARNINGS_AS_ERRORS=NO'
-            >> /tmp/tmp.xcconfig\nexport XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig\nenvman
-            add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig "
-    - carthage@3.2:
-        inputs:
-        - carthage_options: "--platform ios"
-        - carthage_command: bootstrap
-    - script@1:
-        inputs:
-        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
-            log\nset -x\n\n\nrm /tmp/tmp.xcconfig \nenvman add --key XCODE_XCCONFIG_FILE
-            --value ''"
-        title: remove carthage lipo workaround
-    - script@1:
         inputs:
         - content: |-
             #!/usr/bin/env bash
@@ -497,7 +359,6 @@ workflows:
         inputs:
         - cache_paths: |
             $BITRISE_CACHE_DIR
-            ./Carthage -> ./Carthage/Cachefile
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
