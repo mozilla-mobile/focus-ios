@@ -23,14 +23,14 @@ This branch works with Xcode 12.5 and supports iOS 11.4+.
 
 Pull requests should be submitted with `main` as the base branch.
 
-Build Instructions for Master
+Build Instructions
 ------------------
 
 1. Install Xcode 12.5 [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
 2. Clone the repository:
 
   ```shell
-  https://github.com/mozilla-mobile/focus-ios.git
+  git clone https://github.com/mozilla-mobile/focus-ios.git
   ```
 
 3. Pull in the project dependencies:
