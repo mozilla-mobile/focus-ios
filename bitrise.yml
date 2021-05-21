@@ -322,7 +322,7 @@ workflows:
     steps:
     - git-clone@4: {}
     - cache-pull@2: {}
-    - certificate-and-profile-installe@1: {}
+    - certificate-and-profile-installer@1: {}
     - script@1:
         inputs:
         - content: |-
