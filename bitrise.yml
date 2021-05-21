@@ -242,7 +242,7 @@ workflows:
     before_run: []
 
 
-  set-default-browser-entitlement:
+  Set Default Browser Entitlement:
     steps:
     - script@1:
         title: Set Default Web Browser Entitlement
@@ -286,7 +286,7 @@ workflows:
     before_run:
       - clone and build dependencies
       - Set project version
-      - set-default-browser-entitlement
+      - Set Default Browser Entitlement
 
 
   runParallelTests:
@@ -329,6 +329,14 @@ workflows:
             #!/usr/bin/env bash
             ./checkout.sh
         title: ContentBlockerGen
+    - script@1:
+        title: Set Default Web Browser Entitlement
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Focus.entitlements
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
     - xcode-build-for-simulator@0:
         inputs:
         - configuration: FocusDebug
@@ -348,8 +356,6 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
-    before_run:
-      - set-default-browser-entitlement
 
 
   runKlar:
@@ -363,6 +369,14 @@ workflows:
             #!/usr/bin/env bash
             ./checkout.sh
         title: ContentBlockerGen
+    - script@1:
+        title: Set Default Web Browser Entitlement
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Focus.entitlements
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
     - xcode-build-for-simulator@0:
         inputs:
         - configuration: FocusDebug
@@ -382,8 +396,6 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
-    before_run:
-      - set-default-browser-entitlement
 
 
 app:
