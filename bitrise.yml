@@ -293,7 +293,7 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            ./checko.sh
+            ./checkout.sh
         title: ContentBlockerGen
     - xcode-build-for-simulator@0:
         inputs:
