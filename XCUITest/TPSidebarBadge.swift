@@ -22,13 +22,13 @@ class TrackingProtectionMenu: BaseTestCase {
 
         // Check for the existence of one (1) analytical tracker on Mozilla
         waitforExistence(element: app.staticTexts["Trackers blocked.Subtitle"])
-        XCTAssertEqual(app.staticTexts["Trackers blocked.Subtitle"].label, "0")
+        XCTAssertEqual(app.staticTexts["Trackers blocked.Subtitle"].label, "1")
 
         waitforExistence(element: app.staticTexts["Ad trackers.Subtitle"])
         XCTAssertEqual(app.staticTexts["Ad trackers.Subtitle"].label, "0")
 
         waitforExistence(element: app.staticTexts["Analytic trackers.Subtitle"])
-        XCTAssertEqual(app.staticTexts["Analytic trackers.Subtitle"].label, "0")
+        XCTAssertEqual(app.staticTexts["Analytic trackers.Subtitle"].label, "1")
 
         waitforExistence(element: app.staticTexts["Social trackers.Subtitle"])
         XCTAssertEqual(app.staticTexts["Social trackers.Subtitle"].label, "0")
