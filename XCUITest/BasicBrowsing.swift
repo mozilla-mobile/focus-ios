@@ -26,7 +26,8 @@ class BasicBrowsing: BaseTestCase {
         let RemindersApp = app.cells["Reminders"]
         waitforExistence(element: RemindersApp)
         RemindersApp.tap()
-        XCTAssertTrue(app.buttons["Add"].isHittable)
+        waitforExistence(element: app.buttons["Add"])
+        XCTAssertTrue(app.buttons["Add"].exists)
     }
     
     // Smoke test
