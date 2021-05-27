@@ -9,7 +9,6 @@ class BasicBrowsing: BaseTestCase {
 
     // Smoke test
     func testLaunchExternalApp() {
-
         // Load URL
         loadWebPage("https://www.example.com")
         waitForWebPageLoad()
@@ -20,11 +19,24 @@ class BasicBrowsing: BaseTestCase {
 
         // Tap Share button
         let ShareButton = app.cells["Share Page With..."]
+        waitforExistence(element: ShareButton)
         ShareButton.tap()
 
         // Launch external app
         let RemindersApp = app.cells["Reminders"]
+        waitforExistence(element: RemindersApp)
         RemindersApp.tap()
         XCTAssertTrue(app.buttons["Add"].isHittable)
+    }
+    
+    // Smoke test
+    func testAdBlocking() {
+        // Load URL
+        loadWebPage("https://blockads.fivefilters.org/")
+        waitForWebPageLoad()
+
+        // Check ad blocking is enabled
+        let TrackingProtection = app.staticTexts["Ad blocking enabled!"]
+        XCTAssertTrue(TrackingProtection.exists)
     }
 }
