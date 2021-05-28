@@ -17,7 +17,8 @@ trigger_map:
 
 workflows:
 
-  clone and build dependencies:
+  clone-and-build-dependencies:
+    description: Clones the repo and builds dependencies
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
@@ -32,10 +33,9 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
-    description: Clones the repo and builds dependencies
 
 
-  Set project version:
+  set-project-version:
     steps:
     - set-xcode-build-number@1:
         inputs:
@@ -67,7 +67,7 @@ workflows:
     before_run: []
 
 
-  Set Default Browser Entitlement:
+  set-default-browser-entitlement:
     steps:
     - script@1:
         title: Set Default Web Browser Entitlement
@@ -109,9 +109,9 @@ workflows:
       bitrise.io:
         stack: osx-xcode-12.5.x
     before_run:
-      - clone and build dependencies
-      - Set project version
-      - Set Default Browser Entitlement
+      - clone-and-build-dependencies
+      - set-project-version
+      - set-default-browser-entitlement
 
 
   runParallelTests:
