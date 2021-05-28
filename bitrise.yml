@@ -132,11 +132,6 @@ workflows:
     - build-router-wait@0:
         inputs:
         - access_token: "$FOCUS_PARALLEL"
-    - cache-push@2:
-        inputs:
-        - cache_paths: |
-            $BITRISE_CACHE_DIR
-            ./Carthage -> ./Carthage/Cachefile
     - deploy-to-bitrise-io@1: {}
     - slack@3:
         run_if: ".IsBuildFailed"
@@ -177,11 +172,6 @@ workflows:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2
         - scheme: Focus
-    - cache-push@2:
-        inputs:
-        - cache_paths: |
-            $BITRISE_CACHE_DIR
-            ./Carthage -> ./Carthage/Cachefile
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
@@ -217,11 +207,6 @@ workflows:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2
         - scheme: Klar
-    - cache-push@2:
-        inputs:
-        - cache_paths: |
-            $BITRISE_CACHE_DIR
-            ./Carthage -> ./Carthage/Cachefile
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
