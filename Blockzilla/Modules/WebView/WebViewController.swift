@@ -154,6 +154,7 @@ class WebViewController: UIViewController, WebController {
         browserView.scrollView.delegate = self
         browserView.navigationDelegate = self
         browserView.uiDelegate = self
+        browserView.allowsLinkPreview = true
 
         progressObserver = browserView.observe(\WKWebView.estimatedProgress) { (webView, value) in
             self.delegate?.webController(self, didUpdateEstimatedProgress: webView.estimatedProgress)
