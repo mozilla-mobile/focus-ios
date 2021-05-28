@@ -109,9 +109,9 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
 
             let backgroundColorView = UIView()
             backgroundColorView.backgroundColor = UIConstants.colors.cellSelected
-
             cell.selectedBackgroundView = backgroundColorView
             addDomainCell = cell
+            cell.isHidden = self.tableView.isEditing
         } else {
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: "domainCell")
             cell.selectionStyle = .none
