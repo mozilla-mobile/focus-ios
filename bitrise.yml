@@ -314,7 +314,7 @@ workflows:
                 envman add --key TEST_PLAN_NAME --value FullFunctionalTests
             else
                 echo "Regular build, running Smoke Test"
-                envman add --key TEST_PLAN_NAME --value FullFunctionalTests
+                envman add --key TEST_PLAN_NAME --value SmokeTest
             fi
         - title: Check if build is scheduled or regular to set the test plan
     - build-router-start@0:
