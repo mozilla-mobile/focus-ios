@@ -297,6 +297,26 @@ workflows:
     - cache-push@2:
         inputs:
         - cache_paths: "/Users/vagrant/git"
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            # Check if the build is a scheduled build
+
+            if [[ $BITRISE_GIT_MESSAGE == Schedule* ]]
+            then
+                echo "Scheduled build, running Full Functional Tests"
+                envman add --key TEST_PLAN_NAME --value FullFunctionalTests
+            else
+                echo "Regular build, running Smoke Test"
+                envman add --key TEST_PLAN_NAME --value FullFunctionalTests
+            fi
+        - title: Check if build is scheduled or regular to set the test plan
     - build-router-start@0:
         inputs:
         - wait_for_builds: 'true'
@@ -350,7 +370,7 @@ workflows:
     - xcode-test@2:
         inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-            CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan SmokeTest
+            CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan $TEST_PLAN_NAME
         - scheme: Focus
     - cache-push@2:
         inputs:
@@ -361,7 +381,6 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
-
 
   runKlar:
     steps:
@@ -390,7 +409,7 @@ workflows:
     - xcode-test@2:
         inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-            CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan SmokeTest
+            CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan $TEST_PLAN_NAME
         - scheme: Klar
     - cache-push@2:
         inputs:
@@ -401,7 +420,6 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
-
 
 app:
   envs:
