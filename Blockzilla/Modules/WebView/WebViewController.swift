@@ -51,7 +51,7 @@ class WebViewController: UIViewController, WebController {
         case findInPageHandler
         case fullScreen
 
-        static var allValues: [ScriptHandlers] { return [.focusTrackingProtection, .focusTrackingProtectionPostLoad, .findInPageHandler] }
+        static var allValues: [ScriptHandlers] { return [.focusTrackingProtection, .focusTrackingProtectionPostLoad, .findInPageHandler, .fullScreen] }
     }
 
     private enum KVOConstants: String, CaseIterable {
