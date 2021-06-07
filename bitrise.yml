@@ -6,11 +6,11 @@ project_type: ios
 
 trigger_map:
 - push_branch: main
-  workflow: runParallelTests
+  workflow: runTests
 - push_branch: v8.1.7
   workflow: release
 - pull_request_source_branch: "*"
-  workflow: runParallelTests
+  workflow: runTests
 - tag: "*"
   workflow: release
 
