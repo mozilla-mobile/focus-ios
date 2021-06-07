@@ -59,6 +59,7 @@
 		746BD9281F75C45A00BE8DB9 /* DictionaryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BD9271F75C45A00BE8DB9 /* DictionaryExtensions.swift */; };
 		747ADA181FC38EFC00970132 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747ADA171FC38EFC00970132 /* IntroViewController.swift */; };
 		74F94FF21FD9CA070047E629 /* Intro.strings in Resources */ = {isa = PBXBuildFile; fileRef = 74F94FF41FD9CA070047E629 /* Intro.strings */; };
+		846A23182668CC4500DB3C37 /* FullScreen.js in Resources */ = {isa = PBXBuildFile; fileRef = 846A23172668CC4500DB3C37 /* FullScreen.js */; };
 		A89766DA1F57DCA9008183C5 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		B3481A551FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3481A541FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift */; };
 		B3AFC2BC1F7C0B9F001AEF38 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AFC2BB1F7C0B9F001AEF38 /* WebViewController.swift */; };
@@ -129,6 +130,7 @@
 		D3E54FD51DEFB25B003E1AFF /* SearchPlugins in Resources */ = {isa = PBXBuildFile; fileRef = D3E54FD41DEFB25B003E1AFF /* SearchPlugins */; };
 		D3E54FDE1DF0E0D7003E1AFF /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E54FDD1DF0E0D6003E1AFF /* UIImageExtensions.swift */; };
 		D3E54FE01DF0E221003E1AFF /* SearchSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E54FDF1DF0E221003E1AFF /* SearchSettingsViewController.swift */; };
+		D47940DA2664E4F700C286BB /* PastenGoTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4868651F2250A3008C3C09 /* PastenGoTest.swift */; };
 		D50939A91FBF807A005D4316 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D50939A81FBF807A005D4316 /* Settings.bundle */; };
 		D597608C1F9FEFB300A2D212 /* TrackingProtection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D597608B1F9FEFB300A2D212 /* TrackingProtection.swift */; };
 		D5ABA3D91FCC846800D5C060 /* AddCustomDomainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5ABA3D71FCC846800D5C060 /* AddCustomDomainViewController.swift */; };
@@ -537,6 +539,7 @@
 		74F9507E1FD9D08A0047E629 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Intro.strings; sourceTree = "<group>"; };
 		74F950801FD9D0A00047E629 /* af */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = af; path = af.lproj/Intro.strings; sourceTree = "<group>"; };
 		80D9AA926EFBD788739486EB /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		846A23172668CC4500DB3C37 /* FullScreen.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FullScreen.js; sourceTree = "<group>"; };
 		A89766D31F57DCA8008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A89766D41F57DCA8008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A89766D51F57DCA8008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -613,6 +616,7 @@
 		D3E54FD41DEFB25B003E1AFF /* SearchPlugins */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SearchPlugins; path = Search/SearchPlugins; sourceTree = SOURCE_ROOT; };
 		D3E54FDD1DF0E0D6003E1AFF /* UIImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtensions.swift; sourceTree = "<group>"; };
 		D3E54FDF1DF0E221003E1AFF /* SearchSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSettingsViewController.swift; sourceTree = "<group>"; };
+		D47940D92664E15D00C286BB /* SmokeTest.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = SmokeTest.xctestplan; sourceTree = "<group>"; };
 		D50939A81FBF807A005D4316 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		D597608B1F9FEFB300A2D212 /* TrackingProtection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtection.swift; sourceTree = "<group>"; };
 		D5ABA3D71FCC846800D5C060 /* AddCustomDomainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCustomDomainViewController.swift; sourceTree = "<group>"; };
@@ -1173,6 +1177,7 @@
 		E4BF2DCA1BACE8CA00DA9D68 = {
 			isa = PBXGroup;
 			children = (
+				D47940D92664E15D00C286BB /* SmokeTest.xctestplan */,
 				C817A35222CE73B4002529FF /* Deferred */,
 				D3E3CA801DA83FAF0079C94B /* Focus.entitlements */,
 				D3E3CA811DA83FAF0079C94B /* FocusEnterprise.entitlements */,
@@ -1229,6 +1234,7 @@
 				B3481A541FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift */,
 				1D3BEDF820C5E6C70019B722 /* FindInPage.js */,
 				1D3BEDFA20C5E76A0019B722 /* FindInPageBar.swift */,
+				846A23172668CC4500DB3C37 /* FullScreen.js */,
 				747ADA171FC38EFC00970132 /* IntroViewController.swift */,
 				D30179C21BCC6F65009AD388 /* AboutViewController.swift */,
 				74584E341FA1077000AF2582 /* SettingsContentViewController.swift */,
@@ -1469,7 +1475,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1000;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1250;
 				ORGANIZATIONNAME = Mozilla;
 				TargetAttributes = {
 					0BA39A821DD2B8E4005F970A = {
@@ -1681,6 +1687,7 @@
 				D3C047BD1DCBD8ED00402FFB /* SearchEngines.plist in Resources */,
 				D3E2C8FE1D9F17AC00DEBE3D /* disconnect-social.json in Resources */,
 				74F94FF21FD9CA070047E629 /* Intro.strings in Resources */,
+				846A23182668CC4500DB3C37 /* FullScreen.js in Resources */,
 				F84AFE751DE77FE6005C4DD1 /* LaunchScreen.png in Resources */,
 				D3DA778C1DC2C60E009C114E /* errorPage.html in Resources */,
 				F84AFE761DE77FE6005C4DD1 /* LaunchScreen@2x.png in Resources */,
@@ -1764,6 +1771,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D47940DA2664E4F700C286BB /* PastenGoTest.swift in Sources */,
 				1DE903CE20C751D7002E53ED /* FindInPageTest.swift in Sources */,
 				0BBBED431DD3B78300F9C565 /* SettingAppearanceTest.swift in Sources */,
 				1D199EF220D813D300CDF976 /* DragAndDropTest.swift in Sources */,
@@ -4514,7 +4522,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "KLAR DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = Blockzilla;
 			};
 			name = KlarDebug;
@@ -4567,7 +4575,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "FOCUS DEBUG";
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = Blockzilla;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -4620,7 +4628,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = Blockzilla;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -4676,7 +4684,7 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = Blockzilla;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -4729,7 +4737,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = Blockzilla;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -4782,7 +4790,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = Blockzilla;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -5143,10 +5151,10 @@
 		};
 		F85F7A332656885C00395515 /* XCRemoteSwiftPackageReference "glean-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/badboy/glean-swift/";
+			repositoryURL = "https://github.com/mozilla/glean-swift/";
 			requirement = {
-				kind = exactVersion;
-				version = 38.0.2;
+				kind = upToNextMajorVersion;
+				minimumVersion = 39.0.2;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
