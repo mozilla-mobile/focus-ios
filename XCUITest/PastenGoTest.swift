@@ -52,6 +52,7 @@ class PastenGoTest: BaseTestCase {
 
     // Smoketest
     // Test Paste & Go feature
+    /* Disable temporary
     func testPastenGo() {
         // Inject a string into clipboard
         var clipboard = "https://www.mozilla.org/en-US/"
@@ -75,5 +76,5 @@ class PastenGoTest: BaseTestCase {
         searchOrEnterAddressTextField.tap()
         app.menuItems["Paste"].tap()
         waitforExistence(element: app.buttons["Search for " + clipboard])
-    }
+    }*/
 }
