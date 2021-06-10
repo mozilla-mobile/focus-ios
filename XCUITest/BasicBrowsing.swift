@@ -31,7 +31,8 @@ class BasicBrowsing: BaseTestCase {
     }
     
     // Smoke test
-    func testAdBlocking() {
+    /* Disabled due to intermittent failures https://github.com/mozilla-mobile/focus-ios/issues/1894
+     func testAdBlocking() {
         // Load URL
         loadWebPage("https://blockads.fivefilters.org/")
         waitForWebPageLoad()
@@ -39,7 +40,7 @@ class BasicBrowsing: BaseTestCase {
         // Check ad blocking is enabled
         let TrackingProtection = app.staticTexts["Ad blocking enabled!"]
         XCTAssertTrue(TrackingProtection.exists)
-    }
+    }*/
 
     // Smoketest
     func testNavigationToolbar() {
