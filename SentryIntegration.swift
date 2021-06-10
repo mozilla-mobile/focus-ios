@@ -8,7 +8,7 @@ import Sentry
 public class SentryIntegration {
     public static let shared = SentryIntegration()
 
-    public static var crashedLastLaunch: Bool {
+    public static var crashedLastLaunch: Bool  {
         return SentrySDK.crashedLastRun
     }
 
