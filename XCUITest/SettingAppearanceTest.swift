@@ -206,12 +206,13 @@ class SettingAppearanceTest: BaseTestCase {
         iOS_Settings.cells["Safari"].tap()
         iOS_Settings.cells["AutoFill"].swipeUp()
         iOS_Settings.cells.staticTexts["CONTENT_BLOCKERS"].tap()
+        waitForExistence(iOS_Settings.tables.cells.switches.element(boundBy: 0))
         XCTAssertEqual(iOS_Settings.tables.cells.element(boundBy: 0).switches.element(boundBy: 0).value! as! String, "0")
         iOS_Settings.tables.cells.switches.element(boundBy: 0).tap()
 
         // Go back to the app to verify that the toggle has changed its value
         app.activate()
-        waitForExistence(app.otherElements["SAFARI INTEGRATION"], timeout: 10)
+        waitForExistence(app.navigationBars["Settings"], timeout: 15)
         XCTAssertEqual(app.switches["BlockerToggle.Safari"].value! as! String, "1")
     }
 }
