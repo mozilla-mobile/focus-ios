@@ -11,7 +11,7 @@ class SettingAppearanceTest: BaseTestCase {
     // Smoketest
     // Check for the basic appearance of the Settings Menu
     func testCheckSetting() {
-        waitForHittable(app.buttons["Settings"])
+        waitForExistence(app.buttons["Settings"], timeout: 10)
         app.buttons["Settings"].tap()
 
         // Check About page
@@ -95,9 +95,10 @@ class SettingAppearanceTest: BaseTestCase {
         app.tables.firstMatch.swipeUp()
         waitForHittable(reviewCell)
         reviewCell.tap()
-        waitForExistence(safariApp)
+        waitForExistence(safariApp, timeout: 10)
         XCTAssert(safariApp.state == .runningForeground)
         app.activate()
+        waitForExistence(app.navigationBars["Settings"], timeout: 10)
     }
 
     // Smoketest
@@ -192,7 +193,7 @@ class SettingAppearanceTest: BaseTestCase {
 
     // Smoktest
     func testSafariIntegration() {
-        waitForExistence(app.buttons["Settings"])
+        waitForExistence(app.buttons["Settings"], timeout: 10)
         app.buttons["Settings"].tap()
 
         // Check that Safari toggle is off, swipe to get to Safarin Integration menu
@@ -210,7 +211,7 @@ class SettingAppearanceTest: BaseTestCase {
 
         // Go back to the app to verify that the toggle has changed its value
         app.activate()
-        waitForExistence(app.otherElements["SAFARI INTEGRATION"])
+        waitForExistence(app.otherElements["SAFARI INTEGRATION"], timeout: 10)
         XCTAssertEqual(app.switches["BlockerToggle.Safari"].value! as! String, "1")
     }
 }

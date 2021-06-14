@@ -122,7 +122,7 @@ class BaseTestCase: XCTestCase {
     }
 
     func checkForHomeScreen() {
-        waitForExistence(app.buttons["Settings"])
+        waitForExistence(app.buttons["Settings"], timeout: 5)
     }
 
     func waitForWebPageLoad () {
