@@ -207,9 +207,9 @@ class SettingAppearanceTest: BaseTestCase {
         iOS_Settings.cells["AutoFill"].swipeUp()
         iOS_Settings.cells.staticTexts["CONTENT_BLOCKERS"].tap()
         waitForExistence(iOS_Settings.tables.cells.switches.element(boundBy: 0), timeout: 10)
-        print(iOS_Settings.debugDescription)
-        // XCTAssertEqual(iOS_Settings.tables.cells.element(boundBy: 0).switches.element(boundBy: 0).value! as! String, "0")
+        XCTAssertEqual(iOS_Settings.tables.cells.element(boundBy: 0).switches.element(boundBy: 0).value! as! String, "0")
         iOS_Settings.tables.cells.switches.element(boundBy: 0).tap()
+        sleep(1)
 
         // Go back to the app to verify that the toggle has changed its value
         app.activate()
