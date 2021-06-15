@@ -210,15 +210,13 @@ class SettingAppearanceTest: BaseTestCase {
         iOS_Settings.cells["Safari"].tap()
         iOS_Settings.cells["AutoFill"].swipeUp()
         iOS_Settings.cells.staticTexts["CONTENT_BLOCKERS"].tap()
-        waitForExistence(iOS_Settings.tables.cells.switches.element(boundBy: 0), timeout: 10)
+        // waitForExistence(iOS_Settings.tables.cells.switches.element(boundBy: 0), timeout: 10)
         // XCTAssertEqual(iOS_Settings.tables.cells.element(boundBy: 0).switches.element(boundBy: 0).value! as! String, "0")
         iOS_Settings.tables.cells.switches.element(boundBy: 0).tap()
-        sleep(1)
         XCUIDevice.shared.press(.home)
         // Let's be sure the app is backgrounded
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        waitForExistence(springboard.icons["XCUITest-Runner"], timeout: 10)
-        app.activate()
+        waitForExistence(springboard.icons["XCUITest-Runner"], timeout: 15)
 
         // Go back to the app to verify that the toggle has changed its value
         app.activate()
