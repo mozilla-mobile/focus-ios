@@ -97,6 +97,10 @@ class SettingAppearanceTest: BaseTestCase {
         reviewCell.tap()
         waitForExistence(safariApp, timeout: 10)
         // XCTAssert(safariApp.state == .runningForeground)
+        XCUIDevice.shared.press(.home)
+        // Let's be sure the app is backgrounded
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        waitForExistence(springboard.icons["XCUITest-Runner"], timeout: 10)
         app.activate()
         waitForExistence(app.navigationBars["Settings"], timeout: 10)
     }
@@ -210,6 +214,11 @@ class SettingAppearanceTest: BaseTestCase {
         // XCTAssertEqual(iOS_Settings.tables.cells.element(boundBy: 0).switches.element(boundBy: 0).value! as! String, "0")
         iOS_Settings.tables.cells.switches.element(boundBy: 0).tap()
         sleep(1)
+        XCUIDevice.shared.press(.home)
+        // Let's be sure the app is backgrounded
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        waitForExistence(springboard.icons["XCUITest-Runner"], timeout: 10)
+        app.activate()
 
         // Go back to the app to verify that the toggle has changed its value
         app.activate()
