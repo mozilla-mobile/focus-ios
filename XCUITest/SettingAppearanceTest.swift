@@ -97,10 +97,11 @@ class SettingAppearanceTest: BaseTestCase {
         reviewCell.tap()
         waitForExistence(safariApp, timeout: 10)
         // XCTAssert(safariApp.state == .runningForeground)
+        safariApp.terminate()
         XCUIDevice.shared.press(.home)
         // Let's be sure the app is backgrounded
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        waitForExistence(springboard.icons["XCUITest-Runner"], timeout: 10)
+        waitForExistence(springboard.icons["XCUITest-Runner"], timeout: 15)
         app.activate()
         waitForExistence(app.navigationBars["Settings"], timeout: 10)
     }
@@ -213,6 +214,7 @@ class SettingAppearanceTest: BaseTestCase {
         // waitForExistence(iOS_Settings.tables.cells.switches.element(boundBy: 0), timeout: 10)
         // XCTAssertEqual(iOS_Settings.tables.cells.element(boundBy: 0).switches.element(boundBy: 0).value! as! String, "0")
         iOS_Settings.tables.cells.switches.element(boundBy: 0).tap()
+        iOS_Settings.terminate()
         XCUIDevice.shared.press(.home)
         // Let's be sure the app is backgrounded
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
