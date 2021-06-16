@@ -10,7 +10,7 @@ trigger_map:
 - push_branch: v8.1.7
   workflow: release
 - pull_request_source_branch: "*"
-  workflow: runParallelTests
+  workflow: runL10nTests
 - tag: "*"
   workflow: release
 
@@ -250,6 +250,61 @@ workflows:
       bitrise.io:
         stack: osx-xcode-12.5.x
         machine_type_id: g2.8core
+
+  runL10nTests:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@4: {}
+    - cache-pull@2: {}
+    - certificate-and-profile-installer@1: {}
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            # Check if the build is a scheduled build
+
+            if [[ $BITRISE_GIT_MESSAGE == Schedule* ]]
+            then
+                echo "Scheduled build, running Full Functional Tests"
+                envman add --key TEST_PLAN_NAME --value FullFunctionalTests
+            else
+                echo "Regular build, running Smoke Test"
+                envman add --key TEST_PLAN_NAME --value SmokeTest
+            fi
+        - title: Check if build is scheduled or regular to set the test plan
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            ./checkout.sh
+        title: ContentBlockerGen
+    - script@1:
+        title: Set Default Web Browser Entitlement
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Focus.entitlements
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
+    - script@1:
+        title: Generate screenshots
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            ./screenshots.sh en-US
+
+    - deploy-to-bitrise-io@1: {}
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.5.x
+        machine_type_id: standard
 
 app:
   envs:
