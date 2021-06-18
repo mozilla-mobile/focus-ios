@@ -579,6 +579,7 @@ class BrowserViewController: UIViewController {
     }
 
     func openOverylay(text: String) {
+        urlBar.state = .editing
         urlBar.activateTextField()
         urlBar.fillUrlBar(text: text)
     }
