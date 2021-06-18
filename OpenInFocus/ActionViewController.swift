@@ -77,8 +77,8 @@ class ActionViewController: SLComposeServiceViewController {
         } else if let textProvider = textProvider {
             textProvider.processText { (textItem, error) in
                 guard let text = textItem as? String else { self.cancel(); return }
-                    guard let focusUrl = self.textUrl(text: text) else { self.cancel(); return }
-                    self.handleUrl(focusUrl)
+                guard let focusUrl = self.textUrl(text: text) else { self.cancel(); return }
+                self.handleUrl(focusUrl)
             }
         } else {
             // If no item was processed. Cancel the share action to prevent the
