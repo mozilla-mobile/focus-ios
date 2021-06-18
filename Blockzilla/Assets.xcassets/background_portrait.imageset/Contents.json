@@ -1,11 +1,11 @@
 {
   "images" : [
     {
-      "filename" : "background_iphone.pdf",
+      "filename" : "background_iphone_portrait.pdf",
       "idiom" : "iphone"
     },
     {
-      "filename" : "background_ipad.pdf",
+      "filename" : "background_ipad_portrait.pdf",
       "idiom" : "ipad"
     }
   ],
