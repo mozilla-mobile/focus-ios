@@ -582,6 +582,7 @@ class BrowserViewController: UIViewController {
         urlBar.state = .editing
         urlBar.activateTextField()
         urlBar.fillUrlBar(text: text)
+        urlBar.inBrowsingMode = true
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
