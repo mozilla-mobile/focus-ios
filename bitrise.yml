@@ -174,7 +174,6 @@ workflows:
         stack: osx-xcode-12.5.x
         machine_type_id: standard
 
-
   runFocus:
     steps:
     - git-clone@4: {}
