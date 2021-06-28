@@ -20,13 +20,14 @@ class PastenGoTest: BaseTestCase {
         // Check clipboard suggestion is shown
         waitForValueContains(searchOrEnterAddressTextField, value: "mozilla.org/")
         waitForExistence(app.buttons["Search for mozilla"])
-        waitForExistence(app.buttons["Search for " + clipboardString])
         app.typeText("\n")
 
         // Check the correct site is reached
-        waitForValueContains(searchOrEnterAddressTextField, value: "https://www.mozilla.org/en-US/")
+        waitForValueContains(searchOrEnterAddressTextField, value: "https://www.mozilla.org")
 
         // Tap URL field, check for paste & go menu
+        searchOrEnterAddressTextField.tap()
+        sleep(1)
         searchOrEnterAddressTextField.tap()
         searchOrEnterAddressTextField.press(forDuration: 1.5)
 
