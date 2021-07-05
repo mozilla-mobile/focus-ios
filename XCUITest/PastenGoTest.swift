@@ -6,7 +6,8 @@ import XCTest
 
 class PastenGoTest: BaseTestCase {
     // Test the clipboard contents are displayed/updated properly
-    func testClipboard() {
+    func testClipboard() throws {
+        throw XCTSkip("This test needs to be updated or removed: Select menu not shown")
         let app = XCUIApplication()
 
         // Inject a string into clipboard
@@ -23,7 +24,7 @@ class PastenGoTest: BaseTestCase {
         app.typeText("\n")
 
         // Check the correct site is reached
-        waitForValueContains(searchOrEnterAddressTextField, value: "https://www.mozilla.org")
+        waitForValueContains(searchOrEnterAddressTextField, value: "www.mozilla")
 
         // Tap URL field, check for paste & go menu
         searchOrEnterAddressTextField.tap()

@@ -135,7 +135,7 @@ class SettingAppearanceTest: BaseTestCase {
 
     func testDisableAutocomplete() {
         // Navigate to Settings
-        waitForHittable(app.buttons["Settings"])
+        waitForExistence(app.buttons["Settings"], timeout: 10)
         app.buttons["Settings"].tap()
 
         // Navigate to Autocomplete Settings
@@ -157,7 +157,7 @@ class SettingAppearanceTest: BaseTestCase {
 
     func testAddRemoveCustomDomain() {
         // Navigate to Settings
-        waitForHittable(app.buttons["Settings"])
+        waitForExistence(app.buttons["Settings"], timeout: 10)
         app.buttons["Settings"].tap()
 
         // Navigate to Autocomplete Settings
