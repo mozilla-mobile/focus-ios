@@ -12,7 +12,6 @@ class AsianLocaleTest: BaseTestCase {
 		app.tables.cells["SettingsViewController.searchCell"].tap()
 
 		app.tables.staticTexts["Google"].tap()
-		// app.navigationBars["Settings"].children(matching: .button).matching(identifier: "Done").element(boundBy: 0).tap()
         app.buttons["SettingsViewController.doneButton"].tap()
 
 		// Enter 'mozilla' on the search field

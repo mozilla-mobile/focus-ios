@@ -77,6 +77,6 @@ class PastenGoTest: BaseTestCase {
         UIPasteboard.general.string = clipboard
         searchOrEnterAddressTextField.tap()
         app.menuItems["Paste"].tap()
-        waitForExistence(app.buttons["Search for " + clipboard])
+        waitForExistence(app.buttons["Search for " + clipboard], timeout: 10)
     }
 }
