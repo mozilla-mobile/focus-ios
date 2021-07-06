@@ -88,7 +88,11 @@ class TrackingProtectionMenu: BaseTestCase {
 
         // Erase the history
         waitForExistence(app.buttons["URLBar.deleteButton"])
+<<<<<<< HEAD
         app.buttons["URLBar.deleteButton"].tap()
+=======
+        app.buttons["URLBar.deleteButton"].firstMatch.tap()
+>>>>>>> 40647eb (Fixes #1941 - Splash - Bottom Toolbar (#1990))
         waitForExistence(app.staticTexts["Your browsing history has been erased."])
     }
 
