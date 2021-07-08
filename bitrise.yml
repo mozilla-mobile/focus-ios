@@ -251,8 +251,10 @@ workflows:
         stack: osx-xcode-12.5.x
         machine_type_id: g2.8core
 
-runFocus-iPad:
+  runFocus-iPad:
     steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@4: {}
     - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
