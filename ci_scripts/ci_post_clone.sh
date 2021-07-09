@@ -5,5 +5,5 @@
 # calls checkout.sh to pull in the blocklists.
 #
 
-./checkout.sh
+(cd .. && ./checkout.sh)
 
