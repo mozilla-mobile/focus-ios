@@ -151,7 +151,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             // UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
 
             // To speed up your tests
-            UIApplication.shared.keyWindow?.layer.speed = 50
+            UIApplication.shared.keyWindow?.layer.speed = 200
             UIView.setAnimationsEnabled(false)
         }
     }
