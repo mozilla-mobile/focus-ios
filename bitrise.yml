@@ -13,6 +13,8 @@ trigger_map:
   workflow: runParallelTests
 - tag: "*"
   workflow: release
+- push_branch: refresh
+  workflow: refresh_release
 
 
 workflows:
@@ -79,7 +81,7 @@ workflows:
     before_run: []
 
 
-  release:
+  refresh_release:
     steps:
     - certificate-and-profile-installer@1: {}
     - xcode-archive@2:
