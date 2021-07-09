@@ -11,7 +11,7 @@ class BaseTestCase: XCTestCase {
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
-        app.launchArguments = ["testMode", "disableFirstRunUI"]
+        app.launchArguments = ["testMode", "disableFirstRunUI", "--Reset"]
         app.launch()
     }
 

@@ -51,6 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         setupErrorTracking()
         setupTelemetry()
         TPStatsBlocklistChecker.shared.startup()
+        setStateForUITesting()
 
         // Count number of app launches for requesting a review
         let currentLaunchCount = UserDefaults.standard.integer(forKey: UIConstants.strings.userDefaultsLaunchCountKey)
@@ -136,6 +137,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         }
 
         return true
+    }
+
+    static var isUITestingEnabled: Bool {
+        get {
+            return ProcessInfo.processInfo.arguments.contains("--Reset")
+        }
+    }
+
+    private func setStateForUITesting() {
+        if AppDelegate.isUITestingEnabled {
+            // If you need reset your app to clear state
+            // UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
+
+            // To speed up your tests
+            UIApplication.shared.keyWindow?.layer.speed = 2
+            UIView.setAnimationsEnabled(false)
+        }
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
