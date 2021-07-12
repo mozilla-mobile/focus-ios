@@ -262,26 +262,6 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            # Check if the build is a scheduled build
-
-            if [[ $BITRISE_GIT_MESSAGE == Schedule* ]]
-            then
-                echo "Scheduled build, running Full Functional Tests"
-                envman add --key TEST_PLAN_NAME --value FullFunctionalTests
-            else
-                echo "Regular build, running Smoke Test"
-                envman add --key TEST_PLAN_NAME --value SmokeTest
-            fi
-        - title: Check if build is scheduled or regular to set the test plan
-    - script@1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
             ./checkout.sh
         title: ContentBlockerGen
     - script@1:
