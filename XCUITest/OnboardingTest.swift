@@ -10,7 +10,7 @@ class OnboardingTest: XCTestCase {
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
-        app.launchArguments = ["testMode"]
+        app.launchArguments = ["testMode", "--Reset"]
         app.launch()
     }
 
