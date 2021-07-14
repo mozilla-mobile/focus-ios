@@ -302,7 +302,7 @@ struct UIConstants {
         static let copyURLToast = NSLocalizedString("browser.copyAddressToast", value: "URL Copied To Clipboard", comment: "Toast displayed after a URL has been copied to the clipboard")
         static let copyMenuButton = NSLocalizedString("Browser.copyMenuLabel", value: "Copy", comment: "Copy URL button in URL long press menu")
         static let eraseButton = NSLocalizedString("URL.eraseButtonLabel", value: "ERASE", comment: "Erase button in the URL bar")
-        static let eraseMessage = NSLocalizedString("URL.eraseMessageLabel", value: "Browsing history cleared", comment: "Message shown after pressing the Erase button")
+        static let eraseMessage = NSLocalizedString("URL.eraseMessageLabel2", value: "Browsing history cleared", comment: "Message shown after pressing the Erase button")
         static let errorTryAgain = NSLocalizedString("Error.tryAgainButton", value: "Try again", comment: "Button label to reload the error page")
         static let externalLinkCall = NSLocalizedString("ExternalLink.callButton", value: "Call", comment: "Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html")
         static let externalLinkCancel = NSLocalizedString("ExternalLink.cancelButton", value: "Cancel", comment: "Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html")
