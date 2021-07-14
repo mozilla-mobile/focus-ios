@@ -141,7 +141,7 @@ struct UIConstants {
         static let settingsHomeButton = UIFont.systemFont(ofSize: 15)
         static let settingsOverlayButton = UIFont.systemFont(ofSize: 13)
         static let tableSectionHeader = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)
-        static let toast = UIFont.systemFont(ofSize: 12)
+        static let toast = UIFont.systemFont(ofSize: 12, weight: .semibold)
         static let urlText = UIFont.systemFont(ofSize: 15)
         static let truncatedUrlText = UIFont.systemFont(ofSize: 12)
         static let settingsInputLabel = UIFont.systemFont(ofSize: 18)
@@ -189,6 +189,8 @@ struct UIConstants {
         static let urlBarTransitionAnimationDuration: TimeInterval = 0.2
         static let urlBarMargin: CGFloat = 10
         static let urlBarHeightInset: CGFloat = 0
+        static let urlBarContainerHeightInset: CGFloat = 10
+        static let urlBarTextInset: CGFloat = 30
         static let urlBarShadowOpacity: Float = 0.3
         static let urlBarShadowRadius: CGFloat = 2
         static let urlBarShadowOffset = CGSize(width: 0, height: 2)
@@ -264,6 +266,7 @@ struct UIConstants {
 		static let introViewTextLabelPadding: CGFloat = 24
 		static let introViewTextLabelInset: CGFloat = 24
         static let pageControlSpacing: CGFloat = 2
+        static let toastMessageHeight: CGFloat = 48
     }
 
     struct strings {
@@ -301,7 +304,7 @@ struct UIConstants {
         static let copyURLToast = NSLocalizedString("browser.copyAddressToast", value: "URL Copied To Clipboard", comment: "Toast displayed after a URL has been copied to the clipboard")
         static let copyMenuButton = NSLocalizedString("Browser.copyMenuLabel", value: "Copy", comment: "Copy URL button in URL long press menu")
         static let eraseButton = NSLocalizedString("URL.eraseButtonLabel", value: "ERASE", comment: "Erase button in the URL bar")
-        static let eraseMessage = NSLocalizedString("URL.eraseMessageLabel", value: "Your browsing history has been erased.", comment: "Message shown after pressing the Erase button")
+        static let eraseMessage = NSLocalizedString("URL.eraseMessageLabel2", value: "Browsing history cleared", comment: "Message shown after pressing the Erase button")
         static let errorTryAgain = NSLocalizedString("Error.tryAgainButton", value: "Try again", comment: "Button label to reload the error page")
         static let externalLinkCall = NSLocalizedString("ExternalLink.callButton", value: "Call", comment: "Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html")
         static let externalLinkCancel = NSLocalizedString("ExternalLink.cancelButton", value: "Cancel", comment: "Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html")
