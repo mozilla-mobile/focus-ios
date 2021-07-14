@@ -592,10 +592,10 @@ class BrowserViewController: UIViewController {
     }
 
     func openOverylay(text: String) {
-        urlBar.state = .editing
+        ensureBrowsingMode()
+        showToolbars()
         urlBar.activateTextField()
-        urlBar.fillUrlBar(text: text)
-        urlBar.inBrowsingMode = true
+        urlBar.fillUrlBarWithString(text: text)
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
