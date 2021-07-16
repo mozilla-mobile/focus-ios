@@ -193,7 +193,7 @@ workflows:
     - github-status@2:
         inputs:
         - auth_token: "$GITHUB_ACCESS_TOKEN"
-        - status_identifier: Focus build
+        - status_identifier: "Focus build"
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
@@ -252,7 +252,7 @@ workflows:
     - github-status@2:
         inputs:
         - auth_token: "$GITHUB_ACCESS_TOKEN"
-        - status_identifier: Klar build
+        - status_identifier: "Klar build"
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
