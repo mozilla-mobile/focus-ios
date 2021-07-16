@@ -248,9 +248,6 @@ workflows:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan "$TEST_PLAN_NAME"
         - scheme: Klar
-    - github-status@2:
-        inputs:
-        - auth_token: "$GITHUB_ACCESS_TOKEN"
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
