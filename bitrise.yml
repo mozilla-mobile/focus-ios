@@ -192,7 +192,7 @@ workflows:
         - scheme: Focus
     - github-status@2:
         inputs:
-        - auth_token: "$GIHUB_AUTH_TOKEN"
+        - auth_token: "$GITHUB_ACCESS_TOKEN"
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
