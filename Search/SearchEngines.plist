@@ -56,6 +56,7 @@
   <key>ca</key>
   <array>
     <string>google</string>
+    <string>amazon-ca</string>
     <string>twitter</string>
     <string>wikipedia-ca</string>
     <string>diec2</string>
@@ -231,6 +232,7 @@
   <key>fr</key>
   <array>
     <string>google</string>
+    <string>amazon-fr</string>
     <string>duckduckgo</string>
     <string>qwant</string>
     <string>twitter</string>
@@ -459,6 +461,7 @@
   <key>nl</key>
   <array>
     <string>google</string>
+    <string>amazon-nl</string>
     <string>wikipedia-nl</string>
     <string>bolcom-nl</string>
     <string>duckduckgo</string>
