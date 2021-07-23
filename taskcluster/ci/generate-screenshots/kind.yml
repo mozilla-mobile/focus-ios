@@ -2,50 +2,28 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 ---
-loader: taskgraph.loader.transform:loader
+loader: focusios_taskgraph.loader.screenshots_locales:loader
 
 transforms:
-    - focusios_taskgraph.transforms.screenshots:transforms
+    - focusios_taskgraph.transforms.bitrise:transforms
     - focusios_taskgraph.transforms.secrets:transforms
     - taskgraph.transforms.job:transforms
     - taskgraph.transforms.task:transforms
 
+kind-dependencies:
+    - build
+
+not-for-locales:
+    - en-US   # Already built as part of the build task
+
+locales-per-chunk: 6
 
 job-defaults:
+    bitrise-workflow: L10nScreenshotsTests
+    build-derived-data-path: {artifact-reference: '<build/public/build/target.zip>'}
     description: Generate localized screenshots by delegating the work to bitrise.io
-    run:
-        using: run-commands
-        use-caches: false
-        secrets:
-            by-level:
-                '3':
-                    - name: project/mobile/focus-ios/bitrise
-                    key: api_key
-                      path: .bitrise_token
-                default: []
-        dummy-secrets:
-            by-level:
-                '3': []
-                default:
-                      - content: "faketoken"
-                        path: .bitrise_token
+    dependencies:
+        build: build-screenshots
+    index:
+        type: l10n-screenshots
     run-on-tasks-for: []
-    worker:
-        artifacts:
-            - type: file
-              name: public/logs/bitrise.log
-              path: /builds/worker/checkouts/src/bitrise.log
-              docker-image: {in-tree: screenshots}
-        max-run-time: 3600
-    worker-type: b-linux
-
-jobs:
-    fr:
-        locale: fr
-        worker:
-            # TODO: Move artifacts in transforms once we start supporting all locales
-            artifacts:
-                - type: file
-                  # change to the proper focus route
-                  name: public/screenshots/fr-Focus.zip
-                  path: /builds/worker/checkouts/src/fr-Focus.zip
