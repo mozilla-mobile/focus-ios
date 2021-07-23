@@ -35,7 +35,7 @@ DEVICE="iPhone 11"
 for lang in $LOCALES; do
     # start simple with Focus only
     # for PRODUCT in Focus Klar; do
-        echo "Snapshotting $PRODUCT on $DEVICE"
+        echo "Snapshotting on $DEVICE"
             mkdir -p "l10n-screenshots/$PRODUCT/$lang"
             fastlane snapshot --project Blockzilla.xcodeproj --scheme "FocusSnapshotTests" \
               --derived_data_path l10n-screenshots-dd \
