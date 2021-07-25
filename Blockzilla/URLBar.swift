@@ -567,6 +567,36 @@ class URLBar: UIView {
         urlText.text = text
     }
 
+<<<<<<< HEAD
+=======
+    func fillUrlBarWithString(text: String) {
+        urlText.text = text
+        delegate?.urlBar(self, didEnterText: text)
+    }
+
+    private func updateLockIcon() {
+        let visible = !isEditing && (url?.scheme == "https")
+        let duration = UIConstants.layout.urlBarTransitionAnimationDuration / 2
+
+        lockIcon.animateHidden(!visible, duration: duration)
+
+        self.layoutIfNeeded()
+        UIView.animate(withDuration: duration) {
+            if visible {
+                self.hideLockConstraints.forEach { $0.deactivate() }
+                self.showLockConstraints.forEach { $0.activate() }
+                self.hideSmallLockConstraints.forEach { $0.deactivate() }
+            } else {
+                self.showLockConstraints.forEach { $0.deactivate() }
+                self.hideLockConstraints.forEach { $0.activate() }
+                self.hideSmallLockConstraints.forEach { $0.activate() }
+            }
+
+            self.layoutIfNeeded()
+        }
+    }
+
+>>>>>>> cd55eb8 (Fixes #1895 - Sharing text on Focus is not working)
     private func updateUrlIcons() {
         let visible = !isEditing && url != nil
         let duration = UIConstants.layout.urlBarTransitionAnimationDuration / 2
