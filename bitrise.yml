@@ -371,10 +371,8 @@ workflows:
             mkdir -p artifacts
             for locale in $(echo $MOZ_LOCALES); do
               # Only Focus for now
-              # for product in Focus Klar; do
-                zip -9 -j "$locale.zip" "l10n-screenshots/$locale/$locale/"*
-                mv "$locale.zip" artifacts/
-              # done
+              zip -9 -j "$locale.zip" "l10n-screenshots/$locale/$locale/"*
+              mv "$locale.zip" artifacts/
             done
     - deploy-to-bitrise-io@1.10:
         inputs:
