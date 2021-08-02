@@ -185,7 +185,8 @@ workflows:
             set -x
 
             # Check if the build goes to refresh branch then
-            # If not check if it is a scheduled or regular build
+            # check if it is a scheduled or regular build
+            # to select the testPlan to run
 
             if [[ $BITRISEIO_GIT_BRANCH_DEST == refresh ]]
             then
@@ -254,7 +255,8 @@ workflows:
             set -x
 
             # Check if the build goes to refresh branch then
-            # If not check if it is a scheduled or regular build
+            # check if it is a scheduled or regular build
+            # to select the testPlan to run
 
             if [[ $BITRISEIO_GIT_BRANCH_DEST == refresh ]]
             then
