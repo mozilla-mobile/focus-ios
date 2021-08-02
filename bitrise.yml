@@ -188,7 +188,7 @@ workflows:
             # check if it is a scheduled or regular build
             # to select the testPlan to run
 
-            if [[ $BITRISEIO_GIT_BRANCH_DEST == refresh ]]
+            if [[ $BITRISEIO_GIT_BRANCH_DEST == refresh ]] || [[ $BITRISE_GIT_BRANCH == refresh ]]
             then
                 echo "PR for refresh branch"
                 envman add --key TEST_PLAN_NAME --value SmokeTestRefresh
