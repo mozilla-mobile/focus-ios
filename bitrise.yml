@@ -378,6 +378,9 @@ workflows:
         inputs:
         - deploy_path: artifacts/
         - is_compress: 'true'
+    envs:
+    - opts:
+        is_expand: false
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
@@ -420,6 +423,10 @@ workflows:
         inputs:
         - deploy_path: l10n-screenshots/en-US/en-US
         - is_compress: 'true'
+    - cache-push@2.3: {}
+    envs:
+    - opts:
+        is_expand: false
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
