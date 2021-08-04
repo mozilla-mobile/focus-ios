@@ -553,6 +553,9 @@
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Protección de rastreo";
 
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "Desactivar esto podría solucionar algunos problemas del sitio";
+
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Saber más";
 

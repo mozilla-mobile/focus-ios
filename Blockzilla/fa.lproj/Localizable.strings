@@ -550,6 +550,9 @@
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "محافظت در برابر رهگیری";
 
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "خاموش کردن این ممکن است چند مشکل را برطرف کند"
+
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "اطلاعات بیشتر";
 

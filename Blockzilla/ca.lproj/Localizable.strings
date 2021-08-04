@@ -550,6 +550,9 @@
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Protecció contra el seguiment";
 
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "Si es desactiva, pot ser que s'arreglin problemes amb alguns llocs"
+
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Més informació";
 
