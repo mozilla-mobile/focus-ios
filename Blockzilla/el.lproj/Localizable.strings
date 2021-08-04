@@ -551,7 +551,7 @@
 "trackingProtection.label" = "Προστασία από καταγραφή";
 
 /* Description/subtitle for the tracking protection label. */
-"trackingProtection.labelDescription" = "Η απενεργοποίηση αυτού ενδέχεται να διορθώσει μερικά προβλήματα ιστοσελίδων"
+"trackingProtection.labelDescription" = "Η απενεργοποίηση αυτού ενδέχεται να διορθώσει μερικά προβλήματα ιστοσελίδων";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Μάθετε περισσότερα";
