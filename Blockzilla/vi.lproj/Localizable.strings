@@ -122,7 +122,7 @@
 "Browser.copyAddressLabel" = "Sao chép địa chỉ liên kết";
 
 /* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "URL đã được sao chép vào Clipboard";
+"browser.copyAddressToast" = "URL đã được sao chép vào clipboard";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Sao chép";
@@ -290,7 +290,7 @@
 "SearchSuggestions.promptEnable" = "Có";
 
 /* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
-"SearchSuggestions.promptMessage" = "Để nhận đề xuất, %@ cần gửi những gì bạn nhập vào thanh địa chỉ cho công cụ tìm kiếm.";
+"SearchSuggestions.promptMessage" = "Để nhận gợi ý, %@ cần gửi những gì bạn nhập vào thanh địa chỉ cho công cụ tìm kiếm.";
 
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Hiển thị đề xuất tìm kiếm?";
@@ -362,7 +362,7 @@
 "Settings.searchLabel" = "Công cụ tìm kiếm";
 
 /* Label for the Search Suggestions toggle row */
-"Settings.searchSuggestions" = "Nhận đề xuất tìm kiếm";
+"Settings.searchSuggestions" = "Nhận gợi ý tìm kiếm";
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "TÌM KIẾM";
@@ -539,7 +539,7 @@
 "URL.cancelLabel" = "Hủy bỏ";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "Dán & Mở đường dẫn";
+"URL.contextMenu" = "Dán & mở";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "XÓA";

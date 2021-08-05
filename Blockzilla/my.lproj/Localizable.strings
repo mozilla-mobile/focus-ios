@@ -457,6 +457,9 @@
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Desktop ဆိုက်ကို တောင်းပါ";
 
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "မိုဘိုင်းဖုန်းကြည့် ဝဘ်ဆိုက်ဖြင့် ပြရန်";
+
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Chrome တွင် ဖွင့်ပါ";
 
@@ -510,6 +513,9 @@
 
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "ခြေရာခံ ကာကွယ်မှု";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "ယခုအရာကို ပိတ်ခြင်းအားဖြင့် အချို့သော ဝဘ်ဆိုက်ပြဿနာများကို ပြေလည်စေနိုင်သည်";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "ပိုမိုလေ့လာရန်";

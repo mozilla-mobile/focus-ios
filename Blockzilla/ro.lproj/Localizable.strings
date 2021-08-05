@@ -20,7 +20,7 @@
 "About.rowHelp" = "Ajutor";
 
 /* Link to Privacy Notice in the About screen */
-"About.rowPrivacy" = "Politica de confidențialitate";
+"About.rowPrivacy" = "Politică de confidențialitate";
 
 /* Label for row in About screen */
 "About.rowRights" = "Drepturile tale";
@@ -457,6 +457,9 @@
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Cere versiune de desktop";
 
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Cere versiunea de mobil";
+
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Deschide în Chrome";
 
@@ -510,6 +513,9 @@
 
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Protecție împotriva urmăririi";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "Dezactivarea opțiunii poate remedia unele probleme legate de site";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Află mai multe";

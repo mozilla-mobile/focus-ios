@@ -88,11 +88,26 @@
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "À comas";
 
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "Tha an URL seo ann mu thràth";
+
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "Chan eil URL gnàthaichte ann a sheallamaid";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "An comas";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "Stiùirich na làraichean";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "Na làraichean agam";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "Cuir seo an comas airson ’s gun coilean %@ na URLaichean a chleachdas tu gu tric.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "Brod nan làrach";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Seisean ùr";
@@ -268,6 +283,18 @@
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
 "SearchEngine.addEngineError" = "Cha do dh’obraich sin. Feuch is cuir na leanas an àite na lorg thu: %s.";
 
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "Chan eil";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Tha";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "Mus fhaigh thu molaidhean, feumaidh %@ na sgrìobhas tu ann am bàr an t-seòlaidh a chur gun einnsean-luirg.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "A bheil thu airson molaidhean-luirg a shealltainn?";
+
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Fèin-choileanadh URLaichean";
 
@@ -279,6 +306,9 @@
 
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "Bac iad co-dhiù";
+
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "Cuiridh %@ na sgrìobhas tu ann am bàr an t-seòlaidh gun einnsan-luirg agad.";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Tha Mozilla an dealas dìreach an dàta a chruinneachadh a dh’fheumas sinn airson %@ a sholar is a leasachadh dhan a h-uile duine.";
@@ -331,6 +361,9 @@
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Einnseanan-luirg";
 
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "Faigh molaidhean-luirg";
+
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "LORG";
 
@@ -382,6 +415,9 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "’S urrainn dha Face ID a’ ghlas a thoirt far %@ ma tha URL fosgailte san aplacaid mu thràth";
 
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "Seall na gliocasan air an sgrìn-dhachaidh";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Dh’fhaoidte nach obraich cuid a dhuilleagan-lìn is videothan tuilleadh";
 
@@ -420,6 +456,9 @@
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Iarr an làrach desktop";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Iarr an làrach mobile";
 
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Fosgail ann an Chrome";
@@ -475,6 +514,9 @@
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Dìon o thracadh";
 
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "Ma chuireas tu seo dheth, dh’fhaoidte gun cuir sin ceart cuid a dhuilgheadasan le làraichean";
+
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Barrachd fiosrachaidh";
 
@@ -489,6 +531,9 @@
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel" = "Cuir romhad am bac %@ tracaichean sanasachd is sgrùdaidh, tracaichean sòisealta is feadhainn eile.";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Cuir ceangal ris airson a choileanadh gu fèin-obrachail";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Sguir dheth";

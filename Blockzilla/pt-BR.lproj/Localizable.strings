@@ -104,7 +104,7 @@
 "Autocomplete.mySites" = "Meus sites";
 
 /* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.mySitesDesc" = "Ativar para o %@ completar automaticamente suas URLs preferidas.";
+"Autocomplete.mySitesDesc" = "Ative para o %@ completar automaticamente suas URLs preferidas.";
 
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "Sites preferidos";
@@ -269,10 +269,10 @@
 "Safari.instructionsContentBlockers" = "Tocar em Safari e selecionar Bloqueadores de conteúdo";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsEnable" = "Habilitar o %@";
+"Safari.instructionsEnable" = "Ativar o %@";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
-"Safari.instructionsNotEnabled" = "%@ não está habilitado.";
+"Safari.instructionsNotEnabled" = "%@ não está ativado.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Abrir configurações do aplicativo";
@@ -401,7 +401,7 @@
 "Settings.toggleBlockOther" = "Bloquear outros rastreadores";
 
 /* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Habilitar pode causar comportamento inesperado em algumas páginas";
+"Settings.toggleBlockOtherDescription" = "Ativar pode causar comportamento inesperado em algumas páginas";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "Bloquear rastreadores sociais";

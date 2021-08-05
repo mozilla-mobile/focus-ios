@@ -263,7 +263,7 @@
 "photosPermission.title" = "“%@” хотел бы получить доступ к вашим Фото";
 
 /* Label for button that requests the desktop version of the currently loaded website. */
-"Request Desktop Site" = "Запросить полную версию сайта";
+"Request Desktop Site" = "Версия для ПК";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Нажмите Safari, затем выберите Правила блокирования контента";
@@ -455,7 +455,7 @@
 "ShareMenu.PageActions" = "Действия на странице";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
-"ShareMenu.RequestDesktop" = "Запросить полную версию сайта";
+"ShareMenu.RequestDesktop" = "Версия для ПК";
 
 /* Text for the share menu option when a user wants to reload the site as a mobile device */
 "ShareMenu.RequestMobile" = "Запросить мобильную версию сайта";

@@ -91,6 +91,9 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "செயல்படுத்தப்பட்டது";
 
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "என் தளங்கள்";
+
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "புதிய அமர்வு";
 
@@ -99,6 +102,9 @@
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "பின்செல்";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "முகவரியை நகலெடு";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "நகலெடு";
@@ -211,6 +217,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "உலாவு. அகற்று. திரும்பச்செய்.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "மூடு";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "ரத்து";
 
@@ -249,6 +258,12 @@
 
 /* Save button label */
 "Save" = "சேமி";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "இல்லை";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "ஆம்";
 
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL தானியங்கு நிரப்பு";

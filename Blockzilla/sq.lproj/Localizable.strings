@@ -457,6 +457,9 @@
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Kërko Sajtin për Desktop";
 
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Kërko Sajtin Për Celular";
+
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Hape në Chrome";
 
@@ -510,6 +513,9 @@
 
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Mbrojtje Nga Gjurmimet";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "Çaktivizimi i kësaj mund të ndreqë ca probleme sajti";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Mësoni Më Tepër";

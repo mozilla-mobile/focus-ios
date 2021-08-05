@@ -82,8 +82,20 @@
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "ನಿಷ್ಕ್ರಿಯಗೊಳಿಸು";
 
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "URL ಈಗಾಗಲೆ ಅಸ್ತಿತ್ವದಲ್ಲಿದೆ";
+
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "ಸಕ್ರಿಯಗೊಳಿಸು";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "ತಾಣಗಳನ್ನು ನಿರ್ವಹಿಸಿ";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "ನನ್ನ ತಾಣಗಳು";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "ಪ್ರಮುಖ ತಾಣಗಳು";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "ಹೊಸ ಅಧಿವೇಶನ";
@@ -253,6 +265,12 @@
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
 "SearchEngine.addEngineError" = "ಅದು ಕೆಲಸ ಮಾಡಲಿಲ್ಲ. ಹುಡುಕಾಟ ಪದವನ್ನು ಇದರೊಂದಿಗೆ ಬದಲಿಸಿ ಪ್ರಯತ್ನಿಸಿ: %s.";
 
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "ಇಲ್ಲ";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "ಹೌದು";
+
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL ಸ್ವಯಂಪೂರ್ಣಗೊಳಿಸು";
 
@@ -391,6 +409,9 @@
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "ಡೆಸ್ಕ್ಟಾಪ್ ತಾಣವನ್ನು ಕೇಳಿ";
 
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "ಮೊಬೈಲ್ ತಾಣ ಕೇಳಿ";
+
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "ಕ್ರೋಮ್ನಲ್ಲಿ ತೆರೆ";
 
@@ -408,6 +429,9 @@
 
 /* Button to add a specified shortcut option to Siri. */
 "Siri.addTo" = "ಸಿರಿಗೆ ಸೇರಿಸು";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "ಮರು-ದಾಖಲೆ ಅಥವಾ ಅಳಿಸು ಶಾರ್ಟ್ಕಟ್";
 
 /* Title of option in settings to set up Siri to erase */
 "Siri.erase" = "ಅಳಿಸು";
@@ -442,6 +466,9 @@
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "ಜಾಡು ಇರಿಸುವಿಕೆಗೆ ರಕ್ಷಣೆ";
 
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "ಇದನ್ನು ಆಫ್ ಮಾಡುವುದರಿಂದ ತಾಣದ ಕೆಲವು ಸಮಸ್ಯೆಗಳನ್ನು ಸರಿಪಡಿಸಬಹುದು";
+
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ";
 
@@ -456,6 +483,9 @@
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel" = "%@ ಬ್ಲಾಕ್ಗಳ ಜಾಹೀರಾತು, ವಿಶ್ಲೇಷಣಾತ್ಮಕ, ಸಾಮಾಜಿಕ ಮತ್ತು ಇತರ ಟ್ರ್ಯಾಕರ್ಗಳು ಎಂಬುದನ್ನು ಆಯ್ಕೆಮಾಡಿ.";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "ಸ್ವಯಂಪೂರ್ಣತೆಗೆ ಲಿಂಕ್ ಸೇರಿಸಿ";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "ರದ್ದು ಮಾಡು";

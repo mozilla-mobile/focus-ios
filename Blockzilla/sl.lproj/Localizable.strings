@@ -514,6 +514,9 @@
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Zaščita pred sledenjem";
 
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "Z izklopom lahko odpravite nekatere težave s stranjo";
+
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Več o tem";
 
