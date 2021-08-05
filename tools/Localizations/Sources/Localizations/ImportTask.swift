@@ -152,8 +152,8 @@ struct ImportTask {
     func run() {
         locales.forEach { locale in
             if !EXCLUDED_LOCALES.contains(locale) {
-                print("MOO LOCALE \(locale)")
-                //prepareLocale(locale: locale)
+                print("[*] Processing locale \(locale)")
+                prepareLocale(locale: locale)
             }
         }
     }
