@@ -1,8 +1,12 @@
-/* (No Comment) */
-"NSCameraUsageDescription" = "Ligeann seo duit pictiúir a thógáil agus a uaslódáil.";
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "This lets you take and upload photos.";
 
-/* (No Comment) */
-"NSLocationWhenInUseUsageDescription" = "D'fhéadfadh suíomhanna a dtugann tú cuairt orthu do láthair a iarraidh.";
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Websites you visit may request your location.";
 
-/* (No Comment) */
-"NSMicrophoneUsageDescription" = "Ligeann seo duit físeáin a thógáil agus a uaslódáil.";
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "This lets you take and upload videos.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "This lets you save and upload photos.";
+

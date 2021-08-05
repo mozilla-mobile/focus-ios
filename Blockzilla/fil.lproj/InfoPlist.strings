@@ -1,14 +1,12 @@
-/* (No Comment) */
-"NSCameraUsageDescription" = "Maaari kang kumuha at mag-upload ng mga larawan dito.";
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "This lets you take and upload photos.";
 
-/* (No Comment) */
-"NSFaceIDUsageDescription" = "Hinahayaan ka nito na i-unlock ang app.";
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Websites you visit may request your location.";
 
-/* (No Comment) */
-"NSLocationWhenInUseUsageDescription" = "Maaaring hingin ng mga website na binibisita mo ang iyon lokasyon.";
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "This lets you take and upload videos.";
 
-/* (No Comment) */
-"NSMicrophoneUsageDescription" = "Maaari kang kumuha at mag-upload ng mga larawan dito.";
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "This lets you save and upload photos.";
 
-/* (No Comment) */
-"NSPhotoLibraryAddUsageDescription" = "Pinapayagan ka nito na i-save at mag-upload ng mga larawan.";

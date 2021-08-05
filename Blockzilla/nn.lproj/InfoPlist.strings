@@ -1,14 +1,12 @@
-/* (No Comment) */
-"NSCameraUsageDescription" = "Dette gjer det mogleg å ta og lasta opp bilde.";
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "This lets you take and upload photos.";
 
-/* (No Comment) */
-"NSFaceIDUsageDescription" = "Dette lèt deg låsa opp appen.";
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Websites you visit may request your location.";
 
-/* (No Comment) */
-"NSLocationWhenInUseUsageDescription" = "Nettsider du vitjar kan be om plasseringa di.";
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "This lets you take and upload videos.";
 
-/* (No Comment) */
-"NSMicrophoneUsageDescription" = "Dette gjer det mogleg å ta og lasta opp videoar.";
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "This lets you save and upload photos.";
 
-/* (No Comment) */
-"NSPhotoLibraryAddUsageDescription" = "Lar deg lagra og lasta opp bilde.";
