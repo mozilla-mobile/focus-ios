@@ -2,7 +2,7 @@
 "About.learnMoreButton" = "اطّلع على المزيد";
 
 /* Label on About screen */
-"About.missionLabel" = "‏%@ منتج من موزيلا. مهمتنا تشجيع إنترنت مفتوح و صحي.";
+"About.missionLabel" = "\u200f%@ منتج من موزيلا. مهمتنا تشجيع إنترنت مفتوح و صحي.";
 
 /* Label on About screen */
 "About.privateBullet1" = "ابحث و تصفح مباشرة في التطبيق";
@@ -272,7 +272,7 @@
 "Safari.instructionsEnable" = "فعّل %@";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
-"Safari.instructionsNotEnabled" = "‏%@ ليس مفعّلا.";
+"Safari.instructionsNotEnabled" = "\u200f%@ ليس مفعّلا.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "افتح تطبيق الإعدادات";
@@ -356,7 +356,7 @@
 "settings.Search.SearchTemplateExample" = "مثال: searchengineexample.com/search/?q=%s";
 
 /* Placeholder text for input of new search engine template */
-"Settings.Search.SearchTemplatePlaceholder" = "انقر أو أدخِل نص البحث. إن استلزم الأمر اسبتدل مصطلح البحث بِ‍: ‎%s.";
+"Settings.Search.SearchTemplatePlaceholder" = "انقر أو أدخِل نص البحث. إن استلزم الأمر اسبتدل مصطلح البحث بِ‍: \u200e%s.";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "محرك البحث";
