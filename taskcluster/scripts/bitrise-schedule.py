@@ -175,8 +175,13 @@ async def download_artifacts(client, build_slug, artifacts_directory):
 async def download_log(client, build_slug, artifacts_directory):
     suffix = "builds/{}/log".format(build_slug)
     url = BITRISE_URL_TEMPLATE.format(suffix=suffix)
+    is_archived = False
 
-    response = await do_http_request_json(client, url)
+    while not is_archived:
+        response = await do_http_request_json(client, url)
+        if response["is_archived"] == True:
+            is_archived = True
+
     download_url = response["expiring_raw_log_url"]
     if download_url:
         await download_file(download_url, os.path.join(artifacts_directory, "bitrise.log"))
