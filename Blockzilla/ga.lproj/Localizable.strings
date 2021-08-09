@@ -31,9 +31,6 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Úsáid mar eisínteacht Safari é:";
 
-/* (No Comment) */
-"About.screenTitle" = "Maidir leis";
-
 /* Label on About screen */
 "About.topLabel" = "Cuireann %@ tusa i gceannas.";
 
@@ -168,9 +165,6 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "BÁNAIGH";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Bánaíodh do stair bhrabhsála.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Cuardach nó seoladh Gréasáin";
