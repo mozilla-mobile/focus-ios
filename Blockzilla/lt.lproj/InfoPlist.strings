@@ -1,18 +1,15 @@
-/* (No Comment) */
-"NSCameraUsageDescription" = "This lets you take and upload photos.";
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Bus galima fotografuoti ir įkelti nuotraukas.";
 
-/* (No Comment) */
-"NSFaceIDUsageDescription" = "This lets you unlock the app.";
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Bus galima atrakinti programą.";
 
-/* (No Comment) */
-"NSLocationWhenInUseUsageDescription" = "Websites you visit may request your location.";
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Lankomos svetainės gali prašyti jūsų buvimo vietos.";
 
-/* (No Comment) */
-"NSMicrophoneUsageDescription" = "This lets you take and upload videos.";
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Bus galima filmuoti ir įkelti vaizdo įrašus.";
 
-/* (No Comment) */
-"NSPhotoLibraryAddUsageDescription" = "This lets you save and upload photos.";
-
-/* This is the menu item that appears when you long press the Focus icon on the phone home screen. */
-"UIApplicationShortcutItemTitle.EraseAndOpen" = "Erase and Open";
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Bus galima įrašyti ir įkelti nuotraukas.";
 
