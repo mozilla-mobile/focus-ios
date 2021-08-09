@@ -10,7 +10,7 @@ trigger_map:
 - push_branch: v8.1.7
   workflow: release
 - pull_request_source_branch: "*"
-  workflow: L10nScreenshotsTests
+  workflow: runParallelTests
 - tag: "*"
   workflow: release
 - push_branch: refresh
@@ -381,7 +381,7 @@ workflows:
         inputs:
         - content: >-
             #!/usr/bin/env bash
-            echo "running script"
+
             # fail if any commands fails
 
             set -e
@@ -392,7 +392,7 @@ workflows:
 
             echo "curl to Download derived data"
 
-            curl --location --retry 5 --output l10n-screenshots-dd.zip "https://firefox-ci-tc.services.mozilla.com/api/queue/v1/task/CWFhvx6-QCWaPJoYMz9d0w/artifacts/public/build/target.zip"
+            curl --location --retry 5 --output l10n-screenshots-dd.zip "$MOZ_DERIVED_DATA_PATH"
 
             mkdir l10n-screenshots-dd
 
