@@ -381,11 +381,17 @@ workflows:
         inputs:
         - content: >-
             #!/usr/bin/env bash
+            echo "running script"
             # fail if any commands fails
+
             set -e
+
             # debug log
+
             set -x
+
             echo "curl to Download derived data"
+
             curl --location --retry 5 --output l10n-screenshots-dd.zip "https://firefox-ci-tc.services.mozilla.com/api/queue/v1/task/CWFhvx6-QCWaPJoYMz9d0w/artifacts/public/build/target.zip"
 
             mkdir l10n-screenshots-dd
