@@ -603,7 +603,8 @@ class BrowserViewController: UIViewController {
         
         if UIDevice.current.userInterfaceIdiom == .pad {
             urlBar.snp.makeConstraints { make in
-                make.leading.trailing.equalTo(view)
+                make.width.equalTo(view)
+                make.leading.equalTo(view)
             }
         }
 
