@@ -38,9 +38,9 @@
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Erase</string>
+					<string>Intents.Erase.Title</string>
 					<key>INIntentParameterCombinationTitleID</key>
-					<string>HLtAvi</string>
+					<string>Intents.Erase.Title</string>
 				</dict>
 			</dict>
 			<key>INIntentParameters</key>
