@@ -38,7 +38,7 @@
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string></string>
+					<string>Erase</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>Intents.Erase.Title</string>
 				</dict>
@@ -78,7 +78,7 @@
 			<key>INIntentRestrictions</key>
 			<integer>0</integer>
 			<key>INIntentTitle</key>
-			<string></string>
+			<string>Erase</string>
 			<key>INIntentTitleID</key>
 			<string>Intents.Erase.Title</string>
 			<key>INIntentType</key>
