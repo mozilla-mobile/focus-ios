@@ -368,7 +368,13 @@ class BrowserViewController: UIViewController {
 
         urlBar.snp.makeConstraints { make in
             urlBarTopConstraint = make.top.equalTo(mainContainerView.safeAreaLayoutGuide.snp.top).constraint
-            make.leading.trailing.bottom.equalTo(urlBarContainer)
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                make.width.equalToSuperview().multipliedBy(UIConstants.layout.urlBarInitialWidthMultiplier)
+                make.centerX.equalToSuperview()
+                make.bottom.equalTo(urlBarContainer)
+            } else {
+                make.leading.trailing.bottom.equalTo(urlBarContainer)
+            }
         }
     }
 
@@ -593,6 +599,13 @@ class BrowserViewController: UIViewController {
     func submit(url: URL) {
         // If this is the first navigation, show the browser and the toolbar.
         guard isViewLoaded else { initialUrl = url; return }
+        
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            urlBar.snp.makeConstraints { make in
+                make.leading.trailing.equalTo(view)
+            }
+        }
 
         if webViewContainer.isHidden {
             webViewContainer.isHidden = false
