@@ -405,7 +405,7 @@ struct UIConstants {
         static let copiedLink = NSLocalizedString("contextMenu.linkCopied", value: "Link you copied: ", comment: "Text for the context menu when a user has a link on their clipboard.")
         static let trackingProtectionLabel = NSLocalizedString("trackingProtection.label", value: "Tracking Protection", comment: "Title for the tracking settings page to change what trackers are blocked.")
         static let trackingProtectionLabelDescription = NSLocalizedString("trackingProtection.labelDescription", value: "Turning this off may fix some site problems", comment: "Description/subtitle for the tracking protection label.")
-        static let trackingProtectionToggleLabel = NSLocalizedString("trackingProtection.toggleLabel2", value: "Enhanced Tracking Protection", comment: "Text for the toggle that temporarily disables tracking protection.") // deprecated
+        static let trackingProtectionToggleLabel = NSLocalizedString("trackingProtection.toggleLabel2", value: "Enhanced Tracking Protection", comment: "Text for the toggle that enableds/disables tracking protection.")
         static let trackingProtectionMoreSettings = NSLocalizedString("trackingProtection.moreSettings", value: "More Settings", comment: "Text for the button that closes the Shield Data and opens the regular Settings screen.")
         static let trackersHeader = NSLocalizedString("trackingProtection.trackersHeader", value: "Trackers and scripts to block", comment: "Text for the header of trackers section from Tracking Protection.")
         static let trackingProtectionOn = NSLocalizedString("trackingProtection.statusOn", value: "Protections are ON for this session", comment: "Text for the status on from Tracking Protection.")
