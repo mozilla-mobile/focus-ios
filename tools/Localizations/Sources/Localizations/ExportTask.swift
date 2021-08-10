@@ -21,7 +21,7 @@ struct ExportTask {
     ]
     
     private let EXCLUDED_FILES: Set<String> = [
-        "Blockzilla/en.lproj/Intents.strings"
+        //"Blockzilla/en.lproj/Intents.strings"
     ]
     
     private let EXCLUDED_TRANSLATIONS: Set<String> = [
