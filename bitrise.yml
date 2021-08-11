@@ -13,6 +13,8 @@ trigger_map:
   workflow: runParallelTests
 - tag: "*"
   workflow: release
+- push_branch: refresh
+  workflow: refresh_release
 
 
 workflows:
@@ -104,6 +106,39 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
+        machine_type_id: g2.8core
+    before_run:
+      - clone-and-build-dependencies
+      - set-project-version
+      - set-default-browser-entitlement
+
+
+  refresh_release:
+    steps:
+    - certificate-and-profile-installer@1: {}
+    - xcode-archive@2:
+        inputs:
+        - scheme: Focus
+        - team_id: 43AQ936H96
+        - export_method: app-store
+        title: Build Focus
+    - deploy-to-itunesconnect-application-loader@0:
+        inputs:
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+    - xcode-archive@2:
+        inputs:
+        - scheme: Klar
+        - export_method: app-store
+        title: Build Klar
+    - deploy-to-itunesconnect-application-loader@0:
+        inputs:
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.5.x
+        machine_type_id: g2.8core
     before_run:
       - clone-and-build-dependencies
       - set-project-version
@@ -129,14 +164,10 @@ workflows:
         inputs:
         - access_token: "$FOCUS_PARALLEL"
     - deploy-to-bitrise-io@1: {}
-    - slack@3:
-        run_if: ".IsBuildFailed"
-        inputs:
-        - channel: "#focus-ios-alerts"
-        - webhook_url: "$SLACK_WEBHOOK"
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
+        machine_type_id: standard
 
 
   runFocus:
@@ -148,6 +179,35 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            # Check if the build goes to refresh branch then
+            # check if it is a scheduled or regular build
+            # to select the testPlan to run
+
+            if [[ $BITRISEIO_GIT_BRANCH_DEST == refresh ]] || [[ $BITRISE_GIT_BRANCH == refresh ]]
+            then
+                echo "PR for refresh branch"
+                envman add --key TEST_PLAN_NAME --value SmokeTestRefresh
+            else
+                if [[ $BITRISE_GIT_MESSAGE == Schedule* ]]
+                then
+                    echo "Scheduled build, running Full Functional Tests"
+                    envman add --key TEST_PLAN_NAME --value FullFunctionalTests
+                else
+                    echo "Regular build, running Smoke Test"
+                    envman add --key TEST_PLAN_NAME --value SmokeTest
+                fi
+            fi
+
+        - title: Check if build is scheduled or regular to set the test plan
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
             ./checkout.sh
         title: ContentBlockerGen
     - script@1:
@@ -166,16 +226,95 @@ workflows:
     - xcode-test@2:
         inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-            CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan SmokeTest
+            CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan $TEST_PLAN_NAME
         - scheme: Focus
     - deploy-to-bitrise-io@1: {}
+    - slack@3:
+        run_if: ".IsBuildFailed"
+        inputs:
+        - channel: "#focus-ios-alerts"
+        - message: "The build run the testPlan: $TEST_PLAN_NAME"
+        - messageOnError: "The build run the testPlan: $TEST_PLAN_NAME"
+        - webhook_url: "$SLACK_WEBHOOK"
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
-
+        machine_type_id: g2.8core
 
   runKlar:
     steps:
+    - git-clone@4: {}
+    - cache-pull@2: {}
+    - certificate-and-profile-installer@1: {}
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            # Check if the build goes to refresh branch then
+            # check if it is a scheduled or regular build
+            # to select the testPlan to run
+
+            if [[ $BITRISEIO_GIT_BRANCH_DEST == refresh ]]
+            then
+                echo "PR for refresh branch"
+                envman add --key TEST_PLAN_NAME --value SmokeTestRefresh
+            else
+                if [[ $BITRISE_GIT_MESSAGE == Schedule* ]]
+                then
+                    echo "Scheduled build, running Full Functional Tests"
+                    envman add --key TEST_PLAN_NAME --value FullFunctionalTests
+                else
+                    echo "Regular build, running Smoke Test"
+                    envman add --key TEST_PLAN_NAME --value SmokeTest
+                fi
+            fi
+        - title: Check if build is scheduled or regular to set the test plan
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            ./checkout.sh
+        title: ContentBlockerGen
+    - script@1:
+        title: Set Default Web Browser Entitlement
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Focus.entitlements
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
+    - xcode-build-for-simulator@0:
+        inputs:
+        - configuration: FocusDebug
+        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+        - scheme: Klar
+    - xcode-test@2:
+        inputs:
+        - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+            CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan "$TEST_PLAN_NAME"
+        - scheme: Klar
+    - deploy-to-bitrise-io@1: {}
+    - slack@3:
+        run_if: ".IsBuildFailed"
+        inputs:
+        - channel: "#focus-ios-alerts"
+        - message: "The build run the testPlan: $TEST_PLAN_NAME"
+        - messageOnError: "The build run the testPlan: $TEST_PLAN_NAME"
+        - webhook_url: "$SLACK_WEBHOOK"
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.5.x
+        machine_type_id: g2.8core
+
+  runFocus-iPad:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@4: {}
     - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
@@ -197,17 +336,140 @@ workflows:
         inputs:
         - configuration: FocusDebug
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
-        - scheme: Klar
+        - scheme: Focus
+    - xcode-test@2:
+        inputs:
+        - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+            CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan FullFunctionalTests
+        - scheme: Focus
+        - simulator_device: iPad Air (4th generation)
     - xcode-test@2:
         inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan SmokeTest
-        - scheme: Klar
+        - scheme: Focus
+        - simulator_device: iPad Air (4th generation)
     - deploy-to-bitrise-io@1: {}
+    - slack@3:
+        run_if: ".IsBuildFailed"
+        inputs:
+        - channel: "#focus-ios-alerts"
+        - message: "The build run the Full and Smoke tests for iPad"
+        - messageOnError: "The build run the Full and Smoke tests iPad"
+        - webhook_url: "$SLACK_WEBHOOK"
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
+        machine_type_id: g2.8core
 
+  L10nScreenshotsTests:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@4: {}
+    - cache-pull@2: {}
+    - certificate-and-profile-installer@1: {}
+    - script@1:
+        title: Set Default Web Browser Entitlement
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Focus.entitlements
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
+    - script@1:
+        inputs:
+        - content: >-
+            #!/usr/bin/env bash
+
+            # fail if any commands fails
+
+            set -e
+
+            # debug log
+
+            set -x
+
+            echo "curl to Download derived data"
+
+            curl --location --retry 5 --output l10n-screenshots-dd.zip "$MOZ_DERIVED_DATA_PATH"
+
+            mkdir l10n-screenshots-dd
+
+            unzip l10n-screenshots-dd.zip -d l10n-screenshots-dd
+
+            rm l10n-screenshots-dd.zip
+        title: Download derived data path
+    - script@1:
+        title: Generate screenshots
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+            # workaround until 2.187 version is installed. Error with 2.186
+            fastlane update_fastlane
+
+            ./l10n-screenshots.sh --test-without-building $MOZ_LOCALES
+            mkdir -p artifacts
+
+            for locale in $(echo $MOZ_LOCALES); do
+              # Only Focus for now
+              zip -9 -j "$locale.zip" "l10n-screenshots/$locale/$locale/"*
+              mv "$locale.zip" artifacts/
+            done
+    - deploy-to-bitrise-io@1.10:
+        inputs:
+        - deploy_path: artifacts/
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.5.x
+        machine_type_id: standard
+  L10nBuild:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@4: {}
+    - cache-pull@2: {}
+    - certificate-and-profile-installer@1: {}
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            ./checkout.sh
+        title: ContentBlockerGen
+    - script@1:
+        title: Set Default Web Browser Entitlement
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Focus.entitlements
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
+    - script@1:
+        title: Generate screenshots
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            # workaround until 2.187 version is installed. Error with 2.186
+            fastlane update_fastlane
+            ./l10n-screenshots.sh en-US
+    - deploy-to-bitrise-io@1.10:
+        inputs:
+        - deploy_path: l10n-screenshots-dd/
+        - is_compress: 'true'
+    - deploy-to-bitrise-io@1.10:
+        inputs:
+        - deploy_path: l10n-screenshots/en-US/en-US
+        - is_compress: 'true'
+    - cache-push@2.3: {}
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.5.x
+        machine_type_id: g2.4core
 
 app:
   envs:

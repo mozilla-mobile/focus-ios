@@ -6,7 +6,8 @@ import XCTest
 
 class PastenGoTest: BaseTestCase {
     // Test the clipboard contents are displayed/updated properly
-    func testClipboard() {
+    func testClipboard() throws {
+        throw XCTSkip("This test needs to be updated or removed: Select menu not shown")
         let app = XCUIApplication()
 
         // Inject a string into clipboard
@@ -18,26 +19,27 @@ class PastenGoTest: BaseTestCase {
         searchOrEnterAddressTextField.typeText("mozilla")
 
         // Check clipboard suggestion is shown
-        waitForValueMatch(element: searchOrEnterAddressTextField, value: "mozilla.org/")
-        waitforExistence(element: app.buttons["Search for mozilla"])
-        waitforExistence(element: app.buttons["Search for " + clipboardString])
+        waitForValueContains(searchOrEnterAddressTextField, value: "mozilla.org/")
+        waitForExistence(app.buttons["Search for mozilla"])
         app.typeText("\n")
 
         // Check the correct site is reached
-        waitForValueContains(element: searchOrEnterAddressTextField, value: "https://www.mozilla.org/en-US/")
+        waitForValueContains(searchOrEnterAddressTextField, value: "www.mozilla")
 
         // Tap URL field, check for paste & go menu
         searchOrEnterAddressTextField.tap()
+        sleep(1)
+        searchOrEnterAddressTextField.tap()
         searchOrEnterAddressTextField.press(forDuration: 1.5)
 
-        waitforExistence(element: app.menuItems["Select"])
+        waitForExistence(app.menuItems["Select"])
         XCTAssertTrue(app.menuItems["Select All"].isEnabled)
         XCTAssertTrue(app.menuItems["Paste"].isEnabled)
         XCTAssertTrue(app.menuItems["Paste & Go"].isEnabled)
 
         // Copy URL into clipboard
         app.menuItems["Select All"].tap()
-        waitforExistence(element: app.menuItems["Cut"])
+        waitForExistence(app.menuItems["Cut"])
         XCTAssertTrue(app.menuItems["Copy"].isEnabled)
         XCTAssertTrue(app.menuItems["Paste"].isEnabled)
         XCTAssertTrue(app.menuItems["Look Up"].isEnabled)
@@ -46,7 +48,7 @@ class PastenGoTest: BaseTestCase {
         // Clear and start typing on the URL field again, verify the clipboard suggestion changes
         // If it's a URL, do not prefix "Search For"app.buttons["icon clear"].tap()
         searchOrEnterAddressTextField.typeText("mozilla")
-        waitforExistence(element: app.buttons["Search for mozilla"])
+        waitForExistence(app.buttons["Search for mozilla"])
         XCTAssertTrue(app.buttons[UIPasteboard.general.string!].isEnabled)
     }
 
@@ -60,21 +62,22 @@ class PastenGoTest: BaseTestCase {
         // Tap url bar to show context menu
         let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
         searchOrEnterAddressTextField.tap()
-        waitforExistence(element: app.menuItems["Paste"])
+        waitForExistence(app.menuItems["Paste"], timeout: 3)
         XCTAssertTrue(app.menuItems["Paste & Go"].isEnabled)
 
         // Select paste and go, and verify it goes to the correct place
         app.menuItems["Paste & Go"].tap()
 
         // Check the correct site is reached
-        waitForValueContains(element: searchOrEnterAddressTextField, value: "www.mozilla.org")
+        waitForValueContains(searchOrEnterAddressTextField, value: "www.mozilla.org")
         app.buttons["URLBar.deleteButton"].tap()
-        waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
+        waitForExistence(app.staticTexts["Your browsing history has been erased."])
 
         clipboard = "1(*&)(*%@@$^%^12345)"
         UIPasteboard.general.string = clipboard
         searchOrEnterAddressTextField.tap()
+        waitForExistence(app.menuItems["Paste"], timeout: 5)
         app.menuItems["Paste"].tap()
-        waitforExistence(element: app.buttons["Search for " + clipboard])
+        waitForExistence(app.buttons["Search for " + clipboard], timeout: 5)
     }
 }

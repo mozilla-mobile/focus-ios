@@ -52,7 +52,9 @@ class CustomCompletionSource: CustomAutocompleteSource {
         }
 
         var domains = getSuggestions()
-        guard !domains.contains(sanitizedSuggestion) else { return .error(.duplicateDomain) }
+        guard !domains.contains(where: { domain in
+            domain.compare(sanitizedSuggestion, options: .caseInsensitive) == .orderedSame
+        }) else { return .error(.duplicateDomain) }
 
         domains.append(sanitizedSuggestion)
         Settings.setCustomDomainSetting(domains: domains)
@@ -130,6 +132,9 @@ class DomainCompletion: AutocompleteTextFieldCompletionSource {
             let matchedDomain = domainWithDotPrefix[range...]
 
             if matchedDomain.contains(".") {
+                if matchedDomain.contains("/") {
+                    return String(matchedDomain)
+                }
                 return matchedDomain + "/"
             }
         }

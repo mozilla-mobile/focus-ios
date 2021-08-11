@@ -565,6 +565,11 @@ class URLBar: UIView {
         urlText.text = text
     }
 
+    func fillUrlBarWithString(text: String) {
+        urlText.text = text
+        delegate?.urlBar(self, didEnterText: text)
+    }
+
     private func updateLockIcon() {
         let visible = !isEditing && (url?.scheme == "https")
         let duration = UIConstants.layout.urlBarTransitionAnimationDuration / 2
@@ -862,6 +867,10 @@ extension URLBar: AutocompleteTextFieldDelegate {
 
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didTextChange text: String) {
         userInputText = text
+        
+        if !text.isEmpty {
+            displayClearButton(shouldDisplay: true, animated: true)
+        }
 
         autocompleteTextField.rightView?.isHidden = text.isEmpty
 

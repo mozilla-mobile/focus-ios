@@ -284,6 +284,19 @@ class BrowserViewController: UIViewController {
     public func deactivateUrlBarOnHomeView() {
         urlBar.dismissTextField()
     }
+    
+    public func dismissSettings() {
+        if self.presentedViewController?.children.first is SettingsViewController {
+            self.presentedViewController?.children.first?.dismiss(animated: true, completion: nil)
+        }
+    }
+    
+    public func dismissActionSheet() {
+        if self.presentedViewController is PhotonActionSheet {
+            self.presentedViewController?.dismiss(animated: true, completion: nil)
+            photonActionSheetDidDismiss()
+        }
+    }
 
     private func containWebView() {
         addChild(webViewController)
@@ -579,8 +592,10 @@ class BrowserViewController: UIViewController {
     }
 
     func openOverylay(text: String) {
+        ensureBrowsingMode()
+        showToolbars()
         urlBar.activateTextField()
-        urlBar.fillUrlBar(text: text)
+        urlBar.fillUrlBarWithString(text: text)
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -1428,3 +1443,12 @@ protocol WhatsNewDelegate {
     func shouldShowWhatsNew() -> Bool
     func didShowWhatsNew()
 }
+
+extension WhatsNewDelegate {
+    //Temporarily disable what's new button
+    
+    var shouldEnableWhatsNewButton: Bool {
+        return false
+    }
+}
+

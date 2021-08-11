@@ -183,7 +183,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             if application.applicationState == .active {
                 // If we are active then we can ask the BVC to open the new tab right away.
                 // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
-                browserViewController.openOverylay(text: text)
+                if let fixedUrl = URIFixup.getURL(entry: text) {
+                    browserViewController.submit(url: fixedUrl)
+                } else {
+                    browserViewController.openOverylay(text: text)
+                }
             } else {
                 queuedString = text
             }
@@ -286,12 +290,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
             browserViewController.ensureBrowsingMode()
             browserViewController.deactivateUrlBarOnHomeView()
+            browserViewController.dismissSettings()
+            browserViewController.dismissActionSheet()
             browserViewController.submit(url: url)
             queuedUrl = nil
         } else if let text = queuedString {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openedFromExtension, object: TelemetryEventObject.app)
 
-            browserViewController.openOverylay(text: text)
+            if let fixedUrl = URIFixup.getURL(entry: text) {
+                browserViewController.submit(url: fixedUrl)
+            } else {
+                browserViewController.openOverylay(text: text)
+            }
             queuedString = nil
         }
 
@@ -323,6 +333,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
                 let url = URL(string: urlString) else { return false }
             browserViewController.resetBrowser(hidePreviousSession: true)
             browserViewController.ensureBrowsingMode()
+            browserViewController.deactivateUrlBarOnHomeView()
             browserViewController.submit(url: url)
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.siri, object: TelemetryEventObject.openFavoriteSite)
         case "EraseIntent":

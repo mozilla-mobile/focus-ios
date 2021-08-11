@@ -24,7 +24,8 @@ class SearchProviderTest: BaseTestCase {
     func searchProviderTestHelper(provider:String) {
         changeSearchProvider(provider: provider)
         doSearch(searchWord: "mozilla", provider: provider)
-        waitforEnable(element: app.buttons["URLBar.deleteButton"])
+        waitForWebPageLoad()
+
         app.buttons["URLBar.deleteButton"].tap()
         checkForHomeScreen()
 	}
@@ -40,19 +41,19 @@ class SearchProviderTest: BaseTestCase {
         app.navigationBars.buttons["save"].tap()
 
         let toast = app.staticTexts["Toast.label"]
-        waitforNoExistence(element: toast)
+        waitForNoExistence(toast)
 
-        waitforExistence(element: app.tables.cells["MDN"])
+        waitForExistence(app.tables.cells["MDN"])
         app.tables.cells["Wikipedia"].tap()
 
-        waitforExistence(element: app.tables.cells["SettingsViewController.searchCell"])
+        waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
         app.tables.cells["SettingsViewController.searchCell"].tap()
 
         // enter edit mode
         app.navigationBars.buttons["edit"].tap()
-        waitforExistence(element: app.tables.cells["MDN"].buttons["Delete MDN"])
+        waitForExistence(app.tables.cells["MDN"].buttons["Delete MDN"])
         app.tables.cells["MDN"].buttons["Delete MDN"].tap()
-        waitforExistence(element: app.tables.cells["MDN"].buttons["Delete"])
+        waitForExistence(app.tables.cells["MDN"].buttons["Delete"])
         app.tables.cells["MDN"].buttons["Delete"].tap()
 
         // leave edit mode
@@ -74,10 +75,10 @@ class SearchProviderTest: BaseTestCase {
     }
 
 	private func changeSearchProvider(provider: String) {
-
 		app.buttons["Settings"].tap()
+        waitForExistence(app.tables.cells["SettingsViewController.searchCell"], timeout: 5)
 		app.tables.cells["SettingsViewController.searchCell"].tap()
-
+        waitForExistence(app.tables.staticTexts[provider], timeout: 5)
 		app.tables.staticTexts[provider].tap()
 		app.navigationBars.buttons.element(boundBy: 0).tap()
 
@@ -89,7 +90,7 @@ class SearchProviderTest: BaseTestCase {
         let cancelButton = app.buttons["URLBar.cancelButton"]
 		urlbarUrltextTextField.tap()
 		urlbarUrltextTextField.typeText(searchWord)
-		waitforExistence(element: app.buttons[searchForText])
+		waitForExistence(app.buttons[searchForText])
 		app.buttons[searchForText].tap()
         waitForWebPageLoad()
 
@@ -97,21 +98,23 @@ class SearchProviderTest: BaseTestCase {
 		// Check the correct site is reached
 		switch provider {
 			case "Google":
-                waitForValueContains(element: urlbarUrltextTextField, value: "google.com")
+                waitForValueContains(urlbarUrltextTextField, value: "google.com")
                 if app.webViews.textFields["Search"].exists {
-                    waitForValueContains(element: app.webViews.textFields["Search"], value: searchWord)
+                    waitForValueContains(app.webViews.textFields["Search"], value: searchWord)
                 } else if app.webViews.otherElements["Search"].exists {
-                    waitForValueContains(element: app.webViews.otherElements["Search"], value: searchWord)
+                    waitForValueContains(app.webViews.otherElements["Search"], value: searchWord)
                 }
            case "DuckDuckGo":
-				waitForValueContains(element: urlbarUrltextTextField, value: "duckduckgo.com")
-				waitforExistence(element: app.otherElements["mozilla at DuckDuckGo"])
+				waitForValueContains(urlbarUrltextTextField, value: "duckduckgo.com")
+				waitForExistence(app.otherElements["mozilla at DuckDuckGo"])
 			case "Wikipedia":
-				waitForValueContains(element: urlbarUrltextTextField, value: "wikipedia.org")
+				waitForValueContains(urlbarUrltextTextField, value: "wikipedia.org")
             case "Amazon.com":
-				waitForValueContains(element: urlbarUrltextTextField, value: "amazon.com")
-                waitForValueContains(element: app.webViews.textFields["Type search keywords"],
+				waitForValueContains(urlbarUrltextTextField, value: "amazon.com")
+                if !iPad() {
+                waitForValueContains(app.webViews.textFields["Search Amazon"],
                     value: searchWord)
+                }
 
 			default:
 				XCTFail("Invalid Search Provider")
