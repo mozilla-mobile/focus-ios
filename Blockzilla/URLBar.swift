@@ -84,9 +84,8 @@ class URLBar: UIView {
     }
     private var centeredURLConstraints = [Constraint]()
     private var fullWidthURLConstraints = [Constraint]()
-    var editingURLTextConstraints = [Constraint]()
-    var pageActionForIpadConstraints = [Constraint]()
-    
+    var editingURLTextConstrains = [Constraint]()
+    var pageURLTextConstrains = [Constraint]()
     var isIPadRegularDimensions = false {
         didSet {
             updateViews()
@@ -434,10 +433,10 @@ class URLBar: UIView {
         
         pageActionsButton.snp.makeConstraints { make in
             if !isIPadRegularDimensions {
-                pageActionForIpadConstraints.append(make.trailing.equalTo(textAndLockContainer).constraint)
-                pageActionForIpadConstraints.forEach{$0.activate()}
+                pageURLTextConstrains.append(make.trailing.equalTo(textAndLockContainer).constraint)
+                pageURLTextConstrains.forEach{$0.activate()}
             } else {
-                pageActionForIpadConstraints.forEach{$0.deactivate()}
+                pageURLTextConstrains.forEach{$0.deactivate()}
             }
         }
         
@@ -658,7 +657,7 @@ class URLBar: UIView {
             borderColor = .foundation
             backgroundColor = .foundation
 
-            editingURLTextConstraints.forEach{$0.deactivate()}
+            editingURLTextConstrains.forEach{$0.deactivate()}
             urlText.snp.makeConstraints{make in
                 make.leading.equalTo(shieldIcon.snp.trailing).offset(UIConstants.layout.urlTextOffset)
             }
@@ -670,9 +669,9 @@ class URLBar: UIView {
             
             if isIPadRegularDimensions && inBrowsingMode {
                 leftBarViewLayoutGuide.snp.makeConstraints{make in
-                    editingURLTextConstraints.append(make.leading.equalTo(urlText).offset(-UIConstants.layout.urlTextOffset).constraint)
+                    editingURLTextConstrains.append(make.leading.equalTo(urlText).offset(-UIConstants.layout.urlTextOffset).constraint)
                 }
-                editingURLTextConstraints.forEach{$0.activate()}
+                editingURLTextConstrains.forEach{$0.activate()}
                 toolset.stopReloadButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
                 
             }
