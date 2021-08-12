@@ -24,7 +24,7 @@ workflows:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6: {}
+    - git-clone@4: {}
     - certificate-and-profile-installer@1: {}
     - script@1:
         inputs:
@@ -84,25 +84,23 @@ workflows:
   release:
     steps:
     - certificate-and-profile-installer@1: {}
-    - xcode-archive@3:
+    - xcode-archive@2:
         inputs:
         - scheme: Focus
         - team_id: 43AQ936H96
         - export_method: app-store
         title: Build Focus
-    - deploy-to-itunesconnect-application-loader@1:
+    - deploy-to-itunesconnect-application-loader@0:
         inputs:
-        - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"
         - itunescon_user: "$APPLE_ACCOUNT_ID"
-    - xcode-archive@3:
+    - xcode-archive@2:
         inputs:
         - scheme: Klar
         - export_method: app-store
         title: Build Klar
-    - deploy-to-itunesconnect-application-loader@1:
+    - deploy-to-itunesconnect-application-loader@0:
         inputs:
-        - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"
         - itunescon_user: "$APPLE_ACCOUNT_ID"
     meta:
@@ -118,25 +116,23 @@ workflows:
   refresh_release:
     steps:
     - certificate-and-profile-installer@1: {}
-    - xcode-archive@3:
+    - xcode-archive@2:
         inputs:
         - scheme: Focus
         - team_id: 43AQ936H96
         - export_method: app-store
-        title: "Build Focus (Refresh)"
-    - deploy-to-itunesconnect-application-loader@1:
+        title: Build Focus
+    - deploy-to-itunesconnect-application-loader@0:
         inputs:
-        - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"
         - itunescon_user: "$APPLE_ACCOUNT_ID"
-    - xcode-archive@3:
+    - xcode-archive@2:
         inputs:
         - scheme: Klar
         - export_method: app-store
-        title: "Build Klar (Refresh)"
-    - deploy-to-itunesconnect-application-loader@1:
+        title: Build Klar
+    - deploy-to-itunesconnect-application-loader@0:
         inputs:
-        - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"
         - itunescon_user: "$APPLE_ACCOUNT_ID"
     meta:
@@ -168,6 +164,11 @@ workflows:
         inputs:
         - access_token: "$FOCUS_PARALLEL"
     - deploy-to-bitrise-io@1: {}
+    - slack@3:
+        run_if: ".IsBuildFailed"
+        inputs:
+        - channel: "#focus-ios-alerts"
+        - webhook_url: "$SLACK_WEBHOOK"
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
@@ -176,7 +177,7 @@ workflows:
 
   runFocus:
     steps:
-    - git-clone@6: {}
+    - git-clone@4: {}
     - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
     - script@1:
@@ -188,25 +189,16 @@ workflows:
             # debug log
             set -x
 
-            # Check if the build goes to refresh branch then
-            # check if it is a scheduled or regular build
-            # to select the testPlan to run
+            # Check if the build is a scheduled build
 
-            if [[ $BITRISEIO_GIT_BRANCH_DEST == refresh ]] || [[ $BITRISE_GIT_BRANCH == refresh ]]
+            if [[ $BITRISE_GIT_MESSAGE == Schedule* ]]
             then
-                echo "PR for refresh branch"
-                envman add --key TEST_PLAN_NAME --value SmokeTestRefresh
+                echo "Scheduled build, running Full Functional Tests"
+                envman add --key TEST_PLAN_NAME --value FullFunctionalTests
             else
-                if [[ $BITRISE_GIT_MESSAGE == Schedule* ]]
-                then
-                    echo "Scheduled build, running Full Functional Tests"
-                    envman add --key TEST_PLAN_NAME --value FullFunctionalTests
-                else
-                    echo "Regular build, running Smoke Test"
-                    envman add --key TEST_PLAN_NAME --value SmokeTest
-                fi
+                echo "Regular build, running Smoke Test"
+                envman add --key TEST_PLAN_NAME --value SmokeTest
             fi
-
         - title: Check if build is scheduled or regular to set the test plan
     - script@1:
         inputs:
@@ -233,12 +225,6 @@ workflows:
             CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan $TEST_PLAN_NAME
         - scheme: Focus
     - deploy-to-bitrise-io@1: {}
-    - slack@3:
-        run_if: ".IsBuildFailed"
-        inputs:
-        - channel: "#focus-ios-alerts"
-        - message: "The build run the testPlan: $TEST_PLAN_NAME"
-        - webhook_url: "$SLACK_WEBHOOK"
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
@@ -246,7 +232,7 @@ workflows:
 
   runKlar:
     steps:
-    - git-clone@6: {}
+    - git-clone@4: {}
     - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
     - script@1:
@@ -258,23 +244,15 @@ workflows:
             # debug log
             set -x
 
-            # Check if the build goes to refresh branch then
-            # check if it is a scheduled or regular build
-            # to select the testPlan to run
+            # Check if the build is a scheduled build
 
-            if [[ $BITRISEIO_GIT_BRANCH_DEST == refresh ]]
+            if [[ $BITRISE_GIT_MESSAGE == Schedule* ]]
             then
-                echo "PR for refresh branch"
-                envman add --key TEST_PLAN_NAME --value SmokeTestRefresh
+                echo "Scheduled build, running Full Functional Tests"
+                envman add --key TEST_PLAN_NAME --value FullFunctionalTests
             else
-                if [[ $BITRISE_GIT_MESSAGE == Schedule* ]]
-                then
-                    echo "Scheduled build, running Full Functional Tests"
-                    envman add --key TEST_PLAN_NAME --value FullFunctionalTests
-                else
-                    echo "Regular build, running Smoke Test"
-                    envman add --key TEST_PLAN_NAME --value SmokeTest
-                fi
+                echo "Regular build, running Smoke Test"
+                envman add --key TEST_PLAN_NAME --value SmokeTest
             fi
         - title: Check if build is scheduled or regular to set the test plan
     - script@1:
@@ -302,12 +280,6 @@ workflows:
             CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan "$TEST_PLAN_NAME"
         - scheme: Klar
     - deploy-to-bitrise-io@1: {}
-    - slack@3:
-        run_if: ".IsBuildFailed"
-        inputs:
-        - channel: "#focus-ios-alerts"
-        - message: "The build run the testPlan: $TEST_PLAN_NAME"
-        - webhook_url: "$SLACK_WEBHOOK"
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
@@ -317,7 +289,7 @@ workflows:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6: {}
+    - git-clone@4: {}
     - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
     - script@1:
