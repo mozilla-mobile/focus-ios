@@ -84,8 +84,16 @@ class URLBar: UIView {
     }
     private var centeredURLConstraints = [Constraint]()
     private var fullWidthURLConstraints = [Constraint]()
-    var editingURLTextConstrains = [Constraint]()
-
+    var editingURLTextConstraints = [Constraint]()
+    var pageActionForIpadConstraints = [Constraint]()
+    
+    var isIPadRegularDimensions = false {
+        didSet {
+            updateViews()
+            updateURLBarLayoutAfterSplitView()
+        }
+    }
+    
     var hidePageActions = true {
         didSet {
             guard oldValue != hidePageActions else { return }
@@ -98,6 +106,7 @@ class URLBar: UIView {
     private var showToolset = false {
         didSet {
             guard oldValue != showToolset else { return }
+            isIPadRegularDimensions = showToolset
             activateConstraints(showToolset, shownConstraints: showToolsetConstraints, hiddenConstraints: hideToolsetConstraints)
         }
     }
@@ -128,7 +137,7 @@ class URLBar: UIView {
 
     convenience init() {
         self.init(frame: CGRect.zero)
-
+        isIPadRegularDimensions = traitCollection.horizontalSizeClass == .regular && traitCollection.verticalSizeClass == .regular
         let singleTap = UITapGestureRecognizer(target: self, action: #selector(didSingleTap(sender:)))
         singleTap.numberOfTapsRequired = 1
         textAndLockContainer.addGestureRecognizer(singleTap)
@@ -144,7 +153,7 @@ class URLBar: UIView {
         addSubview(toolset.deleteButton)
         addSubview(toolset.settingsButton)
         
-        if UIDevice.current.userInterfaceIdiom != .pad {
+        if !isIPadRegularDimensions {
             addSubview(toolset.stopReloadButton)
         }
 
@@ -258,7 +267,7 @@ class URLBar: UIView {
             make.width.equalTo(UIConstants.layout.urlBarButtonTargetSize).priority(900)
 
             hideToolsetConstraints.append(make.leading.equalTo(safeAreaLayoutGuide).offset(UIConstants.layout.urlBarMargin).constraint)
-            showToolsetConstraints.append(make.leading.equalTo(UIDevice.current.userInterfaceIdiom == .pad ? toolset.forwardButton.snp.trailing : toolset.stopReloadButton.snp.trailing).offset(UIConstants.layout.urlBarToolsetOffset).constraint)
+            showToolsetConstraints.append(make.leading.equalTo(isIPadRegularDimensions ? toolset.forwardButton.snp.trailing : toolset.stopReloadButton.snp.trailing).offset(UIConstants.layout.urlBarToolsetOffset).constraint)
         }
 
         addLayoutGuide(rightBarViewLayoutGuide)
@@ -267,7 +276,7 @@ class URLBar: UIView {
             make.height.equalTo(UIConstants.layout.urlBarButtonTargetSize)
 
             hideToolsetConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide.snp.trailing).inset(UIConstants.layout.urlBarMargin).constraint)
-            if  UIDevice.current.userInterfaceIdiom == .pad {
+            if  isIPadRegularDimensions {
                 showToolsetConstraints.append(make.trailing.equalTo(toolset.settingsButton.snp.leading).offset(-UIConstants.layout.urlBarIPadToolsetOffset).constraint)
             } else {
                 showToolsetConstraints.append(make.trailing.greaterThanOrEqualTo(toolset.settingsButton.snp.leading).offset(-UIConstants.layout.urlBarToolsetOffset).constraint)
@@ -293,12 +302,12 @@ class URLBar: UIView {
         }
         
         toolset.deleteButton.snp.makeConstraints { make in
-            make.trailing.equalTo(toolset.settingsButton.snp.leading).offset(UIDevice.current.userInterfaceIdiom == .pad ? UIConstants.layout.deleteButtonOffset : 0)
+            make.trailing.equalTo(toolset.settingsButton.snp.leading).offset(isIPadRegularDimensions ? UIConstants.layout.deleteButtonOffset : 0)
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
         }
 
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        if isIPadRegularDimensions {
             textAndLockContainer.addSubview(toolset.stopReloadButton)
             toolset.stopReloadButton.snp.makeConstraints { make in
                 make.top.bottom.equalToSuperview()
@@ -333,12 +342,7 @@ class URLBar: UIView {
             make.edges.equalToSuperview().inset(UIConstants.layout.urlBarBorderInset)
         }
 
-        shieldIcon.snp.makeConstraints { (make) in
-            make.top.bottom.equalToSuperview()
-            make.leading.equalTo(leftBarViewLayoutGuide).inset(UIDevice.current.userInterfaceIdiom == .pad ? UIConstants.layout.shieldIconIPadInset : UIConstants.layout.shieldIconInset)
-            make.width.equalTo(UIConstants.layout.shieldIconSize)
-            
-        }
+        addShieldConstraints()
 
         cancelButton.snp.makeConstraints { make in
             make.top.bottom.leading.trailing.equalTo(leftBarViewLayoutGuide)
@@ -358,7 +362,7 @@ class URLBar: UIView {
 
         pageActionsButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            if UIDevice.current.userInterfaceIdiom == .pad {
+            if isIPadRegularDimensions {
                 make.trailing.equalTo(toolset.stopReloadButton.snp_leadingMargin).offset(UIConstants.layout.reloadButtonIPadOffset)
             } else {
                 make.trailing.equalTo(textAndLockContainer).priority(.required)
@@ -413,6 +417,40 @@ class URLBar: UIView {
         showToolsetConstraints.forEach { $0.deactivate() }
         expandedBarConstraints.forEach { $0.activate() }
         updateToolsetConstraints()
+    }
+    
+    private func addShieldConstraints() {
+        shieldIcon.snp.makeConstraints { (make) in
+            make.top.bottom.equalToSuperview()
+            make.leading.equalTo(leftBarViewLayoutGuide).inset(isIPadRegularDimensions ? UIConstants.layout.shieldIconIPadInset : UIConstants.layout.shieldIconInset)
+            make.width.equalTo(UIConstants.layout.shieldIconSize)
+        }
+    }
+    
+    private func updateURLBarLayoutAfterSplitView() {
+        
+        shieldIcon.snp.removeConstraints()
+        addShieldConstraints()
+        
+        pageActionsButton.snp.makeConstraints { make in
+            if !isIPadRegularDimensions {
+                pageActionForIpadConstraints.append(make.trailing.equalTo(textAndLockContainer).constraint)
+                pageActionForIpadConstraints.forEach{$0.activate()}
+            } else {
+                pageActionForIpadConstraints.forEach{$0.deactivate()}
+            }
+        }
+        
+        leftBarViewLayoutGuide.snp.makeConstraints { (make) in
+            make.leading.equalTo(isIPadRegularDimensions ? toolset.forwardButton.snp.trailing : toolset.stopReloadButton.snp.trailing).offset(UIConstants.layout.urlBarToolsetOffset)
+        }
+        rightBarViewLayoutGuide.snp.makeConstraints { (make) in
+            if  isIPadRegularDimensions {
+                make.trailing.equalTo(toolset.settingsButton.snp.leading).offset(-UIConstants.layout.urlBarIPadToolsetOffset)
+            } else {
+                make.trailing.greaterThanOrEqualTo(toolset.settingsButton.snp.leading).offset(-UIConstants.layout.urlBarToolsetOffset)
+            }
+        }
     }
 
     @objc public func activateTextField() {
@@ -619,29 +657,28 @@ class URLBar: UIView {
             setTextToURL()
             borderColor = .foundation
             backgroundColor = .foundation
-            
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                editingURLTextConstrains.forEach{$0.deactivate()}
-                urlText.snp.makeConstraints{make in
-                    make.leading.equalTo(shieldIcon.snp.trailing).offset(UIConstants.layout.urlTextOffset)
-                }
+
+            editingURLTextConstraints.forEach{$0.deactivate()}
+            urlText.snp.makeConstraints{make in
+                make.leading.equalTo(shieldIcon.snp.trailing).offset(UIConstants.layout.urlTextOffset)
             }
-            
+ 
         case .editing:
             showLeftBar = true
-            compressBar = UIDevice.current.userInterfaceIdiom == .pad ? false : true
+            compressBar = isIPadRegularDimensions ? false : true
             showBackgroundView = true
             
-            if UIDevice.current.userInterfaceIdiom == .pad && inBrowsingMode {
+            if isIPadRegularDimensions && inBrowsingMode {
                 leftBarViewLayoutGuide.snp.makeConstraints{make in
-                    editingURLTextConstrains.append(make.leading.equalTo(urlText).offset(-UIConstants.layout.urlTextOffset).constraint)
+                    editingURLTextConstraints.append(make.leading.equalTo(urlText).offset(-UIConstants.layout.urlTextOffset).constraint)
                 }
-                editingURLTextConstrains.forEach{$0.activate()}
+                editingURLTextConstraints.forEach{$0.activate()}
                 toolset.stopReloadButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+                
             }
             
             shieldIcon.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
-            cancelButton.animateHidden(UIDevice.current.userInterfaceIdiom == .pad ? true : false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+            cancelButton.animateHidden(isIPadRegularDimensions ? true : false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
             toolset.settingsButton.isEnabled = true
             borderColor = .foundation
             backgroundColor = .foundation
@@ -687,26 +724,30 @@ class URLBar: UIView {
     /// This method is intended to be called inside `UIView.animate` block.
     private func updateToolsetConstraints() {
         let isHidden: Bool
+        let reloadButtonIsHidden: Bool
 
         switch state {
         case .default:
             isHidden = true
             showToolset = false
             centerURLBar = false
+            reloadButtonIsHidden = isHidden
         case .browsing:
             isHidden = !shouldShowToolset
             showToolset = !isHidden
             centerURLBar = shouldShowToolset
+            reloadButtonIsHidden = isHidden
         case .editing:
-            let isiPadLayoutWhileBrowsing = UIDevice.current.userInterfaceIdiom == .pad && inBrowsingMode
+            let isiPadLayoutWhileBrowsing = isIPadRegularDimensions && inBrowsingMode
             isHidden =  isiPadLayoutWhileBrowsing ? !shouldShowToolset : true
             showToolset = isiPadLayoutWhileBrowsing ? !isHidden : false
             centerURLBar = false
+            reloadButtonIsHidden = true
         }
 
         toolset.backButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         toolset.forwardButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
-        toolset.stopReloadButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+        toolset.stopReloadButton.animateHidden(reloadButtonIsHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         toolset.deleteButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         toolset.settingsButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
 
