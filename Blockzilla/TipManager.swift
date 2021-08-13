@@ -104,7 +104,7 @@ class TipManager {
     }
 
     func shouldShowTips() -> Bool {
-        return NSLocale.current.identifier == "en_US" && !AppInfo.isKlar
+        return NSLocale.current.languageCode == "en" && !AppInfo.isKlar
     }
     
     func getNextTip() -> Tip? {
