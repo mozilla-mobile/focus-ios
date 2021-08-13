@@ -89,7 +89,9 @@ class SearchProviderTest: BaseTestCase {
         let cancelButton = app.buttons["URLBar.cancelButton"]
 		urlbarUrltextTextField.tap()
 		urlbarUrltextTextField.typeText(searchWord)
-		urlbarUrltextTextField.typeText("\n")
+        app.buttons["SearchSuggestionsPromptView.enableButton"].tap()
+        print(app.debugDescription)
+        app.buttons["OverlayView.searchButton"].tap()
         waitForWebPageLoad()
 
         urlbarUrltextTextField.tap()
