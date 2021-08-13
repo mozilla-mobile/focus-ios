@@ -84,23 +84,25 @@ workflows:
   release:
     steps:
     - certificate-and-profile-installer@1: {}
-    - xcode-archive@2:
+    - xcode-archive@3:
         inputs:
         - scheme: Focus
         - team_id: 43AQ936H96
         - export_method: app-store
         title: Build Focus
-    - deploy-to-itunesconnect-application-loader@0:
+    - deploy-to-itunesconnect-application-loader@1:
         inputs:
+        - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"
         - itunescon_user: "$APPLE_ACCOUNT_ID"
-    - xcode-archive@2:
+    - xcode-archive@3:
         inputs:
         - scheme: Klar
         - export_method: app-store
         title: Build Klar
-    - deploy-to-itunesconnect-application-loader@0:
+    - deploy-to-itunesconnect-application-loader@1:
         inputs:
+        - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"
         - itunescon_user: "$APPLE_ACCOUNT_ID"
     meta:
@@ -116,23 +118,25 @@ workflows:
   refresh_release:
     steps:
     - certificate-and-profile-installer@1: {}
-    - xcode-archive@2:
+    - xcode-archive@3:
         inputs:
         - scheme: Focus
         - team_id: 43AQ936H96
         - export_method: app-store
         title: Build Focus
-    - deploy-to-itunesconnect-application-loader@0:
+    - deploy-to-itunesconnect-application-loader@1:
         inputs:
+        - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"
         - itunescon_user: "$APPLE_ACCOUNT_ID"
-    - xcode-archive@2:
+    - xcode-archive@3:
         inputs:
         - scheme: Klar
         - export_method: app-store
         title: Build Klar
-    - deploy-to-itunesconnect-application-loader@0:
+    - deploy-to-itunesconnect-application-loader@1:
         inputs:
+        - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"
         - itunescon_user: "$APPLE_ACCOUNT_ID"
     meta:
