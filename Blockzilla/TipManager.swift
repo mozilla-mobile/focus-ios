@@ -71,7 +71,7 @@ class TipManager {
 
     lazy var siriEraseTip = Tip(title: UIConstants.strings.siriEraseTipTitle, description: UIConstants.strings.siriEraseTipDescription, identifier: TipKey.siriEraseTip, showVc: true)
 
-    /// Return a string representing the trackers tip. It will include the current number of trackers blocked, formatted as a decimal.    
+    /// Return a string representing the trackers tip. It will include the current number of trackers blocked, formatted as a decimal.
     func shareTrackersDescription() -> String {
         let numberOfTrackersBlocked = NSNumber(integerLiteral: UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey))
         let formatter = NumberFormatter()
