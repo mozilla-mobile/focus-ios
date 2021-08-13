@@ -498,6 +498,8 @@ struct UIConstants {
         static let requestDesktopNotification = "Notification.requestDesktop"
         static let requestMobileNotification = "Notification.requestMobile"
         static let findInPageNotification = "Notification.findInPage"
+        static let shortcutsTipTitle = "Create shortcuts to the sites you visit most:"
+        static let shortcutsTipDescription = "Select Add to Shortcuts from the %@ menu"
         static let autocompleteTipTitle = "Autocomplete URLs for the sites you use most:"
         static let autocompleteTipDescription = "Long-press any URL in the address bar"
         static let sitesNotWorkingTipTitle = "Site acting strange?"
