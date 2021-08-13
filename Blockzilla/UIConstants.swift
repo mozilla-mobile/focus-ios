@@ -500,7 +500,7 @@ struct UIConstants {
         static let findInPageNotification = "Notification.findInPage"
         static let sitesNotWorkingTipTitle = "Site missing content or acting strange?"
         static let sitesNotWorkingTipDescription = "Try turning off Tracking Protection"
-        static let biometricTipTitle = String(format: "Lock %@ even when a site is open:", AppInfo.productName)
+        static let biometricTipTitle = String(format: "Lock %@ when a site is open:", AppInfo.productName)
         static let biometricTipFaceIdDescription = "Turn on Face ID"
         static let biometricTipTouchIdDescription = "Turn on Touch ID"
         static let requestDesktopTipTitle = "Get the full desktop site instead:"
