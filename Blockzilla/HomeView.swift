@@ -213,8 +213,6 @@ class HomeView: UIView {
         tipDescriptionLabel.isHidden = false
 
         switch tip.identifier {
-        case TipManager.TipKey.autocompleteTip:
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.autocompleteTip)
         case TipManager.TipKey.biometricTip:
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.biometricTip)
         case TipManager.TipKey.requestDesktopTip:

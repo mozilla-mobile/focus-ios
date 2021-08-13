@@ -26,7 +26,6 @@ class TipManager {
     }
 
     class TipKey {
-        static let autocompleteTip = "autocompleteTip"
         static let sitesNotWorkingTip = "sitesNotWorkingTip"
         static let biometricTip = "biometricTip"
         static let siriFavoriteTip = "siriFavoriteTip"
