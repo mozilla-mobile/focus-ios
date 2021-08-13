@@ -71,9 +71,15 @@ class TipManager {
 
     lazy var siriEraseTip = Tip(title: UIConstants.strings.siriEraseTipTitle, description: UIConstants.strings.siriEraseTipDescription, identifier: TipKey.siriEraseTip, showVc: true)
 
-    let numberOfTrackersBlocked = UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
-
-    lazy var shareTrackersTip = Tip(title: UIConstants.strings.shareTrackersTipTitle, description: String(format: UIConstants.strings.shareTrackersTipDescription, String(numberOfTrackersBlocked)), identifier: TipKey.shareTrackersTip)
+    /// Return a string representing the trackers tip. It will include the current number of trackers blocked, formatted as a decimal.    
+    func shareTrackersDescription() -> String {
+        let numberOfTrackersBlocked = NSNumber(integerLiteral: UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey))
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        return String(format: UIConstants.strings.shareTrackersTipDescription, formatter.string(from: numberOfTrackersBlocked) ?? "0")
+    }
+    
+    lazy var shareTrackersTip = Tip(title: UIConstants.strings.shareTrackersTipTitle, description: shareTrackersDescription(), identifier: TipKey.shareTrackersTip)
 
     func fetchTip() -> Tip? {
         guard Settings.getToggle(.showHomeScreenTips) else { return shareTrackersTip }
