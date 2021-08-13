@@ -498,8 +498,6 @@ struct UIConstants {
         static let requestDesktopNotification = "Notification.requestDesktop"
         static let requestMobileNotification = "Notification.requestMobile"
         static let findInPageNotification = "Notification.findInPage"
-        static let autocompleteTipTitle = "Autocomplete URLs for the sites you use most:"
-        static let autocompleteTipDescription = "Long-press any URL in the address bar"
         static let sitesNotWorkingTipTitle = "Site acting strange?"
         static let sitesNotWorkingTipDescription = "Try turning off Tracking Protection"
         static let biometricTipTitle = String(format: "Lock %@ even when a site is open:", AppInfo.productName)
