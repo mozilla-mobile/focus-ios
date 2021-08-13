@@ -17,7 +17,7 @@ class SearchSettingsViewController: UITableViewController {
 
     init(searchEngineManager: SearchEngineManager) {
         self.searchEngineManager = searchEngineManager
-        super.init(style: .grouped)
+        super.init(style: .insetGrouped)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -28,7 +28,8 @@ class SearchSettingsViewController: UITableViewController {
         super.viewDidLoad()
 
         navigationItem.title = UIConstants.strings.settingsSearchLabel
-        view.backgroundColor = UIConstants.colors.background
+        navigationController?.navigationBar.tintColor = .accent
+        view.backgroundColor = .primaryBackground
         tableView.separatorColor = UIConstants.colors.settingsSeparator
         tableView.selectRow(at: IndexPath(row: 0, section: 1), animated: false, scrollPosition: .none)
         tableView.tableFooterView = UIView()
@@ -39,7 +40,7 @@ class SearchSettingsViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = UITableViewCell()
         cell.textLabel?.text = " "
-        cell.backgroundColor = UIConstants.colors.background
+        cell.backgroundColor = .primaryBackground
 
         if section == 0 {
             let label = SmartLabel()
@@ -85,7 +86,7 @@ class SearchSettingsViewController: UITableViewController {
             let cell = UITableViewCell(style: .default, reuseIdentifier: "addSearchEngine")
             cell.textLabel?.text = UIConstants.strings.AddSearchEngineButton
             cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
-            cell.backgroundColor = UIConstants.colors.cellBackground
+            cell.backgroundColor = .secondaryBackground
             cell.accessibilityIdentifier = "addSearchEngine"
             cell.selectedBackgroundView = getBackgroundView()
             return cell
@@ -95,7 +96,7 @@ class SearchSettingsViewController: UITableViewController {
             cell.textLabel?.font = UIFont.systemFont(ofSize: 17)
             cell.textLabel?.numberOfLines = 0
             cell.textLabel?.lineBreakMode = .byWordWrapping
-            cell.backgroundColor = UIConstants.colors.cellBackground
+            cell.backgroundColor = .secondaryBackground
             cell.accessibilityIdentifier = "restoreDefaults"
             cell.selectedBackgroundView = getBackgroundView()
 
@@ -117,7 +118,7 @@ class SearchSettingsViewController: UITableViewController {
             cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
             cell.imageView?.image = engine.image?.createScaled(size: CGSize(width: 24, height: 24))
             cell.selectedBackgroundView = getBackgroundView()
-            cell.backgroundColor = UIConstants.colors.cellBackground
+            cell.backgroundColor = .secondaryBackground
             cell.accessibilityIdentifier = engine.name
 
             if tableView.isEditing {
@@ -151,6 +152,11 @@ class SearchSettingsViewController: UITableViewController {
 
             return cell
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
+    {
+        cell.roundedCorners(tableView: tableView, indexPath: indexPath)
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -212,7 +218,7 @@ class SearchSettingsViewController: UITableViewController {
 
     private func getBackgroundView(bgColor: UIColor = UIConstants.colors.cellSelected) -> UIView {
         let view = UIView()
-        view.backgroundColor = bgColor
+        view.backgroundColor = .secondaryBackground
         return view
     }
 }
