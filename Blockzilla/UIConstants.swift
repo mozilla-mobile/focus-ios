@@ -503,7 +503,7 @@ struct UIConstants {
         static let biometricTipTitle = String(format: "Lock %@ when a site is open:", AppInfo.productName)
         static let biometricTipFaceIdDescription = "Turn on Face ID"
         static let biometricTipTouchIdDescription = "Turn on Touch ID"
-        static let requestDesktopTipTitle = "Get the full desktop site instead:"
+        static let requestDesktopTipTitle = "Want to see the full desktop version of a site?"
         static let requestDesktopTipDescription = "Page Actions > Request Desktop Site"
         static let siriFavoriteTipTitle = "Ask Siri to open a favorite site:"
         static let siriFavoriteTipDescription = "Add a site"
