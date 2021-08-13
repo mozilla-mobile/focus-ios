@@ -505,9 +505,9 @@ struct UIConstants {
         static let biometricTipTouchIdDescription = "Turn on Touch ID"
         static let requestDesktopTipTitle = "Want to see the full desktop version of a site?"
         static let requestDesktopTipDescription = "Page Actions > Request Desktop Site"
-        static let siriFavoriteTipTitle = "Ask Siri to open a favorite site:"
-        static let siriFavoriteTipDescription = "Add a site"
-        static let siriEraseTipTitle = String(format: "Ask Siri to erase %@ history:", AppInfo.productName)
+        static let siriFavoriteTipTitle = "“Siri, open my favorite site.”"
+        static let siriFavoriteTipDescription = "Add Siri shortcut"
+        static let siriEraseTipTitle = String(format: "“Siri, erase my %@ session.”", AppInfo.productName)
         static let siriEraseTipDescription = "Add Siri shortcut"
         static let shareTrackersTipTitle = "%@ trackers blocked so far"
         static let sumoTopicWhatsNew = "whats-new-focus-ios-8"
