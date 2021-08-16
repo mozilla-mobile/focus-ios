@@ -171,6 +171,7 @@ struct UIConstants {
         static let displayKeyboardDeleteAnimationDuration: TimeInterval = deleteAnimationDuration * (1 / 3)
         static let lockIconInset: Float = 4
         static let shieldIconInset: Float = 9
+        static let shieldIconIPadInset: Float = 15
         static let shieldIconSize: Float = 19
         static let navigationDoneOffset: Float = -10
         static let overlayAnimationDuration: TimeInterval = 0.25
@@ -185,6 +186,8 @@ struct UIConstants {
         static let toastDuration: TimeInterval = 1.5
         static let toolbarFadeAnimationDuration = 0.25
         static let toolbarButtonInsets = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+        static let urlBarInitialWidthMultiplier: CGFloat = 0.7
+        static let urlTextOffset: Float = 15
         static let urlBarCornerRadius: CGFloat = 10
         static let urlBarHeight: CGFloat = 54
         static let collapsedUrlBarHeight: CGFloat = 22
@@ -203,7 +206,9 @@ struct UIConstants {
 		static let urlBarClearButtonWidth: CGFloat = 20
 		static let urlBarClearButtonHeight: CGFloat = 20
 		static let urlBarLayoutPriorityRawValue: Float = 1000
+        static let reloadButtonIPadOffset: CGFloat = -15
         static let deleteButtonInset: CGFloat = -12
+        static let deleteButtonOffset: CGFloat = -5
         static let urlBarIconInset: CGFloat = 8
         static let settingsDefaultTitleOffset = 3
         static let settingsFirstTitleOffset = 16
@@ -211,6 +216,7 @@ struct UIConstants {
         static let settingsItemOffset: CGFloat = 26
         static let settingsCellCornerRadius: CGFloat = 8
         static let urlBarToolsetOffset: CGFloat = 60
+        static let urlBarIPadToolsetOffset: CGFloat = 110
         static let textLogoOffset: CGFloat = -10 - browserToolbarHeight / 2
         static let textLogoMargin: CGFloat = 44
         static let urlBarButtonImageSize: CGFloat = 20
@@ -292,7 +298,7 @@ struct UIConstants {
         static let aboutSafariBulletHeader = NSLocalizedString("About.safariBulletHeader", value: "Use it as a Safari extension:", comment: "Label on About screen")
         static let aboutTitle = NSLocalizedString("About.title", value: "About %@", comment: "%@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page.")
         static let aboutSafariBullet1 = NSLocalizedString("About.safariBullet1", value: "Block trackers for improved privacy", comment: "Label on About screen")
-        static let aboutSafariBullet2 = NSLocalizedString("About.safariBullet2", value: "Block Web fonts to reduce page size", comment: "Label on About screen")
+        static let aboutSafariBullet2 = NSLocalizedString("About.safariBullet2", value: "Block web fonts to reduce page size", comment: "Label on About screen")
         static let whatsNewTitle = NSLocalizedString("Settings.whatsNewTitle", value: "What’s New", comment: "Title for What's new screen")
         static let aboutTopLabel = NSLocalizedString("About.topLabel", value: "%@ puts you in control.", comment: "Label on About screen")
         static let addPassErrorAlertTitle = NSLocalizedString("AddPass.Error.Title", value: "Failed to Add Pass", comment: "Title of the 'Add Pass Failed' alert.")
@@ -336,7 +342,7 @@ struct UIConstants {
         static let labelBlockAnalytics = NSLocalizedString("Settings.toggleBlockAnalytics2", value: "Analytics", comment: "Label for the checkbox to toggle Analytics trackers")
         static let labelBlockSocial = NSLocalizedString("Settings.toggleBlockSocial2", value: "Social", comment: "Label for the checkbox to toggle Social trackers")
         static let labelBlockOther = NSLocalizedString("Settings.toggleBlockOther2", value: "Content", comment: "Label for the checkbox to toggle Other trackers")
-        static let labelBlockFonts = NSLocalizedString("Settings.toggleBlockFonts", value: "Block Web fonts", comment: "Label for toggle on main screen")
+        static let labelBlockFonts = NSLocalizedString("Settings.toggleBlockFonts", value: "Block web fonts", comment: "Label for toggle on main screen")
         static let labelSendAnonymousUsageData = NSLocalizedString("Settings.toggleSendUsageData", value: "Send usage data", comment: "Label for Send Usage Data toggle on main screen")
         static let detailTextSendUsageData = NSLocalizedString("Settings.detailTextSendUsageData", value: "Mozilla strives to collect only what we need to provide and improve %@ for everyone.", comment: "Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar)")
         static let openCancel = NSLocalizedString("Open.Cancel", value: "Cancel", comment: "Label in share alert to cancel the alert")
@@ -354,9 +360,9 @@ struct UIConstants {
         static let searchSuggestionsPromptDisable = NSLocalizedString("SearchSuggestions.promptDisable", value: "No", comment: "Label for disable option on search suggestions prompt")
         static let searchSuggestionsPromptEnable = NSLocalizedString("SearchSuggestions.promptEnable", value: "Yes", comment: "Label for enable option on search suggestions prompt")
         static let addToAutocompleteButton = NSLocalizedString("URL.addToAutocompleteLabel", value: "Add link to autocomplete", comment: "Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete.")
-        static let settingsBlockOtherMessage = NSLocalizedString("Settings.blockOtherMessage", value: "Blocking other content trackers may break some videos and Web pages.", comment: "Alert message shown when toggling the Content blocker")
-        static let settingsBlockOtherNo = NSLocalizedString("Settings.blockOtherNo", value: "No, Thanks", comment: "Button label for declining Content blocker alert")
-        static let settingsBlockOtherYes = NSLocalizedString("Settings.blockOtherYes", value: "I Understand", comment: "Button label for accepting Content blocker alert")
+        static let settingsBlockOtherMessage = NSLocalizedString("Settings.blockOtherMessage", value: "Blocking other content trackers may break some videos and web pages.", comment: "Alert message shown when toggling the Content blocker")
+        static let settingsBlockOtherNo = NSLocalizedString("Settings.blockOtherNo2", value: "Cancel", comment: "Button label for declining Content blocker alert")
+        static let settingsBlockOtherYes = NSLocalizedString("Settings.blockOtherYes2", value: "Block Content Trackers", comment: "Button label for accepting Content blocker alert")
         static let settingsSearchTitle = NSLocalizedString("Settings.searchTitle2", value: "SEARCH", comment: "Title for the search selection screen")
         static let settingsSearchLabel = NSLocalizedString("Settings.searchLabel", value: "Search Engine", comment: "Label for the search engine in the search screen")
         static let settingsSearchSuggestions = NSLocalizedString("Settings.searchSuggestions", value: "Get Search Suggestions", comment: "Label for the Search Suggestions toggle row")
