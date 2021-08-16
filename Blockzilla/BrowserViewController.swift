@@ -923,30 +923,7 @@ extension BrowserViewController: URLBarDelegate {
         modalDelegate.presentModal(viewController: trackingNavController, animated: true)
     }
 
-    func urlBarDidLongPress(_ urlBar: URLBar) {
-        let customURLItem = PhotonActionSheetItem(title: UIConstants.strings.customURLMenuButton, iconString: "icon_link") { action in
-            urlBar.addCustomURL()
-            UserDefaults.standard.set(false, forKey: TipManager.TipKey.autocompleteTip)
-        }
-        var actions = [PhotonActionSheetItem]()
-        if let clipboardString = UIPasteboard.general.string {
-            let pasteAndGoItem = PhotonActionSheetItem(title: UIConstants.strings.urlPasteAndGo, iconString: "icon_paste_and_go") { action in
-                urlBar.pasteAndGo(clipboardString: clipboardString)
-            }
-            actions.append(pasteAndGoItem)
-            let pasteItem = PhotonActionSheetItem(title: UIConstants.strings.urlPaste, iconString: "icon_paste") { action in
-                urlBar.paste(clipboardString: clipboardString)
-            }
-            actions.append(pasteItem)
-        }
-        let copyItem = PhotonActionSheetItem(title: UIConstants.strings.copyAddressButton, iconString: "icon_link") { action in
-            urlBar.copyToClipboard()
-            Toast(text: UIConstants.strings.copyURLToast).show()
-        }
-        actions.append(copyItem)
-        let urlContextMenu = PhotonActionSheet(actions: [[customURLItem], actions])
-        presentPhotonActionSheet(urlContextMenu, from: urlBar)
-    }
+    func urlBarDidLongPress(_ urlBar: URLBar) { }
     
     func presentContextMenu(from sender: UIView) {
         var actions: [[PhotonActionSheetItem]] = []
