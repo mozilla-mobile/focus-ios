@@ -10,20 +10,15 @@ class HomeViewToolbar: UIView {
 
     init() {
         super.init(frame: CGRect.zero)
-        stackView.distribution = .fillEqually
-        
-        toolset.backButton.alpha = 0
-        toolset.forwardButton.alpha = 0
-        toolset.deleteButton.alpha = 0
-        
-        stackView.addArrangedSubview(toolset.backButton)
-        stackView.addArrangedSubview(toolset.forwardButton)
-        stackView.addArrangedSubview(toolset.deleteButton)
+        stackView.distribution = .fill
+        stackView.addArrangedSubview(UIView())
         stackView.addArrangedSubview(toolset.contextMenuButton)
         addSubview(stackView)
 
         stackView.snp.makeConstraints { make in
-            make.top.right.left.equalTo(self)
+            make.top.equalTo(self)
+            make.left.equalTo(self).offset(UIConstants.layout.urlBarMargin)
+            make.right.equalTo(self).offset(-UIConstants.layout.urlBarMargin)
             make.height.equalTo(UIConstants.layout.browserToolbarHeight)
             make.bottom.equalTo(safeAreaLayoutGuide)
         }
