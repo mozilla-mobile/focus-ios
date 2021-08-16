@@ -277,7 +277,7 @@ class URLBar: UIView {
             make.trailing.equalTo(toolset.contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarMargin)
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
-        }red
+        }
 
         urlBarBorderView.snp.makeConstraints { make in
             make.height.equalTo(UIConstants.layout.urlBarBorderHeight).priority(.medium)
