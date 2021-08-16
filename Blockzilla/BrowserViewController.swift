@@ -960,8 +960,8 @@ extension BrowserViewController: URLBarDelegate {
                 let shareVC = utils.buildShareViewController()
                 
                 // Exact frame dimensions taken from presentPhotonActionSheet
-                shareVC.popoverPresentationController?.sourceView = self.urlBar.pageActionsButton
-                shareVC.popoverPresentationController?.sourceRect = CGRect(x: self.urlBar.pageActionsButton.frame.width/2, y: self.urlBar.pageActionsButton.frame.size.height * 0.75, width: 1, height: 1)
+                shareVC.popoverPresentationController?.sourceView = sender
+                shareVC.popoverPresentationController?.sourceRect = CGRect(x: sender.frame.width/2, y: sender.frame.size.height * 0.75, width: 1, height: 1)
                 
                 shareVC.becomeFirstResponder()
                 self.present(shareVC, animated: true, completion: nil)
@@ -1005,24 +1005,18 @@ extension BrowserViewController: URLBarDelegate {
         
         presentPhotonActionSheet(pageActionsMenu, from: sender)
     }
-
-    func urlBarDidPressPageActions(_ urlBar: URLBar) {
-        
-    }
 }
 
 extension BrowserViewController: PhotonActionSheetDelegate {
     func presentPhotonActionSheet(_ actionSheet: PhotonActionSheet, from sender: UIView) {
-        actionSheet.modalPresentationStyle = .popover//UIDevice.current.userInterfaceIdiom == .pad ? .popover : .overCurrentContext
+        actionSheet.modalPresentationStyle = .popover
         
         actionSheet.delegate = self
-//        darkView.isHidden = false
         
         if let popoverVC = actionSheet.popoverPresentationController, actionSheet.modalPresentationStyle == .popover {
             popoverVC.delegate = self
             popoverVC.sourceView = sender
             popoverVC.permittedArrowDirections = .any
-//            popoverVC.backgroundColor = UIConstants.colors.background.withAlphaComponent(0.7)
         }
         
         present(actionSheet, animated: true, completion: nil)
