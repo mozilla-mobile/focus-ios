@@ -11,7 +11,11 @@ class HomeViewToolbar: UIView {
     init() {
         super.init(frame: CGRect.zero)
         stackView.distribution = .fillEqually
-
+        
+        toolset.backButton.alpha = 0
+        toolset.forwardButton.alpha = 0
+        toolset.deleteButton.alpha = 0
+        
         stackView.addArrangedSubview(toolset.backButton)
         stackView.addArrangedSubview(toolset.forwardButton)
         stackView.addArrangedSubview(toolset.deleteButton)
