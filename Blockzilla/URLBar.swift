@@ -142,7 +142,7 @@ class URLBar: UIView {
         addSubview(toolset.forwardButton)
         addSubview(toolset.stopReloadButton)
         addSubview(toolset.deleteButton)
-        addSubview(toolset.settingsButton)
+        addSubview(toolset.contextMenuButton)
 
         urlText.isUserInteractionEnabled = false
         urlBarBackgroundView.addSubview(textAndLockContainer)
@@ -263,7 +263,7 @@ class URLBar: UIView {
             make.height.equalTo(UIConstants.layout.urlBarButtonTargetSize)
 
             hideToolsetConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide.snp.trailing).inset(UIConstants.layout.urlBarMargin).constraint)
-            showToolsetConstraints.append(make.trailing.greaterThanOrEqualTo(toolset.settingsButton.snp.leading).offset(-UIConstants.layout.urlBarToolsetOffset).constraint)
+            showToolsetConstraints.append(make.trailing.greaterThanOrEqualTo(toolset.contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarToolsetOffset).constraint)
         }
 
         toolset.backButton.snp.makeConstraints { make in
@@ -278,14 +278,14 @@ class URLBar: UIView {
             make.size.equalTo(toolset.backButton)
         }
 
-        toolset.settingsButton.snp.makeConstraints { make in
-            make.trailing.equalTo(safeAreaLayoutGuide)
+        toolset.contextMenuButton.snp.makeConstraints { make in
+            make.trailing.equalTo(safeAreaLayoutGuide).offset(-UIConstants.layout.urlBarMargin)
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
         }
         
         toolset.deleteButton.snp.makeConstraints { make in
-            make.trailing.equalTo(toolset.settingsButton.snp.leading)
+            make.trailing.equalTo(toolset.contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarMargin)
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
         }
@@ -354,7 +354,7 @@ class URLBar: UIView {
             showPageActionsConstraints.append(make.trailing.equalTo(pageActionsButton.snp.leading).constraint)
         }
 
-        toolset.settingsButton.snp.makeConstraints { make in
+        toolset.contextMenuButton.snp.makeConstraints { make in
             make.trailing.equalTo(safeAreaLayoutGuide)
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
@@ -605,7 +605,7 @@ class URLBar: UIView {
             shieldIcon.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
             cancelButton.animateHidden(false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
 
-            toolset.settingsButton.isEnabled = true
+            toolset.contextMenuButton.isEnabled = true
             borderColor = .foundation
             backgroundColor = .foundation
         }
@@ -670,7 +670,7 @@ class URLBar: UIView {
         toolset.forwardButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         toolset.stopReloadButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         toolset.deleteButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
-        toolset.settingsButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+        toolset.contextMenuButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
 
     }
 
@@ -734,7 +734,7 @@ class URLBar: UIView {
         toolset.forwardButton.alpha = shouldShowToolset ? expandAlpha : 0
         toolset.stopReloadButton.alpha = shouldShowToolset ? expandAlpha : 0
         toolset.deleteButton.alpha = shouldShowToolset ? expandAlpha : 0
-        toolset.settingsButton.alpha = shouldShowToolset ? expandAlpha : 0
+        toolset.contextMenuButton.alpha = shouldShowToolset ? expandAlpha : 0
 
         collapsedTrackingProtectionBadge.alpha = collapseAlpha
         if isEditing {

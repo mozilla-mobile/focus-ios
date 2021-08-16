@@ -17,7 +17,7 @@ class HomeViewToolbar: UIView {
         toolset.stopReloadButton.isEnabled = false
         stackView.addArrangedSubview(toolset.stopReloadButton)
         stackView.addArrangedSubview(toolset.deleteButton)
-        stackView.addArrangedSubview(toolset.settingsButton)
+        stackView.addArrangedSubview(toolset.contextMenuButton)
         addSubview(stackView)
 
         stackView.snp.makeConstraints { make in

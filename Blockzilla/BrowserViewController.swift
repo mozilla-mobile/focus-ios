@@ -372,24 +372,6 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    private func buildTrackingProtectionMenu(info: TPPageStats?) -> PhotonActionSheet {
-        var actions = [[PhotonActionSheetItem]]()
-        if info != nil {
-            let titleItem = PhotonActionSheetItem(title: UIConstants.strings.trackingProtectionLabel, text: UIConstants.strings.trackingProtectionLabelDescription, textStyle: .subtitle, iconString: "tracking_protection", isEnabled: true, accessory: .Switch)
-            actions.append([titleItem])
-        } else {
-            let titleItem = PhotonActionSheetItem(title: UIConstants.strings.trackingProtectionLabel, iconString: "tracking_protection_off", isEnabled: false, accessory: .Switch)
-            actions.append([titleItem])
-        }
-        let totalCount = PhotonActionSheetItem(title: UIConstants.strings.trackersBlocked, accessory: .Text, accessoryText: String(info?.total ?? 0), bold: true)
-        let adCount = PhotonActionSheetItem(title: UIConstants.strings.adTrackerLabel, accessory: .Text, accessoryText: String(info?.adCount ?? 0))
-        let analyticCount = PhotonActionSheetItem(title: UIConstants.strings.analyticTrackerLabel, accessory: .Text, accessoryText: String(info?.analyticCount ?? 0))
-        let socialCount = PhotonActionSheetItem(title: UIConstants.strings.socialTrackerLabel, accessory: .Text, accessoryText: String(info?.socialCount ?? 0))
-        let contentCount = PhotonActionSheetItem(title: UIConstants.strings.contentTrackerLabel, accessory: .Text, accessoryText: String(info?.contentCount ?? 0))
-        actions.append([totalCount, adCount, analyticCount, socialCount, contentCount])
-        return PhotonActionSheet(actions: actions, style: .overCurrentContext)
-    }
-
     override func updateViewConstraints() {
         super.updateViewConstraints()
         alertStackView.snp.remakeConstraints { make in
@@ -962,64 +944,94 @@ extension BrowserViewController: URLBarDelegate {
             Toast(text: UIConstants.strings.copyURLToast).show()
         }
         actions.append(copyItem)
-        let urlContextMenu = PhotonActionSheet(actions: [[customURLItem], actions], style: .overCurrentContext)
+        let urlContextMenu = PhotonActionSheet(actions: [[customURLItem], actions])
         presentPhotonActionSheet(urlContextMenu, from: urlBar)
+    }
+    
+    func presentContextMenu(from sender: UIView) {
+        var actions: [[PhotonActionSheetItem]] = []
+        
+        if let url = urlBar.url {
+            let utils = OpenUtils(url: url, webViewController: webViewController)
+            let items = PageActionSheetItems(url: url)
+            
+            let sharePageItem = PhotonActionSheetItem(title: UIConstants.strings.sharePage, iconString: "icon_openwith_active") { [weak self] _ in
+                guard let self = self else { return }
+                let shareVC = utils.buildShareViewController()
+                
+                // Exact frame dimensions taken from presentPhotonActionSheet
+                shareVC.popoverPresentationController?.sourceView = self.urlBar.pageActionsButton
+                shareVC.popoverPresentationController?.sourceRect = CGRect(x: self.urlBar.pageActionsButton.frame.width/2, y: self.urlBar.pageActionsButton.frame.size.height * 0.75, width: 1, height: 1)
+                
+                shareVC.becomeFirstResponder()
+                self.present(shareVC, animated: true, completion: nil)
+            }
+            
+            var actionItems = [items.findInPageItem]
+            actionItems.append(
+                webViewController.userAgentString == UserAgent.desktopUserAgent()
+                    ? items.requestMobileItem
+                    : items.requestDesktopItem
+            )
+            
+            let copyItem = PhotonActionSheetItem(title: UIConstants.strings.copyAddress, iconString: "icon_link") { [weak self] _ in
+                guard let self = self else { return }
+                self.urlBar.copyToClipboard()
+                Toast(text: UIConstants.strings.copyURLToast).show()
+            }
+            var shareItems = [copyItem]
+            shareItems.append(sharePageItem)
+            
+            if items.canOpenInFirefox {
+                shareItems.append(items.openInFireFoxItem)
+            }
+            if items.canOpenInChrome {
+                shareItems.append(items.openInChromeItem)
+            }
+            shareItems.append(items.openInSafariItem)
+            
+            actions.append(actionItems)
+            actions.append(shareItems)
+        }
+        
+        let settingsItem = PhotonActionSheetItem(title: UIConstants.strings.settingsTitle, iconString: "icon_settings") { [weak self] _ in
+            guard let self = self else { return }
+            self.showSettings()
+        }
+        
+        actions.append([settingsItem])
+        
+        let pageActionsMenu = PhotonActionSheet(actions: actions)
+        
+        presentPhotonActionSheet(pageActionsMenu, from: sender)
     }
 
     func urlBarDidPressPageActions(_ urlBar: URLBar) {
-        guard let url = urlBar.url else { return }
-        let utils = OpenUtils(url: url, webViewController: webViewController)
-        let items = PageActionSheetItems(url: url)
-        let sharePageItem = PhotonActionSheetItem(title: UIConstants.strings.sharePage, iconString: "icon_openwith_active") { action in
-            let shareVC = utils.buildShareViewController()
-
-            // Exact frame dimensions taken from presentPhotonActionSheet
-            shareVC.popoverPresentationController?.sourceView = urlBar.pageActionsButton
-            shareVC.popoverPresentationController?.sourceRect = CGRect(x: urlBar.pageActionsButton.frame.width/2, y: urlBar.pageActionsButton.frame.size.height * 0.75, width: 1, height: 1)
-
-            shareVC.becomeFirstResponder()
-            self.present(shareVC, animated: true, completion: nil)
-        }
-        var shareItems = [sharePageItem]
-        if items.canOpenInFirefox {
-            shareItems.append(items.openInFireFoxItem)
-        }
-        if items.canOpenInChrome {
-            shareItems.append(items.openInChromeItem)
-        }
-        shareItems.append(items.openInSafariItem)
-        let copyItem = PhotonActionSheetItem(title: UIConstants.strings.copyAddress, iconString: "icon_link") { action in
-            urlBar.copyToClipboard()
-            Toast(text: UIConstants.strings.copyURLToast).show()
-        }
-        shareItems.append(copyItem)
-
-        var actionItems = [items.findInPageItem]
-
-        webViewController.userAgentString == UserAgent.desktopUserAgent() ? actionItems.append(items.requestMobileItem) : actionItems.append(items.requestDesktopItem)
-
-        let pageActionsMenu = PhotonActionSheet(title: UIConstants.strings.pageActionsTitle, actions: [shareItems, actionItems], style: .overCurrentContext)
-        presentPhotonActionSheet(pageActionsMenu, from: urlBar.pageActionsButton)
+        
     }
 }
 
 extension BrowserViewController: PhotonActionSheetDelegate {
     func presentPhotonActionSheet(_ actionSheet: PhotonActionSheet, from sender: UIView) {
-        actionSheet.modalPresentationStyle = UIDevice.current.userInterfaceIdiom == .pad ? .popover : .overCurrentContext
+        actionSheet.modalPresentationStyle = .popover//UIDevice.current.userInterfaceIdiom == .pad ? .popover : .overCurrentContext
+        
         actionSheet.delegate = self
-        darkView.isHidden = false
+//        darkView.isHidden = false
+        
         if let popoverVC = actionSheet.popoverPresentationController, actionSheet.modalPresentationStyle == .popover {
             popoverVC.delegate = self
             popoverVC.sourceView = sender
-            popoverVC.sourceRect = CGRect(x: sender.frame.width/2, y: sender.frame.size.height * 0.75, width: 1, height: 1)
-            popoverVC.permittedArrowDirections = .up
-            popoverVC.backgroundColor = UIConstants.colors.background
+            popoverVC.permittedArrowDirections = .any
+//            popoverVC.backgroundColor = UIConstants.colors.background.withAlphaComponent(0.7)
         }
+        
         present(actionSheet, animated: true, completion: nil)
     }
+    
     func photonActionSheetDidDismiss() {
         darkView.isHidden = true
     }
+    
     func photonActionSheetDidToggleProtection(enabled: Bool) {
         enabled ? webViewController.enableTrackingProtection() : webViewController.disableTrackingProtection()
 
@@ -1029,6 +1041,14 @@ extension BrowserViewController: PhotonActionSheetDelegate {
         UserDefaults.standard.set(false, forKey: TipManager.TipKey.sitesNotWorkingTip)
 
         webViewController.reload()
+    }
+}
+
+extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
+    // Returning None here makes sure that the Popover is actually presented as a Popover and
+    // not as a full-screen modal, which is the default on compact device classes.
+    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+        return .none
     }
 }
 
@@ -1116,9 +1136,9 @@ extension BrowserViewController: BrowserToolsetDelegate {
         self.resetBrowser()
     }
 
-    func browserToolsetDidPressSettings(_ browserToolbar: BrowserToolset) {
+    func browserToolsetDidPressContextMenu(_ browserToolbar: BrowserToolset, menuButton: InsetButton) {
         updateFindInPageVisibility(visible: false)
-        showSettings()
+        presentContextMenu(from: menuButton)
     }
 }
 
