@@ -51,33 +51,4 @@ class PastenGoTest: BaseTestCase {
         waitForExistence(app.buttons["Search for mozilla"])
         XCTAssertTrue(app.buttons[UIPasteboard.general.string!].isEnabled)
     }
-
-    // Smoketest
-    // Test Paste & Go feature
-    func testPastenGo() {
-        // Inject a string into clipboard
-        var clipboard = "https://www.mozilla.org/en-US/"
-        UIPasteboard.general.string = clipboard
-
-        // Tap url bar to show context menu
-        let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
-        searchOrEnterAddressTextField.tap()
-        waitForExistence(app.menuItems["Paste"], timeout: 3)
-        XCTAssertTrue(app.menuItems["Paste & Go"].isEnabled)
-
-        // Select paste and go, and verify it goes to the correct place
-        app.menuItems["Paste & Go"].tap()
-
-        // Check the correct site is reached
-        waitForValueContains(searchOrEnterAddressTextField, value: "mozilla.org")
-        app.buttons["URLBar.deleteButton"].firstMatch.tap()
-        waitForExistence(app.staticTexts["Browsing history cleared"])
-
-        clipboard = "1(*&)(*%@@$^%^12345)"
-        UIPasteboard.general.string = clipboard
-        searchOrEnterAddressTextField.tap()
-        waitForExistence(app.menuItems["Paste"], timeout: 5)
-        app.menuItems["Paste"].tap()
-//        waitForExistence(app.buttons["Search for " + clipboard], timeout: 5) - Different for refresh branch - change it later
-    }
 }
