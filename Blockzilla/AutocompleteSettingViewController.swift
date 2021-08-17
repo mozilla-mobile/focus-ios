@@ -154,14 +154,12 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
     }
 
     @objc private func learnMoreDefaultTapped() {
-        guard let url = SupportUtils.URLForTopic(topic: "autofill-domain-ios") else { return }
-        let contentViewController = SettingsContentViewController(url: url)
+        let contentViewController = SettingsContentViewController(url: SupportUtils.URLFor(topic: .autofillDomain))
         navigationController?.pushViewController(contentViewController, animated: true)
     }
 
     @objc private func learnMoreCustomapped() {
-        guard let url = SupportUtils.URLForTopic(topic: "autofill-domain-ios") else { return }
-        let contentViewController = SettingsContentViewController(url: url)
+        let contentViewController = SettingsContentViewController(url: SupportUtils.URLFor(topic: .autofillDomain))
         navigationController?.pushViewController(contentViewController, animated: true)
     }
 }

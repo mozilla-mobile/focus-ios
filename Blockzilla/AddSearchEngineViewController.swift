@@ -160,8 +160,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     }
 
     @objc func learnMoreTapped() {
-        guard let url = SupportUtils.URLForTopic(topic: "add-search-engine-ios") else { return }
-        let contentViewController = SettingsContentViewController(url: url)
+        let contentViewController = SettingsContentViewController(url: SupportUtils.URLFor(topic: .addSearchEngine))
         navigationController?.pushViewController(contentViewController, animated: true)
     }
 

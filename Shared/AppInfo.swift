@@ -39,8 +39,14 @@ class AppInfo {
         return Bundle.main.infoDictionary!["CFBundleName"] as! String
     }
 
+    /// Return application's ShortVersionString. Like 38 from 38.0. Will crash if the value is missing from the Info.plist.
     static var shortVersion: String {
         return Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
+    }
+
+    /// Return the application's major version. Will crash if the version number is missing or malformed.
+    static var majorVersion: Int {
+        return Int(String(shortVersion.prefix(upTo: shortVersion.index(of: ".")!)))!
     }
 
     static var buildNumber: String {

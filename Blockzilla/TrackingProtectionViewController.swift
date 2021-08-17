@@ -219,8 +219,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
     }
     
     @objc func tappedTrackingProtectionLearnMoreHeader(sender: UIGestureRecognizer) {
-        guard let url = SupportUtils.URLForTopic(topic: "tracking-protection-focus-ios") else { return }
-        let contentViewController = SettingsContentViewController(url: url)
+        let contentViewController = SettingsContentViewController(url: SupportUtils.URLFor(topic: .trackingProtection))
         navigationController?.pushViewController(contentViewController, animated: true)
     }
     

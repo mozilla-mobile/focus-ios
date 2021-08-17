@@ -181,18 +181,17 @@ class SettingsTableViewToggleCell: SettingsTableViewCell {
         }
     }
 
-    private func tappedFooter(topic: String) {
-        guard let url = SupportUtils.URLForTopic(topic: topic) else { return }
-        let contentViewController = SettingsContentViewController(url: url)
+    private func tappedFooter(topic: SupportUtils.Topic) {
+        let contentViewController = SettingsContentViewController(url: SupportUtils.URLFor(topic: topic))
         navigationController?.pushViewController(contentViewController, animated: true)
     }
 
     @objc func tappedLearnMoreFooter(gestureRecognizer: UIGestureRecognizer) {
-        tappedFooter(topic: UIConstants.strings.sumoTopicUsageData)
+        tappedFooter(topic: .usageData)
     }
 
     @objc func tappedLearnMoreSearchSuggestionsFooter(gestureRecognizer: UIGestureRecognizer) {
-        tappedFooter(topic: UIConstants.strings.sumoTopicSearchSuggestion)
+        tappedFooter(topic: .searchSuggestions)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -704,15 +703,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     @objc private func whatsNewClicked() {
         highlightsButton?.tintColor = UIColor.white
-        guard let focusURL = SupportUtils.URLForTopic(topic: UIConstants.strings.sumoTopicWhatsNew) else { return }
-        guard let klarURL = SupportUtils.URLForTopic(topic: UIConstants.strings.klarSumoTopicWhatsNew) else { return }
-
-        if AppInfo.isKlar {
-            navigationController?.pushViewController(SettingsContentViewController(url: klarURL), animated: true)
-        } else {
-            navigationController?.pushViewController(SettingsContentViewController(url: focusURL), animated: true)
-        }
-
+        navigationController?.pushViewController(SettingsContentViewController(url: SupportUtils.URLFor(topic: .whatsNew)), animated: true)
         whatsNew.didShowWhatsNew()
     }
 
