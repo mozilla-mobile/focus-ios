@@ -181,17 +181,17 @@ class SettingsTableViewToggleCell: SettingsTableViewCell {
         }
     }
 
-    private func tappedFooter(topic: SupportTopic) {
+    private func tappedFooter(forSupportTopic topic: SupportTopic) {
         let contentViewController = SettingsContentViewController(url: URL(forSupportTopic: topic))
         navigationController?.pushViewController(contentViewController, animated: true)
     }
 
     @objc func tappedLearnMoreFooter(gestureRecognizer: UIGestureRecognizer) {
-        tappedFooter(topic: .usageData)
+        tappedFooter(forSupportTopic: .usageData)
     }
 
     @objc func tappedLearnMoreSearchSuggestionsFooter(gestureRecognizer: UIGestureRecognizer) {
-        tappedFooter(topic: .searchSuggestions)
+        tappedFooter(forSupportTopic: .searchSuggestions)
     }
 
     required init?(coder aDecoder: NSCoder) {
