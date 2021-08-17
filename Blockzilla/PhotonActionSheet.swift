@@ -23,6 +23,7 @@ struct PhotonActionSheetUX {
     static let TitleHeaderHeight: CGFloat = 36
     static let SeparatorHeaderHeight: CGFloat = 12
     static let SeparatorColor = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
+    static let SectionSeparatorColor = UIConstants.Photon.Grey50.withAlphaComponent(0.5)
     static let TableViewBackgroundColor = UIConstants.Photon.Ink90.withAlphaComponent(PhotonActionSheetUX.BackgroundAlpha)
     static let BlurAlpha: CGFloat = 0.7
     static let SeparatorRowHeight: CGFloat = 8
@@ -106,12 +107,8 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if #available(iOS 13.0, *) {
-            overrideUserInterfaceStyle = .dark
-            tableView.backgroundColor = .clear
-        } else {
-            tableView.backgroundColor = UIConstants.Photon.Grey60
-        }
+        overrideUserInterfaceStyle = .dark
+        tableView.backgroundColor = .clear
         view.addGestureRecognizer(tapRecognizer)
         view.addSubview(tableView)
         view.accessibilityIdentifier = "Action Sheet"
@@ -359,7 +356,7 @@ private class PhotonActionSheetSeparator: UITableViewHeaderFooterView {
         super.init(reuseIdentifier: reuseIdentifier)
         self.backgroundView = UIView()
         separatorLineView.backgroundColor = .clear
-        contentView.backgroundColor = .darkGray
+        contentView.backgroundColor = PhotonActionSheetUX.SectionSeparatorColor
         self.contentView.addSubview(separatorLineView)
         separatorLineView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
