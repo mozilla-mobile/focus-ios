@@ -1185,6 +1185,11 @@ extension BrowserViewController: HomeViewDelegate {
     func tipTapped() {
         guard let tip = tipManager?.currentTip, tip.showVc else { return }
         switch tip.identifier {
+        case TipManager.TipKey.releaseTip:
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.releaseTip)
+            if let url = SupportUtils.URLForTopic(topic: "whats-new-firefox-focus-ios-version-38") {
+                submit(url: url)
+            }
         case TipManager.TipKey.biometricTip:
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.biometricTip)
             showSettings()
