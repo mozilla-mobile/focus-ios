@@ -181,8 +181,8 @@ class SettingsTableViewToggleCell: SettingsTableViewCell {
         }
     }
 
-    private func tappedFooter(topic: SupportUtils.Topic) {
-        let contentViewController = SettingsContentViewController(url: SupportUtils.URLFor(topic: topic))
+    private func tappedFooter(topic: SupportTopic) {
+        let contentViewController = SettingsContentViewController(url: URL(forSupportTopic: topic))
         navigationController?.pushViewController(contentViewController, animated: true)
     }
 
@@ -703,7 +703,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     @objc private func whatsNewClicked() {
         highlightsButton?.tintColor = UIColor.white
-        navigationController?.pushViewController(SettingsContentViewController(url: SupportUtils.URLFor(topic: .whatsNew)), animated: true)
+        navigationController?.pushViewController(SettingsContentViewController(url: URL(forSupportTopic: .whatsNew)), animated: true)
         whatsNew.didShowWhatsNew()
     }
 

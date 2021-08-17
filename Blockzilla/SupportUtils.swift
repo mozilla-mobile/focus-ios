@@ -13,38 +13,43 @@ public struct SupportUtils {
     ///
     /// If for some reason the URL could not be created, a default URL to support.mozilla.org is returned. This is
     /// a very rare case that should not happen except in the rare case where the URL may be dynamically formatted.
-    public static func URLFor(topic: SupportUtils.Topic) -> URL {
-        if let escapedTopic = topic.topicString().addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed), let languageIdentifier = Locale.preferredLanguages.first, let url = URL(string: "https://support.mozilla.org/1/mobile/\(AppInfo.shortVersion)/iOS/\(languageIdentifier)/\(escapedTopic)") {
+    
+}
+
+public enum SupportTopic {
+    case whatsNew
+    case searchSuggestions
+    case usageData
+    case autofillDomain
+    case trackingProtection
+    case addSearchEngine
+    
+    func topicString() -> String {
+        switch self {
+        case .whatsNew:
+            return String(format: "whats-new-%@-ios-%@", AppInfo.config.productName.lowercased(), AppInfo.majorVersion)
+        case .searchSuggestions:
+            return "search-suggestions-focus-ios"
+        case .usageData:
+            return "usage-data"
+        case .autofillDomain:
+            return "autofill-domain-ios"
+        case .trackingProtection:
+            return "tracking-protection-focus-ios"
+        case .addSearchEngine:
+            return "add-search-engine-ios"
+        }
+    }
+}
+
+extension URL {
+    init(forSupportTopic topic: SupportTopic) {
+        if let escapedTopic = topic.topicString().addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed), let languageIdentifier = Locale.preferredLanguages.first {
+            let url = "https://support.mozilla.org/1/mobile/\(AppInfo.shortVersion)/iOS/\(languageIdentifier)/\(escapedTopic)"
             print("DEHJDHEKJHKJDEHKJDHEKJHDEK")
             print(url)
-            return url
+            self.init(string: url)!
         }
-        return URL(string: "https://support.mozilla.org")!
-    }
-    
-    public enum Topic {
-        case whatsNew
-        case searchSuggestions
-        case usageData
-        case autofillDomain
-        case trackingProtection
-        case addSearchEngine
-        
-        func topicString() -> String {
-            switch self {
-            case .whatsNew:
-                return String(format: "whats-new-%@-ios-%@", AppInfo.config.productName.lowercased(), AppInfo.majorVersion)
-            case .searchSuggestions:
-                return "search-suggestions-focus-ios"
-            case .usageData:
-                return "usage-data"
-            case .autofillDomain:
-                return "autofill-domain-ios"
-            case .trackingProtection:
-                return "tracking-protection-focus-ios"
-            case .addSearchEngine:
-                return "add-search-engine-ios"
-            }
-        }
+        self.init(string: "https://support.mozilla.org")!
     }
 }
