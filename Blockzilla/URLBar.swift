@@ -71,7 +71,7 @@ class URLBar: UIView {
     private let textAndLockContainer = UIView()
     private let collapsedUrlAndLockWrapper = UIView()
     private let collapsedTrackingProtectionBadge = CollapsedTrackingProtectionBadge()
-    
+
     let shieldIcon = TrackingProtectionBadge()
 
     var centerURLBar = false {
@@ -82,7 +82,15 @@ class URLBar: UIView {
     }
     private var centeredURLConstraints = [Constraint]()
     private var fullWidthURLConstraints = [Constraint]()
-
+    var editingURLTextConstrains = [Constraint]()
+    var pageURLTextConstrains = [Constraint]()
+    var isIPadRegularDimensions = false {
+        didSet {
+            updateViews()
+            updateURLBarLayoutAfterSplitView()
+        }
+    }
+    
     var hidePageActions = true {
         didSet {
             guard oldValue != hidePageActions else { return }
@@ -95,6 +103,7 @@ class URLBar: UIView {
     private var showToolset = false {
         didSet {
             guard oldValue != showToolset else { return }
+            isIPadRegularDimensions = showToolset
             activateConstraints(showToolset, shownConstraints: showToolsetConstraints, hiddenConstraints: hideToolsetConstraints)
         }
     }
@@ -125,7 +134,7 @@ class URLBar: UIView {
 
     convenience init() {
         self.init(frame: CGRect.zero)
-
+        isIPadRegularDimensions = traitCollection.horizontalSizeClass == .regular && traitCollection.verticalSizeClass == .regular
         let singleTap = UITapGestureRecognizer(target: self, action: #selector(didSingleTap(sender:)))
         singleTap.numberOfTapsRequired = 1
         textAndLockContainer.addGestureRecognizer(singleTap)
@@ -243,7 +252,7 @@ class URLBar: UIView {
             make.width.equalTo(UIConstants.layout.urlBarButtonTargetSize).priority(900)
 
             hideToolsetConstraints.append(make.leading.equalTo(safeAreaLayoutGuide).offset(UIConstants.layout.urlBarMargin).constraint)
-            showToolsetConstraints.append(make.leading.equalTo(toolset.forwardButton.snp.trailing).offset(UIConstants.layout.urlBarToolsetOffset).constraint)
+            showToolsetConstraints.append(make.leading.equalTo( toolset.forwardButton.snp.trailing).offset(UIConstants.layout.urlBarToolsetOffset).constraint)
         }
 
         addLayoutGuide(rightBarViewLayoutGuide)
@@ -252,7 +261,7 @@ class URLBar: UIView {
             make.height.equalTo(UIConstants.layout.urlBarButtonTargetSize)
 
             hideToolsetConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide.snp.trailing).inset(UIConstants.layout.urlBarMargin).constraint)
-            showToolsetConstraints.append(make.trailing.greaterThanOrEqualTo(toolset.contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarToolsetOffset).constraint)
+            showToolsetConstraints.append(make.trailing.equalTo(toolset.contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarIPadToolsetOffset).constraint)
         }
 
         toolset.backButton.snp.makeConstraints { make in
@@ -268,13 +277,13 @@ class URLBar: UIView {
         }
 
         toolset.contextMenuButton.snp.makeConstraints { make in
-            make.trailing.equalTo(safeAreaLayoutGuide).offset(-UIConstants.layout.urlBarMargin)
+            make.trailing.equalTo(safeAreaLayoutGuide)
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
         }
         
         toolset.deleteButton.snp.makeConstraints { make in
-            make.trailing.equalTo(toolset.contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarMargin)
+            make.trailing.equalTo(toolset.contextMenuButton.snp.leading).offset(isIPadRegularDimensions ? UIConstants.layout.deleteButtonOffset : 0)
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
         }
@@ -298,12 +307,7 @@ class URLBar: UIView {
             make.edges.equalToSuperview().inset(UIConstants.layout.urlBarBorderInset)
         }
 
-        shieldIcon.snp.makeConstraints { (make) in
-            make.top.bottom.equalToSuperview()
-            make.leading.equalTo(leftBarViewLayoutGuide).inset(UIConstants.layout.shieldIconInset)
-            make.width.equalTo(UIConstants.layout.shieldIconSize)
-            
-        }
+        addShieldConstraints()
 
         cancelButton.snp.makeConstraints { make in
             make.top.bottom.leading.trailing.equalTo(leftBarViewLayoutGuide)
@@ -374,6 +378,32 @@ class URLBar: UIView {
         showToolsetConstraints.forEach { $0.deactivate() }
         expandedBarConstraints.forEach { $0.activate() }
         updateToolsetConstraints()
+    }
+    
+    private func addShieldConstraints() {
+        shieldIcon.snp.makeConstraints { (make) in
+            make.top.bottom.equalToSuperview()
+            make.leading.equalTo(leftBarViewLayoutGuide).inset(isIPadRegularDimensions ? UIConstants.layout.shieldIconIPadInset : UIConstants.layout.shieldIconInset)
+            make.width.equalTo(UIConstants.layout.shieldIconSize)
+        }
+    }
+    
+    private func updateURLBarLayoutAfterSplitView() {
+        
+        shieldIcon.snp.removeConstraints()
+        addShieldConstraints()
+        
+        leftBarViewLayoutGuide.snp.makeConstraints { (make) in
+            make.leading.equalTo( toolset.forwardButton.snp.trailing).offset(UIConstants.layout.urlBarToolsetOffset)
+        }
+        
+        rightBarViewLayoutGuide.snp.makeConstraints { (make) in
+            if  isIPadRegularDimensions {
+                make.trailing.equalTo(toolset.contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarIPadToolsetOffset)
+            } else {
+                make.trailing.greaterThanOrEqualTo(toolset.contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarToolsetOffset)
+            }
+        }
     }
 
     @objc public func activateTextField() {
@@ -580,14 +610,28 @@ class URLBar: UIView {
             setTextToURL()
             borderColor = .foundation
             backgroundColor = .foundation
+
+            editingURLTextConstrains.forEach{$0.deactivate()}
+            urlText.snp.makeConstraints{make in
+                make.leading.equalTo(shieldIcon.snp.trailing).offset(UIConstants.layout.urlTextOffset)
+            }
+ 
         case .editing:
             showLeftBar = true
-            compressBar = true
+            compressBar = isIPadRegularDimensions ? false : true
             showBackgroundView = true
-
+            
+            if isIPadRegularDimensions && inBrowsingMode {
+                leftBarViewLayoutGuide.snp.makeConstraints{make in
+                    editingURLTextConstrains.append(make.leading.equalTo(urlText).offset(-UIConstants.layout.urlTextOffset).constraint)
+                }
+                editingURLTextConstrains.forEach{$0.activate()}
+                toolset.stopReloadButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+                
+            }
+            
             shieldIcon.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
-            cancelButton.animateHidden(false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
-
+            cancelButton.animateHidden(isIPadRegularDimensions ? true : false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
             toolset.contextMenuButton.isEnabled = true
             borderColor = .foundation
             backgroundColor = .foundation
@@ -644,8 +688,9 @@ class URLBar: UIView {
             showToolset = !isHidden
             centerURLBar = shouldShowToolset
         case .editing:
-            isHidden = true
-            showToolset = false
+            let isiPadLayoutWhileBrowsing = isIPadRegularDimensions && inBrowsingMode
+            isHidden =  isiPadLayoutWhileBrowsing ? !shouldShowToolset : true
+            showToolset = isiPadLayoutWhileBrowsing ? !isHidden : false
             centerURLBar = false
         }
 
@@ -710,6 +755,7 @@ class URLBar: UIView {
         collapsedUrlAndLockWrapper.alpha = collapseAlpha
         toolset.backButton.alpha = shouldShowToolset ? expandAlpha : 0
         toolset.forwardButton.alpha = shouldShowToolset ? expandAlpha : 0
+        toolset.stopReloadButton.alpha = shouldShowToolset ? expandAlpha : 0
         toolset.deleteButton.alpha = shouldShowToolset ? expandAlpha : 0
         toolset.contextMenuButton.alpha = shouldShowToolset ? expandAlpha : 0
 
