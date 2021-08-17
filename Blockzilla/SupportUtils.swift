@@ -23,11 +23,11 @@ public enum SupportTopic {
     case autofillDomain
     case trackingProtection
     case addSearchEngine
-    
-    func topicString() -> String {
+
+    public var slug: String {
         switch self {
         case .whatsNew:
-            return String(format: "whats-new-%@-ios-%@", AppInfo.config.productName.lowercased(), AppInfo.majorVersion)
+            return "whats-new-\(AppInfo.config.productName.lowercased())-ios-\(AppInfo.majorVersion)"
         case .searchSuggestions:
             return "search-suggestions-focus-ios"
         case .usageData:
@@ -44,12 +44,10 @@ public enum SupportTopic {
 
 extension URL {
     init(forSupportTopic topic: SupportTopic) {
-        if let escapedTopic = topic.topicString().addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed), let languageIdentifier = Locale.preferredLanguages.first {
-            let url = "https://support.mozilla.org/1/mobile/\(AppInfo.shortVersion)/iOS/\(languageIdentifier)/\(escapedTopic)"
-            print("DEHJDHEKJHKJDEHKJDHEKJHDEK")
-            print(url)
-            self.init(string: url)!
+        guard let escapedTopic = topic.slug.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed), let languageIdentifier = Locale.preferredLanguages.first else {
+            self.init(string: "https://support.mozilla.org")!
+            return
         }
-        self.init(string: "https://support.mozilla.org")!
+        self.init(string: "https://support.mozilla.org/1/mobile/\(AppInfo.shortVersion)/iOS/\(languageIdentifier)/\(escapedTopic)")!
     }
 }

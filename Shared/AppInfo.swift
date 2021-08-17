@@ -44,9 +44,13 @@ class AppInfo {
         return Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
     }
 
-    /// Return the application's major version. Will crash if the version number is missing or malformed.
+    /// Return the application's major version. It will only handle versions like `9000` or `38.1`
+    /// or `38.1.1`. It will crash if the `shortVersion` is missing or malformed.
     static var majorVersion: Int {
-        return Int(String(shortVersion.prefix(upTo: shortVersion.index(of: ".")!)))!
+        guard let dotIndex = shortVersion.index(of: ".") else {
+            return Int(shortVersion)!
+        }
+        return Int(String(shortVersion.prefix(upTo: dotIndex)))!
     }
 
     static var buildNumber: String {
