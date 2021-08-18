@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum SupportTopic {
+public enum SupportTopic: CaseIterable {
     case whatsNew
     case searchSuggestions
     case usageData
@@ -28,6 +28,8 @@ public enum SupportTopic {
             return "add-search-engine-ios"
         }
     }
+    
+    static let fallbackURL = "https://support.mozilla.org"
 }
 
 extension URL {
@@ -40,7 +42,7 @@ extension URL {
     /// a very rare case that should not happen except in the rare case where the URL may be dynamically formatted.
     init(forSupportTopic topic: SupportTopic) {
         guard let escapedTopic = topic.slug.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed), let languageIdentifier = Locale.preferredLanguages.first else {
-            self.init(string: "https://support.mozilla.org")!
+            self.init(string: SupportTopic.fallbackURL)!
             return
         }
         self.init(string: "https://support.mozilla.org/1/mobile/\(AppInfo.shortVersion)/iOS/\(languageIdentifier)/\(escapedTopic)")!
