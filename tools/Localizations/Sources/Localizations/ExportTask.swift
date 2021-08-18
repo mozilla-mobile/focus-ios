@@ -94,15 +94,36 @@ struct ExportTask {
                 }
 
                 if result[transUnit.attribute(forName: "id")!.stringValue!] != nil {
-                    print("[F] OOHHH NNOOOOO")
+                    print("[F] Unexpected duplicate string id <\(transUnit.attribute(forName: "id")!.stringValue!)>")
                 }
 
-                //print("MOO \(pontoonLocale) \(transUnit.attribute(forName: "id")!.stringValue!) -> \(transUnit)")
                 result[transUnit.attribute(forName: "id")!.stringValue!] = transUnit
             }
         }
 
         return result
+    }
+
+    private func getSourceText(fromTransUnit element: XMLElement) -> String? {
+        if let children = element.children {
+            for node in children {
+                if node.name == "source" {
+                    return node.stringValue
+                }
+            }
+        }
+        return nil
+    }
+
+    private func getTargetText(fromTransUnit element: XMLElement) -> String? {
+        if let children = element.children {
+            for node in children {
+                if node.name == "target" {
+                    return node.stringValue
+                }
+            }
+        }
+        return nil
     }
 
     // Process/transform the exported XLIFF
@@ -139,48 +160,18 @@ struct ExportTask {
                     continue
                 }
 
-                func getSourceText(fromTransUnit element: XMLElement) -> String? {
-                    if let children = element.children {
-                        for node in children {
-                            if node.name == "source" {
-                                return node.stringValue
-                            }
-                        }
-                    }
-                    return nil
-                }
-
-                func getTargetText(fromTransUnit element: XMLElement) -> String? {
-                    if let children = element.children {
-                        for node in children {
-                            if node.name == "target" {
-                                return node.stringValue
-                            }
-                        }
-                    }
-                    return nil
-                }
-
                 // If the new export does not have a <target> then check if the old export had one. If it did then
                 // the string was invalidated and it's translation removed. If this is because the <source> string
                 // differs only in case changes between old and new then do not export this invalidation. Other
                 // invalidations that do not match the above are exported and can be reviewed manually.
-
                 if let oldTransUnit = oldTransUnits[newTransUnit.attribute(forName: "id")!.stringValue!] {
                     // This is an existing string
                     if getTargetText(fromTransUnit: oldTransUnit) != nil && getTargetText(fromTransUnit: newTransUnit) == nil {
-                        print("[I] STRING INVALIDATED: \(newTransUnit.attribute(forName: "id")!.stringValue!)")
                         if let oldSource = getSourceText(fromTransUnit: oldTransUnit), let newSource = getSourceText(fromTransUnit: newTransUnit) {
                             // If source has changed, but it is only a case change then do not invalidate this string
                             if (oldSource != newSource) && (oldSource.caseInsensitiveCompare(newSource) == .orderedSame) {
-                                print("   SOURCE IS THE SAME!")
-                                //newTransUnit.detach()
-                                // Copy back the target text from the old version
                                 newTransUnit.insertChild(XMLNode.element(withName: "target", stringValue: getTargetText(fromTransUnit: oldTransUnit)!) as! XMLNode, at: 1)
-                                newTransUnit.insertChild(XMLNode.text(withStringValue: "\n        ") as! XMLNode, at: 1)
-                                //newTransUnit.addChild(XMLNode.element(withName: "hello", stringValue: "world") as! XMLNode)
-                                //newTransUnit.insertChild(XMLNode.element(withName: "srhello", stringValue: "world") as! XMLNode, at: 1)
-                                //newTransUnit.addAttribute(XMLNode.attribute(withName: "dkejkde", stringValue: "dkejdke") as! XMLNode)
+                                newTransUnit.insertChild(XMLNode.text(withStringValue: "\n        ") as! XMLNode, at: 1) // To maintain formatting
                             }
                         }
                     }
