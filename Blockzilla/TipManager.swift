@@ -26,7 +26,7 @@ class TipManager {
     }
 
     class TipKey {
-        static let autocompleteTip = "autocompleteTip"
+        static let shortcutsTip = "shortcutsTip"
         static let sitesNotWorkingTip = "sitesNotWorkingTip"
         static let biometricTip = "biometricTip"
         static let siriFavoriteTip = "siriFavoriteTip"
@@ -46,7 +46,7 @@ class TipManager {
     }
 
     private func addAllTips() {
-        possibleTips.append(autocompleteTip)
+        possibleTips.append(shortcutsTip)
         possibleTips.append(sitesNotWorkingTip)
         possibleTips.append(requestDesktopTip)
         possibleTips.append(siriFavoriteTip)
@@ -56,8 +56,8 @@ class TipManager {
             possibleTips.append(biometricTip)
         }
     }
-
-    lazy var autocompleteTip = Tip(title: UIConstants.strings.autocompleteTipTitle, description: UIConstants.strings.autocompleteTipDescription, identifier: TipKey.autocompleteTip)
+    
+    lazy var shortcutsTip = Tip(title: UIConstants.strings.shortcutsTipTitle, description: String(format: UIConstants.strings.shortcutsTipDescription, AppInfo.config.productName), identifier: TipKey.shortcutsTip)
 
     lazy var sitesNotWorkingTip = Tip(title: UIConstants.strings.sitesNotWorkingTipTitle, description: UIConstants.strings.sitesNotWorkingTipDescription, identifier: TipKey.sitesNotWorkingTip)
 
@@ -75,8 +75,15 @@ class TipManager {
 
     lazy var siriEraseTip = Tip(title: UIConstants.strings.siriEraseTipTitle, description: UIConstants.strings.siriEraseTipDescription, identifier: TipKey.siriEraseTip, showVc: true)
 
-    let numberOfTrackersBlocked = UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
-    lazy var shareTrackersTip = Tip(title: String(format: UIConstants.strings.shareTrackersTipTitle, String(numberOfTrackersBlocked)), identifier: TipKey.shareTrackersTip)
+    /// Return a string representing the trackers tip. It will include the current number of trackers blocked, formatted as a decimal.
+    func shareTrackersDescription() -> String {
+        let numberOfTrackersBlocked = NSNumber(integerLiteral: UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey))
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        return String(format: UIConstants.strings.shareTrackersTipDescription, formatter.string(from: numberOfTrackersBlocked) ?? "0")
+    }
+    
+    lazy var shareTrackersTip = Tip(title: UIConstants.strings.shareTrackersTipTitle, description: shareTrackersDescription(), identifier: TipKey.shareTrackersTip)
 
     func fetchTip() -> Tip? {
         guard Settings.getToggle(.showHomeScreenTips) else { return shareTrackersTip }
@@ -104,7 +111,7 @@ class TipManager {
     }
 
     func shouldShowTips() -> Bool {
-        return NSLocale.current.identifier == "en_US" && !AppInfo.isKlar
+        return NSLocale.current.languageCode == "en" && !AppInfo.isKlar
     }
     
     func getNextTip() -> Tip? {
