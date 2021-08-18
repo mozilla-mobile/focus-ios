@@ -48,6 +48,7 @@ class OverlayView: UIView {
         didSet {
             searchSuggestionsPrompt.isIpadView = isIpadView
             updateLayout(for: isIpadView)
+            updateSearchButtons()
         }
     }
     
@@ -141,7 +142,7 @@ class OverlayView: UIView {
         self.searchButtonGroup[0].snp.remakeConstraints { make in
             make.top.equalTo(topBorder.snp.bottom)
             if iPadView {
-                make.width.equalTo(searchSuggestionsPrompt).multipliedBy(0.8)
+                make.width.equalTo(searchSuggestionsPrompt).multipliedBy(UIConstants.layout.suggestionViewWidthMultiplier)
                 make.centerX.equalToSuperview()
             } else {
                 make.width.equalTo(safeAreaLayoutGuide)
@@ -176,18 +177,21 @@ class OverlayView: UIView {
         remakeConstraintsForFindInPage()
         
         if iPadView {
-            searchButtonGroup.first?.layer.cornerRadius = 10
+            searchButtonGroup.first?.layer.cornerRadius = UIConstants.layout.suggestionViewCornerRadius
             searchButtonGroup.first?.clipsToBounds = true
             searchButtonGroup.first?.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
-            findInPageButton.layer.cornerRadius = 10
+            findInPageButton.layer.cornerRadius = UIConstants.layout.suggestionViewCornerRadius
             findInPageButton.clipsToBounds =  true
             findInPageButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
             lastSeparator.backgroundColor = .searchSeparator.withAlphaComponent(0.65)
+            topBorder.backgroundColor = .clear
             
         } else {
             searchButtonGroup.first?.layer.cornerRadius = 0
             findInPageButton.layer.cornerRadius = 0
             lastSeparator.backgroundColor = .clear
+            topBorder.backgroundColor =  UIConstants.Photon.Grey90.withAlphaComponent(0.4)
+            
         }
         setGradientToSearchButtons()
     }
@@ -332,8 +336,12 @@ class OverlayView: UIView {
     private func updateSearchButtons() {
         for index in 0..<self.searchButtonGroup.count {
             let hasSuggestionInIndex = index < self.searchSuggestions.count
-            self.searchButtonGroup[index].isHidden = !hasSuggestionInIndex
-
+            if isIpadView {
+                let show = searchSuggestionsPrompt.isHidden && Settings.getToggle(.enableSearchSuggestions) && hasSuggestionInIndex
+                self.searchButtonGroup[index].isHidden = !show
+            } else {
+                self.searchButtonGroup[index].isHidden = !hasSuggestionInIndex
+            }
             if hasSuggestionInIndex {
                 self.setAttributedButtonTitle(
                     phrase: self.searchSuggestions[index],
@@ -351,7 +359,7 @@ class OverlayView: UIView {
         
         findInPageButton.snp.remakeConstraints { (make) in
             if isIpadView {
-                make.width.equalTo(searchSuggestionsPrompt).multipliedBy(0.8)
+                make.width.equalTo(searchSuggestionsPrompt).multipliedBy(UIConstants.layout.suggestionViewWidthMultiplier)
                 if let firstButton = searchButtonGroup.first {
                     make.leading.equalTo(firstButton.snp.leading)
                 } else {
@@ -410,7 +418,7 @@ class OverlayView: UIView {
             searchButtonGroup.last?.layer.maskedCorners = []
         } else {
             topBorder.backgroundColor = .clear
-            searchButtonGroup.last?.layer.cornerRadius = 10
+            searchButtonGroup.last?.layer.cornerRadius = UIConstants.layout.suggestionViewCornerRadius
             searchButtonGroup.last?.clipsToBounds =  true
             searchButtonGroup.last?.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
         }
@@ -419,7 +427,7 @@ class OverlayView: UIView {
     private func remakeConstraintsForFindInPage() {
         findInPageButton.snp.remakeConstraints { (make) in
             if isIpadView {
-                make.width.equalTo(searchSuggestionsPrompt).multipliedBy(0.8)
+                make.width.equalTo(searchSuggestionsPrompt).multipliedBy(UIConstants.layout.suggestionViewWidthMultiplier)
                 if let firstButton = searchButtonGroup.first {
                     make.leading.equalTo(firstButton.snp.leading)
                 } else {

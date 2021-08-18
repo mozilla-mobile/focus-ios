@@ -103,12 +103,11 @@ class SearchSuggestionsPromptView: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
     
     private func updateUI(_ isIpadView: Bool) {
         promptContainer.backgroundColor = isIpadView ? .searchSuggestionIPad : .foundation
         if isIpadView {
-            promptContainer.layer.cornerRadius = 10
+            promptContainer.layer.cornerRadius = UIConstants.layout.suggestionViewCornerRadius
             promptContainer.clipsToBounds = true
         } else {
             promptContainer.layer.cornerRadius = 0
@@ -117,9 +116,9 @@ class SearchSuggestionsPromptView: UIView {
             make.top.equalTo(self).priority(.medium)
             make.bottom.equalTo(self).priority(.medium)
             if isIpadView {
-                make.width.equalTo(self).multipliedBy(0.8)
+                make.width.equalTo(self).multipliedBy(UIConstants.layout.suggestionViewWidthMultiplier)
                 make.centerX.equalTo(self)
-                make.height.equalTo(UIScreen.main.bounds.height * 0.25)
+                make.height.equalTo(UIScreen.main.bounds.height * UIConstants.layout.suggestionViewHeightMultiplier)
             } else {
                 make.leading.equalTo(self)
                 make.trailing.equalTo(self)
