@@ -18,19 +18,25 @@ class SearchSuggestionsPromptView: UIView {
     private let promptContainer = UIView()
     private let promptMessage = UILabel()
     private let promptTitle = UILabel()
+    
+    var isIpadView: Bool = false {
+        didSet {
+            updateUI(isIpadView)
+        }
+    }
+    var shouldShowFindInPage: Bool = false {
+        didSet {
+            if shouldShowFindInPage{
+                promptContainer.layer.maskedCorners = isIpadView ? [.layerMaxXMinYCorner, .layerMinXMinYCorner] : []
+            }
+        }
+    }
 
     init() {
         super.init(frame: CGRect.zero)
-        promptContainer.backgroundColor = .foundation
         addSubview(promptContainer)
-
-        promptContainer.snp.makeConstraints { make in
-            make.top.equalTo(self).priority(.medium)
-            make.bottom.equalTo(self).priority(.medium)
-            make.leading.equalTo(self)
-            make.trailing.equalTo(self)
-        }
-
+        updateUI(isIpadView)
+        
         promptTitle.text = UIConstants.strings.searchSuggestionsPromptTitle
         promptTitle.textColor = .primaryText
         promptTitle.font = UIConstants.fonts.promptTitle
@@ -98,6 +104,29 @@ class SearchSuggestionsPromptView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    
+    private func updateUI(_ isIpadView: Bool) {
+        promptContainer.backgroundColor = isIpadView ? .searchSuggestionIPad : .foundation
+        if isIpadView {
+            promptContainer.layer.cornerRadius = 10
+            promptContainer.clipsToBounds = true
+        } else {
+            promptContainer.layer.cornerRadius = 0
+        }
+        promptContainer.snp.remakeConstraints { make in
+            make.top.equalTo(self).priority(.medium)
+            make.bottom.equalTo(self).priority(.medium)
+            if isIpadView {
+                make.width.equalTo(self).multipliedBy(0.8)
+                make.centerX.equalTo(self)
+                make.height.equalTo(UIScreen.main.bounds.height * 0.25)
+            } else {
+                make.leading.equalTo(self)
+                make.trailing.equalTo(self)
+            }
+        }
+    }
+    
     @objc private func didPressDisable() {
         delegate?.searchSuggestionsPromptView(self, didEnable: false)
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionsOff)
