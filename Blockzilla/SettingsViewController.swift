@@ -637,19 +637,18 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
-    private func tappedFooter(topic: String) {
-        guard let url = SupportUtils.URLForTopic(topic: topic) else { return }
-        let contentViewController = SettingsContentViewController(url: url)
+    private func tappedFooter(forSupportTopic topic: SupportTopic) {
+        let contentViewController = SettingsContentViewController(url: URL(forSupportTopic: topic))
         navigationController?.navigationBar.tintColor = .accent
         navigationController?.pushViewController(contentViewController, animated: true)
     }
     
     @objc func tappedLearnMoreFooter(gestureRecognizer: UIGestureRecognizer) {
-        tappedFooter(topic: UIConstants.strings.sumoTopicUsageData)
+        tappedFooter(forSupportTopic: .usageData)
     }
 
     @objc func tappedLearnMoreSearchSuggestionsFooter(gestureRecognizer: UIGestureRecognizer) {
-        tappedFooter(topic: UIConstants.strings.sumoTopicSearchSuggestion)
+        tappedFooter(forSupportTopic: .searchSuggestions)
     }
 
     @objc private func dismissSettings() {
