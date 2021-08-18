@@ -1197,9 +1197,12 @@ extension BrowserViewController: HomeViewDelegate {
         switch tip.identifier {
         case TipManager.TipKey.releaseTip:
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.releaseTip)
-            if let url = SupportUtils.URLForTopic(topic: "whats-new-firefox-focus-ios-version-38") {
-                submit(url: url)
-            }
+            // TODO Feels like this should be in a visitPage() function
+            ensureBrowsingMode()
+            deactivateUrlBarOnHomeView()
+            dismissSettings()
+            dismissActionSheet()
+            submit(url: URL(forSupportTopic: .whatsNew))
         case TipManager.TipKey.biometricTip:
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.biometricTip)
             showSettings()
