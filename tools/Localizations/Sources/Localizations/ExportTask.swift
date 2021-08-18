@@ -70,6 +70,41 @@ struct ExportTask {
         task.waitUntilExit()
     }
 
+    /// Load all trans-units by id from the old (from checkout)
+    private func loadOldTransUnits(forLocale locale: String) -> [String: XMLElement]? {
+        var result = [String: XMLElement]()
+
+        let pontoonLocale = XCODE_TO_PONTOON[locale] ?? locale
+        let xml = try! XMLDocument(contentsOf: URL(fileURLWithPath: "\(l10nRepoPath)/\(pontoonLocale)/focus-ios.xliff"))
+        guard let root = xml.rootElement() else {
+            print("[W] No valid XML in \(l10nRepoPath)/\(pontoonLocale)/focus-ios.xliff ?")
+            return nil
+        }
+
+        for case let file as XMLElement in try! root.nodes(forXPath: "file") {
+            // Skip <file> nodes that we do not care about
+            if let original = file.attribute(forName: "original")?.stringValue, EXCLUDED_FILES.contains(original) {
+                continue
+            }
+            
+            for case let transUnit as XMLElement in try! file.nodes(forXPath: "body/trans-unit") {
+                // Skip <trans-unit> nodes that we don't want to translate
+                if transUnit.attribute(forName: "id")?.stringValue.map(EXCLUDED_TRANSLATIONS.contains) == true {
+                    continue
+                }
+
+                if result[transUnit.attribute(forName: "id")!.stringValue!] != nil {
+                    print("[F] OOHHH NNOOOOO")
+                }
+
+                //print("MOO \(pontoonLocale) \(transUnit.attribute(forName: "id")!.stringValue!) -> \(transUnit)")
+                result[transUnit.attribute(forName: "id")!.stringValue!] = transUnit
+            }
+        }
+
+        return result
+    }
+
     // Process/transform the exported XLIFF
     private func handleXML(path: String, locale: String) {
         let url = URL(fileURLWithPath: path.appending("/\(locale).xcloc/Localized Contents/\(locale).xliff"))
@@ -79,10 +114,15 @@ struct ExportTask {
             return
         }
 
+        guard let oldTransUnits = loadOldTransUnits(forLocale: locale) else {
+            print("[E] Can't load old trans units")
+            return
+        }
+
         for case let fileNode as XMLElement in try! root.nodes(forXPath: "file") {
             // Remove <file> nodes that we do not care about
             if let original = fileNode.attribute(forName: "original")?.stringValue, EXCLUDED_FILES.contains(original) {
-                print("Skipping a file")
+                print("[I] Skipping excluded file <\(original)>")
                 fileNode.detach()
                 continue
             }
@@ -92,10 +132,58 @@ struct ExportTask {
                 fileNode.attribute(forName: "target-language")?.setStringValue(pontoonLocale, resolvingEntities: false)
             }
             
-            // Delete <trans-unit> nodes that we don't want to translate
-            for case let translation as XMLElement in try! fileNode.nodes(forXPath: "body/trans-unit") {
-                if translation.attribute(forName: "id")?.stringValue.map(EXCLUDED_TRANSLATIONS.contains) == true {
-                    translation.detach()
+            for case let newTransUnit as XMLElement in try! fileNode.nodes(forXPath: "body/trans-unit") {
+                // Delete <trans-unit> nodes that we don't want to translate
+                if newTransUnit.attribute(forName: "id")?.stringValue.map(EXCLUDED_TRANSLATIONS.contains) == true {
+                    newTransUnit.detach()
+                    continue
+                }
+
+                func getSourceText(fromTransUnit element: XMLElement) -> String? {
+                    if let children = element.children {
+                        for node in children {
+                            if node.name == "source" {
+                                return node.stringValue
+                            }
+                        }
+                    }
+                    return nil
+                }
+
+                func getTargetText(fromTransUnit element: XMLElement) -> String? {
+                    if let children = element.children {
+                        for node in children {
+                            if node.name == "target" {
+                                return node.stringValue
+                            }
+                        }
+                    }
+                    return nil
+                }
+
+                // If the new export does not have a <target> then check if the old export had one. If it did then
+                // the string was invalidated and it's translation removed. If this is because the <source> string
+                // differs only in case changes between old and new then do not export this invalidation. Other
+                // invalidations that do not match the above are exported and can be reviewed manually.
+
+                if let oldTransUnit = oldTransUnits[newTransUnit.attribute(forName: "id")!.stringValue!] {
+                    // This is an existing string
+                    if getTargetText(fromTransUnit: oldTransUnit) != nil && getTargetText(fromTransUnit: newTransUnit) == nil {
+                        print("[I] STRING INVALIDATED: \(newTransUnit.attribute(forName: "id")!.stringValue!)")
+                        if let oldSource = getSourceText(fromTransUnit: oldTransUnit), let newSource = getSourceText(fromTransUnit: newTransUnit) {
+                            // If source has changed, but it is only a case change then do not invalidate this string
+                            if (oldSource != newSource) && (oldSource.caseInsensitiveCompare(newSource) == .orderedSame) {
+                                print("   SOURCE IS THE SAME!")
+                                //newTransUnit.detach()
+                                // Copy back the target text from the old version
+                                newTransUnit.insertChild(XMLNode.element(withName: "target", stringValue: getTargetText(fromTransUnit: oldTransUnit)!) as! XMLNode, at: 1)
+                                newTransUnit.insertChild(XMLNode.text(withStringValue: "\n        ") as! XMLNode, at: 1)
+                                //newTransUnit.addChild(XMLNode.element(withName: "hello", stringValue: "world") as! XMLNode)
+                                //newTransUnit.insertChild(XMLNode.element(withName: "srhello", stringValue: "world") as! XMLNode, at: 1)
+                                //newTransUnit.addAttribute(XMLNode.attribute(withName: "dkejkde", stringValue: "dkejdke") as! XMLNode)
+                            }
+                        }
+                    }
                 }
             }
             
@@ -121,10 +209,14 @@ struct ExportTask {
         let _ = try! FileManager.default.replaceItemAt(destination, withItemAt: source)
     }
 
+
     
     func run() {
         print("[*] Exporting \(LOCALES) to \(EXPORT_BASE_PATH)")
         exportLocales()
+
+        //print("[*] Loading template")
+        //loadTemplate()
 
         LOCALES.forEach { locale in
             print("[*] Exporting \(locale)")
