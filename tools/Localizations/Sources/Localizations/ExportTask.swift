@@ -212,9 +212,6 @@ struct ExportTask {
         print("[*] Exporting \(LOCALES) to \(EXPORT_BASE_PATH)")
         exportLocales()
 
-        //print("[*] Loading template")
-        //loadTemplate()
-
         LOCALES.forEach { locale in
             print("[*] Exporting \(locale)")
             handleXML(path: EXPORT_BASE_PATH, locale: locale)
