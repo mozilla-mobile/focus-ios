@@ -152,7 +152,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             if application.applicationState == .active {
                 // If we are active then we can ask the BVC to open the new tab right away.
                 // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
-                browserViewController.submit(url: url)
+                navigateBrowserController(to: url)
             } else {
                 queuedUrl = url
             }
@@ -163,7 +163,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             if application.applicationState == .active {
                 // If we are active then we can ask the BVC to open the new tab right away.
                 // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
-                browserViewController.submit(url: url)
+                navigateBrowserController(to: url)
             } else {
                 queuedUrl = url
             }
@@ -173,7 +173,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             if application.applicationState == .active {
                 // If we are active then we can ask the BVC to open the new tab right away.
                 // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
+<<<<<<< HEAD
                 browserViewController.openOverylay(text: text)
+=======
+                if let fixedUrl = URIFixup.getURL(entry: text) {
+                    navigateBrowserController(to: fixedUrl)
+                } else {
+                    browserViewController.openOverylay(text: text)
+                }
+>>>>>>> c4946b8 (Fixes #1917 - The URL bar is empty and the keyboard will pop up after receiving a link via airdrop)
             } else {
                 queuedString = text
             }
@@ -261,7 +269,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         toggleSplashView(hide: false)
         browserViewController.exitFullScreenVideo()
     }
-
+    
     func applicationDidBecomeActive(_ application: UIApplication) {
         if Settings.siriRequestsErase() {
             browserViewController.photonActionSheetDidDismiss()
@@ -276,11 +284,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         if let url = queuedUrl {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openedFromExtension, object: TelemetryEventObject.app)
 
-            browserViewController.ensureBrowsingMode()
-            browserViewController.deactivateUrlBarOnHomeView()
-            browserViewController.dismissSettings()
-            browserViewController.dismissActionSheet()
-            browserViewController.submit(url: url)
+            navigateBrowserController(to: url)
             queuedUrl = nil
         } else if let text = queuedString {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openedFromExtension, object: TelemetryEventObject.app)
@@ -413,5 +417,15 @@ protocol ModalDelegate {
 extension UINavigationController {
     override open var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
+    }
+}
+
+extension AppDelegate {
+    fileprivate func navigateBrowserController(to url: URL) {
+        browserViewController.ensureBrowsingMode()
+        browserViewController.deactivateUrlBarOnHomeView()
+        browserViewController.dismissSettings()
+        browserViewController.dismissActionSheet()
+        browserViewController.submit(url: url)
     }
 }
