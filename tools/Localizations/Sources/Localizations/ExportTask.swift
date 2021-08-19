@@ -104,6 +104,8 @@ struct ExportTask {
         return result
     }
 
+    /// Return the string value of the <source> element on a given <trans-unit>. Will
+    /// return nil if there is no <source> element.
     private func getSourceText(fromTransUnit element: XMLElement) -> String? {
         if let children = element.children {
             for node in children {
@@ -115,6 +117,8 @@ struct ExportTask {
         return nil
     }
 
+    /// Return the string value of the <target> element on a given <trans-unit>. Will
+    /// return nil if there is no <target> element.
     private func getTargetText(fromTransUnit element: XMLElement) -> String? {
         if let children = element.children {
             for node in children {
@@ -162,14 +166,16 @@ struct ExportTask {
 
                 // If the new export does not have a <target> then check if the old export had one. If it did then
                 // the string was invalidated and it's translation removed. If this is because the <source> string
-                // differs only in case changes between old and new then do not export this invalidation. Other
-                // invalidations that do not match the above are exported and can be reviewed manually.
+                // differs only in case changes between old and new then do not invalidate the string. Other
+                // invalidations that do not match the above are still exported and can be reviewed manually.
                 if let oldTransUnit = oldTransUnits[newTransUnit.attribute(forName: "id")!.stringValue!] {
                     // This is an existing string
                     if getTargetText(fromTransUnit: oldTransUnit) != nil && getTargetText(fromTransUnit: newTransUnit) == nil {
+                        // And both old and new have a <source> (unsurprising)
                         if let oldSource = getSourceText(fromTransUnit: oldTransUnit), let newSource = getSourceText(fromTransUnit: newTransUnit) {
                             // If source has changed, but it is only a case change then do not invalidate this string
                             if (oldSource != newSource) && (oldSource.caseInsensitiveCompare(newSource) == .orderedSame) {
+                                // Xcode removed <target>, so we put it back.
                                 newTransUnit.insertChild(XMLNode.element(withName: "target", stringValue: getTargetText(fromTransUnit: oldTransUnit)!) as! XMLNode, at: 1)
                                 newTransUnit.insertChild(XMLNode.text(withStringValue: "\n        ") as! XMLNode, at: 1) // To maintain formatting
                             }
