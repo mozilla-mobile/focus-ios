@@ -201,8 +201,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
     }
     
     @objc func tappedTrackingProtectionLearnMoreHeader(sender: UIGestureRecognizer) {
-        guard let url = SupportUtils.URLForTopic(topic: "tracking-protection-focus-ios") else { return }
-        let contentViewController = SettingsContentViewController(url: url)
+        let contentViewController = SettingsContentViewController(url: URL(forSupportTopic: .trackingProtection))
         navigationController?.pushViewController(contentViewController, animated: true)
     }
     
@@ -299,10 +298,12 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         }
         return dateFormatter.string(from: Date())
     }
-    
+        
     private func getNumberOfTrackersBlocked() -> String {
-        let numberOfTrackersBlocked = UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
-        return String(numberOfTrackersBlocked)
+        let numberOfTrackersBlocked = NSNumber(integerLiteral: UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey))
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        return formatter.string(from: numberOfTrackersBlocked) ?? "0"
     }
     
     @objc private func toggleProtection(sender: UISwitch) {
