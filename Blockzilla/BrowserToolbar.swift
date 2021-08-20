@@ -16,7 +16,6 @@ class BrowserToolbar: UIView {
         super.init(frame: CGRect.zero)
 
         let background = UIView()
-        background.alpha = 1
         background.backgroundColor = UIConstants.colors.background
         addSubview(background)
 
