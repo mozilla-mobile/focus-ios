@@ -72,7 +72,11 @@ class BrowserViewController: UIViewController {
 
     private let searchSuggestionsDebouncer = Debouncer(timeInterval: 0.1)
     private var shouldEnsureBrowsingMode = false
-    private var isIPadRegularDimensions: Bool = false
+    private var isIPadRegularDimensions: Bool = false {
+        didSet {
+            overlayView.isIpadView = isIPadRegularDimensions
+        }
+    }
     private var initialUrl: URL?
     var tipManager: TipManager?
 
@@ -138,7 +142,7 @@ class BrowserViewController: UIViewController {
         overlayView.isHidden = true
         overlayView.alpha = 0
         overlayView.delegate = self
-        overlayView.backgroundColor = .scrim.withAlphaComponent(0.48)
+        overlayView.backgroundColor = isIPadRegularDimensions ? .clear : .scrim.withAlphaComponent(0.48)
         overlayView.setSearchSuggestionsPromptViewDelegate(delegate: self)
         mainContainerView.addSubview(overlayView)
 
@@ -664,7 +668,7 @@ class BrowserViewController: UIViewController {
             addURLBarConstraints()
             
         } else {
-            urlBar.snp.makeConstraints { make in
+            urlBarContainer.snp.makeConstraints { make in
                 make.width.equalTo(view)
                 make.leading.equalTo(view)
             }
@@ -1096,28 +1100,6 @@ extension BrowserViewController: TrackingProtectionDelegate {
 }
 
 extension BrowserViewController: BrowserToolsetDelegate {
-    func browserToolsetDidLongPressReload(_ browserToolbar: BrowserToolset) {
-        // Request desktop site
-        urlBar.dismiss()
-
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        let title = webViewController.userAgentString == UserAgent.desktopUserAgent() ? "Request Mobile Site" : "Request Desktop Site"
-        let object = webViewController.userAgentString == UserAgent.desktopUserAgent() ? TelemetryEventObject.requestMobile : TelemetryEventObject.requestDesktop
-
-        alert.addAction(UIAlertAction(title: title, style: .default, handler: { (action) in
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: object)
-            self.webViewController.requestUserAgentChange()
-        }))
-        alert.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
-
-        // Must handle iPad interface separately, as it does not implement action sheets
-        let iPadAlert = alert.popoverPresentationController
-        iPadAlert?.sourceView = browserToolbar.stopReloadButton
-        iPadAlert?.sourceRect = browserToolbar.stopReloadButton.bounds
-
-        present(alert, animated: true)
-    }
-
     func browserToolsetDidPressBack(_ browserToolset: BrowserToolset) {
         webViewController.goBack()
     }
