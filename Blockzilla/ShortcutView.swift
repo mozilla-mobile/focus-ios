@@ -4,8 +4,10 @@
 
 import UIKit
 import SnapKit
+import AudioToolbox
+import CoreHaptics
 
-protocol ShortcutViewDelegate: class {
+protocol ShortcutViewDelegate: AnyObject {
     func shortcutTapped(shortcut: Shortcut)
     func shortcutLongPressed(shortcut: Shortcut, shortcutView: ShortcutView)
 }
@@ -29,23 +31,23 @@ class ShortcutView: UIView {
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress))
         self.addGestureRecognizer(longPress)
         
-        let firstView = UIView(frame: CGRect(x: 0, y: 0, width: dimension, height: dimension))
-        firstView.backgroundColor = .above
-        firstView.layer.cornerRadius = 8
-        addSubview(firstView)
-        firstView.snp.makeConstraints { make in
+        let outerView = UIView(frame: CGRect(x: 0, y: 0, width: dimension, height: dimension))
+        outerView.backgroundColor = .above
+        outerView.layer.cornerRadius = 8
+        addSubview(outerView)
+        outerView.snp.makeConstraints { make in
             make.width.height.equalTo(dimension)
             make.centerX.equalToSuperview()
             make.top.equalToSuperview()
         }
         
-        let secondView = UIView(frame: CGRect(x: 0, y: 0, width: innerDimension, height: innerDimension))
-        secondView.backgroundColor = .foundation
-        secondView.layer.cornerRadius = 4
-        addSubview(secondView)
-        secondView.snp.makeConstraints { make in
+        let innerView = UIView(frame: CGRect(x: 0, y: 0, width: innerDimension, height: innerDimension))
+        innerView.backgroundColor = .foundation
+        innerView.layer.cornerRadius = 4
+        addSubview(innerView)
+        innerView.snp.makeConstraints { make in
             make.width.height.equalTo(innerDimension)
-            make.center.equalTo(firstView)
+            make.center.equalTo(outerView)
         }
         
         let letterLabel = UILabel()
@@ -54,7 +56,7 @@ class ShortcutView: UIView {
         letterLabel.text = ShortcutsManager.shared.firstLetterFor(shortcut: shortcut)
         addSubview(letterLabel)
         letterLabel.snp.makeConstraints { make in
-            make.center.equalTo(secondView)
+            make.center.equalTo(innerView)
         }
         
         let nameLabel = UILabel()
@@ -63,7 +65,7 @@ class ShortcutView: UIView {
         nameLabel.text = ShortcutsManager.shared.nameFor(shortcut: shortcut)
         addSubview(nameLabel)
         nameLabel.snp.makeConstraints { make in
-            make.top.equalTo(firstView.snp.bottom).offset(8)
+            make.top.equalTo(outerView.snp.bottom).offset(8)
             make.centerX.equalToSuperview()
         }
     }
@@ -79,7 +81,10 @@ class ShortcutView: UIView {
     }
     
     @objc private func didLongPress() {
+        let feedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+        feedbackGenerator.prepare()
         if let shortcut = self.shortcut {
+            CHHapticEngine.capabilitiesForHardware().supportsHaptics ? feedbackGenerator.impactOccurred() : AudioServicesPlaySystemSound(1519)
             delegate?.shortcutLongPressed(shortcut: shortcut, shortcutView: self)
         }
     }

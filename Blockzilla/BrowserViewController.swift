@@ -1008,9 +1008,7 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidDismiss(_ urlBar: URLBar) {
         overlayView.dismiss()
         toggleURLBarBackground(isBright: !webViewController.isLoading)
-        if urlBar.url?.absoluteString == nil {
-            self.shortcutsContainer.isHidden = false
-        }
+        shortcutsContainer.isHidden = urlBar.url?.absoluteString != nil
     }
 
     func urlBarDidFocus(_ urlBar: URLBar) {
@@ -1067,10 +1065,10 @@ extension BrowserViewController: URLBarDelegate {
             let items = PageActionSheetItems(url: url)
             
             let shortcut = Shortcut(url: url)
-            if ShortcutsManager.shared.isSaved(shortcut: shortcut) {
+            if shortcutManager.isSaved(shortcut: shortcut) {
                 let shortcutItem = [items.removeFromShortcutsItem]
                 actions.append(shortcutItem)
-            } else if ShortcutsManager.shared.numberOfShortcuts < UIConstants.maximumNumberOfShortcuts {
+            } else if shortcutManager.numberOfShortcuts < UIConstants.maximumNumberOfShortcuts {
                 let shortcutItem = [items.addToShortcutsItem]
                 actions.append(shortcutItem)
             }
