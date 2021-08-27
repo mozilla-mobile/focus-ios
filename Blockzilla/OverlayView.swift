@@ -172,7 +172,7 @@ class OverlayView: UIView {
             }
         }
         
-        findInPageButton.backgroundColor = iPadView ? .searchSuggestionIPad : UIConstants.colors.background
+        findInPageButton.backgroundColor = iPadView ? .searchSuggestionIPad : .foundation
         
         remakeConstraintsForFindInPage()
         
@@ -193,7 +193,7 @@ class OverlayView: UIView {
             topBorder.backgroundColor =  UIConstants.Photon.Grey90.withAlphaComponent(0.4)
             
         }
-        setGradientToSearchButtons()
+        setColorstToSearchButtons()
     }
 
     private func makeSearchSuggestionButton(atIndex i: Int) {
@@ -229,14 +229,9 @@ class OverlayView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setGradientToSearchButtons() {
+    func setColorstToSearchButtons() {
         for button in searchButtonGroup {
-            if isIpadView {
-                button.removeGradient()
-                button.backgroundColor = .searchSuggestionIPad
-            } else {
-                button.applyGradient(colors: [.searchGradientFirst, .searchGradientSecond, .searchGradientThird, .searchGradientFourth])
-            }
+            button.backgroundColor = isIpadView ? .searchSuggestionIPad : .foundation
         }
     }
 
@@ -315,7 +310,7 @@ class OverlayView: UIView {
         DispatchQueue.main.async {
             self.updateSearchSuggestionsPrompt(hidden: searchSuggestionsPromptHidden)
             // Hide the autocomplete button on home screen and when the user is typing
-            self.addToAutocompleteButton.animateHidden(hideAddToComplete, duration: 0)
+            self.addToAutocompleteButton.isHidden = true
             if !self.isIpadView {
             self.topBorder.backgroundColor =  searchSuggestionsPromptHidden ? UIConstants.Photon.Grey90.withAlphaComponent(0.4) : UIColor(rgb: 0x42455A)
             }
@@ -495,7 +490,7 @@ class OverlayView: UIView {
         setSearchQuery(suggestions: [""], hideFindInPage: true, hideAddToComplete: false || isOnHomeView)
         self.isUserInteractionEnabled = false
         copyButton.isHidden = false
-        addToAutocompleteButton.animateHidden(currentURL.isEmpty, duration: 0)
+        addToAutocompleteButton.isHidden = true
         animateHidden(false, duration: UIConstants.layout.overlayAnimationDuration) {
             self.isUserInteractionEnabled = true
         }
