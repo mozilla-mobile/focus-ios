@@ -25,6 +25,7 @@
         "RequestDesktopTest",
         "SearchProviderTest",
         "SearchSuggestionsPromptTest",
+        "SettingAppearanceTest",
         "SettingAppearanceTest\/testAddRemoveCustomDomain()",
         "SettingAppearanceTest\/testDisableAutocomplete()",
         "SettingAppearanceTest\/testOpenInSafari()",
