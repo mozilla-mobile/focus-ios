@@ -458,13 +458,28 @@ class URLBar: UIView {
         guard let clipboardString = UIPasteboard.general.string else { return }
         pasteAndGo(clipboardString: clipboardString)
     }
+    
+    @objc func copyLink() {
+        self.url
+            .map(\.absoluteString)
+            .map { UIPasteboard.general.string = $0 }
+    }
 
     // Adds Menu Item
     func addCustomMenu() {
-        if UIPasteboard.general.hasStrings && urlText.isFirstResponder {
-            let lookupMenu = UIMenuItem(title: UIConstants.strings.urlPasteAndGo, action: #selector(pasteAndGoFromContextMenu))
-            UIMenuController.shared.menuItems = [lookupMenu]
+        var items = [UIMenuItem]()
+        
+        if urlText.text != nil, urlText.text?.isEmpty == false {
+            let copyItem = UIMenuItem(title: UIConstants.strings.copyMenuButton, action: #selector(copyLink))
+            items.append(copyItem)
         }
+        
+        if UIPasteboard.general.hasStrings {
+            let lookupMenu = UIMenuItem(title: UIConstants.strings.urlPasteAndGo, action: #selector(pasteAndGoFromContextMenu))
+            items.append(lookupMenu)
+        }
+        
+        UIMenuController.shared.menuItems = items
     }
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         addCustomMenu()
@@ -645,7 +660,6 @@ class URLBar: UIView {
             }
 
             self.urlBarBorderView.backgroundColor = borderColor
-            self.urlBarBackgroundView.backgroundColor = backgroundColor
         }, completion: { finished in
             if finished {
                 self.displayClearButton(shouldDisplay: self.isEditing)
@@ -715,6 +729,7 @@ class URLBar: UIView {
     @objc func urlBarDidLongPress(sender: UILongPressGestureRecognizer) {
         if sender.state == .began {
             delegate?.urlBarDidLongPress(self)
+            UIMenuController.shared.showMenu(from: self, rect: self.bounds)
         }
     }
 
@@ -781,7 +796,7 @@ extension URLBar: AutocompleteTextFieldDelegate {
         setTextToURL(displayFullUrl: true)
         autocompleteTextField.highlightAll()
 
-        if !isEditing && inBrowsingMode {
+        if !isEditing {
             isEditing = true
             delegate?.urlBarDidActivate(self)
         }

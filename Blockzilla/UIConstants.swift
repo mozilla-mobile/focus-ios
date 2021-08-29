@@ -7,6 +7,7 @@ import UIKit
 struct UIConstants {
 
     static var ToolbarHeight: CGFloat = 46
+    static let maximumNumberOfShortcuts = 4
 
     struct colors {
         static let actionMenuItemSubtitleLabel = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
@@ -224,6 +225,9 @@ struct UIConstants {
         static let settingsTextPadding: CGFloat = 10
         static let siriUrlSectionPadding: CGFloat = 40
         static let settingsSectionHeight: CGFloat = 44
+        static let suggestionViewCornerRadius: CGFloat = 10
+        static let suggestionViewHeightMultiplier: CGFloat = 0.25
+        static let suggestionViewWidthMultiplier: CGFloat = 0.75
         static let separatorHeight: CGFloat = 0.5
         static let shareTrackersBottomOffset: CGFloat = -20
         static let shareTrackersHeight: CGFloat = 36
@@ -282,6 +286,13 @@ struct UIConstants {
 		static let introViewTextLabelInset: CGFloat = 24
         static let pageControlSpacing: CGFloat = 2
         static let toastMessageHeight: CGFloat = 48
+        static let shortcutViewWidth: CGFloat = 60
+        static let shortcutViewInnerDimension: CGFloat = 36
+        static let shortcutViewHeight: CGFloat = 84
+        static let shortcutsContainerWidth: CGFloat = 326
+        static let shortcutsContainerOffset: CGFloat = 24
+        static let shortcutsContainerSpacing: CGFloat = 28
+        static let shortcutsBackgroundHeight: CGFloat = 140
     }
 
     struct strings {
