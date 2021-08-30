@@ -43,6 +43,15 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Openen in %@";
 
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "OK";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Er is een fout opgetreden bij het toevoegen van de kaart aan Wallet. Probeer het later opnieuw.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "Kaart toevoegen mislukt";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Authenticeer om naar %@ terug te keren";
 
@@ -302,10 +311,10 @@
 "Settings.blockOtherMessage" = "Blokkeren van andere inhoudstrackers kan sommige video’s en webpagina’s verstoren.";
 
 /* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Nee bedankt";
+"Settings.blockOtherNo2" = "Annuleren";
 
 /* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Ik begrijp het";
+"Settings.blockOtherYes2" = "Inhoudstrackers blokkeren";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ zal wat u in de adresbalk intypt naar uw zoekmachine sturen.";
@@ -382,32 +391,20 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "BEVEILIGING";
 
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Advertentietrackers blokkeren";
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Advertenties";
 
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Sommige advertenties volgen websitebezoeken, zelfs als u niet op de advertenties klikt";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Analysetrackers blokkeren";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Gebruikt voor het verzamelen, analyseren en meten van activiteiten zoals tikken en scrollen";
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Analyse";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Weblettertypen blokkeren";
 
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Andere inhoudstrackers blokkeren";
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Inhoud";
 
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Inschakelen kan onverwacht gedrag van bepaalde pagina’s veroorzaken";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Sociale trackers blokkeren";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Ingebed op websites om uw bezoeken te volgen en functionaliteiten zoals deelknoppen weer te geven";
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Sociaal";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Face ID voor ontgrendelen van app gebruiken";
@@ -432,6 +429,12 @@
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID kan %@ ontgrendelen als een URL al in de app is geopend";
+
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Uit";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "Aan";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Wat is er nieuw";
@@ -520,17 +523,32 @@
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Meer info";
 
+/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
+"trackingProtection.moreSettings" = "Meer instellingen";
+
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Sociale trackers";
+
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "Beschermingen voor deze sessie staan UIT";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "Beschermingen voor deze sessie staan AAN";
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Uitschakelen totdat u %@ sluit of op WISSEN tikt.";
 
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Bescherming tegen volgen";
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Verbeterde bescherming tegen volgen";
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Kiezen of %@ sociale, advertentie-, analyse- en andere trackers blokkeert.";
+"trackingProtection.trackerDescriptionLabel2" = "Houd uw gegevens voor uzelf. %@ beschermt u tegen veel van de meest voorkomende trackers die volgen wat u online doet.";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "Trackers geblokkeerd sinds %@";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "Te blokkeren trackers en scripts";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Koppeling naar automatisch aanvullen toevoegen";
@@ -543,6 +561,9 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "WISSEN";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "Navigatiegeschiedenis gewist";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Zoeken op pagina: %@";

@@ -253,12 +253,6 @@
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Näytetäänkö hakuehdotukset?";
 
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Ei kiitos";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Ymmärrän";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ lähettää osoiteriville kirjoittamasi tiedot hakukoneelle.";
 
@@ -329,22 +323,10 @@
 "Settings.sectionSecurity" = "TURVALLISUUS";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Estä mainosseuraimet";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Jotkin mainokset seuraavat sivulatauksia, vaikka et napsauttaisi mainoksia";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Estä analytiikkaseuraimet";
-
-/* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Estä verkkosivujen kirjasinlajit";
 
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Estä muut sisältöseuraimet";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Estä sosiaalisen median seuraimet";
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Käytä Face ID:tä sovelluksen lukituksen avaamiseen";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Saattaa rikkoa jotkin videot ja verkkosivut";
@@ -354,6 +336,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Lähetä käyttötilastoja";
+
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Käytä Touch ID:tä sovelluksen lukituksen avaamiseen";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Avaa Touch ID:llä %@ jos URL on auki sovelluksessa";
@@ -382,6 +367,9 @@
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Pyydä työpöytäversio";
 
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Pyydä mobiiliversiota";
+
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Avaa Chromessa";
 
@@ -390,6 +378,9 @@
 
 /* Text for the share menu option when a user wants to open the current website in the Safari app. */
 "ShareMenu.ShareOpenSafari" = "Avaa Safarissa";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Jaa sivu...";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Lisää";
@@ -433,8 +424,8 @@
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Sosiaaliset seuraimet";
 
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Seurannan suojaus";
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Lisää linkki automaattisesti täydennettäväksi";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Kumoa";
@@ -444,6 +435,9 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "TYHJENNÄ";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "Selaushistoria tyhjennettiin";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Etsi sivulta: %@";

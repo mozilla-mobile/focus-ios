@@ -43,6 +43,15 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "使用 %@ 開啟";
 
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "確定";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "新增票卡至 Wallet 時發生錯誤，請稍候再試一次。";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "新增票卡失敗";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "驗證後即可回到 %@";
 
@@ -302,10 +311,10 @@
 "Settings.blockOtherMessage" = "封鎖其他的內容追蹤器可能會影響網頁與影片載入。";
 
 /* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "不，那不要了";
+"Settings.blockOtherNo2" = "取消";
 
 /* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "知道了";
+"Settings.blockOtherYes2" = "封鎖內容追蹤器";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "您在網址列打字時，%@ 就會將您輸入的文字傳送到搜尋引擎。";
@@ -382,32 +391,20 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "安全性";
 
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "封鎖廣告型追蹤器";
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "廣告";
 
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "就算您沒點擊廣告，廣告也可能會記錄您造訪了哪些網站";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "封鎖分析型追蹤器";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "用來收集、統計並測量在頁面中的點擊、捲動等行為";
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "統計";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "封鎖網路字型";
 
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "封鎖其他內容追蹤器";
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "內容";
 
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "開啟後可能會造成某些頁面行為不正常";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "封鎖社交型追蹤器";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "嵌入於網站，用來追蹤您的造訪紀錄並顯示分享按鈕等功能";
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "社交";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "使用 Face ID 解鎖程式";
@@ -432,6 +429,12 @@
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "若已在程式開啟網頁，允許使用 Touch ID 解鎖 %@";
+
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "關閉";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "開啟";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "有什麼新鮮事";
@@ -520,17 +523,32 @@
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "了解更多";
 
+/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
+"trackingProtection.moreSettings" = "更多設定";
+
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "社交追蹤器";
+
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "已關閉此瀏覽階段的追蹤保護";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "已開啟此瀏覽階段的追蹤保護";
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "直到關閉 %@ 或點擊「清除」前都停用。";
 
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "追蹤保護";
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "加強型追蹤保護";
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "選擇是否要讓 %@ 封鎖廣告、統計、社交或其他追蹤器。";
+"trackingProtection.trackerDescriptionLabel2" = "自己保留自己的資料。%@ 不讓常見的追蹤器記錄您的上網行為。";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "自 %@ 起封鎖的追蹤器";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "要封鎖的追蹤器與指令碼";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "加入鏈結來自動完成";
@@ -543,6 +561,9 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "清除";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "已清除瀏覽紀錄";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "在頁面中搜尋: %@";

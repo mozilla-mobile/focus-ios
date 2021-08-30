@@ -112,12 +112,6 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Kuzatuvchilarning boshqa kontentlarini bloklasangiz, ba’zi video va veb-sahifalar ishlamay qolishi mumkin.";
 
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Rahmat, kerak emas";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Tushundim";
-
 /* Title for settings screen */
 "Settings.screenTitle" = "Sozlamalar";
 
@@ -134,19 +128,7 @@
 "Settings.sectionPrivacy" = "MAXFIYLIK";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Kuzatuvchilarning reklamalarini bloklash";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Kuzatuvchilarning tashxislarini bloklash";
-
-/* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Veb-shriftlarni bloklash";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Kuzatuvchilarnin boshqa kontentlarini bloklash";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Ijtimoiy kuzatuvchilarni bloklash";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Ba’zi video va veb sahifalarning ishlashiga halaqit berishi mumkin";

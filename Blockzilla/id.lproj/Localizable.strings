@@ -301,12 +301,6 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Memblokir pelacak konten lainnya mungkin menghentikan beberapa video dan laman Web.";
 
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Tidak, terima kasih";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Paham";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ akan mengirim apa yang Anda ketikkan di bilah alamat ke mesin pencari Anda.";
 
@@ -383,31 +377,7 @@
 "Settings.sectionSecurity" = "KEAMANAN";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Blokir pelacak iklan";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Beberapa iklan melacak kunjungan situs, meski Anda tidak mengeklik iklan";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Blokir pelacak analitis";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Digunakan untuk mengumpulkan, menganalisa, dan mengukur kegiatan seperti mengetuk dan menggulir";
-
-/* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Blokir font Web";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Blokir pelacak konten lainnya";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Mengaktifkan fitur ini mungkin menyebabkan beberapa laman berfungsi tidak seperti yang diharapkan";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Blokir pelacak sosial";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Tertanam dalam situs untuk melacak kunjungan Anda dan menampilkan fungsi seperti tombol berbagi";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Gunakan Face ID untuk membuka aplikasi";
@@ -525,12 +495,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Nonaktifkan hingga Anda menutup %@ atau mengetuk HAPUS.";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Perlindungan Pelacakan";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Pilih apakah %@ memblokir iklan, pelacak analitis, sosial, dan lainnya.";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Tambahkan tautan untuk dilengkapi secara otomatis";
