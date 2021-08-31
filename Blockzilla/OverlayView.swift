@@ -136,7 +136,7 @@ class OverlayView: UIView {
         topBorder.snp.remakeConstraints { make in
             make.top.equalTo(searchSuggestionsPrompt.snp.bottom)
             make.leading.trailing.equalTo(safeAreaLayoutGuide)
-            make.height.equalTo(iPadView ? 0.5 : 1)
+            make.height.equalTo(iPadView ? 0.5 : 0)
         }
         
         self.searchButtonGroup[0].snp.remakeConstraints { make in
@@ -232,6 +232,7 @@ class OverlayView: UIView {
     func setColorstToSearchButtons() {
         for button in searchButtonGroup {
             button.backgroundColor = isIpadView ? .primaryBackground.withAlphaComponent(0.95) : .foundation
+            button.highlightedBackgroundColor = UIColor(named: "SearchSuggestionButtonHighlight")
         }
     }
 
