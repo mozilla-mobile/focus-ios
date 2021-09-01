@@ -15,10 +15,9 @@ $schema: moz://mozilla.org/schemas/glean/metrics/1-0-0
 
 shortcuts:
   count:
-    type: counter
+    type: quantity
     description: |
-      Measures the number of shortcuts are present as the application
-      goes to background.
+      Records the current number of shortcuts present.
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/2092
     data_reviews:
