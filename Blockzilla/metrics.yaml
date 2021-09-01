@@ -16,6 +16,7 @@ $schema: moz://mozilla.org/schemas/glean/metrics/1-0-0
 shortcuts:
   count:
     type: quantity
+    unit: number
     description: |
       Records the current number of shortcuts present.
     bugs:
@@ -71,17 +72,17 @@ shortcuts:
     expires: "2022-03-31"
 
 legacy.ids:
-   client_id:
-      type: uuid
-      lifetime: user
-      description: |
-        The client id from legacy telemetry.
-      send_in_pings:
-         - deletion-request
-      bugs:
-         - https://github.com/mozilla-mobile/firefox-ios/issues/7019
-      data_reviews:
-         - https://github.com/mozilla-mobile/focus-ios/pull/1741#issuecomment-705853690
-      notification_emails:
-         - firefox-ios@mozilla.com
-      expires: never
+  client_id:
+    type: uuid
+    lifetime: user
+    description: |
+      The client id from legacy telemetry.
+    send_in_pings:
+      - deletion-request
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7019
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/1741#issuecomment-705853690
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: never
