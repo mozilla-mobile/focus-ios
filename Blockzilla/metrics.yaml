@@ -4,6 +4,73 @@
 ---
 $schema: moz://mozilla.org/schemas/glean/metrics/1-0-0
 
+#
+# TODO Agree on some Common Terminology
+#
+#  - awesomebar
+#  - homescreen
+#  - shortcut
+#  - tap
+#
+
+shortcuts:
+  count:
+    type: counter
+    description: |
+      Measures the number of shortcuts are present as the application
+      goes to background.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2092
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - TODO@mozilla.com
+    expires: "2022-03-31"
+  added:
+    type: event
+    description: |
+      Records an event when the user adds a shortcut.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2092
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - TODO@mozilla.com
+    expires: "2022-03-31"
+  removed:
+    type: event
+    description: |
+      Records an event when the user removes a shortcut.
+    extra_keys:
+      context:
+        description: |
+          How the shortcut was removed. Either `page_action_menu` or
+          `tile_context_menu`.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2092
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - TODO@mozilla.com
+    expires: "2022-03-31"
+  opened:
+    type: event
+    description: |
+      Records an event when user opens a shortcut. Includes the
+      context of the tile.
+    extra_keys:
+      context:
+        description: |
+          The context of the tile that was tapped. Either `awesomebar`
+          or `homescreen`.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2092
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - TODO@mozilla.com
+    expires: "2022-03-31"
+
 legacy.ids:
    client_id:
       type: uuid
