@@ -6,14 +6,6 @@
 	<array>
 		<dict>
 			<key>File</key>
-			<string>com.mono0926.LicensePlist/AutocompleteTextField</string>
-			<key>Title</key>
-			<string>AutocompleteTextField</string>
-			<key>Type</key>
-			<string>PSChildPaneSpecifier</string>
-		</dict>
-		<dict>
-			<key>File</key>
 			<string>com.mono0926.LicensePlist/focus-ios</string>
 			<key>Title</key>
 			<string>Firefox Focus</string>
@@ -25,30 +17,6 @@
 			<string>com.mono0926.LicensePlist/Fuzi</string>
 			<key>Title</key>
 			<string>Fuzi</string>
-			<key>Type</key>
-			<string>PSChildPaneSpecifier</string>
-		</dict>
-		<dict>
-			<key>File</key>
-			<string>com.mono0926.LicensePlist/GCDWebServer</string>
-			<key>Title</key>
-			<string>GCDWebServer</string>
-			<key>Type</key>
-			<string>PSChildPaneSpecifier</string>
-		</dict>
-		<dict>
-			<key>File</key>
-			<string>com.mono0926.LicensePlist/onepassword-extension</string>
-			<key>Title</key>
-			<string>onepassword-extension</string>
-			<key>Type</key>
-			<string>PSChildPaneSpecifier</string>
-		</dict>
-		<dict>
-			<key>File</key>
-			<string>com.mono0926.LicensePlist/sentry-cocoa</string>
-			<key>Title</key>
-			<string>Sentry</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
