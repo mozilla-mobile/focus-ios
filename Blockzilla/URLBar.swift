@@ -6,7 +6,7 @@ import UIKit
 import SnapKit
 import Telemetry
 
-protocol URLBarDelegate: class {
+protocol URLBarDelegate: AnyObject {
     func urlBar(_ urlBar: URLBar, didEnterText text: String)
     func urlBar(_ urlBar: URLBar, didSubmitText text: String)
     func urlBar(_ urlBar: URLBar, didAddCustomURL url: URL)
@@ -454,8 +454,7 @@ class URLBar: UIView {
     @objc private func displayURLContextMenu(sender: UILongPressGestureRecognizer) {
         if sender.state == .began {
             self.becomeFirstResponder()
-            UIMenuController.shared.setTargetRect(self.bounds, in: self)
-            UIMenuController.shared.setMenuVisible(true, animated: true)
+            UIMenuController.shared.showMenu(from: self, rect: self.bounds)
         }
     }
 

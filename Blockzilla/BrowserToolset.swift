@@ -5,7 +5,7 @@
 import UIKit
 import CoreGraphics
 
-protocol BrowserToolsetDelegate: class {
+protocol BrowserToolsetDelegate: AnyObject {
     func browserToolsetDidPressBack(_ browserToolbar: BrowserToolset)
     func browserToolsetDidPressForward(_ browserToolbar: BrowserToolset)
     func browserToolsetDidPressReload(_ browserToolbar: BrowserToolset)

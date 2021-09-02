@@ -5,7 +5,7 @@
 import UIKit
 import Telemetry
 
-protocol HomeViewDelegate: class {
+protocol HomeViewDelegate: AnyObject {
     func shareTrackerStatsButtonTapped()
     func tipTapped()
 }

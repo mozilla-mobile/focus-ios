@@ -5,7 +5,7 @@
 import UIKit
 import Telemetry
 
-protocol AddCustomDomainViewControllerDelegate: class {
+protocol AddCustomDomainViewControllerDelegate: AnyObject {
     func addCustomDomainViewControllerDidFinish(_ viewController: AddCustomDomainViewController)
 }
 
