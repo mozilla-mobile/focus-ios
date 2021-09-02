@@ -42,7 +42,7 @@ extension GleanMetrics {
             lifetime: .ping,
             disabled: false
         )
-        
+
         /// Records an event when the user adds a shortcut.
         static let added = EventMetricType<NoExtraKeys, NoExtras>( // generated from shortcuts.added
             category: "shortcuts",
