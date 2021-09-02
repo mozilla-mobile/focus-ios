@@ -9,7 +9,6 @@ This means you might have to go searching through the dependency tree to get a f
 # Pings
 
 - [deletion-request](#deletion-request)
-- [events](#events)
 - [metrics](#metrics)
 
 ## deletion-request
@@ -26,22 +25,6 @@ In addition to those built-in metrics, the following metrics are added to the pi
 | --- | --- | --- | --- | --- | --- | --- |
 | legacy.ids.client_id |[uuid](https://mozilla.github.io/glean/book/user/metrics/uuid.html) |The client id from legacy telemetry.  |[mozilla-mobile/focus-ios#1741](https://github.com/mozilla-mobile/focus-ios/pull/1741#issuecomment-705853690)||never | |
 
-## events
-
-This is a built-in ping that is assembled out of the box by the Glean SDK.
-
-See the Glean SDK documentation for the [`events` ping](https://mozilla.github.io/glean/book/user/pings/events.html).
-
-All Glean pings contain built-in metrics in the [`ping_info`](https://mozilla.github.io/glean/book/user/pings/index.html#the-ping_info-section) and [`client_info`](https://mozilla.github.io/glean/book/user/pings/index.html#the-client_info-section) sections.
-
-In addition to those built-in metrics, the following metrics are added to the ping:
-
-| Name | Type | Description | Data reviews | Extras | Expiration | [Data Sensitivity](https://wiki.mozilla.org/Firefox/Data_Collection) |
-| --- | --- | --- | --- | --- | --- | --- |
-| shortcuts.added |[event](https://mozilla.github.io/glean/book/user/metrics/event.html) |Records an event when the user adds a shortcut.  |[mozilla-mobile/firefox-ios#TODO](https://github.com/mozilla-mobile/firefox-ios/pull/TODO)||2022-03-31 | |
-| shortcuts.opened |[event](https://mozilla.github.io/glean/book/user/metrics/event.html) |Records an event when user opens a shortcut. Includes the context of the tile.  |[mozilla-mobile/firefox-ios#TODO](https://github.com/mozilla-mobile/firefox-ios/pull/TODO)|<ul><li>context: The context of the tile that was tapped. Either `awesomebar` or `homescreen`. </li></ul>|2022-03-31 | |
-| shortcuts.removed |[event](https://mozilla.github.io/glean/book/user/metrics/event.html) |Records an event when the user removes a shortcut.  |[mozilla-mobile/firefox-ios#TODO](https://github.com/mozilla-mobile/firefox-ios/pull/TODO)|<ul><li>context: How the shortcut was removed. Either `page_action_menu` or `tile_context_menu`. </li></ul>|2022-03-31 | |
-
 ## metrics
 
 This is a built-in ping that is assembled out of the box by the Glean SDK.
@@ -54,7 +37,10 @@ In addition to those built-in metrics, the following metrics are added to the pi
 
 | Name | Type | Description | Data reviews | Extras | Expiration | [Data Sensitivity](https://wiki.mozilla.org/Firefox/Data_Collection) |
 | --- | --- | --- | --- | --- | --- | --- |
-| shortcuts.count |[quantity](https://mozilla.github.io/glean/book/user/metrics/quantity.html) |Records the current number of shortcuts present.  |[mozilla-mobile/firefox-ios#TODO](https://github.com/mozilla-mobile/firefox-ios/pull/TODO)|<ul><li>unit: number</li></ul>|2022-03-31 | |
+| shortcuts.shortcut_added_counter |[counter](https://mozilla.github.io/glean/book/user/metrics/counter.html) |A counter that indicates how many times a user has added a website to shortcuts.  |[mozilla-mobile/focus-ios#2232](https://github.com/mozilla-mobile/focus-ios/pull/2232)||2022-08-20 |2 |
+| shortcuts.shortcut_opened_counter |[counter](https://mozilla.github.io/glean/book/user/metrics/counter.html) |A counter that indicates how many times a user has opened a website from a shortcut in the home screen.  |[mozilla-mobile/focus-ios#2232](https://github.com/mozilla-mobile/focus-ios/pull/2232)||2022-08-20 |2 |
+| shortcuts.shortcut_removed_counter |[labeled_counter](https://mozilla.github.io/glean/book/user/metrics/labeled_counters.html) |A counter that indicates how many times a user has removed a website from shortcuts. It also indicates the screen it was removed from, home or browser.  |[mozilla-mobile/focus-ios#2232](https://github.com/mozilla-mobile/focus-ios/pull/2232)|<ul><li>removed_from_browser_menu</li><li>removed_from_home_screen</li></ul>|2022-08-20 |2 |
+| shortcuts.shortcuts_on_home_number |[quantity](https://mozilla.github.io/glean/book/user/metrics/quantity.html) |The number of shortcuts the user has on home screen, 0, 1, 2, 3 or 4 (maximum)  |[mozilla-mobile/focus-ios#2232](https://github.com/mozilla-mobile/focus-ios/pull/2232)|<ul><li>unit: shortcut(s)</li></ul>|2022-08-20 |2 |
 
 Data categories are [defined here](https://wiki.mozilla.org/Firefox/Data_Collection).
 

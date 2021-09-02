@@ -17,65 +17,6 @@ import Glean
 // swiftlint:disable force_try
 
 extension GleanMetrics {
-    enum Shortcuts {
-        enum RemovedKeys: Int32, ExtraKeys {
-            case context = 0
-
-            public func index() -> Int32 {
-                return self.rawValue
-            }
-        }
-
-        enum OpenedKeys: Int32, ExtraKeys {
-            case context = 0
-
-            public func index() -> Int32 {
-                return self.rawValue
-            }
-        }
-
-        /// Records the current number of shortcuts present.
-        static let count = QuantityMetricType( // generated from shortcuts.count
-            category: "shortcuts",
-            name: "count",
-            sendInPings: ["metrics"],
-            lifetime: .ping,
-            disabled: false
-        )
-        
-        /// Records an event when the user adds a shortcut.
-        static let added = EventMetricType<NoExtraKeys, NoExtras>( // generated from shortcuts.added
-            category: "shortcuts",
-            name: "added",
-            sendInPings: ["events"],
-            lifetime: .ping,
-            disabled: false,
-            allowedExtraKeys: []
-        )
-
-        /// Records an event when the user removes a shortcut.
-        static let removed = EventMetricType<RemovedKeys, NoExtras>( // generated from shortcuts.removed
-            category: "shortcuts",
-            name: "removed",
-            sendInPings: ["events"],
-            lifetime: .ping,
-            disabled: false,
-            allowedExtraKeys: ["context"]
-        )
-
-        /// Records an event when user opens a shortcut. Includes the
-        /// context of the tile.
-        static let opened = EventMetricType<OpenedKeys, NoExtras>( // generated from shortcuts.opened
-            category: "shortcuts",
-            name: "opened",
-            sendInPings: ["events"],
-            lifetime: .ping,
-            disabled: false,
-            allowedExtraKeys: ["context"]
-        )
-
-    }
-
     enum LegacyIds {
         /// The client id from legacy telemetry.
         static let clientId = UuidMetricType( // generated from legacy.ids.client_id
@@ -84,6 +25,60 @@ extension GleanMetrics {
             sendInPings: ["deletion-request"],
             lifetime: .user,
             disabled: false
+        )
+
+    }
+
+    enum Shortcuts {
+        /// The number of shortcuts the user has on home screen,
+        /// 0, 1, 2, 3 or 4 (maximum)
+        static let shortcutsOnHomeNumber = QuantityMetricType( // generated from shortcuts.shortcuts_on_home_number
+            category: "shortcuts",
+            name: "shortcuts_on_home_number",
+            sendInPings: ["metrics"],
+            lifetime: .ping,
+            disabled: false
+        )
+
+        /// A counter that indicates how many times a user has opened
+        /// a website from a shortcut in the home screen.
+        static let shortcutOpenedCounter = CounterMetricType( // generated from shortcuts.shortcut_opened_counter
+            category: "shortcuts",
+            name: "shortcut_opened_counter",
+            sendInPings: ["metrics"],
+            lifetime: .ping,
+            disabled: false
+        )
+
+        /// A counter that indicates how many times a user has added
+        /// a website to shortcuts.
+        static let shortcutAddedCounter = CounterMetricType( // generated from shortcuts.shortcut_added_counter
+            category: "shortcuts",
+            name: "shortcut_added_counter",
+            sendInPings: ["metrics"],
+            lifetime: .ping,
+            disabled: false
+        )
+
+        private static let shortcutRemovedCounterLabel = CounterMetricType( // generated from shortcuts.shortcut_removed_counter
+            category: "shortcuts",
+            name: "shortcut_removed_counter",
+            sendInPings: ["metrics"],
+            lifetime: .ping,
+            disabled: false
+        )
+
+        /// A counter that indicates how many times a user has removed
+        /// a website from shortcuts.
+        /// It also indicates the screen it was removed from, home or browser.
+        static let shortcutRemovedCounter = try! LabeledMetricType<CounterMetricType>( // generated from shortcuts.shortcut_removed_counter
+            category: "shortcuts",
+            name: "shortcut_removed_counter",
+            sendInPings: ["metrics"],
+            lifetime: .ping,
+            disabled: false,
+            subMetric: shortcutRemovedCounterLabel,
+            labels: ["removed_from_browser_menu", "removed_from_home_screen"]
         )
 
     }

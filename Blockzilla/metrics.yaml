@@ -2,74 +2,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 ---
-$schema: moz://mozilla.org/schemas/glean/metrics/1-0-0
-
-#
-# TODO Agree on some Common Terminology
-#
-#  - awesomebar
-#  - homescreen
-#  - shortcut
-#  - tap
-#
-
-shortcuts:
-  count:
-    type: quantity
-    unit: number
-    description: |
-      Records the current number of shortcuts present.
-    bugs:
-      - https://github.com/mozilla-mobile/focus-ios/issues/2092
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
-    notification_emails:
-      - TODO@mozilla.com
-    expires: "2022-03-31"
-  added:
-    type: event
-    description: |
-      Records an event when the user adds a shortcut.
-    bugs:
-      - https://github.com/mozilla-mobile/focus-ios/issues/2092
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
-    notification_emails:
-      - TODO@mozilla.com
-    expires: "2022-03-31"
-  removed:
-    type: event
-    description: |
-      Records an event when the user removes a shortcut.
-    extra_keys:
-      context:
-        description: |
-          How the shortcut was removed. Either `page_action_menu` or
-          `tile_context_menu`.
-    bugs:
-      - https://github.com/mozilla-mobile/focus-ios/issues/2092
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
-    notification_emails:
-      - TODO@mozilla.com
-    expires: "2022-03-31"
-  opened:
-    type: event
-    description: |
-      Records an event when user opens a shortcut. Includes the
-      context of the tile.
-    extra_keys:
-      context:
-        description: |
-          The context of the tile that was tapped. Either `awesomebar`
-          or `homescreen`.
-    bugs:
-      - https://github.com/mozilla-mobile/focus-ios/issues/2092
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
-    notification_emails:
-      - TODO@mozilla.com
-    expires: "2022-03-31"
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
 
 legacy.ids:
   client_id:
@@ -86,3 +19,66 @@ legacy.ids:
     notification_emails:
       - firefox-ios@mozilla.com
     expires: never
+
+shortcuts:
+  shortcuts_on_home_number:
+    type: quantity
+    description: |
+      The number of shortcuts the user has on home screen,
+      0, 1, 2, 3 or 4 (maximum)
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2092
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2232
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - TODO@mozilla.com
+    expires: "2022-08-20"
+    unit: shortcut(s)
+  shortcut_opened_counter:
+    type: counter
+    description: |
+      A counter that indicates how many times a user has opened
+      a website from a shortcut in the home screen.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2092
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2232
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - TODO@mozilla.com
+    expires: "2022-08-20"
+  shortcut_added_counter:
+    type: counter
+    description: |
+      A counter that indicates how many times a user has added
+      a website to shortcuts.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2092
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2232
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - TODO@mozilla.com
+    expires: "2022-08-20"
+  shortcut_removed_counter:
+    type: labeled_counter
+    description: |
+      A counter that indicates how many times a user has removed
+      a website from shortcuts.
+      It also indicates the screen it was removed from, home or browser.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2092
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2232
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - TODO@mozilla.com
+    expires: "2022-08-20"
+    labels:
+      - removed_from_browser_menu
+      - removed_from_home_screen
