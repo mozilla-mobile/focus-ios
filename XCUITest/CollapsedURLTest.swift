@@ -13,7 +13,7 @@ class CollapsedURLTest: BaseTestCase {
 
         // Wait for the website to load
         waitForExistence(app.webViews.otherElements["Hacker News"])
-        let webView = app.webViews.children(matching: .other).element
+        _ = app.webViews.children(matching: .other).element
         app.swipeUp()
         app.swipeUp()
         let collapsedTruncatedurltextTextView = app.textViews["Collapsed.truncatedUrlText"]

@@ -10,7 +10,7 @@ class FindInPageTest: BaseTestCase {
         loadWebPage("https://www.example.com")
         waitForWebPageLoad()
         
-        let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
+        _ = app.textFields["Search or enter address"]
         // Activate the find in page bar
         app.textFields["Search or enter address"].tap()
         app.textFields["Search or enter address"].typeText("domain")

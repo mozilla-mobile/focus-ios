@@ -79,7 +79,7 @@ class TipManager {
 
     func fetchTip() -> Tip? {
         guard Settings.getToggle(.showHomeScreenTips) else { return shareTrackersTip }
-        guard let tip = possibleTips.randomElement(), let indexToRemove = possibleTips.index(of: tip) else { return nil }
+        guard let tip = possibleTips.randomElement(), let indexToRemove = possibleTips.firstIndex(of: tip) else { return nil }
         if tip.identifier != TipKey.shareTrackersTip {
             possibleTips.remove(at: indexToRemove)
         }

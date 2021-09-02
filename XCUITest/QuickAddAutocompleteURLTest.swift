@@ -18,7 +18,7 @@ class QuickAddAutocompleteURLTest: BaseTestCase {
         urlBarTextField.tap()
         urlBarTextField.typeText("reddit.c\n")
 
-        guard let text = urlBarTextField.value as? String else {
+        guard (urlBarTextField.value as? String) != nil else {
             XCTFail()
             return
         }
