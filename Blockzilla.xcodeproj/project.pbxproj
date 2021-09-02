@@ -32,10 +32,10 @@
 		16D7169C2114EF76000C8A66 /* BlockerToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D7169B2114EF72000C8A66 /* BlockerToggle.swift */; };
 		16D7169E2114F00E000C8A66 /* TrackingProtectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D7169D2114F00E000C8A66 /* TrackingProtectionViewController.swift */; };
 		16D716A5211503CD000C8A66 /* PageActionSheetItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D716A4211503CD000C8A66 /* PageActionSheetItems.swift */; };
-		1BDD94B426DF0DE1003622A7 /* Nimbus in Frameworks */ = {isa = PBXBuildFile; productRef = 1BDD94B326DF0DE1003622A7 /* Nimbus */; };
-		1BDD94B626DF0DE1003622A7 /* Viaduct in Frameworks */ = {isa = PBXBuildFile; productRef = 1BDD94B526DF0DE1003622A7 /* Viaduct */; };
-		1BDD94B826DF0DE1003622A7 /* RustLog in Frameworks */ = {isa = PBXBuildFile; productRef = 1BDD94B726DF0DE1003622A7 /* RustLog */; };
-		1BDD94BA26DF0DE1003622A7 /* CrashTest in Frameworks */ = {isa = PBXBuildFile; productRef = 1BDD94B926DF0DE1003622A7 /* CrashTest */; };
+		1B3E93AC26E1649C00EA17B6 /* Nimbus in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3E93AB26E1649C00EA17B6 /* Nimbus */; };
+		1B3E93AE26E1649C00EA17B6 /* Viaduct in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3E93AD26E1649C00EA17B6 /* Viaduct */; };
+		1B3E93B026E1649C00EA17B6 /* RustLog in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3E93AF26E1649C00EA17B6 /* RustLog */; };
+		1B3E93B226E1649C00EA17B6 /* CrashTest in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3E93B126E1649C00EA17B6 /* CrashTest */; };
 		1D199EF220D813D300CDF976 /* DragAndDropTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D199EF120D813D300CDF976 /* DragAndDropTest.swift */; };
 		1D3BEDF920C5E6C70019B722 /* FindInPage.js in Resources */ = {isa = PBXBuildFile; fileRef = 1D3BEDF820C5E6C70019B722 /* FindInPage.js */; };
 		1D3BEDFB20C5E76B0019B722 /* FindInPageBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3BEDFA20C5E76A0019B722 /* FindInPageBar.swift */; };
@@ -1005,11 +1005,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1BDD94B426DF0DE1003622A7 /* Nimbus in Frameworks */,
+				1B3E93AC26E1649C00EA17B6 /* Nimbus in Frameworks */,
 				F85F7A292655AD5800395515 /* SnapKit in Frameworks */,
-				1BDD94BA26DF0DE1003622A7 /* CrashTest in Frameworks */,
+				1B3E93B226E1649C00EA17B6 /* CrashTest in Frameworks */,
 				F85F7A2F2655AD5800395515 /* Telemetry in Frameworks */,
-				1BDD94B626DF0DE1003622A7 /* Viaduct in Frameworks */,
+				1B3E93AE26E1649C00EA17B6 /* Viaduct in Frameworks */,
 				F85F7A2B2655AD5800395515 /* Fuzi in Frameworks */,
 				F85F7A352656885C00395515 /* Glean in Frameworks */,
 				1BDD94B826DF0DE1003622A7 /* RustLog in Frameworks */,
@@ -1534,10 +1534,10 @@
 				F85F7A282655AD5800395515 /* SnapKit */,
 				F85F7A2A2655AD5800395515 /* Fuzi */,
 				F85F7A2E2655AD5800395515 /* Telemetry */,
-				1BDD94B326DF0DE1003622A7 /* Nimbus */,
-				1BDD94B526DF0DE1003622A7 /* Viaduct */,
-				1BDD94B726DF0DE1003622A7 /* RustLog */,
-				1BDD94B926DF0DE1003622A7 /* CrashTest */,
+				1B3E93AB26E1649C00EA17B6 /* Nimbus */,
+				1B3E93AD26E1649C00EA17B6 /* Viaduct */,
+				1B3E93AF26E1649C00EA17B6 /* RustLog */,
+				1B3E93B126E1649C00EA17B6 /* CrashTest */,
 			);
 			productName = Blockzilla;
 			productReference = E4BF2DD31BACE8CA00DA9D68 /* Firefox Klar.app */;
@@ -1714,7 +1714,7 @@
 				F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */,
 				F8324CB8264DC8ED007E4BFA /* XCRemoteSwiftPackageReference "Fuzi" */,
 				F8324E0726556E45007E4BFA /* XCRemoteSwiftPackageReference "telemetry-ios" */,
-				1BDD94B226DF0DE1003622A7 /* XCRemoteSwiftPackageReference "rust-components-swift" */,
+				1B3E93AA26E1649C00EA17B6 /* XCRemoteSwiftPackageReference "rust-components-swift" */,
 			);
 			productRefGroup = E4BF2DD41BACE8CA00DA9D68 /* Products */;
 			projectDirPath = "";
@@ -5216,12 +5216,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		1BDD94B226DF0DE1003622A7 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
+		1B3E93AA26E1649C00EA17B6 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.0.2;
+				minimumVersion = 0.0.3;
 			};
 		};
 		F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */ = {
@@ -5259,24 +5259,24 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		1BDD94B326DF0DE1003622A7 /* Nimbus */ = {
+		1B3E93AB26E1649C00EA17B6 /* Nimbus */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 1BDD94B226DF0DE1003622A7 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			package = 1B3E93AA26E1649C00EA17B6 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
 			productName = Nimbus;
 		};
-		1BDD94B526DF0DE1003622A7 /* Viaduct */ = {
+		1B3E93AD26E1649C00EA17B6 /* Viaduct */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 1BDD94B226DF0DE1003622A7 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			package = 1B3E93AA26E1649C00EA17B6 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
 			productName = Viaduct;
 		};
-		1BDD94B726DF0DE1003622A7 /* RustLog */ = {
+		1B3E93AF26E1649C00EA17B6 /* RustLog */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 1BDD94B226DF0DE1003622A7 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			package = 1B3E93AA26E1649C00EA17B6 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
 			productName = RustLog;
 		};
-		1BDD94B926DF0DE1003622A7 /* CrashTest */ = {
+		1B3E93B126E1649C00EA17B6 /* CrashTest */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 1BDD94B226DF0DE1003622A7 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			package = 1B3E93AA26E1649C00EA17B6 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
 			productName = CrashTest;
 		};
 		F85F7A282655AD5800395515 /* SnapKit */ = {
