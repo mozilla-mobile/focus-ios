@@ -449,26 +449,32 @@ extension AppDelegate {
         // Enable networking.
         Viaduct.shared.useReqwestBackend()
 
-        // Try to initialize and use Nimbus SDK.
-        let profilePath = FileManager.default.containerURL(
+        var nimbusDbPath: String {
+            let profilePath = FileManager.default.containerURL(
                 forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier
             )?
             .appendingPathComponent("profile.profile")
             .path
-        let nimbusDbPath = profilePath.flatMap {
-            URL(fileURLWithPath: $0).appendingPathComponent("nimbus.db").path
+            let dbPath = profilePath.flatMap {
+                URL(fileURLWithPath: $0).appendingPathComponent("nimbus.db").path
+            } ?? ""
+            
+            return dbPath
         }
-        let myNimbus = try! Nimbus.create(
-            NimbusServerSettings(url: URL(string: "https://firefox.settings.services.mozilla.com")!),
-            appSettings: NimbusAppSettings(appName: "Focus", channel: "Nightly"),
-            dbPath: nimbusDbPath!,
-            resourceBundles: [],
-            errorReporter: { err in
-                try! { err in throw err }(err)
+        do {
+            let nimbus = try Nimbus.create(
+                NimbusServerSettings(url: URL(string: "https://firefox.settings.services.mozilla.com")!),
+                appSettings: NimbusAppSettings(appName: "Focus", channel: "Nightly"),
+                dbPath: nimbusDbPath,
+                resourceBundles: [],
+                errorReporter: { err in try! {err in throw err}(err)}
+            )
+                nimbus.initialize()
+                nimbus.fetchExperiments()
             }
-        )
-        myNimbus.initialize()
-        myNimbus.fetchExperiments()
+         catch {
+            print("ERROR: Unable to create Nimbus")
+        }
     }
 
     func presentModal(viewController: UIViewController, animated: Bool) {
