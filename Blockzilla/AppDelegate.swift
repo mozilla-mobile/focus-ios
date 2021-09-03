@@ -461,13 +461,17 @@ extension AppDelegate {
             
             return dbPath
         }
+
+        let errorReporter: NimbusErrorReporter = { err in
+            print(err)
+        }
         do {
             let nimbus = try Nimbus.create(
                 NimbusServerSettings(url: URL(string: "https://firefox.settings.services.mozilla.com")!),
-                appSettings: NimbusAppSettings(appName: "Focus", channel: "Nightly"),
+                appSettings: NimbusAppSettings(appName: "focus_ios", channel: "release"),
                 dbPath: nimbusDbPath,
                 resourceBundles: [],
-                errorReporter: { err in try! {err in throw err}(err)}
+                errorReporter: errorReporter
             )
                 nimbus.initialize()
                 nimbus.fetchExperiments()
