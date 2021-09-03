@@ -410,6 +410,11 @@ extension AppDelegate {
         }
 
         Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData))
+        
+        GleanMetrics.TrackingProtection.hasAdvertisingBlocked.set(Settings.getToggle(.blockAds))
+        GleanMetrics.TrackingProtection.hasAnalyticsBlocked.set(Settings.getToggle(.blockAnalytics))
+        GleanMetrics.TrackingProtection.hasContentBlocked.set(Settings.getToggle(.blockOther))
+        GleanMetrics.TrackingProtection.hasSocialBlocked.set(Settings.getToggle(.blockSocial))
     }
 
     func presentModal(viewController: UIViewController, animated: Bool) {
