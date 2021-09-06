@@ -45,7 +45,7 @@ class TipManager {
     }
 
     static let shared = TipManager()
-    private lazy var possibleTips: [Tip] = {
+    private var tips: [Tip] {
         var tips: [Tip] = []
         tips.append(releaseTip)
         tips.append(shortcutsTip)
@@ -58,48 +58,94 @@ class TipManager {
             tips.append(biometricTip)
         }
         return tips
-    }()
+    }
+    
+    private var availableTips: [Tip] {
+        return tips.filter { $0.canShow() }
+    }
     private let laContext = LAContext()
     var currentTip: Tip?
 
     private init() { }
 
-    lazy var releaseTip = Tip(title: String(format: UIConstants.strings.releaseTipTitle, AppInfo.config.productName), description: String(format: UIConstants.strings.releaseTipDescription, AppInfo.config.productName), identifier: TipKey.releaseTip, showVc: true) { UserDefaults.standard.bool(forKey: TipKey.releaseTip) }
+    private lazy var releaseTip = Tip(
+        title: String(format: UIConstants.strings.releaseTipTitle, AppInfo.config.productName),
+        description: String(format: UIConstants.strings.releaseTipDescription, AppInfo.config.productName),
+        identifier: TipKey.releaseTip,
+        showVc: true,
+        canShow: { UserDefaults.standard.bool(forKey: TipKey.releaseTip) }
+    )
     
-    lazy var shortcutsTip = Tip(title: UIConstants.strings.shortcutsTipTitle, description: String(format: UIConstants.strings.shortcutsTipDescription, AppInfo.config.productName), identifier: TipKey.shortcutsTip) { UserDefaults.standard.bool(forKey: TipKey.shortcutsTip) }
+    private lazy var shortcutsTip = Tip(
+        title: UIConstants.strings.shortcutsTipTitle,
+        description: String(format: UIConstants.strings.shortcutsTipDescription, AppInfo.config.productName),
+        identifier: TipKey.shortcutsTip,
+        canShow: { UserDefaults.standard.bool(forKey: TipKey.shortcutsTip) }
+    )
 
-    lazy var sitesNotWorkingTip = Tip(title: UIConstants.strings.sitesNotWorkingTipTitle, description: UIConstants.strings.sitesNotWorkingTipDescription, identifier: TipKey.sitesNotWorkingTip) { UserDefaults.standard.bool(forKey: TipKey.sitesNotWorkingTip) }
+    private lazy var sitesNotWorkingTip = Tip(
+        title: UIConstants.strings.sitesNotWorkingTipTitle,
+        description: UIConstants.strings.sitesNotWorkingTipDescription,
+        identifier: TipKey.sitesNotWorkingTip,
+        canShow: { UserDefaults.standard.bool(forKey: TipKey.sitesNotWorkingTip) }
+    )
 
-    lazy var biometricTip: Tip = {
-        if laContext.biometryType == .faceID {
-            return Tip(title: UIConstants.strings.biometricTipTitle, description: UIConstants.strings.biometricTipFaceIdDescription, identifier: TipKey.biometricTip, showVc: true) { UserDefaults.standard.bool(forKey: TipKey.biometricTip) }
-        } else {
-            return Tip(title: UIConstants.strings.biometricTipTitle, description: UIConstants.strings.biometricTipTouchIdDescription, identifier: TipKey.biometricTip, showVc: true) { UserDefaults.standard.bool(forKey: TipKey.biometricTip) }
-        }
+    private lazy var biometricTip: Tip = {
+        let description = laContext.biometryType == .faceID
+            ? UIConstants.strings.biometricTipFaceIdDescription
+            : UIConstants.strings.biometricTipTouchIdDescription
+        
+        return Tip(
+            title: UIConstants.strings.biometricTipTitle,
+            description: description,
+            identifier: TipKey.biometricTip,
+            showVc: true,
+            canShow: { UserDefaults.standard.bool(forKey: TipKey.biometricTip) }
+        )
     }()
 
-    lazy var requestDesktopTip = Tip(title: UIConstants.strings.requestDesktopTipTitle, description: UIConstants.strings.requestDesktopTipDescription, identifier: TipKey.requestDesktopTip) { UserDefaults.standard.bool(forKey: TipKey.requestDesktopTip) }
+    private lazy var requestDesktopTip = Tip(
+        title: UIConstants.strings.requestDesktopTipTitle,
+        description: UIConstants.strings.requestDesktopTipDescription,
+        identifier: TipKey.requestDesktopTip,
+        canShow: { UserDefaults.standard.bool(forKey: TipKey.requestDesktopTip) }
+    )
 
-    lazy var siriFavoriteTip = Tip(title: UIConstants.strings.siriFavoriteTipTitle, description: UIConstants.strings.siriFavoriteTipDescription, identifier: TipKey.siriFavoriteTip, showVc: true, canShow: self.isiOS12)
+    private lazy var siriFavoriteTip = Tip(
+        title: UIConstants.strings.siriFavoriteTipTitle,
+        description: UIConstants.strings.siriFavoriteTipDescription,
+        identifier: TipKey.siriFavoriteTip,
+        showVc: true, canShow: self.isiOS12
+    )
 
-    lazy var siriEraseTip = Tip(title: UIConstants.strings.siriEraseTipTitle, description: UIConstants.strings.siriEraseTipDescription, identifier: TipKey.siriEraseTip, showVc: true, canShow: self.isiOS12)
+    private lazy var siriEraseTip = Tip(
+        title: UIConstants.strings.siriEraseTipTitle,
+        description: UIConstants.strings.siriEraseTipDescription,
+        identifier: TipKey.siriEraseTip,
+        showVc: true,
+        canShow: self.isiOS12
+    )
 
     /// Return a string representing the trackers tip. It will include the current number of trackers blocked, formatted as a decimal.
-    func shareTrackersDescription() -> String {
+    private func shareTrackersDescription() -> String {
         let numberOfTrackersBlocked = NSNumber(integerLiteral: UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey))
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         return String(format: UIConstants.strings.shareTrackersTipDescription, formatter.string(from: numberOfTrackersBlocked) ?? "0")
     }
     
-    lazy var shareTrackersTip = Tip(title: UIConstants.strings.shareTrackersTipTitle, description: shareTrackersDescription(), identifier: TipKey.shareTrackersTip) {
-        UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey) >= 10
+    private var shareTrackersTip: Tip {
+        Tip(
+            title: UIConstants.strings.shareTrackersTipTitle,
+            description: shareTrackersDescription(),
+            identifier: TipKey.shareTrackersTip,
+            canShow: { UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey) >= 10 }
+        )
     }
 
     func fetchTip() -> Tip? {
         guard Settings.getToggle(.showHomeScreenTips) else { return shareTrackersTip }
-        guard let tip = possibleTips.first else { return nil }
-        return tip.canShow() ? tip : nil
+        return availableTips.first
     }
     
     private func isiOS12() -> Bool {
@@ -113,8 +159,8 @@ class TipManager {
     
     func getNextTip() -> Tip? {
         if let id = currentTip?.identifier {
-            if let index = possibleTips.firstIndex(where: {$0.identifier == id}) {
-                currentTip = index == possibleTips.count - 1 ? possibleTips[0] : possibleTips[index + 1]
+            if let index = availableTips.firstIndex(where: {$0.identifier == id}) {
+                currentTip = index == availableTips.count - 1 ? availableTips[0] : availableTips[index + 1]
                 if let currentTip = currentTip {
                     return currentTip
                 }
@@ -125,8 +171,8 @@ class TipManager {
     
     func getPreviousTip() -> Tip? {
         if let id = currentTip?.identifier {
-            if let index = possibleTips.firstIndex(where: {$0.identifier == id}) {
-                currentTip = index == 0 ? possibleTips.last : possibleTips[index - 1]
+            if let index = availableTips.firstIndex(where: {$0.identifier == id}) {
+                currentTip = index == 0 ? availableTips.last : availableTips[index - 1]
                 if let currentTip = currentTip {
                     return currentTip
                 }
@@ -136,12 +182,12 @@ class TipManager {
     }
     
     func numberOfTips() -> Int {
-        possibleTips.count
+        availableTips.count
     }
     
     func currentTipIndex() -> Int {
         if let id = currentTip?.identifier {
-            if let index = possibleTips.firstIndex(where: {$0.identifier == id}) {
+            if let index = availableTips.firstIndex(where: {$0.identifier == id}) {
                 return index
             }
         }
