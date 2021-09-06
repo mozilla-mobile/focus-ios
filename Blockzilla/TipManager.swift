@@ -8,16 +8,24 @@ import LocalAuthentication
 class TipManager {
 
     struct Tip: Equatable {
-        var title: String
-        var description: String?
-        var identifier: String
-        var showVc: Bool
+        let title: String
+        let description: String?
+        let identifier: String
+        let showVc: Bool
+        let canShow:   () -> Bool
 
-        init(title: String, description: String? = nil, identifier: String, showVc: Bool = false) {
+        init(
+            title: String,
+            description: String? = nil,
+            identifier: String,
+            showVc: Bool = false,
+            canShow: @escaping () -> Bool
+        ) {
             self.title = title
             self.identifier = identifier
             self.description = description
             self.showVc = showVc
+            self.canShow = canShow
         }
 
         static func == (lhs: Tip, rhs: Tip) -> Bool {
@@ -25,7 +33,7 @@ class TipManager {
         }
     }
 
-    class TipKey {
+    enum TipKey {
         static let releaseTip = "releaseTip"
         static let shortcutsTip = "shortcutsTip"
         static let sitesNotWorkingTip = "sitesNotWorkingTip"
@@ -37,47 +45,44 @@ class TipManager {
     }
 
     static let shared = TipManager()
-    private var possibleTips: [Tip]
+    private lazy var possibleTips: [Tip] = {
+        var tips: [Tip] = []
+        tips.append(releaseTip)
+        tips.append(shortcutsTip)
+        tips.append(sitesNotWorkingTip)
+        tips.append(requestDesktopTip)
+        tips.append(siriFavoriteTip)
+        tips.append(siriEraseTip)
+        tips.append(shareTrackersTip)
+        if laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
+            tips.append(biometricTip)
+        }
+        return tips
+    }()
     private let laContext = LAContext()
     var currentTip: Tip?
 
-    init() {
-        possibleTips = [Tip]()
-        addAllTips()
-    }
+    private init() { }
 
-    private func addAllTips() {
-        possibleTips.append(releaseTip)
-        possibleTips.append(shortcutsTip)
-        possibleTips.append(sitesNotWorkingTip)
-        possibleTips.append(requestDesktopTip)
-        possibleTips.append(siriFavoriteTip)
-        possibleTips.append(siriEraseTip)
-        possibleTips.append(shareTrackersTip)
-        if laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
-            possibleTips.append(biometricTip)
-        }
-    }
-
-    lazy var releaseTip = Tip(title: String(format: UIConstants.strings.releaseTipTitle, AppInfo.config.productName), description: String(format: UIConstants.strings.releaseTipDescription, AppInfo.config.productName), identifier: TipKey.releaseTip, showVc: true)
+    lazy var releaseTip = Tip(title: String(format: UIConstants.strings.releaseTipTitle, AppInfo.config.productName), description: String(format: UIConstants.strings.releaseTipDescription, AppInfo.config.productName), identifier: TipKey.releaseTip, showVc: true) { UserDefaults.standard.bool(forKey: TipKey.releaseTip) }
     
-    lazy var shortcutsTip = Tip(title: UIConstants.strings.shortcutsTipTitle, description: String(format: UIConstants.strings.shortcutsTipDescription, AppInfo.config.productName), identifier: TipKey.shortcutsTip)
+    lazy var shortcutsTip = Tip(title: UIConstants.strings.shortcutsTipTitle, description: String(format: UIConstants.strings.shortcutsTipDescription, AppInfo.config.productName), identifier: TipKey.shortcutsTip) { UserDefaults.standard.bool(forKey: TipKey.shortcutsTip) }
 
-    lazy var sitesNotWorkingTip = Tip(title: UIConstants.strings.sitesNotWorkingTipTitle, description: UIConstants.strings.sitesNotWorkingTipDescription, identifier: TipKey.sitesNotWorkingTip)
+    lazy var sitesNotWorkingTip = Tip(title: UIConstants.strings.sitesNotWorkingTipTitle, description: UIConstants.strings.sitesNotWorkingTipDescription, identifier: TipKey.sitesNotWorkingTip) { UserDefaults.standard.bool(forKey: TipKey.sitesNotWorkingTip) }
 
     lazy var biometricTip: Tip = {
         if laContext.biometryType == .faceID {
-            return Tip(title: UIConstants.strings.biometricTipTitle, description: UIConstants.strings.biometricTipFaceIdDescription, identifier: TipKey.biometricTip, showVc: true)
+            return Tip(title: UIConstants.strings.biometricTipTitle, description: UIConstants.strings.biometricTipFaceIdDescription, identifier: TipKey.biometricTip, showVc: true) { UserDefaults.standard.bool(forKey: TipKey.biometricTip) }
         } else {
-            return Tip(title: UIConstants.strings.biometricTipTitle, description: UIConstants.strings.biometricTipTouchIdDescription, identifier: TipKey.biometricTip, showVc: true)
+            return Tip(title: UIConstants.strings.biometricTipTitle, description: UIConstants.strings.biometricTipTouchIdDescription, identifier: TipKey.biometricTip, showVc: true) { UserDefaults.standard.bool(forKey: TipKey.biometricTip) }
         }
     }()
 
-    lazy var requestDesktopTip = Tip(title: UIConstants.strings.requestDesktopTipTitle, description: UIConstants.strings.requestDesktopTipDescription, identifier: TipKey.requestDesktopTip)
+    lazy var requestDesktopTip = Tip(title: UIConstants.strings.requestDesktopTipTitle, description: UIConstants.strings.requestDesktopTipDescription, identifier: TipKey.requestDesktopTip) { UserDefaults.standard.bool(forKey: TipKey.requestDesktopTip) }
 
-    lazy var siriFavoriteTip = Tip(title: UIConstants.strings.siriFavoriteTipTitle, description: UIConstants.strings.siriFavoriteTipDescription, identifier: TipKey.siriFavoriteTip, showVc: true)
+    lazy var siriFavoriteTip = Tip(title: UIConstants.strings.siriFavoriteTipTitle, description: UIConstants.strings.siriFavoriteTipDescription, identifier: TipKey.siriFavoriteTip, showVc: true, canShow: self.isiOS12)
 
-    lazy var siriEraseTip = Tip(title: UIConstants.strings.siriEraseTipTitle, description: UIConstants.strings.siriEraseTipDescription, identifier: TipKey.siriEraseTip, showVc: true)
+    lazy var siriEraseTip = Tip(title: UIConstants.strings.siriEraseTipTitle, description: UIConstants.strings.siriEraseTipDescription, identifier: TipKey.siriEraseTip, showVc: true, canShow: self.isiOS12)
 
     /// Return a string representing the trackers tip. It will include the current number of trackers blocked, formatted as a decimal.
     func shareTrackersDescription() -> String {
@@ -87,31 +92,19 @@ class TipManager {
         return String(format: UIConstants.strings.shareTrackersTipDescription, formatter.string(from: numberOfTrackersBlocked) ?? "0")
     }
     
-    lazy var shareTrackersTip = Tip(title: UIConstants.strings.shareTrackersTipTitle, description: shareTrackersDescription(), identifier: TipKey.shareTrackersTip)
+    lazy var shareTrackersTip = Tip(title: UIConstants.strings.shareTrackersTipTitle, description: shareTrackersDescription(), identifier: TipKey.shareTrackersTip) {
+        UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey) >= 10
+    }
 
     func fetchTip() -> Tip? {
         guard Settings.getToggle(.showHomeScreenTips) else { return shareTrackersTip }
         guard let tip = possibleTips.first else { return nil }
-        if canShowTip(with: tip.identifier) {
-            return tip
-        } else if possibleTips.count == 1 {
-            return nil
-        } else {
-            return fetchTip()
-        }
+        return tip.canShow() ? tip : nil
     }
-
-    private func canShowTip(with id: String) -> Bool {
-        let defaults = UserDefaults.standard
-        switch id {
-        case TipKey.siriFavoriteTip, TipKey.siriEraseTip:
-            guard #available(iOS 12.0, *) else { return false }
-        case TipKey.shareTrackersTip:
-            guard UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey) >= 10 else { return false }
-        default:
-            break
-        }
-        return defaults.bool(forKey: id)
+    
+    private func isiOS12() -> Bool {
+        guard #available(iOS 12.0, *) else { return false }
+        return true
     }
 
     func shouldShowTips() -> Bool {

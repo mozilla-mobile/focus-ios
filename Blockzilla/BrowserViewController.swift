@@ -80,7 +80,7 @@ class BrowserViewController: UIViewController {
         }
     }
     private var initialUrl: URL?
-    var tipManager: TipManager?
+    var tipManager: TipManager
     var shortcutManager: ShortcutsManager
 
     static let userDefaultsTrackersBlockedKey = "lifetimeTrackersBlocked"
@@ -422,12 +422,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func createHomeView() {
-        let homeView: HomeView
-        if TipManager.shared.shouldShowTips() {
-            homeView = HomeView(tipManager: tipManager)
-        } else {
-            homeView = HomeView()
-        }
+        let homeView = HomeView(tipManager: tipManager)
         homeView.delegate = self
         homeView.toolbar.toolset.delegate = self
         homeViewContainer.addSubview(homeView)
@@ -440,7 +435,6 @@ class BrowserViewController: UIViewController {
             homeView.removeFromSuperview()
         }
         self.homeView = homeView
-
     }
 
     private func createURLBar() {
@@ -1327,7 +1321,7 @@ extension BrowserViewController: HomeViewDelegate {
     }
 
     func tipTapped() {
-        guard let tip = tipManager?.currentTip, tip.showVc else { return }
+        guard let tip = tipManager.currentTip, tip.showVc else { return }
         switch tip.identifier {
         case TipManager.TipKey.releaseTip:
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.releaseTip)

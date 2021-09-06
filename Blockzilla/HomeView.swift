@@ -28,7 +28,7 @@ class HomeView: UIView {
         tipView.gestureRecognizers?.removeAll()
     }
 
-    init(tipManager: TipManager? = nil) {
+    init(tipManager: TipManager) {
         super.init(frame: CGRect.zero)
         rotated()
         NotificationCenter.default.addObserver(self, selector: #selector(rotated), name: UIDevice.orientationDidChangeNotification, object: nil)
@@ -62,7 +62,7 @@ class HomeView: UIView {
         tipDescriptionLabel.minimumScaleFactor = UIConstants.layout.homeViewLabelMinimumScale
         tipView.addSubview(tipDescriptionLabel)
         
-        pageControl.numberOfPages = tipManager?.numberOfTips() ?? 0
+        pageControl.numberOfPages = tipManager.numberOfTips()
         addSubview(pageControl)
         
 
@@ -142,7 +142,7 @@ class HomeView: UIView {
             make.left.equalToSuperview()
         }
 
-        if let tipManager = tipManager, let tip = tipManager.fetchTip() {
+        if let tip = tipManager.fetchTip() {
             showTipView()
             switch tip.identifier {
             case TipManager.TipKey.shareTrackersTip:
