@@ -8,23 +8,34 @@ import LocalAuthentication
 class TipManager {
 
     struct Tip: Equatable {
+        enum ScrollDestination {
+            case siri
+            case biometric
+            case siriFavorite
+        }
+        
+        enum Action {
+            case visit(topic: SupportTopic)
+            case showSettings(destination: ScrollDestination)
+        }
+        
         let title: String
         let description: String?
         let identifier: String
-        let showVc: Bool
-        let canShow:   () -> Bool
+        let action: Action?
+        let canShow: () -> Bool
 
         init(
             title: String,
             description: String? = nil,
             identifier: String,
-            showVc: Bool = false,
+            action: Action? = nil,
             canShow: @escaping () -> Bool
         ) {
             self.title = title
             self.identifier = identifier
             self.description = description
-            self.showVc = showVc
+            self.action = action
             self.canShow = canShow
         }
 
@@ -73,7 +84,7 @@ class TipManager {
         title: String(format: UIConstants.strings.releaseTipTitle, AppInfo.config.productName),
         description: String(format: UIConstants.strings.releaseTipDescription, AppInfo.config.productName),
         identifier: TipKey.releaseTip,
-        showVc: true,
+        action: .visit(topic: .whatsNew),
         canShow: { UserDefaults.standard.bool(forKey: TipKey.releaseTip) }
     )
     
@@ -100,7 +111,7 @@ class TipManager {
             title: UIConstants.strings.biometricTipTitle,
             description: description,
             identifier: TipKey.biometricTip,
-            showVc: true,
+            action: .showSettings(destination: .biometric),
             canShow: { UserDefaults.standard.bool(forKey: TipKey.biometricTip) }
         )
     }()
@@ -116,14 +127,15 @@ class TipManager {
         title: UIConstants.strings.siriFavoriteTipTitle,
         description: UIConstants.strings.siriFavoriteTipDescription,
         identifier: TipKey.siriFavoriteTip,
-        showVc: true, canShow: self.isiOS12
+        action: .showSettings(destination: .siri),
+        canShow: self.isiOS12
     )
 
     private lazy var siriEraseTip = Tip(
         title: UIConstants.strings.siriEraseTipTitle,
         description: UIConstants.strings.siriEraseTipDescription,
         identifier: TipKey.siriEraseTip,
-        showVc: true,
+        action: .showSettings(destination: .siriFavorite),
         canShow: self.isiOS12
     )
 

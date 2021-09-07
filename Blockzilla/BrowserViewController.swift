@@ -1321,24 +1321,23 @@ extension BrowserViewController: HomeViewDelegate {
     }
 
     func tipTapped() {
-        guard let tip = tipManager.currentTip, tip.showVc else { return }
-        switch tip.identifier {
-        case TipManager.TipKey.releaseTip:
+        guard let tip = tipManager.currentTip, let action = tip.action else { return }
+        switch action {
+        case .visit(let topic):
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.releaseTip)
-            visit(url: URL(forSupportTopic: .whatsNew))
-        case TipManager.TipKey.biometricTip:
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.biometricTip)
-            showSettings()
-        case TipManager.TipKey.siriEraseTip:
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.siriEraseTip)
-            showSettings(shouldScrollToSiri: true)
-        case TipManager.TipKey.siriFavoriteTip:
-            if #available(iOS 12.0, *) {
+            visit(url: URL(forSupportTopic: topic))
+        case .showSettings(let destination):
+            switch destination {
+            case .siri:
+                Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.siriEraseTip)
+                showSettings(shouldScrollToSiri: true)
+            case .biometric:
+                Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.biometricTip)
+                showSettings()
+            case .siriFavorite:
                 Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.siriFavoriteTip)
                 showSiriFavoriteSettings()
             }
-        default:
-            break
         }
     }
 }

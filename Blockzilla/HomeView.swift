@@ -205,7 +205,7 @@ class HomeView: UIView {
         tipTitleLabel.text = tip.title
         tipTitleLabel.sizeToFit()
         tipTitleLabel.isHidden = false
-        if let description = tip.description, tip.showVc {
+        if let description = tip.description, tip.action != nil {
             tipDescriptionLabel.text = description
             tipDescriptionLabel.isUserInteractionEnabled = true
             let tap = UITapGestureRecognizer(target: self, action: #selector(HomeView.tapTip))
