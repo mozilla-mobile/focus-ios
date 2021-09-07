@@ -68,6 +68,7 @@ tracking_protection:
     lifetime: user
     notification_emails:
       - firefox-focus@mozilla.com
+      - sarentz@mozilla.com
     expires: never
 
   tracker_setting_changed:
