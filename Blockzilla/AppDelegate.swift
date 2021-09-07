@@ -411,6 +411,8 @@ extension AppDelegate {
 
         Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData))
         
+        // Send "at startup" telemetry
+        GleanMetrics.Shortcuts.shortcutsOnHomeNumber.set(Int64(ShortcutsManager.shared.numberOfShortcuts))
         GleanMetrics.TrackingProtection.hasAdvertisingBlocked.set(Settings.getToggle(.blockAds))
         GleanMetrics.TrackingProtection.hasAnalyticsBlocked.set(Settings.getToggle(.blockAnalytics))
         GleanMetrics.TrackingProtection.hasContentBlocked.set(Settings.getToggle(.blockOther))

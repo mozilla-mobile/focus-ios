@@ -1204,13 +1204,14 @@ extension BrowserViewController: ShortcutViewDelegate {
         urlBar.url = shortcut.url
         deactivateUrlBarOnHomeView()
         submit(url: shortcut.url)
+        GleanMetrics.Shortcuts.shortcutOpenedCounter.add()
     }
 
     func shortcutLongPressed(shortcut: Shortcut, shortcutView: ShortcutView) {
         let removeFromShortcutsItem = PhotonActionSheetItem(title: UIConstants.strings.removeFromShortcuts, iconString: "icon_shortcuts_remove") { action in
-            //TODO: add telemetry
             ShortcutsManager.shared.removeFromShortcuts(shortcut: shortcut)
             self.shortcutsBackground.isHidden = self.shortcutManager.numberOfShortcuts == 0 ? true : false
+            GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_home_screen"].add()
         }
         
         var actions: [[PhotonActionSheetItem]] = []
