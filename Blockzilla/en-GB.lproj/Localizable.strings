@@ -1,597 +1,597 @@
 /* Button on About screen */
-"About.learnMoreButton" = "了解更多";
+"About.learnMoreButton" = "Learn more";
 
 /* Label on About screen */
-"About.missionLabel" = "%@ 是由 Mozilla 所打造，我們的使命是培養一個健康、開放的網際網路。";
+"About.missionLabel" = "%@ is produced by Mozilla. Our mission is to foster a healthy, open Internet.";
 
 /* Label on About screen */
-"About.privateBullet1" = "直接在程式中搜尋、瀏覽";
+"About.privateBullet1" = "Search and browse right in the app";
 
 /* Label on About screen */
-"About.privateBullet2" = "封鎖追蹤器（也可調整設定，允許追蹤器）";
+"About.privateBullet2" = "Block trackers (or update settings to allow trackers)";
 
 /* Label on About screen */
-"About.privateBullet3" = "清除 Cookie、搜尋紀錄、上網紀錄";
+"About.privateBullet3" = "Erase to delete cookies as well as search and browsing history";
 
 /* Label on About screen */
-"About.privateBulletHeader" = "可當作私密瀏覽器使用:";
+"About.privateBulletHeader" = "Use it as a private browser:";
 
 /* Label for row in About screen */
-"About.rowHelp" = "說明";
+"About.rowHelp" = "Help";
 
 /* Link to Privacy Notice in the About screen */
-"About.rowPrivacy" = "隱私權公告";
+"About.rowPrivacy" = "Privacy Notice";
 
 /* Label for row in About screen */
-"About.rowRights" = "您的權利";
+"About.rowRights" = "Your Rights";
 
 /* Label on About screen */
-"About.safariBullet1" = "封鎖追蹤器，加強隱私";
+"About.safariBullet1" = "Block trackers for improved privacy";
 
 /* Label on About screen */
-"About.safariBullet2" = "封鎖網路字型，減少網頁大小";
+"About.safariBullet2" = "Block web fonts to reduce page size";
 
 /* Label on About screen */
-"About.safariBulletHeader" = "以 Safari 延伸功能使用:";
+"About.safariBulletHeader" = "Use it as a Safari extension:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
-"About.title" = "關於 %@";
+"About.title" = "About %@";
 
 /* Label on About screen */
-"About.topLabel" = "%@ 讓您可自行控制線上生活。";
+"About.topLabel" = "%@ puts you in control.";
 
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "使用 %@ 開啟";
+"actionSheet.openIn" = "Open in %@";
 
 /* Button to dismiss the 'Add Pass Failed' alert. */
-"AddPass.Error.Dismiss" = "確定";
+"AddPass.Error.Dismiss" = "OK";
 
 /* Message of the 'Add Pass Failed' alert. */
-"AddPass.Error.Message" = "新增票卡至 Wallet 時發生錯誤，請稍候再試一次。";
+"AddPass.Error.Message" = "An error occurred while adding the pass to Wallet. Please try again later.";
 
 /* Title of the 'Add Pass Failed' alert. */
-"AddPass.Error.Title" = "新增票卡失敗";
+"AddPass.Error.Title" = "Failed to Add Pass";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
-"Authentication.reason" = "驗證後即可回到 %@";
+"Authentication.reason" = "Authenticate to return to %@";
 
 /* Label for button to add a custom URL */
-"Autocomplete.addCustomUrl" = "新增自訂網址";
+"Autocomplete.addCustomUrl" = "Add Custom URL";
 
 /* Label for error state when entering an invalid URL */
-"Autocomplete.addCustomUrlError" = "請檢查您輸入的網址。";
+"Autocomplete.addCustomUrlError" = "Double-check the URL you've entered.";
 
 /* A label displaying an example URL */
-"Autocomplete.addCustomUrlExample" = "舉例: example.com";
+"Autocomplete.addCustomUrlExample" = "Example: example.com";
 
 /* Label for the input to add a custom URL */
-"Autocomplete.addCustomUrlLabel" = "要新增的網址";
+"Autocomplete.addCustomUrlLabel" = "URL to add";
 
 /* Placeholder for the input field to add a custom URL */
-"Autocomplete.addCustomUrlPlaceholder" = "貼上或輸入網址";
+"Autocomplete.addCustomUrlPlaceholder" = "Paste or enter URL";
 
 /* Label for button to add a custom URL with the + prefix */
-"Autocomplete.addCustomUrlWithPlus" = "+ 新增自訂網址";
+"Autocomplete.addCustomUrlWithPlus" = "+ Add Custom URL";
 
 /* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "新增與管理自訂自動完成網址。";
+"Autocomplete.customDescriptoin" = "Add and manage custom autocomplete URLs.";
 
 /* Label for button taking you to your custom Autocomplete URL list */
-"Autocomplete.customLabel" = "自訂網址";
+"Autocomplete.customLabel" = "Custom URLs";
 
 /* Title for the default URL list section */
-"Autocomplete.customTitle" = "自訂網址清單";
+"Autocomplete.customTitle" = "CUSTOM URL LIST";
 
 /* Label for toast alerting a custom URL has been added */
-"Autocomplete.customUrlAdded" = "已新增自訂網址。";
+"Autocomplete.customUrlAdded" = "New Custom URL added.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.defaultDescriptoin" = "開啟後，即可在 %@ 網址列自動完成超過 450 組熱門網址。";
+"Autocomplete.defaultDescriptoin" = "Enable to have %@ autocomplete over 450 popular URLs in the address bar.";
 
 /* Label for enabling or disabling autocomplete */
-"Autocomplete.defaultLabel" = "自動完成";
+"Autocomplete.defaultLabel" = "Autocomplete";
 
 /* Title for the default URL list section */
-"Autocomplete.defaultTitle" = "預設網址清單";
+"Autocomplete.defaultTitle" = "DEFAULT URL LIST";
 
 /* label describing URL Autocomplete as disabled */
-"Autocomplete.disabled" = "已停用";
+"Autocomplete.disabled" = "Disabled";
 
 /* Label for toast alerting that the custom URL being added is a duplicate */
-"Autocomplete.duplicateUrl" = "網址已經存在";
+"Autocomplete.duplicateUrl" = "URL already exists";
 
 /* Label for button to add a custom URL */
-"Autocomplete.emptyState" = "沒有可顯示的自訂網址";
+"Autocomplete.emptyState" = "No Custom URLs to display";
 
 /* label describing URL Autocomplete as enabled */
-"Autocomplete.enabled" = "已啟用";
+"Autocomplete.enabled" = "Enabled";
 
 /* Label for button taking you to your custom Autocomplete URL list */
-"Autocomplete.manageSites" = "管理網站";
+"Autocomplete.manageSites" = "Manage Sites";
 
 /* Label for enabling or disabling autocomplete */
-"Autocomplete.mySites" = "我的網站";
+"Autocomplete.mySites" = "My Sites";
 
 /* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.mySitesDesc" = "開啟後，即可讓 %@ 自動完成您最愛的網址。";
+"Autocomplete.mySitesDesc" = "Enable to have %@ autocomplete your favourite URLs.";
 
 /* Label for enabling or disabling top sites */
-"Autocomplete.topSites" = "熱門網站";
+"Autocomplete.topSites" = "Top Sites";
 
 /* Create a new session after failing a biometric check */
-"BiometricPrompt.newSession" = "開新使用階段";
+"BiometricPrompt.newSession" = "New Session";
 
 /* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
-"BiometricPrompt.reason" = "重新開啟時要求解鎖 %@，以防止未授權使用。";
+"BiometricPrompt.reason" = "Unlock %@ when re-opening in order to prevent unauthorised access.";
 
 /* Accessibility label for the back button */
-"Browser.backLabel" = "上一頁";
+"Browser.backLabel" = "Backwards";
 
 /* Copy URL button in URL long press menu */
-"Browser.copyAddressLabel" = "複製網址";
+"Browser.copyAddressLabel" = "Copy Address";
 
 /* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "已將網址複製至剪貼簿";
+"browser.copyAddressToast" = "URL Copied To Clipboard";
 
 /* Copy URL button in URL long press menu */
-"Browser.copyMenuLabel" = "複製";
+"Browser.copyMenuLabel" = "Copy";
 
 /* Custom URL button in URL long press menu */
-"Browser.customURLMenuLabel" = "新增自訂網址";
+"Browser.customURLMenuLabel" = "Add Custom URL";
 
 /* Accessibility label for the forward button */
-"Browser.forwardLabel" = "下一頁";
+"Browser.forwardLabel" = "Forwards";
 
 /* Accessibility label for the reload button */
-"Browser.reloadLabel" = "重新載入";
+"Browser.reloadLabel" = "Reload";
 
 /* Accessibility label for the settings button */
-"Browser.settingsLabel" = "設定";
+"Browser.settingsLabel" = "Settings";
 
 /* Accessibility label for the share button */
-"Browser.shareLabel" = "分享";
+"Browser.shareLabel" = "Share";
 
 /* Accessibility label for the stop button */
-"Browser.stopLabel" = "停止";
+"Browser.stopLabel" = "Stop";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "選擇網址列";
+"browserShortcutDescription.selectLocationBar" = "Select Location Bar";
 
 /* Label on button to cancel edits */
-"Cancel" = "取消";
+"Cancel" = "Cancel";
 
 /* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "您複製的鏈結: %@";
+"contextMenu.clipboardLink" = "Link you've copied: %@";
 
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "複製圖片";
+"contextMenu.copyImageTitle" = "Copy Image";
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "複製鏈結";
+"contextMenu.copyLink" = "Copy Link";
 
 /* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "您複製的鏈結:";
+"contextMenu.linkCopied" = "Link you've copied:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "儲存圖片";
+"contextMenu.saveImageTitle" = "Save Image";
 
 /* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "分享鏈結";
+"contextMenu.shareLinkTitle" = "Share Link";
 
 /* Label on button to complete edits */
-"Done" = "完成";
+"Done" = "Done";
 
 /* Label on button to allow edits */
-"Edit" = "編輯";
+"Edit" = "Edit";
 
 /* Button label to reload the error page */
-"Error.tryAgainButton" = "再試一次";
+"Error.tryAgainButton" = "Try again";
 
 /* Button label used for cancelling to open another app from Focus */
-"ExternalAppLink.cancelTitle" = "取消";
+"ExternalAppLink.cancelTitle" = "Cancel";
 
 /* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
-"ExternalAppLink.messageTitle" = "%@ 想要開啟其他程式";
+"ExternalAppLink.messageTitle" = "%@ wants to open another app";
 
 /* Button label for opening another app from Focus */
-"ExternalAppLink.openTitle" = "開啟";
+"ExternalAppLink.openTitle" = "Open";
 
 /* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@ 想要開啟 %2$@";
+"externalAppLinkWithAppName.messageTitle" = "%1$@ wants to open %2$@";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "撥號";
+"ExternalLink.callButton" = "Call";
 
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.cancelButton" = "取消";
+"ExternalLink.cancelButton" = "Cancel";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.emailButton" = "寄信";
+"ExternalLink.emailButton" = "Email";
 
 /* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitleWithPlaceholder" = "您即將離開 %@。";
+"ExternalLink.messageTitleWithPlaceholder" = "You are now leaving %@.";
 
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "開啟 App Store";
+"ExternalLink.openAppStoreButton" = "Open App Store";
 
 /* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"ExternalLink.openAppStoreTitle" = "%@ 想開啟 App Store。";
+"ExternalLink.openAppStoreTitle" = "%@ wants to open the App Store.";
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "開啟地圖";
+"ExternalLink.openMapsButton" = "Open Maps";
 
 /* Accessibility label for done button in Find in Page Toolbar. */
-"FindInPage.Done" = "搜尋完成";
+"FindInPage.Done" = "Find in page done";
 
 /* Accessibility label for next result button in Find in Page Toolbar. */
-"FindInPage.NextResult" = "尋找下一筆";
+"FindInPage.NextResult" = "Find next in page";
 
 /* Accessibility label for previous result button in Find in Page Toolbar. */
-"FindInPage.PreviousResult" = "尋找上一筆";
+"FindInPage.PreviousResult" = "Find previous in page";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.lastSlide.buttonLabel" = "好，知道了！";
+"FirstRun.lastSlide.buttonLabel" = "OK, Got It!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "自動在您上網時封鎖線上追蹤器；只要一點即可清除裝置中造訪過的頁面、搜尋、Cookie、密碼等紀錄。";
+"FirstRun.messageLabelDescription" = "Automatically block online trackers while you browse. Then tap to erase visited pages, searches, cookies and passwords from your device.";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "讓上網時不被偷看。";
+"FirstRun.messageLabelTagline" = "Browse like no one’s watching.";
 
 /* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
-"Focus.handoffSyncing" = "Apple Handoff 同步中";
+"Focus.handoffSyncing" = "Apple Handoff is synchronising";
 
 /* First label for product description on the home screen */
-"Home.descriptionLabel1" = "自動進入隱私瀏覽模式，";
+"Home.descriptionLabel1" = "Automatic private browsing.";
 
 /* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "無痕瀏覽，不留足跡。";
+"Home.descriptionLabel2" = "Browse. Erase. Repeat.";
 
 /* Button label used to close a menu that displays as a popup. */
-"Menu.Close" = "關閉";
+"Menu.Close" = "Close";
 
 /* Label in share alert to cancel the alert */
-"Open.Cancel" = "取消";
+"Open.Cancel" = "Cancel";
 
 /* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "Firefox（隱私瀏覽）";
+"Open.Firefox" = "Firefox (Private Browsing)";
 
 /* Label in share alert to open the full system share menu */
-"Open.More" = "更多";
+"Open.More" = "More";
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
 /* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "讓您可儲存圖片到相機膠捲";
+"photosPermission.description" = "This lets you save images to your Camera Roll";
 
 /* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "開啟設定";
+"photosPermission.openSettings" = "Open Settings";
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "「%@」想存取您的照片";
+"photosPermission.title" = "“%@” Would Like to Access Your Photos";
 
 /* Label for button that requests the desktop version of the currently loaded website. */
-"Request Desktop Site" = "開啟桌面版網站";
+"Request Desktop Site" = "Request Desktop Site";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsContentBlockers" = "點擊 Safari，然後選擇「內容阻擋器」";
+"Safari.instructionsContentBlockers" = "Tap Safari, then select Content Blockers";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsEnable" = "開啟 %@";
+"Safari.instructionsEnable" = "Enable %@";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
-"Safari.instructionsNotEnabled" = "未開啟 %@。";
+"Safari.instructionsNotEnabled" = "%@ is not enabled.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsOpen" = "開啟「設定」應用程式";
+"Safari.instructionsOpen" = "Open Settings App";
 
 /* Save button label */
-"Save" = "儲存";
+"Save" = "Save";
 
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
-"SearchEngine.addEngineError" = "資料有誤。請將搜尋詞修改為: %s 然後再試一次。";
+"SearchEngine.addEngineError" = "That didn't work. Try replacing the search term with this: %s.";
 
 /* Label for disable option on search suggestions prompt */
-"SearchSuggestions.promptDisable" = "關";
+"SearchSuggestions.promptDisable" = "No";
 
 /* Label for enable option on search suggestions prompt */
-"SearchSuggestions.promptEnable" = "開";
+"SearchSuggestions.promptEnable" = "Yes";
 
 /* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
-"SearchSuggestions.promptMessage" = "為了取得建議，%@ 需要將您在網址列輸入的文字傳送至搜尋引擎。";
+"SearchSuggestions.promptMessage" = "To get suggestions, %@ needs to send what you type in the address bar to the search engine.";
 
 /* Title for search suggestions prompt */
-"SearchSuggestions.promptTitle" = "要顯示搜尋建議嗎？";
+"SearchSuggestions.promptTitle" = "Show Search Suggestions?";
 
 /* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "網址自動完成";
+"Settings.autocompleteSection" = "URL Autocomplete";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "封鎖其他的內容追蹤器可能會影響網頁與影片載入。";
+"Settings.blockOtherMessage" = "Blocking other content trackers may break some videos and web pages.";
 
 /* Button label for declining Content blocker alert */
-"Settings.blockOtherNo2" = "取消";
+"Settings.blockOtherNo2" = "Cancel";
 
 /* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes2" = "封鎖內容追蹤器";
+"Settings.blockOtherYes2" = "Block Content Trackers";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSearchSuggestion" = "您在網址列打字時，%@ 就會將您輸入的文字傳送到搜尋引擎。";
+"Settings.detailTextSearchSuggestion" = "%@ will send what you type in the address bar to your search engine.";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "Mozilla 致力於只收集用來為眾人改善 %@ 所需的必要資料。";
+"Settings.detailTextSendUsageData" = "Mozilla strives to collect only what we need to provide and improve %@ for everyone.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "了解更多。";
+"Settings.learnMore" = "Learn more.";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
-"Settings.rate" = "為 %@ 評分";
+"Settings.rate" = "Rate %@";
 
 /* Label for Safari integration section */
-"Settings.safariTitle" = "Safari 整合";
+"Settings.safariTitle" = "SAFARI INTEGRATION";
 
 /* Title for settings screen */
-"Settings.screenTitle" = "設定";
+"Settings.screenTitle" = "Settings";
 
 /* Text for button to add another search engine in settings */
-"Settings.Search.AddSearchEngineButton" = "新增其他搜尋引擎";
+"Settings.Search.AddSearchEngineButton" = "Add Another Search Engine";
 
 /* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+ 新增其他搜尋引擎";
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Add Another Search Engine";
 
 /* Title on add search engine settings screen */
-"Settings.Search.AddSearchEngineTitle" = "新增搜尋引擎";
+"Settings.Search.AddSearchEngineTitle" = "Add Search Engine";
 
 /* Header for rows of installed search engines */
-"Settings.Search.InstalledSearchEngines" = "安裝的搜尋引擎";
+"Settings.Search.InstalledSearchEngines" = "INSTALLED SEARCH ENGINES";
 
 /* Label for input field for the name of the search engine to be added */
-"Settings.Search.NameToDisplay" = "要顯示的名稱";
+"Settings.Search.NameToDisplay" = "Name to display";
 
 /* Toast displayed after adding a search engine */
-"Settings.Search.NewSearchEngineAdded" = "已加入新搜尋引擎。";
+"Settings.Search.NewSearchEngineAdded" = "New Search Engine Added.";
 
 /* Label for button to bring deleted default engines back */
-"Settings.Search.RestoreEngine" = "還原預設搜尋引擎";
+"Settings.Search.RestoreEngine" = "Restore Default Search Engines";
 
 /* Placeholder text for input of new search engine name */
-"Settings.Search.SearchEngineName" = "搜尋引擎名稱";
+"Settings.Search.SearchEngineName" = "Search engine name";
 
 /* Label for input of search engine template */
-"Settings.Search.SearchTemplate" = "要使用的搜尋字串";
+"Settings.Search.SearchTemplate" = "Search string to use";
 
 /* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "例如: searchengineexample.com/search/?q=%s";
+"settings.Search.SearchTemplateExample" = "Example: searchengineexample.com/search/?q=%s";
 
 /* Placeholder text for input of new search engine template */
-"Settings.Search.SearchTemplatePlaceholder" = "請貼上或輸入搜尋字串。有需要的話，將搜尋詞修改為: %s。";
+"Settings.Search.SearchTemplatePlaceholder" = "Paste or enter search string. If necessary, replace search term with: %s.";
 
 /* Label for the search engine in the search screen */
-"Settings.searchLabel" = "搜尋引擎";
+"Settings.searchLabel" = "Search Engine";
 
 /* Label for the Search Suggestions toggle row */
-"Settings.searchSuggestions" = "取得搜尋建議";
+"Settings.searchSuggestions" = "Get Search Suggestions";
 
 /* Title for the search selection screen */
-"Settings.searchTitle2" = "搜尋";
+"Settings.searchTitle2" = "SEARCH";
 
 /* Label for Safari integration section */
-"Settings.sectionIntegration" = "整合";
+"Settings.sectionIntegration" = "INTEGRATION";
 
 /* Section label for Mozilla toggles */
-"Settings.sectionMozilla" = "Mozilla";
+"Settings.sectionMozilla" = "MOZILLA";
 
 /* Section label for performance toggles */
-"Settings.sectionPerformance" = "效能";
+"Settings.sectionPerformance" = "PERFORMANCE";
 
 /* Section label for privacy toggles */
-"Settings.sectionPrivacy" = "隱私";
+"Settings.sectionPrivacy" = "PRIVACY";
 
 /* Header label for security toggles displayed in the settings menu */
-"Settings.sectionSecurity" = "安全性";
+"Settings.sectionSecurity" = "SECURITY";
 
 /* Label for the checkbox to toggle Advertising trackers */
-"Settings.toggleBlockAds2" = "廣告";
+"Settings.toggleBlockAds2" = "Advertising";
 
 /* Label for the checkbox to toggle Analytics trackers */
-"Settings.toggleBlockAnalytics2" = "統計";
+"Settings.toggleBlockAnalytics2" = "Analytics";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "封鎖網路字型";
+"Settings.toggleBlockFonts" = "Block web fonts";
 
 /* Label for the checkbox to toggle Other trackers */
-"Settings.toggleBlockOther2" = "內容";
+"Settings.toggleBlockOther2" = "Content";
 
 /* Label for the checkbox to toggle Social trackers */
-"Settings.toggleBlockSocial2" = "社交";
+"Settings.toggleBlockSocial2" = "Social";
 
 /* Label for toggle on settings screen */
-"Settings.toggleFaceID" = "使用 Face ID 解鎖程式";
+"Settings.toggleFaceID" = "Use Face ID to unlock app";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
-"Settings.toggleFaceIDDescription" = "若已在程式開啟網頁，允許使用 Face ID 解鎖 %@";
+"Settings.toggleFaceIDDescription" = "Face ID can unlock %@ if a URL is already open in the app";
 
 /* Show home screen tips toggle label on settings screen */
-"Settings.toggleHomeScreenTips" = "在主畫面顯示小秘訣";
+"Settings.toggleHomeScreenTips" = "Show home screen tips";
 
 /* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "可能會影響網頁與影片載入";
+"Settings.toggleOtherSubtitle" = "May break some videos and web pages";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
 /* Label for Send Usage Data toggle on main screen */
-"Settings.toggleSendUsageData" = "傳送使用資料";
+"Settings.toggleSendUsageData" = "Send usage data";
 
 /* Label for toggle on settings screen */
-"Settings.toggleTouchID" = "使用 Touch ID 解鎖程式";
+"Settings.toggleTouchID" = "Use Touch ID to unlock app";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
-"Settings.toggleTouchIDDescription" = "若已在程式開啟網頁，允許使用 Touch ID 解鎖 %@";
+"Settings.toggleTouchIDDescription" = "Touch ID can unlock %@ if a URL is already open in the app";
 
 /* Status off for tracking protection in settings screen */
-"Settings.trackingProtectionOff" = "關閉";
+"Settings.trackingProtectionOff" = "Off";
 
 /* Status on for tracking protection in settings screen */
-"Settings.trackingProtectionOn" = "開啟";
+"Settings.trackingProtectionOn" = "On";
 
 /* Title for What's new screen */
-"Settings.whatsNewTitle" = "有什麼新鮮事";
+"Settings.whatsNewTitle" = "What’s New";
 
 /* Title for settings section to enable different Siri Shortcuts. */
-"Settinsg.siriShortcutsTitle" = "Siri 捷徑";
+"Settinsg.siriShortcutsTitle" = "SIRI SHORTCUTS";
 
 /* Text for a share button */
-"share" = "分享";
+"share" = "Share";
 
 /* Text for the share menu option when a user wants to add the site to Shortcuts */
-"ShareMenu.AddToShortcuts" = "新增捷徑";
+"ShareMenu.AddToShortcuts" = "Add to Shortcuts";
 
 /* Text for the share menu when a user wants to copy a URL. */
-"shareMenu.copyAddress" = "複製網址";
+"shareMenu.copyAddress" = "Copy Address";
 
 /* Text for the share menu option when a user wants to open the find in page menu */
-"ShareMenu.FindInPage" = "在頁面中搜尋";
+"ShareMenu.FindInPage" = "Find in Page";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
-"ShareMenu.GetFirefox" = "下載 Firefox";
+"ShareMenu.GetFirefox" = "Get the Firefox App";
 
 /* Title for the share menu where users can take actions for the current website they are on. */
-"ShareMenu.PageActions" = "頁面操作";
+"ShareMenu.PageActions" = "Page Actions";
 
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
-"ShareMenu.RemoveFromShortcuts" = "刪除捷徑";
+"ShareMenu.RemoveFromShortcuts" = "Remove from Shortcuts";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
-"ShareMenu.RequestDesktop" = "開啟桌面版網站";
+"ShareMenu.RequestDesktop" = "Request Desktop Site";
 
 /* Text for the share menu option when a user wants to reload the site as a mobile device */
-"ShareMenu.RequestMobile" = "開啟行動版網頁";
+"ShareMenu.RequestMobile" = "Request Mobile Site";
 
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
-"ShareMenu.ShareOpenChrome" = "使用 Chrome 開啟";
+"ShareMenu.ShareOpenChrome" = "Open in Chrome";
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
-"ShareMenu.ShareOpenFirefox" = "使用 Firefox 開啟";
+"ShareMenu.ShareOpenFirefox" = "Open in Firefox";
 
 /* Text for the share menu option when a user wants to open the current website in the Safari app. */
-"ShareMenu.ShareOpenSafari" = "使用 Safari 開啟";
+"ShareMenu.ShareOpenSafari" = "Open in Safari";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
-"ShareMenu.SharePage" = "分享頁面…";
+"ShareMenu.SharePage" = "Share Page With...";
 
 /* Text for the long press on a shortcut option in context menu. */
-"ShortcutView.RemoveFromShortcuts" = "刪除捷徑";
+"ShortcutView.RemoveFromShortcuts" = "Remove from Shortcuts";
 
 /* Button to add a favorite URL to Siri. */
-"Siri.add" = "新增";
+"Siri.add" = "Add";
 
 /* Button to add a specified shortcut option to Siri. */
-"Siri.addTo" = "新增至 Siri";
+"Siri.addTo" = "Add to Siri";
 
 /* Label for button to edit the Siri phrase or delete the Siri functionality. */
-"Siri.editOpenUrl" = "重新記錄或刪除捷徑";
+"Siri.editOpenUrl" = "Re-Record or Delete Shortcut";
 
 /* Title of option in settings to set up Siri to erase */
-"Siri.erase" = "清除上網紀錄";
+"Siri.erase" = "Erase";
 
 /* Title of option in settings to set up Siri to erase and then open the app. */
-"Siri.eraseAndOpen" = "清除並開啟新分頁";
+"Siri.eraseAndOpen" = "Erase & Open";
 
 /* Title for screen to add a favorite URL to Siri. */
-"Siri.favoriteUrl" = "開啟最愛網站";
+"Siri.favoriteUrl" = "Open Favourite Site";
 
 /* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
-"Siri.openURL" = "開啟最愛網站";
+"Siri.openURL" = "Open Favourite Site";
 
 /* Label for input to set a favorite URL to be opened by Siri. */
-"Siri.urlToOpen" = "要開啟的網址";
+"Siri.urlToOpen" = "URL to open";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
-"touchId.reason" = "使用 Touch ID 返回 %@";
+"touchId.reason" = "Use Touch ID to return to %@";
 
 /* Label for ad trackers. */
-"trackingProtection.adTrackersLabel" = "廣告追蹤器";
+"trackingProtection.adTrackersLabel" = "Ad trackers";
 
 /* label for analytic trackers. */
-"trackingProtection.analyticTrackerLabel" = "統計追蹤器";
+"trackingProtection.analyticTrackerLabel" = "Analytic trackers";
 
 /* Text for tracking protection screen showing the connection is not secure */
-"trackingProtection.connectionNotSecureLabel" = "連線不安全";
+"trackingProtection.connectionNotSecureLabel" = "Connection is not secure";
 
 /* Text for tracking protection screen showing the connection is secure */
-"trackingProtection.connectionSecureLabel" = "連線安全";
+"trackingProtection.connectionSecureLabel" = "Connection is secure";
 
 /* label for content trackers. */
-"trackingProtection.contentTrackerLabel" = "內容追蹤器";
+"trackingProtection.contentTrackerLabel" = "Content trackers";
 
 /* text showing the tracking protection is disabled. */
-"trackingProtection.disabledLabel" = "關閉追蹤保護";
+"trackingProtection.disabledLabel" = "Tracking Protection off";
 
 /* Title for the tracking settings page to change what trackers are blocked. */
-"trackingProtection.label" = "追蹤保護";
+"trackingProtection.label" = "Tracking Protection";
 
 /* Description/subtitle for the tracking protection label. */
-"trackingProtection.labelDescription" = "關閉此功能可能可以解決一些網站的問題";
+"trackingProtection.labelDescription" = "Turning this off may fix some site problems";
 
 /* Text for the button to learn more about Tracking Protection. */
-"trackingProtection.learnMore" = "了解更多";
+"trackingProtection.learnMore" = "Learn More";
 
 /* Text for the button that closes the Shield Data and opens the regular Settings screen. */
-"trackingProtection.moreSettings" = "更多設定";
+"trackingProtection.moreSettings" = "More Settings";
 
 /* label for social trackers. */
-"trackingProtection.socialTrackerLabel" = "社交追蹤器";
+"trackingProtection.socialTrackerLabel" = "Social trackers";
 
 /* Text for the status off from Tracking Protection. */
-"trackingProtection.statusOff" = "已關閉此瀏覽階段的追蹤保護";
+"trackingProtection.statusOff" = "Protections are OFF for this session";
 
 /* Text for the status on from Tracking Protection. */
-"trackingProtection.statusOn" = "已開啟此瀏覽階段的追蹤保護";
+"trackingProtection.statusOn" = "Protections are ON for this session";
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.toggleDescription1" = "直到關閉 %@ 或點擊「清除」前都停用。";
+"trackingProtection.toggleDescription1" = "Disable until you close %@ or tap ERASE.";
 
 /* Text for the toggle that enables/disables tracking protection. */
-"trackingProtection.toggleLabel2" = "加強型追蹤保護";
+"trackingProtection.toggleLabel2" = "Enhanced Tracking Protection";
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel2" = "自己保留自己的資料。%@ 不讓常見的追蹤器記錄您的上網行為。";
+"trackingProtection.trackerDescriptionLabel2" = "Keep your data to yourself. %@ protects you from many of the most common trackers that follow what you do online.";
 
 /* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
-"trackingProtection.trackersBlockedLabel" = "自 %@起封鎖的追蹤器數量";
+"trackingProtection.trackersBlockedLabel" = "Trackers blocked since %@";
 
 /* Text for the header of trackers section from Tracking Protection. */
-"trackingProtection.trackersHeader" = "要封鎖的追蹤器與指令碼";
+"trackingProtection.trackersHeader" = "Trackers and scripts to block";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
-"URL.addToAutocompleteLabel" = "將鏈結加入自動完成清單";
+"URL.addToAutocompleteLabel" = "Add link to autocomplete";
 
 /* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "取消";
+"URL.cancelLabel" = "Cancel";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "貼上並前往";
+"URL.contextMenu" = "Paste & Go";
 
 /* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "清除";
+"URL.eraseButtonLabel" = "ERASE";
 
 /* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel2" = "已清除瀏覽紀錄";
+"URL.eraseMessageLabel2" = "Browsing history cleared";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
-"URL.findOnPageLabel" = "在頁面中搜尋: %@";
+"URL.findOnPageLabel" = "Find in page: %@";
 
 /* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
-"URL.paste" = "貼上";
+"URL.paste" = "Paste";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "搜尋或輸入網址";
+"URL.placeholderText" = "Search or enter address";
 
 /* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "搜尋 %@";
+"URL.searchLabel" = "Search for %@";
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "已封鎖追蹤器數";
+"URL.trackersBlockedLabel" = "Trackers blocked";
 
