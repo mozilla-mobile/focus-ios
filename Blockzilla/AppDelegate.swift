@@ -414,6 +414,9 @@ extension AppDelegate {
         }
 
         Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData))
+
+        // Send "at startup" telemetry
+        GleanMetrics.Shortcuts.shortcutsOnHomeNumber.set(Int64(ShortcutsManager.shared.numberOfShortcuts))
     }
 
     func presentModal(viewController: UIViewController, animated: Bool) {
