@@ -4,18 +4,34 @@
 ---
 $schema: moz://mozilla.org/schemas/glean/metrics/1-0-0
 
+settings_screen:
+  autocomplete_domain_added:
+    type: counter
+    description: |
+      A counter that indicates how many times a user has added
+      a website to the autocomplete list.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-android/issues/5059
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-android/pull/5184
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - firefox-focus@mozilla.com
+    expires: "2022-08-17"
+
 legacy.ids:
-   client_id:
-      type: uuid
-      lifetime: user
-      description: |
-        The client id from legacy telemetry.
-      send_in_pings:
-         - deletion-request
-      bugs:
-         - https://github.com/mozilla-mobile/firefox-ios/issues/7019
-      data_reviews:
-         - https://github.com/mozilla-mobile/focus-ios/pull/1741#issuecomment-705853690
-      notification_emails:
-         - firefox-ios@mozilla.com
-      expires: never
+  client_id:
+    type: uuid
+    lifetime: user
+    description: |
+      The client id from legacy telemetry.
+    send_in_pings:
+      - deletion-request
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7019
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/1741#issuecomment-705853690
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: never
