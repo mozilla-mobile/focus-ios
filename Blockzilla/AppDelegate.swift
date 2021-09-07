@@ -410,6 +410,8 @@ extension AppDelegate {
         }
 
         Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData))
+        
+        GleanMetrics.MozillaProducts.hasFirefoxInstalled.set(UIApplication.shared.canOpenURL(URL(string: "firefox://")!))
     }
 
     func presentModal(viewController: UIViewController, animated: Bool) {
