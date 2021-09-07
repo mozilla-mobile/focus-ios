@@ -13,7 +13,7 @@ mozilla_products:
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/2227
     data_reviews:
-      - https://github.com/mozilla-mobile/focus-ios/pull/TODO
+      - https://github.com/mozilla-mobile/focus-ios/pull/2284
     data_sensitivity:
       - technical
       - interaction
