@@ -34,6 +34,11 @@ class BaseTestCase: XCTestCase {
         }
     }
 
+    func dismissURLBarFocused() {
+        waitForExistence(app.buttons["URLBar.cancelButton"], timeout: 15)
+        app.buttons["URLBar.cancelButton"].tap()
+    }
+
     func waitForEnable(_ element: XCUIElement, timeout: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
         waitFor(element, with: "exists == enable", timeout: timeout, file: file, line: line)
     }
