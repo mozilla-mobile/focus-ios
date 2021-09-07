@@ -1320,8 +1320,8 @@ extension BrowserViewController: HomeViewDelegate {
         submit(url: url)
     }
 
-    func tipTapped() {
-        guard let tip = tipManager.currentTip, let action = tip.action else { return }
+    func didTapTip(_ tip: TipManager.Tip) {
+        guard let action = tip.action else { return }
         switch action {
         case .visit(let topic):
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.releaseTip)

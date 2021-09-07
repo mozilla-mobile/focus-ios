@@ -7,7 +7,7 @@ import Telemetry
 
 protocol HomeViewDelegate: class {
     func shareTrackerStatsButtonTapped()
-    func tipTapped()
+    func didTapTip(_ tip: TipManager.Tip)
 }
 
 class HomeView: UIView {
@@ -243,7 +243,8 @@ class HomeView: UIView {
     }
 
     @objc private func tapTip() {
-        delegate?.tipTapped()
+        guard let tip = tipManager.currentTip else { return }
+        delegate?.didTapTip(tip)
     }
     
     @objc private func swipeNextTip() {
