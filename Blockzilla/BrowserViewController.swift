@@ -9,6 +9,7 @@ import Telemetry
 import LocalAuthentication
 import StoreKit
 import Intents
+import Glean
 
 class BrowserViewController: UIViewController {
     let appSplashController: AppSplashController
@@ -1067,6 +1068,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidTapShield(_ urlBar: URLBar) {
         Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.trackingProtectionDrawer))
+        GleanMetrics.TrackingProtection.toolbarShieldClicked.add()
 
         guard let modalDelegate = modalDelegate else { return }
 
@@ -1202,13 +1204,14 @@ extension BrowserViewController: ShortcutViewDelegate {
         urlBar.url = shortcut.url
         deactivateUrlBarOnHomeView()
         submit(url: shortcut.url)
+        GleanMetrics.Shortcuts.shortcutOpenedCounter.add()
     }
 
     func shortcutLongPressed(shortcut: Shortcut, shortcutView: ShortcutView) {
         let removeFromShortcutsItem = PhotonActionSheetItem(title: UIConstants.strings.removeFromShortcuts, iconString: "icon_shortcuts_remove") { action in
-            //TODO: add telemetry
             ShortcutsManager.shared.removeFromShortcuts(shortcut: shortcut)
             self.shortcutsBackground.isHidden = self.shortcutManager.numberOfShortcuts == 0 ? true : false
+            GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_home_screen"].add()
         }
         
         var actions: [[PhotonActionSheetItem]] = []
