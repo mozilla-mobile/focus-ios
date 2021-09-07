@@ -48,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             }
             UserDefaults.standard.removePersistentDomain(forName: AppInfo.sharedContainerIdentifier)
         }
-        setupErrorTracking()
+
         setupTelemetry()
         TPStatsBlocklistChecker.shared.startup()
 
@@ -360,12 +360,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
 // MARK: - Telemetry & Tooling setup
 extension AppDelegate {
-
-    func setupErrorTracking() {
-        // Set up Sentry
-        let sendUsageData = Settings.getToggle(.sendAnonymousUsageData)
-        SentryIntegration.shared.setup(sendUsageData: sendUsageData)
-    }
 
     func setupTelemetry() {
 
