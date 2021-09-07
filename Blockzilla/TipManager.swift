@@ -6,6 +6,31 @@ import Foundation
 import LocalAuthentication
 
 class TipManager {
+    
+    @UserDefault(key: TipKey.releaseTip, defaultValue: true)
+    static var releaseTip: Bool
+    
+    @UserDefault(key: TipKey.shortcutsTip, defaultValue: true)
+    static var shortcutsTip: Bool
+    
+    @UserDefault(key: TipKey.sitesNotWorkingTip, defaultValue: true)
+    static var sitesNotWorkingTip: Bool
+    
+    @UserDefault(key: TipKey.siriFavoriteTip, defaultValue: true)
+    static var siriFavoriteTip: Bool
+    
+    @UserDefault(key: TipKey.biometricTip, defaultValue: true)
+    static var biometricTip: Bool
+    
+    @UserDefault(key: TipKey.shareTrackersTip, defaultValue: true)
+    static var shareTrackersTip: Bool
+    
+    @UserDefault(key: TipKey.siriEraseTip, defaultValue: true)
+    static var siriEraseTip: Bool
+    
+    @UserDefault(key: TipKey.requestDesktopTip, defaultValue: true)
+    static var requestDesktopTip: Bool
+    
 
     struct Tip: Equatable {
         enum ScrollDestination {
@@ -85,21 +110,21 @@ class TipManager {
         description: String(format: UIConstants.strings.releaseTipDescription, AppInfo.config.productName),
         identifier: TipKey.releaseTip,
         action: .visit(topic: .whatsNew),
-        canShow: { UserDefaults.standard.bool(forKey: TipKey.releaseTip) }
+        canShow: { TipManager.releaseTip }
     )
     
     private lazy var shortcutsTip = Tip(
         title: UIConstants.strings.shortcutsTipTitle,
         description: String(format: UIConstants.strings.shortcutsTipDescription, AppInfo.config.productName),
         identifier: TipKey.shortcutsTip,
-        canShow: { UserDefaults.standard.bool(forKey: TipKey.shortcutsTip) }
+        canShow: { TipManager.shortcutsTip }
     )
 
     private lazy var sitesNotWorkingTip = Tip(
         title: UIConstants.strings.sitesNotWorkingTipTitle,
         description: UIConstants.strings.sitesNotWorkingTipDescription,
         identifier: TipKey.sitesNotWorkingTip,
-        canShow: { UserDefaults.standard.bool(forKey: TipKey.sitesNotWorkingTip) }
+        canShow: { TipManager.sitesNotWorkingTip }
     )
 
     private lazy var biometricTip: Tip = {
@@ -112,7 +137,7 @@ class TipManager {
             description: description,
             identifier: TipKey.biometricTip,
             action: .showSettings(destination: .biometric),
-            canShow: { UserDefaults.standard.bool(forKey: TipKey.biometricTip) }
+            canShow: { TipManager.biometricTip }
         )
     }()
 
@@ -120,7 +145,7 @@ class TipManager {
         title: UIConstants.strings.requestDesktopTipTitle,
         description: UIConstants.strings.requestDesktopTipDescription,
         identifier: TipKey.requestDesktopTip,
-        canShow: { UserDefaults.standard.bool(forKey: TipKey.requestDesktopTip) }
+        canShow: { TipManager.requestDesktopTip }
     )
 
     private lazy var siriFavoriteTip = Tip(
@@ -128,7 +153,7 @@ class TipManager {
         description: UIConstants.strings.siriFavoriteTipDescription,
         identifier: TipKey.siriFavoriteTip,
         action: .showSettings(destination: .siri),
-        canShow: self.isiOS12
+        canShow: { TipManager.siriFavoriteTip && self.isiOS12() }
     )
 
     private lazy var siriEraseTip = Tip(
@@ -136,7 +161,7 @@ class TipManager {
         description: UIConstants.strings.siriEraseTipDescription,
         identifier: TipKey.siriEraseTip,
         action: .showSettings(destination: .siriFavorite),
-        canShow: self.isiOS12
+        canShow: { TipManager.siriEraseTip && self.isiOS12() }
     )
 
     /// Return a string representing the trackers tip. It will include the current number of trackers blocked, formatted as a decimal.

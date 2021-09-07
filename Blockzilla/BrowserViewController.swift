@@ -1176,7 +1176,7 @@ extension BrowserViewController: PhotonActionSheetDelegate {
         let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.trackingProtectionToggle)
         telemetryEvent.addExtra(key: "to", value: enabled)
         Telemetry.default.recordEvent(telemetryEvent)
-        UserDefaults.standard.set(false, forKey: TipManager.TipKey.sitesNotWorkingTip)
+        TipManager.sitesNotWorkingTip = false
 
         webViewController.reload()
     }
@@ -1229,7 +1229,7 @@ extension BrowserViewController: TrackingProtectionDelegate {
         let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.trackingProtectionToggle)
         telemetryEvent.addExtra(key: "to", value: enabled)
         Telemetry.default.recordEvent(telemetryEvent)
-        UserDefaults.standard.set(false, forKey: TipManager.TipKey.sitesNotWorkingTip)
+        TipManager.sitesNotWorkingTip = false
 
         webViewController.reload()
     }
