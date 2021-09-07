@@ -11,9 +11,9 @@ settings_screen:
       A counter that indicates how many times a user has added
       a website to the autocomplete list.
     bugs:
-      - https://github.com/mozilla-mobile/focus-android/issues/5059
+      - https://github.com/mozilla-mobile/focus-ios/issues/2094
     data_reviews:
-      - https://github.com/mozilla-mobile/focus-android/pull/5184
+      - https://github.com/mozilla-mobile/focus-ios/pull/2283
     data_sensitivity:
       - interaction
     notification_emails:
