@@ -29,7 +29,7 @@ tracking_protection:
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/2093
     data_reviews:
-      - https://github.com/mozilla-mobile/focus-android/pull/5163
+      - https://github.com/mozilla-mobile/focus-ios/pull/2265
     data_sensitivity:
       - interaction
     notification_emails:
@@ -43,7 +43,7 @@ tracking_protection:
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/2093
     data_reviews:
-      - https://github.com/mozilla-mobile/focus-android/pull/5163
+      - https://github.com/mozilla-mobile/focus-ios/pull/2265
     data_sensitivity:
       - interaction
     notification_emails:
@@ -62,7 +62,7 @@ tracking_protection:
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/2093
     data_reviews:
-      - https://github.com/mozilla-mobile/focus-android/pull/5163
+      - https://github.com/mozilla-mobile/focus-ios/pull/2265
     data_sensitivity:
       - interaction
     lifetime: user
@@ -77,7 +77,7 @@ tracking_protection:
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/2093
     data_reviews:
-      - https://github.com/mozilla-mobile/focus-android/pull/5163
+      - https://github.com/mozilla-mobile/focus-ios/pull/2265
     data_sensitivity:
       - interaction
     notification_emails:
@@ -103,7 +103,7 @@ tracking_protection:
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/2093
     data_reviews:
-      - https://github.com/mozilla-mobile/focus-android/pull/5163
+      - https://github.com/mozilla-mobile/focus-ios/pull/2265
     data_sensitivity:
       - interaction
     notification_emails:
@@ -118,7 +118,7 @@ tracking_protection:
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/2093
     data_reviews:
-      - https://github.com/mozilla-mobile/focus-android/pull/5163
+      - https://github.com/mozilla-mobile/focus-ios/pull/2265
     data_sensitivity:
       - interaction
     notification_emails:
@@ -133,7 +133,7 @@ tracking_protection:
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/2093
     data_reviews:
-      - https://github.com/mozilla-mobile/focus-android/pull/5163
+      - https://github.com/mozilla-mobile/focus-ios/pull/2265
     data_sensitivity:
       - interaction
     notification_emails:
@@ -148,7 +148,7 @@ tracking_protection:
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/2093
     data_reviews:
-      - https://github.com/mozilla-mobile/focus-android/pull/5163
+      - https://github.com/mozilla-mobile/focus-ios/pull/2265
     data_sensitivity:
       - interaction
     notification_emails:
