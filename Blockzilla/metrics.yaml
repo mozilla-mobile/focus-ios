@@ -4,18 +4,35 @@
 ---
 $schema: moz://mozilla.org/schemas/glean/metrics/1-0-0
 
+mozilla_products:
+  has_firefox_installed:
+    type: boolean
+    lifetime: application
+    description: |
+       If Firefox is installed on the users's device.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2227
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/TODO
+    data_sensitivity:
+      - technical
+      - interaction
+    notification_emails:
+      - firefox-focus@mozilla.com
+    expires: "2022-09-01"
+
 legacy.ids:
-   client_id:
-      type: uuid
-      lifetime: user
-      description: |
-        The client id from legacy telemetry.
-      send_in_pings:
-         - deletion-request
-      bugs:
-         - https://github.com/mozilla-mobile/firefox-ios/issues/7019
-      data_reviews:
-         - https://github.com/mozilla-mobile/focus-ios/pull/1741#issuecomment-705853690
-      notification_emails:
-         - firefox-ios@mozilla.com
-      expires: never
+  client_id:
+    type: uuid
+    lifetime: user
+    description: |
+      The client id from legacy telemetry.
+    send_in_pings:
+      - deletion-request
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7019
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/1741#issuecomment-705853690
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: never
