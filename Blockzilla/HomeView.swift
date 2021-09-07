@@ -19,6 +19,7 @@ class HomeView: UIView {
     private let pageControl = TipsPageControl()
     private let shieldLogo = UIImageView()
     private let textLogo = UIImageView()
+    private let tipManager: TipManager
 
     let toolbar = HomeViewToolbar()
     let trackerStatsShareButton = UIButton()
@@ -29,6 +30,7 @@ class HomeView: UIView {
     }
 
     init(tipManager: TipManager) {
+        self.tipManager = tipManager
         super.init(frame: CGRect.zero)
         rotated()
         NotificationCenter.default.addObserver(self, selector: #selector(rotated), name: UIDevice.orientationDidChangeNotification, object: nil)
@@ -144,17 +146,14 @@ class HomeView: UIView {
 
         if let tip = tipManager.fetchTip() {
             showTipView()
-            switch tip.identifier {
-            case TipManager.TipKey.shareTrackersTip:
-                hideTextTip()
-                let numberOfTrackersBlocked = UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
-                showTrackerStatsShareButton(text: String(format: tip.description!, String(numberOfTrackersBlocked)))
-                Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.trackerStatsShareButton)
-            default:
-                hideTrackerStatsShareButton()
-                showTextTip(tip)
-            }
+            hideTrackerStatsShareButton()
+            showTextTip(tip)
             tipManager.currentTip = tip
+        } else {
+            showTipView()
+            hideTextTip()
+            showTrackerStatsShareButton(text: tipManager.shareTrackersDescription())
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.trackerStatsShareButton)
         }
     }
 
@@ -248,7 +247,6 @@ class HomeView: UIView {
     }
     
     @objc private func swipeNextTip() {
-        let tipManager = TipManager.shared
         if let nextTip = tipManager.getNextTip() {
             showTextTip(nextTip)
             pageControl.currentPage = tipManager.currentTipIndex()
@@ -256,7 +254,6 @@ class HomeView: UIView {
     }
 
     @objc private func swipePreviousTip() {
-        let tipManager = TipManager.shared
         if let previousTip = tipManager.getPreviousTip() {
             showTextTip(previousTip)
             pageControl.currentPage = tipManager.currentTipIndex()

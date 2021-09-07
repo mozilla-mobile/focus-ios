@@ -61,6 +61,7 @@ class TipManager {
     }
     
     private var availableTips: [Tip] {
+        guard Settings.getToggle(.showHomeScreenTips) else { return [] }
         return tips.filter { $0.canShow() }
     }
     private let laContext = LAContext()
@@ -127,7 +128,7 @@ class TipManager {
     )
 
     /// Return a string representing the trackers tip. It will include the current number of trackers blocked, formatted as a decimal.
-    private func shareTrackersDescription() -> String {
+    func shareTrackersDescription() -> String {
         let numberOfTrackersBlocked = NSNumber(integerLiteral: UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey))
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -144,7 +145,6 @@ class TipManager {
     }
 
     func fetchTip() -> Tip? {
-        guard Settings.getToggle(.showHomeScreenTips) else { return shareTrackersTip }
         return availableTips.first
     }
     
