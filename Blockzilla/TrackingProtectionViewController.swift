@@ -6,6 +6,7 @@ import Foundation
 import SnapKit
 import UIKit
 import Telemetry
+import Glean
 
 protocol TrackingProtectionDelegate: class {
     func trackingProtectionDidToggleProtection(enabled: Bool)
@@ -119,6 +120,21 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
 
             Settings.set(sender.isOn, forToggle: toggle.setting)
             ContentBlockerHelper.shared.reload()
+
+            let sourceOfChange = isOpenedFromSetting ? "Settings" : "Panel"
+            
+            switch toggle.setting {
+            case .blockAds:
+                GleanMetrics.TrackingProtection.trackerSettingChanged.record(.init(isEnabled: sender.isOn, sourceOfChange: sourceOfChange, trackerChanged: "Advertising"))
+            case .blockAnalytics:
+                GleanMetrics.TrackingProtection.trackerSettingChanged.record(.init(isEnabled: sender.isOn, sourceOfChange: sourceOfChange, trackerChanged: "Analytics"))
+            case .blockSocial:
+                GleanMetrics.TrackingProtection.trackerSettingChanged.record(.init(isEnabled: sender.isOn, sourceOfChange: sourceOfChange, trackerChanged: "Social"))
+            case .blockOther:
+                GleanMetrics.TrackingProtection.trackerSettingChanged.record(.init(isEnabled: sender.isOn, sourceOfChange: sourceOfChange, trackerChanged: "Content"))
+            default:
+                break
+            }
         }
 
         switch toggle.setting {
@@ -183,25 +199,15 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         }
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        section == 0 ? UIConstants.layout.trackingProtectionHeaderHeight : UIConstants.layout.trackingProtectionHeaderDefault
-    }
-    
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if section == 1 {
             let footer = UITableViewCell(style: .subtitle, reuseIdentifier: "trackingProtectionStatusFooter")
             footer.textLabel?.text = trackingProtectionEnabled ? UIConstants.strings.trackingProtectionOn : UIConstants.strings.trackingProtectionOff
             footer.textLabel?.textColor = .primaryText.withAlphaComponent(0.6)
+            footer.textLabel?.numberOfLines = 0
             return footer
         }
         return nil
-    }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if section == 1 {
-            return UIConstants.layout.trackingProtectionFooterHeight
-        }
-        return UIConstants.layout.trackingProtectionFooterDefault
     }
     
     @objc func tappedTrackingProtectionLearnMoreHeader(sender: UIGestureRecognizer) {
@@ -214,6 +220,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         cell.textLabel?.text = String(format: UIConstants.strings.trackersBlockedSince, getAppInstallDate())
         cell.textLabel?.textColor = .primaryText.withAlphaComponent(0.6)
         cell.textLabel?.font = UIConstants.fonts.trackingProtectionStatsText
+        cell.textLabel?.numberOfLines = 0
         cell.detailTextLabel?.text = getNumberOfTrackersBlocked()
         cell.detailTextLabel?.textColor = .primaryText
         cell.detailTextLabel?.font = UIConstants.fonts.trackingProtectionStatsDetail
@@ -230,6 +237,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         trackingProtectionToggle.toggle.isOn = Settings.getToggle(trackingProtectionToggle.setting)
         cell.textLabel?.text = trackingProtectionToggle.label
         cell.textLabel?.textColor = .primaryText
+        cell.textLabel?.numberOfLines = 0
         cell.accessoryView = PaddedSwitch(switchView: trackingProtectionToggle.toggle)
         cell.backgroundColor = .secondaryBackground
         cell.selectionStyle = .none
@@ -288,6 +296,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         let header = UITableViewCell(style: .subtitle, reuseIdentifier: "trackersHeader")
         header.textLabel?.text = UIConstants.strings.trackersHeader.uppercased()
         header.textLabel?.textColor = .primaryText.withAlphaComponent(0.6)
+        header.textLabel?.numberOfLines = 0
         
         return header
     }
@@ -315,6 +324,9 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: "setting", value: toggle.setting.rawValue)
         telemetryEvent.addExtra(key: "to", value: sender.isOn)
         Telemetry.default.recordEvent(telemetryEvent)
+
+        GleanMetrics.TrackingProtection.trackingProtectionChanged.record(.init(isEnabled: sender.isOn))
+        GleanMetrics.TrackingProtection.hasEverChangedEtp.set(true)
 
         Settings.set(sender.isOn, forToggle: toggle.setting)
         trackingProtectionEnabled = sender.isOn

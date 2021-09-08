@@ -48,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             }
             UserDefaults.standard.removePersistentDomain(forName: AppInfo.sharedContainerIdentifier)
         }
-        setupErrorTracking()
+
         setupTelemetry()
         TPStatsBlocklistChecker.shared.startup()
 
@@ -344,12 +344,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 // MARK: - Telemetry & Tooling setup
 extension AppDelegate {
 
-    func setupErrorTracking() {
-        // Set up Sentry
-        let sendUsageData = Settings.getToggle(.sendAnonymousUsageData)
-        SentryIntegration.shared.setup(sendUsageData: sendUsageData)
-    }
-
     func setupTelemetry() {
 
         let telemetryConfig = Telemetry.default.configuration
@@ -397,6 +391,14 @@ extension AppDelegate {
         }
 
         Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData))
+        
+        // Send "at startup" telemetry
+        GleanMetrics.Shortcuts.shortcutsOnHomeNumber.set(Int64(ShortcutsManager.shared.numberOfShortcuts))
+        GleanMetrics.TrackingProtection.hasAdvertisingBlocked.set(Settings.getToggle(.blockAds))
+        GleanMetrics.TrackingProtection.hasAnalyticsBlocked.set(Settings.getToggle(.blockAnalytics))
+        GleanMetrics.TrackingProtection.hasContentBlocked.set(Settings.getToggle(.blockOther))
+        GleanMetrics.TrackingProtection.hasSocialBlocked.set(Settings.getToggle(.blockSocial))
+        GleanMetrics.MozillaProducts.hasFirefoxInstalled.set(UIApplication.shared.canOpenURL(URL(string: "firefox://")!))
     }
 
     func presentModal(viewController: UIViewController, animated: Bool) {

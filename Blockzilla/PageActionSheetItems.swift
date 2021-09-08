@@ -4,6 +4,7 @@
 
 import UIKit
 import Telemetry
+import Glean
 
 class PageActionSheetItems {
 
@@ -28,16 +29,16 @@ class PageActionSheetItems {
     }
     
     lazy var addToShortcutsItem = PhotonActionSheetItem(title: UIConstants.strings.shareMenuAddToShortcuts, iconString: "icon_shortcuts_add") { action in
-        //TODO: add telemetry
         let shortcut = Shortcut(url: self.url)
         ShortcutsManager.shared.addToShortcuts(shortcut: shortcut)
+        GleanMetrics.Shortcuts.shortcutAddedCounter.add()
         TipManager.shortcutsTip = false
     }
     
     lazy var removeFromShortcutsItem = PhotonActionSheetItem(title: UIConstants.strings.shareMenuRemoveFromShortcuts, iconString: "icon_shortcuts_remove") { action in
-        //TODO: add telemetry
         let shortcut = Shortcut(url: self.url)
         ShortcutsManager.shared.removeFromShortcuts(shortcut: shortcut)
+        GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_browser_menu"].add()
     }
 
     lazy var openInFireFoxItem = PhotonActionSheetItem(title: UIConstants.strings.shareOpenInFirefox, iconString: "open_in_firefox_icon") { action in
