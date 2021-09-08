@@ -82,14 +82,15 @@ class TipManager {
 
     static let shared = TipManager()
     private var tips: [Tip] {
-        var tips: [Tip] = []
-        tips.append(releaseTip)
-        tips.append(shortcutsTip)
-        tips.append(sitesNotWorkingTip)
-        tips.append(requestDesktopTip)
-        tips.append(siriFavoriteTip)
-        tips.append(siriEraseTip)
-        tips.append(shareTrackersTip)
+        var tips = [
+            releaseTip,
+            shortcutsTip,
+            sitesNotWorkingTip,
+            requestDesktopTip,
+            siriFavoriteTip,
+            siriEraseTip,
+            shareTrackersTip
+        ]
         if laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
             tips.append(biometricTip)
         }
