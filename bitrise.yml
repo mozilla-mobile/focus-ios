@@ -479,16 +479,16 @@ workflows:
 
     - deploy-to-bitrise-io@1.10:
         inputs:
-        - deploy_path: screenshots-derived-data/
+        - deploy_path: l10n-screenshots-dd/
         - is_compress: 'true'
     - deploy-to-bitrise-io@1.10:
         inputs:
-        - deploy_path: screenshots/Focus/iPhone11/en-US
+        - deploy_path: l10n-screenshots/en-US/en-US
         - is_compress: 'true'
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
-        machine_type_id: standard
+        machine_type_id: g2.4core
 
 app:
   envs:
