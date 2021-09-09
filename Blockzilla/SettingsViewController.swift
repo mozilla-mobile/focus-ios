@@ -597,10 +597,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             guard #available(iOS 12.0, *) else { return }
             if indexPath.row == 0 {
                 SiriShortcuts().manageSiri(for: SiriShortcuts.activityType.erase, in: self)
-                UserDefaults.standard.set(false, forKey: TipManager.TipKey.siriEraseTip)
+                TipManager.siriEraseTip = false
             } else if indexPath.row == 1 {
                 SiriShortcuts().manageSiri(for: SiriShortcuts.activityType.eraseAndOpen, in: self)
-                UserDefaults.standard.set(false, forKey: TipManager.TipKey.siriEraseTip)
+                TipManager.siriEraseTip = false
             } else {
                 let siriFavoriteVC = SiriFavoriteViewController()
                 navigationController?.pushViewController(siriFavoriteVC, animated: true)
@@ -687,7 +687,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             Telemetry.default.configuration.isUploadEnabled = sender.isOn
             Glean.shared.setUploadEnabled(sender.isOn)
         } else if toggle.setting == .biometricLogin {
-            UserDefaults.standard.set(false, forKey: TipManager.TipKey.biometricTip)
+            TipManager.biometricTip = false
         }
 
         switch toggle.setting {
