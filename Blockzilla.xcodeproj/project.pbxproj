@@ -77,7 +77,8 @@
 		C817A35722CE73B4002529FF /* Deferred.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35322CE73B4002529FF /* Deferred.swift */; };
 		C817A35822CE73B4002529FF /* ReadWriteLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35522CE73B4002529FF /* ReadWriteLock.swift */; };
 		C817A35922CE73B4002529FF /* LockProtected.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35622CE73B4002529FF /* LockProtected.swift */; };
-		C8A9FE0C26E8EB8600A9C72B /* UIApplication+Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A9FE0B26E8EB8600A9C72B /* UIApplication+Orientation.swift */; };
+		C8415DB326E9FA38008BAAA2 /* UIApplication+Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8415DB226E9FA38008BAAA2 /* UIApplication+Orientation.swift */; };
+		C8A9FE0A26E7A63F00A9C72B /* UserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A9FE0926E7A5B900A9C72B /* UserDefault.swift */; };
 		D025F225218B64D600B262D8 /* SearchEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D025F224218B64D600B262D8 /* SearchEngineTests.swift */; };
 		D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0967A801EC50002009D937F /* TelemetryIntegration.swift */; };
 		D30179071BC6CB19009AD388 /* BlockerEnabledDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */; };
@@ -579,7 +580,8 @@
 		C817A35422CE73B4002529FF /* Deferred.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Deferred.h; sourceTree = "<group>"; };
 		C817A35522CE73B4002529FF /* ReadWriteLock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadWriteLock.swift; sourceTree = "<group>"; };
 		C817A35622CE73B4002529FF /* LockProtected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockProtected.swift; sourceTree = "<group>"; };
-		C8A9FE0B26E8EB8600A9C72B /* UIApplication+Orientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Orientation.swift"; sourceTree = "<group>"; };
+		C8415DB226E9FA38008BAAA2 /* UIApplication+Orientation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+Orientation.swift"; sourceTree = "<group>"; };
+		C8A9FE0926E7A5B900A9C72B /* UserDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefault.swift; sourceTree = "<group>"; };
 		D025F224218B64D600B262D8 /* SearchEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineTests.swift; sourceTree = "<group>"; };
 		D0967A801EC50002009D937F /* TelemetryIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TelemetryIntegration.swift; sourceTree = "<group>"; };
 		D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockerEnabledDetector.swift; sourceTree = "<group>"; };
@@ -1285,6 +1287,7 @@
 				F84AFE731DE77FE6005C4DD1 /* LaunchScreen@2x.png */,
 				F84AFE741DE77FE6005C4DD1 /* LaunchScreen@3x.png */,
 				D38EDB951DCA8A9400E28196 /* LaunchScreen.storyboard */,
+				C8A9FE0926E7A5B900A9C72B /* UserDefault.swift */,
 				B3481A541FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift */,
 				1D3BEDF820C5E6C70019B722 /* FindInPage.js */,
 				1D3BEDFA20C5E76A0019B722 /* FindInPageBar.swift */,
@@ -1301,10 +1304,10 @@
 				D3E2C96E1DA3093D00DEBE3D /* BrowserToolbar.swift */,
 				D364DC251DC4163700562991 /* BrowserToolset.swift */,
 				D3E2C8E91D9F0E6200DEBE3D /* BrowserViewController.swift */,
-				C8A9FE0B26E8EB8600A9C72B /* UIApplication+Orientation.swift */,
 				D3E2C96C1DA3077400DEBE3D /* CharacterSetExtensions.swift */,
 				D35A0E011E26C94F00297884 /* ClosedRangeExtensions.swift */,
 				D5ABA3D71FCC846800D5C060 /* AddCustomDomainViewController.swift */,
+				C8415DB226E9FA38008BAAA2 /* UIApplication+Orientation.swift */,
 				D3DA77841DC2C307009C114E /* ErrorPage.swift */,
 				D30AEEBA1DE4CB1B0096A2E7 /* FileManagerExtensions.swift */,
 				D3561B2A1DB5925100A5EEAF /* GradientBackgroundView.swift */,
@@ -1926,6 +1929,7 @@
 				D3E251FB1DAF0668005918DC /* AppInfo.swift in Sources */,
 				31421EB12176492A0015F48B /* TitleActivityItemProvider.swift in Sources */,
 				E4BF2E111BAD8AC500DA9D68 /* Settings.swift in Sources */,
+				C8A9FE0A26E7A63F00A9C72B /* UserDefault.swift in Sources */,
 				D3E54FDE1DF0E0D7003E1AFF /* UIImageExtensions.swift in Sources */,
 				16D716A5211503CD000C8A66 /* PageActionSheetItems.swift in Sources */,
 				D597608C1F9FEFB300A2D212 /* TrackingProtection.swift in Sources */,
@@ -1996,9 +2000,9 @@
 				D3426AE91DB7F4060016DA5A /* KeyboardHelper.swift in Sources */,
 				B3CD41CC1FD1CAF000AEBD58 /* PaddedSwitch.swift in Sources */,
 				84D6F8E226C656610006D634 /* UITableViewCellExtensions.swift in Sources */,
-				C8A9FE0C26E8EB8600A9C72B /* UIApplication+Orientation.swift in Sources */,
 				D3E251EA1DAD714C005918DC /* InstructionsView.swift in Sources */,
 				D3561B2B1DB5925100A5EEAF /* GradientBackgroundView.swift in Sources */,
+				C8415DB326E9FA38008BAAA2 /* UIApplication+Orientation.swift in Sources */,
 				D3E2C96D1DA3077400DEBE3D /* CharacterSetExtensions.swift in Sources */,
 				D3E2C96F1DA3093D00DEBE3D /* BrowserToolbar.swift in Sources */,
 			);
