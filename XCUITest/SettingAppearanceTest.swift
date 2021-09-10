@@ -11,8 +11,7 @@ class SettingAppearanceTest: BaseTestCase {
     // Smoketest
     // Check for the basic appearance of the Settings Menu
     func testCheckSetting() {
-        // Workaround for accessing Settings as on first launch the URL bar is focused
-        app.buttons["URLBar.cancelButton"].tap()
+        dismissURLBarFocused()
 
         // Navigate to Settings
         waitForExistence(app.buttons["Settings"])

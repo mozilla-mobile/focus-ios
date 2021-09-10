@@ -104,7 +104,6 @@ class BaseTestCase: XCTestCase {
     }
 
     func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true) {
-        let app = XCUIApplication()
         app.textFields["URLBar.urlText"].tap()
         app.textFields["URLBar.urlText"].typeText(url+"\n")
 
