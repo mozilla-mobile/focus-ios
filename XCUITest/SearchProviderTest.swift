@@ -27,12 +27,17 @@ class SearchProviderTest: BaseTestCase {
         waitForWebPageLoad()
 
         app.buttons["URLBar.deleteButton"].tap()
+        if !iPad() {
+            waitForExistence(app.buttons["URLBar.cancelButton"], timeout: 5)
+            app.buttons["URLBar.cancelButton"].tap()
+        }
         checkForHomeScreen()
 	}
 
     func testAddRemoveCustomSearchProvider() {
         dismissURLBarFocused()
         waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
+
         // Set search engine to Google
         app.buttons["HomeView.settingsButton"].tap()
         app.tables.cells["icon_settings"].tap()
@@ -125,14 +130,14 @@ class SearchProviderTest: BaseTestCase {
 				waitForValueContains(urlbarUrltextTextField, value: "wikipedia.org")
             case "Amazon.com":
 				waitForValueContains(urlbarUrltextTextField, value: "amazon.com")
-                waitForValueContains(app.webViews.textFields["Search Amazon"],
+                waitForValueContains(app.webViews.textFields.element(boundBy: 0),
                     value: searchWord)
 
 			default:
 				XCTFail("Invalid Search Provider")
 		}
-
-        cancelButton.tap()
+        if !iPad() {
+            cancelButton.tap()
+        }
 	}
-
 }

@@ -147,11 +147,10 @@ class SettingAppearanceTest: BaseTestCase {
     }
 
     func testDisableAutocomplete() {
-        // Workaround for accessing Settings as on first launch the URL bar is focused
-        app.buttons["URLBar.cancelButton"].tap()
+        dismissURLBarFocused()
 
         // Navigate to Settings
-        waitForExistence(app.buttons["Settings"])
+        waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["Settings"].tap()
 
         let settingsButton = app.cells["Settings"]
@@ -176,9 +175,7 @@ class SettingAppearanceTest: BaseTestCase {
     }
 
     func testAddRemoveCustomDomain() {
-        // Workaround for accessing Settings as on first launch the URL bar is focused
-        app.buttons["URLBar.cancelButton"].tap()
-
+        dismissURLBarFocused()
         // Navigate to Settings
         waitForExistence(app.buttons["Settings"])
         app.buttons["Settings"].tap()
@@ -227,9 +224,7 @@ class SettingAppearanceTest: BaseTestCase {
 
     // Smoktest
     func testSafariIntegration() {
-        // Workaround for accessing Settings as on first launch the URL bar is focused
-        app.buttons["URLBar.cancelButton"].tap()
-
+        dismissURLBarFocused()
         // Navigate to Settings
         waitForExistence(app.buttons["Settings"])
         app.buttons["Settings"].tap()

@@ -35,8 +35,19 @@ class BaseTestCase: XCTestCase {
     }
 
     func dismissURLBarFocused() {
-        waitForExistence(app.buttons["URLBar.cancelButton"], timeout: 15)
-        app.buttons["URLBar.cancelButton"].tap()
+        if iPad() {
+            app.windows.element(boundBy: 0).tap()
+        } else {
+            waitForExistence(app.buttons["URLBar.cancelButton"], timeout: 15)
+            app.buttons["URLBar.cancelButton"].tap()
+        }
+    }
+
+    func iPad() -> Bool {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return true
+        }
+        return false
     }
 
     func waitForEnable(_ element: XCUIElement, timeout: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
@@ -68,14 +79,6 @@ class BaseTestCase: XCTestCase {
                 self.recordFailure(withDescription: message, inFile: file, atLine: Int(line), expected: false)
             }
         }
-
-
-    func iPad() -> Bool {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            return true
-        }
-        return false
-    }
 
     func search(searchWord: String, waitForLoadToFinish: Bool = true) {
         let app = XCUIApplication()
@@ -126,7 +129,7 @@ class BaseTestCase: XCTestCase {
     }
 
     func checkForHomeScreen() {
-        waitForExistence(app.buttons["Settings"], timeout: 5)
+        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
     }
 
     func waitForWebPageLoad () {

@@ -15,8 +15,14 @@ class RequestDesktopTest: BaseTestCase {
         waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
 
-        waitForExistence(app.tables.cells["request_desktop_site_activity"])
-        app.tables.cells["request_desktop_site_activity"].tap()
+        if iPad() {
+            waitForExistence(app.tables.cells["request_mobile_site_activity"])
+            app.tables.cells["request_mobile_site_activity"].tap()
+        } else {
+            waitForExistence(app.tables.cells["request_desktop_site_activity"])
+            app.tables.cells["request_desktop_site_activity"].tap()
+        }
+
         waitForWebPageLoad()
 
         guard let text = urlBarTextField.value as? String else {
@@ -25,7 +31,9 @@ class RequestDesktopTest: BaseTestCase {
         }
 
         if text.contains("m.facebook") {
-            XCTFail()
+            if !iPad() {
+                XCTFail()
+            }
         }
     }
 }
