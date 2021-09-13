@@ -34,7 +34,7 @@ class TipsPageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .lightGray
+        self.view.backgroundColor = .clear
     }
     
     func setupPageController(with state: State) {
