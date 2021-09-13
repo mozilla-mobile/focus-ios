@@ -25,7 +25,7 @@ class BrowserViewController: UIViewController {
 
     private var keyboardState: KeyboardState?
     private let browserToolbar = BrowserToolbar()
-    private var homeView: HomeView!
+    private var homeViewController: HomeViewController!
     private let overlayView = OverlayView()
     private let searchEngineManager = SearchEngineManager(prefs: UserDefaults.standard)
     private let urlBarContainer = URLBarContainer()
@@ -239,7 +239,7 @@ class BrowserViewController: UIViewController {
         overlayView.snp.makeConstraints { make in
             make.top.equalTo(urlBarContainer.snp.bottom)
             make.leading.trailing.equalTo(mainContainerView)
-            make.bottom.equalTo(homeView.tipViewTop)
+            make.bottom.equalTo(homeViewController.tipViewTop)
         }
 
         // Listen for request desktop site notifications
@@ -273,9 +273,9 @@ class BrowserViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(true, animated: animated)
 
-        let homeViewToolset = homeView.toolbar.toolset
+        let homeViewToolset = homeViewController.toolbar.toolset
         homeViewToolset.setHighlightWhatsNew(shouldHighlight: homeViewToolset.shouldShowWhatsNew())
-        homeView.toolbar.layoutIfNeeded()
+        homeViewController.toolbar.layoutIfNeeded()
         browserToolbar.toolset.setHighlightWhatsNew(shouldHighlight: browserToolbar.toolset.shouldShowWhatsNew())
         browserToolbar.layoutIfNeeded()
 
@@ -386,7 +386,7 @@ class BrowserViewController: UIViewController {
     public func activateUrlBarOnHomeView() {
         // If the Settings view is not displayed AND
         // If the home view is not displayed, nor the overlayView hidden do not activate the text field:
-        guard !(self.presentedViewController?.children.first is SettingsViewController) && (homeView != nil || !overlayView.isHidden) else { return }
+        guard !(self.presentedViewController?.children.first is SettingsViewController) && (homeViewController != nil || !overlayView.isHidden) else { return }
         urlBar.activateTextField()
     }
 
@@ -423,19 +423,10 @@ class BrowserViewController: UIViewController {
     }
 
     private func createHomeView() {
-        let homeView = HomeView(tipManager: tipManager)
-        homeView.delegate = self
-        homeView.toolbar.toolset.delegate = self
-        homeViewContainer.addSubview(homeView)
-
-        homeView.snp.makeConstraints { make in
-            make.edges.equalTo(homeViewContainer)
-        }
-
-        if let homeView = self.homeView {
-            homeView.removeFromSuperview()
-        }
-        self.homeView = homeView
+        homeViewController = HomeViewController(tipManager: tipManager)
+        homeViewController.delegate = self
+        homeViewController.toolbar.toolset.delegate = self
+        install(homeViewController, on: homeViewContainer)
     }
 
     private func createURLBar() {
@@ -603,8 +594,8 @@ class BrowserViewController: UIViewController {
         browserToolbar.canDelete = false
         urlBar.removeFromSuperview()
         urlBarContainer.alpha = 0
-        homeView.refreshTipsDisplay()
-        homeView.isHidden = false
+        homeViewController.refreshTipsDisplay()
+        homeViewController.view.isHidden = false
         createURLBar()
         shortcutsContainer.isHidden = false
         shortcutsBackground.isHidden = true
@@ -703,7 +694,7 @@ class BrowserViewController: UIViewController {
 
         if webViewContainer.isHidden {
             webViewContainer.isHidden = false
-            homeView.isHidden = true
+            homeViewController.view.isHidden = true
             urlBar.inBrowsingMode = true
 
             if !showsToolsetInURLBar {
@@ -761,11 +752,11 @@ class BrowserViewController: UIViewController {
         coordinator.animate(alongsideTransition: { _ in
             self.urlBar.shouldShowToolset = self.showsToolsetInURLBar
 
-            if self.homeView == nil && self.scrollBarState != .expanded {
+            if self.homeViewController == nil && self.scrollBarState != .expanded {
                 self.hideToolbars()
             }
 
-            self.browserToolbar.animateHidden(self.homeView != nil || self.showsToolsetInURLBar, duration: coordinator.transitionDuration, completion: {
+            self.browserToolbar.animateHidden(self.homeViewController != nil || self.showsToolsetInURLBar, duration: coordinator.transitionDuration, completion: {
                 self.updateViewConstraints()
             })
         })
@@ -855,7 +846,7 @@ class BrowserViewController: UIViewController {
     }
 
     func refreshTipsDisplay() {
-        homeView.refreshTipsDisplay()
+        homeViewController.refreshTipsDisplay()
     }
 
     private func getNumberOfLifetimeTrackersBlocked(userDefaults: UserDefaults = UserDefaults.standard) -> Int {
@@ -946,7 +937,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBar(_ urlBar: URLBar, didEnterText text: String) {
         let trimmedText = text.trimmingCharacters(in: .whitespaces)
-        let isOnHomeView = homeView != nil
+        let isOnHomeView = homeViewController != nil
         let shouldShowShortcuts = trimmedText.isEmpty && shortcutManager.numberOfShortcuts != 0
         shortcutsContainer.isHidden = !shouldShowShortcuts
         shortcutsBackground.isHidden = isOnHomeView ? true : !shouldShowShortcuts
@@ -1038,7 +1029,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidFocus(_ urlBar: URLBar) {
-        let isOnHomeView = homeView != nil
+        let isOnHomeView = homeViewController != nil
         overlayView.present(isOnHomeView: isOnHomeView)
         toggleURLBarBackground(isBright: false)
     }
@@ -1501,7 +1492,7 @@ extension BrowserViewController: WebControllerDelegate {
     func webController(_ controller: WebController, didUpdateEstimatedProgress estimatedProgress: Double) {
         // Don't update progress if the home view is visible. This prevents the centered URL bar
         // from catching the global progress events.
-        guard homeView == nil else { return }
+        guard homeViewController == nil else { return }
 
         urlBar.progressBar.alpha = 1
         urlBar.progressBar.isHidden = false
