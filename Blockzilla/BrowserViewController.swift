@@ -458,7 +458,7 @@ class BrowserViewController: UIViewController {
             urlBarTopConstraint = make.top.equalTo(mainContainerView.safeAreaLayoutGuide.snp.top).constraint
             
             if isIPadRegularDimensions {
-                make.width.equalToSuperview().multipliedBy(UIConstants.layout.urlBarInitialWidthMultiplier)
+                make.leading.trailing.equalToSuperview()
                 make.centerX.equalToSuperview()
                 make.bottom.equalTo(urlBarContainer)
             } else {
@@ -949,7 +949,7 @@ extension BrowserViewController: URLBarDelegate {
         let isOnHomeView = homeView != nil
         let shouldShowShortcuts = trimmedText.isEmpty && shortcutManager.numberOfShortcuts != 0
         shortcutsContainer.isHidden = !shouldShowShortcuts
-        shortcutsBackground.isHidden = !shouldShowShortcuts
+        shortcutsBackground.isHidden = isOnHomeView ? true : !shouldShowShortcuts
         
         if Settings.getToggle(.enableSearchSuggestions) && !trimmedText.isEmpty {
             searchSuggestionsDebouncer.renewInterval()
