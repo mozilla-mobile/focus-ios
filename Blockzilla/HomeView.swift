@@ -4,9 +4,10 @@
 
 import UIKit
 import Telemetry
+import SnapKit
 
 protocol HomeViewDelegate: class {
-    func shareTrackerStatsButtonTapped()
+    func shareTrackerStatsButtonTapped(_ sender: UIButton)
     func didTapTip(_ tip: TipManager.Tip)
 }
 
@@ -20,6 +21,8 @@ class HomeView: UIView {
     private let shieldLogo = UIImageView()
     private let textLogo = UIImageView()
     private let tipManager: TipManager
+    
+    public var tipViewTop: ConstraintItem { tipView.snp.top }
 
     let toolbar = HomeViewToolbar()
     let trackerStatsShareButton = UIButton()
@@ -64,9 +67,7 @@ class HomeView: UIView {
         tipDescriptionLabel.minimumScaleFactor = UIConstants.layout.homeViewLabelMinimumScale
         tipView.addSubview(tipDescriptionLabel)
         
-        pageControl.numberOfPages = tipManager.numberOfTips()
         addSubview(pageControl)
-        
 
         shieldLogo.image = #imageLiteral(resourceName: "tracking_protection")
         shieldLogo.tintColor = UIColor.white
@@ -144,21 +145,28 @@ class HomeView: UIView {
             make.left.equalToSuperview()
         }
 
+        refreshTipsDisplay()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func refreshTipsDisplay() {
+        pageControl.numberOfPages = tipManager.numberOfTips()
+        
         if let tip = tipManager.fetchTip() {
             showTipView()
             hideTrackerStatsShareButton()
             showTextTip(tip)
             tipManager.currentTip = tip
+            pageControl.currentPage = tipManager.currentTipIndex()
         } else if tipManager.shouldShowTips() {
             showTipView()
             hideTextTip()
             showTrackerStatsShareButton(text: tipManager.shareTrackersDescription())
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.trackerStatsShareButton)
         }
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 
     func showTipView() {
@@ -232,8 +240,8 @@ class HomeView: UIView {
         tipDescriptionLabel.isHidden = true
     }
 
-    @objc private func shareTapped() {
-        delegate?.shareTrackerStatsButtonTapped()
+    @objc private func shareTapped(sender: UIButton) {
+        delegate?.shareTrackerStatsButtonTapped(sender)
     }
 
     @objc private func tapTip() {

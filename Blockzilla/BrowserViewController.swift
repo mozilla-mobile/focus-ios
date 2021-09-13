@@ -25,7 +25,7 @@ class BrowserViewController: UIViewController {
 
     private var keyboardState: KeyboardState?
     private let browserToolbar = BrowserToolbar()
-    private var homeView: HomeView?
+    private var homeView: HomeView!
     private let overlayView = OverlayView()
     private let searchEngineManager = SearchEngineManager(prefs: UserDefaults.standard)
     private let urlBarContainer = URLBarContainer()
@@ -209,11 +209,6 @@ class BrowserViewController: UIViewController {
 
             make.leading.trailing.equalTo(mainContainerView)
         }
-
-        overlayView.snp.makeConstraints { make in
-            make.top.equalTo(urlBarContainer.snp.bottom)
-            make.leading.trailing.bottom.equalTo(mainContainerView)
-        }
         
         shortcutsContainer.snp.makeConstraints { make in
             make.top.equalTo(urlBarContainer.snp.bottom).offset(isIPadRegularDimensions ? UIConstants.layout.shortcutsContainerOffsetIPad : UIConstants.layout.shortcutsContainerOffset)
@@ -240,6 +235,12 @@ class BrowserViewController: UIViewController {
         createHomeView()
         createURLBar()
         updateViewConstraints()
+        
+        overlayView.snp.makeConstraints { make in
+            make.top.equalTo(urlBarContainer.snp.bottom)
+            make.leading.trailing.equalTo(mainContainerView)
+            make.bottom.equalTo(homeView.tipViewTop)
+        }
 
         // Listen for request desktop site notifications
         NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification), object: nil, queue: nil) { _ in
@@ -272,10 +273,9 @@ class BrowserViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(true, animated: animated)
 
-        if let homeViewToolset = homeView?.toolbar.toolset {
-            homeViewToolset.setHighlightWhatsNew(shouldHighlight: homeViewToolset.shouldShowWhatsNew())
-            homeView?.toolbar.layoutIfNeeded()
-        }
+        let homeViewToolset = homeView.toolbar.toolset
+        homeViewToolset.setHighlightWhatsNew(shouldHighlight: homeViewToolset.shouldShowWhatsNew())
+        homeView.toolbar.layoutIfNeeded()
         browserToolbar.toolset.setHighlightWhatsNew(shouldHighlight: browserToolbar.toolset.shouldShowWhatsNew())
         browserToolbar.layoutIfNeeded()
 
@@ -603,7 +603,8 @@ class BrowserViewController: UIViewController {
         browserToolbar.canDelete = false
         urlBar.removeFromSuperview()
         urlBarContainer.alpha = 0
-        createHomeView()
+        homeView.refreshTipsDisplay()
+        homeView.isHidden = false
         createURLBar()
         shortcutsContainer.isHidden = false
         shortcutsBackground.isHidden = true
@@ -702,8 +703,7 @@ class BrowserViewController: UIViewController {
 
         if webViewContainer.isHidden {
             webViewContainer.isHidden = false
-            homeView?.removeFromSuperview()
-            homeView = nil
+            homeView.isHidden = true
             urlBar.inBrowsingMode = true
 
             if !showsToolsetInURLBar {
@@ -855,7 +855,7 @@ class BrowserViewController: UIViewController {
     }
 
     func refreshTipsDisplay() {
-        createHomeView()
+        homeView.refreshTipsDisplay()
     }
 
     private func getNumberOfLifetimeTrackersBlocked(userDefaults: UserDefaults = UserDefaults.standard) -> Int {
@@ -1299,9 +1299,7 @@ extension BrowserViewController: BrowserToolsetDelegate {
 
 extension BrowserViewController: HomeViewDelegate {
 
-    func shareTrackerStatsButtonTapped() {
-        guard let trackerStatsShareButton = homeView?.trackerStatsShareButton else { return }
-
+    func shareTrackerStatsButtonTapped(_ sender: UIButton) {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.share, object: TelemetryEventObject.trackerStatsShareButton)
 
         let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
@@ -1311,8 +1309,8 @@ extension BrowserViewController: HomeViewDelegate {
         let text = String(format: shareTrackerStatsText + " ", AppInfo.productName, String(numberOfTrackersBlocked))
         let shareController = UIActivityViewController(activityItems: [text, appStoreUrl as Any], applicationActivities: nil)
         // Exact frame dimensions taken from presentPhotonActionSheet
-        shareController.popoverPresentationController?.sourceView = trackerStatsShareButton
-        shareController.popoverPresentationController?.sourceRect = CGRect(x: trackerStatsShareButton.frame.width/2, y: 0, width: 1, height: 1)
+        shareController.popoverPresentationController?.sourceView = sender
+        shareController.popoverPresentationController?.sourceRect = CGRect(x: sender.frame.width/2, y: 0, width: 1, height: 1)
 
         present(shareController, animated: true)
     }
@@ -1328,6 +1326,7 @@ extension BrowserViewController: HomeViewDelegate {
     }
 
     func didTapTip(_ tip: TipManager.Tip) {
+        urlBar.dismiss()
         guard let action = tip.action else { return }
         switch action {
         case .visit(let topic):
@@ -1351,6 +1350,7 @@ extension BrowserViewController: HomeViewDelegate {
 
 extension BrowserViewController: OverlayViewDelegate {
     func overlayViewDidPressSettings(_ overlayView: OverlayView) {
+        urlBar.dismiss()
         showSettings()
     }
 
