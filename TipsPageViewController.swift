@@ -9,7 +9,7 @@ class TipsPageViewController: UIViewController {
     private var emptyController: UIViewController?
     
     private var tipManager: TipManager
-    private var currentIndex: Int = 0
+    private let tipTapped: (TipManager.Tip) -> ()
     
     private lazy var pageController: UIPageViewController = {
         let pageController = UIPageViewController(
@@ -23,8 +23,9 @@ class TipsPageViewController: UIViewController {
         return pageController
     }()
     
-    init(tipManager: TipManager) {
+    init(tipManager: TipManager, tipTapped: @escaping (TipManager.Tip) -> ()) {
         self.tipManager = tipManager
+        self.tipTapped = tipTapped
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -43,7 +44,7 @@ class TipsPageViewController: UIViewController {
         
         switch state {
         case .showTips:
-            guard let initialVC = tipManager.currentTip.map(TipViewController.init(tip:)) else { return }
+            guard let initialVC = tipManager.currentTip.map({ TipViewController(tip: $0, tipTapped: tipTapped) }) else { return }
             install(pageController, on: self.view)
             self.pageController.setViewControllers([initialVC], direction: .forward, animated: true, completion: nil)
             
@@ -57,11 +58,11 @@ class TipsPageViewController: UIViewController {
 
 extension TipsPageViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        return tipManager.getPreviousTip().map(TipViewController.init(tip:))
+        return tipManager.getPreviousTip().map { TipViewController(tip: $0, tipTapped: tipTapped) }
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        return tipManager.getNextTip().map(TipViewController.init(tip:))
+        return tipManager.getNextTip().map { TipViewController(tip: $0, tipTapped: tipTapped) }
     }
     
     func presentationCount(for pageViewController: UIPageViewController) -> Int {

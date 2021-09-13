@@ -20,10 +20,12 @@ class TipViewController: UIViewController {
         return label
     }()
     
-    var tip: TipManager.Tip
+    private let tip: TipManager.Tip
+    private let tipTapped: (TipManager.Tip) -> ()
     
-    init(tip: TipManager.Tip) {
+    init(tip: TipManager.Tip, tipTapped: @escaping (TipManager.Tip) -> ()) {
         self.tip = tip
+        self.tipTapped = tipTapped
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -36,6 +38,10 @@ class TipViewController: UIViewController {
         
         view.addSubview(tipTitleLabel)
         view.addSubview(tipDescriptionLabel)
+        
+        tipDescriptionLabel.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapTip))
+        tipDescriptionLabel.addGestureRecognizer(tap)
 
         tipTitleLabel.text = tip.title
         tipDescriptionLabel.text = tip.description
@@ -49,5 +55,9 @@ class TipViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.bottom.equalTo(tipDescriptionLabel.snp.top)
         }
+    }
+    
+    @objc private func tapTip() {
+        tipTapped(tip)
     }
 }

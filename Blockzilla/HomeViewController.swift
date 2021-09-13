@@ -24,8 +24,8 @@ class HomeViewController: UIViewController {
     }()
     
     private let tipManager: TipManager
-    private let tipsViewController: TipsPageViewController
-    
+    private lazy var tipsViewController = TipsPageViewController(tipManager: tipManager, tipTapped: didTap(tip:))
+     
     public var tipViewTop: ConstraintItem { tipView.snp.top }
 
     let toolbar = HomeViewToolbar()
@@ -36,9 +36,11 @@ class HomeViewController: UIViewController {
 
     init(tipManager: TipManager) {
         self.tipManager = tipManager
-        self.tipsViewController = TipsPageViewController(tipManager: tipManager)
         super.init(nibName: nil, bundle: nil)
-        
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
         rotated()
         NotificationCenter.default.addObserver(self, selector: #selector(rotated), name: UIDevice.orientationDidChangeNotification, object: nil)
@@ -128,8 +130,7 @@ class HomeViewController: UIViewController {
         }
     }
 
-    @objc private func tapTip() {
-        guard let tip = tipManager.currentTip else { return }
+    private func didTap(tip: TipManager.Tip) {
         delegate?.didTapTip(tip)
     }
 }
