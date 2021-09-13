@@ -40,22 +40,18 @@ class RequestDesktopTest: BaseTestCase {
         // Wait for existence rather than hittable because the textfield is technically disabled
         loadWebPage("facebook.com")
 
-        waitForExistence(app.buttons["URLBar.pageActionsButton"])
-        app.buttons["URLBar.pageActionsButton"].tap()
+        waitForWebPageLoad()
+        waitForExistence(app.buttons["HomeView.settingsButton"])
+        app.buttons["HomeView.settingsButton"].tap()
 
         if iPad() {
-            waitForExistence(app.cells["Request Mobile Site"])
-            app.cells["Request Mobile Site"].tap()
+            waitForExistence(app.tables.cells["request_mobile_site_activity"])
+            app.tables.cells["request_mobile_site_activity"].tap()
         } else {
-            waitForExistence(app.cells["Request Desktop Site"])
-            app.cells["Request Desktop Site"].tap()
+            waitForExistence(app.tables.cells["request_desktop_site_activity"])
+            app.tables.cells["request_desktop_site_activity"].tap()
         }
-        waitForWebPageLoad()
 
-        guard let text = urlBarTextField.value as? String else {
-            XCTFail()
-            return
-        }
         if !iPad() {
             if text.contains("m.facebook") {
                 XCTFail()

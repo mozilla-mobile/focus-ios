@@ -7,36 +7,12 @@ import XCTest
 class TrackingProtectionSettings: BaseTestCase {
     func testInactiveSettings() {
         // Go to in-app settings
+        // Check the new options in TP Settings menu
+        dismissURLBarFocused()
         waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
-        app.buttons["Settings"].tap()
-        waitForHittable(app.tables.cells["settingsViewController.trackingCell"])
-        app.tables.cells["settingsViewController.trackingCell"].tap()
-        waitForExistence(app.tables.switches["BlockerToggle.BlockAnalytics"])
-
-        // Disable 'block analytic trackers'
-        app.tables.switches["BlockerToggle.BlockAnalytics"].tap()
-        XCTAssertEqual(app.tables.switches["BlockerToggle.BlockAnalytics"].value as! String, "0")
-
-        // Exit in-app settings
-        app.navigationBars.buttons.element(boundBy: 0).tap()
-        app.navigationBars.buttons.element(boundBy: 0).tap()
-
-        // Visit https://www.mozilla.org
-        loadWebPage("mozilla.org")
-
-        // Check the correct site is reached
-        waitForWebPageLoad()
-
-        // Open the tracking protection menu
-        waitForHittable(app.otherElements["URLBar.trackingProtectionIcon"])
-        app.otherElements["URLBar.trackingProtectionIcon"].tap()
-
-        // Wait for the menu to open
-        waitForExistence(app.staticTexts["Tracking Protection"])
-
-        // Check for the existence of one (1) analytical tracker on Mozilla
-        waitForExistence(app.staticTexts["Trackers blocked.Subtitle"])
-        XCTAssertEqual(app.staticTexts["Trackers blocked.Subtitle"].label, "0")
+        // Set search engine to Google
+        app.buttons["HomeView.settingsButton"].tap()
+        app.tables.cells["icon_settings"].tap()
 
         waitForExistence(app.staticTexts["Ad trackers.Subtitle"])
         XCTAssertEqual(app.staticTexts["Ad trackers.Subtitle"].label, "0")
@@ -59,20 +35,19 @@ class TrackingProtectionSettings: BaseTestCase {
             app.buttons["PhotonMenu.close"].tap()
         }
 
-        // Erase the history
-        waitForHittable(app.buttons["URLBar.deleteButton"])
-        app.buttons["URLBar.deleteButton"].tap()
+        waitForExistence(app.navigationBars["Tracking Protection"])
+        // Verify trackers and scripts to block switches
+        let switchAdvertisingValue = app.switches["BlockerToggle.BlockAds"].value!
+        let switchAnalyticsValue = app.switches["BlockerToggle.BlockAnalytics"].value!
+        let switchSocialValue = app.switches["BlockerToggle.BlockSocial"].value!
+        let switchOtherValue = app.switches["BlockerToggle.BlockOther"].value!
 
-        // Reset in-app settings (work-around until issue: #731)
-        waitForHittable(app.buttons["Settings"])
-        app.buttons["Settings"].tap()
-        waitForHittable(app.tables.cells["settingsViewController.trackingCell"])
-        app.tables.cells["settingsViewController.trackingCell"].tap()
-        waitForExistence(app.tables.switches["BlockerToggle.BlockAnalytics"])
+        XCTAssertEqual(switchAdvertisingValue as! String, "1")
+        XCTAssertEqual(switchAnalyticsValue as! String, "1")
+        XCTAssertEqual(switchSocialValue as! String, "1")
+        XCTAssertEqual(switchOtherValue as! String, "0")
 
-        // Re-enable 'block analytic trackers'
-        app.tables.switches["BlockerToggle.BlockAnalytics"].tap()
-        XCTAssertEqual(app.tables.switches["BlockerToggle.BlockAnalytics"].value as! String, "1")
+        app.staticTexts["More Settings"].tap()
+        waitForExistence(app.navigationBars["Settings"])
     }
-
 }

@@ -18,7 +18,7 @@ class DragAndDropTest: BaseTestCase {
             loadWebPage("developer.mozilla.org/en-US/search")
 
             // Check the text in the search field before dragging and dropping the url text field
-            XCTAssertEqual(app.webViews.searchFields[websiteWithSearchField["urlSearchField"]!].placeholderValue, "Search the docs")
+            XCTAssertEqual(app.webViews.searchFields[websiteWithSearchField["urlSearchField"]!].placeholderValue, "Site search...")
             // DragAndDrop the url for only one second so that the TP menu is not shown and the search box is not covered
             urlBarTextField.press(forDuration: 1, thenDragTo:app.webViews.searchFields[websiteWithSearchField["urlSearchField"]!])
             // Verify that the text in the search field is the same as the text in the url text field

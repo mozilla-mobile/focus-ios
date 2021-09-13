@@ -7,6 +7,7 @@ import XCTest
 class TrackingProtectionMenu: BaseTestCase {
 
     // Smoketest
+<<<<<<< HEAD
     func testActiveProtectionSidebar() throws {
         throw XCTSkip("Skipping this test because the PR is just for the new design")
         //reactivate test after the functionality will be added
@@ -88,16 +89,11 @@ class TrackingProtectionMenu: BaseTestCase {
 
         // Erase the history
         waitForExistence(app.buttons["URLBar.deleteButton"])
-<<<<<<< HEAD
         app.buttons["URLBar.deleteButton"].tap()
-=======
-        app.buttons["URLBar.deleteButton"].firstMatch.tap()
->>>>>>> 40647eb (Fixes #1941 - Splash - Bottom Toolbar (#1990))
         waitForExistence(app.staticTexts["Your browsing history has been erased."])
     }
 
-    func testInactiveProtectionSidebar() {
-
+    func testProtectionSidebar() {
         // Visit https://www.mozilla.org
         loadWebPage("mozilla.org")
 
@@ -108,16 +104,18 @@ class TrackingProtectionMenu: BaseTestCase {
         app.otherElements["URLBar.trackingProtectionIcon"].tap()
 
         // Wait for the sidebar to open
-        waitForExistence(app.staticTexts["Tracking Protection"])
+        waitForExistence(app.navigationBars["Tracking Protection"])
 
         // Disable tracking protection
-        waitForExistence(app.switches["Tracking Protection.Toggle"])
-        app.switches["Tracking Protection.Toggle"].tap()
+        waitForExistence(app.switches["BlockerToggle.TrackingProtection"])
+        app.switches["BlockerToggle.TrackingProtection"].tap()
 
         // Reopen the tracking protection sidebar
+        app.buttons["Done"].tap()
         app.otherElements["URLBar.trackingProtectionIcon"].tap()
 
         // Wait for the sidebar to open
+
         waitForExistence(app.staticTexts["Tracking Protection"])
 
         // Check tracker values
@@ -154,5 +152,8 @@ class TrackingProtectionMenu: BaseTestCase {
 
         waitForExistence(app.staticTexts["Content trackers.Subtitle"])
         XCTAssertEqual(app.staticTexts["Content trackers.Subtitle"].label, "0")
+        waitForExistence(app.navigationBars["Tracking Protection"])
+        let switchValue = app.switches["BlockerToggle.TrackingProtection"].value!
+        XCTAssertEqual(switchValue as! String, "0")
     }
 }
