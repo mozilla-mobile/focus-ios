@@ -20,7 +20,7 @@ class TipViewController: UIViewController {
         return label
     }()
     
-    private let tip: TipManager.Tip
+    public let tip: TipManager.Tip
     private let tipTapped: (TipManager.Tip) -> ()
     
     init(tip: TipManager.Tip, tipTapped: @escaping (TipManager.Tip) -> ()) {

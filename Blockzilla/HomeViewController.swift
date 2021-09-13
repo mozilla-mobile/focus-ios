@@ -79,11 +79,8 @@ class HomeViewController: UIViewController {
     func refreshTipsDisplay() {
         if let tip = tipManager.fetchTip() {
             showTextTip(tip)
-            
-            tipManager.currentTip = tip
             tipsViewController.setupPageController(with: .showTips)
         } else if tipManager.shouldShowTips() {
-            tipManager.currentTip = nil
             tipsViewController.setupPageController(
                 with: .showEmpty(
                     controller: ShareTrackersViewController(

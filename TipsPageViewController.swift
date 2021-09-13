@@ -44,7 +44,7 @@ class TipsPageViewController: UIViewController {
         
         switch state {
         case .showTips:
-            guard let initialVC = tipManager.currentTip.map({ TipViewController(tip: $0, tipTapped: tipTapped) }) else { return }
+            guard let initialVC = tipManager.fetchTip().map({ TipViewController(tip: $0, tipTapped: tipTapped) }) else { return }
             install(pageController, on: self.view)
             self.pageController.setViewControllers([initialVC], direction: .forward, animated: true, completion: nil)
             
@@ -58,11 +58,13 @@ class TipsPageViewController: UIViewController {
 
 extension TipsPageViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        return tipManager.getPreviousTip().map { TipViewController(tip: $0, tipTapped: tipTapped) }
+        let tip = (viewController as! TipViewController).tip
+        return tipManager.getTip(before: tip).map { TipViewController(tip: $0, tipTapped: tipTapped) }
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        return tipManager.getNextTip().map { TipViewController(tip: $0, tipTapped: tipTapped) }
+        let tip = (viewController as! TipViewController).tip
+        return tipManager.getTip(after: tip).map { TipViewController(tip: $0, tipTapped: tipTapped) }
     }
     
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
@@ -70,6 +72,6 @@ extension TipsPageViewController: UIPageViewControllerDataSource, UIPageViewCont
     }
     
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-        return self.tipManager.currentTipIndex()
+        return 0
     }
 }
