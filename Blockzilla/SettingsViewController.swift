@@ -143,7 +143,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             case .integration: return 1
             case .mozilla:
                 // Show tips option should not be displayed for users that do not see tips
-                return TipManager.shared.shouldShowTips() ? 3 : 2
+                return TipManager.shared.canShowTips ? 3 : 2
             }
         }
 
@@ -460,7 +460,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
             }
             cell = siriCell
-        case .mozilla where TipManager.shared.shouldShowTips():
+        case .mozilla where TipManager.shared.canShowTips:
             if indexPath.row == 0 {
                 cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
             } else if indexPath.row == 1 {
@@ -472,7 +472,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.textLabel?.text = String(format: UIConstants.strings.ratingSetting, AppInfo.productName)
                 cell.accessibilityIdentifier = "settingsViewController.rateFocus"
             }
-        case .mozilla where !TipManager.shared.shouldShowTips():
+        case .mozilla where !TipManager.shared.canShowTips:
             if indexPath.row == 0 {
                 cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
                 cell.textLabel?.text = String(format: UIConstants.strings.aboutTitle, AppInfo.productName)
@@ -603,7 +603,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 let siriFavoriteVC = SiriFavoriteViewController()
                 navigationController?.pushViewController(siriFavoriteVC, animated: true)
             }
-        case .mozilla where TipManager.shared.shouldShowTips():
+        case .mozilla where TipManager.shared.canShowTips:
             if indexPath.row == 1 {
                 aboutClicked()
             } else if indexPath.row == 2 {
@@ -612,7 +612,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                     UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
                 }
             }
-        case .mozilla where !TipManager.shared.shouldShowTips():
+        case .mozilla where !TipManager.shared.canShowTips:
             if indexPath.row == 0 {
                 aboutClicked()
             } else if indexPath.row == 1 {
