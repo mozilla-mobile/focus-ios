@@ -45,9 +45,11 @@ class TipViewController: UIViewController {
 
         tipTitleLabel.text = tip.title
         tipDescriptionLabel.text = tip.description
+        tipDescriptionLabel.textAlignment = .center
         
         tipDescriptionLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
+            make.leading.equalTo(view).offset(UIConstants.layout.tipDescriptionMargin)
+            make.trailing.equalTo(view).inset(UIConstants.layout.tipDescriptionMargin)
             make.bottom.equalToSuperview()
         }
 
