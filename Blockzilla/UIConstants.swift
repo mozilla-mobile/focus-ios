@@ -222,7 +222,7 @@ struct UIConstants {
         static let textLogoMargin: CGFloat = 44
         static let tipDescriptionMargin: CGFloat = 12
         static let tipViewHeight: CGFloat = 75
-        static let tipViewBottomOffset: CGFloat = -6
+        static let tipViewBottomOffset: CGFloat = 6
         static let urlBarButtonImageSize: CGFloat = 20
         static let urlBarButtonTargetSize: CGFloat = 40
         static let settingsTextPadding: CGFloat = 10
