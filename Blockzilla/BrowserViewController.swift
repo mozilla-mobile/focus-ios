@@ -938,7 +938,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBar(_ urlBar: URLBar, didEnterText text: String) {
         let trimmedText = text.trimmingCharacters(in: .whitespaces)
-        let isOnHomeView = homeViewController != nil
+        let isOnHomeView = !urlBar.inBrowsingMode
         let shouldShowShortcuts = trimmedText.isEmpty && shortcutManager.numberOfShortcuts != 0
         shortcutsContainer.isHidden = !shouldShowShortcuts
         shortcutsBackground.isHidden = isOnHomeView ? true : !shouldShowShortcuts
@@ -1039,6 +1039,7 @@ extension BrowserViewController: URLBarDelegate {
         let shouldShowShortcuts = shortcutManager.numberOfShortcuts != 0
         shortcutsContainer.isHidden = !shouldShowShortcuts
         shortcutsBackground.isHidden = !shouldShowShortcuts || !urlBar.inBrowsingMode
+        homeViewController.updateUI(urlBarIsActive: true)
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
             self.urlBarContainer.alpha = 1
             self.updateFindInPageVisibility(visible: false)
@@ -1049,7 +1050,7 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidDeactivate(_ urlBar: URLBar) {
         shortcutsContainer.isHidden = false
         shortcutsBackground.isHidden = true
-        
+        homeViewController.updateUI(urlBarIsActive: false)
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
             self.urlBarContainer.alpha = 0
             self.view.layoutIfNeeded()
