@@ -46,12 +46,16 @@ class URLBar: UIView {
     let progressBar = GradientProgressBar(progressViewStyle: .bar)
     var inBrowsingMode: Bool = false {
         didSet {
-            updateBarState()
+            DispatchQueue.main.async {
+                self.updateBarState()
+            }
         }
     }
     private(set) var isEditing = false {
         didSet {
-            updateBarState()
+            DispatchQueue.main.async {
+                self.updateBarState()
+            }
         }
     }
     var shouldPresent = false
@@ -672,7 +676,9 @@ class URLBar: UIView {
             self.urlBarBorderView.backgroundColor = borderColor
         }, completion: { finished in
             if finished {
-                self.displayClearButton(shouldDisplay: self.isEditing)
+                if let isEmpty = self.urlText.text?.isEmpty {
+                    self.displayClearButton(shouldDisplay: !isEmpty)
+                }
             }
         })
     }
