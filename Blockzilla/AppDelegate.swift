@@ -48,23 +48,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             }
             UserDefaults.standard.removePersistentDomain(forName: AppInfo.sharedContainerIdentifier)
         }
-        setupErrorTracking()
+
         setupTelemetry()
         TPStatsBlocklistChecker.shared.startup()
 
         // Count number of app launches for requesting a review
         let currentLaunchCount = UserDefaults.standard.integer(forKey: UIConstants.strings.userDefaultsLaunchCountKey)
         UserDefaults.standard.set(currentLaunchCount + 1, forKey: UIConstants.strings.userDefaultsLaunchCountKey)
-
-        // Set original default values for showing tips
-        let tipDefaults = [TipManager.TipKey.autocompleteTip: true,
-                           TipManager.TipKey.sitesNotWorkingTip: true,
-                           TipManager.TipKey.siriFavoriteTip: true,
-                           TipManager.TipKey.biometricTip: true,
-                           TipManager.TipKey.shareTrackersTip: true,
-                           TipManager.TipKey.siriEraseTip: true,
-                           TipManager.TipKey.requestDesktopTip: true]
-        UserDefaults.standard.register(defaults: tipDefaults)
 
         // Disable localStorage.
         // We clear the Caches directory after each Erase, but WebKit apparently maintains
@@ -191,6 +181,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             } else {
                 queuedString = text
             }
+        } else if host == "glean" {
+            Glean.shared.handleCustomUrl(url: url)
         }
 
         return true
@@ -288,7 +280,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         if let url = queuedUrl {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openedFromExtension, object: TelemetryEventObject.app)
 
-            navigateBrowserController(to: url)
+            browserViewController.ensureBrowsingMode()
+            browserViewController.deactivateUrlBarOnHomeView()
+            browserViewController.dismissSettings()
+            browserViewController.dismissActionSheet()
+            browserViewController.submit(url: url)
             queuedUrl = nil
         } else if let text = queuedString {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openedFromExtension, object: TelemetryEventObject.app)
@@ -356,12 +352,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 // MARK: - Telemetry & Tooling setup
 extension AppDelegate {
 
-    func setupErrorTracking() {
-        // Set up Sentry
-        let sendUsageData = Settings.getToggle(.sendAnonymousUsageData)
-        SentryIntegration.shared.setup(sendUsageData: sendUsageData)
-    }
-
     func setupTelemetry() {
 
         let telemetryConfig = Telemetry.default.configuration
@@ -409,6 +399,14 @@ extension AppDelegate {
         }
 
         Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData))
+        
+        // Send "at startup" telemetry
+        GleanMetrics.Shortcuts.shortcutsOnHomeNumber.set(Int64(ShortcutsManager.shared.numberOfShortcuts))
+        GleanMetrics.TrackingProtection.hasAdvertisingBlocked.set(Settings.getToggle(.blockAds))
+        GleanMetrics.TrackingProtection.hasAnalyticsBlocked.set(Settings.getToggle(.blockAnalytics))
+        GleanMetrics.TrackingProtection.hasContentBlocked.set(Settings.getToggle(.blockOther))
+        GleanMetrics.TrackingProtection.hasSocialBlocked.set(Settings.getToggle(.blockSocial))
+        GleanMetrics.MozillaProducts.hasFirefoxInstalled.set(UIApplication.shared.canOpenURL(URL(string: "firefox://")!))
     }
 
     func presentModal(viewController: UIViewController, animated: Bool) {
