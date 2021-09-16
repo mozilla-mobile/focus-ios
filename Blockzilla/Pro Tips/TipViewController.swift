@@ -44,13 +44,14 @@ class TipViewController: UIViewController {
         view.addSubview(tipTitleLabel)
         view.addSubview(tipDescriptionLabel)
         
-        tipDescriptionLabel.isUserInteractionEnabled = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(tapTip))
-        tipDescriptionLabel.addGestureRecognizer(tap)
-
         tipTitleLabel.text = tip.title
+        tipTitleLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapTip)))
+        tipTitleLabel.isUserInteractionEnabled = true
+
         tipDescriptionLabel.text = tip.description
-        
+        tipDescriptionLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapTip)))
+        tipDescriptionLabel.isUserInteractionEnabled = true
+
         tipDescriptionLabel.snp.makeConstraints { make in
             make.leading.equalTo(view).offset(UIConstants.layout.tipDescriptionMargin)
             make.trailing.equalTo(view).inset(UIConstants.layout.tipDescriptionMargin)
