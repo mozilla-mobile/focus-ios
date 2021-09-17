@@ -386,7 +386,27 @@ class BrowserViewController: UIViewController {
     public func activateUrlBarOnHomeView() {
         // If the Settings view is not displayed AND
         // If the home view is not displayed, nor the overlayView hidden do not activate the text field:
-        guard !(self.presentedViewController?.children.first is SettingsViewController) && (homeViewController != nil || !overlayView.isHidden) else { return }
+        
+        // Do not activate if the settings are presented
+        if self.presentedViewController?.children.first is SettingsViewController {
+            return
+        }
+        
+        // Do not activate if the home view is displayed
+        if homeViewController != nil {
+            return
+        }
+        
+        // Do not activate if the overlay view is shown
+        if !overlayView.isHidden {
+            return
+        }
+        
+        // Do not activate if we are in browsing mode
+        if urlBar.inBrowsingMode {
+            return
+        }
+        
         urlBar.activateTextField()
     }
 
@@ -745,6 +765,8 @@ class BrowserViewController: UIViewController {
         
         urlBar.updateConstraints()
         browserToolbar.updateConstraints()
+        
+        homeViewController.toolbar.isIPadRegularDimensions = isIPadRegularDimensions
         
         shortcutsContainer.spacing = size.width < UIConstants.layout.smallestSplitViewMaxWidthLimit ?
                                         UIConstants.layout.shortcutsContainerSpacingSmallestSplitView :
@@ -1655,7 +1677,11 @@ extension BrowserViewController: KeyboardHelperDelegate {
         }
     }
 
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) { }
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            urlBar.dismiss()
+        }
+    }
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) { }
 }
 
