@@ -47,5 +47,3 @@ export-locales-env
 # Glean
 .venv/
 Blockzilla/Generated
-Documentation/metrics.md
-
