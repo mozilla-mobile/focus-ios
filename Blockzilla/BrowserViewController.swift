@@ -385,7 +385,7 @@ class BrowserViewController: UIViewController {
     // These functions are used to handle displaying and hiding the keyboard after the splash view is animated
     public func activateUrlBarOnHomeView() {
         // Do not activate if we are showing a web page
-        if !webViewContainer.isHidden {
+        if urlBar.inBrowsingMode {
             return
         }
 
