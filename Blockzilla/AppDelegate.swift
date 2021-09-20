@@ -289,17 +289,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         } else if let text = queuedString {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openedFromExtension, object: TelemetryEventObject.app)
 
+            browserViewController.ensureBrowsingMode()
+            browserViewController.deactivateUrlBarOnHomeView()
+            browserViewController.dismissSettings()
+            browserViewController.dismissActionSheet()
+
             if let fixedUrl = URIFixup.getURL(entry: text) {
-                browserViewController.ensureBrowsingMode()
-                browserViewController.deactivateUrlBarOnHomeView()
-                browserViewController.dismissSettings()
-                browserViewController.dismissActionSheet()
                 browserViewController.submit(url: fixedUrl)
             } else {
-                browserViewController.ensureBrowsingMode()
-                browserViewController.deactivateUrlBarOnHomeView()
-                browserViewController.dismissSettings()
-                browserViewController.dismissActionSheet()
                 browserViewController.submit(text: text)
             }
 
