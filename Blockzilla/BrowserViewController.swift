@@ -691,6 +691,21 @@ class BrowserViewController: UIViewController {
 
         shouldEnsureBrowsingMode = false
     }
+    
+    func submit(text: String) {
+        var url = URIFixup.getURL(entry: text)
+        if url == nil {
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
+            Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
+            url = searchEngineManager.activeEngine.urlForQuery(text)
+        } else {
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
+        }
+        
+        if let url = url {
+            submit(url: url)
+        }
+    }
 
     func submit(url: URL) {
         // If this is the first navigation, show the browser and the toolbar.

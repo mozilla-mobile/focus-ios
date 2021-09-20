@@ -176,7 +176,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
                 if let fixedUrl = URIFixup.getURL(entry: text) {
                     browserViewController.submit(url: fixedUrl)
                 } else {
-                    browserViewController.openOverlay(text: text)
+                    browserViewController.submit(text: text)
                 }
             } else {
                 queuedString = text
@@ -296,7 +296,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
                 browserViewController.dismissActionSheet()
                 browserViewController.submit(url: fixedUrl)
             } else {
-                browserViewController.openOverlay(text: text)
+                browserViewController.ensureBrowsingMode()
+                browserViewController.deactivateUrlBarOnHomeView()
+                browserViewController.dismissSettings()
+                browserViewController.dismissActionSheet()
+                browserViewController.submit(text: text)
             }
 
             queuedString = nil
