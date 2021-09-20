@@ -398,7 +398,7 @@ class BrowserViewController: UIViewController {
         if !(homeViewController != nil || overlayView.isHidden) {
             return
         }
-        
+
         urlBar.activateTextField()
     }
 
@@ -725,11 +725,13 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    func openOverylay(text: String) {
+    func openOverlay(text: String) {
+        ensureBrowsingMode()
+        showToolbars()
         urlBar.activateTextField()
-        urlBar.fillUrlBar(text: text)
+        urlBar.fillUrlBarWithString(text: text)
     }
-
+    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
 
