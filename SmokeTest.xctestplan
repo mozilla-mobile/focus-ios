@@ -19,6 +19,7 @@
         "CopyTest",
         "DragAndDropTest",
         "FindInPageTest",
+        "OpenInFocusTest\/testOpenViaSafari()",
         "PastenGoTest\/testClipboard()",
         "QuickAddAutocompleteURLTest",
         "RequestDesktopTest",
