@@ -739,13 +739,6 @@ class BrowserViewController: UIViewController {
             userActivity = SiriShortcuts().getActivity(for: .openURL)
         }
     }
-
-    func openOverlay(text: String) {
-        ensureBrowsingMode()
-        showToolbars()
-        urlBar.activateTextField()
-        urlBar.fillUrlBarWithString(text: text)
-    }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
