@@ -170,7 +170,7 @@ workflows:
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
-        stack: osx-xcode-12.5.x
+        stack: osx-xcode-13.0.x
         machine_type_id: g2.4core
 
 
