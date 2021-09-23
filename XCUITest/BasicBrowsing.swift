@@ -23,7 +23,7 @@ class BasicBrowsing: BaseTestCase {
         ShareButton.tap()
 
         // Launch external app
-        let RemindersApp = app.cells["Reminders"]
+        let RemindersApp = app.collectionViews.scrollViews.cells.element(boundBy: 1)
         waitForExistence( RemindersApp)
         RemindersApp.tap()
         waitForExistence( app.buttons["Add"])
