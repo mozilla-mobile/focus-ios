@@ -384,29 +384,21 @@ class BrowserViewController: UIViewController {
 
     // These functions are used to handle displaying and hiding the keyboard after the splash view is animated
     public func activateUrlBarOnHomeView() {
-        // If the Settings view is not displayed AND
-        // If the home view is not displayed, nor the overlayView hidden do not activate the text field:
-        
+        // Do not activate if we are showing a web page
+        if urlBar.inBrowsingMode {
+            return
+        }
+
         // Do not activate if the settings are presented
         if self.presentedViewController?.children.first is SettingsViewController {
             return
         }
-        
-        // Do not activate if the home view is displayed
-        if homeViewController != nil {
+
+        // Do not activate if the home view is not displayed, nor the overlayView hidden
+        if !(homeViewController != nil || overlayView.isHidden) {
             return
         }
-        
-        // Do not activate if the overlay view is shown
-        if !overlayView.isHidden {
-            return
-        }
-        
-        // Do not activate if we are in browsing mode
-        if urlBar.inBrowsingMode {
-            return
-        }
-        
+
         urlBar.activateTextField()
     }
 
@@ -699,6 +691,21 @@ class BrowserViewController: UIViewController {
 
         shouldEnsureBrowsingMode = false
     }
+    
+    func submit(text: String) {
+        var url = URIFixup.getURL(entry: text)
+        if url == nil {
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
+            Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
+            url = searchEngineManager.activeEngine.urlForQuery(text)
+        } else {
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
+        }
+        
+        if let url = url {
+            submit(url: url)
+        }
+    }
 
     func submit(url: URL) {
         // If this is the first navigation, show the browser and the toolbar.
@@ -732,12 +739,7 @@ class BrowserViewController: UIViewController {
             userActivity = SiriShortcuts().getActivity(for: .openURL)
         }
     }
-
-    func openOverylay(text: String) {
-        urlBar.activateTextField()
-        urlBar.fillUrlBar(text: text)
-    }
-
+    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
 
@@ -1052,7 +1054,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidFocus(_ urlBar: URLBar) {
-        let isOnHomeView = homeViewController != nil
+        let isOnHomeView = !urlBar.inBrowsingMode
         overlayView.present(isOnHomeView: isOnHomeView)
         toggleURLBarBackground(isBright: false)
     }
@@ -1061,7 +1063,7 @@ extension BrowserViewController: URLBarDelegate {
         let shouldShowShortcuts = shortcutManager.numberOfShortcuts != 0
         shortcutsContainer.isHidden = !shouldShowShortcuts
         shortcutsBackground.isHidden = !shouldShowShortcuts || !urlBar.inBrowsingMode
-        homeViewController.updateUI(urlBarIsActive: true)
+        homeViewController.updateUI(urlBarIsActive: true, isBrowsing: urlBar.inBrowsingMode)
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
             self.urlBarContainer.alpha = 1
             self.updateFindInPageVisibility(visible: false)
@@ -1157,6 +1159,13 @@ extension BrowserViewController: URLBarDelegate {
             
             actions.append(actionItems)
             actions.append(shareItems)
+        } else {
+            let helpItem = PhotonActionSheetItem(title: UIConstants.strings.aboutRowHelp, iconString: "icon_help") { [weak self] _ in
+                guard let self = self else { return }
+                self.submit(text: "https://support.mozilla.org/en-US/products/focus-firefox/Focus-ios")
+            }
+            
+            actions.append([helpItem])
         }
         
         let settingsItem = PhotonActionSheetItem(title: UIConstants.strings.settingsTitle, iconString: "icon_settings") { [weak self] _ in
@@ -1427,7 +1436,7 @@ extension BrowserViewController: OverlayViewDelegate {
     }
     
     func overlayView(_ overlayView: OverlayView, didTapArrowText text: String) {
-        urlBar.fillUrlBar(text: text)
+        urlBar.fillUrlBar(text: text + " ")
         searchSuggestClient.getSuggestions(text) { [weak self] suggestions, error in
             if error == nil, let suggestions = suggestions {
                 self?.overlayView.setSearchQuery(suggestions: suggestions, hideFindInPage: true, hideAddToComplete: true)
