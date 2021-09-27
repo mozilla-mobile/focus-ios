@@ -863,10 +863,30 @@ class BrowserViewController: UIViewController {
 
     override var keyCommands: [UIKeyCommand]? {
         return [
-            UIKeyCommand(input: "l", modifierFlags: .command, action: #selector(BrowserViewController.selectLocationBar), discoverabilityTitle: UIConstants.strings.selectLocationBarTitle),
-            UIKeyCommand(input: "r", modifierFlags: .command, action: #selector(BrowserViewController.reload), discoverabilityTitle: UIConstants.strings.browserReload),
-            UIKeyCommand(input: "[", modifierFlags: .command, action: #selector(BrowserViewController.goBack), discoverabilityTitle: UIConstants.strings.browserBack),
-            UIKeyCommand(input: "]", modifierFlags: .command, action: #selector(BrowserViewController.goForward), discoverabilityTitle: UIConstants.strings.browserForward)
+                UIKeyCommand(title: UIConstants.strings.selectLocationBarTitle,
+                             image: nil,
+                             action: #selector(BrowserViewController.selectLocationBar),
+                             input: "l",
+                             modifierFlags: .command,
+                             propertyList: nil),
+                UIKeyCommand(title: UIConstants.strings.browserReload,
+                             image: nil,
+                             action: #selector(BrowserViewController.reload),
+                             input: "r",
+                             modifierFlags: .command,
+                             propertyList: nil),
+                UIKeyCommand(title: UIConstants.strings.browserBack,
+                             image: nil,
+                             action: #selector(BrowserViewController.goBack),
+                             input: "[",
+                             modifierFlags: .command,
+                             propertyList: nil),
+                UIKeyCommand(title: UIConstants.strings.browserForward,
+                             image: nil,
+                             action: #selector(BrowserViewController.goForward),
+                             input: "]",
+                             modifierFlags: .command,
+                             propertyList: nil),
         ]
     }
 

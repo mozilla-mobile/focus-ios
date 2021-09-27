@@ -6,7 +6,7 @@ import UIKit
 import SnapKit
 import Telemetry
 
-protocol URLBarDelegate: class {
+protocol URLBarDelegate: AnyObject {
     func urlBar(_ urlBar: URLBar, didEnterText text: String)
     func urlBar(_ urlBar: URLBar, didSubmitText text: String)
     func urlBar(_ urlBar: URLBar, didAddCustomURL url: URL)
@@ -608,7 +608,6 @@ class URLBar: UIView {
         self.layoutIfNeeded()
 
         let borderColor: UIColor
-        let backgroundColor: UIColor
         let showBackgroundView: Bool
 
         switch state {

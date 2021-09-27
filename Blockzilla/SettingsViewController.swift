@@ -176,6 +176,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             case .faceID: self = .faceID(status)
             case .touchID: self = .touchID(status)
             case .none: self = .none
+            @unknown default: return
             }
         }
     }
