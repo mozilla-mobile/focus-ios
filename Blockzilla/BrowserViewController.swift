@@ -751,7 +751,7 @@ class BrowserViewController: UIViewController {
         showsToolsetInURLBar = (UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == size.width || size.width > size.height)) || (UIDevice.current.userInterfaceIdiom == .phone && size.width > size.height)
         
         //isIPadRegularDimensions check if the device is a Ipad and the app is not in split mode
-        isIPadRegularDimensions = ((UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == size.width || size.width > size.height))) || (UIDevice.current.userInterfaceIdiom == .pad &&  UIApplication.shared.statusBarOrientation.isPortrait && UIScreen.main.bounds.width == size.width)
+        isIPadRegularDimensions = ((UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == size.width || size.width > size.height))) || (UIDevice.current.userInterfaceIdiom == .pad &&  UIApplication.shared.orientation?.isPortrait == true && UIScreen.main.bounds.width == size.width)
         urlBar.isIPadRegularDimensions = isIPadRegularDimensions
         
         if urlBar.state == .default {
