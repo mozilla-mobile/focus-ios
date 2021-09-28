@@ -123,6 +123,21 @@ class BrowserViewController: UIViewController {
         }
     }
     
+    fileprivate func addShortcutsContainerConstraints() {
+        shortcutsContainer.snp.makeConstraints { make in
+            make.top.equalTo(urlBarContainer.snp.bottom).offset(isIPadRegularDimensions ? UIConstants.layout.shortcutsContainerOffsetIPad : UIConstants.layout.shortcutsContainerOffset)
+            make.width.equalTo(isIPadRegularDimensions ?
+                               UIConstants.layout.shortcutsContainerWidthIPad :
+                                UIConstants.layout.shortcutsContainerWidth).priority(.medium)
+            make.height.equalTo(isIPadRegularDimensions ?
+                                UIConstants.layout.shortcutViewHeightIPad :
+                                    UIConstants.layout.shortcutViewHeight)
+            make.centerX.equalToSuperview()
+            make.leading.greaterThanOrEqualTo(mainContainerView).inset(8)
+            make.trailing.lessThanOrEqualTo(mainContainerView).inset(-8)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -210,19 +225,7 @@ class BrowserViewController: UIViewController {
             make.leading.trailing.equalTo(mainContainerView)
         }
         
-        shortcutsContainer.snp.makeConstraints { make in
-            make.top.equalTo(urlBarContainer.snp.bottom).offset(isIPadRegularDimensions ? UIConstants.layout.shortcutsContainerOffsetIPad : UIConstants.layout.shortcutsContainerOffset)
-            make.width.equalTo(isIPadRegularDimensions ?
-                                UIConstants.layout.shortcutsContainerWidthIPad :
-                                UIConstants.layout.shortcutsContainerWidth).priority(.medium)
-            make.height.equalTo(isIPadRegularDimensions ?
-                                    UIConstants.layout.shortcutViewHeightIPad :
-                                    UIConstants.layout.shortcutViewHeight)
-            make.centerX.equalToSuperview()
-            make.leading.greaterThanOrEqualTo(mainContainerView).inset(8)
-            make.trailing.lessThanOrEqualTo(mainContainerView).inset(-8)
-
-        }
+        addShortcutsContainerConstraints()
         
         view.addSubview(alertStackView)
         alertStackView.axis = .vertical
@@ -786,8 +789,8 @@ class BrowserViewController: UIViewController {
             })
         })
         
-        shortcutsContainer.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        addShortcuts()
+        shortcutsContainer.snp.removeConstraints()
+        addShortcutsContainerConstraints()
         
         shortcutsBackground.snp.removeConstraints()
         addShortcutsBackgroundConstraints()
@@ -1190,7 +1193,7 @@ extension BrowserViewController: PhotonActionSheetDelegate {
         if let popoverVC = actionSheet.popoverPresentationController, actionSheet.modalPresentationStyle == .popover {
             popoverVC.delegate = self
             popoverVC.sourceView = sender
-            popoverVC.permittedArrowDirections = .any
+            popoverVC.permittedArrowDirections = sender is ShortcutView ? .up : .any
         }
         
         present(actionSheet, animated: true, completion: nil)
