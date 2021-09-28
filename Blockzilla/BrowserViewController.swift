@@ -1185,7 +1185,7 @@ extension BrowserViewController: URLBarDelegate {
 }
 
 extension BrowserViewController: PhotonActionSheetDelegate {
-    func presentPhotonActionSheet(_ actionSheet: PhotonActionSheet, from sender: UIView) {
+    func presentPhotonActionSheet(_ actionSheet: PhotonActionSheet, from sender: UIView, arrowDirection: UIPopoverArrowDirection = .any) {
         actionSheet.modalPresentationStyle = .popover
         
         actionSheet.delegate = self
@@ -1193,7 +1193,7 @@ extension BrowserViewController: PhotonActionSheetDelegate {
         if let popoverVC = actionSheet.popoverPresentationController, actionSheet.modalPresentationStyle == .popover {
             popoverVC.delegate = self
             popoverVC.sourceView = sender
-            popoverVC.permittedArrowDirections = sender is ShortcutView ? .up : .any
+            popoverVC.permittedArrowDirections = arrowDirection
         }
         
         present(actionSheet, animated: true, completion: nil)
@@ -1243,7 +1243,7 @@ extension BrowserViewController: ShortcutViewDelegate {
         actions.append([removeFromShortcutsItem])
         
         let shortcutActionsMenu = PhotonActionSheet(actions: actions)
-        presentPhotonActionSheet(shortcutActionsMenu, from: shortcutView)
+        presentPhotonActionSheet(shortcutActionsMenu, from: shortcutView, arrowDirection: .up)
     }
 }
 
