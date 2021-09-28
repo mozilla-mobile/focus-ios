@@ -47,6 +47,7 @@ class BrowserViewController: UIViewController {
     private var scrollBarOffsetAlpha: CGFloat = 0
     private var scrollBarState: URLBarScrollState = .expanded
     private var background = UIImageView()
+    private var photonActionSheetForContextMenuIsPresented = false
 
     private enum URLBarScrollState {
         case collapsed
@@ -416,6 +417,7 @@ class BrowserViewController: UIViewController {
         if self.presentedViewController is PhotonActionSheet {
             self.presentedViewController?.dismiss(animated: true, completion: nil)
             photonActionSheetDidDismiss()
+            self.photonActionSheetForContextMenuIsPresented = false
         }
     }
 
@@ -749,6 +751,8 @@ class BrowserViewController: UIViewController {
         // UIDevice.current.orientation isn't reliable. See https://bugzilla.mozilla.org/show_bug.cgi?id=1315370#c5
         // As a workaround, consider the phone to be in landscape if the new width is greater than the height.
         showsToolsetInURLBar = (UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == size.width || size.width > size.height)) || (UIDevice.current.userInterfaceIdiom == .phone && size.width > size.height)
+        
+        changeContextMenuPosition(showsToolsetInURLBar)
         
         //isIPadRegularDimensions check if the device is a Ipad and the app is not in split mode
         isIPadRegularDimensions = ((UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == size.width || size.width > size.height))) || (UIDevice.current.userInterfaceIdiom == .pad &&  UIApplication.shared.statusBarOrientation.isPortrait && UIScreen.main.bounds.width == size.width)
@@ -1194,6 +1198,13 @@ extension BrowserViewController: PhotonActionSheetDelegate {
         }
         
         present(actionSheet, animated: true, completion: nil)
+        photonActionSheetForContextMenuIsPresented = true
+    }
+    
+    func changeContextMenuPosition(_ showsToolsetInUrlBar: Bool) {
+        if photonActionSheetForContextMenuIsPresented && urlBar.inBrowsingMode {
+           (presentedViewController as? PhotonActionSheet)?.popoverPresentationController?.sourceView  = showsToolsetInUrlBar ? urlBar.toolset.contextMenuButton : browserToolbar.toolset.contextMenuButton
+       }
     }
     
     func photonActionSheetDidDismiss() {

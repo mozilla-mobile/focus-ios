@@ -66,7 +66,7 @@ class URLBar: UIView {
     private let cancelButton = InsetButton()
     private let domainCompletion = DomainCompletion(completionSources: [TopDomainsCompletionSource(), CustomCompletionSource()])
 
-    private let toolset = BrowserToolset()
+    let toolset = BrowserToolset()
     private let urlText = URLTextField()
     var draggableUrlTextView: UIView { return urlText }
     private let truncatedUrlText = UITextView()
