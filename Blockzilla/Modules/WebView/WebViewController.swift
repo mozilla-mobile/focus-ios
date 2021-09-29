@@ -136,8 +136,7 @@ class WebViewController: UIViewController, WebController {
         let configuration = WKWebViewConfiguration()
         configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         configuration.allowsInlineMediaPlayback = true
-        // TODO: determine what this should be
-//        configuration.applicationNameForUserAgent = ""
+        configuration.applicationNameForUserAgent = AppInfo.config.productName
         browserView = WKWebView(frame: .zero, configuration: configuration)
 
         browserView.allowsBackForwardNavigationGestures = true
