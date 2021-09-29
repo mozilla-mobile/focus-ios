@@ -63,7 +63,7 @@ class BrowserViewController: UIViewController {
 
     private var homeViewContainer = UIView()
 
-    private var showsToolsetInURLBar = false {
+    fileprivate var showsToolsetInURLBar = false {
         didSet {
             if showsToolsetInURLBar {
                 browserBottomConstraint.deactivate()
@@ -755,7 +755,7 @@ class BrowserViewController: UIViewController {
         showsToolsetInURLBar = (UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == size.width || size.width > size.height)) || (UIDevice.current.userInterfaceIdiom == .phone && size.width > size.height)
         
         //isIPadRegularDimensions check if the device is a Ipad and the app is not in split mode
-        isIPadRegularDimensions = ((UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == size.width || size.width > size.height))) || (UIDevice.current.userInterfaceIdiom == .pad &&  UIApplication.shared.statusBarOrientation.isPortrait && UIScreen.main.bounds.width == size.width)
+        isIPadRegularDimensions = ((UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == size.width || size.width > size.height))) || (UIDevice.current.userInterfaceIdiom == .pad &&  UIApplication.shared.orientation?.isPortrait == true && UIScreen.main.bounds.width == size.width)
         urlBar.isIPadRegularDimensions = isIPadRegularDimensions
         
         if urlBar.state == .default {
@@ -867,10 +867,30 @@ class BrowserViewController: UIViewController {
 
     override var keyCommands: [UIKeyCommand]? {
         return [
-            UIKeyCommand(input: "l", modifierFlags: .command, action: #selector(BrowserViewController.selectLocationBar), discoverabilityTitle: UIConstants.strings.selectLocationBarTitle),
-            UIKeyCommand(input: "r", modifierFlags: .command, action: #selector(BrowserViewController.reload), discoverabilityTitle: UIConstants.strings.browserReload),
-            UIKeyCommand(input: "[", modifierFlags: .command, action: #selector(BrowserViewController.goBack), discoverabilityTitle: UIConstants.strings.browserBack),
-            UIKeyCommand(input: "]", modifierFlags: .command, action: #selector(BrowserViewController.goForward), discoverabilityTitle: UIConstants.strings.browserForward)
+                UIKeyCommand(title: UIConstants.strings.selectLocationBarTitle,
+                             image: nil,
+                             action: #selector(BrowserViewController.selectLocationBar),
+                             input: "l",
+                             modifierFlags: .command,
+                             propertyList: nil),
+                UIKeyCommand(title: UIConstants.strings.browserReload,
+                             image: nil,
+                             action: #selector(BrowserViewController.reload),
+                             input: "r",
+                             modifierFlags: .command,
+                             propertyList: nil),
+                UIKeyCommand(title: UIConstants.strings.browserBack,
+                             image: nil,
+                             action: #selector(BrowserViewController.goBack),
+                             input: "[",
+                             modifierFlags: .command,
+                             propertyList: nil),
+                UIKeyCommand(title: UIConstants.strings.browserForward,
+                             image: nil,
+                             action: #selector(BrowserViewController.goForward),
+                             input: "]",
+                             modifierFlags: .command,
+                             propertyList: nil),
         ]
     }
 
@@ -1191,7 +1211,7 @@ extension BrowserViewController: PhotonActionSheetDelegate {
         
         actionSheet.delegate = self
         
-        if let popoverVC = actionSheet.popoverPresentationController, actionSheet.modalPresentationStyle == .popover {
+        if let popoverVC = actionSheet.popoverPresentationController {
             popoverVC.delegate = self
             popoverVC.sourceView = sender
             popoverVC.permittedArrowDirections = .any
@@ -1699,9 +1719,14 @@ extension BrowserViewController: KeyboardHelperDelegate {
 }
 
 extension BrowserViewController: UIPopoverPresentationControllerDelegate {
-
     func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
         darkView.isHidden = true
+    }
+    
+    func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>) {
+        guard urlBar.inBrowsingMode else { return }
+        guard popoverPresentationController.presentedViewController is PhotonActionSheet  else { return }
+        view.pointee = self.showsToolsetInURLBar ? urlBar.contextMenuButton : browserToolbar.contextMenuButton
     }
 }
 
