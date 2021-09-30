@@ -6,7 +6,6 @@
 
 git clone https://github.com/mozilla-services/shavar-prod-lists.git || exit 1
 
-# This revision is taken from the original Cartfile.resolved
-(cd shavar-prod-lists && git checkout -q 3910527004252af3aa9dd701566a2cb3b78e5c3a)
+(cd shavar-prod-lists && git checkout -q 93.0)
 
 (cd content-blocker-lib-ios/ContentBlockerGen && swift run)
