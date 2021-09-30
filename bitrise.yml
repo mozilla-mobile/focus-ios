@@ -107,7 +107,7 @@ workflows:
         - itunescon_user: "$APPLE_ACCOUNT_ID"
     meta:
       bitrise.io:
-        stack: osx-xcode-12.5.x
+        stack: osx-xcode-13.0.x
         machine_type_id: g2.8core
     before_run:
       - clone-and-build-dependencies
