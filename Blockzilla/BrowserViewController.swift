@@ -63,7 +63,7 @@ class BrowserViewController: UIViewController {
 
     private var homeViewContainer = UIView()
 
-    private var showsToolsetInURLBar = false {
+    fileprivate var showsToolsetInURLBar = false {
         didSet {
             if showsToolsetInURLBar {
                 browserBottomConstraint.deactivate()
@@ -120,6 +120,21 @@ class BrowserViewController: UIViewController {
                 make.left.right.equalToSuperview()
                 make.height.equalTo(UIConstants.layout.shortcutsBackgroundHeight)
             }
+        }
+    }
+    
+    fileprivate func addShortcutsContainerConstraints() {
+        shortcutsContainer.snp.makeConstraints { make in
+            make.top.equalTo(urlBarContainer.snp.bottom).offset(isIPadRegularDimensions ? UIConstants.layout.shortcutsContainerOffsetIPad : UIConstants.layout.shortcutsContainerOffset)
+            make.width.equalTo(isIPadRegularDimensions ?
+                               UIConstants.layout.shortcutsContainerWidthIPad :
+                                UIConstants.layout.shortcutsContainerWidth).priority(.medium)
+            make.height.equalTo(isIPadRegularDimensions ?
+                                UIConstants.layout.shortcutViewHeightIPad :
+                                    UIConstants.layout.shortcutViewHeight)
+            make.centerX.equalToSuperview()
+            make.leading.greaterThanOrEqualTo(mainContainerView).inset(8)
+            make.trailing.lessThanOrEqualTo(mainContainerView).inset(-8)
         }
     }
     
@@ -210,19 +225,7 @@ class BrowserViewController: UIViewController {
             make.leading.trailing.equalTo(mainContainerView)
         }
         
-        shortcutsContainer.snp.makeConstraints { make in
-            make.top.equalTo(urlBarContainer.snp.bottom).offset(isIPadRegularDimensions ? UIConstants.layout.shortcutsContainerOffsetIPad : UIConstants.layout.shortcutsContainerOffset)
-            make.width.equalTo(isIPadRegularDimensions ?
-                                UIConstants.layout.shortcutsContainerWidthIPad :
-                                UIConstants.layout.shortcutsContainerWidth).priority(.medium)
-            make.height.equalTo(isIPadRegularDimensions ?
-                                    UIConstants.layout.shortcutViewHeightIPad :
-                                    UIConstants.layout.shortcutViewHeight)
-            make.centerX.equalToSuperview()
-            make.leading.greaterThanOrEqualTo(mainContainerView).inset(8)
-            make.trailing.lessThanOrEqualTo(mainContainerView).inset(-8)
-
-        }
+        addShortcutsContainerConstraints()
         
         view.addSubview(alertStackView)
         alertStackView.axis = .vertical
@@ -404,6 +407,10 @@ class BrowserViewController: UIViewController {
 
     public func deactivateUrlBarOnHomeView() {
         urlBar.dismissTextField()
+    }
+    
+    public func deactivateUrlBar() {
+        urlBar.dismiss()
     }
     
     public func dismissSettings() {
@@ -751,7 +758,7 @@ class BrowserViewController: UIViewController {
         showsToolsetInURLBar = (UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == size.width || size.width > size.height)) || (UIDevice.current.userInterfaceIdiom == .phone && size.width > size.height)
         
         //isIPadRegularDimensions check if the device is a Ipad and the app is not in split mode
-        isIPadRegularDimensions = ((UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == size.width || size.width > size.height))) || (UIDevice.current.userInterfaceIdiom == .pad &&  UIApplication.shared.statusBarOrientation.isPortrait && UIScreen.main.bounds.width == size.width)
+        isIPadRegularDimensions = ((UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == size.width || size.width > size.height))) || (UIDevice.current.userInterfaceIdiom == .pad &&  UIApplication.shared.orientation?.isPortrait == true && UIScreen.main.bounds.width == size.width)
         urlBar.isIPadRegularDimensions = isIPadRegularDimensions
         
         if urlBar.state == .default {
@@ -786,8 +793,8 @@ class BrowserViewController: UIViewController {
             })
         })
         
-        shortcutsContainer.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        addShortcuts()
+        shortcutsContainer.snp.removeConstraints()
+        addShortcutsContainerConstraints()
         
         shortcutsBackground.snp.removeConstraints()
         addShortcutsBackgroundConstraints()
@@ -863,10 +870,30 @@ class BrowserViewController: UIViewController {
 
     override var keyCommands: [UIKeyCommand]? {
         return [
-            UIKeyCommand(input: "l", modifierFlags: .command, action: #selector(BrowserViewController.selectLocationBar), discoverabilityTitle: UIConstants.strings.selectLocationBarTitle),
-            UIKeyCommand(input: "r", modifierFlags: .command, action: #selector(BrowserViewController.reload), discoverabilityTitle: UIConstants.strings.browserReload),
-            UIKeyCommand(input: "[", modifierFlags: .command, action: #selector(BrowserViewController.goBack), discoverabilityTitle: UIConstants.strings.browserBack),
-            UIKeyCommand(input: "]", modifierFlags: .command, action: #selector(BrowserViewController.goForward), discoverabilityTitle: UIConstants.strings.browserForward)
+                UIKeyCommand(title: UIConstants.strings.selectLocationBarTitle,
+                             image: nil,
+                             action: #selector(BrowserViewController.selectLocationBar),
+                             input: "l",
+                             modifierFlags: .command,
+                             propertyList: nil),
+                UIKeyCommand(title: UIConstants.strings.browserReload,
+                             image: nil,
+                             action: #selector(BrowserViewController.reload),
+                             input: "r",
+                             modifierFlags: .command,
+                             propertyList: nil),
+                UIKeyCommand(title: UIConstants.strings.browserBack,
+                             image: nil,
+                             action: #selector(BrowserViewController.goBack),
+                             input: "[",
+                             modifierFlags: .command,
+                             propertyList: nil),
+                UIKeyCommand(title: UIConstants.strings.browserForward,
+                             image: nil,
+                             action: #selector(BrowserViewController.goForward),
+                             input: "]",
+                             modifierFlags: .command,
+                             propertyList: nil),
         ]
     }
 
@@ -1159,6 +1186,13 @@ extension BrowserViewController: URLBarDelegate {
             
             actions.append(actionItems)
             actions.append(shareItems)
+        } else {
+            let helpItem = PhotonActionSheetItem(title: UIConstants.strings.aboutRowHelp, iconString: "icon_help") { [weak self] _ in
+                guard let self = self else { return }
+                self.submit(text: "https://support.mozilla.org/en-US/products/focus-firefox/Focus-ios")
+            }
+            
+            actions.append([helpItem])
         }
         
         let settingsItem = PhotonActionSheetItem(title: UIConstants.strings.settingsTitle, iconString: "icon_settings") { [weak self] _ in
@@ -1175,15 +1209,15 @@ extension BrowserViewController: URLBarDelegate {
 }
 
 extension BrowserViewController: PhotonActionSheetDelegate {
-    func presentPhotonActionSheet(_ actionSheet: PhotonActionSheet, from sender: UIView) {
+    func presentPhotonActionSheet(_ actionSheet: PhotonActionSheet, from sender: UIView, arrowDirection: UIPopoverArrowDirection = .any) {
         actionSheet.modalPresentationStyle = .popover
         
         actionSheet.delegate = self
         
-        if let popoverVC = actionSheet.popoverPresentationController, actionSheet.modalPresentationStyle == .popover {
+        if let popoverVC = actionSheet.popoverPresentationController {
             popoverVC.delegate = self
             popoverVC.sourceView = sender
-            popoverVC.permittedArrowDirections = .any
+            popoverVC.permittedArrowDirections = arrowDirection
         }
         
         present(actionSheet, animated: true, completion: nil)
@@ -1233,7 +1267,7 @@ extension BrowserViewController: ShortcutViewDelegate {
         actions.append([removeFromShortcutsItem])
         
         let shortcutActionsMenu = PhotonActionSheet(actions: actions)
-        presentPhotonActionSheet(shortcutActionsMenu, from: shortcutView)
+        presentPhotonActionSheet(shortcutActionsMenu, from: shortcutView, arrowDirection: .up)
     }
 }
 
@@ -1518,7 +1552,7 @@ extension BrowserViewController: WebControllerDelegate {
     func webController(_ controller: WebController, didUpdateEstimatedProgress estimatedProgress: Double) {
         // Don't update progress if the home view is visible. This prevents the centered URL bar
         // from catching the global progress events.
-        guard homeViewController == nil else { return }
+        guard urlBar.inBrowsingMode else { return }
 
         urlBar.progressBar.alpha = 1
         urlBar.progressBar.isHidden = false
@@ -1688,9 +1722,14 @@ extension BrowserViewController: KeyboardHelperDelegate {
 }
 
 extension BrowserViewController: UIPopoverPresentationControllerDelegate {
-
     func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
         darkView.isHidden = true
+    }
+    
+    func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>) {
+        guard urlBar.inBrowsingMode else { return }
+        guard popoverPresentationController.presentedViewController is PhotonActionSheet  else { return }
+        view.pointee = self.showsToolsetInURLBar ? urlBar.contextMenuButton : browserToolbar.contextMenuButton
     }
 }
 

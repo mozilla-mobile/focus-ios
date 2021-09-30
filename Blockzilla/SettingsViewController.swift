@@ -176,6 +176,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             case .faceID: self = .faceID(status)
             case .touchID: self = .touchID(status)
             case .none: self = .none
+            @unknown default: self = .none
             }
         }
     }
@@ -188,7 +189,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     private let biometryType = BiometryType(context: LAContext())
     private var isSafariEnabled = false
     private let searchEngineManager: SearchEngineManager
-    private var highlightsButton: UIBarButtonItem?
+    private var highlightsButton = UIBarButtonItem()
     private let whatsNew: WhatsNewDelegate
     private lazy var sections = {
         Section.getSections()
@@ -197,7 +198,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     private var toggles = [Int: [Int: BlockerToggle]]()
 
     private func getSectionIndex(_ section: Section) -> Int? {
-        return Section.getSections().index(where: { $0 == section })
+        return Section.getSections().firstIndex(where: { $0 == section })
     }
 
     private func initializeToggles() {
@@ -264,24 +265,19 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         navigationBar.barTintColor = .primaryBackground
         navigationBar.titleTextAttributes = [.foregroundColor: UIColor.primaryText]
 
-        let backButton = UIButton(type: .custom)
-        backButton.setImage(UIImage(named: "icon_cancel")?.withTintColor(.accent), for: .normal)
-        backButton.tintColor = .accent
-        backButton.setTitle(" " + UIConstants.strings.browserBack, for: .normal)
-        backButton.setTitleColor(backButton.tintColor, for: .normal)
-        backButton.addTarget(self, action: #selector(dismissSettings), for: .touchUpInside)
-        backButton.accessibilityIdentifier = "SettingsViewController.doneButton"
-
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
-
         highlightsButton = UIBarButtonItem(title: UIConstants.strings.whatsNewTitle, style: .plain, target: self, action: #selector(whatsNewClicked))
-        highlightsButton?.image = UIImage(named: "highlight")
-        highlightsButton?.tintColor = .accent
-        highlightsButton?.accessibilityIdentifier = "SettingsViewController.whatsNewButton"
-        navigationItem.rightBarButtonItem = highlightsButton
+        highlightsButton.image = UIImage(named: "highlight")
+        highlightsButton.tintColor = .accent
+        highlightsButton.accessibilityIdentifier = "SettingsViewController.whatsNewButton"
+        
+        let doneButton = UIBarButtonItem(title: UIConstants.strings.done, style: .plain, target: self, action: #selector(dismissSettings))
+        doneButton.tintColor = .accent
+        doneButton.accessibilityIdentifier = "SettingsViewController.doneButton"
+
+        navigationItem.rightBarButtonItems = [doneButton, highlightsButton]
 
         if whatsNew.shouldShowWhatsNew() {
-            highlightsButton?.tintColor = .accent
+            highlightsButton.tintColor = .accent
         }
 
         view.addSubview(tableView)
@@ -329,7 +325,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        tableView.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.reloadData()
+        }
     }
 
     @objc private func applicationDidBecomeActive() {
@@ -490,7 +488,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     private func heightForLabel(_ label: UILabel, width: CGFloat, text: String) -> CGFloat {
         let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
-        let attrs: [NSAttributedString.Key: Any] = [.font: label.font]
+        let attrs: [NSAttributedString.Key: Any] = [.font: label.font as Any]
         let boundingRect = NSString(string: text).boundingRect(with: size, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: attrs, context: nil)
         return boundingRect.height
     }
@@ -635,7 +633,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     @objc private func whatsNewClicked() {
-        highlightsButton?.tintColor = UIColor.white
+        highlightsButton.tintColor = UIColor.white
         navigationController?.pushViewController(SettingsContentViewController(url: URL(forSupportTopic: .whatsNew)), animated: true)
         whatsNew.didShowWhatsNew()
     }

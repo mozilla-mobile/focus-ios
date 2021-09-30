@@ -22,6 +22,8 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     private var nameInput = UITextField()
     private var templateInput = UITextView()
     private var templatePlaceholderLabel = UITextView()
+    private var scrollView =  UIScrollView()
+    private var container = UIView()
 
     init(delegate: AddSearchEngineDelegate, searchEngineManager: SearchEngineManager) {
         self.delegate = delegate
@@ -35,6 +37,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     }
 
     override func viewDidLoad() {
+        KeyboardHelper.defaultHelper.addDelegate(delegate: self)
         title = UIConstants.strings.AddSearchEngineTitle
 
         setupUI()
@@ -45,10 +48,13 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
 
     private func setupUI() {
         view.backgroundColor = .primaryBackground
+        view.addSubview(scrollView)
 
-        let container = UIView()
-        view.addSubview(container)
-
+        scrollView.snp.makeConstraints { (make) in
+            make.leading.trailing.top.bottom.equalToSuperview()
+        }
+        scrollView.showsVerticalScrollIndicator = false
+        
         let nameLabel = SmartLabel()
         nameLabel.text = UIConstants.strings.NameToDisplay
         nameLabel.textColor = .primaryText
@@ -116,9 +122,10 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         exampleLabel.addGestureRecognizer(tapGesture)
         container.addSubview(exampleLabel)
 
+        scrollView.addSubview(container)
         container.snp.makeConstraints { (make) in
-            make.width.equalToSuperview()
-            make.height.equalToSuperview()
+            make.leading.trailing.top.bottom.equalToSuperview()
+            make.width.height.equalToSuperview()
         }
 
         nameLabel.snp.makeConstraints { (make) in
@@ -161,6 +168,33 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
             make.leading.equalToSuperview().offset(leftMargin)
             make.trailing.equalToSuperview().offset(-leftMargin)
         }
+    }
+    
+    override func viewSafeAreaInsetsDidChange() {
+        updateContainerConstraints()
+    }
+    
+    private func updateContainerConstraints() {
+        scrollView.snp.updateConstraints { make in
+            switch (UIDevice.current.userInterfaceIdiom, UIDevice.current.orientation) {
+            case (.phone, .landscapeLeft):
+                make.leading.equalTo(view).offset(self.view.safeAreaInsets.left)
+                make.trailing.equalTo(view)
+                scrollView.isScrollEnabled = true
+            case (.phone, .landscapeRight):
+                make.leading.equalTo(view)
+                make.trailing.equalTo(view).inset(self.view.safeAreaInsets.right)
+                scrollView.isScrollEnabled = true
+            default:
+                make.leading.trailing.equalTo(view)
+                scrollView.isScrollEnabled = false
+            }
+            
+        }
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        updateContainerConstraints()
     }
 
     @objc func learnMoreTapped() {
@@ -238,7 +272,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     func showIndicator(_ shouldShow: Bool) {
         guard shouldShow else { self.navigationItem.rightBarButtonItem = self.saveButton; return }
 
-        let indicatorView = UIActivityIndicatorView(style: .white)
+        let indicatorView = UIActivityIndicatorView(style: .medium)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: indicatorView)
         indicatorView.startAnimating()
     }
@@ -278,4 +312,32 @@ extension AddSearchEngineViewController: UITextFieldDelegate {
         navigationItem.rightBarButtonItem?.isEnabled = !templateInput.text.isEmpty && !nameInput.text!.isEmpty
         return true
     }
+}
+
+extension AddSearchEngineViewController: KeyboardHelperDelegate {
+    
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+        self.updateViewConstraints()
+        UIView.animate(withDuration: state.animationDuration) {
+            self.container.snp.updateConstraints { (make) in
+                make.bottom.equalToSuperview().offset(-state.intersectionHeightForView(view: self.view))
+            }
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+        self.updateViewConstraints()
+        UIView.animate(withDuration: state.animationDuration) {
+            self.container.snp.updateConstraints { (make) in
+                make.height.equalToSuperview()
+                self.view.layoutIfNeeded()
+            }
+        }
+    }
+    
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) { }
+    
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) { }
+    
 }

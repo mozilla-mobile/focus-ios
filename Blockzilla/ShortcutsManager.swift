@@ -8,7 +8,7 @@ struct Shortcut: Equatable, Codable {
     var url: URL
 }
 
-protocol ShortcutsManagerDelegate: class {
+protocol ShortcutsManagerDelegate: AnyObject {
     func shortcutsUpdated()
 }
 
@@ -54,7 +54,7 @@ class ShortcutsManager {
     }
     
     func removeFromShortcuts(shortcut: Shortcut) {
-        if let index = shortcuts.index(of: shortcut) {
+        if let index = shortcuts.firstIndex(of: shortcut) {
             shortcuts.remove(at: index)
             saveShortcuts()
             delegate?.shortcutsUpdated()

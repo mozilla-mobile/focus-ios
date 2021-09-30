@@ -6,7 +6,7 @@ import UIKit
 import SnapKit
 import Telemetry
 
-protocol OverlayViewDelegate: class {
+protocol OverlayViewDelegate: AnyObject {
     func overlayViewDidTouchEmptyArea(_ overlayView: OverlayView)
     func overlayViewDidPressSettings(_ overlayView: OverlayView)
     func overlayView(_ overlayView: OverlayView, didSearchForQuery query: String)
@@ -439,7 +439,7 @@ class OverlayView: UIView {
     }
     
     @objc private func didPressArrowButton(sender: UIButton) {
-        if let index = arrowButtons.index(of: sender) {
+        if let index = arrowButtons.firstIndex(of: sender) {
             delegate?.overlayView(self, didTapArrowText: searchSuggestions[index + 1])
         }
     }

@@ -101,6 +101,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         // This background agrees with the web page background.
         // Keeping the background constant prevents a pop of mismatched color.
         view.backgroundColor = interstitialBackgroundColor
+        navigationController?.navigationBar.tintColor = .accent
 
         self.webView = makeWebView()
         view.addSubview(webView)
@@ -138,7 +139,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         // Keeping the background constant prevents a pop of mismatched color.
         view.backgroundColor = interstitialBackgroundColor
 
-        let spinner = UIActivityIndicatorView(style: .whiteLarge)
+        let spinner = UIActivityIndicatorView(style: .large)
         view.addSubview(spinner)
 
         let error = SmartLabel()
