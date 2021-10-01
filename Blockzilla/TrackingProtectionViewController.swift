@@ -9,74 +9,6 @@ import Telemetry
 import Glean
 import Combine
 
-struct SectionItem {
-    let configureCell: (UITableView, IndexPath) -> UITableViewCell
-    let action: (() -> Void)?
-    
-    init(configureCell: @escaping (UITableView, IndexPath) -> UITableViewCell, action: (() -> Void)? = nil) {
-        self.configureCell = configureCell
-        self.action = action
-    }
-}
-
-struct Section {
-    let headerTitle: String?
-    let footerTitle: String?
-    let items: [SectionItem]
-    
-    init(headerTitle: String? = nil, footerTitle: String? = nil, items: [SectionItem]) {
-        self.headerTitle = headerTitle
-        self.footerTitle = footerTitle
-        self.items = items
-    }
-}
-
-class DataSource: NSObject {
-    init(tableViewSections: [Section] = [Section]()) {
-        self.tableViewSections = tableViewSections
-    }
-    
-    var tableViewSections: [Section]
-    
-    public func update(sections: [Section]) {
-        tableViewSections = sections
-    }
-}
-
-extension DataSource: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        tableViewSections[section].items.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        tableViewSections[indexPath.section].items[indexPath.row].configureCell(tableView, indexPath)
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        tableViewSections.count
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        let cell = tableViewSections[indexPath.section].items[indexPath.row]
-        cell.action?()
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return tableViewSections[section].headerTitle
-    }
-    
-    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        return tableViewSections[section].footerTitle
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        if let headerView = view as? UITableViewHeaderFooterView {
-            headerView.textLabel?.text = tableViewSections[section].headerTitle
-        }
-    }
-}
-
 
 protocol TrackingProtectionDelegate: AnyObject {
     func trackingProtectionDidToggleProtection(enabled: Bool)
@@ -106,30 +38,32 @@ class SwitchTableViewCell: UITableViewCell {
         return toggle
     }()
     
-    @Published var value = false
+    var value: CurrentValueSubject<Bool, Never>!
     private var cancellable: AnyCancellable?
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = .secondaryBackground
-        selectionStyle = .none
-        
-        cancellable = $value.sink { [weak self] isOn in
-            self?.toggle.isOn = isOn
-        }
-    }
     
-    private var action: ((Bool) -> Void)?
-    
-    func configure(with item: ToggleItem) {
-        toggle.isOn = Settings.getToggle(item.settingsKey)
+    convenience init(item: ToggleItem, style: UITableViewCell.CellStyle = .default, reuseIdentifier: String?) {
+        self.init(style: style, reuseIdentifier: reuseIdentifier)
+        value = CurrentValueSubject<Bool, Never>(Settings.getToggle(item.settingsKey))
         toggle.accessibilityIdentifier = "BlockerToggle.\(item.settingsKey.rawValue)"
         self.action = item.action
         textLabel?.text = item.title
         textLabel?.textColor = .primaryText
         textLabel?.numberOfLines = 0
         accessoryView = PaddedSwitch(switchView: toggle)
+        self.cancellable = value.sink { isOn in
+            self.toggle.isOn = isOn
+        }
+            
     }
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        backgroundColor = .secondaryBackground
+        selectionStyle = .none
+    }
+    
+    private var action: ((Bool) -> Void)?
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -137,7 +71,7 @@ class SwitchTableViewCell: UITableViewCell {
     
     @objc private func toggle(sender: UISwitch) {
         action?(sender.isOn)
-        value = sender.isOn
+        value.value = sender.isOn
     }
 }
 
@@ -225,10 +159,7 @@ class TrackingProtectionViewController: UIViewController {
         items: [
             SectionItem(
                 configureCell: { tableView, indexPath in
-                    guard let cell = tableView.dequeueReusableCell(SwitchTableViewCell.self, for: indexPath) else {
-                        return UITableViewCell()
-                    }
-                    cell.configure(with: self.trackingProtectionItem)
+                    let cell = SwitchTableViewCell(item: self.trackingProtectionItem, reuseIdentifier: "SwitchTableViewCell")
                     return cell
                 }
             )
@@ -239,15 +170,13 @@ class TrackingProtectionViewController: UIViewController {
         items: toggleItems.map { toggleItem in
             SectionItem(
                 configureCell: { tableView, indexPath in
-                    guard let cell = tableView.dequeueReusableCell(SwitchTableViewCell.self, for: indexPath) else {
-                        return UITableViewCell()
-                    }
-                    self.cancellable = cell.$value.sink { isOn in
+                    let cell = SwitchTableViewCell(item: toggleItem, reuseIdentifier: "SwitchTableViewCell")
+                    self.cancellable = cell.value.sink { isOn in
                         if isOn {
                             let alertController = UIAlertController(title: nil, message: UIConstants.strings.settingsBlockOtherMessage, preferredStyle: .alert)
                             alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherNo, style: .default) { _ in
                                 //TODO: Make sure to reset the toggle
-                                cell.value = false
+                                cell.value.value = false
                                 GleanMetrics
                                     .TrackingProtection
                                     .trackerSettingChanged
@@ -270,8 +199,6 @@ class TrackingProtectionViewController: UIViewController {
                                 )
                         }
                     }
-                    
-                    cell.configure(with: toggleItem)
                     return cell
                 }
             )
