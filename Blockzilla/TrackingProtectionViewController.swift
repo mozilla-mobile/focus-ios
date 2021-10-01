@@ -7,38 +7,313 @@ import SnapKit
 import UIKit
 import Telemetry
 import Glean
+import Combine
+
+struct SectionItem {
+    let configureCell: (UITableView, IndexPath) -> UITableViewCell
+    let action: (() -> Void)?
+    
+    init(configureCell: @escaping (UITableView, IndexPath) -> UITableViewCell, action: (() -> Void)? = nil) {
+        self.configureCell = configureCell
+        self.action = action
+    }
+}
+
+struct Section {
+    let headerTitle: String?
+    let footerTitle: String?
+    let items: [SectionItem]
+    
+    init(headerTitle: String? = nil, footerTitle: String? = nil, items: [SectionItem]) {
+        self.headerTitle = headerTitle
+        self.footerTitle = footerTitle
+        self.items = items
+    }
+}
+
+class DataSource: NSObject {
+    init(tableViewSections: [Section] = [Section]()) {
+        self.tableViewSections = tableViewSections
+    }
+    
+    var tableViewSections: [Section]
+    
+    public func update(sections: [Section]) {
+        tableViewSections = sections
+    }
+}
+
+extension DataSource: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        tableViewSections[section].items.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        tableViewSections[indexPath.section].items[indexPath.row].configureCell(tableView, indexPath)
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        tableViewSections.count
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let cell = tableViewSections[indexPath.section].items[indexPath.row]
+        cell.action?()
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return tableViewSections[section].headerTitle
+    }
+    
+    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        return tableViewSections[section].footerTitle
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        if let headerView = view as? UITableViewHeaderFooterView {
+            headerView.textLabel?.text = tableViewSections[section].headerTitle
+        }
+    }
+}
+
 
 protocol TrackingProtectionDelegate: AnyObject {
     func trackingProtectionDidToggleProtection(enabled: Bool)
 }
 
-class TrackingProtectionViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+struct ToggleItem {
+    let title: String
+    let subtitle: String?
+    let settingsKey: SettingsToggle
+    let action: ((Bool) -> Void)?
     
-    private let tableView = UITableView(frame: .zero, style: .grouped)
+    init(label: String, settingsKey: SettingsToggle, subtitle: String? = nil, action: ((Bool) -> Void)? = nil) {
+        self.title = label
+        self.settingsKey = settingsKey
+        self.subtitle = subtitle
+        self.action = action
+    }
+}
+
+class SwitchTableViewCell: UITableViewCell {
+    private lazy var toggle: UISwitch = {
+        let toggle = UISwitch()
+        toggle.onTintColor = .accent
+        toggle.tintColor = .darkGray
+        toggle.addTarget(self, action: #selector(toggle(sender:)), for: .valueChanged)
+        
+        return toggle
+    }()
+    
+    @Published var value = false
+    private var cancellable: AnyCancellable?
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        backgroundColor = .secondaryBackground
+        selectionStyle = .none
+        
+        cancellable = $value.sink { [weak self] isOn in
+            self?.toggle.isOn = isOn
+        }
+    }
+    
+    private var action: ((Bool) -> Void)?
+    
+    func configure(with item: ToggleItem) {
+        toggle.isOn = Settings.getToggle(item.settingsKey)
+        toggle.accessibilityIdentifier = "BlockerToggle.\(item.settingsKey.rawValue)"
+        self.action = item.action
+        textLabel?.text = item.title
+        textLabel?.textColor = .primaryText
+        textLabel?.numberOfLines = 0
+        accessoryView = PaddedSwitch(switchView: toggle)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc private func toggle(sender: UISwitch) {
+        action?(sender.isOn)
+        value = sender.isOn
+    }
+}
+
+class TrackingProtectionViewController: UIViewController {
+    private lazy var toggleItems = [
+        ToggleItem(label: UIConstants.strings.labelBlockAds2, settingsKey: .blockAds) { isOn in
+            self.updateTelemetry(.blockAds, isOn)
+            GleanMetrics.TrackingProtection.trackerSettingChanged.record(.init(isEnabled: isOn, sourceOfChange: self.sourceOfChange, trackerChanged: "Advertising"))
+        },
+        ToggleItem(label: UIConstants.strings.labelBlockAnalytics, settingsKey: .blockAnalytics) { isOn in
+            self.updateTelemetry(.blockAnalytics, isOn)
+            GleanMetrics.TrackingProtection.trackerSettingChanged.record(.init(isEnabled: isOn, sourceOfChange: self.sourceOfChange, trackerChanged: "Analytics"))
+        },
+        ToggleItem(label: UIConstants.strings.labelBlockSocial, settingsKey: .blockSocial) { isOn in
+            self.updateTelemetry(.blockSocial, isOn)
+            GleanMetrics.TrackingProtection.trackerSettingChanged.record(.init(isEnabled: isOn, sourceOfChange: self.sourceOfChange, trackerChanged: "Social"))
+        },
+        ToggleItem(label: UIConstants.strings.labelBlockOther, settingsKey: .blockOther) { isOn in
+            self.updateTelemetry(.blockOther, isOn)
+            
+            //            if isOn {
+            //                let alertController = UIAlertController(title: nil, message: UIConstants.strings.settingsBlockOtherMessage, preferredStyle: .alert)
+            //                alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherNo, style: .default) { _ in
+            //                    //TODO: Make sure to reset the toggle
+            ////                    isOn = false
+            //                    GleanMetrics
+            //                        .TrackingProtection
+            //                        .trackerSettingChanged
+            //                        .record(.init(isEnabled: false, sourceOfChange: self.sourceOfChange, trackerChanged: "Content")
+            //                        )
+            //                })
+            //                alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherYes, style: .destructive) { _ in
+            //                    GleanMetrics
+            //                        .TrackingProtection
+            //                        .trackerSettingChanged
+            //                        .record(.init(isEnabled: true, sourceOfChange: self.sourceOfChange, trackerChanged: "Content")
+            //                        )
+            //                })
+            //                self.present(alertController, animated: true, completion: nil)
+            //            } else {
+            //            GleanMetrics
+            //                .TrackingProtection
+            //                .trackerSettingChanged
+            //                .record(.init(isEnabled: isOn, sourceOfChange: self.sourceOfChange, trackerChanged: "Content")
+            //                )
+            //            }
+        },
+    ]
+    
+    private lazy var trackingProtectionItem = ToggleItem(
+        label: UIConstants.strings.trackingProtectionToggleLabel,
+        settingsKey: SettingsToggle.trackingProtection) { isOn in
+            self.toggleProtection(isOn: isOn)
+            if isOn {
+                self.profileDataSource.tableViewSections.insert(self.trackersSection, at: 1)
+                self.tableView.insertSections([1], with: .middle)
+            } else {
+                self.profileDataSource.tableViewSections.remove(at: 1)
+                self.tableView.deleteSections([1], with: .middle)
+            }
+        }
+    
+    private lazy var profileDataSource = DataSource(tableViewSections: tableViewSections)
+    lazy var statsSection = Section(
+        items: [
+            SectionItem(
+                configureCell: { _, _ in
+                    let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "trackingStats")
+                    cell.textLabel?.text = String(format: UIConstants.strings.trackersBlockedSince, self.getAppInstallDate())
+                    cell.textLabel?.textColor = .primaryText.withAlphaComponent(0.6)
+                    cell.textLabel?.font = UIConstants.fonts.trackingProtectionStatsText
+                    cell.textLabel?.numberOfLines = 0
+                    cell.detailTextLabel?.text = self.getNumberOfTrackersBlocked()
+                    cell.detailTextLabel?.textColor = .primaryText
+                    cell.detailTextLabel?.font = UIConstants.fonts.trackingProtectionStatsDetail
+                    cell.backgroundColor = .secondaryBackground
+                    cell.selectionStyle = .none
+                    return cell
+                }
+            )
+        ]
+    )
+    lazy var enableTrackersSection = Section(
+        footerTitle: trackingProtectionEnabled ? UIConstants.strings.trackingProtectionOn : UIConstants.strings.trackingProtectionOff,
+        items: [
+            SectionItem(
+                configureCell: { tableView, indexPath in
+                    guard let cell = tableView.dequeueReusableCell(SwitchTableViewCell.self, for: indexPath) else {
+                        return UITableViewCell()
+                    }
+                    cell.configure(with: self.trackingProtectionItem)
+                    return cell
+                }
+            )
+        ]
+    )
+    lazy var trackersSection = Section(
+        headerTitle: UIConstants.strings.trackersHeader.uppercased(),
+        items: toggleItems.map { toggleItem in
+            SectionItem(
+                configureCell: { tableView, indexPath in
+                    guard let cell = tableView.dequeueReusableCell(SwitchTableViewCell.self, for: indexPath) else {
+                        return UITableViewCell()
+                    }
+                    self.cancellable = cell.$value.sink { isOn in
+                        if isOn {
+                            let alertController = UIAlertController(title: nil, message: UIConstants.strings.settingsBlockOtherMessage, preferredStyle: .alert)
+                            alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherNo, style: .default) { _ in
+                                //TODO: Make sure to reset the toggle
+                                cell.value = false
+                                GleanMetrics
+                                    .TrackingProtection
+                                    .trackerSettingChanged
+                                    .record(.init(isEnabled: false, sourceOfChange: self.sourceOfChange, trackerChanged: "Content")
+                                    )
+                            })
+                            alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherYes, style: .destructive) { _ in
+                                GleanMetrics
+                                    .TrackingProtection
+                                    .trackerSettingChanged
+                                    .record(.init(isEnabled: true, sourceOfChange: self.sourceOfChange, trackerChanged: "Content")
+                                    )
+                            })
+                            self.present(alertController, animated: true, completion: nil)
+                        } else {
+                            GleanMetrics
+                                .TrackingProtection
+                                .trackerSettingChanged
+                                .record(.init(isEnabled: isOn, sourceOfChange: self.sourceOfChange, trackerChanged: "Content")
+                                )
+                        }
+                    }
+                    
+                    cell.configure(with: toggleItem)
+                    return cell
+                }
+            )
+        }
+    )
+    
+    private var tableViewSections: [Section] {
+        return trackingProtectionEnabled
+        ? [enableTrackersSection, trackersSection, statsSection]
+        : [enableTrackersSection, statsSection]
+    }
+    
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .insetGrouped)
+        tableView.delegate = profileDataSource
+        tableView.dataSource = profileDataSource
+        tableView.backgroundColor = .primaryBackground
+        tableView.separatorStyle = .none
+        tableView.tableFooterView = UIView()
+        tableView.register(SwitchTableViewCell.self)
+        return tableView
+    }()
+    
     private var modalDelegate: ModalDelegate?
-    private let webViewController = WebViewController(userAgent: UserAgent.shared)
     private var isOpenedFromSetting = false
+    private var sourceOfChange: String { isOpenedFromSetting ? "Settings" : "Panel" }
     weak var delegate: TrackingProtectionDelegate?
     private var trackingProtectionEnabled: Bool {
         get {
             Settings.getToggle(trackingProtectionToggle.setting)
         }
         set {
-            tableView.reloadData()
+            Settings.set(newValue, forToggle: trackingProtectionToggle.setting)
         }
     }
-
+    
     private let trackingProtectionToggle = BlockerToggle(label: UIConstants.strings.trackingProtectionToggleLabel, setting: SettingsToggle.trackingProtection)
-    private let toggles = [
-        BlockerToggle(label: UIConstants.strings.labelBlockAds2, setting: SettingsToggle.blockAds),
-        BlockerToggle(label: UIConstants.strings.labelBlockAnalytics, setting: SettingsToggle.blockAnalytics),
-        BlockerToggle(label: UIConstants.strings.labelBlockSocial, setting: SettingsToggle.blockSocial),
-        BlockerToggle(label: UIConstants.strings.labelBlockOther, setting: SettingsToggle.blockOther)
-    ]
+    
+    private var cancellable: AnyCancellable?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        modalDelegate = self
         isOpenedFromSetting = self.navigationController?.viewControllers.count != 1
         
         view.backgroundColor = .primaryBackground
@@ -56,26 +331,14 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
             self.navigationController?.navigationBar.isTranslucent = false
             self.navigationController?.navigationBar.barTintColor = .primaryBackground
         }
-
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.backgroundColor = .primaryBackground
-        tableView.separatorStyle = .none
-        tableView.tableFooterView = UIView()
+        
+        
         view.addSubview(tableView)
-
+        
         tableView.snp.makeConstraints { make in
             make.top.equalTo(self.view).offset(15)
             make.leading.trailing.equalTo(self.view).inset(UIConstants.layout.trackingProtectionTableInset)
             make.bottom.equalTo(self.view)
-        }
-
-        for blockerToggle in toggles {
-            let toggle = blockerToggle.toggle
-            toggle.onTintColor = .accent
-            toggle.tintColor = .darkGray
-            toggle.addTarget(self, action: #selector(toggleChanged(_:)), for: .valueChanged)
-            toggle.isOn = Settings.getToggle(blockerToggle.setting)
         }
     }
     
@@ -97,19 +360,9 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
             }
         }
     }
-
+    
     @objc private func doneTapped() {
         self.dismiss(animated: true, completion: nil)
-    }
-    
-    @objc private func tappedMoreSettings() {
-        if !isOpenedFromSetting {
-            self.dismiss(animated: true) { [weak self] in
-                self?.showSettings()
-            }
-        } else {
-            self.navigationController?.popViewController(animated: true)
-        }
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -118,125 +371,13 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         }
     }
     
-    private func showSettings() {
-        guard let modalDelegate = modalDelegate else { return }
-
-        let settingsViewController = SettingsViewController(searchEngineManager: SearchEngineManager(prefs: UserDefaults.standard), whatsNew: BrowserToolset(), shouldScrollToSiri: false)
-        let settingsNavController = UINavigationController(rootViewController: settingsViewController)
-        settingsNavController.modalPresentationStyle = .formSheet
-
-        modalDelegate.presentModal(viewController: settingsNavController, animated: true)
-
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.settingsButton)
-
-    }
-    
-    @objc private func toggleChanged(_ sender: UISwitch) {
-        let toggle = toggles.filter { $0.toggle == sender }.first!
-
-        func updateSetting() {
-            let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: "setting", value: toggle.setting.rawValue)
-            telemetryEvent.addExtra(key: "to", value: sender.isOn)
-            Telemetry.default.recordEvent(telemetryEvent)
-
-            Settings.set(sender.isOn, forToggle: toggle.setting)
-            ContentBlockerHelper.shared.reload()
-
-            let sourceOfChange = isOpenedFromSetting ? "Settings" : "Panel"
-            
-            switch toggle.setting {
-            case .blockAds:
-                GleanMetrics.TrackingProtection.trackerSettingChanged.record(.init(isEnabled: sender.isOn, sourceOfChange: sourceOfChange, trackerChanged: "Advertising"))
-            case .blockAnalytics:
-                GleanMetrics.TrackingProtection.trackerSettingChanged.record(.init(isEnabled: sender.isOn, sourceOfChange: sourceOfChange, trackerChanged: "Analytics"))
-            case .blockSocial:
-                GleanMetrics.TrackingProtection.trackerSettingChanged.record(.init(isEnabled: sender.isOn, sourceOfChange: sourceOfChange, trackerChanged: "Social"))
-            case .blockOther:
-                GleanMetrics.TrackingProtection.trackerSettingChanged.record(.init(isEnabled: sender.isOn, sourceOfChange: sourceOfChange, trackerChanged: "Content"))
-            default:
-                break
-            }
-        }
-
-        switch toggle.setting {
-        case .blockOther where sender.isOn:
-            let alertController = UIAlertController(title: nil, message: UIConstants.strings.settingsBlockOtherMessage, preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherNo, style: .default) { _ in
-                sender.isOn = false
-                updateSetting()
-            })
-            alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherYes, style: .destructive) { _ in
-                updateSetting()
-            })
-            alertController.popoverPresentationController?.sourceView = sender
-            alertController.popoverPresentationController?.sourceRect = sender.bounds
-            present(alertController, animated: true, completion: nil)
-        default:
-            updateSetting()
-        }
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return trackingProtectionEnabled ? 4 : 3
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 2:
-            return trackingProtectionEnabled ? toggles.count : 1
-        default:
-            return 1
-        }
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.section {
-        case 0:
-            return statsCell()
-        case 1:
-            return trackingProtectionCell()
-        case 2:
-            let cell = trackingProtectionEnabled ? trackersCell(index: indexPath.row) : settingsCell()
-            cell.addSeparator(tableView: tableView, indexPath: indexPath, leadingOffset: UIConstants.layout.cellSeparatorLeadingOffset)
-            return cell
-        case 3:
-            return settingsCell()
-        default:
-            return UITableViewCell()
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
-    {
-        cell.roundedCorners(tableView: tableView, indexPath: indexPath)
-    }
-
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        switch section {
-        case 0:
-            return headerView()
-        case 2:
-            return trackingProtectionEnabled ? trackersHeader() : nil
-        default:
-            return nil
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if section == 1 {
-            let footer = UITableViewCell(style: .subtitle, reuseIdentifier: "trackingProtectionStatusFooter")
-            footer.textLabel?.text = trackingProtectionEnabled ? UIConstants.strings.trackingProtectionOn : UIConstants.strings.trackingProtectionOff
-            footer.textLabel?.textColor = .secondaryDark.withAlphaComponent(0.6)
-            footer.textLabel?.font = UIConstants.fonts.tableSectionHeader
-            footer.textLabel?.numberOfLines = 0
-            return footer
-        }
-        return nil
-    }
-    
-    @objc func tappedTrackingProtectionLearnMoreHeader(sender: UIGestureRecognizer) {
-        let contentViewController = SettingsContentViewController(url: URL(forSupportTopic: .trackingProtection))
-        navigationController?.pushViewController(contentViewController, animated: true)
+    fileprivate func updateTelemetry(_ settingsKey: SettingsToggle, _ isOn: Bool) {
+        let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: "setting", value: settingsKey.rawValue)
+        telemetryEvent.addExtra(key: "to", value: isOn)
+        Telemetry.default.recordEvent(telemetryEvent)
+        
+        Settings.set(isOn, forToggle: settingsKey)
+        ContentBlockerHelper.shared.reload()
     }
     
     private func statsCell() -> UITableViewCell {
@@ -253,80 +394,6 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         return cell
     }
     
-    private func trackingProtectionCell() -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "trackingProtectionToggleCell")
-        trackingProtectionToggle.toggle.onTintColor = .accent
-        trackingProtectionToggle.toggle.tintColor = .darkGray
-        trackingProtectionToggle.toggle.addTarget(self, action: #selector(toggleProtection(sender:)), for: .valueChanged)
-        trackingProtectionToggle.toggle.isOn = Settings.getToggle(trackingProtectionToggle.setting)
-        cell.textLabel?.text = trackingProtectionToggle.label
-        cell.textLabel?.textColor = .primaryText
-        cell.textLabel?.numberOfLines = 0
-        cell.accessoryView = PaddedSwitch(switchView: trackingProtectionToggle.toggle)
-        cell.backgroundColor = .secondaryBackground
-        cell.selectionStyle = .none
-
-        return cell
-    }
-    
-    private func trackersCell(index: Int) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "trackingToggleCell")
-        let toggle = toggles[index]
-        cell.textLabel?.text = toggle.label
-        cell.textLabel?.textColor = .primaryText
-        cell.accessoryView = PaddedSwitch(switchView: toggle.toggle)
-        cell.backgroundColor = .secondaryBackground
-        cell.selectionStyle = .none
-
-        return cell
-    }
-    
-    private func settingsCell() -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: "trackingSettingsCell")
-        cell.textLabel?.text = UIConstants.strings.trackingProtectionMoreSettings
-        cell.textLabel?.textColor = .accent
-        cell.backgroundColor = .secondaryBackground
-        cell.selectionStyle = .none
-        
-        let selector = #selector(tappedMoreSettings)
-        let tapGesture = UITapGestureRecognizer(target: self, action: selector)
-        cell.addGestureRecognizer(tapGesture)
-        
-        return cell
-    }
-    
-    private func headerView() -> UIView {
-        let textLabel = UILabel()
-        textLabel.isUserInteractionEnabled = true
-        textLabel.numberOfLines = 0
-        
-        let text = NSMutableAttributedString(string: String(format: UIConstants.strings.trackersDescriptionLabel2, AppInfo.productName), attributes: [.foregroundColor: UIColor.primaryText, .font: UIConstants.fonts.trackingProtectionHeader])
-        let learnMore = NSAttributedString(string: UIConstants.strings.trackingProtectionLearnMore, attributes: [.foregroundColor: UIColor.accent, .font: UIConstants.fonts.trackingProtectionHeader])
-        let space = NSAttributedString(string: "\n", attributes: [:])
-        text.append(space)
-        text.append(learnMore)
-        text.append(space)
-        textLabel.attributedText = text
-        
-        textLabel.backgroundColor = .primaryBackground
-        
-        let selector = #selector(tappedTrackingProtectionLearnMoreHeader)
-        let tapGesture = UITapGestureRecognizer(target: self, action: selector)
-        textLabel.addGestureRecognizer(tapGesture)
-        
-        return textLabel
-    }
-    
-    private func trackersHeader() -> UITableViewCell {
-        let header = UITableViewCell(style: .subtitle, reuseIdentifier: "trackersHeader")
-        header.textLabel?.text = UIConstants.strings.trackersHeader.uppercased()
-        header.textLabel?.textColor = .secondaryDark.withAlphaComponent(0.6)
-        header.textLabel?.font = UIConstants.fonts.tableSectionHeader
-        header.textLabel?.numberOfLines = 0
-        
-        return header
-    }
-    
     private func getAppInstallDate() -> String {
         let urlToDocumentsFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!
         let dateFormatter = DateFormatter()
@@ -337,7 +404,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         }
         return dateFormatter.string(from: Date())
     }
-        
+    
     private func getNumberOfTrackersBlocked() -> String {
         let numberOfTrackersBlocked = NSNumber(integerLiteral: UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey))
         let formatter = NumberFormatter()
@@ -345,25 +412,17 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         return formatter.string(from: numberOfTrackersBlocked) ?? "0"
     }
     
-    @objc private func toggleProtection(sender: UISwitch) {
+    private func toggleProtection(isOn: Bool) {
         let toggle = trackingProtectionToggle
         let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: "setting", value: toggle.setting.rawValue)
-        telemetryEvent.addExtra(key: "to", value: sender.isOn)
+        telemetryEvent.addExtra(key: "to", value: isOn)
         Telemetry.default.recordEvent(telemetryEvent)
-
-        GleanMetrics.TrackingProtection.trackingProtectionChanged.record(.init(isEnabled: sender.isOn))
-        GleanMetrics.TrackingProtection.hasEverChangedEtp.set(true)
-
-        Settings.set(sender.isOn, forToggle: toggle.setting)
-        trackingProtectionEnabled = sender.isOn
         
-        delegate?.trackingProtectionDidToggleProtection(enabled: sender.isOn)
-    }
-}
-
-extension TrackingProtectionViewController: ModalDelegate {
-    
-    func presentModal(viewController: UIViewController, animated: Bool) {
-        UIApplication.shared.windows.first?.rootViewController?.present(viewController, animated: animated, completion: nil)
+        GleanMetrics.TrackingProtection.trackingProtectionChanged.record(.init(isEnabled: isOn))
+        GleanMetrics.TrackingProtection.hasEverChangedEtp.set(true)
+        
+        trackingProtectionEnabled = isOn
+        
+        delegate?.trackingProtectionDidToggleProtection(enabled: isOn)
     }
 }

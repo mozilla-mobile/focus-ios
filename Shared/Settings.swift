@@ -4,7 +4,7 @@
 
 import Foundation
 
-enum SettingsToggle: String {
+enum SettingsToggle: String, Equatable {
     case trackingProtection = "TrackingProtection"
     case biometricLogin = "BiometricLogin"
     case blockAds = "BlockAds"
