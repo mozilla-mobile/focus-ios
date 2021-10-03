@@ -545,11 +545,10 @@ class BrowserViewController: UIViewController {
                     }
 
                     self.view.layoutIfNeeded()
-                    self.findInPageBar?.becomeFirstResponder()
                 }
-            } else {
-                self.findInPageBar?.becomeFirstResponder()
             }
+            
+            self.findInPageBar?.becomeFirstResponder()
         } else if let findInPageBar = self.findInPageBar {
             findInPageBar.endEditing(true)
             webViewController.evaluate("__firefox__.findDone()", completion: nil)
