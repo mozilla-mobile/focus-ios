@@ -62,6 +62,7 @@ class TrackingProtectionViewController: UIViewController {
                             self.profileDataSource.tableViewSections.remove(at: 1)
                             self.tableView.deleteSections([1], with: .middle)
                         }
+                        self.calculatePreferredSize()
                     }
                     .store(in: &self.subscriptions)
                     return cell
@@ -203,6 +204,15 @@ class TrackingProtectionViewController: UIViewController {
             make.leading.trailing.equalTo(self.view).inset(UIConstants.layout.trackingProtectionTableInset)
             make.bottom.equalTo(self.view)
         }
+    }
+    
+    private func calculatePreferredSize() {
+        preferredContentSize = tableView.contentSize
+    }
+    
+    override func viewDidLayoutSubviews() {
+      super.viewDidLayoutSubviews()
+      calculatePreferredSize()
     }
     
     override func viewWillLayoutSubviews() {

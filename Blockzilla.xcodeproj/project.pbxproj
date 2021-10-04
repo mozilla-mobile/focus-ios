@@ -74,6 +74,8 @@
 		C817A35722CE73B4002529FF /* Deferred.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35322CE73B4002529FF /* Deferred.swift */; };
 		C817A35822CE73B4002529FF /* ReadWriteLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35522CE73B4002529FF /* ReadWriteLock.swift */; };
 		C817A35922CE73B4002529FF /* LockProtected.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35622CE73B4002529FF /* LockProtected.swift */; };
+		C82953E0270B2C5900F52B04 /* SlideOverPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82953DF270B2C5900F52B04 /* SlideOverPresentationController.swift */; };
+		C82953E3270B475800F52B04 /* SheetMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82953E2270B475800F52B04 /* SheetMetrics.swift */; };
 		C82D143026EF62BE007B275C /* TipsPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82D142F26EF62BE007B275C /* TipsPageViewController.swift */; };
 		C82D143226EF634E007B275C /* TipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82D143126EF634E007B275C /* TipViewController.swift */; };
 		C82D143426EF644E007B275C /* UIViewController+Child.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82D143326EF644E007B275C /* UIViewController+Child.swift */; };
@@ -585,6 +587,8 @@
 		C817A35422CE73B4002529FF /* Deferred.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Deferred.h; sourceTree = "<group>"; };
 		C817A35522CE73B4002529FF /* ReadWriteLock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadWriteLock.swift; sourceTree = "<group>"; };
 		C817A35622CE73B4002529FF /* LockProtected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockProtected.swift; sourceTree = "<group>"; };
+		C82953DF270B2C5900F52B04 /* SlideOverPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideOverPresentationController.swift; sourceTree = "<group>"; };
+		C82953E2270B475800F52B04 /* SheetMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetMetrics.swift; sourceTree = "<group>"; };
 		C82D142F26EF62BE007B275C /* TipsPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsPageViewController.swift; sourceTree = "<group>"; };
 		C82D143126EF634E007B275C /* TipViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipViewController.swift; sourceTree = "<group>"; };
 		C82D143326EF644E007B275C /* UIViewController+Child.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Child.swift"; sourceTree = "<group>"; };
@@ -1154,6 +1158,15 @@
 			path = Deferred;
 			sourceTree = "<group>";
 		};
+		C82953E1270B474A00F52B04 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				C82953DF270B2C5900F52B04 /* SlideOverPresentationController.swift */,
+				C82953E2270B475800F52B04 /* SheetMetrics.swift */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
 		C88A5D3D26F0999E009A135D /* Pro Tips */ = {
 			isa = PBXGroup;
 			children = (
@@ -1185,6 +1198,7 @@
 		C8EEC804270AF8C0007C0751 /* Tracking Protection */ = {
 			isa = PBXGroup;
 			children = (
+				C82953E1270B474A00F52B04 /* Presentation */,
 				16D7169D2114F00E000C8A66 /* TrackingProtectionViewController.swift */,
 				C8EEC807270AF90F007C0751 /* ToggleItem.swift */,
 				C8EEC805270AF8E6007C0751 /* SwitchTableViewCell.swift */,
@@ -1976,6 +1990,7 @@
 				16074B6D2114364C003B671F /* PhotonActionSheet.swift in Sources */,
 				B3CD41CE1FD1CDE300AEBD58 /* Result.swift in Sources */,
 				D3E2C8EA1D9F0E6200DEBE3D /* BrowserViewController.swift in Sources */,
+				C82953E0270B2C5900F52B04 /* SlideOverPresentationController.swift in Sources */,
 				C817A35922CE73B4002529FF /* LockProtected.swift in Sources */,
 				D3426B031DBAE3800016DA5A /* URLBarContainer.swift in Sources */,
 				2696EB04211F540600F0C73F /* SearchHistoryUtils.swift in Sources */,
@@ -2050,6 +2065,7 @@
 				D35C11471E04AADA005FFFEF /* AppConfig.swift in Sources */,
 				D3E2C9611DA2F7C600DEBE3D /* URLBar.swift in Sources */,
 				746BD9281F75C45A00BE8DB9 /* DictionaryExtensions.swift in Sources */,
+				C82953E3270B475800F52B04 /* SheetMetrics.swift in Sources */,
 				E40AFB141DC939FF00DA5651 /* SupportUtils.swift in Sources */,
 				D392887F1BC5E47E0016A9A0 /* UIConstants.swift in Sources */,
 				D3E251F91DAF064B005918DC /* Utils.swift in Sources */,
