@@ -17,6 +17,8 @@ protocol AppSplashController {
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashController {
+    var nimbusApi: NimbusApi?
+    
     static let prefIntroDone = "IntroDone"
     static let prefIntroVersion = 2
     static let prefWhatsNewDone = "WhatsNewDone"
@@ -53,6 +55,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         }
 
         setupTelemetry()
+        setupExperimentation()
+        
         TPStatsBlocklistChecker.shared.startup()
         
         // Fix transparent navigation bar issue in iOS 15
@@ -430,12 +434,12 @@ extension AppDelegate {
         GleanMetrics.TrackingProtection.hasContentBlocked.set(Settings.getToggle(.blockOther))
         GleanMetrics.TrackingProtection.hasSocialBlocked.set(Settings.getToggle(.blockSocial))
         GleanMetrics.MozillaProducts.hasFirefoxInstalled.set(UIApplication.shared.canOpenURL(URL(string: "firefox://")!))
-
-        // Proof-of-Concept application-services guff here.
-        //
-        // We're just seeing if we can successfully import and use various application-services
-        // components, they don't really do anything in the app yet.
-        //
+    }
+        
+    func setupExperimentation() {
+        if !Settings.getToggle(.sendAnonymousUsageData) {
+            return
+        }
         
         // Hook up basic logging.
         if !RustLog.shared.tryEnable({ (level, tag, message) -> Bool in
@@ -465,19 +469,17 @@ extension AppDelegate {
         let errorReporter: NimbusErrorReporter = { err in
             print(err)
         }
+        
         do {
-            let nimbus = try Nimbus.create(
-                NimbusServerSettings(url: URL(string: "https://firefox.settings.services.mozilla.com")!),
-                appSettings: NimbusAppSettings(appName: "focus_ios", channel: "release"),
-                dbPath: nimbusDbPath,
-                resourceBundles: [],
-                errorReporter: errorReporter
-            )
-                nimbus.initialize()
-                nimbus.fetchExperiments()
+            guard let nimbusServerSettings = NimbusServerSettings.createFromInfoDictionary(), let nimbusAppSettings = NimbusAppSettings.createFromInfoDictionary() else {
+                print("Nimbus not enabled: could not load settings from Info.plist")
+                return
             }
-         catch {
-            print("ERROR: Unable to create Nimbus")
+            self.nimbusApi = try Nimbus.create(nimbusServerSettings, appSettings: nimbusAppSettings, dbPath: nimbusDbPath, resourceBundles: [], errorReporter: errorReporter)
+            self.nimbusApi?.initialize()
+            self.nimbusApi?.fetchExperiments()
+        } catch {
+            print("ERROR: Unable to create Nimbus: \(error)")
         }
     }
 
