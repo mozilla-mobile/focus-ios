@@ -20,6 +20,25 @@ enum SettingsToggle: String, Equatable {
     case enableSearchSuggestions = "enableSearchSuggestions"
 }
 
+extension SettingsToggle {
+    var trackerChanged: String {
+        switch self {
+        case .trackingProtection:
+            return ""
+        case .blockAds:
+            return "Advertising"
+        case .blockAnalytics:
+            return "Analytics"
+        case .blockSocial:
+            return "Social"
+        case .blockOther:
+            return "Content"
+        default:
+            return ""
+        }
+    }
+}
+
 struct Settings {
     private static let prefs = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
 

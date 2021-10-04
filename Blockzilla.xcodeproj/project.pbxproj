@@ -84,6 +84,9 @@
 		C8C04AAC27072C4900D56268 /* SectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C04AAB27072C4900D56268 /* SectionItem.swift */; };
 		C8C04AAE27072C6100D56268 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C04AAD27072C6100D56268 /* Section.swift */; };
 		C8C04AB027072C7100D56268 /* DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C04AAF27072C7100D56268 /* DataSource.swift */; };
+		C8EEC806270AF8E6007C0751 /* SwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EEC805270AF8E6007C0751 /* SwitchTableViewCell.swift */; };
+		C8EEC808270AF90F007C0751 /* ToggleItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EEC807270AF90F007C0751 /* ToggleItem.swift */; };
+		C8EEC80A270AF930007C0751 /* TrackingProtectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EEC809270AF930007C0751 /* TrackingProtectionDelegate.swift */; };
 		D025F225218B64D600B262D8 /* SearchEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D025F224218B64D600B262D8 /* SearchEngineTests.swift */; };
 		D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0967A801EC50002009D937F /* TelemetryIntegration.swift */; };
 		D30179071BC6CB19009AD388 /* BlockerEnabledDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */; };
@@ -592,6 +595,9 @@
 		C8C04AAB27072C4900D56268 /* SectionItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionItem.swift; sourceTree = "<group>"; };
 		C8C04AAD27072C6100D56268 /* Section.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
 		C8C04AAF27072C7100D56268 /* DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSource.swift; sourceTree = "<group>"; };
+		C8EEC805270AF8E6007C0751 /* SwitchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchTableViewCell.swift; sourceTree = "<group>"; };
+		C8EEC807270AF90F007C0751 /* ToggleItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleItem.swift; sourceTree = "<group>"; };
+		C8EEC809270AF930007C0751 /* TrackingProtectionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionDelegate.swift; sourceTree = "<group>"; };
 		D025F224218B64D600B262D8 /* SearchEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineTests.swift; sourceTree = "<group>"; };
 		D0967A801EC50002009D937F /* TelemetryIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TelemetryIntegration.swift; sourceTree = "<group>"; };
 		D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockerEnabledDetector.swift; sourceTree = "<group>"; };
@@ -1176,6 +1182,17 @@
 			path = "Declarative DataSource";
 			sourceTree = "<group>";
 		};
+		C8EEC804270AF8C0007C0751 /* Tracking Protection */ = {
+			isa = PBXGroup;
+			children = (
+				16D7169D2114F00E000C8A66 /* TrackingProtectionViewController.swift */,
+				C8EEC807270AF90F007C0751 /* ToggleItem.swift */,
+				C8EEC805270AF8E6007C0751 /* SwitchTableViewCell.swift */,
+				C8EEC809270AF930007C0751 /* TrackingProtectionDelegate.swift */,
+			);
+			path = "Tracking Protection";
+			sourceTree = "<group>";
+		};
 		D33A1A391BC476D40003D929 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
@@ -1378,7 +1395,7 @@
 				845174A526CD0C2500510113 /* ShortcutsManager.swift */,
 				845174A726CD2C7100510113 /* ShortcutView.swift */,
 				D30DF93D1DC1634F0064736C /* Toast.swift */,
-				16D7169D2114F00E000C8A66 /* TrackingProtectionViewController.swift */,
+				C8EEC804270AF8C0007C0751 /* Tracking Protection */,
 				C8C04AB127072CC200D56268 /* Declarative DataSource */,
 				D392881C1BC5CF180016A9A0 /* UIColorExtensions.swift */,
 				D392887E1BC5E47E0016A9A0 /* UIConstants.swift */,
@@ -1977,12 +1994,14 @@
 				D5ABA3DA1FCC846800D5C060 /* AutocompleteSettingViewController.swift in Sources */,
 				845174A826CD2C7100510113 /* ShortcutView.swift in Sources */,
 				D5ABA3D91FCC846800D5C060 /* AddCustomDomainViewController.swift in Sources */,
+				C8EEC80A270AF930007C0751 /* TrackingProtectionDelegate.swift in Sources */,
 				D3426AEB1DB7F8AA0016DA5A /* OverlayView.swift in Sources */,
 				D5D2F02B252FA6AE00761DC8 /* Metrics.swift in Sources */,
 				16180DBB212F563800AFE3C2 /* Intents.intentdefinition in Sources */,
 				16D465B12127891000FEC226 /* SiriFavoriteViewController.swift in Sources */,
 				D3E54FCF1DEFAE80003E1AFF /* OpenSearchParser.swift in Sources */,
 				E40AFB101DC9014700DA5651 /* UserAgent.swift in Sources */,
+				C8EEC808270AF90F007C0751 /* ToggleItem.swift in Sources */,
 				EB84F96D2093799900BA6739 /* TrackingProtectionPageStats.swift in Sources */,
 				74584E351FA1077000AF2582 /* SettingsContentViewController.swift in Sources */,
 				24433101219DA46F00778D02 /* Debouncer.swift in Sources */,
@@ -1994,6 +2013,7 @@
 				C82D143426EF644E007B275C /* UIViewController+Child.swift in Sources */,
 				F7B3E49D2165C32B00118785 /* SearchSuggestionsPromptView.swift in Sources */,
 				D33E9B241E1D93DD00A39A44 /* RequestHandler.swift in Sources */,
+				C8EEC806270AF8E6007C0751 /* SwitchTableViewCell.swift in Sources */,
 				D3426AF61DB84E7A0016DA5A /* SearchEngine.swift in Sources */,
 				C8C04AAC27072C4900D56268 /* SectionItem.swift in Sources */,
 				B3CD41C91FD1027000AEBD58 /* InsetTextField.swift in Sources */,
