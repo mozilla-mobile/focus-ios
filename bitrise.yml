@@ -65,7 +65,7 @@ workflows:
     steps:
     - script@1:
         title: Configure Nimbus
-        input:
+        inputs:
         - content: |-
             #!/usr/bin/env bash
             set -x
