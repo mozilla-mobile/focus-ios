@@ -438,8 +438,14 @@ extension AppDelegate {
         
     func setupExperimentation() {
         if !Settings.getToggle(.sendAnonymousUsageData) {
+            print("Not setting up Nimbus because sendAnonymousUsageData is disabled") // TODO Remove
             return
         }
+
+        print("Initializing Nimbus") // TODO Remove
+        
+        let b = Bundle.main.infoDictionary
+        print(b?.debugDescription)
         
         // Hook up basic logging.
         if !RustLog.shared.tryEnable({ (level, tag, message) -> Bool in
