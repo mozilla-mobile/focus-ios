@@ -441,10 +441,6 @@ extension AppDelegate {
             NSLog("Not setting up Nimbus because sendAnonymousUsageData is disabled") // TODO Remove
             return
         }
-
-        NSLog("Initializing Nimbus") // TODO Remove
-        
-        NSLog("Info.plist \(Bundle.main.infoDictionary?.debugDescription ?? "-")")
         
         // Hook up basic logging.
         if !RustLog.shared.tryEnable({ (level, tag, message) -> Bool in
