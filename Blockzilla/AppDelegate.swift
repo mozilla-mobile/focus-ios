@@ -438,22 +438,20 @@ extension AppDelegate {
         
     func setupExperimentation() {
         if !Settings.getToggle(.sendAnonymousUsageData) {
-            print("Not setting up Nimbus because sendAnonymousUsageData is disabled") // TODO Remove
+            NSLog("Not setting up Nimbus because sendAnonymousUsageData is disabled") // TODO Remove
             return
         }
 
-        print("Initializing Nimbus") // TODO Remove
+        NSLog("Initializing Nimbus") // TODO Remove
         
-        let b = Bundle.main.infoDictionary
-        print(b?.debugDescription)
+        NSLog("Info.plist \(Bundle.main.infoDictionary?.debugDescription ?? "-")")
         
         // Hook up basic logging.
         if !RustLog.shared.tryEnable({ (level, tag, message) -> Bool in
-            let logString = "[RUST][\(tag ?? "no-tag")] \(message)"
-            print(logString)
+            NSLog("[RUST][\(tag ?? "no-tag")] \(message)")
             return true
         }) {
-            print("ERROR: Unable to enable logging from Rust")
+            NSLog("ERROR: Unable to enable logging from Rust")
         }
 
         // Enable networking.
@@ -473,19 +471,19 @@ extension AppDelegate {
         }
 
         let errorReporter: NimbusErrorReporter = { err in
-            print(err)
+            NSLog("NIMBUS ERROR: \(err)")
         }
         
         do {
             guard let nimbusServerSettings = NimbusServerSettings.createFromInfoDictionary(), let nimbusAppSettings = NimbusAppSettings.createFromInfoDictionary() else {
-                print("Nimbus not enabled: could not load settings from Info.plist")
+                NSLog("Nimbus not enabled: could not load settings from Info.plist")
                 return
             }
             self.nimbusApi = try Nimbus.create(nimbusServerSettings, appSettings: nimbusAppSettings, dbPath: nimbusDbPath, resourceBundles: [], errorReporter: errorReporter)
             self.nimbusApi?.initialize()
             self.nimbusApi?.fetchExperiments()
         } catch {
-            print("ERROR: Unable to create Nimbus: \(error)")
+            NSLog("ERROR: Unable to create Nimbus: \(error)")
         }
     }
 
