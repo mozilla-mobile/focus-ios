@@ -30,12 +30,12 @@ class SwitchTableViewCell: UITableViewCell {
         textLabel?.textColor = .primaryText
         textLabel?.numberOfLines = 0
         accessoryView = PaddedSwitch(switchView: toggle)
+        backgroundColor = .secondaryBackground
+        selectionStyle = .none
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = .secondaryBackground
-        selectionStyle = .none
     }
     
     required init?(coder: NSCoder) {

@@ -1132,8 +1132,9 @@ extension BrowserViewController: URLBarDelegate {
             Settings.set(false, forToggle: .trackingProtection)
         }
     
+        let state: TrackingProtectionState = urlBar.inBrowsingMode ? .browsing(isSecureConnection: webViewController.connectionIsSecure) : .homescreen
         
-        let trackingProtectionViewController = TrackingProtectionViewController()
+        let trackingProtectionViewController = TrackingProtectionViewController(state: state)
         trackingProtectionViewController.delegate = self
         modalDelegate.presentSheet(viewController: trackingProtectionViewController)
     }

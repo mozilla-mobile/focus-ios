@@ -9,6 +9,12 @@ import Telemetry
 import Glean
 import Combine
 
+enum TrackingProtectionState {
+    case browsing(isSecureConnection: Bool)
+    case homescreen
+    case settings
+}
+
 class TrackingProtectionViewController: UIViewController {
     private lazy var toggleItems = [
         ToggleItem(label: UIConstants.strings.labelBlockAds2, settingsKey: .blockAds),
@@ -21,7 +27,30 @@ class TrackingProtectionViewController: UIViewController {
         label: UIConstants.strings.trackingProtectionToggleLabel,
         settingsKey: SettingsToggle.trackingProtection)
     
-    private lazy var profileDataSource = DataSource(tableViewSections: tableViewSections)
+    private lazy var profileDataSource = DataSource(tableViewSections: tableViewSections.compactMap { $0 })
+    
+    var state: TrackingProtectionState
+    init(state: TrackingProtectionState) {
+        self.state = state
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func secureConnectionSection(title: String, image: UIImage) -> Section {
+        return Section(
+            items: [
+                SectionItem(
+                    configureCell: { _, _ in
+                        return ImageCell(image: image, title: title)
+                    }
+                )
+            ]
+        )
+    }
+    
     lazy var statsSection = Section(
         items: [
             SectionItem(
@@ -43,6 +72,10 @@ class TrackingProtectionViewController: UIViewController {
     )
     
     private var subscriptions = Set<AnyCancellable>()
+    
+    var trackersSectionIndex: Int {
+        if case .browsing = state { return 2 }  else { return 1 }
+    }
     lazy var enableTrackersSection = Section(
         footerTitle: trackingProtectionItem.settingsValue ? UIConstants.strings.trackingProtectionOn : UIConstants.strings.trackingProtectionOff,
         items: [
@@ -56,11 +89,11 @@ class TrackingProtectionViewController: UIViewController {
                         self.trackingProtectionItem.settingsValue = isOn
                         self.toggleProtection(isOn: isOn)
                         if isOn {
-                            self.profileDataSource.tableViewSections.insert(self.trackersSection, at: 1)
-                            self.tableView.insertSections([1], with: .middle)
+                            self.profileDataSource.tableViewSections.insert(self.trackersSection, at: trackersSectionIndex)
+                            self.tableView.insertSections([trackersSectionIndex], with: .middle)
                         } else {
-                            self.profileDataSource.tableViewSections.remove(at: 1)
-                            self.tableView.deleteSections([1], with: .middle)
+                            self.profileDataSource.tableViewSections.remove(at: trackersSectionIndex)
+                            self.tableView.deleteSections([trackersSectionIndex], with: .middle)
                         }
                         self.calculatePreferredSize()
                     }
@@ -152,10 +185,21 @@ class TrackingProtectionViewController: UIViewController {
         ]
     )
     
-    private var tableViewSections: [Section] {
-        return trackingProtectionItem.settingsValue
-        ? [enableTrackersSection, trackersSection, statsSection]
-        : [enableTrackersSection, statsSection]
+    private var tableViewSections: [Section?] {
+        let secureSection: Section?
+        if case let .browsing(isSecureConnection) = state {
+            let title = isSecureConnection ? "Secure" : "Not secure"
+            let image = isSecureConnection ? UIImage.connectionSecure : .connectionNotSecure
+            secureSection = secureConnectionSection(title: title, image: image)
+        } else {
+            secureSection = nil
+        }
+        return [
+            secureSection,
+            enableTrackersSection,
+            trackingProtectionItem.settingsValue ? trackersSection : nil,
+            statsSection
+        ]
     }
     
     private lazy var tableView: UITableView = {
@@ -170,22 +214,22 @@ class TrackingProtectionViewController: UIViewController {
     }()
     
     private var modalDelegate: ModalDelegate?
-    private var isOpenedFromSetting = false
-    private var sourceOfChange: String { isOpenedFromSetting ? "Settings" : "Panel" }
+    private var sourceOfChange: String {
+        if case .settings = state { return "Settings" }  else { return "Panel" }
+    }
     weak var delegate: TrackingProtectionDelegate?
     
     private var cancellable: AnyCancellable?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        isOpenedFromSetting = self.navigationController?.viewControllers.count != 1
         
         view.backgroundColor = .primaryBackground
         title = UIConstants.strings.trackingProtectionLabel
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.primaryText]
         navigationController?.navigationBar.tintColor = .accent
         
-        if !isOpenedFromSetting {
+        if case .settings = state {
             let doneButton = UIBarButtonItem(title: UIConstants.strings.done, style: .plain, target: self, action: #selector(doneTapped))
             doneButton.tintColor = .accent
             navigationItem.rightBarButtonItem = doneButton

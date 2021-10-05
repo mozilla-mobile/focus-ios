@@ -79,6 +79,8 @@
 		C817A35922CE73B4002529FF /* LockProtected.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35622CE73B4002529FF /* LockProtected.swift */; };
 		C82953E0270B2C5900F52B04 /* SheetModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82953DF270B2C5900F52B04 /* SheetModalViewController.swift */; };
 		C82953E3270B475800F52B04 /* SheetMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82953E2270B475800F52B04 /* SheetMetrics.swift */; };
+		C82953EB270C540900F52B04 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82953EA270C540900F52B04 /* ImageCell.swift */; };
+		C82953ED270C5F5300F52B04 /* UIImage+AppImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82953EC270C5F5300F52B04 /* UIImage+AppImages.swift */; };
 		C82D143026EF62BE007B275C /* TipsPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82D142F26EF62BE007B275C /* TipsPageViewController.swift */; };
 		C82D143226EF634E007B275C /* TipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82D143126EF634E007B275C /* TipViewController.swift */; };
 		C82D143426EF644E007B275C /* UIViewController+Child.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82D143326EF644E007B275C /* UIViewController+Child.swift */; };
@@ -591,6 +593,8 @@
 		C817A35622CE73B4002529FF /* LockProtected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockProtected.swift; sourceTree = "<group>"; };
 		C82953DF270B2C5900F52B04 /* SheetModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetModalViewController.swift; sourceTree = "<group>"; };
 		C82953E2270B475800F52B04 /* SheetMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetMetrics.swift; sourceTree = "<group>"; };
+		C82953EA270C540900F52B04 /* ImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
+		C82953EC270C5F5300F52B04 /* UIImage+AppImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+AppImages.swift"; sourceTree = "<group>"; };
 		C82D142F26EF62BE007B275C /* TipsPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsPageViewController.swift; sourceTree = "<group>"; };
 		C82D143126EF634E007B275C /* TipViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipViewController.swift; sourceTree = "<group>"; };
 		C82D143326EF644E007B275C /* UIViewController+Child.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Child.swift"; sourceTree = "<group>"; };
@@ -1185,6 +1189,7 @@
 			isa = PBXGroup;
 			children = (
 				C82D143326EF644E007B275C /* UIViewController+Child.swift */,
+				C82953EC270C5F5300F52B04 /* UIImage+AppImages.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1204,6 +1209,7 @@
 			children = (
 				C82953E1270B474A00F52B04 /* Presentation */,
 				16D7169D2114F00E000C8A66 /* TrackingProtectionViewController.swift */,
+				C82953EA270C540900F52B04 /* ImageCell.swift */,
 				C8EEC807270AF90F007C0751 /* ToggleItem.swift */,
 				C8EEC805270AF8E6007C0751 /* SwitchTableViewCell.swift */,
 				C8EEC809270AF930007C0751 /* TrackingProtectionDelegate.swift */,
@@ -2018,6 +2024,7 @@
 				C8EEC80A270AF930007C0751 /* TrackingProtectionDelegate.swift in Sources */,
 				D3426AEB1DB7F8AA0016DA5A /* OverlayView.swift in Sources */,
 				D5D2F02B252FA6AE00761DC8 /* Metrics.swift in Sources */,
+				C82953EB270C540900F52B04 /* ImageCell.swift in Sources */,
 				16180DBB212F563800AFE3C2 /* Intents.intentdefinition in Sources */,
 				16D465B12127891000FEC226 /* SiriFavoriteViewController.swift in Sources */,
 				D3E54FCF1DEFAE80003E1AFF /* OpenSearchParser.swift in Sources */,
@@ -2082,6 +2089,7 @@
 				845174A626CD0C2500510113 /* ShortcutsManager.swift in Sources */,
 				D3426AE91DB7F4060016DA5A /* KeyboardHelper.swift in Sources */,
 				B3CD41CC1FD1CAF000AEBD58 /* PaddedSwitch.swift in Sources */,
+				C82953ED270C5F5300F52B04 /* UIImage+AppImages.swift in Sources */,
 				84D6F8E226C656610006D634 /* UITableViewCellExtensions.swift in Sources */,
 				D3E251EA1DAD714C005918DC /* InstructionsView.swift in Sources */,
 				D3561B2B1DB5925100A5EEAF /* GradientBackgroundView.swift in Sources */,
