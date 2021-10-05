@@ -25,10 +25,7 @@ jobs:
       run: sh ./test-fixtures/import-strings.sh
     - name: Update new strings
       run: |-
-        git diff
-        git config --global user.email "firefox-test-engineering@mozilla.com"
-        git config --global user.name "Firefox Test Engineering"
-        git diff --quiet || (git add Blockzilla/*/*.lproj/* Blockzilla/*.lproj/*)
+        git diff || (git add Blockzilla/*/*.lproj/* Blockzilla/*.lproj/*)
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v3
       with:
