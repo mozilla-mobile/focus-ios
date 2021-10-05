@@ -74,7 +74,7 @@
 		C817A35722CE73B4002529FF /* Deferred.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35322CE73B4002529FF /* Deferred.swift */; };
 		C817A35822CE73B4002529FF /* ReadWriteLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35522CE73B4002529FF /* ReadWriteLock.swift */; };
 		C817A35922CE73B4002529FF /* LockProtected.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35622CE73B4002529FF /* LockProtected.swift */; };
-		C82953E0270B2C5900F52B04 /* SlideOverPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82953DF270B2C5900F52B04 /* SlideOverPresentationController.swift */; };
+		C82953E0270B2C5900F52B04 /* SheetModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82953DF270B2C5900F52B04 /* SheetModalViewController.swift */; };
 		C82953E3270B475800F52B04 /* SheetMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82953E2270B475800F52B04 /* SheetMetrics.swift */; };
 		C82D143026EF62BE007B275C /* TipsPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82D142F26EF62BE007B275C /* TipsPageViewController.swift */; };
 		C82D143226EF634E007B275C /* TipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82D143126EF634E007B275C /* TipViewController.swift */; };
@@ -587,7 +587,7 @@
 		C817A35422CE73B4002529FF /* Deferred.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Deferred.h; sourceTree = "<group>"; };
 		C817A35522CE73B4002529FF /* ReadWriteLock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadWriteLock.swift; sourceTree = "<group>"; };
 		C817A35622CE73B4002529FF /* LockProtected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockProtected.swift; sourceTree = "<group>"; };
-		C82953DF270B2C5900F52B04 /* SlideOverPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideOverPresentationController.swift; sourceTree = "<group>"; };
+		C82953DF270B2C5900F52B04 /* SheetModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetModalViewController.swift; sourceTree = "<group>"; };
 		C82953E2270B475800F52B04 /* SheetMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetMetrics.swift; sourceTree = "<group>"; };
 		C82D142F26EF62BE007B275C /* TipsPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsPageViewController.swift; sourceTree = "<group>"; };
 		C82D143126EF634E007B275C /* TipViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipViewController.swift; sourceTree = "<group>"; };
@@ -1161,7 +1161,7 @@
 		C82953E1270B474A00F52B04 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
-				C82953DF270B2C5900F52B04 /* SlideOverPresentationController.swift */,
+				C82953DF270B2C5900F52B04 /* SheetModalViewController.swift */,
 				C82953E2270B475800F52B04 /* SheetMetrics.swift */,
 			);
 			path = Presentation;
@@ -1990,7 +1990,7 @@
 				16074B6D2114364C003B671F /* PhotonActionSheet.swift in Sources */,
 				B3CD41CE1FD1CDE300AEBD58 /* Result.swift in Sources */,
 				D3E2C8EA1D9F0E6200DEBE3D /* BrowserViewController.swift in Sources */,
-				C82953E0270B2C5900F52B04 /* SlideOverPresentationController.swift in Sources */,
+				C82953E0270B2C5900F52B04 /* SheetModalViewController.swift in Sources */,
 				C817A35922CE73B4002529FF /* LockProtected.swift in Sources */,
 				D3426B031DBAE3800016DA5A /* URLBarContainer.swift in Sources */,
 				2696EB04211F540600F0C73F /* SearchHistoryUtils.swift in Sources */,

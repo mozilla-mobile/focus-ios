@@ -131,7 +131,7 @@ class SheetModalViewController: UIViewController {
         let dismissAnimator = UIViewPropertyAnimator(duration: 0.3, curve: .easeOut)
         
         dismissAnimator.addAnimations {
-            self.containerViewBottomConstraint?.constant = self.metrics.bufferHeight
+            self.containerViewBottomConstraint?.constant = 1000
             self.view.layoutIfNeeded()
         }
         dimmAnimator.addAnimations {
