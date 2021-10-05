@@ -57,7 +57,7 @@ class BrowserViewController: UIViewController {
 
     private var trackingProtectionStatus: TrackingProtectionStatus = .on(TPPageStats()) {
         didSet {
-            urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus, secureConnection: self.webViewController.connectionIsSecure)
+            urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus, shouldDisplayShieldIcon:  urlBar.inBrowsingMode ? self.webViewController.connectionIsSecure : true )
         }
     }
 
@@ -1270,7 +1270,7 @@ extension BrowserViewController: ShortcutViewDelegate {
     func shortcutLongPressed(shortcut: Shortcut, shortcutView: ShortcutView) {
         let removeFromShortcutsItem = PhotonActionSheetItem(title: UIConstants.strings.removeFromShortcuts, iconString: "icon_shortcuts_remove") { action in
             ShortcutsManager.shared.removeFromShortcuts(shortcut: shortcut)
-            self.shortcutsBackground.isHidden = self.shortcutManager.numberOfShortcuts == 0 ? true : false
+            self.shortcutsBackground.isHidden = self.shortcutManager.numberOfShortcuts == 0 || !self.urlBar.inBrowsingMode ? true : false
             GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_home_screen"].add()
         }
         
