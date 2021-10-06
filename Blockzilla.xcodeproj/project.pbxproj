@@ -87,8 +87,6 @@
 		C82D143426EF644E007B275C /* UIViewController+Child.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82D143326EF644E007B275C /* UIViewController+Child.swift */; };
 		C8415DB326E9FA38008BAAA2 /* UIApplication+Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8415DB226E9FA38008BAAA2 /* UIApplication+Orientation.swift */; };
 		C88A5D3B26EF9245009A135D /* ShareTrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C88A5D3A26EF9245009A135D /* ShareTrackersViewController.swift */; };
-		C896A630270CA2CE0038EB51 /* WebKit+Evaluate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C896A62F270CA1810038EB51 /* WebKit+Evaluate.swift */; };
-		C896A632270CA3250038EB51 /* PageMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = C896A631270CA3250038EB51 /* PageMetadata.swift */; };
 		C8A9FE0A26E7A63F00A9C72B /* UserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A9FE0926E7A5B900A9C72B /* UserDefault.swift */; };
 		C8C04A902705E42D00D56268 /* UITableView+Dequeue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C04A8F2705E39500D56268 /* UITableView+Dequeue.swift */; };
 		C8C04AAC27072C4900D56268 /* SectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C04AAB27072C4900D56268 /* SectionItem.swift */; };
@@ -604,8 +602,6 @@
 		C82D143326EF644E007B275C /* UIViewController+Child.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Child.swift"; sourceTree = "<group>"; };
 		C8415DB226E9FA38008BAAA2 /* UIApplication+Orientation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+Orientation.swift"; sourceTree = "<group>"; };
 		C88A5D3A26EF9245009A135D /* ShareTrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareTrackersViewController.swift; sourceTree = "<group>"; };
-		C896A62F270CA1810038EB51 /* WebKit+Evaluate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WebKit+Evaluate.swift"; sourceTree = "<group>"; };
-		C896A631270CA3250038EB51 /* PageMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageMetadata.swift; sourceTree = "<group>"; };
 		C8A9FE0926E7A5B900A9C72B /* UserDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefault.swift; sourceTree = "<group>"; };
 		C8C04A8F2705E39500D56268 /* UITableView+Dequeue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Dequeue.swift"; sourceTree = "<group>"; };
 		C8C04AAB27072C4900D56268 /* SectionItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionItem.swift; sourceTree = "<group>"; };
@@ -1148,9 +1144,7 @@
 		B3AFC2BA1F7C0B92001AEF38 /* WebView */ = {
 			isa = PBXGroup;
 			children = (
-				C896A62F270CA1810038EB51 /* WebKit+Evaluate.swift */,
 				B3AFC2BB1F7C0B9F001AEF38 /* WebViewController.swift */,
-				C896A631270CA3250038EB51 /* PageMetadata.swift */,
 			);
 			path = WebView;
 			sourceTree = "<group>";
@@ -2045,7 +2039,6 @@
 				24433101219DA46F00778D02 /* Debouncer.swift in Sources */,
 				7460BD671F58B1B10096B745 /* GradientProgressBar.swift in Sources */,
 				D3E54FE01DF0E221003E1AFF /* SearchSettingsViewController.swift in Sources */,
-				C896A632270CA3250038EB51 /* PageMetadata.swift in Sources */,
 				30DFF98021810BF20055707C /* SearchSuggestClient.swift in Sources */,
 				16D7169C2114EF76000C8A66 /* BlockerToggle.swift in Sources */,
 				C817A35822CE73B4002529FF /* ReadWriteLock.swift in Sources */,
@@ -2062,7 +2055,6 @@
 				EBE44F4E20ADDF6A005AFEA6 /* SmartLabel.swift in Sources */,
 				E4BF2DD71BACE8CA00DA9D68 /* AppDelegate.swift in Sources */,
 				D3E2C9691DA3024800DEBE3D /* InsetButton.swift in Sources */,
-				C896A630270CA2CE0038EB51 /* WebKit+Evaluate.swift in Sources */,
 				F7FF8B5B2194084000CCA80F /* UIDeviceExtensions.swift in Sources */,
 				F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */,
 				1D3BEDFB20C5E76B0019B722 /* FindInPageBar.swift in Sources */,
