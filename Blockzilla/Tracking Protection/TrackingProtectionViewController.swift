@@ -284,30 +284,17 @@ class TrackingProtectionViewController: UIViewController {
             width: tableView.contentSize.width,
             height: tableView.contentSize.height + headerHeight.layoutConstraints[0].constant
         )
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            self.presentingViewController?.presentedViewController?.preferredContentSize = CGSize(
+                width: tableView.contentSize.width,
+                height: tableView.contentSize.height + headerHeight.layoutConstraints[0].constant
+            )
+        }
     }
     
     override func viewDidLayoutSubviews() {
-      super.viewDidLayoutSubviews()
-      calculatePreferredSize()
-    }
-    
-    override func viewWillLayoutSubviews() {
-        updateHorizontalConstraintsForTableView()
-    }
-    
-    private func updateHorizontalConstraintsForTableView() {
-        tableView.snp.updateConstraints { make in
-            switch (UIDevice.current.userInterfaceIdiom, UIDevice.current.orientation) {
-            case (.phone, .landscapeLeft):
-                make.leading.equalTo(view).offset(view.safeAreaInsets.left)
-                make.trailing.equalTo(view).inset(UIConstants.layout.trackingProtectionTableInset)
-            case (.phone, .landscapeRight):
-                make.leading.equalTo(view).inset(UIConstants.layout.trackingProtectionTableInset)
-                make.trailing.equalTo(view).inset(view.safeAreaInsets.right)
-            default:
-                make.leading.trailing.equalTo(view).inset(UIConstants.layout.trackingProtectionTableInset)
-            }
-        }
+        super.viewDidLayoutSubviews()
+        calculatePreferredSize()
     }
     
     @objc private func doneTapped() {

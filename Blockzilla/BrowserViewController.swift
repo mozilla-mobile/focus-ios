@@ -1140,7 +1140,13 @@ extension BrowserViewController: URLBarDelegate {
         
         let trackingProtectionViewController = TrackingProtectionViewController(state: state)
         trackingProtectionViewController.delegate = self
-        modalDelegate.presentSheet(viewController: trackingProtectionViewController)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            trackingProtectionViewController.modalPresentationStyle = .popover
+            trackingProtectionViewController.popoverPresentationController?.sourceView = urlBar.shieldIcon
+            modalDelegate.presentModal(viewController: trackingProtectionViewController, animated: true)
+        } else {
+            modalDelegate.presentSheet(viewController: trackingProtectionViewController)
+        }
     }
 
     func urlBarDidLongPress(_ urlBar: URLBar) { }
