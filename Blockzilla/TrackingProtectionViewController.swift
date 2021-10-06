@@ -41,7 +41,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         modalDelegate = self
         isOpenedFromSetting = self.navigationController?.viewControllers.count != 1
         
-        view.backgroundColor = .primaryBackground
+        view.backgroundColor = .systemBackground
         title = UIConstants.strings.trackingProtectionLabel
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.primaryText]
         navigationController?.navigationBar.tintColor = .accent
@@ -54,12 +54,12 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
             self.navigationController?.navigationBar.shadowImage = UIImage()
             self.navigationController?.navigationBar.layoutIfNeeded()
             self.navigationController?.navigationBar.isTranslucent = false
-            self.navigationController?.navigationBar.barTintColor = .primaryBackground
+            self.navigationController?.navigationBar.barTintColor = .systemBackground
         }
 
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.backgroundColor = .primaryBackground
+        tableView.backgroundColor = .systemBackground
         tableView.separatorStyle = .none
         tableView.tableFooterView = UIView()
         view.addSubview(tableView)
@@ -226,7 +226,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         if section == 1 {
             let footer = UITableViewCell(style: .subtitle, reuseIdentifier: "trackingProtectionStatusFooter")
             footer.textLabel?.text = trackingProtectionEnabled ? UIConstants.strings.trackingProtectionOn : UIConstants.strings.trackingProtectionOff
-            footer.textLabel?.textColor = .secondaryDark.withAlphaComponent(0.6)
+            footer.textLabel?.textColor = .tertiaryLabel
             footer.textLabel?.font = UIConstants.fonts.tableSectionHeader
             footer.textLabel?.numberOfLines = 0
             return footer
@@ -248,7 +248,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         cell.detailTextLabel?.text = getNumberOfTrackersBlocked()
         cell.detailTextLabel?.textColor = .primaryText
         cell.detailTextLabel?.font = UIConstants.fonts.trackingProtectionStatsDetail
-        cell.backgroundColor = .secondaryBackground
+        cell.backgroundColor = .secondarySystemBackground
         cell.selectionStyle = .none
         return cell
     }
@@ -263,7 +263,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         cell.textLabel?.textColor = .primaryText
         cell.textLabel?.numberOfLines = 0
         cell.accessoryView = PaddedSwitch(switchView: trackingProtectionToggle.toggle)
-        cell.backgroundColor = .secondaryBackground
+        cell.backgroundColor = .secondarySystemBackground
         cell.selectionStyle = .none
 
         return cell
@@ -275,7 +275,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         cell.textLabel?.text = toggle.label
         cell.textLabel?.textColor = .primaryText
         cell.accessoryView = PaddedSwitch(switchView: toggle.toggle)
-        cell.backgroundColor = .secondaryBackground
+        cell.backgroundColor = .secondarySystemBackground
         cell.selectionStyle = .none
 
         return cell
@@ -285,7 +285,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         let cell = UITableViewCell(style: .default, reuseIdentifier: "trackingSettingsCell")
         cell.textLabel?.text = UIConstants.strings.trackingProtectionMoreSettings
         cell.textLabel?.textColor = .accent
-        cell.backgroundColor = .secondaryBackground
+        cell.backgroundColor = .secondarySystemBackground
         cell.selectionStyle = .none
         
         let selector = #selector(tappedMoreSettings)
@@ -308,7 +308,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         text.append(space)
         textLabel.attributedText = text
         
-        textLabel.backgroundColor = .primaryBackground
+        textLabel.backgroundColor = .systemBackground
         
         let selector = #selector(tappedTrackingProtectionLearnMoreHeader)
         let tapGesture = UITapGestureRecognizer(target: self, action: selector)
@@ -320,7 +320,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
     private func trackersHeader() -> UITableViewCell {
         let header = UITableViewCell(style: .subtitle, reuseIdentifier: "trackersHeader")
         header.textLabel?.text = UIConstants.strings.trackersHeader.uppercased()
-        header.textLabel?.textColor = .secondaryDark.withAlphaComponent(0.6)
+        header.textLabel?.textColor = .tertiaryLabel
         header.textLabel?.font = UIConstants.fonts.tableSectionHeader
         header.textLabel?.numberOfLines = 0
         
