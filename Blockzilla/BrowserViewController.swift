@@ -1131,8 +1131,12 @@ extension BrowserViewController: URLBarDelegate {
         case .off:
             Settings.set(false, forToggle: .trackingProtection)
         }
-    
-        let state: TrackingProtectionState = urlBar.inBrowsingMode ? .browsing(isSecureConnection: webViewController.connectionIsSecure) : .homescreen
+        
+        let state: TrackingProtectionState = urlBar.inBrowsingMode
+        ? .browsing(status: SecureConnectionStatus(
+            url: webViewController.url!,
+            isSecureConnection: webViewController.connectionIsSecure))
+        : .homescreen
         
         let trackingProtectionViewController = TrackingProtectionViewController(state: state)
         trackingProtectionViewController.delegate = self

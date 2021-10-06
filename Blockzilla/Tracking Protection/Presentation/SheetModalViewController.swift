@@ -20,6 +20,13 @@ class SheetModalViewController: UIViewController {
         return view
     }()
     
+    private lazy var closeButton: UIButton = {
+        var button = UIButton()
+        button.setImage(UIImage(named: "close-button")!, for: .normal)
+        button.addTarget(self, action: #selector(animateDismissView), for: .touchUpInside)
+        return button
+    }()
+    
     private let containerViewController: UIViewController
     private let metrics: SheetMetrics
     
@@ -81,8 +88,8 @@ class SheetModalViewController: UIViewController {
         containerView.translatesAutoresizingMaskIntoConstraints = false
         
         install(containerViewController, on: containerView)
+        
         NSLayoutConstraint.activate([
-            
             dimmedView.topAnchor.constraint(equalTo: view.topAnchor),
             dimmedView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             dimmedView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -94,6 +101,12 @@ class SheetModalViewController: UIViewController {
         containerViewBottomConstraint = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: metrics.bufferHeight)
         containerViewHeightConstraint?.isActive = true
         containerViewBottomConstraint?.isActive = true
+        
+        containerView.addSubview(closeButton)
+        closeButton.snp.makeConstraints { make in
+            make.trailing.top.equalToSuperview().inset(16)
+            make.height.equalTo(30)
+        }
     }
     
     func animateContainerHeight(_ height: CGFloat) {
@@ -123,7 +136,7 @@ class SheetModalViewController: UIViewController {
         }
     }
     
-    func animateDismissView() {
+    @objc func animateDismissView() {
         dimmedView.alpha = maximumDimmingAlpha
         
         let springTiming = UISpringTimingParameters(dampingRatio: 0.75, initialVelocity: CGVector(dx: 0, dy: 4))

@@ -9,8 +9,19 @@ import Telemetry
 import Glean
 import Combine
 
+struct SecureConnectionStatus {
+    let url: URL
+    let isSecureConnection: Bool
+}
+
+extension SecureConnectionStatus {
+    var faviconURL: URL? {
+        URL(string: "https://www.google.com/s2/favicons?sz=256&domain=\(url.absoluteString))")
+    }
+}
+
 enum TrackingProtectionState {
-    case browsing(isSecureConnection: Bool)
+    case browsing(status: SecureConnectionStatus)
     case homescreen
     case settings
 }
@@ -187,9 +198,9 @@ class TrackingProtectionViewController: UIViewController {
     
     private var tableViewSections: [Section?] {
         let secureSection: Section?
-        if case let .browsing(isSecureConnection) = state {
-            let title = isSecureConnection ? "Secure" : "Not secure"
-            let image = isSecureConnection ? UIImage.connectionSecure : .connectionNotSecure
+        if case let .browsing(browsingStatus) = state {
+            let title = browsingStatus.isSecureConnection ? "Secure" : "Not secure"
+            let image = browsingStatus.isSecureConnection ? UIImage.connectionSecure : .connectionNotSecure
             secureSection = secureConnectionSection(title: title, image: image)
         } else {
             secureSection = nil
@@ -240,15 +251,29 @@ class TrackingProtectionViewController: UIViewController {
             self.navigationController?.navigationBar.barTintColor = .primaryBackground
         }
         
+        view.addSubview(header)
+        header.snp.makeConstraints { make in
+            make.height.equalTo(72)
+            make.leading.top.trailing.equalToSuperview()
+        }
+        if case let .browsing(browsingStatus) = state,
+           let baseDomain = browsingStatus.url.baseDomain,
+           let url = browsingStatus.faviconURL {
+            header.configure(domain: baseDomain, imageURL: url)
+        }
         
         view.addSubview(tableView)
-        
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(self.view).offset(15)
-            make.leading.trailing.equalTo(self.view).inset(UIConstants.layout.trackingProtectionTableInset)
+            make.top.equalTo(header.snp.bottom)
+            make.leading.trailing.equalTo(self.view)
             make.bottom.equalTo(self.view)
         }
     }
+    
+    lazy var header: TrackingHeaderView = {
+        let header = TrackingHeaderView()
+        return header
+    }()
     
     private func calculatePreferredSize() {
         preferredContentSize = tableView.contentSize
