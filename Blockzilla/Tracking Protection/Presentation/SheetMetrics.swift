@@ -12,5 +12,5 @@ public struct SheetMetrics {
     public let shadowRadius: CGFloat = 10
     public let shadowOpacity: CGFloat = 0.12
 
-    public let maximumContainerHeight: CGFloat = UIScreen.main.bounds.height - 64
+    public var maximumContainerHeight: CGFloat { UIScreen.main.bounds.height }
 }
