@@ -87,8 +87,8 @@ class SettingsTableViewToggleCell: SettingsTableViewCell {
         textLabel?.text = toggle.label
 
         backgroundColor = UIConstants.colors.cellBackground
-        newLabel.textColor = UIConstants.colors.settingsTextLabel
-        textLabel?.textColor = UIConstants.colors.settingsTextLabel
+        newLabel.textColor = .primaryText
+        textLabel?.textColor = .primaryText
         layoutMargins = UIEdgeInsets.zero
 
         accessoryView = PaddedSwitch(switchView: toggle.toggle)
@@ -253,7 +253,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     override func viewDidLoad() {
-        view.backgroundColor = .primaryBackground
+        view.backgroundColor = .systemBackground
 
         title = UIConstants.strings.settingsTitle
 
@@ -262,7 +262,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         navigationBar.setBackgroundImage(UIImage(), for:.default)
         navigationBar.shadowImage = UIImage()
         navigationBar.layoutIfNeeded()
-        navigationBar.barTintColor = .primaryBackground
+        navigationBar.barTintColor = .systemBackground
         navigationBar.titleTextAttributes = [.foregroundColor: UIColor.primaryText]
 
         highlightsButton = UIBarButtonItem(title: UIConstants.strings.whatsNewTitle, style: .plain, target: self, action: #selector(whatsNewClicked))
@@ -288,7 +288,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.backgroundColor = .primaryBackground
+        tableView.backgroundColor = .systemBackground
         tableView.layoutMargins = UIEdgeInsets.zero
         tableView.separatorStyle = .none
         tableView.allowsSelection = true
@@ -459,10 +459,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
         }
 
-        cell.backgroundColor = .secondaryBackground
-        cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
+        cell.backgroundColor = .secondarySystemBackground
+        cell.textLabel?.textColor = .primaryText
         cell.layoutMargins = UIEdgeInsets.zero
-        cell.detailTextLabel?.textColor = UIConstants.colors.settingsDetailLabel
+        cell.detailTextLabel?.textColor = .secondaryText
 
         cell.textLabel?.setupShrinkage()
         cell.detailTextLabel?.setupShrinkage()
@@ -505,7 +505,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         // constraints for our custom label based on the cell's label.
         let cell = UITableViewCell()
         cell.textLabel?.text = " "
-        cell.backgroundColor = .primaryBackground
+        cell.backgroundColor = .systemBackground
 
         let label = SmartLabel()
         label.text = sections[section].headerText
@@ -523,10 +523,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if let text = toggles[section]?.first?.value.subtitle {
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-            cell.backgroundColor = .primaryBackground
+            cell.backgroundColor = .systemBackground
             cell.textLabel?.numberOfLines = 0
-            cell.textLabel?.textColor = .secondaryDark.withAlphaComponent(0.6)
-            cell.textLabel?.font = UIConstants.fonts.tableSectionHeader //.systemFont(ofSize: 13)
+            cell.textLabel?.textColor = .tertiaryLabel
+            cell.textLabel?.font = UIConstants.fonts.tableSectionHeader
             cell.textLabel?.text = text
             
             if section == 1 || section == 2 {
