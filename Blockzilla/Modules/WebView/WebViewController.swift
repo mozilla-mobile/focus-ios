@@ -88,7 +88,10 @@ class WebViewController: UIViewController, WebController {
     private var currentContentMode: WKWebpagePreferences.ContentMode?
     private var contentModeForHost: [String: WKWebpagePreferences.ContentMode] = [:]
 
-    var requestMobileSite: Bool { currentContentMode == .desktop }
+    var requestMobileSite: Bool { currentContentMode == .desktop }    
+    var connectionIsSecure: Bool {
+        return browserView.hasOnlySecureContent
+    }
 
     var printFormatter: UIPrintFormatter { return browserView.viewPrintFormatter() }
     var scrollView: UIScrollView { return browserView.scrollView }
@@ -137,6 +140,9 @@ class WebViewController: UIViewController, WebController {
         configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         configuration.allowsInlineMediaPlayback = true
         configuration.applicationNameForUserAgent = AppInfo.config.productName
+        if #available(iOS 15.0, *) {
+            configuration.upgradeKnownHostsToHTTPS = true
+        }
         browserView = WKWebView(frame: .zero, configuration: configuration)
 
         browserView.allowsBackForwardNavigationGestures = true

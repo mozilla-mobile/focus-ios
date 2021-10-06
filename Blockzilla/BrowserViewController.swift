@@ -57,7 +57,7 @@ class BrowserViewController: UIViewController {
 
     private var trackingProtectionStatus: TrackingProtectionStatus = .on(TPPageStats()) {
         didSet {
-            urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus)
+            urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus, shouldDisplayShieldIcon:  urlBar.inBrowsingMode ? self.webViewController.connectionIsSecure : true )
         }
     }
 
@@ -545,9 +545,10 @@ class BrowserViewController: UIViewController {
                     }
 
                     self.view.layoutIfNeeded()
-                    self.findInPageBar?.becomeFirstResponder()
                 }
             }
+            
+            self.findInPageBar?.becomeFirstResponder()
         } else if let findInPageBar = self.findInPageBar {
             findInPageBar.endEditing(true)
             webViewController.evaluate("__firefox__.findDone()", completion: nil)
@@ -848,6 +849,10 @@ class BrowserViewController: UIViewController {
     @objc private func goForward() {
         webViewController.goForward()
     }
+    
+    @objc private func showFindInPage() {
+        self.updateFindInPageVisibility(visible: true)
+    }
 
     private func toggleURLBarBackground(isBright: Bool) {
         if urlBar.isEditing {
@@ -892,6 +897,12 @@ class BrowserViewController: UIViewController {
                              image: nil,
                              action: #selector(BrowserViewController.goForward),
                              input: "]",
+                             modifierFlags: .command,
+                             propertyList: nil),
+                UIKeyCommand(title: UIConstants.strings.shareMenuFindInPage,
+                             image: nil,
+                             action: #selector(BrowserViewController.showFindInPage),
+                             input: "f",
                              modifierFlags: .command,
                              propertyList: nil),
         ]
@@ -1259,7 +1270,7 @@ extension BrowserViewController: ShortcutViewDelegate {
     func shortcutLongPressed(shortcut: Shortcut, shortcutView: ShortcutView) {
         let removeFromShortcutsItem = PhotonActionSheetItem(title: UIConstants.strings.removeFromShortcuts, iconString: "icon_shortcuts_remove") { action in
             ShortcutsManager.shared.removeFromShortcuts(shortcut: shortcut)
-            self.shortcutsBackground.isHidden = self.shortcutManager.numberOfShortcuts == 0 ? true : false
+            self.shortcutsBackground.isHidden = self.shortcutManager.numberOfShortcuts == 0 || !self.urlBar.inBrowsingMode ? true : false
             GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_home_screen"].add()
         }
         
@@ -1552,7 +1563,7 @@ extension BrowserViewController: WebControllerDelegate {
     func webController(_ controller: WebController, didUpdateEstimatedProgress estimatedProgress: Double) {
         // Don't update progress if the home view is visible. This prevents the centered URL bar
         // from catching the global progress events.
-        guard homeViewController == nil else { return }
+        guard urlBar.inBrowsingMode else { return }
 
         urlBar.progressBar.alpha = 1
         urlBar.progressBar.isHidden = false
