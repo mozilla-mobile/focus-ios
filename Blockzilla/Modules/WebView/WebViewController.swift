@@ -118,19 +118,11 @@ class WebViewController: UIViewController, WebController {
     func reload() { browserView.reload() }
 
     func requestUserAgentChange() {
-        guard let currentItem = browserView.backForwardList.currentItem else { return }
-        
         if let hostName = browserView.url?.host {
             contentModeForHost[hostName] = requestMobileSite ? .mobile : .desktop
         }
-
-        if currentItem.url != currentItem.initialURL {
-            // Reload the initial URL to avoid UA specific redirection
-            browserView.load(URLRequest(url: currentItem.initialURL, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 60))
-        } else {
-            reload() // Reload the current URL. We cannot use loadRequest in this case because it seems to leverage caching.
-        }
-        TipManager.requestDesktopTip = false
+        
+        self.browserView.reloadFromOrigin()
     }
 
     func stop() { browserView.stopLoading() }
