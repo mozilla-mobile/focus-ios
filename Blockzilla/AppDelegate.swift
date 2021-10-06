@@ -87,9 +87,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         displaySplashAnimation()
         KeyboardHelper.defaultHelper.startObserving()
 
-        // Override default keyboard appearance
-        UITextField.appearance().keyboardAppearance = .dark
-
         let prefIntroDone = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone)
 
         // Short circuit if we are testing. We special case the first run handling and completely

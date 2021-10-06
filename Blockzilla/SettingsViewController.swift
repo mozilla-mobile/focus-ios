@@ -509,7 +509,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         let label = SmartLabel()
         label.text = sections[section].headerText
-        label.textColor = UIConstants.colors.tableSectionHeader
+        label.textColor = .secondaryText
         label.font = UIConstants.fonts.tableSectionHeader
         cell.contentView.addSubview(label)
 
