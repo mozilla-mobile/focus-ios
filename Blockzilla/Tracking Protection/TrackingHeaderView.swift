@@ -1,108 +1,12 @@
-
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
 
-class ImageLoader {
-    private var loadedImages = [URL: UIImage]()
-    private var runningRequests = [UUID: URLSessionDataTask]()
-}
-
-extension ImageLoader {
-    @discardableResult
-    func loadImage(_ url: URL, _ completion: @escaping (Result<UIImage, Error>) -> Void) -> UUID? {
-        
-        if let image = loadedImages[url] {
-            completion(.success(image))
-            return nil
-        }
-        
-        let uuid = UUID()
-        var request = URLRequest(url: url)
-        request.timeoutInterval = 3
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            defer { self.runningRequests.removeValue(forKey: uuid) }
-            
-            if let data = data, let image = UIImage(data: data) {
-                self.loadedImages[url] = image
-                completion(.success(image))
-                return
-            }
-            
-            guard let error = error else { return }
-            
-            guard (error as NSError).code == NSURLErrorCancelled else {
-                completion(.error(error))
-                return
-            }
-        }
-        task.resume()
-        
-        runningRequests[uuid] = task
-        return uuid
-    }
-    
-    func cancelLoad(_ uuid: UUID) {
-        runningRequests[uuid]?.cancel()
-        runningRequests.removeValue(forKey: uuid)
-    }
-}
-
-class AsyncImage: UIView {
-    private lazy var imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        return imageView
-    }()
-    
-    private lazy var activityIndicator = UIActivityIndicatorView(style: .large)
-    
-    let loader = ImageLoader()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        commonInit()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        commonInit()
-    }
-    
-    func commonInit() {
-        addSubview(imageView)
-        addSubview(activityIndicator)
-        activityIndicator.hidesWhenStopped = true
-        imageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        activityIndicator.snp.makeConstraints { make in
-            make.centerY.centerY.equalToSuperview()
-        }
-    }
-    
-    func load(imageURL: URL) {
-        activityIndicator.startAnimating()
-        loader.loadImage(imageURL) { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let image):
-                    self?.activityIndicator.stopAnimating()
-                    self?.imageView.image = image
-                    
-                case .error:
-                    self?.imageView.image = .defaultFavicon
-                    self?.activityIndicator.stopAnimating()
-                }
-            }
-        }
-    }
-}
-
-
-
 class TrackingHeaderView: UIView {
-    private lazy var faviImageView: AsyncImage = {
-        let shieldLogo = AsyncImage()
+    private lazy var faviImageView: AsyncImageView = {
+        let shieldLogo = AsyncImageView()
         return shieldLogo
     }()
     
@@ -158,6 +62,6 @@ class TrackingHeaderView: UIView {
     
     func configure(domain: String, imageURL: URL) {
         self.domainLabel.text = domain
-        self.faviImageView.load(imageURL: imageURL)
+        self.faviImageView.load(imageURL: imageURL, defaultImage: .defaultFavicon)
     }
 }

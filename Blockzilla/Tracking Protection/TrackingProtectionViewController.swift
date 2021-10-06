@@ -301,12 +301,6 @@ class TrackingProtectionViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        DispatchQueue.main.async { [weak self] in
-            self?.tableView.reloadData()
-        }
-    }
-    
     fileprivate func updateTelemetry(_ settingsKey: SettingsToggle, _ isOn: Bool) {
         let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: "setting", value: settingsKey.rawValue)
         telemetryEvent.addExtra(key: "to", value: isOn)
