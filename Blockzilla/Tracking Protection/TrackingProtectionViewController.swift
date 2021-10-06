@@ -16,7 +16,9 @@ struct SecureConnectionStatus {
 
 extension SecureConnectionStatus {
     var faviconURL: URL? {
-        URL(string: "https://www.google.com/s2/favicons?sz=256&domain=\(url.absoluteString))")
+        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        components?.path = "/favicon.ico"
+        return components?.url
     }
 }
 
@@ -199,7 +201,7 @@ class TrackingProtectionViewController: UIViewController {
     private var tableViewSections: [Section?] {
         let secureSection: Section?
         if case let .browsing(browsingStatus) = state {
-            let title = browsingStatus.isSecureConnection ? "Secure" : "Not secure"
+            let title = browsingStatus.isSecureConnection ? UIConstants.strings.connectionSecure : UIConstants.strings.connectionNotSecure
             let image = browsingStatus.isSecureConnection ? UIImage.connectionSecure : .connectionNotSecure
             secureSection = secureConnectionSection(title: title, image: image)
         } else {
@@ -253,7 +255,7 @@ class TrackingProtectionViewController: UIViewController {
         
         view.addSubview(header)
         header.snp.makeConstraints { make in
-            make.height.equalTo(72)
+            self.headerHeight = make.height.equalTo(72).constraint
             make.leading.top.trailing.equalToSuperview()
         }
         if case let .browsing(browsingStatus) = state,
@@ -270,13 +272,18 @@ class TrackingProtectionViewController: UIViewController {
         }
     }
     
+    private var headerHeight: Constraint!
+    
     lazy var header: TrackingHeaderView = {
         let header = TrackingHeaderView()
         return header
     }()
     
     private func calculatePreferredSize() {
-        preferredContentSize = tableView.contentSize
+        preferredContentSize = CGSize(
+            width: tableView.contentSize.width,
+            height: tableView.contentSize.height + headerHeight.layoutConstraints[0].constant
+        )
     }
     
     override func viewDidLayoutSubviews() {

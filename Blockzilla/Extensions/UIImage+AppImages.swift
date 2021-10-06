@@ -12,4 +12,6 @@ extension UIImage {
     static let trackingProtectionOn = UIImage(named: "tracking_protection")!
     static let connectionNotSecure = UIImage(named: "connection_not_secure")!
     static let connectionSecure = UIImage(named: "icon_https")!
+    
+    static let defaultFavicon = UIImage(named: "icon_favicon")!
 }

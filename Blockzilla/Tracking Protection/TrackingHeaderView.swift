@@ -17,8 +17,9 @@ extension ImageLoader {
         }
         
         let uuid = UUID()
-        
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+        var request = URLRequest(url: url)
+        request.timeoutInterval = 3
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
             defer { self.runningRequests.removeValue(forKey: uuid) }
             
             if let data = data, let image = UIImage(data: data) {
@@ -89,6 +90,7 @@ class AsyncImage: UIView {
                     self?.imageView.image = image
                     
                 case .error:
+                    self?.imageView.image = .defaultFavicon
                     self?.activityIndicator.stopAnimating()
                 }
             }
