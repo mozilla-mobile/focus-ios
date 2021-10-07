@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import SnapKit
 
 class SheetModalViewController: UIViewController {
     
@@ -20,6 +21,15 @@ class SheetModalViewController: UIViewController {
         return view
     }()
     
+    private lazy var dimmedView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .black
+        view.alpha = maximumDimmingAlpha
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(animateDismissView))
+        view.addGestureRecognizer(tapGesture)
+        return view
+    }()
+    
     private lazy var closeButton: UIButton = {
         var button = UIButton()
         button.setImage(UIImage(named: "close-button")!, for: .normal)
@@ -29,6 +39,11 @@ class SheetModalViewController: UIViewController {
     
     private let containerViewController: UIViewController
     private let metrics: SheetMetrics
+    private let minimumDimmingAlpha: CGFloat = 0.1
+    private let maximumDimmingAlpha: CGFloat = 0.5
+    
+    private var containerViewHeightConstraint: Constraint!
+    private var containerViewBottomConstraint: Constraint!
     
     init(containerViewController: UIViewController, metrics: SheetMetrics = .default) {
         self.containerViewController = containerViewController
@@ -40,45 +55,22 @@ class SheetModalViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private var minimumDimmingAlpha: CGFloat = 0.1
-    private var maximumDimmingAlpha: CGFloat = 0.5
-    
-    private lazy var dimmedView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .black
-        view.alpha = maximumDimmingAlpha
-        return view
-    }()
-    
     override func preferredContentSizeDidChange(forChildContentContainer container: UIContentContainer) {
         super.preferredContentSizeDidChange(forChildContentContainer: container)
         let height = min(container.preferredContentSize.height, metrics.maximumContainerHeight)
         animateContainerHeight(height)
     }
     
-    var containerViewHeightConstraint: NSLayoutConstraint!
-    var containerViewBottomConstraint: NSLayoutConstraint!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
+        view.backgroundColor = .clear
         setupConstraints()
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.handleCloseAction))
-        dimmedView.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc func handleCloseAction() {
-        animateDismissView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         animateShowDimmedView()
         animatePresentContainer()
-    }
-    
-    func setupView() {
-        view.backgroundColor = .clear
     }
     
     func setupConstraints() {
@@ -89,41 +81,38 @@ class SheetModalViewController: UIViewController {
         
         install(containerViewController, on: containerView)
         
-        NSLayoutConstraint.activate([
-            dimmedView.topAnchor.constraint(equalTo: view.topAnchor),
-            dimmedView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            dimmedView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            dimmedView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-        ])
-        containerViewHeightConstraint = containerView.heightAnchor.constraint(equalToConstant: metrics.bufferHeight)
-        containerViewBottomConstraint = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: metrics.bufferHeight)
-        containerViewHeightConstraint?.isActive = true
-        containerViewBottomConstraint?.isActive = true
+        dimmedView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        containerView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            containerViewHeightConstraint = make.height.equalTo(metrics.bufferHeight).constraint
+            containerViewBottomConstraint = make.bottom.equalTo(view).offset(metrics.bufferHeight).constraint
+        }
         
         containerView.addSubview(closeButton)
         closeButton.snp.makeConstraints { make in
             make.trailing.top.equalToSuperview().inset(16)
-            make.height.equalTo(30)
+            make.height.width.equalTo(30)
         }
-    }
-    
-    func animateContainerHeight(_ height: CGFloat) {
-        let animator = UIViewPropertyAnimator(duration: 0.4, curve: .easeInOut) {
-            self.containerViewHeightConstraint?.constant = height
-            self.view.layoutIfNeeded()
-        }
-        animator.startAnimation()
     }
     
     // MARK: Present and dismiss animation
+    
     func animatePresentContainer() {
         let springTiming = UISpringTimingParameters(dampingRatio: 0.75, initialVelocity: CGVector(dx: 0, dy: 4))
         let animator = UIViewPropertyAnimator(duration: 0.4, timingParameters: springTiming)
         
         animator.addAnimations {
-            self.containerViewBottomConstraint?.constant = 0
+            self.containerViewBottomConstraint.update(offset: 0)
+            self.view.layoutIfNeeded()
+        }
+        animator.startAnimation()
+    }
+    
+    func animateContainerHeight(_ height: CGFloat) {
+        let animator = UIViewPropertyAnimator(duration: 0.4, curve: .easeInOut) {
+            self.containerViewHeightConstraint?.update(offset: height)
             self.view.layoutIfNeeded()
         }
         animator.startAnimation()
@@ -144,7 +133,7 @@ class SheetModalViewController: UIViewController {
         let dismissAnimator = UIViewPropertyAnimator(duration: 0.3, curve: .easeOut)
         
         dismissAnimator.addAnimations {
-            self.containerViewBottomConstraint?.constant = 1000
+            self.containerViewBottomConstraint?.update(offset: 1000)
             self.view.layoutIfNeeded()
         }
         dimmAnimator.addAnimations {
