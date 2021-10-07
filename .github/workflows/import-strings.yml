@@ -16,6 +16,8 @@ jobs:
       with:
         persist-credentials: false 
         token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Select Xcode ${{ matrix.xcode }}
+      run: sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v1
       with:
