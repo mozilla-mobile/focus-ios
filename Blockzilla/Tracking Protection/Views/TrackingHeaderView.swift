@@ -28,8 +28,7 @@ class TrackingHeaderView: UIView {
         return stackView
     }()
     
-    
-    let separator: UIView = {
+    private lazy var separator: UIView = {
         let view = UIView()
         view.backgroundColor = .searchSeparator.withAlphaComponent(0.65)
         return view

@@ -9,86 +9,49 @@ import Telemetry
 import Glean
 import Combine
 
-struct SecureConnectionStatus {
-    let url: URL
-    let isSecureConnection: Bool
-}
-
-extension SecureConnectionStatus {
-    var faviconURL: URL? {
-        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
-        components?.path = "/favicon.ico"
-        return components?.url
-    }
-}
-
-enum TrackingProtectionState {
-    case browsing(status: SecureConnectionStatus)
-    case homescreen
-    case settings
-}
-
 class TrackingProtectionViewController: UIViewController {
+    
+    //MARK: - Data source
+    private var tableViewSections: [Section?] {
+        let secureSection: Section?
+        if case let .browsing(browsingStatus) = state {
+            let title = browsingStatus.isSecureConnection ? UIConstants.strings.connectionSecure : UIConstants.strings.connectionNotSecure
+            let image = browsingStatus.isSecureConnection ? UIImage.connectionSecure : .connectionNotSecure
+            secureSection = secureConnectionSection(title: title, image: image)
+        } else {
+            secureSection = nil
+        }
+        return [
+            secureSection,
+            enableTrackersSection,
+            trackingProtectionItem.settingsValue ? trackersSection : nil,
+            statsSection
+        ]
+    }
+    
+    private lazy var profileDataSource = DataSource(tableViewSections: tableViewSections.compactMap { $0 })
+    
+    //MARK: - Toggles items
+    private lazy var trackingProtectionItem = ToggleItem(
+        label: UIConstants.strings.trackingProtectionToggleLabel,
+        settingsKey: SettingsToggle.trackingProtection
+    )
     private lazy var toggleItems = [
         ToggleItem(label: UIConstants.strings.labelBlockAds2, settingsKey: .blockAds),
         ToggleItem(label: UIConstants.strings.labelBlockAnalytics, settingsKey: .blockAnalytics),
         ToggleItem(label: UIConstants.strings.labelBlockSocial, settingsKey: .blockSocial),
     ]
-    let blockOtherItem = ToggleItem(label: UIConstants.strings.labelBlockOther, settingsKey: .blockOther)
+    private let blockOtherItem = ToggleItem(label: UIConstants.strings.labelBlockOther, settingsKey: .blockOther)
     
-    private lazy var trackingProtectionItem = ToggleItem(
-        label: UIConstants.strings.trackingProtectionToggleLabel,
-        settingsKey: SettingsToggle.trackingProtection)
-    
-    private lazy var profileDataSource = DataSource(tableViewSections: tableViewSections.compactMap { $0 })
-    
-    var state: TrackingProtectionState
-    init(state: TrackingProtectionState) {
-        self.state = state
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+    //MARK: - Sections
     func secureConnectionSection(title: String, image: UIImage) -> Section {
-        return Section(
-            items: [
-                SectionItem(
-                    configureCell: { _, _ in
-                        return ImageCell(image: image, title: title)
-                    }
-                )
-            ]
+        Section(
+            items: [ SectionItem(configureCell: { _, _ in
+                ImageCell(image: image, title: title)
+            })]
         )
     }
     
-    lazy var statsSection = Section(
-        items: [
-            SectionItem(
-                configureCell: { _, _ in
-                    let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "trackingStats")
-                    cell.textLabel?.text = String(format: UIConstants.strings.trackersBlockedSince, self.getAppInstallDate())
-                    cell.textLabel?.textColor = .primaryText.withAlphaComponent(0.6)
-                    cell.textLabel?.font = UIConstants.fonts.trackingProtectionStatsText
-                    cell.textLabel?.numberOfLines = 0
-                    cell.detailTextLabel?.text = self.getNumberOfTrackersBlocked()
-                    cell.detailTextLabel?.textColor = .primaryText
-                    cell.detailTextLabel?.font = UIConstants.fonts.trackingProtectionStatsDetail
-                    cell.backgroundColor = .secondaryBackground
-                    cell.selectionStyle = .none
-                    return cell
-                }
-            )
-        ]
-    )
-    
-    private var subscriptions = Set<AnyCancellable>()
-    
-    var trackersSectionIndex: Int {
-        if case .browsing = state { return 2 }  else { return 1 }
-    }
     lazy var enableTrackersSection = Section(
         footerTitle: trackingProtectionItem.settingsValue ? UIConstants.strings.trackingProtectionOn : UIConstants.strings.trackingProtectionOff,
         items: [
@@ -135,8 +98,6 @@ class TrackingProtectionViewController: UIViewController {
                                 sourceOfChange: self.sourceOfChange,
                                 trackerChanged: toggleItem.settingsKey.trackerChanged)
                             )
-                        
-                        if toggleItem.settingsKey == .blockOther, isOn { }
                     }
                     .store(in: &self.subscriptions)
                     return cell
@@ -198,22 +159,23 @@ class TrackingProtectionViewController: UIViewController {
         ]
     )
     
-    private var tableViewSections: [Section?] {
-        let secureSection: Section?
-        if case let .browsing(browsingStatus) = state {
-            let title = browsingStatus.isSecureConnection ? UIConstants.strings.connectionSecure : UIConstants.strings.connectionNotSecure
-            let image = browsingStatus.isSecureConnection ? UIImage.connectionSecure : .connectionNotSecure
-            secureSection = secureConnectionSection(title: title, image: image)
-        } else {
-            secureSection = nil
-        }
-        return [
-            secureSection,
-            enableTrackersSection,
-            trackingProtectionItem.settingsValue ? trackersSection : nil,
-            statsSection
+    lazy var statsSection = Section(
+        items: [
+            SectionItem(
+                configureCell: { [unowned self] _, _ in
+                    SubtitleCell(
+                        title: String(format: UIConstants.strings.trackersBlockedSince, self.getAppInstallDate()),
+                        subtitle: self.getNumberOfTrackersBlocked()
+                    )
+                }
+            )
         ]
-    }
+    )
+    
+    //MARK: - Views
+    private var headerHeight: Constraint?
+    
+    private lazy var header = TrackingHeaderView()
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -226,13 +188,30 @@ class TrackingProtectionViewController: UIViewController {
         return tableView
     }()
     
+    weak var delegate: TrackingProtectionDelegate?
+    
     private var modalDelegate: ModalDelegate?
     private var sourceOfChange: String {
         if case .settings = state { return "Settings" }  else { return "Panel" }
     }
-    weak var delegate: TrackingProtectionDelegate?
+    private var subscriptions = Set<AnyCancellable>()
+    private var trackersSectionIndex: Int {
+        if case .browsing = state { return 2 }  else { return 1 }
+    }
+    private var tableViewTopInset: CGFloat {
+        if case .settings = state { return 0 }  else { return 32 }
+    }
+    var state: TrackingProtectionState
     
-    private var cancellable: AnyCancellable?
+    //MARK: - VC Lifecycle
+    init(state: TrackingProtectionState) {
+        self.state = state
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -253,41 +232,38 @@ class TrackingProtectionViewController: UIViewController {
             self.navigationController?.navigationBar.barTintColor = .primaryBackground
         }
         
-        view.addSubview(header)
-        header.snp.makeConstraints { make in
-            self.headerHeight = make.height.equalTo(72).constraint
-            make.leading.top.trailing.equalToSuperview()
-        }
         if case let .browsing(browsingStatus) = state,
            let baseDomain = browsingStatus.url.baseDomain,
            let url = browsingStatus.faviconURL {
+            view.addSubview(header)
+            header.snp.makeConstraints { make in
+                self.headerHeight = make.height.equalTo(72).constraint
+                make.leading.top.trailing.equalToSuperview()
+            }
             header.configure(domain: baseDomain, imageURL: url)
         }
         
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(header.snp.bottom)
+            if case .browsing = state {
+                make.top.equalTo(header.snp.bottom)
+            } else {
+                make.top.equalTo(view).inset(self.tableViewTopInset)
+            }
             make.leading.trailing.equalTo(self.view)
             make.bottom.equalTo(self.view)
         }
     }
     
-    private var headerHeight: Constraint!
-    
-    lazy var header: TrackingHeaderView = {
-        let header = TrackingHeaderView()
-        return header
-    }()
-    
     private func calculatePreferredSize() {
         preferredContentSize = CGSize(
             width: tableView.contentSize.width,
-            height: tableView.contentSize.height + headerHeight.layoutConstraints[0].constant
+            height: tableView.contentSize.height + (headerHeight?.layoutConstraints[0].constant ?? .zero)
         )
         if UIDevice.current.userInterfaceIdiom == .pad {
             self.presentingViewController?.presentedViewController?.preferredContentSize = CGSize(
                 width: tableView.contentSize.width,
-                height: tableView.contentSize.height + headerHeight.layoutConstraints[0].constant
+                height: tableView.contentSize.height + (headerHeight?.layoutConstraints[0].constant ?? .zero)
             )
         }
     }

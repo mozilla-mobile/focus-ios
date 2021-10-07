@@ -5,6 +5,7 @@
 import UIKit
 
 class AsyncImageView: UIView {
+    
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -13,7 +14,7 @@ class AsyncImageView: UIView {
     
     private lazy var activityIndicator = UIActivityIndicatorView(style: .large)
     
-    let loader = ImageLoader()
+    private lazy var loader = ImageLoader()
     
     override init(frame: CGRect) {
         super.init(frame: frame)

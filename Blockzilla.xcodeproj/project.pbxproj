@@ -85,6 +85,9 @@
 		C82D143026EF62BE007B275C /* TipsPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82D142F26EF62BE007B275C /* TipsPageViewController.swift */; };
 		C82D143226EF634E007B275C /* TipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82D143126EF634E007B275C /* TipViewController.swift */; };
 		C82D143426EF644E007B275C /* UIViewController+Child.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82D143326EF644E007B275C /* UIViewController+Child.swift */; };
+		C8337DDB270EF21C00093D42 /* TrackingProtectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DDA270EF21C00093D42 /* TrackingProtectionState.swift */; };
+		C8337DDE270EF52300093D42 /* SecureConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DDD270EF52300093D42 /* SecureConnectionStatus.swift */; };
+		C8337DE0270EF58400093D42 /* SubtitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DDF270EF58400093D42 /* SubtitleCell.swift */; };
 		C8415DB326E9FA38008BAAA2 /* UIApplication+Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8415DB226E9FA38008BAAA2 /* UIApplication+Orientation.swift */; };
 		C85C53C4270DD3210094E5DB /* AsyncImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85C53C3270DD3210094E5DB /* AsyncImageView.swift */; };
 		C85C53C6270DD3590094E5DB /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85C53C5270DD3590094E5DB /* ImageLoader.swift */; };
@@ -602,6 +605,9 @@
 		C82D142F26EF62BE007B275C /* TipsPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsPageViewController.swift; sourceTree = "<group>"; };
 		C82D143126EF634E007B275C /* TipViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipViewController.swift; sourceTree = "<group>"; };
 		C82D143326EF644E007B275C /* UIViewController+Child.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Child.swift"; sourceTree = "<group>"; };
+		C8337DDA270EF21C00093D42 /* TrackingProtectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionState.swift; sourceTree = "<group>"; };
+		C8337DDD270EF52300093D42 /* SecureConnectionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureConnectionStatus.swift; sourceTree = "<group>"; };
+		C8337DDF270EF58400093D42 /* SubtitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtitleCell.swift; sourceTree = "<group>"; };
 		C8415DB226E9FA38008BAAA2 /* UIApplication+Orientation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+Orientation.swift"; sourceTree = "<group>"; };
 		C85C53C3270DD3210094E5DB /* AsyncImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImageView.swift; sourceTree = "<group>"; };
 		C85C53C5270DD3590094E5DB /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
@@ -1181,14 +1187,26 @@
 			path = Presentation;
 			sourceTree = "<group>";
 		};
-		C85C53C2270DD2CE0094E5DB /* Cells */ = {
+		C8337DDC270EF50D00093D42 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C8EEC807270AF90F007C0751 /* ToggleItem.swift */,
+				C8337DDA270EF21C00093D42 /* TrackingProtectionState.swift */,
+				C8337DDD270EF52300093D42 /* SecureConnectionStatus.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		C85C53C2270DD2CE0094E5DB /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				C82953EA270C540900F52B04 /* ImageCell.swift */,
+				C8337DDF270EF58400093D42 /* SubtitleCell.swift */,
 				C8EEC805270AF8E6007C0751 /* SwitchTableViewCell.swift */,
 				C85C53C3270DD3210094E5DB /* AsyncImageView.swift */,
+				C82953EE270C776C00F52B04 /* TrackingHeaderView.swift */,
 			);
-			path = Cells;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		C88A5D3D26F0999E009A135D /* Pro Tips */ = {
@@ -1223,11 +1241,10 @@
 		C8EEC804270AF8C0007C0751 /* Tracking Protection */ = {
 			isa = PBXGroup;
 			children = (
-				C85C53C2270DD2CE0094E5DB /* Cells */,
+				C85C53C2270DD2CE0094E5DB /* Views */,
 				C82953E1270B474A00F52B04 /* Presentation */,
 				16D7169D2114F00E000C8A66 /* TrackingProtectionViewController.swift */,
-				C82953EE270C776C00F52B04 /* TrackingHeaderView.swift */,
-				C8EEC807270AF90F007C0751 /* ToggleItem.swift */,
+				C8337DDC270EF50D00093D42 /* Model */,
 				C8EEC809270AF930007C0751 /* TrackingProtectionDelegate.swift */,
 				C85C53C5270DD3590094E5DB /* ImageLoader.swift */,
 			);
@@ -2078,6 +2095,7 @@
 				747ADA181FC38EFC00970132 /* IntroViewController.swift in Sources */,
 				C8C04AAE27072C6100D56268 /* Section.swift in Sources */,
 				D30AEEBB1DE4CB1B0096A2E7 /* FileManagerExtensions.swift in Sources */,
+				C8337DDE270EF52300093D42 /* SecureConnectionStatus.swift in Sources */,
 				D36C1BAA1DB02EBB0073C1AB /* OpenUtils.swift in Sources */,
 				D364DC261DC4163700562991 /* BrowserToolset.swift in Sources */,
 				D3E54FD11DEFB063003E1AFF /* SearchEngineManager.swift in Sources */,
@@ -2100,10 +2118,12 @@
 				746BD9281F75C45A00BE8DB9 /* DictionaryExtensions.swift in Sources */,
 				C82953E3270B475800F52B04 /* SheetMetrics.swift in Sources */,
 				E40AFB141DC939FF00DA5651 /* SupportUtils.swift in Sources */,
+				C8337DDB270EF21C00093D42 /* TrackingProtectionState.swift in Sources */,
 				D392887F1BC5E47E0016A9A0 /* UIConstants.swift in Sources */,
 				D3E251F91DAF064B005918DC /* Utils.swift in Sources */,
 				D32F71D31BCEF67C006D44FC /* UIViewExtensions.swift in Sources */,
 				F81DF84F2653477F00C83C61 /* AutocompleteTextField.swift in Sources */,
+				C8337DE0270EF58400093D42 /* SubtitleCell.swift in Sources */,
 				D3E2C96B1DA3069000DEBE3D /* URIFixup.swift in Sources */,
 				D3DA77851DC2C307009C114E /* ErrorPage.swift in Sources */,
 				845174A626CD0C2500510113 /* ShortcutsManager.swift in Sources */,
