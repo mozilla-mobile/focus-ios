@@ -126,6 +126,7 @@ class SheetModalViewController: UIViewController {
     }
     
     @objc func animateDismissView() {
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
         dimmedView.alpha = maximumDimmingAlpha
         
         let springTiming = UISpringTimingParameters(dampingRatio: 0.75, initialVelocity: CGVector(dx: 0, dy: 4))
