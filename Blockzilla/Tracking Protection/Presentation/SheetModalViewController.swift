@@ -34,6 +34,7 @@ class SheetModalViewController: UIViewController {
         var button = UIButton()
         button.setImage(UIImage(named: "close-button")!, for: .normal)
         button.addTarget(self, action: #selector(animateDismissView), for: .touchUpInside)
+        button.accessibilityIdentifier = "closeSheetButton"
         return button
     }()
     
