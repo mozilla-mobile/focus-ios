@@ -49,7 +49,7 @@ open class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
         // Fixes: https://github.com/mozilla-mobile/focus-ios/issues/2192
         // When swipe-typing + completionRange is present, and deletion causes
-        // incorrect internal text value. So we call deleteDackward() here.
+        // incorrect internal text value. So we call deleteBackward() here.
         if let completionRange = completionRange, string.isEmpty,
            NSIntersectionRange(range, completionRange).length > 0 {
             self.deleteBackward()
