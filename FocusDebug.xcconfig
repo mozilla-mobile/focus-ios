@@ -1,0 +1,14 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+DEVELOPMENT_TEAM = 43AQ936H96
+PRODUCT_BUNDLE_PREFIX = org.mozilla.ios
+CODE_SIGN_PREFIX = mozilla
+
+//CODE_SIGN_PREFIX = contributor // do not change this value
+//PRODUCT_BUNDLE_PREFIX = org.contributor
+//DEVELOPMENT_TEAM = ABCDE12345

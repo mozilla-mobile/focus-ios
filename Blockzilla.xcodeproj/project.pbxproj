@@ -42,6 +42,13 @@
 		2696EB04211F540600F0C73F /* SearchHistoryUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2696EB03211F540600F0C73F /* SearchHistoryUtils.swift */; };
 		30DFF98021810BF20055707C /* SearchSuggestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DFF97F21810BF20055707C /* SearchSuggestClient.swift */; };
 		31421EB12176492A0015F48B /* TitleActivityItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31421EB02176492A0015F48B /* TitleActivityItemProvider.swift */; };
+		34BE04B22712BE130056F3E9 /* FocusDebug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 34BE04B12712BC4E0056F3E9 /* FocusDebug.xcconfig */; };
+		34BE04B32712BE140056F3E9 /* FocusDebug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 34BE04B12712BC4E0056F3E9 /* FocusDebug.xcconfig */; };
+		34BE04B42712BE150056F3E9 /* FocusDebug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 34BE04B12712BC4E0056F3E9 /* FocusDebug.xcconfig */; };
+		34BE04B52712BE160056F3E9 /* FocusDebug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 34BE04B12712BC4E0056F3E9 /* FocusDebug.xcconfig */; };
+		34BE04B62712BE160056F3E9 /* FocusDebug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 34BE04B12712BC4E0056F3E9 /* FocusDebug.xcconfig */; };
+		34BE04B72712BE170056F3E9 /* FocusDebug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 34BE04B12712BC4E0056F3E9 /* FocusDebug.xcconfig */; };
+		34BE04B82712BE180056F3E9 /* FocusDebug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 34BE04B12712BC4E0056F3E9 /* FocusDebug.xcconfig */; };
 		3AEC0B3E267DE30A007B7850 /* URIFixupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEC0B3D267DE30A007B7850 /* URIFixupTests.swift */; };
 		4F1284861FC5E242001A775B /* TPSettingsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1284851FC5E242001A775B /* TPSettingsTest.swift */; };
 		4F582F7B1F44A10F006C744B /* OpenInFocusTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F582F7A1F44A10F006C744B /* OpenInFocusTest.swift */; };
@@ -298,7 +305,6 @@
 		166E4C0021347D150029E2A5 /* FocusIntentExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FocusIntentExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		166E4C0221347D150029E2A5 /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
 		166E4C0421347D150029E2A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		166E4C1021347DB50029E2A5 /* FocusIntentExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FocusIntentExtension.entitlements; sourceTree = "<group>"; };
 		16837EA52135EFCC000424BB /* TipManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipManager.swift; sourceTree = "<group>"; };
 		16938BFB21010C2B00DCD489 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		16938BFC21010C2C00DCD489 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -401,6 +407,8 @@
 		29B90C056305836CB297FF79 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		30DFF97F21810BF20055707C /* SearchSuggestClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSuggestClient.swift; sourceTree = "<group>"; };
 		31421EB02176492A0015F48B /* TitleActivityItemProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleActivityItemProvider.swift; sourceTree = "<group>"; };
+		347CA6182712CE6D00404515 /* Focus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Focus.entitlements; path = Entitlements/mozilla/Focus.entitlements; sourceTree = SOURCE_ROOT; };
+		34BE04B12712BC4E0056F3E9 /* FocusDebug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = FocusDebug.xcconfig; sourceTree = "<group>"; };
 		3AEC0B3D267DE30A007B7850 /* URIFixupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URIFixupTests.swift; sourceTree = "<group>"; };
 		427B752EF11959F9C38B12D6 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4F1284851FC5E242001A775B /* TPSettingsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPSettingsTest.swift; sourceTree = "<group>"; };
@@ -674,7 +682,6 @@
 		D3E2C96C1DA3077400DEBE3D /* CharacterSetExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharacterSetExtensions.swift; sourceTree = "<group>"; };
 		D3E2C96E1DA3093D00DEBE3D /* BrowserToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserToolbar.swift; sourceTree = "<group>"; };
 		D3E3CA7C1DA827AD0079C94B /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
-		D3E3CA801DA83FAF0079C94B /* Focus.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Focus.entitlements; sourceTree = "<group>"; };
 		D3E3CA811DA83FAF0079C94B /* FocusEnterprise.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = FocusEnterprise.entitlements; sourceTree = "<group>"; };
 		D3E54FCE1DEFAE80003E1AFF /* OpenSearchParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenSearchParser.swift; sourceTree = "<group>"; };
 		D3E54FD01DEFB063003E1AFF /* SearchEngineManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEngineManager.swift; sourceTree = "<group>"; };
@@ -1094,7 +1101,6 @@
 		166E4C0121347D150029E2A5 /* FocusIntentExtension */ = {
 			isa = PBXGroup;
 			children = (
-				166E4C1021347DB50029E2A5 /* FocusIntentExtension.entitlements */,
 				166E4C0221347D150029E2A5 /* IntentHandler.swift */,
 				166E4C0421347D150029E2A5 /* Info.plist */,
 			);
@@ -1278,6 +1284,7 @@
 				D3E251FA1DAF0668005918DC /* AppInfo.swift */,
 				E4BF2E101BAD8AC500DA9D68 /* Settings.swift */,
 				D3E251F81DAF064B005918DC /* Utils.swift */,
+				34BE04B12712BC4E0056F3E9 /* FocusDebug.xcconfig */,
 			);
 			name = Shared;
 			sourceTree = "<group>";
@@ -1364,7 +1371,7 @@
 				D43A61BD26B4627100814232 /* SmokeTest.xctestplan */,
 				D4341F802669342A00294A15 /* FullFunctionalTests.xctestplan */,
 				C817A35222CE73B4002529FF /* Deferred */,
-				D3E3CA801DA83FAF0079C94B /* Focus.entitlements */,
+				347CA6182712CE6D00404515 /* Focus.entitlements */,
 				D3E3CA811DA83FAF0079C94B /* FocusEnterprise.entitlements */,
 				D3C70C711DDFCA4800CEE458 /* Klar.entitlements */,
 				D3C70C721DDFCA7000CEE458 /* KlarEnterprise.entitlements */,
@@ -1836,6 +1843,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4BC84F11E2A862400833B45 /* InfoPlist.strings in Resources */,
+				34BE04B42712BE150056F3E9 /* FocusDebug.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1844,6 +1852,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				16ABCD2621406D5500CABBF4 /* Intents.strings in Resources */,
+				34BE04B82712BE180056F3E9 /* FocusDebug.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1851,6 +1860,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34BE04B62712BE160056F3E9 /* FocusDebug.xcconfig in Resources */,
 				742C99D41F3A3AD200717D69 /* Assets.xcassets in Resources */,
 				A89766DA1F57DCA9008183C5 /* (null) in Resources */,
 			);
@@ -1860,6 +1870,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34BE04B72712BE170056F3E9 /* FocusDebug.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1868,6 +1879,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4BC84F61E2A862600833B45 /* InfoPlist.strings in Resources */,
+				34BE04B52712BE160056F3E9 /* FocusDebug.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1898,6 +1910,7 @@
 				D3426AEF1DB846BB0016DA5A /* topdomains.txt in Resources */,
 				B3D23BEF1FA3A9E500D9C50F /* postload.js in Resources */,
 				F8324CE7264EA223007E4BFA /* rights-focus.html in Resources */,
+				34BE04B22712BE130056F3E9 /* FocusDebug.xcconfig in Resources */,
 				D50939A91FBF807A005D4316 /* Settings.bundle in Resources */,
 				F8324CE4264EA223007E4BFA /* gpl.html in Resources */,
 				D3E54FD51DEFB25B003E1AFF /* SearchPlugins in Resources */,
@@ -1911,6 +1924,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D32817251BD0689800185845 /* disconnect-social.json in Resources */,
+				34BE04B32712BE140056F3E9 /* FocusDebug.xcconfig in Resources */,
 				E4BC84FB1E2A862700833B45 /* InfoPlist.strings in Resources */,
 				D32817231BD0689800185845 /* disconnect-analytics.json in Resources */,
 				D3BBC9ED1D7F81CB00D1751B /* enabled-detector.json in Resources */,
@@ -3082,7 +3096,6 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = FocusIntentExtension/FocusIntentExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -3125,6 +3138,7 @@
 		};
 		166E4C0A21347D150029E2A5 /* FocusDebug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 34BE04B12712BC4E0056F3E9 /* FocusDebug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -3155,11 +3169,10 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = FocusIntentExtension/FocusIntentExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "Entitlements/$(CODE_SIGN_PREFIX)/FocusIntentExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -3178,7 +3191,7 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.FocusIntentExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_PREFIX).Focus.FocusIntentExtension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -3222,7 +3235,6 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = FocusIntentExtension/FocusIntentExtension.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
@@ -3292,7 +3304,6 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = FocusIntentExtension/FocusIntentExtension.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
@@ -3362,7 +3373,6 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = FocusIntentExtension/FocusIntentExtension.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
@@ -3430,7 +3440,6 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = FocusIntentExtension/FocusIntentExtension.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
@@ -3531,6 +3540,7 @@
 		};
 		745DC5E61F39221100661635 /* FocusDebug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 34BE04B12712BC4E0056F3E9 /* FocusDebug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -3555,7 +3565,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 43AQ936H96;
 				DISPLAY_NAME = "Firefox Focus";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -3574,7 +3583,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.ShareExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_PREFIX).Focus.ShareExtension";
 				PRODUCT_NAME = ShareExtension;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4139,13 +4148,13 @@
 		};
 		D3E872AC1C471F7900BF4DE4 /* FocusDebug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 34BE04B12712BC4E0056F3E9 /* FocusDebug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon${BUNDLE_ID_SUFFIX}";
 				BUNDLE_ID_SUFFIX = .dev;
-				CODE_SIGN_ENTITLEMENTS = Focus.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "Entitlements/$(CODE_SIGN_PREFIX)/Focus.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
 				INFOPLIST_FILE = Blockzilla/Info.plist;
@@ -4153,7 +4162,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_PREFIX).Focus";
 				PRODUCT_NAME = "Firefox Focus";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "FOCUS DEBUG";
 				SWIFT_VERSION = 5.0;
@@ -4163,17 +4172,16 @@
 		};
 		D3E872AD1C471F7900BF4DE4 /* FocusDebug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 34BE04B12712BC4E0056F3E9 /* FocusDebug.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = Focus.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 43AQ936H96;
 				INFOPLIST_FILE = ContentBlocker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.ContentBlocker;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_PREFIX).Focus.ContentBlocker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "FOCUS DEBUG";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
