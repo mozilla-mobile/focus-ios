@@ -5,10 +5,12 @@
 // Configuration settings file format documentation can be found at:
 // https://help.apple.com/xcode/#/dev745c5c974
 
+// Mozilla settings
 DEVELOPMENT_TEAM = 43AQ936H96
 PRODUCT_BUNDLE_PREFIX = org.mozilla.ios
-CODE_SIGN_PREFIX = mozilla
+FOCUS_ENTITLEMENTS = Focus.entitlements
 
-//CODE_SIGN_PREFIX = contributor // do not change this value
+// Contributor settings
+//DEVELOPMENT_TEAM = 12345ABCDE
 //PRODUCT_BUNDLE_PREFIX = org.contributor
-//DEVELOPMENT_TEAM = ABCDE12345
+//FOCUS_ENTITLEMENTS = Focus_contributor.entitlements  // This is a fixed filename
