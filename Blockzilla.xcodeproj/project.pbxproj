@@ -1278,7 +1278,6 @@
 		D33A1A391BC476D40003D929 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				34996A042714359100196067 /* FocusDebug.xcconfig */,
 				D35C11461E04AADA005FFFEF /* AppConfig.swift */,
 				D3E251FA1DAF0668005918DC /* AppInfo.swift */,
 				E4BF2E101BAD8AC500DA9D68 /* Settings.swift */,
@@ -1369,6 +1368,7 @@
 				D43A61BD26B4627100814232 /* SmokeTest.xctestplan */,
 				D4341F802669342A00294A15 /* FullFunctionalTests.xctestplan */,
 				C817A35222CE73B4002529FF /* Deferred */,
+				34996A042714359100196067 /* FocusDebug.xcconfig */,
 				D3E3CA801DA83FAF0079C94B /* Focus.entitlements */,
 				34D889AD27143A0100589DB2 /* Focus_contributor.entitlements */,
 				D3E3CA811DA83FAF0079C94B /* FocusEnterprise.entitlements */,

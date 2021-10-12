@@ -43,4 +43,19 @@ Build Instructions
 4. Open `Blockzilla.xcodeproj` in Xcode.
 5. Build the `Focus` scheme in Xcode.
 
+Run on a Device with a Free Apple Developer Account
+---------------
+
+> This process is not required for simulator based development.
+
+Since the bundle identifier we use for Focus is tied to Mozilla developer account, you'll need to generate your own identifier and update the existing configuration.
+
+1. Add your Apple ID as an account in Xcode.
+2. Open FocusDebug.xcconfig
+3. Change PRODUCT_BUNDLE_PREFIX to your own bundle identifier prefix e.g., com.your_github_id.ios
+4. Change DEVELOPMENT_TEAM to your Apple developer account Team ID.
+5. Make sure FOCUS_ENTITLEMENTS value is Focus_contributor.entitlements
+6. Build and Run on a device.
+
+Due to a bug(or limitation) of Xcode, for the first time build/run Focus, please change `group.$(PRODUCT_BUNDLE_PREFIX).Focus` to actual value (like `group.com.your_github_id.ios.Focus`) in "Focus_contributor.entitlements" and "FocusIntentExtension/FocusIntentExtension.entitlements". Then let Xcode to build and complete signing process. After first build/run, the values could be reverted.
 
