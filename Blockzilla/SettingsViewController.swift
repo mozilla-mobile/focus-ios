@@ -194,6 +194,21 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }()
 
     private var toggles = [Int: [Int: BlockerToggle]]()
+    
+    private var labelTextForCurrentTheme: String {
+        var themeName = ""
+        switch UserDefaults.standard.theme.userInterfaceStyle {
+        case .unspecified:
+            themeName = UIConstants.strings.systemTheme
+        case .light:
+            themeName = UIConstants.strings.light
+        case .dark:
+            themeName = UIConstants.strings.dark
+        @unknown default:
+            break
+        }
+        return themeName
+    }
 
     private func getSectionIndex(_ section: Section) -> Int? {
         return Section.getSections().firstIndex(where: { $0 == section })
@@ -384,7 +399,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             let themeCell = SettingsTableViewAccessoryCell(style: .value1, reuseIdentifier: "themeCell")
             themeCell.labelText = String(format: UIConstants.strings.theme)
             themeCell.accessibilityIdentifier = "settingsViewController.themeCell"
-            themeCell.accessoryLabelText = UIConstants.strings.systemTheme //TODO: change based on selection
+            themeCell.accessoryLabelText = labelTextForCurrentTheme
             cell = themeCell
         case .privacy:
             if indexPath.row == 0 {
