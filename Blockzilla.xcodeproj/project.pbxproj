@@ -48,6 +48,9 @@
 		4F582F7B1F44A10F006C744B /* OpenInFocusTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F582F7A1F44A10F006C744B /* OpenInFocusTest.swift */; };
 		4FE4E6F61FBB5E2C001BB779 /* TPSidebarBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE4E6F51FBB5E2C001BB779 /* TPSidebarBadge.swift */; };
 		58408BA5265FC524003C4E4F /* BasicBrowsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58408BA4265FC524003C4E4F /* BasicBrowsing.swift */; };
+		605A79732716E98C009956FA /* ThemeTableViewAccessoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605A79722716E98C009956FA /* ThemeTableViewAccessoryCell.swift */; };
+		605A79752716E9B1009956FA /* ThemeTableViewToggleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605A79742716E9B1009956FA /* ThemeTableViewToggleCell.swift */; };
+		605A79772716E9DD009956FA /* SystemThemeDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605A79762716E9DD009956FA /* SystemThemeDelegate.swift */; };
 		60E9C59527159F9400909884 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E9C59427159F9400909884 /* Theme.swift */; };
 		742C99D41F3A3AD200717D69 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 742C99D31F3A3AD200717D69 /* Assets.xcassets */; };
 		74584E351FA1077000AF2582 /* SettingsContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74584E341FA1077000AF2582 /* SettingsContentViewController.swift */; };
@@ -392,6 +395,9 @@
 		4F582F7A1F44A10F006C744B /* OpenInFocusTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenInFocusTest.swift; sourceTree = "<group>"; };
 		4FE4E6F51FBB5E2C001BB779 /* TPSidebarBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPSidebarBadge.swift; sourceTree = "<group>"; };
 		58408BA4265FC524003C4E4F /* BasicBrowsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicBrowsing.swift; sourceTree = "<group>"; };
+		605A79722716E98C009956FA /* ThemeTableViewAccessoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeTableViewAccessoryCell.swift; sourceTree = "<group>"; };
+		605A79742716E9B1009956FA /* ThemeTableViewToggleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeTableViewToggleCell.swift; sourceTree = "<group>"; };
+		605A79762716E9DD009956FA /* SystemThemeDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemThemeDelegate.swift; sourceTree = "<group>"; };
 		60E9C59427159F9400909884 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		742C99D31F3A3AD200717D69 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7449B1361F290F7B001A199D /* af */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = af; path = af.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1069,6 +1075,26 @@
 			path = FocusIntentExtension;
 			sourceTree = "<group>";
 		};
+		605A79702716E8C7009956FA /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				60E9C59427159F9400909884 /* Theme.swift */,
+				84451C1C270DD1DA00812BDF /* ThemeViewController.swift */,
+				605A79762716E9DD009956FA /* SystemThemeDelegate.swift */,
+				605A79712716E90F009956FA /* ThemeCells */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		605A79712716E90F009956FA /* ThemeCells */ = {
+			isa = PBXGroup;
+			children = (
+				605A79722716E98C009956FA /* ThemeTableViewAccessoryCell.swift */,
+				605A79742716E9B1009956FA /* ThemeTableViewToggleCell.swift */,
+			);
+			path = ThemeCells;
+			sourceTree = "<group>";
+		};
 		745DC5DB1F39221100661635 /* OpenInFocus */ = {
 			isa = PBXGroup;
 			children = (
@@ -1302,6 +1328,7 @@
 				D3E54FD41DEFB25B003E1AFF /* SearchPlugins */,
 				C88A5D3D26F0999E009A135D /* Pro Tips */,
 				C88A5D3E26F099B5009A135D /* Extensions */,
+				605A79702716E8C7009956FA /* Theme */,
 				D3DA778B1DC2C60E009C114E /* errorPage.html */,
 				E4BF2DE21BACE8CA00DA9D68 /* Info.plist */,
 				D3C047BC1DCBD8ED00402FFB /* SearchEngines.plist */,
@@ -1358,8 +1385,6 @@
 				D34E70341DA874AA00BABDCC /* StringExtensions.swift */,
 				E40AFB131DC939FF00DA5651 /* SupportUtils.swift */,
 				D0967A801EC50002009D937F /* TelemetryIntegration.swift */,
-				60E9C59427159F9400909884 /* Theme.swift */,
-				84451C1C270DD1DA00812BDF /* ThemeViewController.swift */,
 				31421EB02176492A0015F48B /* TitleActivityItemProvider.swift */,
 				16837EA52135EFCC000424BB /* TipManager.swift */,
 				845174A526CD0C2500510113 /* ShortcutsManager.swift */,
@@ -1946,6 +1971,7 @@
 				B3CD41CE1FD1CDE300AEBD58 /* Result.swift in Sources */,
 				D3E2C8EA1D9F0E6200DEBE3D /* BrowserViewController.swift in Sources */,
 				C817A35922CE73B4002529FF /* LockProtected.swift in Sources */,
+				605A79772716E9DD009956FA /* SystemThemeDelegate.swift in Sources */,
 				D3426B031DBAE3800016DA5A /* URLBarContainer.swift in Sources */,
 				2696EB04211F540600F0C73F /* SearchHistoryUtils.swift in Sources */,
 				D3426AED1DB846310016DA5A /* DomainCompletion.swift in Sources */,
@@ -1963,6 +1989,7 @@
 				D5ABA3DA1FCC846800D5C060 /* AutocompleteSettingViewController.swift in Sources */,
 				845174A826CD2C7100510113 /* ShortcutView.swift in Sources */,
 				D5ABA3D91FCC846800D5C060 /* AddCustomDomainViewController.swift in Sources */,
+				605A79752716E9B1009956FA /* ThemeTableViewToggleCell.swift in Sources */,
 				D3426AEB1DB7F8AA0016DA5A /* OverlayView.swift in Sources */,
 				D5D2F02B252FA6AE00761DC8 /* Metrics.swift in Sources */,
 				16180DBB212F563800AFE3C2 /* Intents.intentdefinition in Sources */,
@@ -1983,6 +2010,7 @@
 				D3426AF61DB84E7A0016DA5A /* SearchEngine.swift in Sources */,
 				B3CD41C91FD1027000AEBD58 /* InsetTextField.swift in Sources */,
 				D30179071BC6CB19009AD388 /* BlockerEnabledDetector.swift in Sources */,
+				605A79732716E98C009956FA /* ThemeTableViewAccessoryCell.swift in Sources */,
 				B3481A551FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift in Sources */,
 				161D90312108085F00C2A74A /* HomeViewToolbar.swift in Sources */,
 				EBE44F4E20ADDF6A005AFEA6 /* SmartLabel.swift in Sources */,
