@@ -18,7 +18,7 @@ class BrowserViewController: UIViewController {
     private let mainContainerView = UIView(frame: .zero)
     let darkView = UIView()
 
-    private let webViewController = WebViewController(userAgent: UserAgent.shared)
+    private let webViewController = WebViewController()
     private let webViewContainer = UIView()
 
     var modalDelegate: ModalDelegate?
@@ -57,7 +57,7 @@ class BrowserViewController: UIViewController {
 
     private var trackingProtectionStatus: TrackingProtectionStatus = .on(TPPageStats()) {
         didSet {
-            urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus)
+            urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus, shouldDisplayShieldIcon:  urlBar.inBrowsingMode ? self.webViewController.connectionIsSecure : true )
         }
     }
 
@@ -387,18 +387,14 @@ class BrowserViewController: UIViewController {
 
     // These functions are used to handle displaying and hiding the keyboard after the splash view is animated
     public func activateUrlBarOnHomeView() {
-        // Do not activate if we are showing a web page
-        if urlBar.inBrowsingMode {
+
+        // Do not activate if a modal is presented
+        if self.presentedViewController != nil {
             return
         }
 
-        // Do not activate if the settings are presented
-        if self.presentedViewController?.children.first is SettingsViewController {
-            return
-        }
-
-        // Do not activate if the home view is not displayed, nor the overlayView hidden
-        if !(homeViewController != nil || overlayView.isHidden) {
+        // Do not activate if we are showing a web page, nor the overlayView hidden
+        if !(urlBar.inBrowsingMode || overlayView.isHidden) {
             return
         }
 
@@ -407,10 +403,6 @@ class BrowserViewController: UIViewController {
 
     public func deactivateUrlBarOnHomeView() {
         urlBar.dismissTextField()
-    }
-    
-    public func deactivateUrlBar() {
-        urlBar.dismiss()
     }
     
     public func dismissSettings() {
@@ -545,9 +537,10 @@ class BrowserViewController: UIViewController {
                     }
 
                     self.view.layoutIfNeeded()
-                    self.findInPageBar?.becomeFirstResponder()
                 }
             }
+            
+            self.findInPageBar?.becomeFirstResponder()
         } else if let findInPageBar = self.findInPageBar {
             findInPageBar.endEditing(true)
             webViewController.evaluate("__firefox__.findDone()", completion: nil)
@@ -848,6 +841,10 @@ class BrowserViewController: UIViewController {
     @objc private func goForward() {
         webViewController.goForward()
     }
+    
+    @objc private func showFindInPage() {
+        self.updateFindInPageVisibility(visible: true)
+    }
 
     private func toggleURLBarBackground(isBright: Bool) {
         if urlBar.isEditing {
@@ -892,6 +889,12 @@ class BrowserViewController: UIViewController {
                              image: nil,
                              action: #selector(BrowserViewController.goForward),
                              input: "]",
+                             modifierFlags: .command,
+                             propertyList: nil),
+                UIKeyCommand(title: UIConstants.strings.shareMenuFindInPage,
+                             image: nil,
+                             action: #selector(BrowserViewController.showFindInPage),
+                             input: "f",
                              modifierFlags: .command,
                              propertyList: nil),
         ]
@@ -1120,15 +1123,22 @@ extension BrowserViewController: URLBarDelegate {
         case .off:
             Settings.set(false, forToggle: .trackingProtection)
         }
-    
-        let trackingProtectionViewController = TrackingProtectionViewController()
         
+        let state: TrackingProtectionState = urlBar.inBrowsingMode
+        ? .browsing(status: SecureConnectionStatus(
+            url: webViewController.url!,
+            isSecureConnection: webViewController.connectionIsSecure))
+        : .homescreen
+        
+        let trackingProtectionViewController = TrackingProtectionViewController(state: state)
         trackingProtectionViewController.delegate = self
-        
-        let trackingNavController = UINavigationController(rootViewController: trackingProtectionViewController)
-        trackingNavController.modalPresentationStyle = .formSheet
-
-        modalDelegate.presentModal(viewController: trackingNavController, animated: true)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            trackingProtectionViewController.modalPresentationStyle = .popover
+            trackingProtectionViewController.popoverPresentationController?.sourceView = urlBar.shieldIcon
+            modalDelegate.presentModal(viewController: trackingProtectionViewController, animated: true)
+        } else {
+            modalDelegate.presentSheet(viewController: trackingProtectionViewController)
+        }
     }
 
     func urlBarDidLongPress(_ urlBar: URLBar) { }
@@ -1163,7 +1173,7 @@ extension BrowserViewController: URLBarDelegate {
             
             var actionItems = [items.findInPageItem]
             actionItems.append(
-                webViewController.userAgentString == UserAgent.desktopUserAgent()
+                webViewController.requestMobileSite
                     ? items.requestMobileItem
                     : items.requestDesktopItem
             )
@@ -1259,7 +1269,7 @@ extension BrowserViewController: ShortcutViewDelegate {
     func shortcutLongPressed(shortcut: Shortcut, shortcutView: ShortcutView) {
         let removeFromShortcutsItem = PhotonActionSheetItem(title: UIConstants.strings.removeFromShortcuts, iconString: "icon_shortcuts_remove") { action in
             ShortcutsManager.shared.removeFromShortcuts(shortcut: shortcut)
-            self.shortcutsBackground.isHidden = self.shortcutManager.numberOfShortcuts == 0 ? true : false
+            self.shortcutsBackground.isHidden = self.shortcutManager.numberOfShortcuts == 0 || !self.urlBar.inBrowsingMode ? true : false
             GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_home_screen"].add()
         }
         

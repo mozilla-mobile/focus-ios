@@ -5,6 +5,9 @@
 import UIKit
 import Telemetry
 import Glean
+import Viaduct
+import RustLog
+import Nimbus
 
 protocol AppSplashController {
     var splashView: UIView { get }
@@ -14,6 +17,8 @@ protocol AppSplashController {
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashController {
+    var nimbusApi: NimbusApi?
+    
     static let prefIntroDone = "IntroDone"
     static let prefIntroVersion = 2
     static let prefWhatsNewDone = "WhatsNewDone"
@@ -50,6 +55,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         }
 
         setupTelemetry()
+        setupExperimentation()
+        
         TPStatsBlocklistChecker.shared.startup()
         
         // Fix transparent navigation bar issue in iOS 15
@@ -311,9 +318,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
             queuedString = nil
         }
-
-        browserViewController.deactivateUrlBar()
-        
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -425,14 +429,63 @@ extension AppDelegate {
         GleanMetrics.TrackingProtection.hasSocialBlocked.set(Settings.getToggle(.blockSocial))
         GleanMetrics.MozillaProducts.hasFirefoxInstalled.set(UIApplication.shared.canOpenURL(URL(string: "firefox://")!))
     }
+        
+    func setupExperimentation() {
+        if !Settings.getToggle(.sendAnonymousUsageData) {
+            NSLog("Not setting up Nimbus because sendAnonymousUsageData is disabled") // TODO Remove
+            return
+        }
+        
+        // Hook up basic logging.
+        if !RustLog.shared.tryEnable({ (level, tag, message) -> Bool in
+            NSLog("[RUST][\(tag ?? "no-tag")] \(message)")
+            return true
+        }) {
+            NSLog("ERROR: Unable to enable logging from Rust")
+        }
+
+        // Enable networking.
+        Viaduct.shared.useReqwestBackend()
+
+        let errorReporter: NimbusErrorReporter = { err in
+            NSLog("NIMBUS ERROR: \(err)")
+        }
+        
+        do {
+            guard let nimbusServerSettings = NimbusServerSettings.createFromInfoDictionary(), let nimbusAppSettings = NimbusAppSettings.createFromInfoDictionary() else {
+                NSLog("Nimbus not enabled: could not load settings from Info.plist")
+                return
+            }
+            
+            guard let databasePath = Nimbus.defaultDatabasePath() else {
+                NSLog("Nimbus not enabled: unable to determine database path")
+                return
+            }
+            
+            self.nimbusApi = try Nimbus.create(nimbusServerSettings, appSettings: nimbusAppSettings, dbPath: databasePath, resourceBundles: [], errorReporter: errorReporter)
+            self.nimbusApi?.initialize()
+            self.nimbusApi?.fetchExperiments()
+        } catch {
+            NSLog("ERROR: Unable to create Nimbus: \(error)")
+        }
+    }
 
     func presentModal(viewController: UIViewController, animated: Bool) {
         window?.rootViewController?.present(viewController, animated: animated, completion: nil)
+    }
+    
+    func presentSheet(viewController: UIViewController) {
+        let vc = SheetModalViewController(containerViewController: viewController)
+        vc.modalPresentationStyle = .overCurrentContext
+        // keep false
+        // modal animation will be handled in VC itself
+        window?.rootViewController?.present(vc, animated: false)
     }
 }
 
 protocol ModalDelegate {
     func presentModal(viewController: UIViewController, animated: Bool)
+    func presentSheet(viewController: UIViewController)
 }
 
 extension UINavigationController {
