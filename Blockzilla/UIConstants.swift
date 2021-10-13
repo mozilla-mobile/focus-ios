@@ -222,8 +222,9 @@ struct UIConstants {
         static let textLogoOffsetSmallDevice: CGFloat = 10 - browserToolbarHeight / 4
         static let textLogoMargin: CGFloat = 44
         static let tipDescriptionMargin: CGFloat = 12
-        static let tipViewHeight: CGFloat = 75
+        static let tipViewHeight: CGFloat = 148
         static let tipViewBottomOffset: CGFloat = 6
+        static let tipViewPadding: CGFloat = 16
         static let urlBarButtonImageSize: CGFloat = 20
         static let urlBarButtonTargetSize: CGFloat = 40
         static let settingsTextPadding: CGFloat = 10
@@ -535,7 +536,9 @@ struct UIConstants {
         static let autocompleteLabel = NSLocalizedString("Autocomplete.defaultLabel", value: "Autocomplete", comment: "Label for enabling or disabling autocomplete")
         static let autocompleteCustomSectionLabel = NSLocalizedString("Autocomplete.customLabel", value: "Custom URLs", comment: "Label for button taking you to your custom Autocomplete URL list")
         static let autocompleteCustomDescription = NSLocalizedString("Autocomplete.customDescriptoin", value: "Add and manage custom autocomplete URLs.", comment: "Description for adding and managing custom autocomplete URLs")
-
+        static let protectionStatusSecure = NSLocalizedString("ProtectionStatus.Secure", value: "Connection is secure", comment: "This is the value for a label that indicates if a user is on a secure https connection.")
+        static let protectionStatusNotSecure = NSLocalizedString("ProtectionStatus.NotSecure", value: "Connection is not secure", comment: "This is the value for a label that indicates if a user is on an unencrypted website.")
+        
         static let userDefaultsLaunchThresholdKey = "launchThreshold"
         static let userDefaultsLaunchCountKey = "launchCount"
         static let userDefaultsLastReviewRequestDate = "lastReviewRequestDate"
