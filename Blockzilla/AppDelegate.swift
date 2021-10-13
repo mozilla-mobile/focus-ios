@@ -88,6 +88,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         browserViewController.modalDelegate = self
         window?.rootViewController = browserViewController
         window?.makeKeyAndVisible()
+        window?.overrideUserInterfaceStyle = UserDefaults.standard.theme.userInterfaceStyle
 
         WebCacheUtils.reset()
 

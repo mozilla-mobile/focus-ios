@@ -102,10 +102,11 @@ class SettingsTableViewToggleCell: SettingsTableViewCell {
 
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     enum Section: String {
-        case privacy, usageData, search, siri, integration, mozilla
+        case general, privacy, usageData, search, siri, integration, mozilla
 
         var numberOfRows: Int {
             switch self {
+            case .general: return 1
             case .privacy:
                 if BiometryType(context: LAContext()).hasBiometry { return 3 }
                 return 2
@@ -121,6 +122,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         var headerText: String? {
             switch self {
+            case .general: return UIConstants.strings.general
             case .privacy: return UIConstants.strings.toggleSectionPrivacy
             case .usageData: return nil
             case .search: return UIConstants.strings.settingsSearchTitle
@@ -131,11 +133,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
 
         static func getSections() -> [Section] {
-            if #available(iOS 12.0, *) {
-                return [.privacy, .usageData, .search, .siri, integration, .mozilla]
-            } else {
-                return [.privacy, .usageData, .search, integration, .mozilla]
-            }
+            return [.general, .privacy, .usageData, .search, .siri, integration, .mozilla]
         }
     }
 
@@ -196,6 +194,21 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }()
 
     private var toggles = [Int: [Int: BlockerToggle]]()
+    
+    private var labelTextForCurrentTheme: String {
+        var themeName = ""
+        switch UserDefaults.standard.theme.userInterfaceStyle {
+        case .unspecified:
+            themeName = UIConstants.strings.systemTheme
+        case .light:
+            themeName = UIConstants.strings.light
+        case .dark:
+            themeName = UIConstants.strings.dark
+        @unknown default:
+            break
+        }
+        return themeName
+    }
 
     private func getSectionIndex(_ section: Section) -> Int? {
         return Section.getSections().firstIndex(where: { $0 == section })
@@ -382,6 +395,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell
         switch sections[indexPath.section] {
+        case .general:
+            let themeCell = SettingsTableViewAccessoryCell(style: .value1, reuseIdentifier: "themeCell")
+            themeCell.labelText = String(format: UIConstants.strings.theme)
+            themeCell.accessibilityIdentifier = "settingsViewController.themeCell"
+            themeCell.accessoryLabelText = labelTextForCurrentTheme
+            cell = themeCell
         case .privacy:
             if indexPath.row == 0 {
                 let trackingCell = SettingsTableViewAccessoryCell(style: .value1, reuseIdentifier: "trackingCell")
@@ -550,6 +569,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         switch sections[indexPath.section] {
+        case .general:
+            let themeVC = ThemeViewController()
+            navigationController?.pushViewController(themeVC, animated: true)
         case .privacy:
             if indexPath.row == 0 {
                 let trackingProtectionVC = TrackingProtectionViewController(state: .settings)
