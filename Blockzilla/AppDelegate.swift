@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import os.log
 import UIKit
 import Telemetry
 import Glean
@@ -439,20 +440,29 @@ extension AppDelegate {
             return
         }
         
-        // Hook up basic logging.
-        if !RustLog.shared.tryEnable({ (level, tag, message) -> Bool in
-            NSLog("[RUST][\(tag ?? "no-tag")] \(message)")
+        let rustLogCallback: LogCallback = { level, tag, message in
+            let log = OSLog(subsystem: "org.mozilla.nimbus", category: tag ?? "default")
+            switch level {
+                case .trace:
+                    os_log("%{private}@", log: log, type: .error, message) // Only logs when attached to debugger
+                case .debug:
+                    os_log("%@", log: log, type: .debug, message)
+                case .info:
+                    os_log("%@", log: log, type: .info, message)
+                case .warn:
+                    os_log("%@", log: log, type: .fault, message)
+                case .error:
+                    os_log("%@", log: log, type: .error, message)
+            }
             return true
-        }) {
-            NSLog("ERROR: Unable to enable logging from Rust")
+        }
+        
+        if !RustLog.shared.tryEnable(rustLogCallback) {
+            NSLog("RUSTLOG ERROR: Unable to enable logging from Rust")
         }
 
         // Enable networking.
         Viaduct.shared.useReqwestBackend()
-
-        let errorReporter: NimbusErrorReporter = { err in
-            NSLog("NIMBUS ERROR: \(err)")
-        }
         
         do {
             guard let nimbusServerSettings = NimbusServerSettings.createFromInfoDictionary(), let nimbusAppSettings = NimbusAppSettings.createFromInfoDictionary() else {
@@ -465,7 +475,7 @@ extension AppDelegate {
                 return
             }
             
-            self.nimbusApi = try Nimbus.create(nimbusServerSettings, appSettings: nimbusAppSettings, dbPath: databasePath, resourceBundles: [], errorReporter: errorReporter)
+            self.nimbusApi = try Nimbus.create(nimbusServerSettings, appSettings: nimbusAppSettings, dbPath: databasePath, resourceBundles: [])
             self.nimbusApi?.initialize()
             self.nimbusApi?.fetchExperiments()
         } catch {
