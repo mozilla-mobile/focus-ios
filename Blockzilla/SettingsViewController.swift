@@ -574,7 +574,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             navigationController?.pushViewController(themeVC, animated: true)
         case .privacy:
             if indexPath.row == 0 {
-                let trackingProtectionVC = TrackingProtectionViewController()
+                let trackingProtectionVC = TrackingProtectionViewController(state: .settings)
+                trackingProtectionVC.delegate = presentingViewController as? BrowserViewController
                 navigationController?.pushViewController(trackingProtectionVC, animated: true)
             }
         case .search:
