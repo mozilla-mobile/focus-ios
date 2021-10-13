@@ -10,7 +10,7 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: [3.9]
-        xcode: [13.0]
+        xcode: ["13.0"]
     steps:
     - uses: actions/checkout@v2
       with:
