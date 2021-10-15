@@ -67,7 +67,6 @@ class WebViewController: UIViewController, WebController {
     private var progressObserver: NSKeyValueObservation?
     private var urlObserver: NSKeyValueObservation?
     private var currentBackForwardItem: WKBackForwardListItem?
-    private var userAgent: UserAgent?
     private var trackingProtectionStatus = TrackingProtectionStatus.on(TPPageStats()) {
         didSet {
             delegate?.webController(self, didUpdateTrackingProtectionStatus: trackingProtectionStatus)
@@ -85,11 +84,11 @@ class WebViewController: UIViewController, WebController {
     var pageTitle: String? {
         return browserView.title
     }
-
-    var userAgentString: String? {
-        return self.userAgent?.getUserAgent()
-    }
     
+    private var currentContentMode: WKWebpagePreferences.ContentMode?
+    private var contentModeForHost: [String: WKWebpagePreferences.ContentMode] = [:]
+
+    var requestMobileSite: Bool { currentContentMode == .desktop }    
     var connectionIsSecure: Bool {
         return browserView.hasOnlySecureContent
     }
@@ -97,17 +96,13 @@ class WebViewController: UIViewController, WebController {
     var printFormatter: UIPrintFormatter { return browserView.viewPrintFormatter() }
     var scrollView: UIScrollView { return browserView.scrollView }
 
-    convenience init(userAgent: UserAgent = UserAgent.shared) {
+    convenience init() {
         self.init(nibName: nil, bundle: nil)
-
-        self.userAgent = userAgent
-
         setupWebview()
         ContentBlockerHelper.shared.handler = reloadBlockers(_:)
     }
-
+    
     func reset() {
-        userAgent?.setup()
         browserView.load(URLRequest(url: URL(string: "about:blank")!))
         browserView.navigationDelegate = nil
         browserView.removeFromSuperview()
@@ -122,31 +117,37 @@ class WebViewController: UIViewController, WebController {
     func goForward() { browserView.goForward() }
     func reload() { browserView.reload() }
 
-    @available(iOS 9, *)
     func requestUserAgentChange() {
-        guard let currentItem = browserView.backForwardList.currentItem else {
-            return
+        if let hostName = browserView.url?.host {
+            contentModeForHost[hostName] = requestMobileSite ? .mobile : .desktop
         }
-
-        userAgent?.changeUserAgent()
-        browserView.customUserAgent = userAgent?.getUserAgent()
-
-        if currentItem.url != currentItem.initialURL {
-            // Reload the initial URL to avoid UA specific redirection
-            browserView.load(URLRequest(url: currentItem.initialURL, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 60))
-        } else {
-            reload() // Reload the current URL. We cannot use loadRequest in this case because it seems to leverage caching.
-        }
-        TipManager.requestDesktopTip = false
+        
+        self.browserView.reloadFromOrigin()
     }
 
     func stop() { browserView.stopLoading() }
 
     private func setupWebview() {
-        let wvConfig = WKWebViewConfiguration()
-        wvConfig.websiteDataStore = WKWebsiteDataStore.nonPersistent()
-        wvConfig.allowsInlineMediaPlayback = true
-        browserView = WKWebView(frame: .zero, configuration: wvConfig)
+        let configuration = WKWebViewConfiguration()
+        configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
+        configuration.allowsInlineMediaPlayback = true
+        
+        // For consistency we set our user agent similar to Firefox iOS.
+        //
+        // Important to note that this UA change only applies when the webview is created initially or
+        // when people hit the erase session button. The UA is not changed when you change the width of
+        // Focus on iPad, which means there could be some edge cases right now.
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            configuration.applicationNameForUserAgent = "Version/13.1 Safari/605.1.15"
+        } else {
+            configuration.applicationNameForUserAgent = "FxiOS/\(AppInfo.majorVersion) Mobile/15E148 Version/15.0"
+        }
+                
+        if #available(iOS 15.0, *) {
+            configuration.upgradeKnownHostsToHTTPS = true
+        }
+        browserView = WKWebView(frame: .zero, configuration: configuration)
 
         browserView.allowsBackForwardNavigationGestures = true
         browserView.allowsLinkPreview = true
@@ -154,7 +155,6 @@ class WebViewController: UIViewController, WebController {
         browserView.scrollView.delegate = self
         browserView.navigationDelegate = self
         browserView.uiDelegate = self
-        browserView.customUserAgent = userAgent?.getUserAgent()
 
         progressObserver = browserView.observe(\WKWebView.estimatedProgress) { (webView, value) in
             self.delegate?.webController(self, didUpdateEstimatedProgress: webView.estimatedProgress)
@@ -232,6 +232,10 @@ class WebViewController: UIViewController, WebController {
         browserView.evaluateJavaScript(javascript, completionHandler: completion)
     }
 
+    func focus() {
+        browserView.becomeFirstResponder()
+    }
+
     override func viewDidLoad() {
         self.browserView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
     }
@@ -278,6 +282,7 @@ extension WebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         delegate?.webControllerDidStartNavigation(self)
         if case .on = trackingProtectionStatus { trackingInformation = TPPageStats() }
+        currentContentMode = navigation.effectiveContentMode
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
@@ -294,6 +299,18 @@ extension WebViewController: WKNavigationDelegate {
         let errorPageData = ErrorPage(error: error).data
         webView.load(errorPageData, mimeType: "", characterEncodingName: UIConstants.strings.encodingNameUTF8, baseURL: errorUrl)
     }
+    
+    func webView(
+        _ webView: WKWebView,
+        decidePolicyFor navigationAction: WKNavigationAction,
+        preferences: WKWebpagePreferences,
+        decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
+            if let hostName = navigationAction.request.url?.host,
+               let preferredContentMode = contentModeForHost[hostName] {
+                preferences.preferredContentMode = preferredContentMode
+            }
+            decisionHandler(.allow, preferences)
+        }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
         let response = navigationResponse.response

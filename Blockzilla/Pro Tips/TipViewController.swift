@@ -6,32 +6,40 @@ import UIKit
 
 class TipViewController: UIViewController {
     
-    private lazy var tipTitleLabel: SmartLabel = {
-        let label = SmartLabel()
-        label.textColor = UIConstants.colors.defaultFont
+    private lazy var tipTitleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .secondaryText
         label.font = UIConstants.fonts.shareTrackerStatsLabel
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.minimumScaleFactor = UIConstants.layout.homeViewLabelMinimumScale
         return label
     }()
     
-    private let tipDescriptionLabel: SmartLabel = {
-        let label = SmartLabel()
-        label.textColor = .accent
-        label.font = UIConstants.fonts.shareTrackerStatsLabel
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.minimumScaleFactor = UIConstants.layout.homeViewLabelMinimumScale
-        return label
+    private lazy var tipDescriptionButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitleColor(.accent, for: .normal)
+        button.setTitleColor(.accent, for: .highlighted)
+        button.titleLabel?.font = UIConstants.fonts.shareTrackerStatsLabel
+        button.titleLabel?.textAlignment = .center
+        button.titleLabel?.numberOfLines = 0
+        button.isEnabled = self.tip.action != nil
+        return button
+    }()
+    
+    private lazy var stackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [UIView(), tipTitleLabel, tipDescriptionButton])
+        stackView.spacing = 0
+        stackView.alignment = .center
+        stackView.axis = .vertical
+        return stackView
     }()
     
     public let tip: TipManager.Tip
-    private let tipTapped: (TipManager.Tip) -> ()
+    private let tipTappedAction: (TipManager.Tip) -> ()
     
-    init(tip: TipManager.Tip, tipTapped: @escaping (TipManager.Tip) -> ()) {
+    init(tip: TipManager.Tip, tipTappedAction: @escaping (TipManager.Tip) -> ()) {
         self.tip = tip
-        self.tipTapped = tipTapped
+        self.tipTappedAction = tipTappedAction
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -42,29 +50,19 @@ class TipViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
                 
-        view.addSubview(tipTitleLabel)
-        view.addSubview(tipDescriptionLabel)
+        view.addSubview(stackView)
         
         tipTitleLabel.text = tip.title
-        tipDescriptionLabel.text = tip.description
+        tipDescriptionButton.setTitle(tip.description, for: .normal)
+        tipDescriptionButton.addTarget(self, action: #selector(tapTip), for: .touchUpInside)
 
-        tipTitleLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.bottom.equalTo(self.view.snp.centerY)
+        stackView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(UIConstants.layout.tipViewPadding)
+            make.top.bottom.equalToSuperview()
         }
-
-        tipDescriptionLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.top.equalTo(self.view.snp.centerY)
-        }
-
-        self.view.isUserInteractionEnabled = true
-        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapTip)))
     }
     
     @objc private func tapTip() {
-        tipTapped(tip)
+        tipTappedAction(tip)
     }
 }

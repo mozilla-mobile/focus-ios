@@ -57,7 +57,7 @@ class HomeViewController: UIViewController {
         }
 
         tipView.snp.makeConstraints { make in
-            make.bottom.equalTo(toolbar.snp.top).offset(-UIConstants.layout.tipViewBottomOffset)
+            make.bottom.equalTo(toolbar.snp.top).inset(UIConstants.layout.tipViewBottomOffset)
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(UIConstants.layout.tipViewHeight)
         }
@@ -77,7 +77,7 @@ class HomeViewController: UIViewController {
     
     func refreshTipsDisplay() {
         if let tip = tipManager.fetchFirstTip() {
-            showTextTip(tip)
+            logTelemetry(for: tip)
             tipsViewController.setupPageController(with: .showTips)
         } else if tipManager.canShowTips {
             tipsViewController.setupPageController(
@@ -126,7 +126,7 @@ class HomeViewController: UIViewController {
         tipsViewController.view.isHidden = false
     }
 
-    func showTextTip(_ tip: TipManager.Tip) {
+    func logTelemetry(for tip: TipManager.Tip) {
 
         switch tip.identifier {
         case TipManager.TipKey.biometricTip:
@@ -158,7 +158,7 @@ class HomeViewController: UIViewController {
             if urlBarIsActive {
                 make.bottom.equalToSuperview()
             } else {
-                make.bottom.equalTo(toolbar.snp.top).offset(-UIConstants.layout.tipViewBottomOffset)
+                make.bottom.equalTo(toolbar.snp.top).inset(UIConstants.layout.tipViewBottomOffset)
             }
         }
 

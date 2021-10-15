@@ -4,26 +4,7 @@
 
 import XCTest
 
-class SnapshotTests: XCTestCase {
-
-    let app = XCUIApplication()
-    let testRunningFirstRun = ["test01FirstRunScreens"]
-
-    override func setUp() {
-        super.setUp()
-        continueAfterFailure = false
-        // Test name looks like: "[Class testFunc]", parse out the function name
-        let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
-        let key = String(parts[1])
-        if testRunningFirstRun.contains(key) {
-        // for the current test name, add the db fixture used
-            app.launchArguments = ["testMode"]
-        } else {
-            app.launchArguments = ["testMode", "disableFirstRunUI"]
-        }
-        setupSnapshot(app)
-        app.launch()
-    }
+class SnapshotTests: BaseTestCaseL10n {
 
     func test01FirstRunScreens() {
         snapshot("00FirstRun")
@@ -31,7 +12,7 @@ class SnapshotTests: XCTestCase {
         snapshot("01FirstRun")
         app.swipeLeft()
         snapshot("02FirstRun")
-        waitForExistence(app.buttons["IntroViewController.button"], timeout: 5)
+        waitForExistence(app.buttons["IntroViewController.button"], timeout: 15)
         app.buttons["IntroViewController.button"].tap()
         snapshot("03Home")
     }
@@ -82,9 +63,17 @@ class SnapshotTests: XCTestCase {
 
     func test04ShareMenu() {
         app.textFields["URLBar.urlText"].tap()
-        app.textFields["URLBar.urlText"].typeText("bugzilla.mozilla.org\n")
-        waitForValueContains(app.textFields["URLBar.urlText"], value: "bugzilla.mozilla.org")
+        app.textFields["URLBar.urlText"].typeText("example.com\n")
+        waitForValueContains(app.textFields["URLBar.urlText"], value: "example")
+        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
         app.buttons["HomeView.settingsButton"].tap()
+        snapshot("WebsiteSettingsMenu")
+        waitForExistence(app.cells["icon_shortcuts_add"])
+        app.tables.cells["icon_shortcuts_add"].tap()
+        waitForExistence(app.buttons["HomeView.settingsButton"])
+        app.buttons["HomeView.settingsButton"].tap()
+        waitForExistence(app.tables["Context Menu"].cells["icon_openwith_active"])
+        snapshot("WebsiteSettingsMenu-RemovePin")
         app.tables["Context Menu"].cells["icon_openwith_active"].tap()
         snapshot("14ShareMenu")
     }
@@ -98,21 +87,21 @@ class SnapshotTests: XCTestCase {
         snapshot("15SafariIntegrationInstructions")
     }
 
-    func test06OpenMaps() {
-        app.textFields["URLBar.urlText"].tap()
-        app.textFields["URLBar.urlText"].typeText("maps.apple.com\n")
-        waitForValueContains(app.textFields["URLBar.urlText"], value: "maps.apple.com")
-        snapshot("16OpenMaps")
+    func test06Theme() {
+        dismissURLBarFocused()
+        app.buttons["HomeView.settingsButton"].tap()
+        app.tables.cells["icon_settings"].tap()
+        waitForExistence(app.cells["settingsViewController.themeCell"])
+        app.cells["settingsViewController.themeCell"].tap()
+        // Toggle the switch on-off to see the different menus
+        waitForExistence(app.cells["themeViewController.themetoogleCell"])
+        app.cells["themeViewController.themetoogleCell"].switches.element(boundBy: 0).tap()
+        snapshot("Settings-theme1")
+        app.cells["themeViewController.themetoogleCell"].switches.element(boundBy: 0).tap()
+        snapshot("Settings-theme2")
     }
 
-    func test07OpenAppStore() {
-        app.textFields["URLBar.urlText"].tap()
-        app.textFields["URLBar.urlText"].typeText("itunes.apple.com\n")
-        waitForValueContains(app.textFields["URLBar.urlText"], value: "itunes.apple.com")
-        snapshot("17OpenAppStore")
-    }
-
-    func test08PasteAndGo() {
+    func test07PasteAndGo() {
         // Inject a string into clipboard
         let clipboardString = "Hello world"
         UIPasteboard.general.string = clipboardString
@@ -147,17 +136,18 @@ class SnapshotTests: XCTestCase {
 
     func test11WebsiteView() {
         app.textFields.firstMatch.tap()
-        app.textFields.firstMatch.typeText("bugzilla.mozilla.org")
+        app.textFields.firstMatch.typeText("example.com")
         snapshot("04SearchFor")
 
         app.typeText("\n")
-        waitForValueContains(app.textFields["URLBar.urlText"], value: "bugzilla.mozilla.org")
+        waitForValueContains(app.textFields["URLBar.urlText"], value: "example")
+        waitForExistence(app.buttons["URLBar.deleteButton"], timeout: 10)
         app.buttons["URLBar.deleteButton"].tap()
         snapshot("07YourBrowsingHistoryHasBeenErased")
     }
 
 //    Run it only for EN locales for now
-//    func test12HomePageTipsCarrousel() {
+//    func test13HomePageTipsCarrousel() {
 //        dismissURLBarFocused()
 //        snapshot("1stTip")
 //        app.staticTexts["Select Add to Shortcuts from the Focus menu"].swipeLeft()
@@ -171,27 +161,4 @@ class SnapshotTests: XCTestCase {
 //        app.staticTexts["“Siri, erase my Firefox Focus session.”"].swipeLeft()
 //        snapshot("6thTip")
 //    }
-
-    private func dismissURLBarFocused() {
-        waitForExistence(app.buttons["URLBar.cancelButton"], timeout: 15)
-        app.buttons["URLBar.cancelButton"].tap()
-    }
-
-    func waitForValueContains(_ element: XCUIElement, value: String, file: String = #file, line: UInt = #line) {
-            waitFor(element, with: "value CONTAINS '\(value)'", file: file, line: line)
-        }
-
-    func waitForExistence(_ element: XCUIElement, timeout: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
-                waitFor(element, with: "exists == true", timeout: timeout, file: file, line: line)
-    }
-    
-    private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 5.0, file: String, line: UInt) {
-            let predicate = NSPredicate(format: predicateString)
-            let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
-            let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
-            if result != .completed {
-                let message = description ?? "Expect predicate \(predicateString) for \(element.description)"
-                self.recordFailure(withDescription: message, inFile: file, atLine: Int(line), expected: false)
-            }
-    }
 }

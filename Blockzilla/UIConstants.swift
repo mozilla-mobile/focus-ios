@@ -222,8 +222,9 @@ struct UIConstants {
         static let textLogoOffsetSmallDevice: CGFloat = 10 - browserToolbarHeight / 4
         static let textLogoMargin: CGFloat = 44
         static let tipDescriptionMargin: CGFloat = 12
-        static let tipViewHeight: CGFloat = 75
+        static let tipViewHeight: CGFloat = 148
         static let tipViewBottomOffset: CGFloat = 6
+        static let tipViewPadding: CGFloat = 16
         static let urlBarButtonImageSize: CGFloat = 20
         static let urlBarButtonTargetSize: CGFloat = 40
         static let settingsTextPadding: CGFloat = 10
@@ -372,6 +373,7 @@ struct UIConstants {
         static let labelBlockFonts = NSLocalizedString("Settings.toggleBlockFonts", value: "Block web fonts", comment: "Label for toggle on main screen")
         static let labelSendAnonymousUsageData = NSLocalizedString("Settings.toggleSendUsageData", value: "Send usage data", comment: "Label for Send Usage Data toggle on main screen")
         static let detailTextSendUsageData = NSLocalizedString("Settings.detailTextSendUsageData", value: "Mozilla strives to collect only what we need to provide and improve %@ for everyone.", comment: "Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar)")
+        static let general = NSLocalizedString("Settings.general", value: "General", comment: "Title for section in settings menu")
         static let theme = NSLocalizedString("Settings.theme", value: "Theme", comment: "Theme section in settings menu")
         static let systemTheme = NSLocalizedString("Settings.systemTheme", value: "System Theme", comment: "System value for theme section in settings menu")
         static let manualTheme = NSLocalizedString("Settings.manualTheme", value: "Manual", comment: "Manual value for theme section in settings menu")
@@ -535,7 +537,9 @@ struct UIConstants {
         static let autocompleteLabel = NSLocalizedString("Autocomplete.defaultLabel", value: "Autocomplete", comment: "Label for enabling or disabling autocomplete")
         static let autocompleteCustomSectionLabel = NSLocalizedString("Autocomplete.customLabel", value: "Custom URLs", comment: "Label for button taking you to your custom Autocomplete URL list")
         static let autocompleteCustomDescription = NSLocalizedString("Autocomplete.customDescriptoin", value: "Add and manage custom autocomplete URLs.", comment: "Description for adding and managing custom autocomplete URLs")
-
+        static let protectionStatusSecure = NSLocalizedString("ProtectionStatus.Secure", value: "Connection is secure", comment: "This is the value for a label that indicates if a user is on a secure https connection.")
+        static let protectionStatusNotSecure = NSLocalizedString("ProtectionStatus.NotSecure", value: "Connection is not secure", comment: "This is the value for a label that indicates if a user is on an unencrypted website.")
+        
         static let userDefaultsLaunchThresholdKey = "launchThreshold"
         static let userDefaultsLaunchCountKey = "launchCount"
         static let userDefaultsLastReviewRequestDate = "lastReviewRequestDate"

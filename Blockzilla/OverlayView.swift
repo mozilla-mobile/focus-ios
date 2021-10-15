@@ -172,7 +172,7 @@ class OverlayView: UIView {
             }
         }
         
-        findInPageButton.backgroundColor = iPadView ? .primaryBackground.withAlphaComponent(0.95) : .foundation
+        findInPageButton.backgroundColor = iPadView ? .systemBackground.withAlphaComponent(0.95) : .foundation
         
         remakeConstraintsForFindInPage()
         
@@ -231,7 +231,7 @@ class OverlayView: UIView {
     
     func setColorstToSearchButtons() {
         for button in searchButtonGroup {
-            button.backgroundColor = isIpadView ? .primaryBackground.withAlphaComponent(0.95) : .foundation
+            button.backgroundColor = isIpadView ? .systemBackground.withAlphaComponent(0.95) : .foundation
             button.highlightedBackgroundColor = UIColor(named: "SearchSuggestionButtonHighlight")
         }
     }
@@ -264,7 +264,7 @@ class OverlayView: UIView {
      
      */
 	func getAttributedButtonTitle(phrase: String, localizedStringFormat: String) -> NSAttributedString {
-		let attributedString = NSMutableAttributedString(string: localizedStringFormat, attributes: [.foregroundColor: UIConstants.Photon.Grey10])
+        let attributedString = NSMutableAttributedString(string: localizedStringFormat, attributes: [.foregroundColor: UIColor.primaryText])
 		let phraseString = NSAttributedString(string: phrase, attributes: [.font: UIConstants.fonts.copyButtonQuery,
                                                                            .foregroundColor: UIColor.primaryText])
 		if phrase != searchQuery {

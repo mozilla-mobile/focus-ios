@@ -5,9 +5,6 @@
 import UIKit
 import Telemetry
 import Glean
-import Viaduct
-import RustLog
-import Nimbus
 
 protocol AppSplashController {
     var splashView: UIView { get }
@@ -16,7 +13,7 @@ protocol AppSplashController {
 }
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashController {
+class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashController {    
     static let prefIntroDone = "IntroDone"
     static let prefIntroVersion = 2
     static let prefWhatsNewDone = "WhatsNewDone"
@@ -53,6 +50,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         }
 
         setupTelemetry()
+        setupExperimentation()
+        
         TPStatsBlocklistChecker.shared.startup()
         
         // Fix transparent navigation bar issue in iOS 15
@@ -60,7 +59,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
             appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.primaryText]
-            appearance.backgroundColor = .primaryBackground
+            appearance.backgroundColor = .systemBackground
             appearance.shadowColor = .clear
             UINavigationBar.appearance().standardAppearance = appearance
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
@@ -84,14 +83,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         browserViewController.modalDelegate = self
         window?.rootViewController = browserViewController
         window?.makeKeyAndVisible()
+        window?.overrideUserInterfaceStyle = UserDefaults.standard.theme.userInterfaceStyle
 
         WebCacheUtils.reset()
 
         displaySplashAnimation()
         KeyboardHelper.defaultHelper.startObserving()
-
-        // Override default keyboard appearance
-        UITextField.appearance().keyboardAppearance = .dark
 
         let prefIntroDone = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone)
 
@@ -317,9 +314,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
             queuedString = nil
         }
-
-        browserViewController.deactivateUrlBar()
-        
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -430,64 +424,28 @@ extension AppDelegate {
         GleanMetrics.TrackingProtection.hasContentBlocked.set(Settings.getToggle(.blockOther))
         GleanMetrics.TrackingProtection.hasSocialBlocked.set(Settings.getToggle(.blockSocial))
         GleanMetrics.MozillaProducts.hasFirefoxInstalled.set(UIApplication.shared.canOpenURL(URL(string: "firefox://")!))
-
-        // Proof-of-Concept application-services guff here.
-        //
-        // We're just seeing if we can successfully import and use various application-services
-        // components, they don't really do anything in the app yet.
-        //
+    }
         
-        // Hook up basic logging.
-        if !RustLog.shared.tryEnable({ (level, tag, message) -> Bool in
-            let logString = "[RUST][\(tag ?? "no-tag")] \(message)"
-            print(logString)
-            return true
-        }) {
-            print("ERROR: Unable to enable logging from Rust")
-        }
-
-        // Enable networking.
-        Viaduct.shared.useReqwestBackend()
-
-        var nimbusDbPath: String {
-            let profilePath = FileManager.default.containerURL(
-                forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier
-            )?
-            .appendingPathComponent("profile.profile")
-            .path
-            let dbPath = profilePath.flatMap {
-                URL(fileURLWithPath: $0).appendingPathComponent("nimbus.db").path
-            } ?? ""
-            
-            return dbPath
-        }
-
-        let errorReporter: NimbusErrorReporter = { err in
-            print(err)
-        }
-        do {
-            let nimbus = try Nimbus.create(
-                NimbusServerSettings(url: URL(string: "https://firefox.settings.services.mozilla.com")!),
-                appSettings: NimbusAppSettings(appName: "focus_ios", channel: "release"),
-                dbPath: nimbusDbPath,
-                resourceBundles: [],
-                errorReporter: errorReporter
-            )
-                nimbus.initialize()
-                nimbus.fetchExperiments()
-            }
-         catch {
-            print("ERROR: Unable to create Nimbus")
-        }
+    func setupExperimentation() {
+        // TODO Temporarily removed because of https://github.com/mozilla-mobile/focus-ios/issues/2600
     }
 
     func presentModal(viewController: UIViewController, animated: Bool) {
         window?.rootViewController?.present(viewController, animated: animated, completion: nil)
     }
+    
+    func presentSheet(viewController: UIViewController) {
+        let vc = SheetModalViewController(containerViewController: viewController)
+        vc.modalPresentationStyle = .overCurrentContext
+        // keep false
+        // modal animation will be handled in VC itself
+        window?.rootViewController?.present(vc, animated: false)
+    }
 }
 
 protocol ModalDelegate {
     func presentModal(viewController: UIViewController, animated: Bool)
+    func presentSheet(viewController: UIViewController)
 }
 
 extension UINavigationController {
