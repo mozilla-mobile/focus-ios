@@ -1527,6 +1527,7 @@ extension BrowserViewController: WebControllerDelegate {
         browserToolbar.color = .loading
         toggleURLBarBackground(isBright: false)
         updateURLBar()
+        GleanMetrics.Browser.totalUriCount.add()
     }
 
     func webControllerDidFinishNavigation(_ controller: WebController) {
