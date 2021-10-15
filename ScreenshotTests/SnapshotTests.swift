@@ -63,9 +63,9 @@ class SnapshotTests: BaseTestCaseL10n {
 
     func test04ShareMenu() {
         app.textFields["URLBar.urlText"].tap()
-        app.textFields["URLBar.urlText"].typeText("bugzilla.mozilla.org\n")
-        waitForValueContains(app.textFields["URLBar.urlText"], value: "bugzilla.mozilla.org")
-        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 5)
+        app.textFields["URLBar.urlText"].typeText("example.com\n")
+        waitForValueContains(app.textFields["URLBar.urlText"], value: "example")
+        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
         app.buttons["HomeView.settingsButton"].tap()
         snapshot("WebsiteSettingsMenu")
         waitForExistence(app.cells["icon_shortcuts_add"])
@@ -136,12 +136,12 @@ class SnapshotTests: BaseTestCaseL10n {
 
     func test11WebsiteView() {
         app.textFields.firstMatch.tap()
-        app.textFields.firstMatch.typeText("bugzilla.mozilla.org")
+        app.textFields.firstMatch.typeText("example.com")
         snapshot("04SearchFor")
 
         app.typeText("\n")
-        waitForValueContains(app.textFields["URLBar.urlText"], value: "bugzilla.mozilla.org")
-        waitForExistence(app.buttons["URLBar.deleteButton"], timeout: 5)
+        waitForValueContains(app.textFields["URLBar.urlText"], value: "example")
+        waitForExistence(app.buttons["URLBar.deleteButton"], timeout: 10)
         app.buttons["URLBar.deleteButton"].tap()
         snapshot("07YourBrowsingHistoryHasBeenErased")
     }
