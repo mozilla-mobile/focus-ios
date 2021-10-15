@@ -263,7 +263,7 @@ preferences:
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/2496
     data_reviews:
-      - https://github.com/mozilla-mobile/focus-ios/pull/TODO
+      - https://github.com/mozilla-mobile/focus-ios/pull/2621
     data_sensitivity:
       - interaction
     notification_emails:
