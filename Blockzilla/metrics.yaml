@@ -33,7 +33,7 @@ browser:
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/2447
     data_reviews:
-      - https://github.com/mozilla-mobile/focus-ios/pull/2497
+      - https://github.com/mozilla-mobile/focus-ios/pull/2623
     data_sensitivity:
       - interaction
     notification_emails:
