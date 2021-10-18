@@ -11,7 +11,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.backgroundColor = .primaryBackground
+        tableView.backgroundColor = .systemBackground
         tableView.estimatedRowHeight = 44
         tableView.separatorStyle = .singleLine
         tableView.separatorColor = UIConstants.colors.settingsSeparator
@@ -33,7 +33,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
 
     private func configureTableView() {
         view.addSubview(tableView)
-        view.backgroundColor = .primaryBackground
+        view.backgroundColor = .systemBackground
 
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -61,7 +61,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         switch (indexPath as NSIndexPath).row {
         case 0:
             cell.contentView.addSubview(headerView)
-            cell.contentView.backgroundColor = .primaryBackground
+            cell.contentView.backgroundColor = .systemBackground
             headerView.snp.makeConstraints { make in
                 make.edges.equalTo(cell)
             }
@@ -71,10 +71,10 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         default: break
         }
 
-        cell.backgroundColor = .secondaryBackground
+        cell.backgroundColor = .secondarySystemBackground
 
         let cellBG = UIView()
-        cellBG.backgroundColor = .primaryBackground
+        cellBG.backgroundColor = .systemBackground
         cell.selectedBackgroundView = cellBG
 
         cell.textLabel?.textColor = .primaryText
@@ -84,10 +84,10 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0 {
             let cell = UITableViewCell()
-            cell.backgroundColor = .primaryBackground
+            cell.backgroundColor = .systemBackground
             // Hack to cover header separator line
             let footer = UIView()
-            footer.backgroundColor = .primaryBackground
+            footer.backgroundColor = .systemBackground
             cell.addSubview(footer)
             cell.sendSubviewToBack(footer)
             footer.snp.makeConstraints { make in
@@ -183,7 +183,7 @@ private class AboutHeaderView: UIView {
 
         let aboutParagraph = SmartLabel()
         aboutParagraph.attributedText = attributed
-        aboutParagraph.textColor = UIConstants.colors.defaultFont
+        aboutParagraph.textColor = .tertiaryLabel
         aboutParagraph.font = UIConstants.fonts.aboutText
         aboutParagraph.numberOfLines = 0
         return aboutParagraph
@@ -193,7 +193,7 @@ private class AboutHeaderView: UIView {
         let label = SmartLabel()
         label.text = "\(AppInfo.shortVersion) (\(AppInfo.buildNumber)) / \(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
         label.font = UIConstants.fonts.aboutText
-        label.textColor = UIConstants.colors.defaultFont.withAlphaComponent(0.5)
+        label.textColor = .tertiaryLabel
         return label
     }()
 

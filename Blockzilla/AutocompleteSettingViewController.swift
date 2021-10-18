@@ -10,7 +10,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.backgroundColor = .primaryBackground
+        tableView.backgroundColor = .systemBackground
         tableView.separatorStyle = .singleLine
         tableView.separatorColor = UIConstants.colors.settingsSeparator
         tableView.allowsSelection = true
@@ -31,7 +31,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
     }
 
     override func viewDidLoad() {
-        view.backgroundColor = .primaryBackground
+        view.backgroundColor = .systemBackground
 
         title = UIConstants.strings.settingsAutocompleteSection
         navigationController?.navigationBar.tintColor = .accent
@@ -82,7 +82,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             }
         }
 
-        cell.backgroundColor = .secondaryBackground
+        cell.backgroundColor = .secondarySystemBackground
         cell.textLabel?.textColor = .primaryText
         cell.layoutMargins = UIEdgeInsets.zero
 
