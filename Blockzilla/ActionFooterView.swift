@@ -8,7 +8,7 @@ class ActionFooterView: UIView {
 
     lazy var textLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .secondaryDark.withAlphaComponent(0.6)
+        label.textColor = .secondaryLabel
         label.font = UIConstants.fonts.tableSectionHeader //.systemFont(ofSize: 13)
         label.numberOfLines = 0
         return label
