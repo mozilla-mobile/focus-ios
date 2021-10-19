@@ -102,7 +102,6 @@
 		C89AA970271720330089838F /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89AA96B271720330089838F /* Theme.swift */; };
 		C8A9FE0A26E7A63F00A9C72B /* UserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A9FE0926E7A5B900A9C72B /* UserDefault.swift */; };
 		C8C74BF4271D5D310009CE5A /* ActionFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C74BF3271D5D310009CE5A /* ActionFooterView.swift */; };
-		C8C74BF6271D5EB60009CE5A /* UITableViewCellExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C74BF5271D5EB60009CE5A /* UITableViewCellExtensions.swift */; };
 		D025F225218B64D600B262D8 /* SearchEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D025F224218B64D600B262D8 /* SearchEngineTests.swift */; };
 		D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0967A801EC50002009D937F /* TelemetryIntegration.swift */; };
 		D30179071BC6CB19009AD388 /* BlockerEnabledDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */; };
@@ -628,7 +627,6 @@
 		C89AA96B271720330089838F /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		C8A9FE0926E7A5B900A9C72B /* UserDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefault.swift; sourceTree = "<group>"; };
 		C8C74BF3271D5D310009CE5A /* ActionFooterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionFooterView.swift; sourceTree = "<group>"; };
-		C8C74BF5271D5EB60009CE5A /* UITableViewCellExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewCellExtensions.swift; sourceTree = "<group>"; };
 		D025F224218B64D600B262D8 /* SearchEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineTests.swift; sourceTree = "<group>"; };
 		D0967A801EC50002009D937F /* TelemetryIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TelemetryIntegration.swift; sourceTree = "<group>"; };
 		D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockerEnabledDetector.swift; sourceTree = "<group>"; };
@@ -1439,7 +1437,6 @@
 				74584E341FA1077000AF2582 /* SettingsContentViewController.swift */,
 				7460BD661F58B1B10096B745 /* GradientProgressBar.swift */,
 				C8C74BF3271D5D310009CE5A /* ActionFooterView.swift */,
-				C8C74BF5271D5EB60009CE5A /* UITableViewCellExtensions.swift */,
 				D5ABA3D81FCC846800D5C060 /* AutocompleteSettingViewController.swift */,
 				E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */,
 				16180DBA212F563800AFE3C2 /* Intents.intentdefinition */,
@@ -2137,7 +2134,6 @@
 				EB84F96F209380CE00BA6739 /* URLExtensions.swift in Sources */,
 				D3E3CA7D1DA827AD0079C94B /* HomeViewController.swift in Sources */,
 				D8E0152C1FB4136E00CA3B9F /* AddSearchEngineViewController.swift in Sources */,
-				C8C74BF6271D5EB60009CE5A /* UITableViewCellExtensions.swift in Sources */,
 				D3E251EB1DAD714C005918DC /* SafariInstructionsViewController.swift in Sources */,
 				C80F901C26C554B800F5112B /* PhotonActionSheetCell.swift in Sources */,
 				D35A0E021E26C94F00297884 /* ClosedRangeExtensions.swift in Sources */,
