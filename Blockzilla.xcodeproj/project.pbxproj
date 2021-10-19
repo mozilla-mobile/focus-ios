@@ -59,7 +59,6 @@
 		845174A826CD2C7100510113 /* ShortcutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845174A726CD2C7100510113 /* ShortcutView.swift */; };
 		846A23182668CC4500DB3C37 /* FullScreen.js in Resources */ = {isa = PBXBuildFile; fileRef = 846A23172668CC4500DB3C37 /* FullScreen.js */; };
 		8493C54B267B478B001686E9 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8493C54A267B478B001686E9 /* Colors.xcassets */; };
-		84D6F8E226C656610006D634 /* UITableViewCellExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D6F8E126C656610006D634 /* UITableViewCellExtensions.swift */; };
 		84EF9F97269489980000E361 /* TipsPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EF9F96269489980000E361 /* TipsPageControl.swift */; };
 		A89766DA1F57DCA9008183C5 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		B3481A551FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3481A541FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift */; };
@@ -102,6 +101,7 @@
 		C89AA96F271720330089838F /* ThemeTableViewAccessoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89AA96A271720330089838F /* ThemeTableViewAccessoryCell.swift */; };
 		C89AA970271720330089838F /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89AA96B271720330089838F /* Theme.swift */; };
 		C8A9FE0A26E7A63F00A9C72B /* UserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A9FE0926E7A5B900A9C72B /* UserDefault.swift */; };
+		C8C74BF4271D5D310009CE5A /* ActionFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C74BF3271D5D310009CE5A /* ActionFooterView.swift */; };
 		D025F225218B64D600B262D8 /* SearchEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D025F224218B64D600B262D8 /* SearchEngineTests.swift */; };
 		D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0967A801EC50002009D937F /* TelemetryIntegration.swift */; };
 		D30179071BC6CB19009AD388 /* BlockerEnabledDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */; };
@@ -201,9 +201,6 @@
 		F8324CE6264EA223007E4BFA /* style.css in Resources */ = {isa = PBXBuildFile; fileRef = F8324CE1264EA223007E4BFA /* style.css */; };
 		F8324CE7264EA223007E4BFA /* rights-focus.html in Resources */ = {isa = PBXBuildFile; fileRef = F8324CE2264EA223007E4BFA /* rights-focus.html */; };
 		F8324CE8264EA223007E4BFA /* rights-klar.html in Resources */ = {isa = PBXBuildFile; fileRef = F8324CE3264EA223007E4BFA /* rights-klar.html */; };
-		F84AFE751DE77FE6005C4DD1 /* LaunchScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE721DE77FE6005C4DD1 /* LaunchScreen.png */; };
-		F84AFE761DE77FE6005C4DD1 /* LaunchScreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE731DE77FE6005C4DD1 /* LaunchScreen@2x.png */; };
-		F84AFE771DE77FE6005C4DD1 /* LaunchScreen@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE741DE77FE6005C4DD1 /* LaunchScreen@3x.png */; };
 		F85F7A292655AD5800395515 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A282655AD5800395515 /* SnapKit */; };
 		F85F7A2B2655AD5800395515 /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2A2655AD5800395515 /* Fuzi */; };
 		F85F7A2F2655AD5800395515 /* Telemetry in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2E2655AD5800395515 /* Telemetry */; };
@@ -576,7 +573,6 @@
 		845174A726CD2C7100510113 /* ShortcutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutView.swift; sourceTree = "<group>"; };
 		846A23172668CC4500DB3C37 /* FullScreen.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FullScreen.js; sourceTree = "<group>"; };
 		8493C54A267B478B001686E9 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
-		84D6F8E126C656610006D634 /* UITableViewCellExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITableViewCellExtensions.swift; sourceTree = "<group>"; };
 		84EF9F96269489980000E361 /* TipsPageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsPageControl.swift; sourceTree = "<group>"; };
 		A89766D31F57DCA8008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A89766D41F57DCA8008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -627,6 +623,7 @@
 		C89AA96A271720330089838F /* ThemeTableViewAccessoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeTableViewAccessoryCell.swift; sourceTree = "<group>"; };
 		C89AA96B271720330089838F /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		C8A9FE0926E7A5B900A9C72B /* UserDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefault.swift; sourceTree = "<group>"; };
+		C8C74BF3271D5D310009CE5A /* ActionFooterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionFooterView.swift; sourceTree = "<group>"; };
 		D025F224218B64D600B262D8 /* SearchEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineTests.swift; sourceTree = "<group>"; };
 		D0967A801EC50002009D937F /* TelemetryIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TelemetryIntegration.swift; sourceTree = "<group>"; };
 		D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockerEnabledDetector.swift; sourceTree = "<group>"; };
@@ -969,9 +966,6 @@
 		F8324CE1264EA223007E4BFA /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
 		F8324CE2264EA223007E4BFA /* rights-focus.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "rights-focus.html"; sourceTree = "<group>"; };
 		F8324CE3264EA223007E4BFA /* rights-klar.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "rights-klar.html"; sourceTree = "<group>"; };
-		F84AFE721DE77FE6005C4DD1 /* LaunchScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchScreen.png; sourceTree = "<group>"; };
-		F84AFE731DE77FE6005C4DD1 /* LaunchScreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LaunchScreen@2x.png"; sourceTree = "<group>"; };
-		F84AFE741DE77FE6005C4DD1 /* LaunchScreen@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LaunchScreen@3x.png"; sourceTree = "<group>"; };
 		F8820C7126E19B1E006AB3B8 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Intro.strings"; sourceTree = "<group>"; };
 		F8820C7226E19B1E006AB3B8 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Intents.strings"; sourceTree = "<group>"; };
 		F8820C7326E19B1E006AB3B8 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -1423,9 +1417,6 @@
 				D3DA778B1DC2C60E009C114E /* errorPage.html */,
 				E4BF2DE21BACE8CA00DA9D68 /* Info.plist */,
 				D3C047BC1DCBD8ED00402FFB /* SearchEngines.plist */,
-				F84AFE721DE77FE6005C4DD1 /* LaunchScreen.png */,
-				F84AFE731DE77FE6005C4DD1 /* LaunchScreen@2x.png */,
-				F84AFE741DE77FE6005C4DD1 /* LaunchScreen@3x.png */,
 				D38EDB951DCA8A9400E28196 /* LaunchScreen.storyboard */,
 				C8A9FE0926E7A5B900A9C72B /* UserDefault.swift */,
 				B3481A541FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift */,
@@ -1436,6 +1427,7 @@
 				D30179C21BCC6F65009AD388 /* AboutViewController.swift */,
 				74584E341FA1077000AF2582 /* SettingsContentViewController.swift */,
 				7460BD661F58B1B10096B745 /* GradientProgressBar.swift */,
+				C8C74BF3271D5D310009CE5A /* ActionFooterView.swift */,
 				D5ABA3D81FCC846800D5C060 /* AutocompleteSettingViewController.swift */,
 				E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */,
 				16180DBA212F563800AFE3C2 /* Intents.intentdefinition */,
@@ -1485,7 +1477,6 @@
 				D392887E1BC5E47E0016A9A0 /* UIConstants.swift */,
 				D3E54FDD1DF0E0D6003E1AFF /* UIImageExtensions.swift */,
 				D32F71D21BCEF67C006D44FC /* UIViewExtensions.swift */,
-				84D6F8E126C656610006D634 /* UITableViewCellExtensions.swift */,
 				EB84F96E209380CE00BA6739 /* URLExtensions.swift */,
 				D3E2C96A1DA3069000DEBE3D /* URIFixup.swift */,
 				D3E2C9601DA2F7C600DEBE3D /* URLBar.swift */,
@@ -1892,9 +1883,7 @@
 				D3E2C8FE1D9F17AC00DEBE3D /* disconnect-social.json in Resources */,
 				74F94FF21FD9CA070047E629 /* Intro.strings in Resources */,
 				846A23182668CC4500DB3C37 /* FullScreen.js in Resources */,
-				F84AFE751DE77FE6005C4DD1 /* LaunchScreen.png in Resources */,
 				D3DA778C1DC2C60E009C114E /* errorPage.html in Resources */,
-				F84AFE761DE77FE6005C4DD1 /* LaunchScreen@2x.png in Resources */,
 				D38EDB961DCA8A9400E28196 /* LaunchScreen.storyboard in Resources */,
 				E40AFC741DDDE96D00DA5651 /* InfoPlist.strings in Resources */,
 				F8324CE5264EA223007E4BFA /* licenses.html in Resources */,
@@ -1909,7 +1898,6 @@
 				D3426AEF1DB846BB0016DA5A /* topdomains.txt in Resources */,
 				B3D23BEF1FA3A9E500D9C50F /* postload.js in Resources */,
 				F8324CE7264EA223007E4BFA /* rights-focus.html in Resources */,
-				F84AFE771DE77FE6005C4DD1 /* LaunchScreen@3x.png in Resources */,
 				D50939A91FBF807A005D4316 /* Settings.bundle in Resources */,
 				F8324CE4264EA223007E4BFA /* gpl.html in Resources */,
 				D3E54FD51DEFB25B003E1AFF /* SearchPlugins in Resources */,
@@ -1967,7 +1955,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"$PRODUCT_NAME\" = \"Firefox Klar\" ]; then\n  cp -v \"$SRCROOT/Blockzilla/Assets.xcassets/img_klar_wordmark.imageset/img_klar_wordmark.png\" \\\n    \"$SRCROOT/Blockzilla/LaunchScreen.png\"\n  cp -v \"$SRCROOT/Blockzilla/Assets.xcassets/img_klar_wordmark.imageset/img_klar_wordmark@2x.png\" \\\n    \"$SRCROOT/Blockzilla/LaunchScreen@2x.png\"\n  cp -v \"$SRCROOT/Blockzilla/Assets.xcassets/img_klar_wordmark.imageset/img_klar_wordmark@3x.png\" \\\n    \"$SRCROOT/Blockzilla/LaunchScreen@3x.png\"\nelse\n  cp -v \"$SRCROOT/Blockzilla/Assets.xcassets/img_focus_wordmark.imageset/img_focus_wordmark.png\" \\\n    \"$SRCROOT/Blockzilla/LaunchScreen.png\"\n  cp -v \"$SRCROOT/Blockzilla/Assets.xcassets/img_focus_wordmark.imageset/img_focus_wordmark@2x.png\" \\\n    \"$SRCROOT/Blockzilla/LaunchScreen@2x.png\"\n  cp -v \"$SRCROOT/Blockzilla/Assets.xcassets/img_focus_wordmark.imageset/img_focus_wordmark@3x.png\" \\\n    \"$SRCROOT/Blockzilla/LaunchScreen@3x.png\"\nfi\n";
+			shellScript = "if [ \"$PRODUCT_NAME\" = \"Firefox Klar\" ]; then\n  cp -v \"$SRCROOT/Blockzilla/Assets.xcassets/img_klar_wordmark.imageset/img_klar_wordmark.png\" \\\n    \"$SRCROOT/Blockzilla/Assets.xcassets/img_focus_launchscreen.imageset/img_focus_wordmark.png\"\n  cp -v \"$SRCROOT/Blockzilla/Assets.xcassets/img_klar_wordmark.imageset/img_klar_wordmark@2x.png\" \\\n    \"$SRCROOT/Blockzilla/Assets.xcassets/img_focus_launchscreen.imageset/img_focus_wordmark@2x.png\"\n  cp -v \"$SRCROOT/Blockzilla/Assets.xcassets/img_klar_wordmark.imageset/img_klar_wordmark@3x.png\" \\\n    \"$SRCROOT/Blockzilla/Assets.xcassets/img_focus_launchscreen.imageset/img_focus_wordmark@3x.png\"\n  cp -v \"$SRCROOT/Blockzilla/Assets.xcassets/img_klar_wordmark.imageset/ic_logo_wordmark_light_horizontal_klar.png\" \\\n    \"$SRCROOT/Blockzilla/Assets.xcassets/img_focus_launchscreen.imageset/ic_logo_wordmark_light_horizontal.png\"\n  cp -v \"$SRCROOT/Blockzilla/Assets.xcassets/img_klar_wordmark.imageset/ic_logo_wordmark_light_horizontal_klar@2x.png\" \\\n    \"$SRCROOT/Blockzilla/Assets.xcassets/img_focus_launchscreen.imageset/ic_logo_wordmark_light_horizontal@2x.png\"\n  cp -v \"$SRCROOT/Blockzilla/Assets.xcassets/img_klar_wordmark.imageset/ic_logo_wordmark_light_horizontal_klar@3x.png\" \\\n    \"$SRCROOT/Blockzilla/Assets.xcassets/img_focus_launchscreen.imageset/ic_logo_wordmark_light_horizontal@3x.png\"\nelse\n  cp -v \"$SRCROOT/Blockzilla/Assets.xcassets/img_focus_wordmark.imageset/img_focus_wordmark.png\" \\\n    \"$SRCROOT/Blockzilla/Assets.xcassets/img_focus_launchscreen.imageset/img_focus_wordmark.png\"\n  cp -v \"$SRCROOT/Blockzilla/Assets.xcassets/img_focus_wordmark.imageset/img_focus_wordmark@2x.png\" \\\n    \"$SRCROOT/Blockzilla/Assets.xcassets/img_focus_launchscreen.imageset/img_focus_wordmark@2x.png\"\n  cp -v \"$SRCROOT/Blockzilla/Assets.xcassets/img_focus_wordmark.imageset/img_focus_wordmark@3x.png\" \\\n    \"$SRCROOT/Blockzilla/Assets.xcassets/img_focus_launchscreen.imageset/img_focus_wordmark@3x.png\"\n  cp -v \"$SRCROOT/Blockzilla/Assets.xcassets/img_focus_wordmark.imageset/ic_logo_wordmark_light_horizontal.png\" \\\n    \"$SRCROOT/Blockzilla/Assets.xcassets/img_focus_launchscreen.imageset/ic_logo_wordmark_light_horizontal.png\"\n  cp -v \"$SRCROOT/Blockzilla/Assets.xcassets/img_focus_wordmark.imageset/ic_logo_wordmark_light_horizontal@2x.png\" \\\n    \"$SRCROOT/Blockzilla/Assets.xcassets/img_focus_launchscreen.imageset/ic_logo_wordmark_light_horizontal@2x.png\"\n  cp -v \"$SRCROOT/Blockzilla/Assets.xcassets/img_focus_wordmark.imageset/ic_logo_wordmark_light_horizontal@3x.png\" \\\n    \"$SRCROOT/Blockzilla/Assets.xcassets/img_focus_launchscreen.imageset/ic_logo_wordmark_light_horizontal@3x.png\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2077,6 +2065,7 @@
 				D3E54FDE1DF0E0D7003E1AFF /* UIImageExtensions.swift in Sources */,
 				16D716A5211503CD000C8A66 /* PageActionSheetItems.swift in Sources */,
 				C8337DFA2710898800093D42 /* SubtitleCell.swift in Sources */,
+				C8C74BF4271D5D310009CE5A /* ActionFooterView.swift in Sources */,
 				D597608C1F9FEFB300A2D212 /* TrackingProtection.swift in Sources */,
 				C8337DFD2710898800093D42 /* ImageCell.swift in Sources */,
 				D34E70351DA874AA00BABDCC /* StringExtensions.swift in Sources */,
@@ -2156,7 +2145,6 @@
 				845174A626CD0C2500510113 /* ShortcutsManager.swift in Sources */,
 				D3426AE91DB7F4060016DA5A /* KeyboardHelper.swift in Sources */,
 				B3CD41CC1FD1CAF000AEBD58 /* PaddedSwitch.swift in Sources */,
-				84D6F8E226C656610006D634 /* UITableViewCellExtensions.swift in Sources */,
 				D3E251EA1DAD714C005918DC /* InstructionsView.swift in Sources */,
 				D3561B2B1DB5925100A5EEAF /* GradientBackgroundView.swift in Sources */,
 				C82D143026EF62BE007B275C /* TipsPageViewController.swift in Sources */,
