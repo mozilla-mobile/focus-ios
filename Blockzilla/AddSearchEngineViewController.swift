@@ -47,7 +47,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     }
 
     private func setupUI() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .secondarySystemBackground
         view.addSubview(scrollView)
 
         scrollView.snp.makeConstraints { (make) in
@@ -61,7 +61,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         container.addSubview(nameLabel)
 
         nameInput.attributedPlaceholder = NSAttributedString(string: UIConstants.strings.AddSearchEngineName, attributes: [.foregroundColor: UIColor.primaryText.withAlphaComponent(0.65)])
-        nameInput.backgroundColor = .secondarySystemBackground
+        nameInput.backgroundColor = .systemBackground
         nameInput.textColor = .primaryText
         nameInput.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: rowHeight))
         nameInput.leftViewMode = .always
@@ -73,10 +73,10 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         container.addSubview(nameInput)
 
         let templateContainer = UIView()
-        templateContainer.backgroundColor = .systemBackground
+        templateContainer.backgroundColor = .secondarySystemBackground
         container.addSubview(templateContainer)
 
-        templatePlaceholderLabel.backgroundColor = .secondarySystemBackground
+        templatePlaceholderLabel.backgroundColor = .systemBackground
         templatePlaceholderLabel.textColor = .primaryText.withAlphaComponent(0.65)
         templatePlaceholderLabel.text = UIConstants.strings.AddSearchEngineTemplatePlaceholder
         templatePlaceholderLabel.font = UIConstants.fonts.addSearchEngineInput
@@ -279,18 +279,18 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
 
     func textViewDidBeginEditing(_ textView: UITextView) {
         templatePlaceholderLabel.isHidden = !textView.text.isEmpty
-        templateInput.backgroundColor = textView.text.isEmpty ? .clear : .secondarySystemBackground
+        templateInput.backgroundColor = textView.text.isEmpty ? .clear : .systemBackground
     }
 
     func textViewDidChange(_ textView: UITextView) {
         templatePlaceholderLabel.isHidden = !textView.text.isEmpty
-        templateInput.backgroundColor = textView.text.isEmpty ? .clear : .secondarySystemBackground
+        templateInput.backgroundColor = textView.text.isEmpty ? .clear : .systemBackground
         navigationItem.rightBarButtonItem?.isEnabled = !templateInput.text.isEmpty && !nameInput.text!.isEmpty
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
         templatePlaceholderLabel.isHidden = !textView.text.isEmpty
-        templateInput.backgroundColor = textView.text.isEmpty ? .clear : .secondarySystemBackground
+        templateInput.backgroundColor = textView.text.isEmpty ? .clear : .systemBackground
     }
 
     static func isValidTemplate(_ template: String) -> Bool {
