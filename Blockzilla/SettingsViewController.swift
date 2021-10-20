@@ -76,7 +76,6 @@ class SettingsTableViewToggleCell: SettingsTableViewCell {
         textLabel?.numberOfLines = 0
         textLabel?.text = toggle.label
 
-        backgroundColor = UIConstants.colors.cellBackground
         newLabel.textColor = .primaryText
         textLabel?.textColor = .primaryText
         layoutMargins = UIEdgeInsets.zero
@@ -173,7 +172,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.backgroundColor = .secondarySystemBackground
         tableView.separatorStyle = .singleLine
         tableView.allowsSelection = true
         tableView.estimatedRowHeight = UITableView.automaticDimension
@@ -265,7 +263,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     override func viewDidLoad() {
-        view.backgroundColor = .secondarySystemBackground
 
         title = UIConstants.strings.settingsTitle
 
@@ -467,7 +464,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
         }
 
-        cell.backgroundColor = .systemBackground
         cell.textLabel?.textColor = .primaryText
         cell.layoutMargins = UIEdgeInsets.zero
         cell.detailTextLabel?.textColor = .secondaryText

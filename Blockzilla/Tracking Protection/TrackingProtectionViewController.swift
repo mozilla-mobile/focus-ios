@@ -181,7 +181,6 @@ class TrackingProtectionViewController: UIViewController {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.delegate = profileDataSource
         tableView.dataSource = profileDataSource
-        tableView.backgroundColor = .secondarySystemBackground
         tableView.separatorStyle = .singleLine
         tableView.tableFooterView = UIView()
         tableView.register(SwitchTableViewCell.self)
@@ -216,7 +215,6 @@ class TrackingProtectionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .secondarySystemBackground
         title = UIConstants.strings.trackingProtectionLabel
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.primaryText]
         navigationController?.navigationBar.tintColor = .accent
