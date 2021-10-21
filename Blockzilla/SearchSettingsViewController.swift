@@ -18,7 +18,6 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.backgroundColor = .systemBackground
         tableView.separatorStyle = .singleLine
         tableView.allowsSelection = true
         tableView.estimatedRowHeight = UITableView.automaticDimension
@@ -87,9 +86,8 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
             let cell = UITableViewCell(style: .default, reuseIdentifier: "addSearchEngine")
             cell.textLabel?.text = UIConstants.strings.AddSearchEngineButton
             cell.textLabel?.textColor = .primaryText
-            cell.backgroundColor = .secondarySystemBackground
             cell.accessibilityIdentifier = "addSearchEngine"
-            cell.selectedBackgroundView = getBackgroundView()
+            cell.selectionStyle = .gray
             return cell
         } else if indexPath.section == 1 && indexPath.row == 0 {
             let cell = UITableViewCell(style: .default, reuseIdentifier: "restoreDefaultEngines")
@@ -97,13 +95,11 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
             cell.textLabel?.font = UIFont.systemFont(ofSize: 17)
             cell.textLabel?.numberOfLines = 0
             cell.textLabel?.lineBreakMode = .byWordWrapping
-            cell.backgroundColor = .secondarySystemBackground
             cell.accessibilityIdentifier = "restoreDefaults"
-            cell.selectedBackgroundView = getBackgroundView()
 
             if searchEngineManager.hasDisabledDefaultEngine() {
                 cell.textLabel?.textColor = .primaryText
-                cell.selectionStyle = .default
+                cell.selectionStyle = .gray
                 cell.isUserInteractionEnabled = true
             } else {
                 cell.textLabel?.textColor = UIConstants.colors.settingsDisabled
@@ -118,8 +114,7 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
             cell.textLabel?.text = engine.name
             cell.textLabel?.textColor = .primaryText
             cell.imageView?.image = engine.image?.createScaled(size: CGSize(width: 24, height: 24))
-            cell.selectedBackgroundView = getBackgroundView()
-            cell.backgroundColor = .secondarySystemBackground
+            cell.selectionStyle = .gray
             cell.accessibilityIdentifier = engine.name
 
             if tableView.isEditing {
@@ -218,7 +213,6 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
 
     private func getBackgroundView(bgColor: UIColor = UIConstants.colors.cellSelected) -> UIView {
         let view = UIView()
-        view.backgroundColor = .secondarySystemBackground
         return view
     }
 }
