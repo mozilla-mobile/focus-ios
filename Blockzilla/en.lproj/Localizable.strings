@@ -564,3 +564,21 @@
 
 /* This is the value for a label that indicates if a user is on a secure https connection. */
 "ProtectionStatus.Secure" = "Connection is secure";
+
+"releaseTipTitle" = "Why yes, we do have a fresh new look!";
+"releaseTipDescription" = "Read more about this and other updates to %@.";
+"shortcutsTipTitle" = "Create shortcuts to the sites you visit most:";
+"shortcutsTipDescription" = "Select Add to Shortcuts from the %@ menu";
+"sitesNotWorkingTipTitle" = "Site missing content or acting strange?";
+"sitesNotWorkingTipDescription" = "Try turning off Tracking Protection";
+"biometricTipTitle" = "Lock %@ when a site is open:";
+"biometricTipFaceIdDescription" = "Turn on Face ID";
+"biometricTipTouchIdDescription" = "Turn on Touch ID";
+"requestDesktopTipTitle" = "Want to see the full desktop version of a site?";
+"requestDesktopTipDescription" = "Page Actions > Request Desktop Site";
+"siriFavoriteTipTitle" = "“Siri, open my favorite site.”";
+"siriFavoriteTipDescription" = "Add Siri shortcut";
+"siriEraseTipTitle" = "“Siri, erase my %@ session.”";
+"siriEraseTipDescription" = "Add Siri shortcut";
+"shareTrackersTipTitle" = "You browse. %@ blocks.";
+"shareTrackersTipDescription" = "%@ trackers blocked so far";

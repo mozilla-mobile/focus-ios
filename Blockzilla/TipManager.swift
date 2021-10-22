@@ -134,7 +134,7 @@ class TipManager {
             : UIConstants.strings.biometricTipTouchIdDescription
         
         return Tip(
-            title: UIConstants.strings.biometricTipTitle,
+            title: String(format: UIConstants.strings.biometricTipTitle, AppInfo.productName),
             description: description,
             identifier: TipKey.biometricTip,
             action: .showSettings(destination: .biometric),
@@ -158,7 +158,7 @@ class TipManager {
     )
 
     private lazy var siriEraseTip = Tip(
-        title: UIConstants.strings.siriEraseTipTitle,
+        title: String(format: UIConstants.strings.siriEraseTipTitle, AppInfo.productName),
         description: UIConstants.strings.siriEraseTipDescription,
         identifier: TipKey.siriEraseTip,
         action: .showSettings(destination: .siriFavorite),
@@ -175,7 +175,7 @@ class TipManager {
     
     private var shareTrackersTip: Tip {
         Tip(
-            title: UIConstants.strings.shareTrackersTipTitle,
+            title: String(format: UIConstants.strings.shareTrackersTipTitle, AppInfo.productName),
             description: shareTrackersDescription(),
             identifier: TipKey.shareTrackersTip,
             canShow: { UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey) >= 10 }

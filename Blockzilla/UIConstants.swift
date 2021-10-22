@@ -546,23 +546,25 @@ struct UIConstants {
         
         // Home Screen Tips
         
-        static let releaseTipTitle = "Why yes, we do have a fresh new look!"
-        static let releaseTipDescription = "Read more about this and other updates to %@."
-        static let shortcutsTipTitle = "Create shortcuts to the sites you visit most:"
-        static let shortcutsTipDescription = "Select Add to Shortcuts from the %@ menu"
-        static let sitesNotWorkingTipTitle = "Site missing content or acting strange?"
-        static let sitesNotWorkingTipDescription = "Try turning off Tracking Protection"
-        static let biometricTipTitle = String(format: "Lock %@ when a site is open:", AppInfo.productName)
-        static let biometricTipFaceIdDescription = "Turn on Face ID"
-        static let biometricTipTouchIdDescription = "Turn on Touch ID"
-        static let requestDesktopTipTitle = "Want to see the full desktop version of a site?"
-        static let requestDesktopTipDescription = "Page Actions > Request Desktop Site"
-        static let siriFavoriteTipTitle = "“Siri, open my favorite site.”"
-        static let siriFavoriteTipDescription = "Add Siri shortcut"
-        static let siriEraseTipTitle = String(format: "“Siri, erase my %@ session.”", AppInfo.productName)
-        static let siriEraseTipDescription = "Add Siri shortcut"
-        static let shareTrackersTipTitle = String(format: "You browse. %@ blocks.", AppInfo.productName)
-        static let shareTrackersTipDescription = "%@ trackers blocked so far"
+        static let releaseTipTitle = NSLocalizedString("releaseTipTitle", value: "Why yes, we do have a fresh new look!", comment: "")
+        static let releaseTipDescription = NSLocalizedString("releaseTipDescription", value: "Read more about this and other updates to %@.", comment: "")
+        static let shortcutsTipTitle = NSLocalizedString("shortcutsTipTitle", value: "Create shortcuts to the sites you visit most:", comment: "")
+        static let shortcutsTipDescription = NSLocalizedString("shortcutsTipDescription", value: "Select Add to Shortcuts from the %@ menu", comment: "")
+        static let sitesNotWorkingTipTitle = NSLocalizedString("sitesNotWorkingTipTitle", value: "Site missing content or acting strange?", comment: "")
+        static let sitesNotWorkingTipDescription = NSLocalizedString("sitesNotWorkingTipDescription", value: "Try turning off Tracking Protection", comment: "")
+        static let biometricTipTitle = NSLocalizedString("biometricTipTitle", value: "Lock %@ when a site is open:", comment: "")
+        static let biometricTipFaceIdDescription = NSLocalizedString("biometricTipFaceIdDescription", value: "Turn on Face ID", comment: "")
+        static let biometricTipTouchIdDescription = NSLocalizedString("biometricTipTouchIdDescription", value: "Turn on Touch ID", comment: "")
+        static let requestDesktopTipTitle = NSLocalizedString("requestDesktopTipTitle", value: "Want to see the full desktop version of a site?", comment: "")
+        static let requestDesktopTipDescription = NSLocalizedString("requestDesktopTipDescription", value: "Page Actions > Request Desktop Site", comment: "")
+        static let siriFavoriteTipTitle = NSLocalizedString("siriFavoriteTipTitle", value: "“Siri, open my favorite site.”", comment: "")
+        static let siriFavoriteTipDescription = NSLocalizedString("siriFavoriteTipDescription", value: "Add Siri shortcut", comment: "")
+        static let siriEraseTipTitle = NSLocalizedString("siriEraseTipTitle", value: "“Siri, erase my %@ session.”", comment: "")
+        static let siriEraseTipDescription = NSLocalizedString("siriEraseTipDescription", value: "Add Siri shortcut", comment: "")
+        static let shareTrackersTipTitle = NSLocalizedString("shareTrackersTipTitle", value: "You browse. %@ blocks.", comment: "")
+        static let shareTrackersTipDescription = NSLocalizedString("shareTrackersTipDescription", value: "%@ trackers blocked so far", comment: "")
+        
+        
         static let encodingNameUTF8 = "utf-8"
         static let googleAmpURLPrefix = "https://www.google.com/amp/s/"
         static let truncateLeader = "..."
