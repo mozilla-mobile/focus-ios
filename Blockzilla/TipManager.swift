@@ -98,7 +98,6 @@ class TipManager {
     }
     
     private var availableTips: [Tip] {
-        guard canShowTips else { return [] }
         guard Settings.getToggle(.showHomeScreenTips) else { return [] }
         return tips.filter { $0.canShow() }
     }
@@ -189,8 +188,6 @@ class TipManager {
         guard #available(iOS 12.0, *) else { return false }
         return true
     }
-
-    var canShowTips: Bool { NSLocale.current.languageCode == "en" && !AppInfo.isKlar }
     
     func getTip(after: Tip) -> Tip? {
         if let index = availableTips.firstIndex(where: { $0.identifier == after.identifier }) {
