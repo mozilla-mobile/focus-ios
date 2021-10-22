@@ -546,24 +546,23 @@ struct UIConstants {
         
         // Home Screen Tips
         
-        static let releaseTipTitle = NSLocalizedString("releaseTipTitle", value: "Why yes, we do have a fresh new look!", comment: "")
-        static let releaseTipDescription = NSLocalizedString("releaseTipDescription", value: "Read more about this and other updates to %@.", comment: "")
-        static let shortcutsTipTitle = NSLocalizedString("shortcutsTipTitle", value: "Create shortcuts to the sites you visit most:", comment: "")
-        static let shortcutsTipDescription = NSLocalizedString("shortcutsTipDescription", value: "Select Add to Shortcuts from the %@ menu", comment: "")
-        static let sitesNotWorkingTipTitle = NSLocalizedString("sitesNotWorkingTipTitle", value: "Site missing content or acting strange?", comment: "")
-        static let sitesNotWorkingTipDescription = NSLocalizedString("sitesNotWorkingTipDescription", value: "Try turning off Tracking Protection", comment: "")
-        static let biometricTipTitle = NSLocalizedString("biometricTipTitle", value: "Lock %@ when a site is open:", comment: "")
-        static let biometricTipFaceIdDescription = NSLocalizedString("biometricTipFaceIdDescription", value: "Turn on Face ID", comment: "")
-        static let biometricTipTouchIdDescription = NSLocalizedString("biometricTipTouchIdDescription", value: "Turn on Touch ID", comment: "")
-        static let requestDesktopTipTitle = NSLocalizedString("requestDesktopTipTitle", value: "Want to see the full desktop version of a site?", comment: "")
-        static let requestDesktopTipDescription = NSLocalizedString("requestDesktopTipDescription", value: "Page Actions > Request Desktop Site", comment: "")
-        static let siriFavoriteTipTitle = NSLocalizedString("siriFavoriteTipTitle", value: "“Siri, open my favorite site.”", comment: "")
-        static let siriFavoriteTipDescription = NSLocalizedString("siriFavoriteTipDescription", value: "Add Siri shortcut", comment: "")
-        static let siriEraseTipTitle = NSLocalizedString("siriEraseTipTitle", value: "“Siri, erase my %@ session.”", comment: "")
-        static let siriEraseTipDescription = NSLocalizedString("siriEraseTipDescription", value: "Add Siri shortcut", comment: "")
-        static let shareTrackersTipTitle = NSLocalizedString("shareTrackersTipTitle", value: "You browse. %@ blocks.", comment: "")
-        static let shareTrackersTipDescription = NSLocalizedString("shareTrackersTipDescription", value: "%@ trackers blocked so far", comment: "")
-        
+        static let releaseTipTitle = NSLocalizedString("Tip.Release.Title", value: "Why yes, we do have a fresh new look!", comment: "Text for a label that indicates the title for release tip.")
+        static let releaseTipDescription = NSLocalizedString("Tip.Release.Description", value: "Read more about this and other updates to %@.", comment: "Text for a label that indicates the description for release tip.")
+        static let shortcutsTipTitle = NSLocalizedString("Tip.Shortcuts.Title", value: "Create shortcuts to the sites you visit most:", comment: "Text for a label that indicates the title for shortcuts tip.")
+        static let shortcutsTipDescription = NSLocalizedString("Tip.Shortcuts.Description", value: "Select Add to Shortcuts from the %@ menu", comment: "Text for a label that indicates the description for shortcuts tip.")
+        static let sitesNotWorkingTipTitle = NSLocalizedString("Tip.SitesNotWorking.Title", value: "Site missing content or acting strange?", comment: "Text for a label that indicates the title for sites not working tip.")
+        static let sitesNotWorkingTipDescription = NSLocalizedString("Tip.SitesNotWorking.Description", value: "Try turning off Tracking Protection", comment: "Text for a label that indicates the description for sites not working tip.")
+        static let biometricTipTitle = NSLocalizedString("Tip.Biometric.Title", value: "Lock %@ when a site is open:", comment: "Text for a label that indicates the title for biometric tip.")
+        static let biometricTipFaceIdDescription = NSLocalizedString("Tip.BiometricFaceId.Description", value: "Turn on Face ID", comment: "Text for a label that indicates the description for biometric Face ID tip.")
+        static let biometricTipTouchIdDescription = NSLocalizedString("Tip.BiometricTouchId.Description", value: "Turn on Touch ID", comment: "Text for a label that indicates the description for biometric Touch ID tip.")
+        static let requestDesktopTipTitle = NSLocalizedString("Tip.RequestDesktop.Title", value: "Want to see the full desktop version of a site?", comment: "Text for a label that indicates the title for request desktop tip.")
+        static let requestDesktopTipDescription = NSLocalizedString("Tip.RequestDesktop.Description", value: "Page Actions > Request Desktop Site", comment: "Text for a label that indicates the description for request desktop tip.")
+        static let siriFavoriteTipTitle = NSLocalizedString("Tip.SiriFavorite.Title", value: "“Siri, open my favorite site.”", comment: "Text for a label that indicates the title for siri favorite tip.")
+        static let siriFavoriteTipDescription = NSLocalizedString("Tip.SiriFavorite.Description", value: "Add Siri shortcut", comment: "Text for a label that indicates the description for siri favorite tip.")
+        static let siriEraseTipTitle = NSLocalizedString("Tip.SiriErase.Title", value: "“Siri, erase my %@ session.”", comment: "Text for a label that indicates the title for siri erase tip.")
+        static let siriEraseTipDescription = NSLocalizedString("Tip.SiriErase.Description", value: "Add Siri shortcut", comment: "Text for a label that indicates the description for siri erase tip.")
+        static let shareTrackersTipTitle = NSLocalizedString("Tip.ShareTrackers.Title", value: "You browse. %@ blocks.", comment: "Text for a label that indicates the title for share trackers tip.")
+        static let shareTrackersTipDescription = NSLocalizedString("Tip.ShareTrackers.Description", value: "%@ trackers blocked so far", comment: "Text for a label that indicates the description for share trackers tip.")
         
         static let encodingNameUTF8 = "utf-8"
         static let googleAmpURLPrefix = "https://www.google.com/amp/s/"
