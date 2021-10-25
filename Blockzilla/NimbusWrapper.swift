@@ -8,6 +8,21 @@ import RustLog
 import Viaduct
 import Nimbus
 
+/// An application specific enum of app features that we are configuring with experiments.
+/// This is expected to grow and shrink across releases of the app.
+enum FeatureId: String {
+    case nimbusValidation = "nimbus-validation"
+}
+
+/// A set of common branch ids used in experiments. Branch ids can be application/experiment specific, so
+/// _could_ be an `enum`; however, there is a likelihood that they will become less relevant in the future.
+enum ExperimentBranch {
+    static let a1 = "a1"
+    static let a2 = "a2"
+    static let control = "control"
+    static let treatment = "treatment"
+}
+
 class NimbusWrapper {
     static let shared = NimbusWrapper()
     
