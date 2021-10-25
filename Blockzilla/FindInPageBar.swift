@@ -68,6 +68,7 @@ class FindInPageBar: UIView {
 
         searchText.addTarget(self, action: #selector(didTextChange), for: .editingChanged)
         searchText.textColor = FindInPageUX.SearchTextColor
+        searchText.tintColor = FindInPageUX.SearchTextColor
         searchText.font = FindInPageUX.SearchTextFont
         searchText.autocapitalizationType = .none
         searchText.autocorrectionType = .no
