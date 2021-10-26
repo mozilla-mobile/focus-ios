@@ -621,6 +621,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             if !sender.isOn {
                 NimbusWrapper.shared.nimbus?.resetTelemetryIdentifiers()
             }
+        } else if toggle.setting == .studies {
+            NimbusWrapper.shared.nimbus?.globalUserParticipation = sender.isOn
         } else if toggle.setting == .biometricLogin {
             TipManager.biometricTip = false
         }
