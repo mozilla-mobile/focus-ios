@@ -418,7 +418,8 @@ extension AppDelegate {
             GleanMetrics.LegacyIds.clientId.set(clientId)
         }
 
-        Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData))
+        let channel = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" ? "testflight" : "release"
+        Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData), configuration: Configuration(channel: channel))
         
         // Send "at startup" telemetry
         GleanMetrics.Shortcuts.shortcutsOnHomeNumber.set(Int64(ShortcutsManager.shared.numberOfShortcuts))
@@ -431,7 +432,11 @@ extension AppDelegate {
     }
         
     func setupExperimentation() {
-        // TODO Temporarily removed because of https://github.com/mozilla-mobile/focus-ios/issues/2600
+        do {
+            try NimbusWrapper.shared.initialize(enabled: Settings.getToggle(.sendAnonymousUsageData))
+        } catch {
+            NSLog("Failed to setup experimentation: \(error)")
+        }
     }
 
     func presentModal(viewController: UIViewController, animated: Bool) {
