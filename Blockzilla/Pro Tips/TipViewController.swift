@@ -61,10 +61,10 @@ class TipViewController: UIViewController {
         
         tipTitleLabel.text = tip.title
         
-        if let variables = NimbusWrapper.shared.nimbus?.getVariables(featureId: .nimbusValidation) {
-            if variables.getBool("bold-tip-title") == true {
-                tipTitleLabel.font = UIFont.systemFont(ofSize: 14, weight: .bold)
-            }
+        if let variables = NimbusWrapper.shared.nimbus?.getVariables(featureId: .nimbusValidation), variables.getBool("bold-tip-title") == true {
+            tipTitleLabel.font = UIConstants.fonts.shareTrackerStatsLabelBold
+        } else {
+            tipTitleLabel.font = UIConstants.fonts.shareTrackerStatsLabel
         }
         
         tipDescriptionButton.setTitle(tip.description, for: .normal)

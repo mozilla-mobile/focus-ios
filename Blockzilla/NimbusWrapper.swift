@@ -14,15 +14,6 @@ enum FeatureId: String {
     case nimbusValidation = "nimbus-validation"
 }
 
-/// A set of common branch ids used in experiments. Branch ids can be application/experiment specific, so
-/// _could_ be an `enum`; however, there is a likelihood that they will become less relevant in the future.
-enum ExperimentBranch {
-    static let a1 = "a1"
-    static let a2 = "a2"
-    static let control = "control"
-    static let treatment = "treatment"
-}
-
 class NimbusWrapper {
     static let shared = NimbusWrapper()
     
