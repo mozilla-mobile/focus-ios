@@ -612,8 +612,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             Utils.reloadSafariContentBlocker()
         }
 
-        // First check if the user changed the anonymous usage data setting and follow that choice right
-        // here. Otherwise it will be delayed until the application restarts.
+        // The following settings are special and need to be in effect immediately.
+        
         if toggle.setting == .sendAnonymousUsageData {
             Telemetry.default.configuration.isCollectionEnabled = sender.isOn
             Telemetry.default.configuration.isUploadEnabled = sender.isOn
