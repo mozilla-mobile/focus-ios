@@ -370,6 +370,10 @@ struct UIConstants {
         static let labelBlockFonts = NSLocalizedString("Settings.toggleBlockFonts", value: "Block web fonts", comment: "Label for toggle on main screen")
         static let labelSendAnonymousUsageData = NSLocalizedString("Settings.toggleSendUsageData", value: "Send usage data", comment: "Label for Send Usage Data toggle on main screen")
         static let detailTextSendUsageData = NSLocalizedString("Settings.detailTextSendUsageData", value: "Mozilla strives to collect only what we need to provide and improve %@ for everyone.", comment: "Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar)")
+
+        static let labelStudies = NSLocalizedString("Settings.toggleStudies", value: "Studies", comment: "Label for Studies toggle on the settings screen")
+        static let detailTextStudies = NSLocalizedString("Settings.detailTextStudies", value: "%@ may install and run studies from time to time.", comment: "Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar)")
+
         static let general = NSLocalizedString("Settings.general", value: "General", comment: "Title for section in settings menu")
         static let theme = NSLocalizedString("Settings.theme", value: "Theme", comment: "Theme section in settings menu")
         static let systemTheme = NSLocalizedString("Settings.systemTheme", value: "System Theme", comment: "System value for theme section in settings menu")
@@ -420,7 +424,7 @@ struct UIConstants {
         static let sharePage = NSLocalizedString("ShareMenu.SharePage", value: "Share Page With...", comment: "Text for the share menu option when a user wants to share the current website they are on through another app.")
         static let shareOpenInFirefox = NSLocalizedString("ShareMenu.ShareOpenFirefox", value: "Open in Firefox", comment: "Text for the share menu option when a user wants to open the current website in the Firefox app.")
         static let shareOpenInChrome = NSLocalizedString("ShareMenu.ShareOpenChrome", value: "Open in Chrome", comment: "Text for the share menu option when a user wants to open the current website in the Chrome app.")
-        static let shareOpenInSafari = NSLocalizedString("ShareMenu.ShareOpenSafari", value: "Open in Safari", comment: "Text for the share menu option when a user wants to open the current website in the Safari app.")
+        static let shareOpenInDefaultBrowser = NSLocalizedString("ShareMenu.ShareOpenDefaultBrowser", value: "Open in Default Browser", comment: "Text for the share menu option when a user wants to open the current website in the default browser.")
         static let shareMenuRequestDesktop = NSLocalizedString("ShareMenu.RequestDesktop", value: "Request Desktop Site", comment: "Text for the share menu option when a user wants to reload the site as a desktop")
         static let shareMenuRequestMobile = NSLocalizedString("ShareMenu.RequestMobile", value: "Request Mobile Site", comment: "Text for the share menu option when a user wants to reload the site as a mobile device")
         static let shareMenuFindInPage = NSLocalizedString("ShareMenu.FindInPage", value: "Find in Page", comment: "Text for the share menu option when a user wants to open the find in page menu")
