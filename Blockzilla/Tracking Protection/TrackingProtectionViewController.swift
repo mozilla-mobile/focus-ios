@@ -252,12 +252,6 @@ class TrackingProtectionViewController: UIViewController {
         }
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        calculatePreferredSize()
-        view.layoutIfNeeded()
-    }
-    
     private func calculatePreferredSize() {
         guard state != .settings else { return }
         
@@ -271,6 +265,11 @@ class TrackingProtectionViewController: UIViewController {
                 height: tableView.contentSize.height + (headerHeight?.layoutConstraints[0].constant ?? .zero)
             )
         }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        calculatePreferredSize()
     }
     
     @objc private func doneTapped() {
