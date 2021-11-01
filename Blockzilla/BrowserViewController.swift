@@ -600,6 +600,9 @@ class BrowserViewController: UIViewController {
                 if let error = error { print(error.localizedDescription) }
             }
         }
+        
+        // Reenable tracking protection after reset
+        Settings.set(true, forToggle: .trackingProtection)
     }
 
     private func clearBrowser() {
@@ -832,8 +835,9 @@ class BrowserViewController: UIViewController {
     @objc private func selectLocationBar() {
         showToolbars()
         urlBar.activateTextField()
-        shortcutsContainer.isHidden = false
-        shortcutsBackground.isHidden = !urlBar.inBrowsingMode
+        let shouldShowShortcuts = shortcutManager.numberOfShortcuts != 0
+        shortcutsContainer.isHidden = !shouldShowShortcuts
+        shortcutsBackground.isHidden = !shouldShowShortcuts || !urlBar.inBrowsingMode
     }
 
     @objc private func reload() {
