@@ -835,8 +835,9 @@ class BrowserViewController: UIViewController {
     @objc private func selectLocationBar() {
         showToolbars()
         urlBar.activateTextField()
-        shortcutsContainer.isHidden = false
-        shortcutsBackground.isHidden = !urlBar.inBrowsingMode
+        let shouldShowShortcuts = shortcutManager.numberOfShortcuts != 0
+        shortcutsContainer.isHidden = !shouldShowShortcuts
+        shortcutsBackground.isHidden = !shouldShowShortcuts || !urlBar.inBrowsingMode
     }
 
     @objc private func reload() {
@@ -1084,6 +1085,7 @@ extension BrowserViewController: URLBarDelegate {
         toggleURLBarBackground(isBright: !webViewController.isLoading)
         shortcutsContainer.isHidden = urlBar.inBrowsingMode
         shortcutsBackground.isHidden = true
+        webViewController.focus()
     }
 
     func urlBarDidFocus(_ urlBar: URLBar) {
@@ -1544,7 +1546,6 @@ extension BrowserViewController: WebControllerDelegate {
         toggleToolbarBackground()
         toggleURLBarBackground(isBright: !urlBar.isEditing)
         urlBar.progressBar.hideProgressBar()
-        webViewController.focus()
         GleanMetrics.Browser.totalUriCount.add()
     }
 
