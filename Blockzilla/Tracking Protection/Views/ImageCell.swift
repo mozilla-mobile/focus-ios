@@ -12,7 +12,7 @@ class ImageCell: UITableViewCell {
         textLabel?.text = title
         textLabel?.textColor = .primaryText
         textLabel?.numberOfLines = 0
-        backgroundColor = .secondarySystemBackground
+        backgroundColor = .secondarySystemGroupedBackground
         selectionStyle = .none
     }
     

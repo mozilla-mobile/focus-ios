@@ -57,7 +57,7 @@ class BrowserViewController: UIViewController {
 
     private var trackingProtectionStatus: TrackingProtectionStatus = .on(TPPageStats()) {
         didSet {
-            urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus, shouldDisplayShieldIcon:  urlBar.inBrowsingMode ? self.webViewController.connectionIsSecure : true )
+            updateLockIcon()
         }
     }
 
@@ -380,6 +380,10 @@ class BrowserViewController: UIViewController {
             
         }
     }
+    
+    private func updateLockIcon() {
+        urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus, shouldDisplayShieldIcon:  urlBar.inBrowsingMode ? self.webViewController.connectionIsSecure : true)
+    }
 
     // These functions are used to handle displaying and hiding the keyboard after the splash view is animated
     public func activateUrlBarOnHomeView() {
@@ -596,6 +600,9 @@ class BrowserViewController: UIViewController {
                 if let error = error { print(error.localizedDescription) }
             }
         }
+        
+        // Reenable tracking protection after reset
+        Settings.set(true, forToggle: .trackingProtection)
     }
 
     private func clearBrowser() {
@@ -828,8 +835,9 @@ class BrowserViewController: UIViewController {
     @objc private func selectLocationBar() {
         showToolbars()
         urlBar.activateTextField()
-        shortcutsContainer.isHidden = false
-        shortcutsBackground.isHidden = !urlBar.inBrowsingMode
+        let shouldShowShortcuts = shortcutManager.numberOfShortcuts != 0
+        shortcutsContainer.isHidden = !shouldShowShortcuts
+        shortcutsBackground.isHidden = !shouldShowShortcuts || !urlBar.inBrowsingMode
     }
 
     @objc private func reload() {
@@ -1077,6 +1085,7 @@ extension BrowserViewController: URLBarDelegate {
         toggleURLBarBackground(isBright: !webViewController.isLoading)
         shortcutsContainer.isHidden = urlBar.inBrowsingMode
         shortcutsBackground.isHidden = true
+        webViewController.focus()
     }
 
     func urlBarDidFocus(_ urlBar: URLBar) {
@@ -1526,6 +1535,9 @@ extension BrowserViewController: WebControllerDelegate {
         browserToolbar.color = .loading
         toggleURLBarBackground(isBright: false)
         updateURLBar()
+        if trackingProtectionStatus == .off {
+            updateLockIcon()
+        }
     }
 
     func webControllerDidFinishNavigation(_ controller: WebController) {
@@ -1534,7 +1546,6 @@ extension BrowserViewController: WebControllerDelegate {
         toggleToolbarBackground()
         toggleURLBarBackground(isBright: !urlBar.isEditing)
         urlBar.progressBar.hideProgressBar()
-        webViewController.focus()
         GleanMetrics.Browser.totalUriCount.add()
     }
 
