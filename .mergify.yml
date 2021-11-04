@@ -1,3 +1,8 @@
+queue_rules:
+  - name: default
+    conditions:
+      - check-success=Bitrise
+
 pull_request_rules:
   - name: Resolve conflict
     conditions:
@@ -36,4 +41,5 @@ pull_request_rules:
     actions:
       queue:
         method: rebase
+        name: default
   
