@@ -27,3 +27,12 @@ pull_request_rules:
       merge:
         method: squash
         strict: smart
+  - name: String Import - Auto Merge
+    conditions:
+      - author=github-actions[bot]
+      - status-success=pr-complete
+      - files~=(Blockzilla/*/*.lproj/*|Blockzilla/*.lproj/*)
+    actions:
+      merge:
+        method: rebase
+        strict: smart
