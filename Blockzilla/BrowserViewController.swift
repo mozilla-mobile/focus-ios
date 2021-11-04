@@ -549,6 +549,7 @@ class BrowserViewController: UIViewController {
             self.findInPageBar?.becomeFirstResponder()
         } else if let findInPageBar = self.findInPageBar {
             findInPageBar.endEditing(true)
+            webViewController.focus()
             webViewController.evaluate("__firefox__.findDone()", completion: nil)
             findInPageBar.removeFromSuperview()
             fillerView?.removeFromSuperview()
@@ -614,6 +615,7 @@ class BrowserViewController: UIViewController {
         browserToolbar.canGoBack = false
         browserToolbar.canGoForward = false
         browserToolbar.canDelete = false
+        urlBar.dismiss()
         urlBar.removeFromSuperview()
         urlBarContainer.alpha = 0
         homeViewController.refreshTipsDisplay()
