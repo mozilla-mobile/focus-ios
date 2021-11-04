@@ -30,8 +30,9 @@ pull_request_rules:
   - name: String Import - Auto Merge
     conditions:
       - author=github-actions[bot]
-      - status-success=pr-complete
-      - files~=(Blockzilla/*/*.lproj/*|Blockzilla/*.lproj/*)
+      - title~=string-import*
+      - files~=^Blockzilla\/[^\/]*\/[^\/]*.lproj\/*
+      - files~=^Blockzilla\/[^\/]*.lproj\/*
     actions:
       merge:
         method: rebase
