@@ -18,7 +18,7 @@ class TipViewController: UIViewController {
     private lazy var tipDescriptionButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitleColor(.accent, for: .normal)
-        button.setTitleColor(.accent, for: .highlighted)
+        button.setTitleColor(.white, for: .disabled)
         button.titleLabel?.font = UIConstants.fonts.shareTrackerStatsLabel
         button.titleLabel?.textAlignment = .center
         button.titleLabel?.numberOfLines = 0
