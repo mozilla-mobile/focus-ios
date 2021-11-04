@@ -45,13 +45,11 @@ protocol WebControllerDelegate: AnyObject {
 }
 
 class WebViewController: UIViewController, WebController {
-    private enum ScriptHandlers: String {
+    private enum ScriptHandlers: String, CaseIterable {
         case focusTrackingProtection
         case focusTrackingProtectionPostLoad
         case findInPageHandler
         case fullScreen
-
-        static var allValues: [ScriptHandlers] { return [.focusTrackingProtection, .focusTrackingProtectionPostLoad, .findInPageHandler, .fullScreen] }
     }
 
     private enum KVOConstants: String, CaseIterable {
@@ -62,7 +60,7 @@ class WebViewController: UIViewController, WebController {
 
     weak var delegate: WebControllerDelegate?
 
-    private var browserView: WKWebView!
+    var browserView: WKWebView!
     var onePasswordExtensionItem: NSExtensionItem!
     private var progressObserver: NSKeyValueObservation?
     private var urlObserver: NSKeyValueObservation?
@@ -164,6 +162,8 @@ class WebViewController: UIViewController, WebController {
         setupTrackingProtectionScripts()
         setupFindInPageScripts()
         setupFullScreen()
+        UserScriptManager.shared.injectUserScriptsInto(webView: browserView)
+        
 
         view.addSubview(browserView)
         browserView.snp.makeConstraints { make in
@@ -211,11 +211,12 @@ class WebViewController: UIViewController, WebController {
 
     func disableTrackingProtection() {
         guard case .on = trackingProtectionStatus else { return }
-        ScriptHandlers.allValues.forEach {
+        ScriptHandlers.allCases.forEach {
             browserView.configuration.userContentController.removeScriptMessageHandler(forName: $0.rawValue)
         }
         browserView.configuration.userContentController.removeAllUserScripts()
         browserView.configuration.userContentController.removeAllContentRuleLists()
+        UserScriptManager.shared.injectUserScriptsInto(webView: browserView)
         setupFindInPageScripts()
         trackingProtectionStatus = .off
     }
