@@ -34,6 +34,6 @@ pull_request_rules:
       - files~=^Blockzilla\/[^\/]*\/[^\/]*.lproj\/*
       - files~=^Blockzilla\/[^\/]*.lproj\/*
     actions:
-      merge:
+      queue:
         method: rebase
-        strict: smart
+        name: default
