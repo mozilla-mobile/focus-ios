@@ -1121,6 +1121,18 @@ extension BrowserViewController: URLBarDelegate {
         GleanMetrics.TrackingProtection.toolbarShieldClicked.add()
 
         guard let modalDelegate = modalDelegate else { return }
+        
+        
+        MetadataParserHelper.getMetadata(for: webViewController.browserView) { result in
+            switch result {
+            case .success(let metadata):
+                print(metadata.icon)
+                
+            case .error(_):
+                ()
+            }
+        }
+        
 
         switch trackingProtectionStatus {
         case .on:
