@@ -34,20 +34,3 @@ public enum SupportTopic: CaseIterable {
     
     static let fallbackURL = "https://support.mozilla.org"
 }
-
-extension URL {
-    /// Construct an URL pointing to a specific topic on SUMO. The topic comes from the Topics enum.
-    ///
-    /// The resulting URL will include the app version, operating system and locale code. For example, a topic
-    /// "cheese" will be turned into a link that looks like https://support.mozilla.org/1/mobile/2.0/iOS/en-US/cheese
-    ///
-    /// If for some reason the URL could not be created, a default URL to support.mozilla.org is returned. This is
-    /// a very rare case that should not happen except in the rare case where the URL may be dynamically formatted.
-    init(forSupportTopic topic: SupportTopic) {
-        guard let escapedTopic = topic.slug.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed), let languageIdentifier = Locale.preferredLanguages.first else {
-            self.init(string: SupportTopic.fallbackURL)!
-            return
-        }
-        self.init(string: "https://support.mozilla.org/1/mobile/\(AppInfo.shortVersion)/iOS/\(languageIdentifier)/\(escapedTopic)")!
-    }
-}
