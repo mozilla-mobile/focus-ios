@@ -50,6 +50,7 @@ class WebViewController: UIViewController, WebController {
         case focusTrackingProtectionPostLoad
         case findInPageHandler
         case fullScreen
+        case metadata
     }
 
     private enum KVOConstants: String, CaseIterable {
@@ -161,9 +162,8 @@ class WebViewController: UIViewController, WebController {
         setupBlockLists()
         setupTrackingProtectionScripts()
         setupFindInPageScripts()
+        setupMetadataScripts()
         setupFullScreen()
-        UserScriptManager.shared.injectUserScriptsInto(webView: browserView)
-        
 
         view.addSubview(browserView)
         browserView.snp.makeConstraints { make in
@@ -204,6 +204,11 @@ class WebViewController: UIViewController, WebController {
         addScript(forResource: "FindInPage", injectionTime: .atDocumentEnd, forMainFrameOnly: true)
     }
     
+    private func setupMetadataScripts() {
+        browserView.configuration.userContentController.add(self, name: ScriptHandlers.metadata.rawValue)
+        addScript(forResource: "MetadataHelper", injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+    }
+    
     private func setupFullScreen() {
         browserView.configuration.userContentController.add(self, name: ScriptHandlers.fullScreen.rawValue)
         addScript(forResource: "FullScreen", injectionTime: .atDocumentEnd, forMainFrameOnly: true)
@@ -216,8 +221,8 @@ class WebViewController: UIViewController, WebController {
         }
         browserView.configuration.userContentController.removeAllUserScripts()
         browserView.configuration.userContentController.removeAllContentRuleLists()
-        UserScriptManager.shared.injectUserScriptsInto(webView: browserView)
         setupFindInPageScripts()
+        setupMetadataScripts()
         trackingProtectionStatus = .off
     }
 
