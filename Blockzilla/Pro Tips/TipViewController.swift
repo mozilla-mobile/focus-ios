@@ -6,7 +6,7 @@ import UIKit
 
 class TipViewController: UIViewController {
     
-    // Mark depency explicit
+    // Mark dependency explicit
     private let nimbus = NimbusWrapper.shared
     
     private lazy var tipTitleLabel: UILabel = {
