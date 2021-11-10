@@ -10,6 +10,7 @@ import LocalAuthentication
 import StoreKit
 import Intents
 import Glean
+import Combine
 
 class BrowserViewController: UIViewController {
     let appSplashController: AppSplashController
@@ -1122,17 +1123,21 @@ extension BrowserViewController: URLBarDelegate {
 
         guard let modalDelegate = modalDelegate else { return }
         
-        
-        MetadataParserHelper.getMetadata(for: webViewController.browserView) { result in
-            switch result {
-            case .success(let metadata):
-                print(metadata.icon)
-                
-            case .error(_):
-                ()
+        let favIconPublisher: AnyPublisher<UIImage, Never> =
+        webViewController
+            .getMetadata()
+            .map(\.icon)
+            .tryMap {
+                if let url = $0.flatMap(URL.init(string:)) {
+                    return url
+                } else {
+                    throw WebViewController.MetadataError.missingURL
+                }
             }
-        }
-        
+            .flatMap { url in ImageLoader().loadImage(url) }
+            .replaceError(with: .defaultFavicon)
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
 
         switch trackingProtectionStatus {
         case .on:
@@ -1147,7 +1152,7 @@ extension BrowserViewController: URLBarDelegate {
             isSecureConnection: webViewController.connectionIsSecure))
         : .homescreen
         
-        let trackingProtectionViewController = TrackingProtectionViewController(state: state)
+        let trackingProtectionViewController = TrackingProtectionViewController(state: state, favIconPublisher: favIconPublisher)
         trackingProtectionViewController.delegate = self
         if UIDevice.current.userInterfaceIdiom == .pad {
             trackingProtectionViewController.modalPresentationStyle = .popover

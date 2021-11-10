@@ -6,6 +6,7 @@ import UIKit
 import WebKit
 import Telemetry
 import PassKit
+import Combine
 
 protocol BrowserState {
     var url: URL? { get }
@@ -236,6 +237,37 @@ class WebViewController: UIViewController, WebController {
 
     func evaluate(_ javascript: String, completion: ((Any?, Error?) -> Void)?) {
         browserView.evaluateJavaScript(javascript, completionHandler: completion)
+    }
+    
+    enum MetadataError: Swift.Error {
+        case missingMetadata
+        case missingURL
+    }
+
+    /// Get the metadata out of the page-metadata-parser, and into a type safe struct as soon as possible.
+    /// 
+    func getMetadata(completion: @escaping (Swift.Result<Metadata, Error>) -> Void) {
+        evaluate("__firefox__.metadata.getMetadata()") { result, error in
+            let metadata = result
+                .flatMap { try? JSONSerialization.data(withJSONObject: $0) }
+                .flatMap { try? JSONDecoder().decode(Metadata.self, from: $0) }
+            
+            if let metadata = metadata {
+                completion(.success(metadata))
+            } else if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.failure(MetadataError.missingMetadata))
+            }
+        }
+    }
+    
+    func getMetadata()  -> Future<Metadata, Error> {
+        Future { promise in
+            self.getMetadata { result in
+                promise(result)
+            }
+        }
     }
 
     func focus() {
