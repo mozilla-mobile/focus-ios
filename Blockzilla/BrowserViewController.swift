@@ -791,6 +791,7 @@ class BrowserViewController: UIViewController {
 
             self.browserToolbar.animateHidden(!self.urlBar.inBrowsingMode || self.showsToolsetInURLBar, duration: coordinator.transitionDuration, completion: {
                 self.updateViewConstraints()
+                self.webViewController.resetZoom()
             })
         })
         
