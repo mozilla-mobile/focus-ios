@@ -476,7 +476,7 @@
 "Settings.whatsNewTitle" = "Novità";
 
 /* Title for settings section to enable different Siri Shortcuts. */
-"Settinsg.siriShortcutsTitle" = "SCORCIATOIE SIRI";
+"Settinsg.siriShortcutsTitle" = "COMANDI SIRI";
 
 /* Text for a share button */
 "share" = "Condividi";
