@@ -853,10 +853,6 @@ extension URLBar: AutocompleteTextFieldDelegate {
 
         delegate?.urlBar(self, didEnterText: text)
     }
-    
-    func autocompleteTextFieldDidEndEditing (_ autocompleteTextField: AutocompleteTextField) {
-        dismiss()
-    }
 }
 
 extension URLBar: UIDragInteractionDelegate {
@@ -927,7 +923,6 @@ private class URLTextField: AutocompleteTextField {
 
     private func textFieldDidEndEditing(_ textField: UITextField) {
         textField.layoutIfNeeded()
-        autocompleteDelegate?.autocompleteTextFieldDidEndEditing?(self)
     }
 }
 
