@@ -1751,11 +1751,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
         }
     }
 
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            urlBar.dismiss()
-        }
-    }
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) { }
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) { }
 }
 

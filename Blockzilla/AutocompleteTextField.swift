@@ -13,6 +13,7 @@ public protocol AutocompleteTextFieldCompletionSource: AnyObject {
     @objc optional func autocompleteTextFieldShouldEndEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool
     @objc optional func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool
     @objc optional func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didTextChange text: String)
+    @objc optional func autocompleteTextFieldDidEndEditing(_ autocompleteTextField: AutocompleteTextField)
 }
 
 open class AutocompleteTextField: UITextField, UITextFieldDelegate {
