@@ -271,6 +271,12 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "Το «%@» θα ήθελε πρόσβαση στις φωτογραφίες σας";
 
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Η σύνδεση δεν είναι ασφαλής";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Η σύνδεση είναι ασφαλής";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Έκδοση για υπολογιστές";
 
@@ -324,6 +330,12 @@
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Η Mozilla προσπαθεί να συλλέγει μόνο όσα χρειάζεται για να παρέχει και να βελτιώνει το %@ για όλους.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "Το %@ ενδέχεται να εγκαθιστά και να εκτελεί περιστασιακά μελέτες.";
+
+/* Title for section in settings menu */
+"Settings.general" = "Γενικά";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Μάθετε περισσότερα.";
@@ -442,6 +454,9 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Αποστολή δεδομένων χρήσης";
 
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "Μελέτες";
+
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Χρήση Touch ID για ξεκλείδωμα";
 
@@ -493,6 +508,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Άνοιγμα σε Chrome";
 
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Άνοιγμα σε προεπιλεγμένο φυλλομετρητή";
+
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Άνοιγμα σε Firefox";
 
@@ -526,6 +544,42 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL για άνοιγμα";
 
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "Κλείδωμα του %@ όταν είναι ανοικτός ένας ιστότοπος:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Ενεργοποίηση Face ID";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Ενεργοποίηση Touch ID";
+
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Release.Description" = "Διαβάστε περισσότερα σχετικά με αυτό και άλλες ενημερώσεις στο %@.";
+
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "Πράγματι, δημιουργήσαμε μια νέα εμφάνιση!";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Θέλετε να δείτε την πλήρη έκδοση ενός ιστοτόπου;";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "%@ αποκλεισμένοι ιχνηλάτες μέχρι στιγμής";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Εσείς περιηγείστε. Το %@ αποκλείει.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "Επιλέξτε «Προσθήκη συντόμευσης» από το μενού του %@";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Προσθήκη συντόμευσης Siri";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Προσθήκη συντόμευσης Siri";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Δοκιμάστε να απενεργοποιήσετε την προστασία από καταγραφή";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Χρήση Touch ID για επιστροφή στο %@";
 
@@ -540,6 +594,9 @@
 
 /* Text for tracking protection screen showing the connection is secure */
 "trackingProtection.connectionSecureLabel" = "Η σύνδεση είναι ασφαλής";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"trackingProtection.connectionVerifiedByLabel" = "Επαλήθευση από %@";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Ιχνηλάτες περιεχομένου";

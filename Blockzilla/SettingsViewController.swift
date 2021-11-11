@@ -531,7 +531,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 navigationController?.pushViewController(autcompleteSettingViewController, animated: true)
             }
         case .siri:
-            guard #available(iOS 12.0, *) else { return }
             if indexPath.row == 0 {
                 SiriShortcuts().manageSiri(for: SiriShortcuts.activityType.erase, in: self)
                 TipManager.siriEraseTip = false
@@ -594,7 +593,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     @objc private func whatsNewClicked() {
-        highlightsButton.tintColor = UIColor.white
+        highlightsButton.tintColor = view.currentTheme == .light ? .systemGray2 : .white
         navigationController?.pushViewController(SettingsContentViewController(url: URL(forSupportTopic: .whatsNew)), animated: true)
         whatsNew.didShowWhatsNew()
     }
@@ -654,18 +653,15 @@ extension SettingsViewController: SearchSettingsViewControllerDelegate {
 }
 
 extension SettingsViewController: INUIAddVoiceShortcutViewControllerDelegate {
-    @available(iOS 12.0, *)
     func addVoiceShortcutViewController(_ controller: INUIAddVoiceShortcutViewController, didFinishWith voiceShortcut: INVoiceShortcut?, error: Error?) {
         controller.dismiss(animated: true, completion: nil)
     }
 
-    @available(iOS 12.0, *)
     func addVoiceShortcutViewControllerDidCancel(_ controller: INUIAddVoiceShortcutViewController) {
         controller.dismiss(animated: true, completion: nil)
     }
 }
 
-@available(iOS 12.0, *)
 extension SettingsViewController: INUIEditVoiceShortcutViewControllerDelegate {
     func editVoiceShortcutViewController(_ controller: INUIEditVoiceShortcutViewController, didUpdate voiceShortcut: INVoiceShortcut?, error: Error?) {
         controller.dismiss(animated: true, completion: nil)

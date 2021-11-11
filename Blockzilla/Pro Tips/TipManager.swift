@@ -154,7 +154,7 @@ class TipManager {
         description: .siriFavoriteTipDescription,
         identifier: TipKey.siriFavoriteTip,
         action: .showSettings(destination: .siri),
-        canShow: { TipManager.siriFavoriteTip && self.isiOS12 }
+        canShow: { TipManager.siriFavoriteTip }
     )
 
     private lazy var siriEraseTip = Tip(
@@ -162,7 +162,7 @@ class TipManager {
         description: .siriEraseTipDescription,
         identifier: TipKey.siriEraseTip,
         action: .showSettings(destination: .siriFavorite),
-        canShow: { TipManager.siriEraseTip && self.isiOS12 }
+        canShow: { TipManager.siriEraseTip }
     )
 
     /// Return a string representing the trackers tip. It will include the current number of trackers blocked, formatted as a decimal.
@@ -183,11 +183,6 @@ class TipManager {
     }
 
     func fetchFirstTip() -> Tip? { availableTips.first }
-    
-    private var isiOS12: Bool {
-        guard #available(iOS 12.0, *) else { return false }
-        return true
-    }
     
     func getTip(after: Tip) -> Tip? {
         if let index = availableTips.firstIndex(where: { $0.identifier == after.identifier }) {
@@ -220,20 +215,20 @@ class TipManager {
 fileprivate extension String {
     
     static let releaseTipTitle = NSLocalizedString("Tip.Release.Title", value: "Why yes, we do have a fresh new look!", comment: "Text for a label that indicates the title for release tip.")
-    static let releaseTipDescription = NSLocalizedString("Tip.Release.Description", value: "Read more about this and other updates to %@.", comment: "Text for a label that indicates the description for release tip.")
+    static let releaseTipDescription = NSLocalizedString("Tip.Release.Description", value: "Read more about this and other updates to %@.", comment: "Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar).")
     static let shortcutsTipTitle = NSLocalizedString("Tip.Shortcuts.Title", value: "Create shortcuts to the sites you visit most:", comment: "Text for a label that indicates the title for shortcuts tip.")
-    static let shortcutsTipDescription = NSLocalizedString("Tip.Shortcuts.Description", value: "Select Add to Shortcuts from the %@ menu", comment: "Text for a label that indicates the description for shortcuts tip.")
+    static let shortcutsTipDescription = NSLocalizedString("Tip.Shortcuts.Description", value: "Select Add to Shortcuts from the %@ menu", comment: "Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar).")
     static let sitesNotWorkingTipTitle = NSLocalizedString("Tip.SitesNotWorking.Title", value: "Site missing content or acting strange?", comment: "Text for a label that indicates the title for sites not working tip.")
     static let sitesNotWorkingTipDescription = NSLocalizedString("Tip.SitesNotWorking.Description", value: "Try turning off Tracking Protection", comment: "Text for a label that indicates the description for sites not working tip.")
-    static let biometricTipTitle = NSLocalizedString("Tip.Biometric.Title", value: "Lock %@ when a site is open:", comment: "Text for a label that indicates the title for biometric tip.")
+    static let biometricTipTitle = NSLocalizedString("Tip.Biometric.Title", value: "Lock %@ when a site is open:", comment: "Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar).")
     static let biometricTipFaceIdDescription = NSLocalizedString("Tip.BiometricFaceId.Description", value: "Turn on Face ID", comment: "Text for a label that indicates the description for biometric Face ID tip.")
     static let biometricTipTouchIdDescription = NSLocalizedString("Tip.BiometricTouchId.Description", value: "Turn on Touch ID", comment: "Text for a label that indicates the description for biometric Touch ID tip.")
     static let requestDesktopTipTitle = NSLocalizedString("Tip.RequestDesktop.Title", value: "Want to see the full desktop version of a site?", comment: "Text for a label that indicates the title for request desktop tip.")
     static let requestDesktopTipDescription = NSLocalizedString("Tip.RequestDesktop.Description", value: "Page Actions > Request Desktop Site", comment: "Text for a label that indicates the description for request desktop tip.")
     static let siriFavoriteTipTitle = NSLocalizedString("Tip.SiriFavorite.Title", value: "“Siri, open my favorite site.”", comment: "Text for a label that indicates the title for siri favorite tip.")
-    static let siriFavoriteTipDescription = NSLocalizedString("Tip.SiriFavorite.Description", value: "Add Siri shortcut", comment: "Text for a label that indicates the description for siri favorite tip.")
-    static let siriEraseTipTitle = NSLocalizedString("Tip.SiriErase.Title", value: "“Siri, erase my %@ session.”", comment: "Text for a label that indicates the title for siri erase tip.")
-    static let siriEraseTipDescription = NSLocalizedString("Tip.SiriErase.Description", value: "Add Siri shortcut", comment: "Text for a label that indicates the description for siri erase tip.")
-    static let shareTrackersTipTitle = NSLocalizedString("Tip.ShareTrackers.Title", value: "You browse. %@ blocks.", comment: "Text for a label that indicates the title for share trackers tip.")
-    static let shareTrackersTipDescription = NSLocalizedString("Tip.ShareTrackers.Description", value: "%@ trackers blocked so far", comment: "Text for a label that indicates the description for share trackers tip.")
+    static let siriFavoriteTipDescription = NSLocalizedString("Tip.SiriFavorite.Description", value: "Add Siri shortcut", comment: "Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut.")
+    static let siriEraseTipTitle = NSLocalizedString("Tip.SiriErase.Title", value: "“Siri, erase my %@ session.”", comment: "Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar).")
+    static let siriEraseTipDescription = NSLocalizedString("Tip.SiriErase.Description", value: "Add Siri shortcut", comment: "Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut.")
+    static let shareTrackersTipTitle = NSLocalizedString("Tip.ShareTrackers.Title", value: "You browse. %@ blocks.", comment: "Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar).")
+    static let shareTrackersTipDescription = NSLocalizedString("Tip.ShareTrackers.Description", value: "%@ trackers blocked so far", comment: "Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead.")
 }

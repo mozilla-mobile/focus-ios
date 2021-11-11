@@ -320,7 +320,7 @@ extension WebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         delegate?.webControllerDidStartNavigation(self)
         if case .on = trackingProtectionStatus { trackingInformation = TPPageStats() }
-        currentContentMode = navigation.effectiveContentMode
+        currentContentMode = navigation?.effectiveContentMode
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
@@ -344,7 +344,12 @@ extension WebViewController: WKNavigationDelegate {
             preferences.preferredContentMode = preferredContentMode
         }
         
-        let present: (UIViewController) -> Void = { self.present($0, animated: true, completion: nil) }
+        let present: (UIViewController) -> Void = {
+            self.present($0, animated: true) {
+                self.delegate?.webController(self, didUpdateEstimatedProgress: 1.0)
+                self.delegate?.webControllerDidFinishNavigation(self)
+            }
+        }
 
         switch navigationAction.navigationType {
             case .backForward:
