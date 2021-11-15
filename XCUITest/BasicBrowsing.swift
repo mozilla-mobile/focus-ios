@@ -31,7 +31,6 @@ class BasicBrowsing: BaseTestCase {
     }
     
     // Smoke test
-    // Disabled due to issue 1894
     func testAdBlocking() {
         // Load URL
         loadWebPage("https://blockads.fivefilters.org/")
