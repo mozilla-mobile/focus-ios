@@ -5,6 +5,7 @@
 import XCTest
 
 class RequestDesktopTest: BaseTestCase {
+    // Smoketest
     func testActivityMenuRequestDesktopItem() {
         let urlBarTextField = app.textFields["URLBar.urlText"]
 
