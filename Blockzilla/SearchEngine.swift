@@ -5,6 +5,7 @@
 import UIKit
 
 class SearchEngine: NSObject, NSCoding {
+    let id: String
     let name: String
     let image: UIImage?
     var isCustom: Bool = false
@@ -14,7 +15,8 @@ class SearchEngine: NSObject, NSCoding {
     private let SearchTermComponent = "{searchTerms}"
     private let LocaleTermComponent = "{moz:locale}"
 
-    init(name: String, image: UIImage?, searchTemplate: String, suggestionsTemplate: String?, isCustom: Bool = false) {
+    init(id: String, name: String, image: UIImage?, searchTemplate: String, suggestionsTemplate: String?, isCustom: Bool = false) {
+        self.id = id
         self.name = name
         self.image = image ?? SearchEngine.generateImage(name: name)
         self.searchTemplate = searchTemplate
@@ -28,6 +30,7 @@ class SearchEngine: NSObject, NSCoding {
                 return nil
         }
 
+        self.id = "custom" // Only custom search engines are encoded
         self.name = name
         self.searchTemplate = searchTemplate
         image = aDecoder.decodeObject(forKey: "image") as? UIImage

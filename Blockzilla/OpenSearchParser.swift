@@ -28,6 +28,12 @@ class OpenSearchParser {
             print("Invalid search file")
             return nil
         }
+        
+        // The ID of a search engine is simply the filename without extension
+        let searchEngineID = file.deletingPathExtension().lastPathComponent
+        if searchEngineID == "" {
+            return nil
+        }
 
         guard let doc = try? XMLDocument(data: data),
               let rootElem = doc.root else {
@@ -126,6 +132,6 @@ class OpenSearchParser {
             image = nil
         }
 
-        return SearchEngine(name: shortName, image: image, searchTemplate: template, suggestionsTemplate: suggestionsTemplate)
+        return SearchEngine(id: searchEngineID, name: shortName, image: image, searchTemplate: template, suggestionsTemplate: suggestionsTemplate)
     }
 }

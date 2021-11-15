@@ -31,7 +31,7 @@ class SearchEngineManager {
 
     func addEngine(name: String, template: String) -> SearchEngine {
         let correctedTemplate = template.replacingOccurrences(of: "%s", with: "{searchTerms}")
-        let engine = SearchEngine(name: name, image: nil, searchTemplate: correctedTemplate, suggestionsTemplate: nil, isCustom: true)
+        let engine = SearchEngine(id: "custom", name: name, image: nil, searchTemplate: correctedTemplate, suggestionsTemplate: nil, isCustom: true)
 
         // Persist
         var customEngines = readCustomEngines()
