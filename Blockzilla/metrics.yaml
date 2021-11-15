@@ -327,18 +327,6 @@ search:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-01-01"
-  start_search_pressed:
-    type: counter
-    description: |
-      Counts the number of times the start search button is
-      pressed
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2022-01-01"
   in_content:
     type: labeled_counter
     description: |
