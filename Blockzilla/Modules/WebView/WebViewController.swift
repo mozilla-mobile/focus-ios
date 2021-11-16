@@ -378,11 +378,11 @@ extension WebViewController: WKNavigationDelegate {
             case .reload:
                 delegate?.webControllerDidReload(self)
             case .linkActivated:
-                
-                if let url = navigationAction.request.url {
-                    print("MOO URL Clicked is \(url.absoluteString)")
-                    if adsTelemetryUrlList.contains(url.absoluteString) && !adsProviderName.isEmpty{
-                        recordAdsClickedOnPage(providerName: adsProviderName)
+                if let url = navigationAction.request.url, adsTelemetryUrlList.count > 0 {
+                    if adsTelemetryUrlList.contains(url.absoluteString) {
+                        if !adsProviderName.isEmpty {
+                            GleanMetrics.BrowserSearch.adClicks["provider-\(adsProviderName)"].add()
+                        }
                         adsTelemetryUrlList.removeAll()
                         adsProviderName = ""
                     }
@@ -494,9 +494,9 @@ extension WebViewController: WKScriptMessageHandler {
             let adUrls = provider.listAdUrls(urls: urls)
             
             if !adUrls.isEmpty {
-                recordAdsFoundOnPage(providerName: provider.name)
-                adsProviderName = provider.name // TODO
-                adsTelemetryUrlList = adUrls // TODO
+                GleanMetrics.BrowserSearch.withAds["provider-\(provider.name)"].add()
+                adsProviderName = provider.name
+                adsTelemetryUrlList = adUrls
             }
             
             return
@@ -549,15 +549,5 @@ extension WebViewController {
             }
         }
         return nil
-    }
-
-    public func recordAdsFoundOnPage(providerName: String) {
-        print("MOO recordAdsFoundOnPage: provider-\(providerName)")
-        GleanMetrics.BrowserSearch.withAds["provider-\(providerName)"].add()
-    }
-
-    public func recordAdsClickedOnPage(providerName: String) {
-        print("MOO recordAdsClickedOnPage: provider-\(providerName)")
-        GleanMetrics.BrowserSearch.adClicks["provider-\(providerName)"].add()
     }
 }

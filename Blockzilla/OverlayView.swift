@@ -453,7 +453,7 @@ class OverlayView: UIView {
         
         if sender.getIndex() == 0 {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionNotSelected)
-            GleanMetrics.SearchSuggestions.suggestionTapped.record()
+            GleanMetrics.SearchSuggestions.searchTapped.record()
         } else {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionSelected)
             GleanMetrics.SearchSuggestions.suggestionTapped.record()
