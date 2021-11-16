@@ -5,6 +5,7 @@
 import UIKit
 import SnapKit
 import Telemetry
+import Glean
 
 protocol OverlayViewDelegate: AnyObject {
     func overlayViewDidTouchEmptyArea(_ overlayView: OverlayView)
@@ -450,6 +451,11 @@ class OverlayView: UIView {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionNotSelected)
         } else {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionSelected)
+
+            // Record this search in Telemetry
+            let activeSearchEngine = SearchEngineManager(prefs: UserDefaults.standard).activeEngine
+            let id = activeSearchEngine.isCustom ? "custom" : activeSearchEngine.id
+            GleanMetrics.Search.counts["\(id).suggestion"].add()
         }
     }
     @objc private func didPressCopy() {

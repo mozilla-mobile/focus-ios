@@ -708,6 +708,10 @@ class BrowserViewController: UIViewController {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
             url = searchEngineManager.activeEngine.urlForQuery(text)
+            
+            // Record this search in Telemetry
+            let id = searchEngineManager.activeEngine.isCustom ? "custom" : searchEngineManager.activeEngine.id
+            GleanMetrics.Search.counts["\(id).actionbar"].add()
         } else {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
         }
