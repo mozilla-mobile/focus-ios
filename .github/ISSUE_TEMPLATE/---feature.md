@@ -5,8 +5,8 @@ labels: "Feature-Request"
 
 ---
 
-### User Problem
+### User proposal
 > Why should we implement this? What is the user benefit?
 
 ### Ideas for Solution
-> Let us know if you have an idea on how to solve this user problem
+> Let us know if you have an idea on how to solve this user proposal
