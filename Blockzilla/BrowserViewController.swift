@@ -10,6 +10,7 @@ import LocalAuthentication
 import StoreKit
 import Intents
 import Glean
+import Combine
 
 class BrowserViewController: UIViewController {
     let appSplashController: AppSplashController
@@ -81,6 +82,7 @@ class BrowserViewController: UIViewController {
         }
     }
     private var initialUrl: URL?
+    private var orientationWillChange = false
     var tipManager: TipManager
     var shortcutManager: ShortcutsManager
 
@@ -754,6 +756,7 @@ class BrowserViewController: UIViewController {
         // Fixes the issue of a user fresh-opening Focus via Split View
         guard isViewLoaded else { return }
 
+        orientationWillChange = true
         // UIDevice.current.orientation isn't reliable. See https://bugzilla.mozilla.org/show_bug.cgi?id=1315370#c5
         // As a workaround, consider the phone to be in landscape if the new width is greater than the height.
         showsToolsetInURLBar = (UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == size.width || size.width > size.height)) || (UIDevice.current.userInterfaceIdiom == .phone && size.width > size.height)
@@ -791,6 +794,7 @@ class BrowserViewController: UIViewController {
 
             self.browserToolbar.animateHidden(!self.urlBar.inBrowsingMode || self.showsToolsetInURLBar, duration: coordinator.transitionDuration, completion: {
                 self.updateViewConstraints()
+                self.webViewController.resetZoom()
             })
         })
         
@@ -1120,6 +1124,22 @@ extension BrowserViewController: URLBarDelegate {
         GleanMetrics.TrackingProtection.toolbarShieldClicked.add()
 
         guard let modalDelegate = modalDelegate else { return }
+        
+        let favIconPublisher: AnyPublisher<UIImage, Never> =
+        webViewController
+            .getMetadata()
+            .map(\.icon)
+            .tryMap {
+                if let url = $0.flatMap(URL.init(string:)) {
+                    return url
+                } else {
+                    throw WebViewController.MetadataError.missingURL
+                }
+            }
+            .flatMap { url in ImageLoader().loadImage(url) }
+            .replaceError(with: .defaultFavicon)
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
 
         switch trackingProtectionStatus {
         case .on:
@@ -1134,7 +1154,7 @@ extension BrowserViewController: URLBarDelegate {
             isSecureConnection: webViewController.connectionIsSecure))
         : .homescreen
         
-        let trackingProtectionViewController = TrackingProtectionViewController(state: state)
+        let trackingProtectionViewController = TrackingProtectionViewController(state: state, favIconPublisher: favIconPublisher)
         trackingProtectionViewController.delegate = self
         if UIDevice.current.userInterfaceIdiom == .pad {
             trackingProtectionViewController.modalPresentationStyle = .popover
@@ -1735,9 +1755,11 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        if UIDevice.current.userInterfaceIdiom == .pad && !orientationWillChange {
             urlBar.dismiss()
         }
+        orientationWillChange = false
+                                                                                                           
     }
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) { }
 }

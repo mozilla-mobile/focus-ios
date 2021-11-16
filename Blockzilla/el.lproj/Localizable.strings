@@ -382,9 +382,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Όρος αναζήτησης για χρήση";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Παράδειγμα: searchengineexample.com/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Επικολλήστε ή εισαγάγετε έναν όρο αναζήτησης. Αν πρέπει, αντικαταστήστε τον όρο αναζήτησης με: %s.";
 
@@ -508,6 +505,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Άνοιγμα σε Chrome";
 
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Άνοιγμα σε προεπιλεγμένο φυλλομετρητή";
+
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Άνοιγμα σε Firefox";
 
@@ -541,6 +541,9 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL για άνοιγμα";
 
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "Κλείδωμα του %@ όταν είναι ανοικτός ένας ιστότοπος:";
+
 /* Text for a label that indicates the description for biometric Face ID tip. */
 "Tip.BiometricFaceId.Description" = "Ενεργοποίηση Face ID";
 
@@ -550,20 +553,44 @@
 /* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
 "Tip.Release.Description" = "Διαβάστε περισσότερα σχετικά με αυτό και άλλες ενημερώσεις στο %@.";
 
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "Πράγματι, δημιουργήσαμε μια νέα εμφάνιση!";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Ενέργειες σελίδας > Έκδοση για υπολογιστές";
+
 /* Text for a label that indicates the title for request desktop tip. */
 "Tip.RequestDesktop.Title" = "Θέλετε να δείτε την πλήρη έκδοση ενός ιστοτόπου;";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "%@ αποκλεισμένοι ιχνηλάτες μέχρι στιγμής";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Εσείς περιηγείστε. Το %@ αποκλείει.";
 
 /* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
 "Tip.Shortcuts.Description" = "Επιλέξτε «Προσθήκη συντόμευσης» από το μενού του %@";
 
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "Δημιουργήστε συντομεύσεις για συχνούς ιστοτόπους:";
+
 /* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriErase.Description" = "Προσθήκη συντόμευσης Siri";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "«Siri, διάγραψε τη συνεδρία μου στο %@.»";
 
 /* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriFavorite.Description" = "Προσθήκη συντόμευσης Siri";
 
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "«Siri, άνοιξε τον αγαπημένο μου ιστότοπο.»";
+
 /* Text for a label that indicates the description for sites not working tip. */
 "Tip.SitesNotWorking.Description" = "Δοκιμάστε να απενεργοποιήσετε την προστασία από καταγραφή";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "Απώλεια περιεχομένου ή περίεργη συμπεριφορά;";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Χρήση Touch ID για επιστροφή στο %@";
