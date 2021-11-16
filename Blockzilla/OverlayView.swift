@@ -438,6 +438,7 @@ class OverlayView: UIView {
     @objc private func didPressArrowButton(sender: UIButton) {
         if let index = arrowButtons.firstIndex(of: sender) {
             delegate?.overlayView(self, didTapArrowText: searchSuggestions[index + 1])
+            GleanMetrics.SearchSuggestions.autocompleteArrowTapped.record()
         }
     }
 
@@ -446,16 +447,16 @@ class OverlayView: UIView {
         let immutableSearchSuggestions = searchSuggestions
         delegate?.overlayView(self, didSearchForQuery: immutableSearchSuggestions[sender.getIndex()])
 
-        if !Settings.getToggle(.enableSearchSuggestions) { return }
+        if !Settings.getToggle(.enableSearchSuggestions) {
+            return
+        }
+        
         if sender.getIndex() == 0 {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionNotSelected)
+            GleanMetrics.SearchSuggestions.suggestionTapped.record()
         } else {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionSelected)
-
-            // Record this search in Telemetry
-            let activeSearchEngine = SearchEngineManager(prefs: UserDefaults.standard).activeEngine
-            let id = activeSearchEngine.isCustom ? "custom" : activeSearchEngine.id
-            GleanMetrics.Search.counts["\(id).suggestion"].add()
+            GleanMetrics.SearchSuggestions.suggestionTapped.record()
         }
     }
     @objc private func didPressCopy() {

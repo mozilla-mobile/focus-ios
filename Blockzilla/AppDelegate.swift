@@ -389,9 +389,6 @@ extension AppDelegate {
         let defaultSearchEngineProvider = activeSearchEngine.isCustom ? "custom" : activeSearchEngine.name
         telemetryConfig.defaultSearchEngineProvider = defaultSearchEngineProvider
         
-        print(activeSearchEngine.isCustom ? "custom" : activeSearchEngine.id)
-        GleanMetrics.Search.defaultEngine.set(activeSearchEngine.isCustom ? "custom" : activeSearchEngine.id)
-
         telemetryConfig.measureUserDefaultsSetting(forKey: SearchEngineManager.prefKeyEngine, withDefaultValue: defaultSearchEngineProvider)
         telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockAds, withDefaultValue: Settings.getToggle(.blockAds))
         telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockAnalytics, withDefaultValue: Settings.getToggle(.blockAnalytics))
@@ -434,6 +431,7 @@ extension AppDelegate {
         GleanMetrics.TrackingProtection.hasSocialBlocked.set(Settings.getToggle(.blockSocial))
         GleanMetrics.MozillaProducts.hasFirefoxInstalled.set(UIApplication.shared.canOpenURL(URL(string: "firefox://")!))
         GleanMetrics.Preferences.userTheme.set(UserDefaults.standard.theme.telemetryValue)
+        GleanMetrics.Browser.defaultSearchEngine.set(activeSearchEngine.id)
     }
         
     func setupExperimentation() {

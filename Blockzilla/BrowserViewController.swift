@@ -707,13 +707,11 @@ class BrowserViewController: UIViewController {
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
+            GleanMetrics.SearchBar.performedSearch.record(.init(engineName: searchEngineManager.activeEngine.id))
             url = searchEngineManager.activeEngine.urlForQuery(text)
-            
-            // Record this search in Telemetry
-            let id = searchEngineManager.activeEngine.isCustom ? "custom" : searchEngineManager.activeEngine.id
-            GleanMetrics.Search.counts["\(id).actionbar"].add()
         } else {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
+            GleanMetrics.SearchBar.enteredUrl.record()
         }
         
         if let url = url {
@@ -1071,9 +1069,11 @@ extension BrowserViewController: URLBarDelegate {
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
+            GleanMetrics.SearchBar.performedSearch.record(.init(engineName: searchEngineManager.activeEngine.id))
             url = searchEngineManager.activeEngine.urlForQuery(text)
         } else {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
+            GleanMetrics.SearchBar.enteredUrl.record()
         }
         if let urlBarURL = url {
             submit(url: urlBarURL)
@@ -1454,6 +1454,7 @@ extension BrowserViewController: OverlayViewDelegate {
         if searchEngineManager.activeEngine.urlForQuery(query) != nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.selectQuery, object: TelemetryEventObject.searchBar)
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
+            GleanMetrics.SearchBar.performedSearch.record(.init(engineName: searchEngineManager.activeEngine.id))
             urlBar(urlBar, didSubmitText: query)
         }
 
@@ -1492,9 +1493,11 @@ extension BrowserViewController: OverlayViewDelegate {
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
+            GleanMetrics.SearchBar.performedSearch.record(.init(engineName: searchEngineManager.activeEngine.id))
             url = searchEngineManager.activeEngine.urlForQuery(text)
         } else {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
+            GleanMetrics.SearchBar.enteredUrl.record()
         }
         if let overlayURL = url {
             submit(url: overlayURL)
