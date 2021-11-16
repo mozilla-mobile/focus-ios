@@ -7,6 +7,7 @@ import WebKit
 import Telemetry
 import PassKit
 import Combine
+import Glean
 
 protocol BrowserState {
     var url: URL? { get }
@@ -52,6 +53,7 @@ class WebViewController: UIViewController, WebController {
         case findInPageHandler
         case fullScreen
         case metadata
+        case adsMessageHandler
     }
 
     private enum KVOConstants: String, CaseIterable {
@@ -62,6 +64,9 @@ class WebViewController: UIViewController, WebController {
 
     weak var delegate: WebControllerDelegate?
 
+    var adsTelemetryUrlList: [String] = [String]()
+    var adsProviderName: String = ""
+    
     var browserView: WKWebView!
     var onePasswordExtensionItem: NSExtensionItem!
     private var progressObserver: NSKeyValueObservation?
@@ -164,6 +169,7 @@ class WebViewController: UIViewController, WebController {
         setupTrackingProtectionScripts()
         setupFindInPageScripts()
         setupMetadataScripts()
+        setupAdsScripts()
         setupFullScreen()
 
         view.addSubview(browserView)
@@ -210,6 +216,11 @@ class WebViewController: UIViewController, WebController {
         addScript(forResource: "MetadataHelper", injectionTime: .atDocumentEnd, forMainFrameOnly: true)
     }
     
+    private func setupAdsScripts() {
+        browserView.configuration.userContentController.add(self, name: ScriptHandlers.adsMessageHandler.rawValue)
+        addScript(forResource: "Ads", injectionTime: .atDocumentStart, forMainFrameOnly: true) // TODO Are injectionTime and forMainFrameOnly correct here?
+    }
+    
     private func setupFullScreen() {
         browserView.configuration.userContentController.add(self, name: ScriptHandlers.fullScreen.rawValue)
         addScript(forResource: "FullScreen", injectionTime: .atDocumentEnd, forMainFrameOnly: true)
@@ -224,6 +235,7 @@ class WebViewController: UIViewController, WebController {
         browserView.configuration.userContentController.removeAllContentRuleLists()
         setupFindInPageScripts()
         setupMetadataScripts()
+        setupAdsScripts()
         trackingProtectionStatus = .off
     }
 
@@ -365,6 +377,16 @@ extension WebViewController: WKNavigationDelegate {
                 }
             case .reload:
                 delegate?.webControllerDidReload(self)
+            case .linkActivated:
+                
+                if let url = navigationAction.request.url {
+                    print("MOO URL Clicked is \(url.absoluteString)")
+                    if adsTelemetryUrlList.contains(url.absoluteString) && !adsProviderName.isEmpty{
+                        recordAdsClickedOnPage(providerName: adsProviderName)
+                        adsTelemetryUrlList.removeAll()
+                        adsProviderName = ""
+                    }
+                }
             default:
                 break
         }
@@ -464,6 +486,22 @@ extension WebViewController: WKUIDelegate {
 
 extension WebViewController: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        if message.name == "adsMessageHandler" {
+            guard let provider = getProviderForMessage(message: message), let body = message.body as? [String : Any], let urls = body["urls"] as? [String] else {
+                return
+            }
+            
+            let adUrls = provider.listAdUrls(urls: urls)
+            
+            if !adUrls.isEmpty {
+                recordAdsFoundOnPage(providerName: provider.name)
+                adsProviderName = provider.name // TODO
+                adsTelemetryUrlList = adUrls // TODO
+            }
+            
+            return
+        }
+        
         if message.name == "findInPageHandler" {
             let data = message.body as! [String: Int]
 
@@ -475,23 +513,51 @@ extension WebViewController: WKScriptMessageHandler {
             if let totalResults = data["totalResults"] {
                 delegate?.webController(self, didUpdateFindInPageResults: nil, totalResults: totalResults)
             }
+            
             return
         }
 
-        guard let body = message.body as? [String: String],
-            let urlString = body["url"],
-            var components = URLComponents(string: urlString) else {
-                return
-        }
+        // Unclear what the difference is, but these two were previously the 'fall-through'
+        if message.name == "focusTrackingProtection" || message.name == "focusTrackingProtectionPostLoad" {
+            guard let body = message.body as? [String: String],
+                let urlString = body["url"],
+                var components = URLComponents(string: urlString) else {
+                    return
+            }
 
-        components.scheme = "http"
-        guard let url = components.url else { return }
+            components.scheme = "http"
+            guard let url = components.url else { return }
 
-        let enabled = Utils.getEnabledLists().compactMap { BlocklistName(rawValue: $0) }
-        TPStatsBlocklistChecker.shared.isBlocked(url: url, enabledLists: enabled).uponQueue(.main) { listItem in
-            if let listItem = listItem {
-                self.trackingInformation = self.trackingInformation.create(byAddingListItem: listItem)
+            let enabled = Utils.getEnabledLists().compactMap { BlocklistName(rawValue: $0) }
+            TPStatsBlocklistChecker.shared.isBlocked(url: url, enabledLists: enabled).uponQueue(.main) { listItem in
+                if let listItem = listItem {
+                    self.trackingInformation = self.trackingInformation.create(byAddingListItem: listItem)
+                }
             }
         }
+    }
+}
+
+// Ad Telemetry Helper
+
+extension WebViewController {
+    private func getProviderForMessage(message: WKScriptMessage) -> SearchProviderModel? {
+        guard let body = message.body as? [String : Any], let url = body["url"] as? String else { return nil }
+        for provider in SearchProviderModel.searchProviderList {
+            if url.range(of: provider.regexp, options: .regularExpression) != nil {
+                return provider
+            }
+        }
+        return nil
+    }
+
+    public func recordAdsFoundOnPage(providerName: String) {
+        print("MOO recordAdsFoundOnPage: provider-\(providerName)")
+        GleanMetrics.BrowserSearch.withAds["provider-\(providerName)"].add()
+    }
+
+    public func recordAdsClickedOnPage(providerName: String) {
+        print("MOO recordAdsClickedOnPage: provider-\(providerName)")
+        GleanMetrics.BrowserSearch.adClicks["provider-\(providerName)"].add()
     }
 }

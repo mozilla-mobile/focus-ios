@@ -209,6 +209,8 @@
 		F7FF8B5B2194084000CCA80F /* UIDeviceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FF8B5A2194084000CCA80F /* UIDeviceExtensions.swift */; };
 		F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F805722E1DBEE504004339C1 /* WebCacheUtils.swift */; };
 		F81DF84F2653477F00C83C61 /* AutocompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81DF84E2653477F00C83C61 /* AutocompleteTextField.swift */; };
+		F827EA412742F01300F21E12 /* Ads.js in Resources */ = {isa = PBXBuildFile; fileRef = F827EA402742F01300F21E12 /* Ads.js */; };
+		F827EA432742F93600F21E12 /* SearchProviderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F827EA422742F93600F21E12 /* SearchProviderModel.swift */; };
 		F8324CE4264EA223007E4BFA /* gpl.html in Resources */ = {isa = PBXBuildFile; fileRef = F8324CDF264EA223007E4BFA /* gpl.html */; };
 		F8324CE5264EA223007E4BFA /* licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = F8324CE0264EA223007E4BFA /* licenses.html */; };
 		F8324CE6264EA223007E4BFA /* style.css in Resources */ = {isa = PBXBuildFile; fileRef = F8324CE1264EA223007E4BFA /* style.css */; };
@@ -985,6 +987,8 @@
 		F7FF8B5A2194084000CCA80F /* UIDeviceExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDeviceExtensions.swift; sourceTree = "<group>"; };
 		F805722E1DBEE504004339C1 /* WebCacheUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebCacheUtils.swift; sourceTree = "<group>"; };
 		F81DF84E2653477F00C83C61 /* AutocompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteTextField.swift; sourceTree = "<group>"; };
+		F827EA402742F01300F21E12 /* Ads.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Ads.js; sourceTree = "<group>"; };
+		F827EA422742F93600F21E12 /* SearchProviderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchProviderModel.swift; sourceTree = "<group>"; };
 		F8324CDF264EA223007E4BFA /* gpl.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = gpl.html; sourceTree = "<group>"; };
 		F8324CE0264EA223007E4BFA /* licenses.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = licenses.html; sourceTree = "<group>"; };
 		F8324CE1264EA223007E4BFA /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
@@ -1452,6 +1456,8 @@
 				B3481A541FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift */,
 				1D3BEDF820C5E6C70019B722 /* FindInPage.js */,
 				C83FB7D1273AA13200B78CC5 /* MetadataHelper.js */,
+				F827EA402742F01300F21E12 /* Ads.js */,
+				F827EA422742F93600F21E12 /* SearchProviderModel.swift */,
 				1D3BEDFA20C5E76A0019B722 /* FindInPageBar.swift */,
 				846A23172668CC4500DB3C37 /* FullScreen.js */,
 				747ADA171FC38EFC00970132 /* IntroViewController.swift */,
@@ -1942,6 +1948,7 @@
 				B3D23BEF1FA3A9E500D9C50F /* postload.js in Resources */,
 				F8324CE7264EA223007E4BFA /* rights-focus.html in Resources */,
 				D50939A91FBF807A005D4316 /* Settings.bundle in Resources */,
+				F827EA412742F01300F21E12 /* Ads.js in Resources */,
 				F8324CE4264EA223007E4BFA /* gpl.html in Resources */,
 				D3E54FD51DEFB25B003E1AFF /* SearchPlugins in Resources */,
 				D3E2C8FF1D9F17AC00DEBE3D /* web-fonts.json in Resources */,
@@ -2086,6 +2093,7 @@
 			files = (
 				D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */,
 				C89AA96E271720330089838F /* ThemeTableViewToggleCell.swift in Sources */,
+				F827EA432742F93600F21E12 /* SearchProviderModel.swift in Sources */,
 				C8337DE22710893700093D42 /* UIImage+AppImages.swift in Sources */,
 				C8337DF82710898800093D42 /* TrackingProtectionDelegate.swift in Sources */,
 				16837EA62135EFCC000424BB /* TipManager.swift in Sources */,
