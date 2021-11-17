@@ -47,14 +47,14 @@ class PhotonActionSheetCell: UITableViewCell {
     lazy var titleLabel: UILabel = {
         let label = createLabel()
         label.numberOfLines = 4
-        label.font = UIConstants.fonts.actionMenuItem
+        label.font = .systemFont(ofSize: 16)
         return label
     }()
     
     lazy var subtitleLabel: UILabel = {
         let label = createLabel()
         label.numberOfLines = 0
-        label.font = UIConstants.fonts.actionMenuItem
+        label.font = .systemFont(ofSize: 16)
         return label
     }()
     
@@ -126,8 +126,7 @@ class PhotonActionSheetCell: UITableViewCell {
         subtitleLabel.text = action.text
         subtitleLabel.textColor = .secondaryText
         subtitleLabel.isHidden = action.text == nil
-        titleLabel.font  = action.bold ? UIConstants.fonts.actionMenuItemBold : UIConstants.fonts.actionMenuItem
-        accessibilityIdentifier = action.iconString
+        titleLabel.font = .systemFont(ofSize: 16, weight: action.bold ? .bold : .regular)
         accessibilityLabel = action.title
         selectionStyle = .none
         
@@ -151,12 +150,12 @@ class PhotonActionSheetCell: UITableViewCell {
         
         if action.textStyle == .subtitle {
             subtitleLabel.textColor = .tertiaryLabel
-            subtitleLabel.font = UIConstants.fonts.actionMenuItemSubtitle
+            subtitleLabel.font = .systemFont(ofSize: 12)
         }
         
         switch action.accessory {
         case .Text:
-            disclosureLabel.font  = action.bold ? UIConstants.fonts.actionMenuItemBold : UIConstants.fonts.actionMenuItem
+            disclosureLabel.font = .systemFont(ofSize: 16, weight: action.bold ? .bold : .regular)
             disclosureLabel.text = action.accessoryText
             disclosureLabel.textColor = titleLabel.textColor
             disclosureLabel.accessibilityIdentifier = "\(action.title).Subtitle"

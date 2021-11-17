@@ -39,7 +39,7 @@ class SearchSuggestionsPromptView: UIView {
         
         promptTitle.text = UIConstants.strings.searchSuggestionsPromptTitle
         promptTitle.textColor = .primaryText
-        promptTitle.font = UIConstants.fonts.promptTitle
+        promptTitle.font = .systemFont(ofSize: 20, weight: .bold)
         promptTitle.textAlignment = NSTextAlignment.center
         promptTitle.numberOfLines = 0
         promptTitle.lineBreakMode = .byWordWrapping
@@ -53,7 +53,7 @@ class SearchSuggestionsPromptView: UIView {
 
         promptMessage.text = String(format: UIConstants.strings.searchSuggestionsPromptMessage, AppInfo.productName)
         promptMessage.textColor = .primaryText
-        promptMessage.font = UIConstants.fonts.promptMessage
+        promptMessage.font = .systemFont(ofSize: 15)
         promptMessage.textAlignment = NSTextAlignment.center
         promptMessage.numberOfLines = 0
         promptMessage.lineBreakMode = .byWordWrapping
@@ -67,7 +67,7 @@ class SearchSuggestionsPromptView: UIView {
 
         disableButton.accessibilityIdentifier = "SearchSuggestionsPromptView.disableButton"
         disableButton.setTitle(UIConstants.strings.searchSuggestionsPromptDisable, for: .normal)
-        disableButton.titleLabel?.font = UIConstants.fonts.promptButton
+        disableButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .medium)
         disableButton.titleLabel?.textColor = .primaryText
         disableButton.backgroundColor = .primaryDark.withAlphaComponent(0.36)
         disableButton.layer.cornerRadius = UIConstants.layout.promptButtonHeight / 2
@@ -84,7 +84,7 @@ class SearchSuggestionsPromptView: UIView {
 
         enableButton.accessibilityIdentifier = "SearchSuggestionsPromptView.enableButton"
         enableButton.setTitle(UIConstants.strings.searchSuggestionsPromptEnable, for: .normal)
-        enableButton.titleLabel?.font = UIConstants.fonts.promptButton
+        enableButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .medium)
         enableButton.titleLabel?.textColor = .primaryText
         enableButton.backgroundColor = .primaryDark.withAlphaComponent(0.36)
         enableButton.layer.cornerRadius = UIConstants.layout.promptButtonHeight / 2
