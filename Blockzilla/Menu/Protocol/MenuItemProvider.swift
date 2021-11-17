@@ -43,7 +43,7 @@ extension MenuItemProvider where Self: MenuActionable {
     }
     
     func openInDefaultBrowserItem(for url: URL) -> MenuAction {
-        MenuAction(title: UIConstants.strings.shareOpenInDefaultBrowser, image: "open_in_safari_icon") { [unowned self] in
+        MenuAction(title: UIConstants.strings.shareOpenInDefaultBrowser, image: "icon_favicon") { [unowned self] in
             self.openInDefaultBrowser(url: url)
         }
     }
