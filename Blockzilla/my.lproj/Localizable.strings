@@ -346,9 +346,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "စာကြောင်းကို အသုံးပြုရန် ရှာဖွေပါ";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "ဥပမာ. searchengineexample.com /search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "ရှာထားသောစာကြောင်းကို ကူးယူ သို့မဟုတ် ဝင်ရောက်ပါ လိုအပ်လှျင် %s နှင့်ရှာဖွေသုံးနှုန်းများကို ပြန်ထားပါ";
 
@@ -435,9 +432,6 @@
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Firefox တွင် ဖွင့်ပါ";
-
-/* Text for the share menu option when a user wants to open the current website in the Safari app. */
-"ShareMenu.ShareOpenSafari" = "Safari တွင် ဖွင့်ပါ";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "၎င်းနှင့်အတူ မျှဝေရန် ...";

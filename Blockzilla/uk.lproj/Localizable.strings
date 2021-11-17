@@ -2,7 +2,7 @@
 "About.learnMoreButton" = "Докладніше";
 
 /* Label on About screen */
-"About.missionLabel" = "%@ створено в Mozilla. Нашою місією є сприяння розвитку здорового, відкритого Інтернету.";
+"About.missionLabel" = "%@ створено в Mozilla. Наша місія — сприяння розвитку здорового й відкритого Інтернету.";
 
 /* Label on About screen */
 "About.privateBullet1" = "Пошук і перегляд прямо в програмі";
@@ -14,7 +14,7 @@
 "About.privateBullet3" = "Стирайте для видалення куків, а також історії пошуку й перегляду";
 
 /* Label on About screen */
-"About.privateBulletHeader" = "Використовуйте в якості приватного браузера:";
+"About.privateBulletHeader" = "Використовуйте його як приватний браузер:";
 
 /* Label for row in About screen */
 "About.rowHelp" = "Допомога";
@@ -32,7 +32,7 @@
 "About.safariBullet2" = "Блокуйте вебшрифти для зменшення розміру сторінок";
 
 /* Label on About screen */
-"About.safariBulletHeader" = "Використовуйте в якості розширення для Safari:";
+"About.safariBulletHeader" = "Використовуйте його як розширення для Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "Про %@";
@@ -74,7 +74,7 @@
 "Autocomplete.addCustomUrlWithPlus" = "+ Додати власну URL-адресу";
 
 /* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "Додавайте і керуйте автозавершенням власних URL-адрес.";
+"Autocomplete.customDescriptoin" = "Додавання й керування автозавершенням власних URL-адрес.";
 
 /* Label for button taking you to your custom Autocomplete URL list */
 "Autocomplete.customLabel" = "Власні URL";
@@ -86,7 +86,7 @@
 "Autocomplete.customUrlAdded" = "Нову власну URL-адресу додано.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.defaultDescriptoin" = "Увімкніть автозавершення в %@ для понад 450 популярних URL-адрес в панелі адреси.";
+"Autocomplete.defaultDescriptoin" = "Увімкніть автозавершення в %@ для понад 450 популярних сайтів у панелі адреси.";
 
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.defaultLabel" = "Автозавершення";
@@ -122,7 +122,7 @@
 "BiometricPrompt.newSession" = "Новий сеанс";
 
 /* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
-"BiometricPrompt.reason" = "Блокуйте %@ при повторному відкритті для запобігання небажаного доступу.";
+"BiometricPrompt.reason" = "Розблоковуйте %@ при кожному відкритті для запобігання небажаного доступу.";
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Назад";
@@ -155,7 +155,7 @@
 "Browser.stopLabel" = "Стоп";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "Виберіть панель адреси";
+"browserShortcutDescription.selectLocationBar" = "Вибрати панель адреси";
 
 /* Label on button to cancel edits */
 "Cancel" = "Скасувати";
@@ -271,6 +271,12 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” бажає отримати доступ до ваших фотографій";
 
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "З’єднання не захищене";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "З’єднання захищене";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Повна версія сайту";
 
@@ -284,7 +290,7 @@
 "Safari.instructionsNotEnabled" = "%@ не увімкнено.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsOpen" = "Відкрийте параметри";
+"Safari.instructionsOpen" = "Відкрийте параметри програми";
 
 /* Save button label */
 "Save" = "Зберегти";
@@ -324,6 +330,12 @@
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla зобов'язується збирати лише дані, що необхідні для роботи і вдосконалення %@.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "%@ може час від часу встановлювати й виконувати дослідження.";
+
+/* Title for section in settings menu */
+"Settings.general" = "Загальні";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Докладніше.";
@@ -369,9 +381,6 @@
 
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Запит для пошуку";
-
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Зразок: searchengineexample.com/search/?q=%s";
 
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Вставте або введіть запит для пошуку. Якщо необхідно, замініть пошуковий термін на: %s.";
@@ -442,6 +451,9 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Надсилати дані про використання";
 
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "Дослідження";
+
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Використовувати Touch ID для розблокування програми";
 
@@ -493,11 +505,11 @@
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Відкрити в Chrome";
 
-/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
-"ShareMenu.ShareOpenFirefox" = "Відкрити в Firefox";
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Відкрити у типовому браузері";
 
-/* Text for the share menu option when a user wants to open the current website in the Safari app. */
-"ShareMenu.ShareOpenSafari" = "Відкрити в Safari";
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Відкрити у Firefox";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Поділитися сторінкою...";
@@ -518,7 +530,7 @@
 "Siri.erase" = "Стерти";
 
 /* Title of option in settings to set up Siri to erase and then open the app. */
-"Siri.eraseAndOpen" = "Стерти і відкрити";
+"Siri.eraseAndOpen" = "Стерти й відкрити";
 
 /* Title for screen to add a favorite URL to Siri. */
 "Siri.favoriteUrl" = "Відкрити улюблений сайт";
@@ -529,8 +541,59 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "Відкрити URL";
 
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "Блокувати %@, якщо сайт відкрито:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Увімкнути Face ID";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Увімкнути Touch ID";
+
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Release.Description" = "Докладніше про це та інші оновлення %@.";
+
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "Чому б і так, ми маємо новий вигляд!";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Дії сторінки > Повна версія сайту";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Хочете переглянути повну версію сайту?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "Заблоковано елементів стеження: %@";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Ви переглядаєте. %@ блокує.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "Виберіть Додати до ярликів у меню %@";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "Створіть ярлики для сайтів, які ви відвідуєте найчастіше:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Додати швидку команду Siri";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "“Siri, зітри мій сеанс %@.”";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Додати ярлик Siri";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "“Siri, відкрий мій улюблений сайт.”";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Спробуйте вимкнути захист від стеження";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "На сайті відсутній вміст або він дивно поводиться?";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
-"touchId.reason" = "Використовувати Touch ID для повернення до %@";
+"touchId.reason" = "Використовуйте Touch ID для повернення до %@";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Стеження реклами";
@@ -543,6 +606,9 @@
 
 /* Text for tracking protection screen showing the connection is secure */
 "trackingProtection.connectionSecureLabel" = "З’єднання захищене";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"trackingProtection.connectionVerifiedByLabel" = "Засвідчено %@";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Стеження вмісту";
@@ -572,13 +638,13 @@
 "trackingProtection.statusOn" = "Захист увімкнено для цього сеансу";
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.toggleDescription1" = "Вимкнути до закриття %@, або оберіть СТЕРТИ.";
+"trackingProtection.toggleDescription1" = "Вимкнути до закриття %@ або натискання СТЕРТИ.";
 
 /* Text for the toggle that enables/disables tracking protection. */
 "trackingProtection.toggleLabel2" = "Розширений захист від стеження";
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel2" = "Зберігайте свої дані при собі. %@ захищає вас від численних найпоширеніших елементів стеження, що переслідують вас в мережі.";
+"trackingProtection.trackerDescriptionLabel2" = "Зберігайте свої дані при собі. %@ захищає вас від багатьох найпоширеніших елементів стеження, що переслідують вас в Інтернеті.";
 
 /* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
 "trackingProtection.trackersBlockedLabel" = "Заблоковано стеження, починаючи з %@";

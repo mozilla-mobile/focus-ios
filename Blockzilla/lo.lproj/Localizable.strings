@@ -271,9 +271,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "ຊອກຫາສະຕຣິງທີ່ຈະໃຊ້";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "ຕົວຢ່າງ: searchengineexample.com/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "ວາງ ຫຼື ປ້ອນ String ການຄົ້ນຫາ ຫາກຈຳເປັນໃຫ້ແທນທີ່ຄຳຄົ້ນຫາດ້ວຍ: %s.";
 
@@ -324,9 +321,6 @@
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "ເປີດໃນ Firefox";
-
-/* Text for the share menu option when a user wants to open the current website in the Safari app. */
-"ShareMenu.ShareOpenSafari" = "ເປີດໃນ Safari";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "ເພີ່ມ";

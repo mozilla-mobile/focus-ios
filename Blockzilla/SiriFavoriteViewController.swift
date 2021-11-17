@@ -6,7 +6,6 @@ import UIKit
 import Intents
 import IntentsUI
 
-@available(iOS 12.0, *)
 class SiriFavoriteViewController: UIViewController {
     private let inputLabel = SmartLabel()
     private let textInput: UITextField = InsetTextField(insetBy: UIConstants.layout.settingsTextPadding)
@@ -37,14 +36,14 @@ class SiriFavoriteViewController: UIViewController {
         navigationController?.navigationBar.tintColor = .accent
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIConstants.colors.defaultFont]
         navigationController?.navigationBar.isTranslucent = false
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .systemGroupedBackground
 
         inputLabel.text = UIConstants.strings.urlToOpen
         inputLabel.font = UIConstants.fonts.settingsInputLabel
         inputLabel.textColor = .primaryText
         view.addSubview(inputLabel)
 
-        textInput.backgroundColor = .secondarySystemBackground
+        textInput.backgroundColor = .secondarySystemGroupedBackground
         textInput.keyboardType = .URL
         textInput.autocapitalizationType = .none
         textInput.autocorrectionType = .no
@@ -90,7 +89,7 @@ class SiriFavoriteViewController: UIViewController {
     }
 
     private func setUpEditUI() {
-        editView.backgroundColor = .secondarySystemBackground
+        editView.backgroundColor = .systemGroupedBackground
         view.addSubview(editView)
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(SiriFavoriteViewController.editTapped))
@@ -104,7 +103,7 @@ class SiriFavoriteViewController: UIViewController {
 
         let editLabel = UILabel()
         editLabel.text = UIConstants.strings.editOpenUrl
-        editLabel.textColor = UIConstants.colors.siriTint
+        editLabel.textColor = .accent
 
         editView.addSubview(editLabel)
         editLabel.snp.makeConstraints { make in
@@ -113,7 +112,7 @@ class SiriFavoriteViewController: UIViewController {
         }
 
         let topBorder = UIView()
-        topBorder.backgroundColor = UIConstants.colors.settingsSeparator
+        topBorder.backgroundColor = .systemGray
         editView.addSubview(topBorder)
         topBorder.snp.makeConstraints { make in
             make.height.equalTo(UIConstants.layout.separatorHeight)
@@ -121,7 +120,7 @@ class SiriFavoriteViewController: UIViewController {
         }
 
         let bottomBorder = UIView()
-        bottomBorder.backgroundColor = UIConstants.colors.settingsSeparator
+        bottomBorder.backgroundColor = .systemGray
         editView.addSubview(bottomBorder)
         bottomBorder.snp.makeConstraints { make in
             make.height.equalTo(UIConstants.layout.separatorHeight)
@@ -189,7 +188,6 @@ class SiriFavoriteViewController: UIViewController {
     }
 }
 
-@available(iOS 12.0, *)
 extension SiriFavoriteViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         nextTapped()
@@ -197,7 +195,6 @@ extension SiriFavoriteViewController: UITextFieldDelegate {
     }
 }
 
-@available(iOS 12.0, *)
 extension SiriFavoriteViewController: INUIAddVoiceShortcutViewControllerDelegate {
     func addVoiceShortcutViewController(_ controller: INUIAddVoiceShortcutViewController, didFinishWith voiceShortcut: INVoiceShortcut?, error: Error?) {
         controller.dismiss(animated: true, completion: nil)
@@ -208,7 +205,6 @@ extension SiriFavoriteViewController: INUIAddVoiceShortcutViewControllerDelegate
     }
 }
 
-@available(iOS 12.0, *)
 extension SiriFavoriteViewController: INUIEditVoiceShortcutViewControllerDelegate {
     func editVoiceShortcutViewController(_ controller: INUIEditVoiceShortcutViewController, didUpdate voiceShortcut: INVoiceShortcut?, error: Error?) {
         controller.dismiss(animated: true, completion: nil)
@@ -220,19 +216,5 @@ extension SiriFavoriteViewController: INUIEditVoiceShortcutViewControllerDelegat
 
     func editVoiceShortcutViewControllerDidCancel(_ controller: INUIEditVoiceShortcutViewController) {
         controller.dismiss(animated: true, completion: nil)
-    }
-}
-
-class EditView: UIView {
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.backgroundColor = UIConstants.colors.cellSelected
-    }
-
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.backgroundColor = UIConstants.colors.cellBackground
-    }
-
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.backgroundColor = UIConstants.colors.cellBackground
     }
 }

@@ -370,9 +370,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Testenn glask da implij";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Skouer: searchengineexample.com/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Pegit pe enankit un destenn da glask. M'eo dleet e c'hallit amsaviñ an termen klasket gant: %s.";
 
@@ -495,9 +492,6 @@
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Digeriñ e Firefox";
-
-/* Text for the share menu option when a user wants to open the current website in the Safari app. */
-"ShareMenu.ShareOpenSafari" = "Digeriñ e Safari";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Rannañ ar bajenn gant...";

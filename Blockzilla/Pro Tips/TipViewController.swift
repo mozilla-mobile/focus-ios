@@ -6,10 +6,13 @@ import UIKit
 
 class TipViewController: UIViewController {
     
+    // Mark dependency explicit
+    private let nimbus = NimbusWrapper.shared
+    
     private lazy var tipTitleLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .secondaryText
-        label.font = UIConstants.fonts.shareTrackerStatsLabel
+        label.textColor = .secondaryLabel
+        label.font = nimbus.shouldHaveBoldTitle == true ? UIConstants.fonts.tipTitleBold : UIConstants.fonts.tipTitleMedium
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
@@ -18,7 +21,7 @@ class TipViewController: UIViewController {
     private lazy var tipDescriptionButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitleColor(.accent, for: .normal)
-        button.setTitleColor(.accent, for: .highlighted)
+        button.setTitleColor(.secondaryLabel, for: .disabled)
         button.titleLabel?.font = UIConstants.fonts.shareTrackerStatsLabel
         button.titleLabel?.textAlignment = .center
         button.titleLabel?.numberOfLines = 0
@@ -35,13 +38,18 @@ class TipViewController: UIViewController {
     }()
     
     public let tip: TipManager.Tip
-    private let tipTappedAction: (TipManager.Tip) -> ()
+    private let tipTappedAction: (TipManager.Tip) -> Void
+    private let tapOutsideAction: () -> Void
     
-    init(tip: TipManager.Tip, tipTappedAction: @escaping (TipManager.Tip) -> ()) {
-        self.tip = tip
-        self.tipTappedAction = tipTappedAction
-        super.init(nibName: nil, bundle: nil)
-    }
+    init(
+        tip: TipManager.Tip,
+        tipTappedAction: @escaping (TipManager.Tip) -> Void,
+        tapOutsideAction: @escaping () -> Void) {
+            self.tip = tip
+            self.tipTappedAction = tipTappedAction
+            self.tapOutsideAction = tapOutsideAction
+            super.init(nibName: nil, bundle: nil)
+        }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -51,8 +59,11 @@ class TipViewController: UIViewController {
         super.viewDidLoad()
                 
         view.addSubview(stackView)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapOutside))
+        view.addGestureRecognizer(tap)
         
         tipTitleLabel.text = tip.title
+        
         tipDescriptionButton.setTitle(tip.description, for: .normal)
         tipDescriptionButton.addTarget(self, action: #selector(tapTip), for: .touchUpInside)
 
@@ -64,5 +75,9 @@ class TipViewController: UIViewController {
     
     @objc private func tapTip() {
         tipTappedAction(tip)
+    }
+    
+    @objc private func tapOutside() {
+        tapOutsideAction()
     }
 }

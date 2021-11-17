@@ -10,9 +10,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.backgroundColor = .systemBackground
         tableView.separatorStyle = .singleLine
-        tableView.separatorColor = UIConstants.colors.settingsSeparator
         tableView.allowsSelection = true
         tableView.estimatedRowHeight = UITableView.automaticDimension
         return tableView
@@ -31,7 +29,6 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
     }
 
     override func viewDidLoad() {
-        view.backgroundColor = .systemBackground
 
         title = UIConstants.strings.settingsAutocompleteSection
         navigationController?.navigationBar.tintColor = .accent
@@ -82,7 +79,6 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             }
         }
 
-        cell.backgroundColor = .secondarySystemBackground
         cell.textLabel?.textColor = .primaryText
         cell.layoutMargins = UIEdgeInsets.zero
 
@@ -101,7 +97,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         switch section {
         case 0:
-            let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.autocompleteTopSitesDesc, AppInfo.productName), attributes: [.foregroundColor: UIConstants.colors.settingsDetailLabel])
+            let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.autocompleteTopSitesDesc, AppInfo.productName), attributes: [.foregroundColor: UIColor.secondaryLabel])
             let footer = ActionFooterView(frame: .zero)
             footer.textLabel.attributedText = subtitle
             footer.detailTextButton.setTitle(UIConstants.strings.learnMore, for: .normal)
@@ -111,7 +107,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             return footer
             
         case 1:
-            let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.autocompleteManageSitesDesc, AppInfo.productName), attributes: [.foregroundColor: UIConstants.colors.settingsDetailLabel])
+            let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.autocompleteManageSitesDesc, AppInfo.productName), attributes: [.foregroundColor: UIColor.secondaryLabel])
             let footer = ActionFooterView(frame: .zero)
             footer.textLabel.attributedText = subtitle
             footer.detailTextButton.setTitle(UIConstants.strings.learnMore, for: .normal)

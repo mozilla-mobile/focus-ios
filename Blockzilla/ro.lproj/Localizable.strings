@@ -349,9 +349,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Text de căutare spre utilizare";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Exemplu: exempludemotordecăutare.com/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Lipește sau introdu formatul de căutare. Dacă este necesar, înlocuiește termenul de căutare cu: %s.";
 
@@ -438,9 +435,6 @@
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Deschide în Firefox";
-
-/* Text for the share menu option when a user wants to open the current website in the Safari app. */
-"ShareMenu.ShareOpenSafari" = "Deschide în Safari";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Partajează pagina cu...";

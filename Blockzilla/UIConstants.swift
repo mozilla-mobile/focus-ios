@@ -10,48 +10,20 @@ struct UIConstants {
     static let maximumNumberOfShortcuts = 4
 
     struct colors {
-        static let actionMenuItemSubtitleLabel = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
         static let background = UIConstants.Photon.Ink90
-        static let buttonHighlight = UIColor(rgb: 0x333333)
-        static let cellBackground = UIConstants.Photon.Ink80
         static let cellSelected = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         static let defaultFont = UIColor(rgb: 0xE1E5EA)
         static let firstRunMessage = UIConstants.Photon.Grey50
         static let firstRunNextButton = UIConstants.Photon.Purple50
         static let firstRunTitle = UIColor(rgb: 0x212121)
-        static let focusLightBlue = UIColor(rgb: 0x00A7E0)
-        static let focusDarkBlue = UIColor(rgb: 0x005DA5)
-        static let focusGreen = UIColor(rgb: 0x7ED321)
-        static let focusMaroon = UIColor(rgb: 0xE63D2F)
-        static let focusOrange = UIColor(rgb: 0xF26C23)
-        static let focusRed = UIColor(rgb: 0xE63D2F)
-        static let focusViolet = UIColor(rgb: 0x95368C)
         static let gradientBackground = UIColor(rgb: 0x363B40)
         static let gradientLeft = UIConstants.Photon.Red60
         static let gradientMiddle = UIConstants.Photon.Magenta70
         static let gradientRight = UIConstants.Photon.Purple80
         static let inputPlaceholder = UIColor(rgb: 0xb2b2b2)
-        static let navigationButton = UIConstants.Photon.Grey10
-        static let navigationTitle = UIConstants.Photon.Grey10
-        static let overlayBackground = UIColor(white: 0, alpha: 0.8)
-        static let searchSuggestion = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
-        static let settingsDetailLabel = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
         static let settingsDisabled = UIColor(rgb: 0xB2B2B2)
-        static let settingsLink = UIConstants.Photon.Magenta40
-        static let settingsNavBar = UIConstants.Photon.Ink80.withAlphaComponent(0.9)
-        static let settingsNavBorder = UIConstants.Photon.Grey10.withAlphaComponent(0.5)
-        static let settingsSeparator = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
-        static let settingsTextLabel = UIConstants.Photon.Grey10
-        static let siriTint = UIConstants.Photon.Magenta40
-        static let tableSectionHeader = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
-        static let toastBackground = UIColor(rgb: 0x414146)
-        static let toastText = UIColor.white
         static let toggleOff = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         static let toggleOn = UIConstants.Photon.Magenta40
-        static let urlTextFont = UIConstants.Photon.Grey10
-        static let urlTextHighlight = UIConstants.Photon.Magenta40
-        static let urlTextPlaceholder = UIConstants.Photon.Grey10.withAlphaComponent(0.4)
-        static let whatsNew = UIConstants.Photon.Teal50
     }
 
     struct Photon {
@@ -149,6 +121,7 @@ struct UIConstants {
         static let settingsInputLabel = UIFont.systemFont(ofSize: 18)
         static let settingsDescriptionText = UIFont.systemFont(ofSize: 12)
         static let shareTrackerStatsLabel = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.light)
+        static let shareTrackerStatsLabelBold = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.bold)
         static let closeButtonTitle = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.bold)
         static let actionMenuItem = UIFont.systemFont(ofSize: 16)
         static let actionMenuTitle = UIFont.systemFont(ofSize: 12)
@@ -162,6 +135,8 @@ struct UIConstants {
         static let trackingProtectionHeader = UIFont.systemFont(ofSize: 15, weight: .regular)
         static let trackingProtectionStatsText = UIFont.systemFont(ofSize: 15)
         static let trackingProtectionStatsDetail = UIFont.systemFont(ofSize: 20)
+        static let tipTitleMedium = UIFont.systemFont(ofSize: 14, weight: .medium)
+        static let tipTitleBold = UIFont.systemFont(ofSize: 14, weight: .bold)
     }
 
     struct layout {
@@ -373,6 +348,10 @@ struct UIConstants {
         static let labelBlockFonts = NSLocalizedString("Settings.toggleBlockFonts", value: "Block web fonts", comment: "Label for toggle on main screen")
         static let labelSendAnonymousUsageData = NSLocalizedString("Settings.toggleSendUsageData", value: "Send usage data", comment: "Label for Send Usage Data toggle on main screen")
         static let detailTextSendUsageData = NSLocalizedString("Settings.detailTextSendUsageData", value: "Mozilla strives to collect only what we need to provide and improve %@ for everyone.", comment: "Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar)")
+
+        static let labelStudies = NSLocalizedString("Settings.toggleStudies", value: "Studies", comment: "Label for Studies toggle on the settings screen")
+        static let detailTextStudies = NSLocalizedString("Settings.detailTextStudies", value: "%@ may install and run studies from time to time.", comment: "Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar)")
+
         static let general = NSLocalizedString("Settings.general", value: "General", comment: "Title for section in settings menu")
         static let theme = NSLocalizedString("Settings.theme", value: "Theme", comment: "Theme section in settings menu")
         static let systemTheme = NSLocalizedString("Settings.systemTheme", value: "System Theme", comment: "System value for theme section in settings menu")
@@ -423,7 +402,7 @@ struct UIConstants {
         static let sharePage = NSLocalizedString("ShareMenu.SharePage", value: "Share Page With...", comment: "Text for the share menu option when a user wants to share the current website they are on through another app.")
         static let shareOpenInFirefox = NSLocalizedString("ShareMenu.ShareOpenFirefox", value: "Open in Firefox", comment: "Text for the share menu option when a user wants to open the current website in the Firefox app.")
         static let shareOpenInChrome = NSLocalizedString("ShareMenu.ShareOpenChrome", value: "Open in Chrome", comment: "Text for the share menu option when a user wants to open the current website in the Chrome app.")
-        static let shareOpenInSafari = NSLocalizedString("ShareMenu.ShareOpenSafari", value: "Open in Safari", comment: "Text for the share menu option when a user wants to open the current website in the Safari app.")
+        static let shareOpenInDefaultBrowser = NSLocalizedString("ShareMenu.ShareOpenDefaultBrowser", value: "Open in Default Browser", comment: "Text for the share menu option when a user wants to open the current website in the default browser.")
         static let shareMenuRequestDesktop = NSLocalizedString("ShareMenu.RequestDesktop", value: "Request Desktop Site", comment: "Text for the share menu option when a user wants to reload the site as a desktop")
         static let shareMenuRequestMobile = NSLocalizedString("ShareMenu.RequestMobile", value: "Request Mobile Site", comment: "Text for the share menu option when a user wants to reload the site as a mobile device")
         static let shareMenuFindInPage = NSLocalizedString("ShareMenu.FindInPage", value: "Find in Page", comment: "Text for the share menu option when a user wants to open the find in page menu")
@@ -443,6 +422,7 @@ struct UIConstants {
         static let connectionSecure = NSLocalizedString("trackingProtection.connectionSecureLabel", value: "Connection is secure", comment: "Text for tracking protection screen showing the connection is secure")
         static let connectionNotSecure = NSLocalizedString("trackingProtection.connectionNotSecureLabel", value: "Connection is not secure", comment: "Text for tracking protection screen showing the connection is not secure")
         static let trackersBlockedSince = NSLocalizedString("trackingProtection.trackersBlockedLabel", value: "Trackers blocked since %@", comment: "Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application.")
+        static let connectionVerifiedBy = NSLocalizedString("trackingProtection.connectionVerifiedByLabel", value: "Verified by %@", comment: "String to let users know the site verifier, where the placeholder represents the SSL certificate signer.")
         static let externalAppLink = NSLocalizedString("ExternalAppLink.messageTitle", value: "%@ wants to open another App", comment: "Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar.")
         static let externalAppLinkWithAppName = NSLocalizedString("externalAppLinkWithAppName.messageTitle", value: "%@ wants to open %@", comment: "Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open.")
         static let open = NSLocalizedString("ExternalAppLink.openTitle", value: "Open", comment: "Button label for opening another app from Focus")
@@ -483,7 +463,7 @@ struct UIConstants {
         static let AddSearchEngineName = NSLocalizedString("Settings.Search.SearchEngineName", value: "Search engine name", comment: "Placeholder text for input of new search engine name")
         static let AddSearchEngineTemplate = NSLocalizedString("Settings.Search.SearchTemplate", value: "Search string to use", comment: "Label for input of search engine template")
         static let AddSearchEngineTemplatePlaceholder = NSLocalizedString("Settings.Search.SearchTemplatePlaceholder", value: "Paste or enter search string. If necessary, replace search term with: %s.", comment: "Placeholder text for input of new search engine template")
-        static let AddSearchEngineTemplateExample = NSLocalizedString("settings.Search.SearchTemplateExample", value: "Example: searchengineexample.com/search/?q=%s", comment: "Text displayed as an example of the template to add a search engine.")
+        static let AddSearchEngineTemplateExample2 = NSLocalizedString("settings.Search.SearchTemplateExample", value: "Example: searchengine.example.com/search/?q=%s", comment: "Text displayed as an example of the template to add a search engine.")
         static let RestoreSearchEnginesLabel = NSLocalizedString("Settings.Search.RestoreEngine", value: "Restore Default Search Engines", comment: "Label for button to bring deleted default engines back")
         static let Edit = NSLocalizedString("Edit", value: "Edit", comment: "Label on button to allow edits")
         static let Done = NSLocalizedString("Done", value: "Done", comment: "Label on button to complete edits")
@@ -547,25 +527,6 @@ struct UIConstants {
         static let requestMobileNotification = "Notification.requestMobile"
         static let findInPageNotification = "Notification.findInPage"
         
-        // Home Screen Tips
-        
-        static let releaseTipTitle = "Why yes, we do have a fresh new look!"
-        static let releaseTipDescription = "Read more about this and other updates to %@."
-        static let shortcutsTipTitle = "Create shortcuts to the sites you visit most:"
-        static let shortcutsTipDescription = "Select Add to Shortcuts from the %@ menu"
-        static let sitesNotWorkingTipTitle = "Site missing content or acting strange?"
-        static let sitesNotWorkingTipDescription = "Try turning off Tracking Protection"
-        static let biometricTipTitle = String(format: "Lock %@ when a site is open:", AppInfo.productName)
-        static let biometricTipFaceIdDescription = "Turn on Face ID"
-        static let biometricTipTouchIdDescription = "Turn on Touch ID"
-        static let requestDesktopTipTitle = "Want to see the full desktop version of a site?"
-        static let requestDesktopTipDescription = "Page Actions > Request Desktop Site"
-        static let siriFavoriteTipTitle = "“Siri, open my favorite site.”"
-        static let siriFavoriteTipDescription = "Add Siri shortcut"
-        static let siriEraseTipTitle = String(format: "“Siri, erase my %@ session.”", AppInfo.productName)
-        static let siriEraseTipDescription = "Add Siri shortcut"
-        static let shareTrackersTipTitle = String(format: "You browse. %@ blocks.", AppInfo.productName)
-        static let shareTrackersTipDescription = "%@ trackers blocked so far"
         static let encodingNameUTF8 = "utf-8"
         static let googleAmpURLPrefix = "https://www.google.com/amp/s/"
         static let truncateLeader = "..."

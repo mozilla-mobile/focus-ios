@@ -6,6 +6,7 @@ import UIKit
 import WebKit
 import Telemetry
 import PassKit
+import Combine
 
 protocol BrowserState {
     var url: URL? { get }
@@ -45,13 +46,12 @@ protocol WebControllerDelegate: AnyObject {
 }
 
 class WebViewController: UIViewController, WebController {
-    private enum ScriptHandlers: String {
+    private enum ScriptHandlers: String, CaseIterable {
         case focusTrackingProtection
         case focusTrackingProtectionPostLoad
         case findInPageHandler
         case fullScreen
-
-        static var allValues: [ScriptHandlers] { return [.focusTrackingProtection, .focusTrackingProtectionPostLoad, .findInPageHandler, .fullScreen] }
+        case metadata
     }
 
     private enum KVOConstants: String, CaseIterable {
@@ -62,7 +62,7 @@ class WebViewController: UIViewController, WebController {
 
     weak var delegate: WebControllerDelegate?
 
-    private var browserView: WKWebView!
+    var browserView: WKWebView!
     var onePasswordExtensionItem: NSExtensionItem!
     private var progressObserver: NSKeyValueObservation?
     private var urlObserver: NSKeyValueObservation?
@@ -163,6 +163,7 @@ class WebViewController: UIViewController, WebController {
         setupBlockLists()
         setupTrackingProtectionScripts()
         setupFindInPageScripts()
+        setupMetadataScripts()
         setupFullScreen()
 
         view.addSubview(browserView)
@@ -204,6 +205,11 @@ class WebViewController: UIViewController, WebController {
         addScript(forResource: "FindInPage", injectionTime: .atDocumentEnd, forMainFrameOnly: true)
     }
     
+    private func setupMetadataScripts() {
+        browserView.configuration.userContentController.add(self, name: ScriptHandlers.metadata.rawValue)
+        addScript(forResource: "MetadataHelper", injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+    }
+    
     private func setupFullScreen() {
         browserView.configuration.userContentController.add(self, name: ScriptHandlers.fullScreen.rawValue)
         addScript(forResource: "FullScreen", injectionTime: .atDocumentEnd, forMainFrameOnly: true)
@@ -211,12 +217,13 @@ class WebViewController: UIViewController, WebController {
 
     func disableTrackingProtection() {
         guard case .on = trackingProtectionStatus else { return }
-        ScriptHandlers.allValues.forEach {
+        ScriptHandlers.allCases.forEach {
             browserView.configuration.userContentController.removeScriptMessageHandler(forName: $0.rawValue)
         }
         browserView.configuration.userContentController.removeAllUserScripts()
         browserView.configuration.userContentController.removeAllContentRuleLists()
         setupFindInPageScripts()
+        setupMetadataScripts()
         trackingProtectionStatus = .off
     }
 
@@ -231,9 +238,44 @@ class WebViewController: UIViewController, WebController {
     func evaluate(_ javascript: String, completion: ((Any?, Error?) -> Void)?) {
         browserView.evaluateJavaScript(javascript, completionHandler: completion)
     }
+    
+    enum MetadataError: Swift.Error {
+        case missingMetadata
+        case missingURL
+    }
+
+    /// Get the metadata out of the page-metadata-parser, and into a type safe struct as soon as possible.
+    /// 
+    func getMetadata(completion: @escaping (Swift.Result<Metadata, Error>) -> Void) {
+        evaluate("__firefox__.metadata.getMetadata()") { result, error in
+            let metadata = result
+                .flatMap { try? JSONSerialization.data(withJSONObject: $0) }
+                .flatMap { try? JSONDecoder().decode(Metadata.self, from: $0) }
+            
+            if let metadata = metadata {
+                completion(.success(metadata))
+            } else if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.failure(MetadataError.missingMetadata))
+            }
+        }
+    }
+    
+    func getMetadata()  -> Future<Metadata, Error> {
+        Future { promise in
+            self.getMetadata { result in
+                promise(result)
+            }
+        }
+    }
 
     func focus() {
         browserView.becomeFirstResponder()
+    }
+    
+    func resetZoom() {
+        browserView.scrollView.setZoomScale(1.0, animated: true)
     }
 
     override func viewDidLoad() {
@@ -282,7 +324,7 @@ extension WebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         delegate?.webControllerDidStartNavigation(self)
         if case .on = trackingProtectionStatus { trackingInformation = TPPageStats() }
-        currentContentMode = navigation.effectiveContentMode
+        currentContentMode = navigation?.effectiveContentMode
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
@@ -306,7 +348,12 @@ extension WebViewController: WKNavigationDelegate {
             preferences.preferredContentMode = preferredContentMode
         }
         
-        let present: (UIViewController) -> Void = { self.present($0, animated: true, completion: nil) }
+        let present: (UIViewController) -> Void = {
+            self.present($0, animated: true) {
+                self.delegate?.webController(self, didUpdateEstimatedProgress: 1.0)
+                self.delegate?.webControllerDidFinishNavigation(self)
+            }
+        }
 
         switch navigationAction.navigationType {
             case .backForward:

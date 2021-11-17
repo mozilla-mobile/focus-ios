@@ -101,7 +101,7 @@ class BrowserToolbar: UIView {
             let duration = UIConstants.layout.urlBarTransitionAnimationDuration
             backgroundDark.animateHidden(color != .dark, duration: duration)
             backgroundBright.animateHidden(color != .bright, duration: duration)
-            backgroundLoading.animateHidden(color != .loading, duration: duration)
+            backgroundLoading.animateHidden(currentTheme == .light ? true : color != .loading, duration: duration)
             toolset.isLoading = color == .loading
         }
     }

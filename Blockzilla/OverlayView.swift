@@ -172,18 +172,15 @@ class OverlayView: UIView {
             }
         }
         
-        findInPageButton.backgroundColor = iPadView ? .systemBackground.withAlphaComponent(0.95) : .foundation
+        findInPageButton.backgroundColor = iPadView ? .secondarySystemBackground.withAlphaComponent(0.95) : .foundation
         
         remakeConstraintsForFindInPage()
         
         if iPadView {
-            searchButtonGroup.first?.layer.cornerRadius = UIConstants.layout.suggestionViewCornerRadius
-            searchButtonGroup.first?.clipsToBounds = true
-            searchButtonGroup.first?.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
             findInPageButton.layer.cornerRadius = UIConstants.layout.suggestionViewCornerRadius
             findInPageButton.clipsToBounds =  true
             findInPageButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
-            lastSeparator.backgroundColor = .searchSeparator.withAlphaComponent(0.65)
+            lastSeparator.backgroundColor = .systemGray
             topBorder.backgroundColor = .clear
             
         } else {
@@ -213,7 +210,7 @@ class OverlayView: UIView {
         
         if i != 0 {
             let separator = UIView()
-            separator.backgroundColor = .searchSeparator.withAlphaComponent(0.65)
+            separator.backgroundColor = .systemGray
             self.separatorGroup.append(separator)
             searchButton.addSubview(separator)
             
@@ -231,7 +228,7 @@ class OverlayView: UIView {
     
     func setColorstToSearchButtons() {
         for button in searchButtonGroup {
-            button.backgroundColor = isIpadView ? .systemBackground.withAlphaComponent(0.95) : .foundation
+            button.backgroundColor = isIpadView ? .secondarySystemBackground.withAlphaComponent(0.95) : .foundation
             button.highlightedBackgroundColor = UIColor(named: "SearchSuggestionButtonHighlight")
         }
     }
@@ -327,12 +324,7 @@ class OverlayView: UIView {
     private func updateSearchButtons() {
         for index in 0..<self.searchButtonGroup.count {
             let hasSuggestionInIndex = index < self.searchSuggestions.count
-            if isIpadView {
-                let show = searchSuggestionsPrompt.isHidden && Settings.getToggle(.enableSearchSuggestions) && hasSuggestionInIndex
-                self.searchButtonGroup[index].isHidden = !show
-            } else {
-                self.searchButtonGroup[index].isHidden = !hasSuggestionInIndex
-            }
+            self.searchButtonGroup[index].isHidden = !hasSuggestionInIndex
             if hasSuggestionInIndex {
                 self.setAttributedButtonTitle(
                     phrase: self.searchSuggestions[index],
@@ -405,13 +397,17 @@ class OverlayView: UIView {
         guard isIpadView  else {
             return
         }
-        if shouldShowFindInPage {
-            searchButtonGroup.last?.layer.maskedCorners = []
+        topBorder.backgroundColor = .clear
+        searchButtonGroup.last?.layer.cornerRadius = UIConstants.layout.suggestionViewCornerRadius
+        searchButtonGroup.last?.clipsToBounds =  true
+        searchButtonGroup.first?.layer.cornerRadius = UIConstants.layout.suggestionViewCornerRadius
+        searchButtonGroup.first?.clipsToBounds = true
+        
+        if searchSuggestions.count == 1 {
+            searchButtonGroup.first?.layer.maskedCorners = findInPageButton.isHidden ? [.layerMaxXMinYCorner, .layerMinXMinYCorner, .layerMaxXMaxYCorner, .layerMinXMaxYCorner] : [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         } else {
-            topBorder.backgroundColor = .clear
-            searchButtonGroup.last?.layer.cornerRadius = UIConstants.layout.suggestionViewCornerRadius
-            searchButtonGroup.last?.clipsToBounds =  true
-            searchButtonGroup.last?.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+            searchButtonGroup.first?.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+            searchButtonGroup.last?.layer.maskedCorners = findInPageButton.isHidden ? [.layerMaxXMaxYCorner, .layerMinXMaxYCorner] : []
         }
     }
     
@@ -509,44 +505,10 @@ class OverlayView: UIView {
         }
     }
 }
-extension URL {
-    public func isWebPage() -> Bool {
-        let schemes = ["http", "https"]
-        if let scheme = scheme, schemes.contains(scheme) {
-            return true
-        }
-        return false
-    }
-}
 
 extension OverlayView: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {}
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {}
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {}
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {}
-}
-
-extension UIPasteboard {
-
-    //
-    // As of iOS 11: macOS/iOS's Universal Clipboard feature causes UIPasteboard to block.
-    //
-    // (Known) Apple Radars that have been filed:
-    //
-    //  http://www.openradar.me/28787338
-    //  http://www.openradar.me/28774309
-    //
-    // Discussion on Twitter:
-    //
-    //  https://twitter.com/steipete/status/787985965432369152
-    //
-    //  To workaround this, urlAsync(callback:) makes a call of UIPasteboard.general on
-    //  an async dispatch queue, calling the completion block when done.
-    //
-    func urlAsync(callback: @escaping (URL?) -> Void) {
-        DispatchQueue.global().async {
-            let url = URL(string: UIPasteboard.general.string ?? "")
-            callback(url)
-        }
-    }
 }

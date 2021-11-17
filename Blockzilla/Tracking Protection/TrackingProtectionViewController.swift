@@ -181,9 +181,7 @@ class TrackingProtectionViewController: UIViewController {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.delegate = profileDataSource
         tableView.dataSource = profileDataSource
-        tableView.backgroundColor = .systemBackground
         tableView.separatorStyle = .singleLine
-        tableView.separatorColor = .searchSeparator.withAlphaComponent(0.65)
         tableView.tableFooterView = UIView()
         tableView.register(SwitchTableViewCell.self)
         return tableView
@@ -203,9 +201,11 @@ class TrackingProtectionViewController: UIViewController {
         if case .settings = state { return 0 }  else { return 32 }
     }
     var state: TrackingProtectionState
+    let favIconPublisher: AnyPublisher<UIImage, Never>?
     
     //MARK: - VC Lifecycle
-    init(state: TrackingProtectionState) {
+    init(state: TrackingProtectionState, favIconPublisher: AnyPublisher<UIImage, Never>? = nil) {
+        self.favIconPublisher = favIconPublisher
         self.state = state
         super.init(nibName: nil, bundle: nil)
     }
@@ -217,7 +217,6 @@ class TrackingProtectionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .systemBackground
         title = UIConstants.strings.trackingProtectionLabel
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.primaryText]
         navigationController?.navigationBar.tintColor = .accent
@@ -230,7 +229,6 @@ class TrackingProtectionViewController: UIViewController {
             self.navigationController?.navigationBar.shadowImage = UIImage()
             self.navigationController?.navigationBar.layoutIfNeeded()
             self.navigationController?.navigationBar.isTranslucent = false
-            self.navigationController?.navigationBar.barTintColor = .systemBackground
         }
         
         if case let .browsing(browsingStatus) = state,
@@ -241,7 +239,9 @@ class TrackingProtectionViewController: UIViewController {
                 self.headerHeight = make.height.equalTo(72).constraint
                 make.leading.top.trailing.equalToSuperview()
             }
-            header.configure(domain: baseDomain, imageURL: url)
+            if let publisher = favIconPublisher {
+                header.configure(domain: baseDomain, publisher: publisher)
+            }
         }
         
         view.addSubview(tableView)
@@ -257,6 +257,8 @@ class TrackingProtectionViewController: UIViewController {
     }
     
     private func calculatePreferredSize() {
+        guard state != .settings else { return }
+        
         preferredContentSize = CGSize(
             width: tableView.contentSize.width,
             height: tableView.contentSize.height + (headerHeight?.layoutConstraints[0].constant ?? .zero)

@@ -5,12 +5,6 @@
 import UIKit
 import SnapKit
 
-extension UIScreen {
-    var isSmallScreen: Bool {
-        return min(bounds.size.width, bounds.size.height) < 700
-    }
-}
-
 struct PhotonActionSheetCellUX {
     static let LabelColor = UIColor.blue
     static let BorderWidth: CGFloat = CGFloat(0.5)
@@ -156,7 +150,7 @@ class PhotonActionSheetCell: UITableViewCell {
         }
         
         if action.textStyle == .subtitle {
-            subtitleLabel.textColor = UIConstants.colors.actionMenuItemSubtitleLabel
+            subtitleLabel.textColor = .tertiaryLabel
             subtitleLabel.font = UIConstants.fonts.actionMenuItemSubtitle
         }
         

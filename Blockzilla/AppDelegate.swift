@@ -59,7 +59,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
             appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.primaryText]
-            appearance.backgroundColor = .systemBackground
+            appearance.backgroundColor = .systemGroupedBackground
             appearance.shadowColor = .clear
             UINavigationBar.appearance().standardAppearance = appearance
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
@@ -211,6 +211,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         }
         switch shortcutIdentifier {
         case .EraseAndOpen:
+            browserViewController.photonActionSheetDidDismiss()
+            browserViewController.dismiss(animated: true, completion: nil)
+            browserViewController.navigationController?.popViewController(animated: true)
             browserViewController.resetBrowser(hidePreviousSession: true)
         }
         return true
@@ -331,7 +334,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     }
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        guard #available(iOS 12.0, *) else { return false }
         browserViewController.photonActionSheetDidDismiss()
         browserViewController.dismiss(animated: true, completion: nil)
         browserViewController.navigationController?.popViewController(animated: true)
@@ -418,7 +420,8 @@ extension AppDelegate {
             GleanMetrics.LegacyIds.clientId.set(clientId)
         }
 
-        Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData))
+        let channel = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" ? "testflight" : "release"
+        Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData), configuration: Configuration(channel: channel))
         
         // Send "at startup" telemetry
         GleanMetrics.Shortcuts.shortcutsOnHomeNumber.set(Int64(ShortcutsManager.shared.numberOfShortcuts))
@@ -431,7 +434,12 @@ extension AppDelegate {
     }
         
     func setupExperimentation() {
-        // TODO Temporarily removed because of https://github.com/mozilla-mobile/focus-ios/issues/2600
+        do {
+            // Enable nimbus when both Send Usage Data and Studies are enabled in the settings.
+            try NimbusWrapper.shared.initialize(enabled: Settings.getToggle(.sendAnonymousUsageData) && Settings.getToggle(.studies))
+        } catch {
+            NSLog("Failed to setup experimentation: \(error)")
+        }
     }
 
     func presentModal(viewController: UIViewController, animated: Bool) {
@@ -450,10 +458,4 @@ extension AppDelegate {
 protocol ModalDelegate {
     func presentModal(viewController: UIViewController, animated: Bool)
     func presentSheet(viewController: UIViewController)
-}
-
-extension UINavigationController {
-    override open var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
 }

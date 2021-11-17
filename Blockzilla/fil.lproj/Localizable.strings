@@ -337,9 +337,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Maghanap ng string na gagamitin";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Halimbawa: searchengineexample.com/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "I-paste o ilagay ang string ng paghahanap. Kung kinakailangan, palitan ang termino ng paghahanap gamit ang: %s.";
 
@@ -444,9 +441,6 @@
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Buksan sa Firefox";
-
-/* Text for the share menu option when a user wants to open the current website in the Safari app. */
-"ShareMenu.ShareOpenSafari" = "Buksan sa Safari";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Ibahagi ang Pahina Sa...";

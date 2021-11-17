@@ -370,9 +370,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "String pencarian untuk digunakan";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Contoh: contohmesinpencari.id/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Tempel atau masukkan string pencarian. Jika diperlukan, ganti istilah pencarian dengan: %s.";
 
@@ -495,9 +492,6 @@
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Buka di Firefox";
-
-/* Text for the share menu option when a user wants to open the current website in the Safari app. */
-"ShareMenu.ShareOpenSafari" = "Buka di Safari";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Bagikan Laman Dengan...";

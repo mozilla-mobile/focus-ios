@@ -10,6 +10,7 @@ import LocalAuthentication
 import StoreKit
 import Intents
 import Glean
+import Combine
 
 class BrowserViewController: UIViewController {
     let appSplashController: AppSplashController
@@ -28,7 +29,7 @@ class BrowserViewController: UIViewController {
     private var homeViewController: HomeViewController!
     private let overlayView = OverlayView()
     private let searchEngineManager = SearchEngineManager(prefs: UserDefaults.standard)
-    private let urlBarContainer = URLBarContainer()
+    private let urlBarContainer = UIView()
     private var urlBar: URLBar!
     private let requestHandler = RequestHandler()
     private let searchSuggestClient = SearchSuggestClient()
@@ -57,7 +58,7 @@ class BrowserViewController: UIViewController {
 
     private var trackingProtectionStatus: TrackingProtectionStatus = .on(TPPageStats()) {
         didSet {
-            urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus, shouldDisplayShieldIcon:  urlBar.inBrowsingMode ? self.webViewController.connectionIsSecure : true )
+            updateLockIcon()
         }
     }
 
@@ -81,6 +82,7 @@ class BrowserViewController: UIViewController {
         }
     }
     private var initialUrl: URL?
+    private var orientationWillChange = false
     var tipManager: TipManager
     var shortcutManager: ShortcutsManager
 
@@ -269,10 +271,6 @@ class BrowserViewController: UIViewController {
         submit(url: url)
     }
 
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(true, animated: animated)
 
@@ -384,6 +382,10 @@ class BrowserViewController: UIViewController {
             
         }
     }
+    
+    private func updateLockIcon() {
+        urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus, shouldDisplayShieldIcon:  urlBar.inBrowsingMode ? self.webViewController.connectionIsSecure : true)
+    }
 
     // These functions are used to handle displaying and hiding the keyboard after the splash view is animated
     public func activateUrlBarOnHomeView() {
@@ -394,7 +396,7 @@ class BrowserViewController: UIViewController {
         }
 
         // Do not activate if we are showing a web page, nor the overlayView hidden
-        if !(urlBar.inBrowsingMode || overlayView.isHidden) {
+        if urlBar.inBrowsingMode {
             return
         }
 
@@ -406,7 +408,9 @@ class BrowserViewController: UIViewController {
     }
     
     public func deactivateUrlBar() {
-        urlBar.dismiss()
+        if urlBar.inBrowsingMode {
+            urlBar.dismiss()
+        }
     }
     
     public func dismissSettings() {
@@ -547,6 +551,7 @@ class BrowserViewController: UIViewController {
             self.findInPageBar?.becomeFirstResponder()
         } else if let findInPageBar = self.findInPageBar {
             findInPageBar.endEditing(true)
+            webViewController.focus()
             webViewController.evaluate("__firefox__.findDone()", completion: nil)
             findInPageBar.removeFromSuperview()
             fillerView?.removeFromSuperview()
@@ -591,13 +596,14 @@ class BrowserViewController: UIViewController {
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.eraseButton)
 
-        if #available(iOS 12.0, *) {
-            userActivity = SiriShortcuts().getActivity(for: .eraseAndOpen)
-            let interaction = INInteraction(intent: eraseIntent, response: nil)
-            interaction.donate { (error) in
-                if let error = error { print(error.localizedDescription) }
-            }
+        userActivity = SiriShortcuts().getActivity(for: .eraseAndOpen)
+        let interaction = INInteraction(intent: eraseIntent, response: nil)
+        interaction.donate { (error) in
+            if let error = error { print(error.localizedDescription) }
         }
+        
+        // Reenable tracking protection after reset
+        Settings.set(true, forToggle: .trackingProtection)
     }
 
     private func clearBrowser() {
@@ -609,6 +615,7 @@ class BrowserViewController: UIViewController {
         browserToolbar.canGoBack = false
         browserToolbar.canGoForward = false
         browserToolbar.canDelete = false
+        urlBar.dismiss()
         urlBar.removeFromSuperview()
         urlBarContainer.alpha = 0
         homeViewController.refreshTipsDisplay()
@@ -674,7 +681,6 @@ class BrowserViewController: UIViewController {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.settingsButton)
     }
 
-    @available(iOS 12.0, *)
     private func showSiriFavoriteSettings() {
         guard let modalDelegate = modalDelegate else { return }
 
@@ -738,7 +744,7 @@ class BrowserViewController: UIViewController {
         if urlBar.url == nil {
             urlBar.url = url
         }
-        guard #available(iOS 12.0, *), let savedUrl = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return }
+        guard let savedUrl = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return }
         if let currentDomain = url.baseDomain, let savedDomain = URL(string: savedUrl)?.baseDomain, currentDomain == savedDomain {
             userActivity = SiriShortcuts().getActivity(for: .openURL)
         }
@@ -750,6 +756,7 @@ class BrowserViewController: UIViewController {
         // Fixes the issue of a user fresh-opening Focus via Split View
         guard isViewLoaded else { return }
 
+        orientationWillChange = true
         // UIDevice.current.orientation isn't reliable. See https://bugzilla.mozilla.org/show_bug.cgi?id=1315370#c5
         // As a workaround, consider the phone to be in landscape if the new width is greater than the height.
         showsToolsetInURLBar = (UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == size.width || size.width > size.height)) || (UIDevice.current.userInterfaceIdiom == .phone && size.width > size.height)
@@ -787,6 +794,7 @@ class BrowserViewController: UIViewController {
 
             self.browserToolbar.animateHidden(!self.urlBar.inBrowsingMode || self.showsToolsetInURLBar, duration: coordinator.transitionDuration, completion: {
                 self.updateViewConstraints()
+                self.webViewController.resetZoom()
             })
         })
         
@@ -830,8 +838,9 @@ class BrowserViewController: UIViewController {
     @objc private func selectLocationBar() {
         showToolbars()
         urlBar.activateTextField()
-        shortcutsContainer.isHidden = false
-        shortcutsBackground.isHidden = !urlBar.inBrowsingMode
+        let shouldShowShortcuts = shortcutManager.numberOfShortcuts != 0
+        shortcutsContainer.isHidden = !shouldShowShortcuts
+        shortcutsBackground.isHidden = !shouldShowShortcuts || !urlBar.inBrowsingMode
     }
 
     @objc private func reload() {
@@ -851,13 +860,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func toggleURLBarBackground(isBright: Bool) {
-        if urlBar.isEditing {
-            urlBarContainer.barState = .editing
-        } else if case .on = trackingProtectionStatus {
-            urlBarContainer.barState = .bright
-        } else {
-            urlBarContainer.barState = .dark
-        }
+        urlBarContainer.backgroundColor = urlBar.inBrowsingMode ? .foundation : .clear
     }
 
     private func toggleToolbarBackground() {
@@ -1085,6 +1088,7 @@ extension BrowserViewController: URLBarDelegate {
         toggleURLBarBackground(isBright: !webViewController.isLoading)
         shortcutsContainer.isHidden = urlBar.inBrowsingMode
         shortcutsBackground.isHidden = true
+        webViewController.focus()
     }
 
     func urlBarDidFocus(_ urlBar: URLBar) {
@@ -1120,6 +1124,22 @@ extension BrowserViewController: URLBarDelegate {
         GleanMetrics.TrackingProtection.toolbarShieldClicked.add()
 
         guard let modalDelegate = modalDelegate else { return }
+        
+        let favIconPublisher: AnyPublisher<UIImage, Never> =
+        webViewController
+            .getMetadata()
+            .map(\.icon)
+            .tryMap {
+                if let url = $0.flatMap(URL.init(string:)) {
+                    return url
+                } else {
+                    throw WebViewController.MetadataError.missingURL
+                }
+            }
+            .flatMap { url in ImageLoader().loadImage(url) }
+            .replaceError(with: .defaultFavicon)
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
 
         switch trackingProtectionStatus {
         case .on:
@@ -1134,7 +1154,7 @@ extension BrowserViewController: URLBarDelegate {
             isSecureConnection: webViewController.connectionIsSecure))
         : .homescreen
         
-        let trackingProtectionViewController = TrackingProtectionViewController(state: state)
+        let trackingProtectionViewController = TrackingProtectionViewController(state: state, favIconPublisher: favIconPublisher)
         trackingProtectionViewController.delegate = self
         if UIDevice.current.userInterfaceIdiom == .pad {
             trackingProtectionViewController.modalPresentationStyle = .popover
@@ -1196,7 +1216,7 @@ extension BrowserViewController: URLBarDelegate {
             if items.canOpenInChrome {
                 shareItems.append(items.openInChromeItem)
             }
-            shareItems.append(items.openInSafariItem)
+            shareItems.append(items.openInDefaultBrowserItem)
             
             actions.append(actionItems)
             actions.append(shareItems)
@@ -1362,9 +1382,12 @@ extension BrowserViewController: BrowserToolsetDelegate {
     }
 }
 
-extension BrowserViewController: HomeViewDelegate {
+extension BrowserViewController: HomeViewControllerDelegate {
+    func homeViewControllerDidTouchEmptyArea(_ controller: HomeViewController) {
+        urlBar.dismiss()
+    }
 
-    func shareTrackerStatsButtonTapped(_ sender: UIButton) {
+    func homeViewControllerDidTapShareTrackers(_ controller: HomeViewController, sender: UIButton) {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.share, object: TelemetryEventObject.trackerStatsShareButton)
 
         let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
@@ -1390,7 +1413,7 @@ extension BrowserViewController: HomeViewDelegate {
         submit(url: url)
     }
 
-    func didTapTip(_ tip: TipManager.Tip) {
+    func homeViewControllerDidTapTip(_ controller: HomeViewController, tip: TipManager.Tip) {
         urlBar.dismiss()
         guard let action = tip.action else { return }
         switch action {
@@ -1531,6 +1554,9 @@ extension BrowserViewController: WebControllerDelegate {
         browserToolbar.color = .loading
         toggleURLBarBackground(isBright: false)
         updateURLBar()
+        if trackingProtectionStatus == .off {
+            updateLockIcon()
+        }
     }
 
     func webControllerDidFinishNavigation(_ controller: WebController) {
@@ -1539,7 +1565,6 @@ extension BrowserViewController: WebControllerDelegate {
         toggleToolbarBackground()
         toggleURLBarBackground(isBright: !urlBar.isEditing)
         urlBar.progressBar.hideProgressBar()
-        webViewController.focus()
         GleanMetrics.Browser.totalUriCount.add()
     }
 
@@ -1730,9 +1755,11 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        if UIDevice.current.userInterfaceIdiom == .pad && !orientationWillChange {
             urlBar.dismiss()
         }
+        orientationWillChange = false
+                                                                                                           
     }
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) { }
 }
@@ -1749,7 +1776,6 @@ extension BrowserViewController: UIPopoverPresentationControllerDelegate {
     }
 }
 
-@available(iOS 12.0, *)
 extension BrowserViewController {
     public var eraseIntent: EraseIntent {
         let intent = EraseIntent()

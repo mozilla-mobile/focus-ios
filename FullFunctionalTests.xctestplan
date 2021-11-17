@@ -25,9 +25,13 @@
         "BasicBrowsing\/testAdBlocking()",
         "BasicBrowsing\/testLaunchExternalApp()",
         "BasicBrowsing\/testNavigationToolbar()",
+        "FindInPageTest\/testActivityMenuFindInPageAction()",
         "OnboardingTest",
         "PastenGoTest\/testPastenGo()",
+        "RequestDesktopTest\/testActivityMenuRequestDesktopItem()",
+        "SearchProviderTest\/testGoogleSearchProvider()",
         "SettingAppearanceTest\/testCheckSetting()",
+        "SettingAppearanceTest\/testSafariIntegration()",
         "TrackingProtectionMenu\/testActiveProtectionSidebar()",
         "TrackingProtectionMenu\/testProtectionSidebar()",
         "WebsiteAccessTests\/testVisitWebsite()"

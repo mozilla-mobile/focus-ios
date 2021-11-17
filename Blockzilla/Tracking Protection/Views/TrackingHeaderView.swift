@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import Combine
 
 class TrackingHeaderView: UIView {
     private lazy var faviImageView: AsyncImageView = {
@@ -13,7 +14,7 @@ class TrackingHeaderView: UIView {
     private lazy var domainLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.preferredFont(forTextStyle: .callout)
-        label.textColor = UIConstants.colors.defaultFont
+        label.textColor = .primaryText
         label.numberOfLines = 0
         label.setContentHuggingPriority(.required, for: .horizontal)
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -30,7 +31,7 @@ class TrackingHeaderView: UIView {
     
     private lazy var separator: UIView = {
         let view = UIView()
-        view.backgroundColor = .searchSeparator.withAlphaComponent(0.65)
+        view.backgroundColor = .systemGray
         return view
     }()
     
@@ -59,8 +60,8 @@ class TrackingHeaderView: UIView {
         }
     }
     
-    func configure(domain: String, imageURL: URL) {
+    func configure(domain: String, publisher: AnyPublisher<UIImage, Never>) {
         self.domainLabel.text = domain
-        self.faviImageView.load(imageURL: imageURL, defaultImage: .defaultFavicon)
+        self.faviImageView.load(from: publisher)
     }
 }

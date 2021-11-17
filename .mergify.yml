@@ -1,3 +1,8 @@
+queue_rules:
+  - name: default
+    conditions:
+      - check-success=Bitrise
+
 pull_request_rules:
   - name: Resolve conflict
     conditions:
@@ -13,9 +18,9 @@ pull_request_rules:
       - label!=Work In Progress
       - label!=Do Not Land
     actions:
-      merge:
+      queue:
         method: rebase
-        strict: smart
+        name: default
   - name: Needs landing - Squash
     conditions:
       - label=Needs Landing (Squash)
@@ -24,6 +29,29 @@ pull_request_rules:
       - label!=work in progress
       - label!=do not land
     actions:
-      merge:
+      queue:
         method: squash
-        strict: smart
+        name: default
+  - name: String Import - Auto Approve
+    conditions:
+      - author=github-actions[bot]
+      - title~=string-import*
+      - or:
+        - files~=^Blockzilla\/[^\/]*\/[^\/]*.lproj\/*
+        - files~=^Blockzilla\/[^\/]*.lproj\/*
+    actions:
+      review:
+        type: APPROVE
+        message: Automatically approving string import
+  - name: String Import - Auto Merge
+    conditions:
+      - author=github-actions[bot]
+      - title~=string-import*
+      - or:
+        - files~=^Blockzilla\/[^\/]*\/[^\/]*.lproj\/*
+        - files~=^Blockzilla\/[^\/]*.lproj\/*
+    actions:
+      queue:
+        method: rebase
+        name: default
+  

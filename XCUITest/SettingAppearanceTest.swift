@@ -120,9 +120,8 @@ class SettingAppearanceTest: BaseTestCase {
 
         waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
-        print(app.debugDescription)
 
-        let safariButton = app.cells["Open in Safari"]
+        let safariButton = app.cells["icon_favicon"]
         waitForExistence(safariButton)
         safariButton.tap()
 
@@ -232,6 +231,9 @@ class SettingAppearanceTest: BaseTestCase {
         let settingsButton = app.cells["Settings"]
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
+        
+        waitForHittable(app.tables.cells["SettingsViewController.autocompleteCell"])
+        app.tables.cells["SettingsViewController.autocompleteCell"].swipeUp()
 
         // Check that Safari toggle is off, swipe to get to Safarin Integration menu
         waitForExistence(app.otherElements["SIRI SHORTCUTS"])

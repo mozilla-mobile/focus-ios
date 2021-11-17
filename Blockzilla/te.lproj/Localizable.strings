@@ -262,9 +262,6 @@
 /* Label for input field for the name of the search engine to be added */
 "Settings.Search.NameToDisplay" = "ప్రదర్శించడానికి పేరు";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "ఉదాహరణ: searchengineexample.com/search/?q=%s";
-
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "శోధన యంత్రం";
 
@@ -321,9 +318,6 @@
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Firefoxలో తెరువు";
-
-/* Text for the share menu option when a user wants to open the current website in the Safari app. */
-"ShareMenu.ShareOpenSafari" = "సఫారీలో తెరువు";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "చేర్చు";

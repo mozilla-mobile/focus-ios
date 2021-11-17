@@ -346,9 +346,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "İstifadə ediləcək axtarış sətri";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Məsələn: mozillaz.org/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Axtarış sətrini daxil edin və ya yapışdırın. Əgər lazımdırsa, axtarış ifadəsini bununla dəyişin: %s.";
 
@@ -435,9 +432,6 @@
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Firefox-da aç";
-
-/* Text for the share menu option when a user wants to open the current website in the Safari app. */
-"ShareMenu.ShareOpenSafari" = "Safari-də aç";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Səhifəni Paylaş...";
