@@ -25,7 +25,7 @@ class Toast {
         let label = SmartLabel()
         label.text = text
         label.textColor = .primaryText
-        label.font = .systemFont(ofSize: 12, weight: .semibold)
+        label.font = .footnote12Semibold
         
         label.numberOfLines = 0
         label.accessibilityIdentifier = "Toast.label"

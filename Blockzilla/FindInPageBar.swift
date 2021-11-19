@@ -15,9 +15,9 @@ private struct FindInPageUX {
     static let BackgroundColor = UIColor.foundation
     static let ButtonColor = UIColor.white
     static let MatchCountColor = UIColor.primaryText.withAlphaComponent(0.6)
-    static let MatchCountFont = UIFont.systemFont(ofSize: 16)
+    static let MatchCountFont = UIFont.body16
     static let SearchTextColor = UIColor.primaryText
-    static let SearchTextFont = UIFont.systemFont(ofSize: 16)
+    static let SearchTextFont = UIFont.body16
     static let TopBorderColor = UIColor.divider
 }
 

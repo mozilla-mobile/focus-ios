@@ -12,7 +12,7 @@ class TipViewController: UIViewController {
     private lazy var tipTitleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .secondaryLabel
-        label.font = .systemFont(ofSize: 14, weight: nimbus.shouldHaveBoldTitle ? .bold : .medium)
+        label.font = nimbus.shouldHaveBoldTitle ? .footnote14Bold : .footnote14Medium
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
@@ -22,7 +22,7 @@ class TipViewController: UIViewController {
         let button = UIButton(type: .system)
         button.setTitleColor(.accent, for: .normal)
         button.setTitleColor(.secondaryLabel, for: .disabled)
-        button.titleLabel?.font = .systemFont(ofSize: 14, weight: .light)
+        button.titleLabel?.font = .footnote14Light
         button.titleLabel?.textAlignment = .center
         button.titleLabel?.numberOfLines = 0
         button.isEnabled = self.tip.action != nil

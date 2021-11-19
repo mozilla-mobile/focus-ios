@@ -40,7 +40,7 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
         view.backgroundColor = .systemGroupedBackground
 
         inputLabel.text = UIConstants.strings.autocompleteAddCustomUrlLabel
-        inputLabel.font = .systemFont(ofSize: 18)
+        inputLabel.font = .body18
         inputLabel.textColor = .primaryText
         view.addSubview(inputLabel)
 
@@ -60,7 +60,7 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
 
         inputDescription.text = UIConstants.strings.autocompleteAddCustomUrlExample
         inputDescription.textColor = .primaryText
-        inputDescription.font = .systemFont(ofSize: 12)
+        inputDescription.font = .footnote12
         view.addSubview(inputDescription)
 
         inputLabel.snp.makeConstraints { make in

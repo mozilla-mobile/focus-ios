@@ -10,11 +10,11 @@ class SubtitleCell: UITableViewCell {
         self.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         textLabel?.text = title
         textLabel?.textColor = .primaryText.withAlphaComponent(0.6)
-        textLabel?.font = .systemFont(ofSize: 15)
+        textLabel?.font = .body15
         textLabel?.numberOfLines = 0
         detailTextLabel?.text = subtitle
         detailTextLabel?.textColor = .primaryText
-        detailTextLabel?.font = .systemFont(ofSize: 20)
+        detailTextLabel?.font = .title20
         backgroundColor = .secondarySystemGroupedBackground
         selectionStyle = .none
     }
