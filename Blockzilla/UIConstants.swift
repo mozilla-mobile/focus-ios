@@ -10,45 +10,20 @@ struct UIConstants {
     static let maximumNumberOfShortcuts = 4
 
     struct colors {
-        static let actionMenuItemSubtitleLabel = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
         static let background = UIConstants.Photon.Ink90
-        static let buttonHighlight = UIColor(rgb: 0x333333)
-        static let cellBackground = UIConstants.Photon.Ink80
         static let cellSelected = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         static let defaultFont = UIColor(rgb: 0xE1E5EA)
         static let firstRunMessage = UIConstants.Photon.Grey50
         static let firstRunNextButton = UIConstants.Photon.Purple50
         static let firstRunTitle = UIColor(rgb: 0x212121)
-        static let focusLightBlue = UIColor(rgb: 0x00A7E0)
-        static let focusDarkBlue = UIColor(rgb: 0x005DA5)
-        static let focusGreen = UIColor(rgb: 0x7ED321)
-        static let focusMaroon = UIColor(rgb: 0xE63D2F)
-        static let focusOrange = UIColor(rgb: 0xF26C23)
-        static let focusRed = UIColor(rgb: 0xE63D2F)
-        static let focusViolet = UIColor(rgb: 0x95368C)
         static let gradientBackground = UIColor(rgb: 0x363B40)
         static let gradientLeft = UIConstants.Photon.Red60
         static let gradientMiddle = UIConstants.Photon.Magenta70
         static let gradientRight = UIConstants.Photon.Purple80
         static let inputPlaceholder = UIColor(rgb: 0xb2b2b2)
-        static let navigationButton = UIConstants.Photon.Grey10
-        static let navigationTitle = UIConstants.Photon.Grey10
-        static let overlayBackground = UIColor(white: 0, alpha: 0.8)
-        static let searchSuggestion = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
         static let settingsDisabled = UIColor(rgb: 0xB2B2B2)
-        static let settingsLink = UIConstants.Photon.Magenta40
-        static let settingsNavBar = UIConstants.Photon.Ink80.withAlphaComponent(0.9)
-        static let settingsNavBorder = UIConstants.Photon.Grey10.withAlphaComponent(0.5)
-        static let settingsTextLabel = UIConstants.Photon.Grey10
-        static let siriTint = UIConstants.Photon.Magenta40
-        static let tableSectionHeader = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
-        static let toastBackground = UIColor(rgb: 0x414146)
-        static let toastText = UIColor.white
         static let toggleOff = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         static let toggleOn = UIConstants.Photon.Magenta40
-        static let urlTextHighlight = UIConstants.Photon.Magenta40
-        static let urlTextPlaceholder = UIConstants.Photon.Grey10.withAlphaComponent(0.4)
-        static let whatsNew = UIConstants.Photon.Teal50
     }
 
     struct Photon {
@@ -120,48 +95,6 @@ struct UIConstants {
 
         static let White100 = UIColor(rgb: 0xffffff)
 
-    }
-
-    struct fonts {
-        static let aboutText = UIFont.systemFont(ofSize: 14)
-        static let cancelButton = UIFont.systemFont(ofSize: 15)
-        static let copyButton = UIFont.systemFont(ofSize: 16)
-        static let copyButtonQuery = UIFont.systemFont(ofSize: 17)
-        static let copyButtonRest = UIFont.boldSystemFont(ofSize: 17)
-        static let deleteButton = UIFont.systemFont(ofSize: 11)
-        static let firstRunDisclaimer = UIFont.systemFont(ofSize: 14)
-        static let firstRunMessage = UIFont.systemFont(ofSize: 14)
-        static let firstRunTitle = UIFont.systemFont(ofSize: 18)
-        static let firstRunButton = UIFont.systemFont(ofSize: 16)
-        static let homeLabel = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.ultraLight)
-        static let safariInstruction = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.medium)
-        static let searchButton = UIFont.systemFont(ofSize: 16)
-        static let searchButtonQuery = UIFont.boldSystemFont(ofSize: 16)
-        static let settingsHomeButton = UIFont.systemFont(ofSize: 15)
-        static let settingsOverlayButton = UIFont.systemFont(ofSize: 13)
-        static let tableSectionHeader = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)
-        static let toast = UIFont.systemFont(ofSize: 12, weight: .semibold)
-        static let urlText = UIFont.systemFont(ofSize: 15)
-        static let truncatedUrlText = UIFont.systemFont(ofSize: 12)
-        static let settingsInputLabel = UIFont.systemFont(ofSize: 18)
-        static let settingsDescriptionText = UIFont.systemFont(ofSize: 12)
-        static let shareTrackerStatsLabel = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.light)
-        static let shareTrackerStatsLabelBold = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.bold)
-        static let closeButtonTitle = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.bold)
-        static let actionMenuItem = UIFont.systemFont(ofSize: 16)
-        static let actionMenuTitle = UIFont.systemFont(ofSize: 12)
-        static let actionMenuItemBold = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.bold)
-        static let actionMenuItemSubtitle = UIFont.systemFont(ofSize: 12)
-		static let addSearchEngineInput = UIFont.systemFont(ofSize: 15)
-		static let addSearchEngineExampleLabel = UIFont.systemFont(ofSize: 12)
-		static let promptTitle = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.bold)
-		static let promptMessage = UIFont.systemFont(ofSize: 15)
-        static let promptButton = UIFont.systemFont(ofSize: 17, weight: .medium)
-        static let trackingProtectionHeader = UIFont.systemFont(ofSize: 15, weight: .regular)
-        static let trackingProtectionStatsText = UIFont.systemFont(ofSize: 15)
-        static let trackingProtectionStatsDetail = UIFont.systemFont(ofSize: 20)
-        static let tipTitleMedium = UIFont.systemFont(ofSize: 14, weight: .medium)
-        static let tipTitleBold = UIFont.systemFont(ofSize: 14, weight: .bold)
     }
 
     struct layout {

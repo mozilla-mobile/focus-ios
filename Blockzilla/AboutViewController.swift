@@ -52,7 +52,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
                 case 0:
                     return URL(string: "https://support.mozilla.org/\(AppInfo.config.supportPath)")
                 case 1:
-                    return Bundle.main.url(forResource: AppInfo.config.rightsFile, withExtension: nil)
+                    return URL(string: "https://www.mozilla.org/en-US/about/legal/terms/firefox/")
                 case 2:
                     return URL(string: "https://www.mozilla.org/privacy/firefox-focus")
                 default:
@@ -203,7 +203,7 @@ private class AboutHeaderView: UIView {
         let aboutParagraph = SmartLabel()
         aboutParagraph.attributedText = attributed
         aboutParagraph.textColor = .secondaryLabel
-        aboutParagraph.font = UIConstants.fonts.aboutText
+        aboutParagraph.font = .footnote14
         aboutParagraph.numberOfLines = 0
         return aboutParagraph
     }()
@@ -211,7 +211,7 @@ private class AboutHeaderView: UIView {
     private lazy var versionNumber: UILabel = {
         let label = SmartLabel()
         label.text = "\(AppInfo.shortVersion) (\(AppInfo.buildNumber)) / \(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
-        label.font = UIConstants.fonts.aboutText
+        label.font = .footnote14
         label.textColor = .secondaryLabel
         return label
     }()
@@ -220,8 +220,8 @@ private class AboutHeaderView: UIView {
         let learnMoreButton = UIButton()
         learnMoreButton.setTitle(UIConstants.strings.aboutLearnMoreButton, for: .normal)
         learnMoreButton.setTitleColor(.accent, for: .normal)
-        learnMoreButton.setTitleColor(UIConstants.colors.buttonHighlight, for: .highlighted)
-        learnMoreButton.titleLabel?.font = UIConstants.fonts.aboutText
+        learnMoreButton.setTitleColor(.accent, for: .highlighted)
+        learnMoreButton.titleLabel?.font = .footnote14
         learnMoreButton.addTarget(self, action: #selector(didPressLearnMore), for: .touchUpInside)
         return learnMoreButton
     }()
