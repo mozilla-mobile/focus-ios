@@ -19,7 +19,7 @@ class SettingAppearanceTest: BaseTestCase {
 
         let settingsButton: XCUIElement
         if #available(iOS 14, *) {
-            settingsButton = app.tables.cells.buttons["Settings"]
+            settingsButton = app.collectionViews.cells.buttons["Settings"]
         } else {
             settingsButton = app.tables.cells["Settings"]
         }
@@ -235,7 +235,7 @@ class SettingAppearanceTest: BaseTestCase {
 
         let settingsButton: XCUIElement
         if #available(iOS 14, *) {
-            settingsButton = app.tables.cells.buttons["Settings"]
+            settingsButton = app.collectionViews.cells.buttons["Settings"]
         } else {
             settingsButton = app.tables.cells["Settings"]
         }
