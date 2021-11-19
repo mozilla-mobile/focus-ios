@@ -17,7 +17,12 @@ class SettingAppearanceTest: BaseTestCase {
         waitForExistence(app.buttons["Settings"], timeout: 5)
         app.buttons["Settings"].tap()
 
-        let settingsButton = app.cells["Settings"]
+        let settingsButton: XCUIElement
+        if #available(iOS 14, *) {
+            settingsButton = app.tables.cells.buttons["Settings"]
+        } else {
+            settingsButton = app.tables.cells["Settings"]
+        }
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
         
@@ -228,7 +233,12 @@ class SettingAppearanceTest: BaseTestCase {
         waitForExistence(app.buttons["Settings"], timeout: 5)
         app.buttons["Settings"].tap()
 
-        let settingsButton = app.cells["Settings"]
+        let settingsButton: XCUIElement
+        if #available(iOS 14, *) {
+            settingsButton = app.tables.cells.buttons["Settings"]
+        } else {
+            settingsButton = app.tables.cells["Settings"]
+        }
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
         
