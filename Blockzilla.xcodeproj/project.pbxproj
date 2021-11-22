@@ -108,6 +108,7 @@
 		C83FB7D2273AA13300B78CC5 /* MetadataHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = C83FB7D1273AA13200B78CC5 /* MetadataHelper.js */; };
 		C83FB7DC273BE4BC00B78CC5 /* Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = C83FB7DB273BE4BC00B78CC5 /* Metadata.swift */; };
 		C8415DB326E9FA38008BAAA2 /* UIApplication+Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8415DB226E9FA38008BAAA2 /* UIApplication+Orientation.swift */; };
+		C847E956274BB7CC000F6D20 /* XCUIApplication+Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = C847E955274BB7C0000F6D20 /* XCUIApplication+Buttons.swift */; };
 		C88A5D3B26EF9245009A135D /* ShareTrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C88A5D3A26EF9245009A135D /* ShareTrackersViewController.swift */; };
 		C89AA96C271720330089838F /* ThemeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89AA966271720330089838F /* ThemeViewController.swift */; };
 		C89AA96D271720330089838F /* SystemThemeDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89AA967271720330089838F /* SystemThemeDelegate.swift */; };
@@ -644,6 +645,7 @@
 		C83FB7D1273AA13200B78CC5 /* MetadataHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = MetadataHelper.js; sourceTree = "<group>"; };
 		C83FB7DB273BE4BC00B78CC5 /* Metadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metadata.swift; sourceTree = "<group>"; };
 		C8415DB226E9FA38008BAAA2 /* UIApplication+Orientation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+Orientation.swift"; sourceTree = "<group>"; };
+		C847E955274BB7C0000F6D20 /* XCUIApplication+Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIApplication+Buttons.swift"; sourceTree = "<group>"; };
 		C88A5D3A26EF9245009A135D /* ShareTrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareTrackersViewController.swift; sourceTree = "<group>"; };
 		C89AA966271720330089838F /* ThemeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeViewController.swift; sourceTree = "<group>"; };
 		C89AA967271720330089838F /* SystemThemeDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemThemeDelegate.swift; sourceTree = "<group>"; };
@@ -1096,6 +1098,7 @@
 			isa = PBXGroup;
 			children = (
 				1D199EF120D813D300CDF976 /* DragAndDropTest.swift */,
+				C847E955274BB7C0000F6D20 /* XCUIApplication+Buttons.swift */,
 				1DE903CD20C751D7002E53ED /* FindInPageTest.swift */,
 				1D47758720C1E66000C074AE /* CopyTest.swift */,
 				1D3FEEA020C0A73D00FFAA8C /* RequestDesktopTest.swift */,
@@ -2058,6 +2061,7 @@
 				4F582F7B1F44A10F006C744B /* OpenInFocusTest.swift in Sources */,
 				0BC928CE1E366A6E004AC581 /* AsianLocaleTest.swift in Sources */,
 				1D3FEEA120C0A73D00FFAA8C /* RequestDesktopTest.swift in Sources */,
+				C847E956274BB7CC000F6D20 /* XCUIApplication+Buttons.swift in Sources */,
 				4F1284861FC5E242001A775B /* TPSettingsTest.swift in Sources */,
 				4FE4E6F61FBB5E2C001BB779 /* TPSidebarBadge.swift in Sources */,
 				F8DEC61326C6A2BE00C5F26B /* UIColorExtensions.swift in Sources */,

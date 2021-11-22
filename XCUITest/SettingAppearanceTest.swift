@@ -17,12 +17,7 @@ class SettingAppearanceTest: BaseTestCase {
         waitForExistence(app.buttons["Settings"], timeout: 5)
         app.buttons["Settings"].tap()
 
-        let settingsButton: XCUIElement
-        if #available(iOS 14, *) {
-            settingsButton = app.collectionViews.cells.buttons["Settings"]
-        } else {
-            settingsButton = app.tables.cells["Settings"]
-        }
+        let settingsButton = app.settingsButton
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
         
@@ -154,9 +149,9 @@ class SettingAppearanceTest: BaseTestCase {
 
         // Navigate to Settings
         waitForExistence(app.buttons["HomeView.settingsButton"])
-        app.buttons["Settings"].tap()
+        app.buttons["HomeView.settingsButton"].tap()
 
-        let settingsButton = app.cells["Settings"]
+        let settingsButton = app.settingsButton
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
 
@@ -183,7 +178,7 @@ class SettingAppearanceTest: BaseTestCase {
         waitForExistence(app.buttons["Settings"])
         app.buttons["Settings"].tap()
 
-        let settingsButton = app.cells["Settings"]
+        let settingsButton = app.settingsButton
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
 
@@ -233,12 +228,7 @@ class SettingAppearanceTest: BaseTestCase {
         waitForExistence(app.buttons["Settings"], timeout: 5)
         app.buttons["Settings"].tap()
 
-        let settingsButton: XCUIElement
-        if #available(iOS 14, *) {
-            settingsButton = app.collectionViews.cells.buttons["Settings"]
-        } else {
-            settingsButton = app.tables.cells["Settings"]
-        }
+        let settingsButton = app.settingsButton
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
         

@@ -39,7 +39,9 @@ class WebsiteAccessTests: BaseTestCase {
     func testDisableAutocomplete() {
         dismissURLBarFocused()
         app.buttons["HomeView.settingsButton"].tap()
-        app.tables.cells["Settings"].tap()
+        let settingsButton = app.settingsButton
+        waitForExistence(settingsButton, timeout: 10)
+        settingsButton.tap()
         // Disable Autocomplete
         waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
@@ -62,7 +64,8 @@ class WebsiteAccessTests: BaseTestCase {
 
         // Enable autocomplete
         app.buttons["Settings"].tap()
-        app.tables.cells["Settings"].tap()
+        waitForExistence(settingsButton, timeout: 10)
+        settingsButton.tap()
         waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
         toggle = app.tables.switches["toggleAutocompleteSwitch"]
@@ -81,7 +84,9 @@ class WebsiteAccessTests: BaseTestCase {
     func testAutocompleteCustomDomain() {
         dismissURLBarFocused()
         app.buttons["HomeView.settingsButton"].tap()
-        app.tables.cells["Settings"].tap()
+        let settingsButton = app.settingsButton
+        waitForExistence(settingsButton, timeout: 10)
+        settingsButton.tap()
         waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
         // Add Custom Domain
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
@@ -107,7 +112,8 @@ class WebsiteAccessTests: BaseTestCase {
         // Remove the custom domain
         app.buttons["URLBar.cancelButton"].tap()
         app.buttons["Settings"].tap()
-        app.tables.cells["Settings"].tap()
+        waitForExistence(settingsButton, timeout: 10)
+        settingsButton.tap()
         waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
         app.tables.cells["customURLS"].tap()
