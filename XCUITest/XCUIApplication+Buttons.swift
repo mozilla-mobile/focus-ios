@@ -13,4 +13,12 @@ extension XCUIApplication {
             return self.tables.cells["Settings"]
         }
     }
+    
+    var findInPageButton: XCUIElement {
+        if #available(iOS 14, *) {
+            return self.collectionViews.cells.buttons["Find in Page"]
+        } else {
+            return self.tables.cells["Find in Page"]
+        }
+    }
 }
