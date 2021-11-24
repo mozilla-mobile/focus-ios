@@ -5,117 +5,22 @@
 import UIKit
 
 struct UIConstants {
-
-    static var ToolbarHeight: CGFloat = 46
+    
     static let maximumNumberOfShortcuts = 4
-
-    struct colors {
-        static let background = UIConstants.Photon.Ink90
-        static let cellSelected = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
-        static let defaultFont = UIColor(rgb: 0xE1E5EA)
-        static let firstRunMessage = UIConstants.Photon.Grey50
-        static let firstRunNextButton = UIConstants.Photon.Purple50
-        static let firstRunTitle = UIColor(rgb: 0x212121)
-        static let gradientBackground = UIColor(rgb: 0x363B40)
-        static let gradientLeft = UIConstants.Photon.Red60
-        static let gradientMiddle = UIConstants.Photon.Magenta70
-        static let gradientRight = UIConstants.Photon.Purple80
-        static let inputPlaceholder = UIColor(rgb: 0xb2b2b2)
-        static let settingsDisabled = UIColor(rgb: 0xB2B2B2)
-        static let toggleOff = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
-        static let toggleOn = UIConstants.Photon.Magenta40
-    }
-
-    struct Photon {
-        static let Magenta40 = UIColor(rgb: 0xe452b9)
-        static let Magenta50 = UIColor(rgb: 0xff1ad9)
-        static let Magenta60 = UIColor(rgb: 0xed00b5)
-        static let Magenta70 = UIColor(rgb: 0xb5007f)
-        static let Magenta80 = UIColor(rgb: 0x7d004f)
-        static let Magenta90 = UIColor(rgb: 0x440027)
-
-        static let Purple30 = UIColor(rgb: 0xc069ff)
-        static let Purple40 = UIColor(rgb: 0xad3bff)
-        static let Purple50 = UIColor(rgb: 0x9400ff)
-        static let Purple60 = UIColor(rgb: 0x8000d7)
-        static let Purple70 = UIColor(rgb: 0x6200a4)
-        static let Purple80 = UIColor(rgb: 0x440071)
-        static let Purple90 = UIColor(rgb: 0x25003e)
-
-        static let Blue40 = UIColor(rgb: 0x45a1ff)
-        static let Blue50 = UIColor(rgb: 0x0a84ff)
-        static let Blue60 = UIColor(rgb: 0x0060df)
-        static let Blue70 = UIColor(rgb: 0x003eaa)
-        static let Blue80 = UIColor(rgb: 0x002275)
-        static let Blue90 = UIColor(rgb: 0x000f40)
-
-        static let Teal50 = UIColor(rgb: 0x00feff)
-        static let Teal60 = UIColor(rgb: 0x00c8d7)
-        static let Teal70 = UIColor(rgb: 0x008ea4)
-        static let Teal80 = UIColor(rgb: 0x005a71)
-        static let Teal90 = UIColor(rgb: 0x002d3e)
-
-        static let Green50 = UIColor(rgb: 0x30e60b)
-        static let Green60 = UIColor(rgb: 0x12bc00)
-        static let Green70 = UIColor(rgb: 0x058b00)
-        static let Green80 = UIColor(rgb: 0x006504)
-        static let Green90 = UIColor(rgb: 0x003706)
-
-        static let Yellow50 = UIColor(rgb: 0xffe900)
-        static let Yellow60 = UIColor(rgb: 0xd7b600)
-        static let Yellow70 = UIColor(rgb: 0xa47f00)
-        static let Yellow80 = UIColor(rgb: 0x715100)
-        static let Yellow90 = UIColor(rgb: 0x3e2800)
-
-        static let Red50 = UIColor(rgb: 0xff0039)
-        static let Red60 = UIColor(rgb: 0xd70022)
-        static let Red70 = UIColor(rgb: 0xa4000f)
-        static let Red80 = UIColor(rgb: 0x5a0002)
-        static let Red90 = UIColor(rgb: 0x3e0200)
-
-        static let Orange50 = UIColor(rgb: 0xff9400)
-        static let Orange60 = UIColor(rgb: 0xd76e00)
-        static let Orange70 = UIColor(rgb: 0xa44900)
-        static let Orange80 = UIColor(rgb: 0x712b00)
-        static let Orange90 = UIColor(rgb: 0x3e1300)
-
-        static let Grey10 = UIColor(rgb: 0xf9f9fa)
-        static let Grey20 = UIColor(rgb: 0xededf0)
-        static let Grey30 = UIColor(rgb: 0xd7d7db)
-        static let Grey40 = UIColor(rgb: 0xb1b1b3)
-        static let Grey50 = UIColor(rgb: 0x737373)
-        static let Grey60 = UIColor(rgb: 0x4a4a4f)
-        static let Grey70 = UIColor(rgb: 0x38383d)
-        static let Grey80 = UIColor(rgb: 0x2a2a2e)
-        static let Grey90 = UIColor(rgb: 0x0c0c0d)
-
-        static let Ink70 = UIColor(rgb: 0x363959)
-        static let Ink80 = UIColor(rgb: 0x202340)
-        static let Ink90 = UIColor(rgb: 0x0f1126)
-
-        static let White100 = UIColor(rgb: 0xffffff)
-
-    }
 
     struct layout {
         static let browserToolbarDisabledOpacity: CGFloat = 0.4
         static let browserToolbarHeight: CGFloat = 44
-        static let cellSeparatorLeadingOffset: CGFloat = 14
         static let deleteAnimationDuration: TimeInterval = 0.25
-        static let alphaToZeroDeleteAnimationDuration: TimeInterval = deleteAnimationDuration * (2 / 3)
-        static let displayKeyboardDeleteAnimationDuration: TimeInterval = deleteAnimationDuration * (1 / 3)
-        static let lockIconInset: Float = 4
         static let shieldIconInset: Float = 9
         static let shieldIconIPadInset: Float = 15
         static let shieldIconSize: Float = 19
-        static let navigationDoneOffset: Float = -10
         static let overlayAnimationDuration: TimeInterval = 0.25
-		static let autocompleteAnimationDuration: TimeInterval = 0.2
-		static let autocompleteAfterDelayDuration: TimeInterval = 0.5
+        static let autocompleteAnimationDuration: TimeInterval = 0.2
+        static let autocompleteAfterDelayDuration: TimeInterval = 0.5
         static let overlayButtonHeight: Int = 56
         static let smallDeviceMaxNumSuggestions: Int = 4
         static let largeDeviceMaxNumSuggestions: Int = 5
-        static let progressVisibilityAnimationDuration: TimeInterval = 0.25
         static let searchButtonInset: CGFloat = 15
         static let toastAnimationDuration: TimeInterval = 0.3
         static let toastDuration: TimeInterval = 1.5
@@ -130,22 +35,14 @@ struct UIConstants {
         static let urlBarHeightInset: CGFloat = 0
         static let urlBarContainerHeightInset: CGFloat = 10
         static let urlBarTextInset: CGFloat = 30
-        static let urlBarShadowOpacity: Float = 0.3
-        static let urlBarShadowRadius: CGFloat = 2
-        static let urlBarShadowOffset = CGSize(width: 0, height: 2)
         static let urlBarWidthInset: CGFloat = 8
         static let urlBarBorderInset: CGFloat = 0
         static let urlBarBorderHeight: CGFloat = 36
-		static let urlBarPageActionsButtonInsets = UIEdgeInsets(top: 10, left: 8, bottom: 8, right: 10)
-		static let urlBarClearButtonWidth: CGFloat = 20
-		static let urlBarClearButtonHeight: CGFloat = 20
-		static let urlBarLayoutPriorityRawValue: Float = 1000
-        static let reloadButtonIPadOffset: CGFloat = -15
-        static let deleteButtonInset: CGFloat = -12
+        static let urlBarClearButtonWidth: CGFloat = 20
+        static let urlBarClearButtonHeight: CGFloat = 20
+        static let urlBarLayoutPriorityRawValue: Float = 1000
         static let deleteButtonOffset: CGFloat = -5
         static let urlBarIconInset: CGFloat = 8
-        static let settingsDefaultTitleOffset = 3
-        static let settingsFirstTitleOffset = 16
         static let settingsItemInset = 16
         static let settingsItemOffset: CGFloat = 26
         static let settingsCellCornerRadius: CGFloat = 8
@@ -154,7 +51,6 @@ struct UIConstants {
         static let textLogoOffset: CGFloat = -10 - browserToolbarHeight / 2
         static let textLogoOffsetSmallDevice: CGFloat = 10 - browserToolbarHeight / 4
         static let textLogoMargin: CGFloat = 44
-        static let tipDescriptionMargin: CGFloat = 12
         static let tipViewHeight: CGFloat = 148
         static let tipViewBottomOffset: CGFloat = 6
         static let tipViewPadding: CGFloat = 16
@@ -167,61 +63,45 @@ struct UIConstants {
         static let suggestionViewHeightMultiplier: CGFloat = 0.25
         static let suggestionViewWidthMultiplier: CGFloat = 0.75
         static let separatorHeight: CGFloat = 0.5
-        static let shareTrackersBottomOffset: CGFloat = -20
-        static let shareTrackersHeight: CGFloat = 36
-        static let homeViewTextOffset: CGFloat = 5
         static let homeViewLabelMinimumScale: CGFloat = 0.65
         static let truncateCharactersLimit = 160
         static let truncateHeadCharactersCount = (truncateCharactersLimit - UIConstants.strings.truncateLeader.count) / 2
         static let truncateTailCharactersCount = Int(ceil(Double(truncateCharactersLimit - UIConstants.strings.truncateLeader.count) / 2.0))
-        static let homeTipTitleLableOffset: CGFloat = 3
-        static let homePrivateBrowsingDescriptionLabelTopOffset: CGFloat = 5
-		static let findInPageSearchTextInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0)
-		static let findInPagePreviousButtonOffset: CGFloat = 16
+        static let findInPageSearchTextInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0)
+        static let findInPagePreviousButtonOffset: CGFloat = 16
         static let progressBarHeight: CGFloat = 1.5
-		static let progressBarOffset: CGFloat = 1
-		static let trackingProtectionHeight: CGFloat = 18
-        static let trackingProtectionTableInset: CGFloat = 16
-        static let trackingProtectionHeaderHeight: CGFloat = 120
-        static let trackingProtectionHeaderDefault: CGFloat = 36
-        static let trackingProtectionFooterHeight: CGFloat = 60
-        static let trackingProtectionFooterDefault: CGFloat = 20
-		static let collapsedProtectionBadgeOffset: CGFloat = 10
-		static let truncatedUrlTextOffset: CGFloat = 5
-		static let addSearchEngineInputHeight: CGFloat = 44
-		static let addSearchEngineInputWidth: CGFloat = 10
-		static let addSearchEngineInputOffset: CGFloat = 16
-		static let addSearchEngineTemplateContainerHeight: CGFloat = 88
-		static let addSearchEnginePlaceholderHeight: CGFloat = 44
-		static let addSearchEnginePlaceholderOffset: CGFloat = 4
-		static let addSearchEngineTemplateInputPadding: CGFloat = 5
-		static let addSearchEnginePlaceholderPadding: CGFloat = 9
-		static let addSearchEngineExampleLabelOffset: CGFloat = 2
-		static let promptTitleOffset: CGFloat = 16
-		static let promptTitlePadding: CGFloat = 10
-		static let promptMessageOffset: CGFloat = 18
-		static let promptMessagePadding: CGFloat = 32
+        static let trackingProtectionHeight: CGFloat = 18
+        static let collapsedProtectionBadgeOffset: CGFloat = 10
+        static let truncatedUrlTextOffset: CGFloat = 5
+        static let addSearchEngineInputHeight: CGFloat = 44
+        static let addSearchEngineInputOffset: CGFloat = 16
+        static let addSearchEngineTemplateContainerHeight: CGFloat = 88
+        static let addSearchEngineExampleLabelOffset: CGFloat = 2
+        static let promptTitleOffset: CGFloat = 16
+        static let promptTitlePadding: CGFloat = 10
+        static let promptMessageOffset: CGFloat = 18
+        static let promptMessagePadding: CGFloat = 32
         static let promptButtonWidth: CGFloat = 66
         static let promptButtonHeight: CGFloat = 34
         static let promptButtonTopOffset: CGFloat = 38
         static let promptButtonBottomInset: CGFloat = 32
         static let promptButtonCenterOffset: CGFloat = 8
-		static let AutocompleteCustomURLLabelOffset: CGFloat = 50
-		static let introViewOffset: CGFloat = 24
-		static let introViewCardButtonOffset: CGFloat = 5
-		static let introViewButtonFrame = CGRect(x: 0, y: 0, width: 6, height: 6)
-		static let introViewPageControlOffset: CGFloat = 24
-		static let introViewSkipButtonOffset: CGFloat = 24
-		static let introViewCornerRadius: CGFloat = 6
-		static let introViewShadowOpacity: Float = 0.2
-		static let introViewShadowRadius: CGFloat = 12
-		static let introViewImageWidth: CGFloat = 280
-		static let introViewImageHeight: CGFloat = 212
-		static let introViewTitleLabelOffset: CGFloat = 24
-		static let introViewTitleLabelInset: CGFloat = 24
-		static let introViewTextLabelOffset: CGFloat = 16
-		static let introViewTextLabelPadding: CGFloat = 24
-		static let introViewTextLabelInset: CGFloat = 24
+        static let autocompleteCustomURLLabelOffset: CGFloat = 50
+        static let introViewOffset: CGFloat = 24
+        static let introViewCardButtonOffset: CGFloat = 5
+        static let introViewButtonFrame = CGRect(x: 0, y: 0, width: 6, height: 6)
+        static let introViewPageControlOffset: CGFloat = 24
+        static let introViewSkipButtonOffset: CGFloat = 24
+        static let introViewCornerRadius: CGFloat = 6
+        static let introViewShadowOpacity: Float = 0.2
+        static let introViewShadowRadius: CGFloat = 12
+        static let introViewImageWidth: CGFloat = 280
+        static let introViewImageHeight: CGFloat = 212
+        static let introViewTitleLabelOffset: CGFloat = 24
+        static let introViewTitleLabelInset: CGFloat = 24
+        static let introViewTextLabelOffset: CGFloat = 16
+        static let introViewTextLabelPadding: CGFloat = 24
+        static let introViewTextLabelInset: CGFloat = 24
         static let pageControlSpacing: CGFloat = 2
         static let toastMessageHeight: CGFloat = 48
         static let shortcutViewWidth: CGFloat = 60
@@ -243,6 +123,7 @@ struct UIConstants {
         static let smallestSplitViewMaxWidthLimit: CGFloat = UIScreen.main.bounds.width * 0.45
         static let iPhoneSEHeight: CGFloat = 568
         static let searchSuggestionsArrowButtonWidth: CGFloat = 30
+        static var toolbarHeight: CGFloat = 46
     }
 
     struct strings {
@@ -347,7 +228,6 @@ struct UIConstants {
         static let settingsToggleOtherSubtitle = NSLocalizedString("Settings.toggleOtherSubtitle", value: "May break some videos and Web pages", comment: "Label subtitle for toggle on main screen")
         static let learnMore = NSLocalizedString("Settings.learnMore", value: "Learn more.", comment: "Subtitle for Send Anonymous Usage Data toggle on main screen")
         static let toggleHomeScreenTips = NSLocalizedString("Settings.toggleHomeScreenTips", value: "Show home screen tips", comment: "Show home screen tips toggle label on settings screen")
-        static let toggleSectionIntegration = NSLocalizedString("Settings.sectionIntegration", value: "INTEGRATION", comment: "Label for Safari integration section") // deprecated
         static let toggleSectionSafari = NSLocalizedString("Settings.safariTitle", value: "SAFARI INTEGRATION", comment: "Label for Safari integration section")
         static let toggleSectionMozilla = NSLocalizedString("Settings.sectionMozilla", value: "MOZILLA", comment: "Section label for Mozilla toggles")
         static let toggleSectionPerformance = NSLocalizedString("Settings.sectionPerformance", value: "PERFORMANCE", comment: "Section label for performance toggles")
@@ -391,7 +271,6 @@ struct UIConstants {
         static let openSettingsButtonTitle = NSLocalizedString("photosPermission.openSettings", value: "Open Settings", comment: "Title for button that takes the user to system settings")
         static let openIn = NSLocalizedString("actionSheet.openIn", value: "Open in %@", comment: "Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page.")
         static let handoffSyncing = NSLocalizedString("Focus.handoffSyncing", value: "Apple Handoff is syncing", comment: "Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681")
-        static let linkYouCopied = NSLocalizedString("contextMenu.clipboardLink", value: "Link you copied: %@", comment: "Text for the context menu when a user has a link on their clipboard.") // deprecated
         static let copiedLink = NSLocalizedString("contextMenu.linkCopied", value: "Link you copied: ", comment: "Text for the context menu when a user has a link on their clipboard.")
         static let trackingProtectionLabel = NSLocalizedString("trackingProtection.label", value: "Tracking Protection", comment: "Title for the tracking settings page to change what trackers are blocked.")
         static let trackingProtectionLabelDescription = NSLocalizedString("trackingProtection.labelDescription", value: "Turning this off may fix some site problems", comment: "Description/subtitle for the tracking protection label.")

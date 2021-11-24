@@ -60,7 +60,9 @@ class WebsiteAccessTests: BaseTestCase {
         let searchForButton = app.buttons["OverlayView.searchButton"]
         XCTAssertNotEqual(searchForButton.label, "Search for mozilla.org/")
         waitForValueContains(searchOrEnterAddressTextField, value: "mozilla")
-        app.buttons["URLBar.cancelButton"].tap()
+        if !iPad() {
+            app.buttons["URLBar.cancelButton"].tap()
+        }
 
         // Enable autocomplete
         app.buttons["Settings"].tap()
@@ -78,7 +80,6 @@ class WebsiteAccessTests: BaseTestCase {
         searchOrEnterAddressTextField.typeText("mozilla")
         XCTAssertNotEqual(searchForButton.label, "Search for mozilla.org/")
         waitForValueContains(searchOrEnterAddressTextField, value: "mozilla.org/")
-        app.buttons["URLBar.cancelButton"].tap()
     }
 
     func testAutocompleteCustomDomain() {
@@ -110,7 +111,9 @@ class WebsiteAccessTests: BaseTestCase {
         waitForValueContains(searchOrEnterAddressTextField, value: "getfirefox.com/")
 
         // Remove the custom domain
-        app.buttons["URLBar.cancelButton"].tap()
+        if !iPad() {
+            app.buttons["URLBar.cancelButton"].tap()
+        }
         app.buttons["Settings"].tap()
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()

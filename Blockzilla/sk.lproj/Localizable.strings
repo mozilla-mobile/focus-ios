@@ -160,9 +160,6 @@
 /* Label on button to cancel edits */
 "Cancel" = "Zrušiť";
 
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Skopírovaný odkaz: %@";
-
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "Kopírovať obrázok";
 
@@ -394,9 +391,6 @@
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "VYHĽADÁVANIE";
 
-/* Label for Safari integration section */
-"Settings.sectionIntegration" = "INTEGRÁCIA";
-
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
@@ -551,7 +545,7 @@
 "Tip.BiometricTouchId.Description" = "Zapnite Touch ID";
 
 /* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
-"Tip.Release.Description" = "Prečítajte si viac o tejto a ďalších aktualizáciách prehliadača %@.";
+"Tip.Release.Description" = "Prečítajte si viac o tejto a ďalších novinkách prehliadača %@.";
 
 /* Text for a label that indicates the title for release tip. */
 "Tip.Release.Title" = "Áno, máme svieži nový vzhľad!";

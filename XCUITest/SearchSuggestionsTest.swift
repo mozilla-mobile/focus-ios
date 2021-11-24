@@ -120,8 +120,12 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         checkToggleStartsOff()
 
         // Turn toggle ON
-        app.tables.switches["BlockerToggle.enableSearchSuggestions"].tap()
+        waitForExistence(app.tables.switches["BlockerToggle.enableSearchSuggestions"], timeout: 5)
 
+        app.tables.cells.switches["BlockerToggle.enableSearchSuggestions"].tap()
+        if iPad() {
+            app.tables.cells.switches["BlockerToggle.enableSearchSuggestions"].tap()
+        }
         // Prompt should not display
         app.buttons["SettingsViewController.doneButton"].tap()
         typeInURLBar(text: "g")
@@ -129,8 +133,8 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         // Adding a delay in case of slow network
         sleep(4)
 
-        waitForNoExistence(app.otherElements["SearchSuggestionsPromptView"])
-        
+        waitForNoExistence(app.otherElements["SearchSuggestionsPromptView"], timeoutValue: 5)
+
         // Ensure search suggestions are shown
         checkSuggestions()
     }
@@ -166,6 +170,9 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         settingsButton.tap()
         waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
         app.tables.switches["BlockerToggle.enableSearchSuggestions"].tap()
+        if iPad() {
+            app.tables.switches["BlockerToggle.enableSearchSuggestions"].tap()
+        }
         checkToggle(isOn: false)
 
         // Ensure only one search cell is shown
