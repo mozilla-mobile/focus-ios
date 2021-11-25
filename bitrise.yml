@@ -274,7 +274,7 @@ workflows:
     - deploy-to-bitrise-io@1: {}
     - github-status@2:
         inputs:
-        - status_identifier: "Focus-build"
+        - status_identifier: "Klar-build"
         - auth_token: "$GITHUB_ACCESS_TOKEN"
     - slack@3:
         run_if: ".IsBuildFailed"
