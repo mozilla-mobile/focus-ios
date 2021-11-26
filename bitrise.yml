@@ -209,7 +209,6 @@ workflows:
     - github-status@2:
         inputs:
         - status_identifier: "Focus-build"
-        #- auth_token: "$GITHUB_ACCESS_TOKEN"
     - slack@3:
         run_if: ".IsBuildFailed"
         inputs:
@@ -275,7 +274,6 @@ workflows:
     - github-status@2:
         inputs:
         - status_identifier: "Klar-build"
-        #- auth_token: "$GITHUB_ACCESS_TOKEN"
     - slack@3:
         run_if: ".IsBuildFailed"
         inputs:
