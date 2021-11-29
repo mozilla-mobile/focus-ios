@@ -75,29 +75,6 @@ struct L10NTools: ParsableCommand {
         default: return true;
         }
     }
-    
-    private func listAllFileNamesExtension(nameDirectory: String, extensionWanted: String) -> (names : [String], paths : [URL]) {
-
-       let documentURL =  URL(fileURLWithPath: projectPath)
-       let Path = documentURL.appendingPathComponent(nameDirectory).absoluteURL
-
-       do {
-           try FileManager.default.createDirectory(atPath: Path.relativePath, withIntermediateDirectories: true)
-           // Get the directory contents urls (including subfolders urls)
-           let directoryContents = try FileManager.default.contentsOfDirectory(at: Path, includingPropertiesForKeys: nil, options: [])
-
-           // if you want to filter the directory contents you can do like this:
-           let FilesPath = directoryContents.filter{ $0.pathExtension == extensionWanted }
-           let FileNames = FilesPath.map{ $0.deletingPathExtension().lastPathComponent }
-
-           return (names : FileNames, paths : FilesPath);
-
-       } catch {
-           print(error.localizedDescription)
-       }
-
-       return (names : [], paths : [])
-   }
 
     private func getLocalesFromProjectFolder () -> (Array<String>) {
         var myLocalesList:[String] = []

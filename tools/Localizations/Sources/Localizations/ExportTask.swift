@@ -222,8 +222,6 @@ struct ExportTask {
         let _ = try! FileManager.default.replaceItemAt(destination, withItemAt: source)
     }
 
-    
-    
     func run() {
         LOCALES = getProjectLocales()
         print("[*] Exporting \(LOCALES) to \(EXPORT_BASE_PATH)")
