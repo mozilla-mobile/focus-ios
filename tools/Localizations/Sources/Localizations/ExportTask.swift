@@ -63,10 +63,10 @@ struct ExportTask {
     }
     
     // Get Locales that are in the Xcode project
-    private func localesProject() -> (Array<String>) {
-        print("export")
-        var myLocalesList:[String] = []
-        //var locale:String
+    private func getProjectLocales() -> (Array<String>) {
+    
+        var localesList:[String] = []
+
         let blockzillaFolder = FileManager.default.enumerator(atPath: URL(fileURLWithPath: xcodeProjPath).deletingLastPathComponent().appendingPathComponent("Blockzilla").path)
         let filePaths = blockzillaFolder?.allObjects as! [String]
         let textFilePaths = filePaths.filter{$0.contains(".lproj")}
@@ -74,18 +74,15 @@ struct ExportTask {
  
         if let index = txt.firstIndex(of: ".") {
             let firstPart = txt.prefix(upTo: index)
-                myLocalesList.append(String(firstPart))
+            localesList.append(String(firstPart))
             }
         }
-        var uniqueLocales = Array(Set(myLocalesList))
+        var uniqueLocales = Array(Set(localesList))
         
-        let toRemove = ["Settings"]
+        let toRemove = "Settings"
         
-        for k in toRemove {
-            uniqueLocales = uniqueLocales.filter { $0 != k }
-        }
+        uniqueLocales = uniqueLocales.filter { $0 != toRemove }
 
-        print("final array2 ordenado \(uniqueLocales.sorted(by:<))")
         return uniqueLocales.sorted(by:<)
     }
 
@@ -228,8 +225,7 @@ struct ExportTask {
     
     
     func run() {
-       
-        LOCALES = localesProject()
+        LOCALES = getProjectLocales()
         print("[*] Exporting \(LOCALES) to \(EXPORT_BASE_PATH)")
         exportLocales()
 

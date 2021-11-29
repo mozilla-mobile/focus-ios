@@ -101,6 +101,7 @@ struct L10NTools: ParsableCommand {
 
     private func getLocalesFromProjectFolder () -> (Array<String>) {
         var myLocalesList:[String] = []
+
         let blockzillaFolder = FileManager.default.enumerator(atPath: URL(fileURLWithPath: projectPath).deletingLastPathComponent().appendingPathComponent("Blockzilla").path)
 
         let filePaths = blockzillaFolder?.allObjects as! [String]
@@ -113,11 +114,9 @@ struct L10NTools: ParsableCommand {
         }
         var uniqueLocales = Array(Set(myLocalesList))
         
-        let toRemove = ["Settings"]
+        let toRemove = "Settings"
         
-        // for k in toRemove {
-            uniqueLocales = uniqueLocales.filter { $0 != "Settings" }
-        //}
+        uniqueLocales = uniqueLocales.filter { $0 != toRemove }
 
         for item in uniqueLocales {
             print(item)
@@ -128,25 +127,24 @@ struct L10NTools: ParsableCommand {
                 }
             }
         }
-        
-        // return uniqueLocales
-    
+
         return uniqueLocales.sorted(by:<)
     }
 
-    private var locale_mapping = [
+    private let locale_mapping = [
         "fil" : "tl",
         "ga" : "ga-IE",
         "nb" : "nb-NO",
         "nn" : "nn-NO",
         "sv" : "sv-SE",
         "en" : "en-US"
-        ]
+    ]
 
     mutating func run() throws {
         guard validateArguments() else { L10NTools.exit() }
 
         let locales = getLocalesFromProjectFolder()
+        print(locales)
 
         if runImportTask {
             ImportTask(xcodeProjPath: projectPath, l10nRepoPath: l10nProjectPath, locales: locales).run()
