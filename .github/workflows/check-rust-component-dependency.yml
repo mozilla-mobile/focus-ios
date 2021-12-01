@@ -1,6 +1,7 @@
 name: Create a PR to build the app using newest rust-component version available
 on:
-  workflow_dispatch
+  schedule:
+    - cron: '0 22 * * *'
 
 jobs:
   build:
@@ -25,7 +26,7 @@ jobs:
     - name: Modify SPM file
       run: |
         python ./github-actions-scripts/update-rust-component-version.py
-    - name: Get new A-S tag to be used in the PR info
+    - name: Get new rust-component tag to be used in the PR info
       run: |
         cd github-actions-scripts/
         chmod u+x read-rust-component-tag.sh
