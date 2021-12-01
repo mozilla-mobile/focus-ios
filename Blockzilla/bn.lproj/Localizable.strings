@@ -43,6 +43,15 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "%@ অ্যাপে খুলুন";
 
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "ঠিক আছে";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Wallet এ পাস যোগ করার সময় ত্রুটি ঘটেছে। অনুগ্রহ করে একটু পরে আবার চেষ্টা করুন।";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "পাস যোগ করতে ব্যর্থ হয়েছে";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "%@ এ ফেরত আসতে প্রমাণীকরণ করুন";
 
@@ -259,6 +268,12 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” আপনার ছবিতে প্রবেশাধিকার চায়";
 
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "সংযোগ নিরাপদ নয়";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "সংযোগ সুরক্ষিত";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "ডেস্কটপ সাইটের জন্য অনুরোধ করুন";
 
@@ -298,14 +313,32 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "অন্যান্য কন্টেন্ট ট্রাকারদেরকে অবরুদ্ধ করা হলে কিছু ভিডিও এবং ওয়েব পেজে সমস্যা হতে পারে।";
 
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "বাতিল করুন";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "Content Trackers ব্লক করুন";
+
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "অন্ধকার";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "আপনি যা ঠিকানা বারে টাইপ করেছেন তা %@ আপনার অনুসন্ধান ইঞ্জিনে পাঠাবে।";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla এর প্রচেষ্টা হচ্ছে অত্যাবশ্যকীয় এবং প্রয়োজনীয় তথ্য ও উপাত্ত সংগ্রহ করে, সকলের জন্যে %@ এর আরও উন্নত সংস্করণ তৈরী করা।";
 
+/* Title for section in settings menu */
+"Settings.general" = "সাধারণ";
+
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "আরও জানুন।";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "উজ্জ্বল";
+
+/* Manual value for theme section in settings menu */
+"Settings.manualTheme" = "ম্যানুয়াল";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "রেট %@";
@@ -367,8 +400,29 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "নিরাপত্তা";
 
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "সিস্টেম থিম";
+
+/* Theme section in settings menu */
+"Settings.theme" = "থিম";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "থিম পিকার";
+
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "বিজ্ঞাপন";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "বিশ্লেষণ";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "ওয়েব ফন্ট অবরুদ্ধ করুন";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "কন্টেন্ট";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "সামাজিক";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "অ্যাপ চালু করার জন্য ফেস আইডি ব্যবহার করুন";
@@ -388,11 +442,23 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "ব্যবহারের উপাত্ত প্রেরণ করে";
 
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "অধ্যয়ন";
+
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "অ্যাপ চালু করার জন্য টাচ আইডি ব্যবহার করুন";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "URL ইতিমধ্যে অ্যাপে খোলা থাকলে টাচ আইডি %@ আনলক করতে পারে";
+
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "বন্ধ";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "চালু";
+
+/* Value for theme toggle in settings menu */
+"Settings.useSystemTheme" = "সিস্টেম লাইট/ডার্ক মোড ব্যবহার করুন";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "নতুন যা কিছু";
@@ -402,6 +468,9 @@
 
 /* Text for a share button */
 "share" = "শেয়ার";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "শর্টকাট যোগ করুন";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "ঠিকানা অনুলিপি করুন";
@@ -415,6 +484,9 @@
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "পেজ একশন";
 
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "শর্টকাট থেকে সরান";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "ডেস্কটপ সাইটের জন্য অনুরোধ করুন";
 
@@ -424,11 +496,17 @@
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Chrome এ খুলুন";
 
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "ডিফল্ট ব্রাউজারে খুলুন";
+
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Firefox এ খুলুন";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "পাতা শেয়ার করুন...";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "শর্টকাট থেকে সরান";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "যোগ";
@@ -454,6 +532,9 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "খুলতে URL";
 
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "ফেস আইডি চালু করুন";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "%@ এ ফিরে আসার জন্য Touch ID ব্যবহার করুন";
 
@@ -462,6 +543,12 @@
 
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "এনালিটিক ট্র্যাকার";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "সংযোগ নিরাপদ নয়";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "সংযোগ সুরক্ষিত";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "কনটেন্ট ট্র্যাকার";
