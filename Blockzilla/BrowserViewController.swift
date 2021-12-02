@@ -791,6 +791,10 @@ class BrowserViewController: UIViewController {
         
         shortcutsBackground.snp.removeConstraints()
         addShortcutsBackgroundConstraints()
+        
+        DispatchQueue.main.async {
+            self.urlBar.updateCollapsedState()
+        }
     }
 
     private func presentImageActionSheet(title: String, link: String?, saveAction: @escaping () -> Void, copyAction: @escaping () -> Void) {

@@ -676,10 +676,6 @@ class URLBar: UIView {
                 }
             }
         })
-        
-        DispatchQueue.main.async {
-            self.updateCollapsedState()
-        }
     }
 
     /* This separate @objc function is necessary as selector methods pass sender by default. Calling
@@ -794,7 +790,7 @@ class URLBar: UIView {
         }
     }
     
-    private func updateCollapsedState() {
+    func updateCollapsedState() {
         switch collapsedState {
         case .extended:
             collapseUrlBar(expandAlpha: 1, collapseAlpha: 0)
