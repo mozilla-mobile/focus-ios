@@ -76,27 +76,33 @@ struct L10NTools: ParsableCommand {
         }
     }
 
-    private func getLocalesFromProjectFolder () -> (Array<String>) {
-        var myLocalesList:[String] = []
+    private func getBlockzillaFolder() -> [String] {
+        guard let blockzillaFolder = FileManager.default.enumerator(atPath: URL(fileURLWithPath: projectPath).deletingLastPathComponent().appendingPathComponent("Blockzilla").path),
+              let filePaths = blockzillaFolder.allObjects as? [String] else {
+                return[]
+        }
+        return filePaths
+    }
 
-        let blockzillaFolder = FileManager.default.enumerator(atPath: URL(fileURLWithPath: projectPath).deletingLastPathComponent().appendingPathComponent("Blockzilla").path)
+    private func getLocalesFromProjectFolder () -> [String] {
+        var localesList:[String] = []
 
-        let filePaths = blockzillaFolder?.allObjects as! [String]
-        let textFilePaths = filePaths.filter{$0.contains(".lproj")}
-        for txt in textFilePaths {
-            if let index = txt.firstIndex(of: ".") {
-                let firstPart = txt.prefix(upTo: index)
-                myLocalesList.append(String(firstPart))
+        let filePaths = getBlockzillaFolder()
+
+        filePaths.filter { $0.contains(".lproj") }.forEach { path in
+            if let index = path.firstIndex(of: ".") {
+                let firstPart = path.prefix(upTo: index)
+                localesList.append(String(firstPart))
             }
         }
-        var uniqueLocales = Array(Set(myLocalesList))
-        
+        // Removing duplicates locales as there are several folders/subfolders for same locale
+        var uniqueLocales = Array(Set(localesList))
+        // Removing Settings from the locales list as it a folder containing locales
         let toRemove = "Settings"
-        
         uniqueLocales = uniqueLocales.filter { $0 != toRemove }
 
+        // Mapping locale's project name with Pontoon's name to prevent from having errors
         for item in uniqueLocales {
-            print(item)
             for (key, _) in locale_mapping {
                 if item == key {
                     let position = uniqueLocales.firstIndex(of: item)!
@@ -105,6 +111,7 @@ struct L10NTools: ParsableCommand {
             }
         }
 
+        // Alphabetically ordered array for simplicity
         return uniqueLocales.sorted(by:<)
     }
 
@@ -124,7 +131,8 @@ struct L10NTools: ParsableCommand {
         print(locales)
 
         if runImportTask {
-            ImportTask(xcodeProjPath: projectPath, l10nRepoPath: l10nProjectPath, locales: locales).run()
+            // ImportTask(xcodeProjPath: projectPath, l10nRepoPath: l10nProjectPath, locales: locales).run()
+            print("HIIIII")
         }
         
         if runExportTask {

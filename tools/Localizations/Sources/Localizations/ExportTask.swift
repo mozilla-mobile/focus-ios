@@ -61,28 +61,35 @@ struct ExportTask {
         try! task.run()
         task.waitUntilExit()
     }
+
+    private func getBlockzillaFolder() -> [String] {
+        guard let blockzillaFolder = FileManager.default.enumerator(atPath: URL(fileURLWithPath: xcodeProjPath).deletingLastPathComponent().appendingPathComponent("Blockzilla").path),
+              let filePaths = blockzillaFolder.allObjects as? [String] else {
+                return[]
+        }
+        return filePaths
+    }
     
     // Get Locales that are in the Xcode project
-    private func getProjectLocales() -> (Array<String>) {
+    private func getProjectLocales() -> [String] {
     
         var localesList:[String] = []
 
-        let blockzillaFolder = FileManager.default.enumerator(atPath: URL(fileURLWithPath: xcodeProjPath).deletingLastPathComponent().appendingPathComponent("Blockzilla").path)
-        let filePaths = blockzillaFolder?.allObjects as! [String]
-        let textFilePaths = filePaths.filter{$0.contains(".lproj")}
-        for txt in textFilePaths {
- 
-        if let index = txt.firstIndex(of: ".") {
-            let firstPart = txt.prefix(upTo: index)
-            localesList.append(String(firstPart))
+        let filePaths = getBlockzillaFolder()
+
+        filePaths.filter { $0.contains(".lproj") }.forEach { path in
+            if let index = path.firstIndex(of: ".") {
+                let firstPart = path.prefix(upTo: index)
+                localesList.append(String(firstPart))
             }
         }
+        // Removing duplicates locales as there are several folders/subfolders for same locale
         var uniqueLocales = Array(Set(localesList))
-        
+        // Removing Settings from the locales list as it a folder containing locales
         let toRemove = "Settings"
-        
         uniqueLocales = uniqueLocales.filter { $0 != toRemove }
-
+        
+        // Alphabetically ordered array for simplicity
         return uniqueLocales.sorted(by:<)
     }
 
