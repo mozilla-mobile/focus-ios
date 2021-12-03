@@ -203,9 +203,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         navigationItem.rightBarButtonItems = [doneButton, highlightsButton]
 
-        if whatsNew.shouldShowWhatsNew() {
-            highlightsButton.tintColor = .accent
-        }
+        updateHighlightsButtonState()
 
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
@@ -254,6 +252,14 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         // the detection callback won't fire and the detector won't be cleaned up.
         if isViewLoaded && view.window != nil {
             updateSafariEnabledState()
+        }
+    }
+    
+    private func updateHighlightsButtonState() {
+        if whatsNew.shouldShowWhatsNew() {
+            highlightsButton.tintColor = .accent
+        } else {
+            highlightsButton.tintColor = view.currentTheme == .light ? .systemGray2 : .white
         }
     }
 
@@ -503,9 +509,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     @objc private func whatsNewClicked() {
-        highlightsButton.tintColor = view.currentTheme == .light ? .systemGray2 : .white
         navigationController?.pushViewController(SettingsContentViewController(url: URL(forSupportTopic: .whatsNew)), animated: true)
         whatsNew.didShowWhatsNew()
+        updateHighlightsButtonState()
     }
 
     @objc private func toggleSwitched(_ sender: UISwitch) {
