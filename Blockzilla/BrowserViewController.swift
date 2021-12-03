@@ -1660,7 +1660,7 @@ extension BrowserViewController: WebControllerDelegate {
         if expandAlpha == 1, collapseAlpha == 0 {
             self.urlBar.collapsedState = .extended
         } else {
-            self.urlBar.collapsedState = .collapsed(expandAlpha: expandAlpha, collapseAlpha: collapseAlpha)
+            self.urlBar.collapsedState = .intermediate(expandAlpha: expandAlpha, collapseAlpha: collapseAlpha)
         }
         
         self.urlBarTopConstraint.update(offset: -scrollBarOffsetAlpha * (UIConstants.layout.urlBarHeight - UIConstants.layout.collapsedUrlBarHeight))
@@ -1722,7 +1722,7 @@ extension BrowserViewController: WebControllerDelegate {
         let scrollView = webViewController.scrollView
         scrollBarState = .animating
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: {
-            self.urlBar.collapsedState = .fullCollapsed
+            self.urlBar.collapsedState = .collapsed
             self.urlBarTopConstraint.update(offset: -UIConstants.layout.urlBarHeight + UIConstants.layout.collapsedUrlBarHeight)
             self.toolbarBottomConstraint.update(offset: UIConstants.layout.browserToolbarHeight + self.view.safeAreaInsets.bottom)
             scrollView.bounds.origin.y += (self.scrollBarOffsetAlpha - 1) * UIConstants.layout.urlBarHeight

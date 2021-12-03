@@ -778,8 +778,8 @@ class URLBar: UIView {
     
     enum CollapsedState: Equatable {
         case extended
-        case collapsed(expandAlpha: CGFloat, collapseAlpha: CGFloat)
-        case fullCollapsed
+        case intermediate(expandAlpha: CGFloat, collapseAlpha: CGFloat)
+        case collapsed
     }
     
     var collapsedState: CollapsedState = .extended {
@@ -794,9 +794,9 @@ class URLBar: UIView {
         switch collapsedState {
         case .extended:
             collapseUrlBar(expandAlpha: 1, collapseAlpha: 0)
-        case .collapsed(expandAlpha: let expandAlpha, collapseAlpha: let collapseAlpha):
+        case .intermediate(expandAlpha: let expandAlpha, collapseAlpha: let collapseAlpha):
             collapseUrlBar(expandAlpha: expandAlpha, collapseAlpha: collapseAlpha)
-        case .fullCollapsed:
+        case .collapsed:
             collapseUrlBar(expandAlpha: 0, collapseAlpha: 1)
         }
     }
