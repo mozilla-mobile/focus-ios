@@ -320,7 +320,7 @@ private class PhotonActionSheetSeparator: UITableViewHeaderFooterView {
         super.init(reuseIdentifier: reuseIdentifier)
         self.backgroundView = UIView()
         separatorLineView.backgroundColor = .clear
-        contentView.backgroundColor = UIColor.grey50.withAlphaComponent(0.5)
+        contentView.backgroundColor = .grey50.withAlphaComponent(0.5)
         self.contentView.addSubview(separatorLineView)
         separatorLineView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
