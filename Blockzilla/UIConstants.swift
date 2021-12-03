@@ -8,94 +8,6 @@ struct UIConstants {
     
     static let maximumNumberOfShortcuts = 4
 
-    struct colors {
-        static let background = UIConstants.Photon.Ink90
-        static let cellSelected = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
-        static let defaultFont = UIColor(rgb: 0xE1E5EA)
-        static let firstRunMessage = UIConstants.Photon.Grey50
-        static let firstRunNextButton = UIConstants.Photon.Purple50
-        static let firstRunTitle = UIColor(rgb: 0x212121)
-        static let gradientBackground = UIColor(rgb: 0x363B40)
-        static let gradientLeft = UIConstants.Photon.Red60
-        static let gradientMiddle = UIConstants.Photon.Magenta70
-        static let gradientRight = UIConstants.Photon.Purple80
-        static let inputPlaceholder = UIColor(rgb: 0xb2b2b2)
-        static let settingsDisabled = UIColor(rgb: 0xB2B2B2)
-        static let toggleOff = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
-        static let toggleOn = UIConstants.Photon.Magenta40
-    }
-
-    struct Photon {
-        static let Magenta40 = UIColor(rgb: 0xe452b9)
-        static let Magenta50 = UIColor(rgb: 0xff1ad9)
-        static let Magenta60 = UIColor(rgb: 0xed00b5)
-        static let Magenta70 = UIColor(rgb: 0xb5007f)
-        static let Magenta80 = UIColor(rgb: 0x7d004f)
-        static let Magenta90 = UIColor(rgb: 0x440027)
-
-        static let Purple30 = UIColor(rgb: 0xc069ff)
-        static let Purple40 = UIColor(rgb: 0xad3bff)
-        static let Purple50 = UIColor(rgb: 0x9400ff)
-        static let Purple60 = UIColor(rgb: 0x8000d7)
-        static let Purple70 = UIColor(rgb: 0x6200a4)
-        static let Purple80 = UIColor(rgb: 0x440071)
-        static let Purple90 = UIColor(rgb: 0x25003e)
-
-        static let Blue40 = UIColor(rgb: 0x45a1ff)
-        static let Blue50 = UIColor(rgb: 0x0a84ff)
-        static let Blue60 = UIColor(rgb: 0x0060df)
-        static let Blue70 = UIColor(rgb: 0x003eaa)
-        static let Blue80 = UIColor(rgb: 0x002275)
-        static let Blue90 = UIColor(rgb: 0x000f40)
-
-        static let Teal50 = UIColor(rgb: 0x00feff)
-        static let Teal60 = UIColor(rgb: 0x00c8d7)
-        static let Teal70 = UIColor(rgb: 0x008ea4)
-        static let Teal80 = UIColor(rgb: 0x005a71)
-        static let Teal90 = UIColor(rgb: 0x002d3e)
-
-        static let Green50 = UIColor(rgb: 0x30e60b)
-        static let Green60 = UIColor(rgb: 0x12bc00)
-        static let Green70 = UIColor(rgb: 0x058b00)
-        static let Green80 = UIColor(rgb: 0x006504)
-        static let Green90 = UIColor(rgb: 0x003706)
-
-        static let Yellow50 = UIColor(rgb: 0xffe900)
-        static let Yellow60 = UIColor(rgb: 0xd7b600)
-        static let Yellow70 = UIColor(rgb: 0xa47f00)
-        static let Yellow80 = UIColor(rgb: 0x715100)
-        static let Yellow90 = UIColor(rgb: 0x3e2800)
-
-        static let Red50 = UIColor(rgb: 0xff0039)
-        static let Red60 = UIColor(rgb: 0xd70022)
-        static let Red70 = UIColor(rgb: 0xa4000f)
-        static let Red80 = UIColor(rgb: 0x5a0002)
-        static let Red90 = UIColor(rgb: 0x3e0200)
-
-        static let Orange50 = UIColor(rgb: 0xff9400)
-        static let Orange60 = UIColor(rgb: 0xd76e00)
-        static let Orange70 = UIColor(rgb: 0xa44900)
-        static let Orange80 = UIColor(rgb: 0x712b00)
-        static let Orange90 = UIColor(rgb: 0x3e1300)
-
-        static let Grey10 = UIColor(rgb: 0xf9f9fa)
-        static let Grey20 = UIColor(rgb: 0xededf0)
-        static let Grey30 = UIColor(rgb: 0xd7d7db)
-        static let Grey40 = UIColor(rgb: 0xb1b1b3)
-        static let Grey50 = UIColor(rgb: 0x737373)
-        static let Grey60 = UIColor(rgb: 0x4a4a4f)
-        static let Grey70 = UIColor(rgb: 0x38383d)
-        static let Grey80 = UIColor(rgb: 0x2a2a2e)
-        static let Grey90 = UIColor(rgb: 0x0c0c0d)
-
-        static let Ink70 = UIColor(rgb: 0x363959)
-        static let Ink80 = UIColor(rgb: 0x202340)
-        static let Ink90 = UIColor(rgb: 0x0f1126)
-
-        static let White100 = UIColor(rgb: 0xffffff)
-
-    }
-
     struct layout {
         static let browserToolbarDisabledOpacity: CGFloat = 0.4
         static let browserToolbarHeight: CGFloat = 44
@@ -152,9 +64,6 @@ struct UIConstants {
         static let suggestionViewWidthMultiplier: CGFloat = 0.75
         static let separatorHeight: CGFloat = 0.5
         static let homeViewLabelMinimumScale: CGFloat = 0.65
-        static let truncateCharactersLimit = 160
-        static let truncateHeadCharactersCount = (truncateCharactersLimit - UIConstants.strings.truncateLeader.count) / 2
-        static let truncateTailCharactersCount = Int(ceil(Double(truncateCharactersLimit - UIConstants.strings.truncateLeader.count) / 2.0))
         static let findInPageSearchTextInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0)
         static let findInPagePreviousButtonOffset: CGFloat = 16
         static let progressBarHeight: CGFloat = 1.5
@@ -212,6 +121,24 @@ struct UIConstants {
         static let iPhoneSEHeight: CGFloat = 568
         static let searchSuggestionsArrowButtonWidth: CGFloat = 30
         static var toolbarHeight: CGFloat = 46
+        static let introScreenWidth = 302
+        static let introScreenHeight = UIScreen.main.bounds.width <= 320 ? 420 : 460
+        static let introScreenMinimumFontScale: CGFloat = 0.5
+        static let pagerCenterOffsetFromScrollViewBottom = UIScreen.main.bounds.width <= 320 ? 16 : 24
+        static let cardTextLineHeight: CGFloat = UIScreen.main.bounds.width <= 320 ? 2 : 6
+        static let actionSheetCellPadding: CGFloat = 16
+        static let actionSheetCellHorizontalPadding: CGFloat = 10
+        static let actionSheetCellVerticalPadding: CGFloat = 2
+        static let actionSheetCellCornerRadius: CGFloat = 3
+        static let actionSheetPadding: CGFloat = 10
+        static let actionSheetHeaderFooterHeight: CGFloat = 0
+        static let actionSheetRowHeight: CGFloat = 50
+        static let actionSheetCornerRadius: CGFloat = 10
+        static let actionSheetIconSize = CGSize(width: 24, height: 24)
+        static let actionSheetTablePadding: CGFloat = 6
+        static let actionSheetTitleHeaderHeight: CGFloat = 36
+        static let actionSheetSeparatorHeaderHeight: CGFloat = 12
+     
     }
 
     struct strings {

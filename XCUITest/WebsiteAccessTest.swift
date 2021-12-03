@@ -39,7 +39,9 @@ class WebsiteAccessTests: BaseTestCase {
     func testDisableAutocomplete() {
         dismissURLBarFocused()
         app.buttons["HomeView.settingsButton"].tap()
-        app.tables.cells["Settings"].tap()
+        let settingsButton = app.settingsButton
+        waitForExistence(settingsButton, timeout: 10)
+        settingsButton.tap()
         // Disable Autocomplete
         waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
@@ -58,11 +60,14 @@ class WebsiteAccessTests: BaseTestCase {
         let searchForButton = app.buttons["OverlayView.searchButton"]
         XCTAssertNotEqual(searchForButton.label, "Search for mozilla.org/")
         waitForValueContains(searchOrEnterAddressTextField, value: "mozilla")
-        app.buttons["URLBar.cancelButton"].tap()
+        if !iPad() {
+            app.buttons["URLBar.cancelButton"].tap()
+        }
 
         // Enable autocomplete
         app.buttons["Settings"].tap()
-        app.tables.cells["Settings"].tap()
+        waitForExistence(settingsButton, timeout: 10)
+        settingsButton.tap()
         waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
         toggle = app.tables.switches["toggleAutocompleteSwitch"]
@@ -75,13 +80,14 @@ class WebsiteAccessTests: BaseTestCase {
         searchOrEnterAddressTextField.typeText("mozilla")
         XCTAssertNotEqual(searchForButton.label, "Search for mozilla.org/")
         waitForValueContains(searchOrEnterAddressTextField, value: "mozilla.org/")
-        app.buttons["URLBar.cancelButton"].tap()
     }
 
     func testAutocompleteCustomDomain() {
         dismissURLBarFocused()
         app.buttons["HomeView.settingsButton"].tap()
-        app.tables.cells["Settings"].tap()
+        let settingsButton = app.settingsButton
+        waitForExistence(settingsButton, timeout: 10)
+        settingsButton.tap()
         waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
         // Add Custom Domain
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
@@ -105,9 +111,12 @@ class WebsiteAccessTests: BaseTestCase {
         waitForValueContains(searchOrEnterAddressTextField, value: "getfirefox.com/")
 
         // Remove the custom domain
-        app.buttons["URLBar.cancelButton"].tap()
+        if !iPad() {
+            app.buttons["URLBar.cancelButton"].tap()
+        }
         app.buttons["Settings"].tap()
-        app.tables.cells["Settings"].tap()
+        waitForExistence(settingsButton, timeout: 10)
+        settingsButton.tap()
         waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
         app.tables.cells["customURLS"].tap()

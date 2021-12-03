@@ -17,7 +17,7 @@ class SettingAppearanceTest: BaseTestCase {
         waitForExistence(app.buttons["Settings"], timeout: 5)
         app.buttons["Settings"].tap()
 
-        let settingsButton = app.cells["Settings"]
+        let settingsButton = app.settingsButton
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
         
@@ -149,14 +149,14 @@ class SettingAppearanceTest: BaseTestCase {
 
         // Navigate to Settings
         waitForExistence(app.buttons["HomeView.settingsButton"])
-        app.buttons["Settings"].tap()
+        app.buttons["HomeView.settingsButton"].tap()
 
-        let settingsButton = app.cells["Settings"]
+        let settingsButton = app.settingsButton
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
 
         // Navigate to Autocomplete Settings
-        waitForHittable(app.tables.cells["SettingsViewController.autocompleteCell"])
+        waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
 
         // Verify that autocomplete is enabled
@@ -178,20 +178,20 @@ class SettingAppearanceTest: BaseTestCase {
         waitForExistence(app.buttons["Settings"])
         app.buttons["Settings"].tap()
 
-        let settingsButton = app.cells["Settings"]
+        let settingsButton = app.settingsButton
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
 
         // Navigate to Autocomplete Settings
-        waitForHittable(app.tables.cells["SettingsViewController.autocompleteCell"])
+        waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
 
         // Navigate to the customURL list
-        waitForHittable(app.tables.cells["customURLS"])
+        waitForExistence(app.tables.cells["customURLS"])
         app.tables.cells["customURLS"].tap()
 
         // Navigate to add domain screen
-        waitForHittable(app.tables.cells["addCustomDomainCell"])
+        waitForExistence(app.tables.cells["addCustomDomainCell"])
         app.tables.cells["addCustomDomainCell"].tap()
 
         // Edit Text Field
@@ -228,7 +228,7 @@ class SettingAppearanceTest: BaseTestCase {
         waitForExistence(app.buttons["Settings"], timeout: 5)
         app.buttons["Settings"].tap()
 
-        let settingsButton = app.cells["Settings"]
+        let settingsButton = app.settingsButton
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
         

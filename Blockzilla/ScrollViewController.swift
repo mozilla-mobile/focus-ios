@@ -6,6 +6,8 @@ import UIKit
 
 class ScrollViewController: UIPageViewController, PageControlDelegate {
 
+    private  let cardSlides = ["onboarding_1", "onboarding_2", "onboarding_3"]
+    
     @objc func incrementPage(_ pageControl: PageControl) {
         changePage(isIncrement: true)
     }
@@ -45,7 +47,7 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
         dataSource = self
         delegate = self
 
-        for slideName in IntroViewControllerUX.CardSlides {
+        for slideName in cardSlides {
             slides.append(UIImage(named: slideName)!)
         }
 
@@ -89,8 +91,8 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
         let titleLabel = UILabel()
         titleLabel.numberOfLines = 2
         titleLabel.adjustsFontSizeToFitWidth = true
-        titleLabel.minimumScaleFactor = IntroViewControllerUX.MinimumFontScale
-        titleLabel.textColor = UIConstants.colors.firstRunTitle
+        titleLabel.minimumScaleFactor = UIConstants.layout.introScreenMinimumFontScale
+        titleLabel.textColor = .firstRunTitle
         titleLabel.textAlignment = NSTextAlignment.center
         titleLabel.text = title
         titleLabel.font = .body18
@@ -107,10 +109,10 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
         textLabel.numberOfLines = 5
         textLabel.attributedText = attributedStringForLabel(text)
         textLabel.adjustsFontSizeToFitWidth = true
-        textLabel.minimumScaleFactor = IntroViewControllerUX.MinimumFontScale
+        textLabel.minimumScaleFactor = UIConstants.layout.introScreenMinimumFontScale
         textLabel.lineBreakMode = .byTruncatingTail
         textLabel.textAlignment = .center
-        textLabel.textColor = UIConstants.colors.firstRunMessage
+        textLabel.textColor = .grey50
         textLabel.font = .footnote14
 
         introView.addSubview(textLabel)
@@ -123,8 +125,8 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
 
         introView.snp.makeConstraints { (make) -> Void in
             make.center.equalTo(viewController.view)
-            make.width.equalTo(IntroViewControllerUX.Width).priority(.high)
-            make.height.equalTo(IntroViewControllerUX.Height)
+            make.width.equalTo(UIConstants.layout.introScreenWidth).priority(.high)
+            make.height.equalTo(UIConstants.layout.introScreenHeight)
             make.leading.greaterThanOrEqualTo(viewController.view).offset(UIConstants.layout.introViewOffset).priority(.required)
             make.trailing.lessThanOrEqualTo(viewController.view).offset(UIConstants.layout.introViewOffset).priority(.required)
         }
@@ -133,12 +135,12 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
 
         if orderedViewControllers.count == slides.count - 1 {
             cardButton.setTitle(UIConstants.strings.firstRunButton, for: .normal)
-            cardButton.setTitleColor(UIConstants.colors.firstRunNextButton, for: .normal)
+            cardButton.setTitleColor(.purple50, for: .normal)
             cardButton.titleLabel?.font = .body16
             cardButton.addTarget(self, action: #selector(ScrollViewController.didTapStartBrowsingButton), for: .touchUpInside)
         } else {
             cardButton.setTitle(UIConstants.strings.NextIntroButtonTitle, for: .normal)
-            cardButton.setTitleColor(UIConstants.colors.firstRunNextButton, for: .normal)
+            cardButton.setTitleColor(.purple50, for: .normal)
             cardButton.titleLabel?.font = .body16
             cardButton.addTarget(self, action: #selector(ScrollViewController.incrementPage), for: .touchUpInside)
         }
@@ -159,7 +161,7 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
 
     private func attributedStringForLabel(_ text: String) -> NSMutableAttributedString {
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = IntroViewControllerUX.CardTextLineHeight
+        paragraphStyle.lineSpacing = UIConstants.layout.cardTextLineHeight
         paragraphStyle.alignment = .center
 
         let string = NSMutableAttributedString(string: text)

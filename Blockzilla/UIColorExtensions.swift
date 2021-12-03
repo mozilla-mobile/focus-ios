@@ -5,27 +5,35 @@
 import Foundation
 import UIKit
 
-private struct Color {
-    var red: CGFloat
-    var green: CGFloat
-    var blue: CGFloat
-}
+
 
 extension UIColor {
     
     static let above = UIColor(named: "Above")!
     static let accent = UIColor(named: "Accent")!
-    static let cfrFirst = UIColor(named: "CfrFirst")!
-    static let cfrSecond = UIColor(named: "CfrSecond")!
-    static let divider = UIColor(named: "Divider")!
+    static let defaultFont = UIColor(named: "DefaultFont")!
+    static let firstRunTitle = UIColor(named: "FirstRunTitle")!
     static let foundation = UIColor(named: "Foundation")!
+    static let gradientBackground = UIColor(named: "GradientBackground")!
     static let gradientFirst = UIColor(named: "GradientFirst")!
     static let gradientSecond = UIColor(named: "GradientSecond")!
     static let gradientThird = UIColor(named: "GradientThird")!
+    static let grey10 = UIColor(named: "Grey10")!
+    static let grey30 = UIColor(named: "Grey30")!
+    static let grey50 = UIColor(named: "Grey50")!
+    static let grey70 = UIColor(named: "Grey70")!
+    static let grey90 = UIColor(named: "Grey90")!
+    static let ink90 = UIColor(named: "Ink90")!
+    static let inputPlaceholder = UIColor(named: "InputPlaceholder")!
     static let launchScreenBackground = UIColor(named: "LaunchScreenBackground")!
     static let locationBar = UIColor(named: "LocationBar")!
+    static let magenta40 = UIColor(named: "Magenta40")!
+    static let magenta70 = UIColor(named: "Magenta70")!
     static let primaryDark = UIColor(named: "PrimaryDark")!
     static let primaryText = UIColor(named: "PrimaryText")!
+    static let purple50 = UIColor(named: "Purple50")!
+    static let purple80 = UIColor(named: "Purple80")!
+    static let red60 = UIColor(named: "Red60")!
     static let scrim = UIColor(named: "Scrim")!
     static let searchGradientFirst = UIColor(named: "SearchGradientFirst")!
     static let searchGradientSecond = UIColor(named: "SearchGradientSecond")!
@@ -33,7 +41,6 @@ extension UIColor {
     static let searchGradientFourth = UIColor(named: "SearchGradientFourth")!
     static let secondaryText = UIColor(named: "SecondaryText")!
     static let secondaryButton = UIColor(named: "SecondaryButton")!
-    static let warning = UIColor(named: "Warning")!
     
     /**
      * Initializes and returns a color object for the given RGB hex integer.
@@ -46,21 +53,4 @@ extension UIColor {
             alpha: CGFloat(alpha))
     }
 
-    func lerp(toColor: UIColor, step: CGFloat) -> UIColor {
-        var fromR: CGFloat = 0
-        var fromG: CGFloat = 0
-        var fromB: CGFloat = 0
-        getRed(&fromR, green: &fromG, blue: &fromB, alpha: nil)
-
-        var toR: CGFloat = 0
-        var toG: CGFloat = 0
-        var toB: CGFloat = 0
-        toColor.getRed(&toR, green: &toG, blue: &toB, alpha: nil)
-
-        let r = fromR + (toR - fromR) * step
-        let g = fromG + (toG - fromG) * step
-        let b = fromB + (toB - fromB) * step
-
-        return UIColor(red: r, green: g, blue: b, alpha: 1)
-    }
 }
