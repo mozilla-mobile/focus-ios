@@ -801,15 +801,6 @@ class BrowserViewController: UIViewController {
         urlBarContainer.backgroundColor = urlBar.inBrowsingMode ? .foundation : .clear
     }
 
-    private func toggleToolbarBackground() {
-        switch trackingProtectionStatus {
-        case .off:
-            browserToolbar.color = .dark
-        case .on:
-            browserToolbar.color = .bright
-        }
-    }
-
     override var keyCommands: [UIKeyCommand]? {
         return [
                 UIKeyCommand(title: UIConstants.strings.selectLocationBarTitle,
@@ -1500,7 +1491,6 @@ extension BrowserViewController: WebControllerDelegate {
         urlBar.isLoading = true
         urlBar.canDelete = true
         browserToolbar.canDelete = true
-        browserToolbar.color = .loading
         toggleURLBarBackground(isBright: false)
         updateURLBar()
         if trackingProtectionStatus == .off {
@@ -1511,7 +1501,6 @@ extension BrowserViewController: WebControllerDelegate {
     func webControllerDidFinishNavigation(_ controller: WebController) {
         updateURLBar()
         urlBar.isLoading = false
-        toggleToolbarBackground()
         toggleURLBarBackground(isBright: !urlBar.isEditing)
         urlBar.progressBar.hideProgressBar()
         GleanMetrics.Browser.totalUriCount.add()
@@ -1525,7 +1514,6 @@ extension BrowserViewController: WebControllerDelegate {
         urlBar.url = webViewController.url
         urlBar.isLoading = false
         toggleURLBarBackground(isBright: true)
-        toggleToolbarBackground()
         urlBar.progressBar.hideProgressBar()
     }
 
