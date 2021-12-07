@@ -7,8 +7,6 @@ import Telemetry
 import Glean
 
 protocol AppSplashController {
-    var splashView: UIView { get }
-
     func toggleSplashView(hide: Bool)
 }
 
@@ -33,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
     var window: UIWindow?
 
-    var splashView: UIView = UIView()
+    var extendedLaunchScreenView: UIView = UIView()
     private lazy var browserViewController = {
         BrowserViewController(appSplashController: self)
     }()
@@ -246,19 +244,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     }
 
     private func displaySplashAnimation() {
-        let splashView = self.splashView
-        splashView.backgroundColor = .launchScreenBackground
-        window!.addSubview(splashView)
+        extendedLaunchScreenView.backgroundColor = .launchScreenBackground
+        window!.addSubview(extendedLaunchScreenView)
 
         let logoImage = UIImageView(image: AppInfo.config.wordmark)
-        splashView.addSubview(logoImage)
+        extendedLaunchScreenView.addSubview(logoImage)
 
-        splashView.snp.makeConstraints { make in
+        extendedLaunchScreenView.snp.makeConstraints { make in
             make.edges.equalTo(window!)
         }
 
         logoImage.snp.makeConstraints { make in
-            make.center.equalTo(splashView)
+            make.center.equalTo(extendedLaunchScreenView)
         }
 
         let animationDuration = 0.25
@@ -266,10 +263,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             logoImage.layer.transform = CATransform3DMakeScale(0.8, 0.8, 1.0)
         }, completion: { success in
             UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIView.AnimationOptions(), animations: {
-                splashView.alpha = 0
+                self.extendedLaunchScreenView.alpha = 0
                 logoImage.layer.transform = CATransform3DMakeScale(2.0, 2.0, 1.0)
             }, completion: { success in
-                splashView.isHidden = true
+                self.extendedLaunchScreenView.isHidden = true
                 logoImage.layer.transform = CATransform3DIdentity
             })
         })
@@ -358,15 +355,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         }
         return true
     }
+    
+    // MARK: Privacy Protection
+
+    private var privacyProtectionWindow: UIWindow?
+
+    private func showPrivacyProtectionWindow() {
+        guard let windowScene = self.window?.windowScene else { return }
+        privacyProtectionWindow = UIWindow(windowScene: windowScene)
+        privacyProtectionWindow?.windowLevel = .alert + 1
+        privacyProtectionWindow?.makeKeyAndVisible()
+        privacyProtectionWindow.map {
+            UIView.transition(
+                with: $0,
+                duration: 0.3,
+                options: [.transitionCrossDissolve],
+                animations: { self.privacyProtectionWindow?.rootViewController = PrivacyProtectionViewController() },
+                completion: nil
+            )
+        }
+
+    }
+
+    private func hidePrivacyProtectionWindow() {
+        privacyProtectionWindow?.isHidden = true
+        privacyProtectionWindow = nil
+    }
 
     func toggleSplashView(hide: Bool) {
-        let duration = 0.25
-        splashView.animateHidden(hide, duration: duration)
-
-        if !hide {
-            browserViewController.deactivateUrlBarOnHomeView()
-        } else {
+        if hide {
+            hidePrivacyProtectionWindow()
             browserViewController.activateUrlBarOnHomeView()
+        } else {
+            showPrivacyProtectionWindow()
+            browserViewController.deactivateUrlBarOnHomeView()
         }
     }
 }
