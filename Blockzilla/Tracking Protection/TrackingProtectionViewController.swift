@@ -233,7 +233,7 @@ class TrackingProtectionViewController: UIViewController {
         
         if case let .browsing(browsingStatus) = state,
            let baseDomain = browsingStatus.url.baseDomain,
-           let url = browsingStatus.faviconURL {
+           let _ = browsingStatus.faviconURL {
             view.addSubview(header)
             header.snp.makeConstraints { make in
                 self.headerHeight = make.height.equalTo(72).constraint
