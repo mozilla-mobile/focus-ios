@@ -244,20 +244,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             string as CFString,
             "" as CFString) as String
     }
-
-    func addSplashView() {
+    
+    private func displaySplashAnimation() {
         window!.addSubview(splashView)
         splashView.snp.makeConstraints { make in
             make.edges.equalTo(window!)
         }
-    }
-    
-    func removeSplashView() {
-        splashView.removeFromSuperview()
-    }
-    
-    private func displaySplashAnimation() {
-        addSplashView()
         splashView.animateDissapear()
     }
 
@@ -348,12 +340,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     func hideSplashView() {
         browserViewController.activateUrlBarOnHomeView()
         splashView.animateHidden(true, duration: 0.25)
-        removeSplashView()
+        splashView.removeFromSuperview()
     }
     
     func showSplashView() {
         browserViewController.deactivateUrlBarOnHomeView()
-        addSplashView()
+        window!.addSubview(splashView)
+        splashView.snp.makeConstraints { make in
+            make.edges.equalTo(window!)
+        }
         splashView.animateHidden(false, duration: 0.25)
     }
 }
