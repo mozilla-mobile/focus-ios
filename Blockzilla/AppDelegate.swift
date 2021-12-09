@@ -7,9 +7,9 @@ import Telemetry
 import Glean
 
 protocol AppSplashController {
-    var splashView: UIView { get }
-
-    func toggleSplashView(hide: Bool)
+    var splashView: SplashView { get }
+    func hideSplashView()
+    func showSplashView()
 }
 
 @UIApplicationMain
@@ -33,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
     var window: UIWindow?
 
-    var splashView: UIView = UIView()
+    var splashView = SplashView()
     private lazy var browserViewController = {
         BrowserViewController(appSplashController: self)
     }()
@@ -245,38 +245,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             "" as CFString) as String
     }
 
-    private func displaySplashAnimation() {
-        let splashView = self.splashView
-        splashView.backgroundColor = .launchScreenBackground
+    func addSplashView() {
         window!.addSubview(splashView)
-
-        let logoImage = UIImageView(image: AppInfo.config.wordmark)
-        splashView.addSubview(logoImage)
-
         splashView.snp.makeConstraints { make in
             make.edges.equalTo(window!)
         }
-
-        logoImage.snp.makeConstraints { make in
-            make.center.equalTo(splashView)
-        }
-
-        let animationDuration = 0.25
-        UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIView.AnimationOptions(), animations: {
-            logoImage.layer.transform = CATransform3DMakeScale(0.8, 0.8, 1.0)
-        }, completion: { success in
-            UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIView.AnimationOptions(), animations: {
-                splashView.alpha = 0
-                logoImage.layer.transform = CATransform3DMakeScale(2.0, 2.0, 1.0)
-            }, completion: { success in
-                splashView.isHidden = true
-                logoImage.layer.transform = CATransform3DIdentity
-            })
-        })
+    }
+    
+    func removeSplashView() {
+        splashView.removeFromSuperview()
+    }
+    
+    private func displaySplashAnimation() {
+        addSplashView()
+        splashView.animateDissapear()
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-        toggleSplashView(hide: false)
+        showSplashView()
         browserViewController.exitFullScreenVideo()
         browserViewController.dismissActionSheet()
         browserViewController.deactivateUrlBar()
@@ -358,16 +344,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         }
         return true
     }
-
-    func toggleSplashView(hide: Bool) {
-        let duration = 0.25
-        splashView.animateHidden(hide, duration: duration)
-
-        if !hide {
-            browserViewController.deactivateUrlBarOnHomeView()
-        } else {
-            browserViewController.activateUrlBarOnHomeView()
-        }
+    
+    func hideSplashView() {
+        browserViewController.activateUrlBarOnHomeView()
+        splashView.animateHidden(true, duration: 0.25)
+        removeSplashView()
+    }
+    
+    func showSplashView() {
+        browserViewController.deactivateUrlBarOnHomeView()
+        addSplashView()
+        splashView.animateHidden(false, duration: 0.25)
     }
 }
 
