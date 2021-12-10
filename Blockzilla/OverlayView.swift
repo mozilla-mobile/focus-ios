@@ -402,16 +402,20 @@ class OverlayView: UIView {
         
         let searchSuggestionsPromptHidden = UserDefaults.standard.bool(forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt) || searchQuery.isEmpty
         
-        var firstSearchButtonMaskedCorners: CACornerMask = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        let topCorners: CACornerMask = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        let bottomCorners: CACornerMask = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+        let allCorners: CACornerMask = [.layerMaxXMinYCorner, .layerMinXMinYCorner, .layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+        
+        var firstSearchButtonMaskedCorners = topCorners
+        
         if !searchSuggestionsPromptHidden {
-            firstSearchButtonMaskedCorners = findInPageButton.isHidden ? [.layerMaxXMaxYCorner, .layerMinXMaxYCorner] : []
+            firstSearchButtonMaskedCorners = findInPageButton.isHidden ? bottomCorners : []
         } else if searchSuggestions.count == 1 {
-            firstSearchButtonMaskedCorners = findInPageButton.isHidden ? [.layerMaxXMinYCorner, .layerMinXMinYCorner, .layerMaxXMaxYCorner, .layerMinXMaxYCorner] : [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+            firstSearchButtonMaskedCorners = findInPageButton.isHidden ? allCorners : topCorners
         }
         
         searchButtonGroup.first?.layer.maskedCorners = firstSearchButtonMaskedCorners
-        searchButtonGroup.last?.layer.maskedCorners = findInPageButton.isHidden ? [.layerMaxXMaxYCorner, .layerMinXMaxYCorner] : []
-        
+        searchButtonGroup.last?.layer.maskedCorners = findInPageButton.isHidden ? bottomCorners : []
     }
     
     private func remakeConstraintsForFindInPage() {
