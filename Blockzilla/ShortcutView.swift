@@ -9,7 +9,7 @@ import CoreHaptics
 
 protocol ShortcutViewDelegate: AnyObject {
     func shortcutTapped(shortcut: Shortcut)
-    func shortcutLongPressed(shortcut: Shortcut, shortcutView: ShortcutView)
+    func removeFromShortcutsAction(shortcut: Shortcut)
 }
 
 class ShortcutView: UIView {
@@ -29,9 +29,6 @@ class ShortcutView: UIView {
         let tap = UITapGestureRecognizer(target: self, action: #selector(didTap))
         self.addGestureRecognizer(tap)
         
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress))
-        self.addGestureRecognizer(longPress)
-        
         let outerView = UIView(frame: CGRect(x: 0, y: 0, width: dimension, height: dimension))
         outerView.backgroundColor = .above
         outerView.layer.cornerRadius = 8
@@ -45,7 +42,7 @@ class ShortcutView: UIView {
         let innerView = UIView(frame: CGRect(x: 0, y: 0, width: innerDimension, height: innerDimension))
         innerView.backgroundColor = .foundation
         innerView.layer.cornerRadius = 4
-        addSubview(innerView)
+        outerView.addSubview(innerView)
         innerView.snp.makeConstraints { make in
             make.width.height.equalTo(innerDimension)
             make.center.equalTo(outerView)
@@ -55,7 +52,7 @@ class ShortcutView: UIView {
         letterLabel.textColor = .primaryText
         letterLabel.font = .title20
         letterLabel.text = ShortcutsManager.shared.firstLetterFor(shortcut: shortcut)
-        addSubview(letterLabel)
+        innerView.addSubview(letterLabel)
         letterLabel.snp.makeConstraints { make in
             make.center.equalTo(innerView)
         }
@@ -69,6 +66,9 @@ class ShortcutView: UIView {
             make.top.equalTo(outerView.snp.bottom).offset(8)
             make.centerX.equalToSuperview()
         }
+        
+        let interaction = UIContextMenuInteraction(delegate: self)
+        outerView.addInteraction(interaction)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -81,14 +81,26 @@ class ShortcutView: UIView {
         }
     }
     
-    @objc private func didLongPress(sender: UILongPressGestureRecognizer) {
-        if sender.state == .began {
-            let feedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
-            feedbackGenerator.prepare()
-            if let shortcut = self.shortcut {
-                CHHapticEngine.capabilitiesForHardware().supportsHaptics ? feedbackGenerator.impactOccurred() : AudioServicesPlaySystemSound(1519)
-                delegate?.shortcutLongPressed(shortcut: shortcut, shortcutView: self)
+}
+
+extension ShortcutView: UIContextMenuInteractionDelegate {
+    
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        
+        return UIContextMenuConfiguration(identifier: nil,
+                                          previewProvider: nil,
+                                          actionProvider: { suggestedActions in
+            
+            let removeFromShortcutsAction = UIAction(title: UIConstants.strings.removeFromShortcuts,
+                                                     image: UIImage(named: "icon_shortcuts_remove")) { [weak self] action in
+                let feedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+                feedbackGenerator.prepare()
+                if let shortcut = self?.shortcut {
+                    CHHapticEngine.capabilitiesForHardware().supportsHaptics ? feedbackGenerator.impactOccurred() : AudioServicesPlaySystemSound(1519)
+                    self?.delegate?.removeFromShortcutsAction(shortcut: shortcut)
+                }
             }
-        }
+            return UIMenu(title: "", children: [removeFromShortcutsAction])
+        })
     }
 }
