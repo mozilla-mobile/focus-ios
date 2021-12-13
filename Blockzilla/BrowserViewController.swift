@@ -31,7 +31,6 @@ class BrowserViewController: UIViewController {
     private let searchEngineManager = SearchEngineManager(prefs: UserDefaults.standard)
     private let urlBarContainer = UIView()
     private var urlBar: URLBar!
-    private let requestHandler = RequestHandler()
     private let searchSuggestClient = SearchSuggestClient()
     private var findInPageBar: FindInPageBar?
     private var fillerView: UIView?
@@ -453,7 +452,6 @@ class BrowserViewController: UIViewController {
         urlBar = URLBar()
         urlBar.delegate = self
         urlBar.toolsetDelegate = self
-        urlBar.shrinkFromView = urlBarContainer
         urlBar.isIPadRegularDimensions = isIPadRegularDimensions
         urlBar.shouldShowToolset = showsToolsetInURLBar
         mainContainerView.insertSubview(urlBar, aboveSubview: urlBarContainer)
@@ -476,24 +474,6 @@ class BrowserViewController: UIViewController {
                 make.leading.trailing.equalToSuperview()
             }
         }
-    }
-
-    private func buildTrackingProtectionMenu(info: TPPageStats?) -> PhotonActionSheet {
-        var actions = [[PhotonActionSheetItem]]()
-        if info != nil {
-            let titleItem = PhotonActionSheetItem(title: UIConstants.strings.trackingProtectionLabel, text: UIConstants.strings.trackingProtectionLabelDescription, textStyle: .subtitle, iconString: "tracking_protection", isEnabled: true, accessory: .Switch)
-            actions.append([titleItem])
-        } else {
-            let titleItem = PhotonActionSheetItem(title: UIConstants.strings.trackingProtectionLabel, iconString: "tracking_protection_off", isEnabled: false, accessory: .Switch)
-            actions.append([titleItem])
-        }
-        let totalCount = PhotonActionSheetItem(title: UIConstants.strings.trackersBlocked, accessory: .Text, accessoryText: String(info?.total ?? 0), bold: true)
-        let adCount = PhotonActionSheetItem(title: UIConstants.strings.adTrackerLabel, accessory: .Text, accessoryText: String(info?.adCount ?? 0))
-        let analyticCount = PhotonActionSheetItem(title: UIConstants.strings.analyticTrackerLabel, accessory: .Text, accessoryText: String(info?.analyticCount ?? 0))
-        let socialCount = PhotonActionSheetItem(title: UIConstants.strings.socialTrackerLabel, accessory: .Text, accessoryText: String(info?.socialCount ?? 0))
-        let contentCount = PhotonActionSheetItem(title: UIConstants.strings.contentTrackerLabel, accessory: .Text, accessoryText: String(info?.contentCount ?? 0))
-        actions.append([totalCount, adCount, analyticCount, socialCount, contentCount])
-        return PhotonActionSheet(actions: actions)
     }
 
     override func updateViewConstraints() {
@@ -791,36 +771,10 @@ class BrowserViewController: UIViewController {
         
         shortcutsBackground.snp.removeConstraints()
         addShortcutsBackgroundConstraints()
-    }
-
-    private func presentImageActionSheet(title: String, link: String?, saveAction: @escaping () -> Void, copyAction: @escaping () -> Void) {
-
-        var normalizedTitle = title
-        if title.count > UIConstants.layout.truncateCharactersLimit {
-            normalizedTitle = String("\(title.prefix(UIConstants.layout.truncateHeadCharactersCount))\(UIConstants.strings.truncateLeader)\(title.suffix(UIConstants.layout.truncateTailCharactersCount))")
+        
+        DispatchQueue.main.async {
+            self.urlBar.updateCollapsedState()
         }
-
-        let alertController = UIAlertController(title: normalizedTitle, message: nil, preferredStyle: .actionSheet)
-
-        if let link = link {
-            alertController.addAction(UIAlertAction(title: UIConstants.strings.copyLink, style: .default) { _ in
-                UIPasteboard.general.string = link
-            })
-
-            alertController.addAction(UIAlertAction(title: UIConstants.strings.shareLink, style: .default) { _ in
-                let activityViewController = UIActivityViewController(activityItems: [link], applicationActivities: nil)
-                self.present(activityViewController, animated: true, completion: nil)
-            })
-        }
-
-        alertController.addAction(UIAlertAction(title: UIConstants.strings.saveImage, style: .default) { _ in saveAction() })
-        alertController.addAction(UIAlertAction(title: UIConstants.strings.copyImage, style: .default) { _ in copyAction() })
-        alertController.addAction(UIAlertAction(title: UIConstants.strings.cancel, style: .cancel))
-
-        alertController.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection(rawValue: 0)
-        alertController.popoverPresentationController?.sourceView = self.view
-        alertController.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.size.width / 2.0, y: self.view.bounds.size.height / 2.0, width: 1.0, height: 1.0)
-        present(alertController, animated: true, completion: nil)
     }
 
     @objc private func selectLocationBar() {
@@ -849,15 +803,6 @@ class BrowserViewController: UIViewController {
 
     private func toggleURLBarBackground(isBright: Bool) {
         urlBarContainer.backgroundColor = urlBar.inBrowsingMode ? .foundation : .clear
-    }
-
-    private func toggleToolbarBackground() {
-        switch trackingProtectionStatus {
-        case .off:
-            browserToolbar.color = .dark
-        case .on:
-            browserToolbar.color = .bright
-        }
     }
 
     override var keyCommands: [UIKeyCommand]? {
@@ -1550,7 +1495,6 @@ extension BrowserViewController: WebControllerDelegate {
         urlBar.isLoading = true
         urlBar.canDelete = true
         browserToolbar.canDelete = true
-        browserToolbar.color = .loading
         toggleURLBarBackground(isBright: false)
         updateURLBar()
         if trackingProtectionStatus == .off {
@@ -1561,7 +1505,6 @@ extension BrowserViewController: WebControllerDelegate {
     func webControllerDidFinishNavigation(_ controller: WebController) {
         updateURLBar()
         urlBar.isLoading = false
-        toggleToolbarBackground()
         toggleURLBarBackground(isBright: !urlBar.isEditing)
         urlBar.progressBar.hideProgressBar()
         GleanMetrics.Browser.totalUriCount.add()
@@ -1575,7 +1518,6 @@ extension BrowserViewController: WebControllerDelegate {
         urlBar.url = webViewController.url
         urlBar.isLoading = false
         toggleURLBarBackground(isBright: true)
-        toggleToolbarBackground()
         urlBar.progressBar.hideProgressBar()
     }
 
@@ -1649,8 +1591,16 @@ extension BrowserViewController: WebControllerDelegate {
         default:
             scrollBarState = .transitioning
         }
-
-        self.urlBar.collapseUrlBar(expandAlpha: max(0, (1 - scrollBarOffsetAlpha * 2)), collapseAlpha: max(0, -(1 - scrollBarOffsetAlpha * 2)))
+        
+        let expandAlpha = max(0, (1 - scrollBarOffsetAlpha * 2))
+        let collapseAlpha = max(0, -(1 - scrollBarOffsetAlpha * 2))
+        
+        if expandAlpha == 1, collapseAlpha == 0 {
+            self.urlBar.collapsedState = .extended
+        } else {
+            self.urlBar.collapsedState = .intermediate(expandAlpha: expandAlpha, collapseAlpha: collapseAlpha)
+        }
+        
         self.urlBarTopConstraint.update(offset: -scrollBarOffsetAlpha * (UIConstants.layout.urlBarHeight - UIConstants.layout.collapsedUrlBarHeight))
         self.toolbarBottomConstraint.update(offset: scrollBarOffsetAlpha * (UIConstants.layout.browserToolbarHeight + view.safeAreaInsets.bottom))
         updateViewConstraints()
@@ -1676,8 +1626,6 @@ extension BrowserViewController: WebControllerDelegate {
         handleNavigationForward()
     }
 
-    func webController(_ controller: WebController, stateDidChange state: BrowserState) {}
-
     func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus) {
         // Calculate the number of trackers blocked and add that to lifetime total
         if case .on(let info) = trackingStatus,
@@ -1695,7 +1643,7 @@ extension BrowserViewController: WebControllerDelegate {
         scrollBarState = .animating
 
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: {
-            self.urlBar.collapseUrlBar(expandAlpha: 1, collapseAlpha: 0)
+            self.urlBar.collapsedState = .extended
             self.urlBarTopConstraint.update(offset: 0)
             self.toolbarBottomConstraint.update(inset: 0)
             scrollView.bounds.origin.y += self.scrollBarOffsetAlpha * UIConstants.layout.urlBarHeight
@@ -1708,10 +1656,9 @@ extension BrowserViewController: WebControllerDelegate {
 
     private func hideToolbars() {
         let scrollView = webViewController.scrollView
-
         scrollBarState = .animating
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: {
-            self.urlBar.collapseUrlBar(expandAlpha: 0, collapseAlpha: 1)
+            self.urlBar.collapsedState = .collapsed
             self.urlBarTopConstraint.update(offset: -UIConstants.layout.urlBarHeight + UIConstants.layout.collapsedUrlBarHeight)
             self.toolbarBottomConstraint.update(offset: UIConstants.layout.browserToolbarHeight + self.view.safeAreaInsets.bottom)
             scrollView.bounds.origin.y += (self.scrollBarOffsetAlpha - 1) * UIConstants.layout.urlBarHeight
@@ -1770,7 +1717,9 @@ extension BrowserViewController: UIPopoverPresentationControllerDelegate {
     
     func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>) {
         guard urlBar.inBrowsingMode else { return }
-        guard popoverPresentationController.presentedViewController is PhotonActionSheet  else { return }
+        guard let menuSheet = popoverPresentationController.presentedViewController as? PhotonActionSheet, !(menuSheet.popoverPresentationController?.sourceView is ShortcutView) else {
+            return
+        }
         view.pointee = self.showsToolsetInURLBar ? urlBar.contextMenuButton : browserToolbar.contextMenuButton
     }
 }
