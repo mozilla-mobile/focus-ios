@@ -56,7 +56,6 @@ class ShortcutView: UIView {
         let tap = UITapGestureRecognizer(target: self, action: #selector(didTap))
         self.addGestureRecognizer(tap)
         
-        outerView.frame = CGRect(x: 0, y: 0, width: dimension, height: dimension)
         addSubview(outerView)
         outerView.snp.makeConstraints { make in
             make.width.height.equalTo(dimension)
@@ -64,7 +63,6 @@ class ShortcutView: UIView {
             make.top.equalToSuperview()
         }
         
-        innerView.frame = CGRect(x: 0, y: 0, width: innerDimension, height: innerDimension)
         outerView.addSubview(innerView)
         innerView.snp.makeConstraints { make in
             make.width.height.equalTo(innerDimension)
