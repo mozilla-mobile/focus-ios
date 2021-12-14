@@ -102,17 +102,16 @@ extension ShortcutView: UIContextMenuInteractionDelegate {
         
         return UIContextMenuConfiguration(identifier: nil,
                                           previewProvider: nil,
-                                          actionProvider: { suggestedActions in
+                                          actionProvider: { _ in
             
             let removeFromShortcutsAction = UIAction(title: UIConstants.strings.removeFromShortcuts,
                                                      image: UIImage(named: "icon_shortcuts_remove"),
-                                                     attributes: .destructive) { [weak self] action in
+                                                     attributes: .destructive) { _ in
+                guard self == self else { return }
                 let feedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
                 feedbackGenerator.prepare()
-                if let shortcut = self?.shortcut {
-                    CHHapticEngine.capabilitiesForHardware().supportsHaptics ? feedbackGenerator.impactOccurred() : AudioServicesPlaySystemSound(1519)
-                    self?.delegate?.removeFromShortcutsAction(shortcut: shortcut)
-                }
+                CHHapticEngine.capabilitiesForHardware().supportsHaptics ? feedbackGenerator.impactOccurred() : AudioServicesPlaySystemSound(1519)
+                self.delegate?.removeFromShortcutsAction(shortcut: self.shortcut)
             }
             return UIMenu(children: [removeFromShortcutsAction])
         })
