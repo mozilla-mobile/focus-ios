@@ -131,8 +131,7 @@ struct L10NTools: ParsableCommand {
         print(locales)
 
         if runImportTask {
-            // ImportTask(xcodeProjPath: projectPath, l10nRepoPath: l10nProjectPath, locales: locales).run()
-            print("HIIIII")
+            ImportTask(xcodeProjPath: projectPath, l10nRepoPath: l10nProjectPath, locales: locales).run()
         }
         
         if runExportTask {
