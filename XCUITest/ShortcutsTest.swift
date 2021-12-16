@@ -32,8 +32,11 @@ class ShortcutsTest: BaseTestCase {
 
     func testAdd4Shortcuts() {
         addShortcut(website: "mozilla.org")
+        app.buttons["URLBar.deleteButton"].firstMatch.tap()
         addShortcut(website: "example.com")
+        app.buttons["URLBar.deleteButton"].firstMatch.tap()
         addShortcut(website: "pocket.com")
+        app.buttons["URLBar.deleteButton"].firstMatch.tap()
         addShortcut(website: "wikipedia.com")
 
         // Tap on erase button to go to homepage and check the shortcut created
