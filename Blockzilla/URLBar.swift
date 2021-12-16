@@ -298,7 +298,26 @@ class URLBar: UIView {
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
         }
-        applyURLBorderViewConstraints()
+
+        urlBarBorderView.snp.makeConstraints { make in
+            make.height.equalTo(UIConstants.layout.urlBarBorderHeight).priority(.medium)
+            make.top.bottom.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
+
+            compressedBarConstraints.append(make.height.equalTo(UIConstants.layout.urlBarBorderHeight).constraint)
+            if inBrowsingMode {
+                compressedBarConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide.snp.trailing).inset(UIConstants.layout.urlBarMargin).constraint)
+            } else {
+                compressedBarConstraints.append(make.trailing.equalTo(contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarMargin).constraint)
+            }
+
+            expandedBarConstraints.append(make.trailing.equalTo(rightBarViewLayoutGuide.snp.trailing).constraint)
+
+            showLeftBarViewConstraints.append(make.leading.equalTo(leftBarViewLayoutGuide.snp.trailing).offset(UIConstants.layout.urlBarIconInset).constraint)
+            
+            hideLeftBarViewConstraints.append(make.leading.equalTo(shieldIcon.snp.leading).offset(-UIConstants.layout.urlBarIconInset).constraint)
+            
+            showToolsetConstraints.append(make.leading.equalTo(leftBarViewLayoutGuide.snp.leading).offset(UIConstants.layout.urlBarIconInset).constraint)
+        }
 
         urlBarBackgroundView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(UIConstants.layout.urlBarBorderInset)
@@ -325,7 +344,7 @@ class URLBar: UIView {
 
         toolset.stopReloadButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.trailing.equalTo(textAndLockContainer).priority(.required)
+            make.trailing.equalTo(urlBarBorderView).priority(.required)
             make.width.equalTo(UIConstants.layout.urlBarButtonTargetSize).priority(900)
         }
 
@@ -371,27 +390,6 @@ class URLBar: UIView {
         expandedBarConstraints.forEach { $0.activate() }
         updateToolsetConstraints()
     }
-    
-    private func applyURLBorderViewConstraints() {
-        self.urlBarBorderView.snp.removeConstraints()
-         
-         self.urlBarBorderView.snp.makeConstraints { make in
-             make.height.equalTo(UIConstants.layout.urlBarBorderHeight).priority(.medium)
-             make.top.bottom.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
-             
-             compressedBarConstraints.append(make.height.equalTo(UIConstants.layout.urlBarBorderHeight).constraint)
-             if inBrowsingMode {
-                 compressedBarConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide.snp.trailing).inset(UIConstants.layout.urlBarMargin).constraint)
-             } else {
-                 compressedBarConstraints.append(make.trailing.equalTo(contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarMargin).constraint)
-             }
-             
-             expandedBarConstraints.append(make.trailing.equalTo(rightBarViewLayoutGuide.snp.trailing).constraint)
-             showLeftBarViewConstraints.append(make.leading.equalTo(leftBarViewLayoutGuide.snp.trailing).offset(UIConstants.layout.urlBarIconInset).constraint)
-             hideLeftBarViewConstraints.append(make.leading.equalTo(shieldIcon.snp.leading).offset(-UIConstants.layout.urlBarIconInset).constraint)
-             showToolsetConstraints.append(make.leading.equalTo(leftBarViewLayoutGuide.snp.leading).offset(UIConstants.layout.urlBarIconInset).constraint)
-         }
-     }
     
     private func addShieldConstraints() {
         shieldIcon.snp.makeConstraints { (make) in
@@ -671,7 +669,7 @@ class URLBar: UIView {
             self.layoutIfNeeded()
             
             if self.inBrowsingMode && !self.isIPadRegularDimensions {
-                self.applyURLBorderViewConstraints()
+                self.updateURLBorderConstraints()
             }
             
             self.urlBarBackgroundView.snp.remakeConstraints { make in
@@ -686,6 +684,26 @@ class URLBar: UIView {
                 }
             }
         })
+    }
+    
+    func updateURLBorderConstraints() {
+        self.urlBarBorderView.snp.remakeConstraints { make in
+            make.height.equalTo(UIConstants.layout.urlBarBorderHeight).priority(.medium)
+            make.top.bottom.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
+            
+            compressedBarConstraints.append(make.height.equalTo(UIConstants.layout.urlBarBorderHeight).constraint)
+            if inBrowsingMode {
+                compressedBarConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide.snp.trailing).inset(UIConstants.layout.urlBarMargin).constraint)
+            } else {
+                compressedBarConstraints.append(make.trailing.equalTo(contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarMargin).constraint)
+            }
+            
+            if isEditing {
+                make.leading.equalTo(leftBarViewLayoutGuide.snp.trailing).offset(UIConstants.layout.urlBarIconInset)
+            } else {
+                make.leading.equalTo(shieldIcon.snp.leading).offset(-UIConstants.layout.urlBarIconInset)
+            }
+        }
     }
 
     /* This separate @objc function is necessary as selector methods pass sender by default. Calling
