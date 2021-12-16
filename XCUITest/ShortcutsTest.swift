@@ -16,7 +16,7 @@ class ShortcutsTest: BaseTestCase {
         addShortcut(website: "mozilla.org")
 
         // Tap on erase button to go to homepage and check the shortcut created
-        app.buttons["URLBar.deleteButton"].firstMatch.tap()
+        app.eraseButton.tap()
 
         // Verify the shortcut is created
         waitForExistence(app.otherElements.staticTexts["M"], timeout: 5)
@@ -58,11 +58,11 @@ class ShortcutsTest: BaseTestCase {
 
     func testShortcutShownWhileTypingURLBar() {
         addShortcut(website: "example.com")
-        app.textFields["URLBar.urlText"].tap()
+        app.urlTextField.tap()
         waitForExistence(app.otherElements.staticTexts["E"], timeout: 5)
         XCTAssertTrue(app.otherElements.staticTexts["Example"].exists)
 
-        app.textFields["URLBar.urlText"].typeText("foo")
+        app.urlTextField.typeText("foo")
         waitForNoExistence(app.otherElements.staticTexts["E"])
         XCTAssertFalse(app.otherElements.staticTexts["Example"].exists)
     }
