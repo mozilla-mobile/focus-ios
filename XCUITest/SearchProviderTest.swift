@@ -27,6 +27,10 @@ class SearchProviderTest: BaseTestCase {
         waitForWebPageLoad()
 
         app.buttons["URLBar.deleteButton"].tap()
+        if !iPad() {
+            waitForExistence(app.buttons["URLBar.cancelButton"], timeout: 5)
+            app.buttons["URLBar.cancelButton"].tap()
+        }
         checkForHomeScreen()
 	}
 
