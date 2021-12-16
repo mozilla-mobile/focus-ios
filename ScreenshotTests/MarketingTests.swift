@@ -8,12 +8,7 @@ import XCTest
 class MarketingTests: BaseTestCaseL10n {
 
     func testSettingsView() {
-        if iPad () {
-            app.windows.element(boundBy: 0).tap()
-        } else {
-            waitForExistence(app.buttons["URLBar.cancelButton"], timeout: 15)
-            app.buttons["URLBar.cancelButton"].tap()
-        }
+        app.windows.element(boundBy: 0).tap()
 
         snapshot("Home")
         // Go to ETP Menu
@@ -37,11 +32,7 @@ class MarketingTests: BaseTestCaseL10n {
     }
 
     func testVisitSite() {
-        if iPad () {
-            app.windows.element(boundBy: 0).tap()
-        } else {
-            waitForExistence(app.buttons["URLBar.cancelButton"], timeout: 15)
-        }
+        app.windows.element(boundBy: 0).tap()
         app.textFields.firstMatch.tap()
         app.textFields.firstMatch.typeText("https://www.mozilla.org/de/firefox/browsers/mobile/focus\n")
         waitForExistence(app.webViews.buttons["Close"])
@@ -50,16 +41,12 @@ class MarketingTests: BaseTestCaseL10n {
     }
 
     func testPinTopSites(){
-        if iPad () {
-            app.windows.element(boundBy: 0).tap()
-        } else {
-            waitForExistence(app.buttons["URLBar.cancelButton"], timeout: 15)
-        }
+        app.windows.element(boundBy: 0).tap()
         saveTopSite(TopSite: "mozilla.org")
         saveTopSite(TopSite: "pocket.com")
         saveTopSite(TopSite: "relay.com")
         saveTopSite(TopSite: "monitor.com")
-
+        
         app.buttons["URLBar.deleteButton"].tap()
         waitForExistence(app.buttons["URLBar.cancelButton"], timeout: 15)
         app.buttons["URLBar.cancelButton"].tap()
