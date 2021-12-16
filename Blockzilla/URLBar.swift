@@ -284,7 +284,11 @@ class URLBar: UIView {
         }
 
         toolset.contextMenuButton.snp.makeConstraints { make in
-            make.trailing.equalTo(safeAreaLayoutGuide)
+            if inBrowsingMode {
+                make.trailing.equalTo(safeAreaLayoutGuide)
+            }else {
+                make.trailing.equalTo(safeAreaLayoutGuide).offset(-UIConstants.layout.urlBarMargin)
+            }
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
         }
@@ -294,22 +298,7 @@ class URLBar: UIView {
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
         }
-
-        urlBarBorderView.snp.makeConstraints { make in
-            make.height.equalTo(UIConstants.layout.urlBarBorderHeight).priority(.medium)
-            make.top.bottom.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
-
-            compressedBarConstraints.append(make.height.equalTo(UIConstants.layout.urlBarBorderHeight).constraint)
-            compressedBarConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide.snp.trailing).inset(UIConstants.layout.urlBarMargin).constraint)
-
-            expandedBarConstraints.append(make.trailing.equalTo(rightBarViewLayoutGuide.snp.trailing).constraint)
-
-            showLeftBarViewConstraints.append(make.leading.equalTo(leftBarViewLayoutGuide.snp.trailing).offset(UIConstants.layout.urlBarIconInset).constraint)
-            
-            hideLeftBarViewConstraints.append(make.leading.equalTo(shieldIcon.snp.leading).offset(-UIConstants.layout.urlBarIconInset).constraint)
-            
-            showToolsetConstraints.append(make.leading.equalTo(leftBarViewLayoutGuide.snp.leading).offset(UIConstants.layout.urlBarIconInset).constraint)
-        }
+        applyURLBorderViewConstraints()
 
         urlBarBackgroundView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(UIConstants.layout.urlBarBorderInset)
@@ -382,6 +371,27 @@ class URLBar: UIView {
         expandedBarConstraints.forEach { $0.activate() }
         updateToolsetConstraints()
     }
+    
+    private func applyURLBorderViewConstraints() {
+        self.urlBarBorderView.snp.removeConstraints()
+         
+         self.urlBarBorderView.snp.makeConstraints { make in
+             make.height.equalTo(UIConstants.layout.urlBarBorderHeight).priority(.medium)
+             make.top.bottom.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
+             
+             compressedBarConstraints.append(make.height.equalTo(UIConstants.layout.urlBarBorderHeight).constraint)
+             if inBrowsingMode {
+                 compressedBarConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide.snp.trailing).inset(UIConstants.layout.urlBarMargin).constraint)
+             } else {
+                 compressedBarConstraints.append(make.trailing.equalTo(contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarMargin).constraint)
+             }
+             
+             expandedBarConstraints.append(make.trailing.equalTo(rightBarViewLayoutGuide.snp.trailing).constraint)
+             showLeftBarViewConstraints.append(make.leading.equalTo(leftBarViewLayoutGuide.snp.trailing).offset(UIConstants.layout.urlBarIconInset).constraint)
+             hideLeftBarViewConstraints.append(make.leading.equalTo(shieldIcon.snp.leading).offset(-UIConstants.layout.urlBarIconInset).constraint)
+             showToolsetConstraints.append(make.leading.equalTo(leftBarViewLayoutGuide.snp.leading).offset(UIConstants.layout.urlBarIconInset).constraint)
+         }
+     }
     
     private func addShieldConstraints() {
         shieldIcon.snp.makeConstraints { (make) in
@@ -659,7 +669,11 @@ class URLBar: UIView {
 
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
             self.layoutIfNeeded()
-
+            
+            if self.inBrowsingMode && !self.isIPadRegularDimensions {
+                self.applyURLBorderViewConstraints()
+            }
+            
             self.urlBarBackgroundView.snp.remakeConstraints { make in
                 make.edges.equalToSuperview().inset(showBackgroundView ? UIConstants.layout.urlBarBorderInset : 1)
             }
@@ -718,7 +732,7 @@ class URLBar: UIView {
         toolset.backButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         toolset.forwardButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         toolset.deleteButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
-        toolset.contextMenuButton.animateHidden(isIPadRegularDimensions ? false : isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+        toolset.contextMenuButton.animateHidden(!inBrowsingMode ? false : (isIPadRegularDimensions ? false : isHidden), duration: UIConstants.layout.urlBarTransitionAnimationDuration)
 
     }
 
@@ -805,7 +819,6 @@ class URLBar: UIView {
         toolset.backButton.alpha = shouldShowToolset ? expandAlpha : 0
         toolset.forwardButton.alpha = shouldShowToolset ? expandAlpha : 0
         toolset.deleteButton.alpha = shouldShowToolset ? expandAlpha : 0
-        toolset.contextMenuButton.alpha = shouldShowToolset ? expandAlpha : 0
 
         collapsedTrackingProtectionBadge.alpha = collapseAlpha
         if isEditing {
