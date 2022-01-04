@@ -202,7 +202,7 @@ extension URL {
             return host
         }
 
-        return publicSuffixFromHost(host, withAdditionalParts: 1) ?? ""
+        return publicSuffixFromHost(host, withAdditionalParts: 1) ?? host
     }
 
     /**
