@@ -837,7 +837,7 @@ class URLBar: UIView {
         toolset.backButton.alpha = shouldShowToolset ? expandAlpha : 0
         toolset.forwardButton.alpha = shouldShowToolset ? expandAlpha : 0
         toolset.deleteButton.alpha = shouldShowToolset ? expandAlpha : 0
-        toolset.contextMenuButton.alpha = shouldShowToolset ? expandAlpha : 0
+        toolset.contextMenuButton.alpha = isEditing ? expandAlpha : (shouldShowToolset ? expandAlpha : 0)
 
         collapsedTrackingProtectionBadge.alpha = 0
         if isEditing {
