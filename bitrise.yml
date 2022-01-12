@@ -150,7 +150,7 @@ workflows:
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.4core
 
 
@@ -217,7 +217,7 @@ workflows:
         - webhook_url: "$SLACK_WEBHOOK"
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.8core
 
   runKlar:
@@ -282,7 +282,7 @@ workflows:
         - webhook_url: "$SLACK_WEBHOOK"
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.8core
   runFocus-iPad:
     steps:
