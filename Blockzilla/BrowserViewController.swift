@@ -298,8 +298,9 @@ class BrowserViewController: UIViewController {
         NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: nil) { notification in
             var biometricError: NSError?
 
+            
             // Check if user is already in a cleared session, or doesn't have biometrics enabled in settings
-            if  !Settings.getToggle(SettingsToggle.biometricLogin) || !AppDelegate.needsAuthenticated || self.webViewContainer.isHidden {
+            if  !Settings.getToggle(SettingsToggle.biometricLogin) || !AppDelegate.needsAuthenticated {
                 self.appSplashController.hideSplashView()
                 return
             }
