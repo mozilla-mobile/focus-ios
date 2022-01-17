@@ -8,6 +8,11 @@ import RustLog
 import Viaduct
 import Nimbus
 
+
+let NimbusUseStagingServerDefault = "NimbusUseStagingServer"
+let NimbusUsePreviewCollectionDefault = "NimbusUsePreviewCollection"
+
+
 /// An application specific enum of app features that we are configuring with experiments.
 /// This is expected to grow and shrink across releases of the app.
 enum FeatureId: String {
@@ -46,7 +51,11 @@ class NimbusWrapper {
 
         Viaduct.shared.useReqwestBackend()
 
-        guard let nimbusServerSettings = NimbusServerSettings.createFromInfoDictionary(), let nimbusAppSettings = NimbusAppSettings.createFromInfoDictionary() else {
+        let useStagingServer = UserDefaults.standard.bool(forKey: NimbusUseStagingServerDefault)
+        let usePreviewCollection = UserDefaults.standard.bool(forKey: NimbusUsePreviewCollectionDefault)
+        
+        guard let nimbusServerSettings = NimbusServerSettings.createFromInfoDictionary(useStagingServer: useStagingServer, usePreviewCollection: usePreviewCollection),
+              let nimbusAppSettings = NimbusAppSettings.createFromInfoDictionary() else {
             throw "Failed to load Nimbus settings from Info.plist"
         }
 
@@ -61,4 +70,8 @@ class NimbusWrapper {
     }
     
     var shouldHaveBoldTitle: Bool { nimbus?.getVariables(featureId: .nimbusValidation).getBool("bold-tip-title") == true }
+        
+    func availableExperiments() -> [AvailableExperiment] {
+        return self.nimbus?.getAvailableExperiments() ?? []
+    }
 }

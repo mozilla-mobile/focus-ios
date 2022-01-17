@@ -46,7 +46,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
 
         static func getSections() -> [Section] {
-            return [.general, .privacy, .usageData, .studies, .search, .siri, integration, .mozilla, .secret]
+            var sections = [.general, .privacy, .usageData, .studies, .search, .siri, integration, .mozilla]
+            if Settings.getToggle(.displaySecretMenu) {
+                sections.append(.secret)
+            }
+            return sections
         }
     }
 

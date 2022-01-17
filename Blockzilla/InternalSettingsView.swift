@@ -6,16 +6,14 @@ import SwiftUI
 
 struct InternalSettingsView: View {
     var body: some View {
-        NavigationView {
-            Form {
-                NavigationLink("Telemetry") {
-                    InternalTelemetrySettingsView()
-                }
-                NavigationLink("Experiments") {
-                    InternalExperimentsSettingsView()
-                }
-            }.navigationBarTitle("Internal Settings")
-        }
+        Form {
+            NavigationLink("Telemetry") {
+                InternalTelemetrySettingsView()
+            }
+            NavigationLink("Experiments") {
+                InternalExperimentsSettingsView(availableExperiments: NimbusWrapper.shared.availableExperiments())
+            }
+        }.navigationBarTitle("Internal Settings")
     }
 }
 

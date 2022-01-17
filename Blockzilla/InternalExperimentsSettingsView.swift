@@ -3,27 +3,54 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import SwiftUI
+import Nimbus
 
 struct InternalExperimentsSettingsView: View {
-    @State private var enablePreviewCollections = false
+    let availableExperiments: [AvailableExperiment]
+
+    @ObservedObject var internalSettings = InternalSettings()
+    
     var body: some View {
         NavigationView {
             Form {
-                SwiftUI.Section {
-                    Toggle(isOn: $enablePreviewCollections) {
+                SwiftUI.Section(header: Text("Settings")) {
+                    Toggle(isOn: $internalSettings.useStagingServer) {
+                        VStack(alignment: .leading) {
+                            Text("Use Staging Server")
+                            Text("Requires app restart").font(.caption)
+                        }
+                    }
+                    Toggle(isOn: $internalSettings.usePreviewCollection) {
                         VStack(alignment: .leading) {
                             Text("Use Preview Collection")
-                            Text("Requires restart").font(.caption)
+                            Text("Requires app restart").font(.caption)
                         }
                     }
                 }
-            }.navigationBarTitle("Experiment Settings")
+                SwiftUI.Section(header: Text("Available Experiments")) {
+                    if availableExperiments.isEmpty {
+                        Text("No Experiments Found")
+                    } else {
+                        ForEach(availableExperiments, id: \.slug) { experiment in
+                            NavigationLink(destination: Text("TODO")) {
+                                VStack(alignment: .leading) {
+                                    Text(experiment.userFacingName)
+                                    Text(experiment.slug).font(.caption)
+                                }
+                            }
+                        }
+                    }
+                }
+            }.navigationBarTitle("Experiments Settings")
         }
     }
 }
 
 struct InternalExperimentsSettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        InternalExperimentsSettingsView()
+        InternalExperimentsSettingsView(availableExperiments: [
+            AvailableExperiment(slug: "something-experiment", userFacingName: "Some Experiment", userFacingDescription: "Some Experiment to Experiment", branches: [.init(slug: "control", ratio: 50)], referenceBranch: nil),
+            AvailableExperiment(slug: "another-experiment", userFacingName: "Another Experiment", userFacingDescription: "Another Experiment to Try", branches: [.init(slug: "control", ratio: 50)], referenceBranch: nil)
+        ])
     }
 }
