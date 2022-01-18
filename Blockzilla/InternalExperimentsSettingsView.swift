@@ -5,44 +5,43 @@
 import SwiftUI
 import Nimbus
 
-struct InternalExperimentsSettingsView: View {
+struct InternalExperimentsSettingsView {
     let availableExperiments: [AvailableExperiment]
-
     @ObservedObject var internalSettings = InternalSettings()
-    
+}
+
+extension InternalExperimentsSettingsView: View {
     var body: some View {
-        NavigationView {
-            Form {
-                SwiftUI.Section(header: Text("Settings")) {
-                    Toggle(isOn: $internalSettings.useStagingServer) {
-                        VStack(alignment: .leading) {
-                            Text("Use Staging Server")
-                            Text("Requires app restart").font(.caption)
-                        }
-                    }
-                    Toggle(isOn: $internalSettings.usePreviewCollection) {
-                        VStack(alignment: .leading) {
-                            Text("Use Preview Collection")
-                            Text("Requires app restart").font(.caption)
-                        }
+        Form {
+            SwiftUI.Section(header: Text("Settings")) {
+                Toggle(isOn: $internalSettings.useStagingServer) {
+                    VStack(alignment: .leading) {
+                        Text("Use Staging Server")
+                        Text("Requires app restart").font(.caption)
                     }
                 }
-                SwiftUI.Section(header: Text("Available Experiments")) {
-                    if availableExperiments.isEmpty {
-                        Text("No Experiments Found")
-                    } else {
-                        ForEach(availableExperiments, id: \.slug) { experiment in
-                            NavigationLink(destination: Text("TODO")) {
-                                VStack(alignment: .leading) {
-                                    Text(experiment.userFacingName)
-                                    Text(experiment.slug).font(.caption)
-                                }
+                Toggle(isOn: $internalSettings.usePreviewCollection) {
+                    VStack(alignment: .leading) {
+                        Text("Use Preview Collection")
+                        Text("Requires app restart").font(.caption)
+                    }
+                }
+            }
+            SwiftUI.Section(header: Text("Available Experiments")) {
+                if availableExperiments.isEmpty {
+                    Text("No Experiments Found")
+                } else {
+                    ForEach(availableExperiments, id: \.slug) { experiment in
+                        NavigationLink(destination: InternalExperimentDetailView(experiment: experiment)) {
+                            VStack(alignment: .leading) {
+                                Text(experiment.userFacingName)
+                                Text(experiment.slug).font(.caption)
                             }
                         }
                     }
                 }
-            }.navigationBarTitle("Experiments Settings")
-        }
+            }
+        }.navigationBarTitle("Experiments Settings")
     }
 }
 

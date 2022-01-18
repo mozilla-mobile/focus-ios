@@ -2,44 +2,61 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Combine
 import SwiftUI
 import Nimbus
 
+private let notEnrolledBranchSlug = "not-enrolled"
+
 struct InternalExperimentDetailView {
     let experiment: AvailableExperiment
-    @State private var selectedBranch: String
+    @State private var selectedBranchSlug: String
+    let pickerBranches: [String]
     
     init(experiment: AvailableExperiment) {
         self.experiment = experiment
-        self.selectedBranch = experiment.referenceBranch ?? "" // TODO Can this actually be nil?
+        self.selectedBranchSlug = NimbusWrapper.shared.getEnrolledBranchSlug(forExperiment: experiment) ?? notEnrolledBranchSlug
+        self.pickerBranches = [notEnrolledBranchSlug] + experiment.branches.map { $0.slug }
     }
 }
 
 extension InternalExperimentDetailView: View {
     var body: some View {
-        NavigationView {
-            Form {
-                SwiftUI.Section {
-                    Text(experiment.userFacingDescription)
+        Form {
+            SwiftUI.Section {
+                Text(experiment.userFacingDescription)
+            }
+            SwiftUI.Section(header: Text("Available Branches")) {
+                ForEach(experiment.branches, id: \.slug) { branch in
+                    HStack {
+                        Text(branch.slug)
+                        Spacer()
+                        Text("\(branch.ratio)")
+                    }
                 }
-                SwiftUI.Section(header: Text("Available Branches")) {
-                    ForEach(experiment.branches, id: \.slug) { branch in
-                        HStack {
-                            Text(branch.slug)
-                            Spacer()
-                            Text("\(branch.ratio)")
+            }
+            SwiftUI.Section {
+                Picker(selection: $selectedBranchSlug, label: Text("Active Branch")) {
+                    ForEach(pickerBranches, id: \.self) { branch in
+                        Text(branch)
+                    }
+                }.onReceive(Just(selectedBranchSlug)) { newValue in
+                    if newValue != notEnrolledBranchSlug {
+                        if NimbusWrapper.shared.getEnrolledBranchSlug(forExperiment: experiment) != newValue {
+                            if let branch = experiment.branches.first(where: { $0.slug == newValue }) {
+                                print("MOO Opting in to \(experiment.slug) / \(branch.slug)")
+                                NimbusWrapper.shared.optIn(toExperiment: experiment, withBranch: branch)
+                            }
+                        }
+                    } else {
+                        if NimbusWrapper.shared.getEnrolledBranchSlug(forExperiment: experiment) != nil {
+                            print("MOO Opting out of \(experiment.slug)")
+                            NimbusWrapper.shared.optOut(ofExperiment: experiment)
                         }
                     }
                 }
-                SwiftUI.Section {
-                    Picker(selection: $selectedBranch, label: Text("Active Branch")) {
-                        ForEach(experiment.branches, id: \.slug) { branch in
-                            Text(branch.slug)
-                        }
-                    }
-                }
-            }.navigationBarTitle(experiment.userFacingName)
-        }
+            }
+        }.navigationBarTitle(experiment.userFacingName)
     }
 }
 

@@ -68,10 +68,30 @@ class NimbusWrapper {
         self.nimbus?.applyPendingExperiments()
         self.nimbus?.fetchExperiments()
     }
-    
-    var shouldHaveBoldTitle: Bool { nimbus?.getVariables(featureId: .nimbusValidation).getBool("bold-tip-title") == true }
-        
-    func availableExperiments() -> [AvailableExperiment] {
+}
+
+// Helper functions for the internal settings
+
+extension NimbusWrapper {
+    func getAvailableExperiments() -> [AvailableExperiment] {
         return self.nimbus?.getAvailableExperiments() ?? []
     }
+    
+    func getEnrolledBranchSlug(forExperiment experiment: AvailableExperiment) -> String? {
+        return self.nimbus?.getExperimentBranch(experimentId: experiment.slug)
+    }
+
+    func optIn(toExperiment experiment: AvailableExperiment, withBranch branch: ExperimentBranch) {
+        self.nimbus?.optIn(experiment.slug, branch: branch.slug)
+    }
+    
+    func optOut(ofExperiment experiment: AvailableExperiment) {
+        self.nimbus?.optOut(experiment.slug)
+    }
+}
+
+// Experiment specific shortcuts to check enrollment
+
+extension NimbusWrapper {
+    var shouldHaveBoldTitle: Bool { nimbus?.getVariables(featureId: .nimbusValidation).getBool("bold-tip-title") == true }
 }

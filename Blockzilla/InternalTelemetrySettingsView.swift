@@ -7,21 +7,19 @@ import Glean
 
 struct InternalTelemetrySettingsView: View {
     var body: some View {
-        NavigationView {
-            Form {
-                SwiftUI.Section {
-                    Text("Telemetry Identifier")
-                    Text("A974A227-B8F1-48E7-9547-759AB68AC4D3") // TODO
-                        .font(.caption)
-                }
+        Form {
+            SwiftUI.Section {
+                Text("Telemetry Identifier")
+                Text("A974A227-B8F1-48E7-9547-759AB68AC4D3") // TODO
+                    .font(.caption)
+            }
 
-                SwiftUI.Section {
-                    Button("Enable Testing Mode") {
-                        Glean.shared.enableTestingMode()
-                    }
+            SwiftUI.Section {
+                Button("Enable Testing Mode") {
+                    Glean.shared.enableTestingMode()
                 }
-            }.navigationBarTitle("Telemetry Settings")
-        }
+            }
+        }.navigationBarTitle("Telemetry Settings")
     }
 }
 

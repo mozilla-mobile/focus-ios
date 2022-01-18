@@ -11,7 +11,7 @@ struct InternalSettingsView: View {
                 InternalTelemetrySettingsView()
             }
             NavigationLink("Experiments") {
-                InternalExperimentsSettingsView(availableExperiments: NimbusWrapper.shared.availableExperiments())
+                InternalExperimentsSettingsView(availableExperiments: NimbusWrapper.shared.getAvailableExperiments())
             }
         }.navigationBarTitle("Internal Settings")
     }
