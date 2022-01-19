@@ -1,0 +1,50 @@
+name: Bitrise Xcode Check and Update
+
+on: 
+  schedule:
+  - cron: '0 */6 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.7]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r ./github-actions-scripts/requirements.txt
+    - name: Modify bitrise.yml 
+      run: |
+        python ./github-actions-scripts/update-bitrise-file-latest-xcode.py
+    - name: Get new xcode version to be used in the PR info
+      run: |
+        cd github-actions-scripts/
+        chmod u+x read-xcode-new-version.sh
+        echo "version=$(./read-xcode-new-version.sh)" >> $GITHUB_ENV
+    - name: Remove temp file created to store the tag info
+      run: |
+        cd github-actions-scripts/
+        [ ! -e newest_xcode.txt ] || rm newest_xcode.txt
+    - name: Commit and push if bitrise.yml changed
+      run: |-
+        git diff
+        git diff --quiet || (git add bitrise.yml)
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v3
+      with:
+        # Add the new xcode version to the branch and PR info
+        commit-message: Auto Update Bitrise.YML
+        author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+        committer: GitHub <noreply@github.com>
+        title: Update Bitrise NewXcodeVersions Workflow Xcode Stack ${{ env.version }}
+        branch: update-br-new-xcode-version-${{ env.version }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        labels: Do Not Land
