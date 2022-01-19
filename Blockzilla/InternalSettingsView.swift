@@ -7,9 +7,6 @@ import SwiftUI
 struct InternalSettingsView: View {
     var body: some View {
         Form {
-            NavigationLink("Telemetry") {
-                InternalTelemetrySettingsView()
-            }
             NavigationLink("Experiments") {
                 InternalExperimentsSettingsView(availableExperiments: NimbusWrapper.shared.getAvailableExperiments())
             }

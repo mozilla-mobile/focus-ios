@@ -222,7 +222,6 @@
 		F85F7A292655AD5800395515 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A282655AD5800395515 /* SnapKit */; };
 		F85F7A2B2655AD5800395515 /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2A2655AD5800395515 /* Fuzi */; };
 		F85F7A2F2655AD5800395515 /* Telemetry in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2E2655AD5800395515 /* Telemetry */; };
-		F86179992795D5BB00CFD324 /* InternalTelemetrySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86179982795D5BB00CFD324 /* InternalTelemetrySettingsView.swift */; };
 		F861799B2795D95E00CFD324 /* InternalExperimentsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F861799A2795D95E00CFD324 /* InternalExperimentsSettingsView.swift */; };
 		F861799D2795EE9800CFD324 /* InternalExperimentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F861799C2795EE9800CFD324 /* InternalExperimentDetailView.swift */; };
 		F861799F27961F4200CFD324 /* InternalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F861799E27961F4200CFD324 /* InternalSettings.swift */; };
@@ -1005,7 +1004,6 @@
 		F8324CDF264EA223007E4BFA /* gpl.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = gpl.html; sourceTree = "<group>"; };
 		F8324CE0264EA223007E4BFA /* licenses.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = licenses.html; sourceTree = "<group>"; };
 		F8324CE1264EA223007E4BFA /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
-		F86179982795D5BB00CFD324 /* InternalTelemetrySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalTelemetrySettingsView.swift; sourceTree = "<group>"; };
 		F861799A2795D95E00CFD324 /* InternalExperimentsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalExperimentsSettingsView.swift; sourceTree = "<group>"; };
 		F861799C2795EE9800CFD324 /* InternalExperimentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalExperimentDetailView.swift; sourceTree = "<group>"; };
 		F861799E27961F4200CFD324 /* InternalSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalSettings.swift; sourceTree = "<group>"; };
@@ -1593,7 +1591,6 @@
 				F86D00602790978700E83177 /* InternalSettingsView.swift */,
 				F861799A2795D95E00CFD324 /* InternalExperimentsSettingsView.swift */,
 				F861799C2795EE9800CFD324 /* InternalExperimentDetailView.swift */,
-				F86179982795D5BB00CFD324 /* InternalTelemetrySettingsView.swift */,
 				D5D067FA252F945D00C35227 /* metrics.yaml */,
 			);
 			path = Blockzilla;
@@ -2143,7 +2140,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F86179992795D5BB00CFD324 /* InternalTelemetrySettingsView.swift in Sources */,
 				D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */,
 				C89AA96E271720330089838F /* ThemeTableViewToggleCell.swift in Sources */,
 				C8337DE22710893700093D42 /* UIImage+AppImages.swift in Sources */,

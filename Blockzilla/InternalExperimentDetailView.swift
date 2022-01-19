@@ -44,13 +44,11 @@ extension InternalExperimentDetailView: View {
                     if newValue != notEnrolledBranchSlug {
                         if NimbusWrapper.shared.getEnrolledBranchSlug(forExperiment: experiment) != newValue {
                             if let branch = experiment.branches.first(where: { $0.slug == newValue }) {
-                                print("MOO Opting in to \(experiment.slug) / \(branch.slug)")
                                 NimbusWrapper.shared.optIn(toExperiment: experiment, withBranch: branch)
                             }
                         }
                     } else {
                         if NimbusWrapper.shared.getEnrolledBranchSlug(forExperiment: experiment) != nil {
-                            print("MOO Opting out of \(experiment.slug)")
                             NimbusWrapper.shared.optOut(ofExperiment: experiment)
                         }
                     }
