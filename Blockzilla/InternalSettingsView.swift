@@ -7,8 +7,14 @@ import SwiftUI
 struct InternalSettingsView: View {
     var body: some View {
         Form {
-            NavigationLink("Experiments") {
-                InternalExperimentsSettingsView(availableExperiments: NimbusWrapper.shared.getAvailableExperiments())
+            SwiftUI.Section {
+                NavigationLink("Experiments") {
+                    InternalExperimentsSettingsView(availableExperiments: NimbusWrapper.shared.getAvailableExperiments())
+                }
+            }
+            SwiftUI.Section {
+                Text("The settings in this section are used by Focus developers and testers.")
+                    .font(.caption)
             }
         }.navigationBarTitle("Internal Settings")
     }
