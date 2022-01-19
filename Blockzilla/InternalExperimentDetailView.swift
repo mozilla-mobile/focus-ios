@@ -38,7 +38,11 @@ extension InternalExperimentDetailView: View {
             SwiftUI.Section {
                 Picker(selection: $selectedBranchSlug, label: Text("Active Branch")) {
                     ForEach(pickerBranches, id: \.self) { branch in
-                        Text(branch)
+                        if branch == notEnrolledBranchSlug {
+                            Text("Not Enrolled")
+                        } else {
+                            Text(branch)
+                        }
                     }
                 }.onReceive(Just(selectedBranchSlug)) { newValue in
                     if newValue != notEnrolledBranchSlug {
