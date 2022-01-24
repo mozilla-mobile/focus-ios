@@ -78,6 +78,21 @@ workflows:
     before_run: []
 
 
+  configure-sentry:
+    steps:
+    - script@1:
+        title: Configure Sentry
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            /usr/libexec/PlistBuddy -c "Add :SentryDSN string ${SENTRY_DSN}" Blockzilla/Info.plist
+    meta:
+      bitrise.io:
+        stack: osx-xcode-13.2.x
+    before_run: []
+
+
   set-default-browser-entitlement:
     steps:
     - script@1:
@@ -127,6 +142,7 @@ workflows:
       - set-project-version
       - set-default-browser-entitlement
       - configure-nimbus
+      - configure-sentry
 
 
   runParallelTests:

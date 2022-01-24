@@ -362,6 +362,11 @@ private let SentryDSNKey = "SentryDSN"
 
 extension AppDelegate {
     func setupCrashReporting() {
+        // Do not enable crash reporting if collection of anonymous usage data is disabled.
+        if Settings.getToggle(.sendAnonymousUsageData) {
+            return
+        }
+        
         if let sentryDSN = Bundle.main.object(forInfoDictionaryKey: SentryDSNKey) as? String {
             SentrySDK.start { options in
                 options.dsn = sentryDSN
