@@ -4,6 +4,7 @@
 
 import Foundation
 import UIKit
+import Sentry
 
 class AboutViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AboutHeaderViewDelegate {
     
@@ -230,8 +231,19 @@ private class AboutHeaderView: UIView {
         self.init(frame: CGRect.zero)
         addSubviews()
         configureConstraints()
+    
+        // TODO REMOVE THIS IS JUST FOR TESTING
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleSecretMenuActivation(sender:)))
+        gestureRecognizer.numberOfTapsRequired = 5
+        logo.isUserInteractionEnabled = true
+        logo.addGestureRecognizer(gestureRecognizer)
     }
-
+    
+    // TODO REMOVE THIS IS JUST FOR TESTING
+    @objc private func handleSecretMenuActivation(sender: UITapGestureRecognizer) {
+        SentrySDK.crash()
+    }
+    
     @objc private func didPressLearnMore() {
         delegate?.aboutHeaderViewDidPressLearnMore(self)
     }
@@ -248,6 +260,8 @@ private class AboutHeaderView: UIView {
         logo.snp.makeConstraints { make in
             make.centerX.equalTo(self)
             make.top.equalTo(self).offset(50)
+            
+            
         }
 
         versionNumber.snp.makeConstraints { make in
