@@ -103,6 +103,7 @@ workflows:
             set -x
             DWARF_DSYM_FOLDER_PATH=$(xcodebuild -showBuildSettings \
               | grep DWARF_DSYM_FOLDER_PATH | awk '{split($0,a," = "); print a[2]}')
+            find "$DWARF_DSYM_FOLDER_PATH" -ls
             tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
               --org "$SENTRY_ORG" --project "$SENTRY_PROJECT" "$DWARF_DSYM_FOLDER_PATH"
     meta:
