@@ -4,7 +4,6 @@
 
 import Foundation
 import UIKit
-import Sentry
 
 class AboutViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AboutHeaderViewDelegate {
     
@@ -232,7 +231,7 @@ private class AboutHeaderView: UIView {
         addSubviews()
         configureConstraints()
     }
-    
+
     @objc private func didPressLearnMore() {
         delegate?.aboutHeaderViewDidPressLearnMore(self)
     }
@@ -249,8 +248,6 @@ private class AboutHeaderView: UIView {
         logo.snp.makeConstraints { make in
             make.centerX.equalTo(self)
             make.top.equalTo(self).offset(50)
-            
-            
         }
 
         versionNumber.snp.makeConstraints { make in
