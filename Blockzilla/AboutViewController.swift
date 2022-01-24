@@ -231,17 +231,6 @@ private class AboutHeaderView: UIView {
         self.init(frame: CGRect.zero)
         addSubviews()
         configureConstraints()
-    
-        // TODO REMOVE THIS IS JUST FOR TESTING
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleSecretMenuActivation(sender:)))
-        gestureRecognizer.numberOfTapsRequired = 5
-        logo.isUserInteractionEnabled = true
-        logo.addGestureRecognizer(gestureRecognizer)
-    }
-    
-    // TODO REMOVE THIS IS JUST FOR TESTING
-    @objc private func handleSecretMenuActivation(sender: UITapGestureRecognizer) {
-        SentrySDK.capture(exception: NSException(name: .genericException, reason: "SomethingReason", userInfo: nil))
     }
     
     @objc private func didPressLearnMore() {
