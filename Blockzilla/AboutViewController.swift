@@ -241,7 +241,7 @@ private class AboutHeaderView: UIView {
     
     // TODO REMOVE THIS IS JUST FOR TESTING
     @objc private func handleSecretMenuActivation(sender: UITapGestureRecognizer) {
-        SentrySDK.capture(exception: NSException(name: "SomethingName", reason: "SomethingReason", userInfo: nil))
+        SentrySDK.capture(exception: NSException(name: .genericException, reason: "SomethingReason", userInfo: nil))
     }
     
     @objc private func didPressLearnMore() {
