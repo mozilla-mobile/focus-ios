@@ -93,25 +93,6 @@ workflows:
     before_run: []
 
 
-  upload-symbols:
-    steps:
-    - script@1:
-        title: Upload Symbols
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -x
-            DWARF_DSYM_FOLDER_PATH=$(xcodebuild -showBuildSettings \
-              | grep DWARF_DSYM_FOLDER_PATH | awk '{split($0,a," = "); print a[2]}')
-            find "$DWARF_DSYM_FOLDER_PATH" -ls
-            tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
-              --org "$SENTRY_ORG" --project "$SENTRY_PROJECT" "$DWARF_DSYM_FOLDER_PATH"
-    meta:
-      bitrise.io:
-        stack: osx-xcode-13.2.x
-    before_run: []
-
-
   set-default-browser-entitlement:
     steps:
     - script@1:
@@ -142,6 +123,15 @@ workflows:
         - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"
         - itunescon_user: "$APPLE_ACCOUNT_ID"
+    - script@1:
+        title: Upload Focus Symbols
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            find "$BITRISE_DSYM_DIR_PATH" -ls
+            tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+              --org mozilla --project focus-ios "$BITRISE_DSYM_DIR_PATH"
     - xcode-archive@3:
         inputs:
         - scheme: Klar
@@ -152,6 +142,15 @@ workflows:
         - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"
         - itunescon_user: "$APPLE_ACCOUNT_ID"
+    - script@1:
+        title: Upload Klar Symbols
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            find "$BITRISE_DSYM_DIR_PATH" -ls
+            tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+              --org mozilla --project klar-ios "$BITRISE_DSYM_DIR_PATH"
     meta:
       bitrise.io:
         stack: osx-xcode-13.2.x
@@ -162,8 +161,6 @@ workflows:
       - set-default-browser-entitlement
       - configure-nimbus
       - configure-sentry
-    after_run:
-      - upload-symbols
 
 
   runParallelTests:
