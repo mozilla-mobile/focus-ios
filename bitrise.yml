@@ -93,6 +93,24 @@ workflows:
     before_run: []
 
 
+  upload-symbols:
+    steps:
+    - script@1:
+        title: Upload Symbols
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            DWARF_DSYM_FOLDER_PATH=$(xcodebuild -showBuildSettings \
+              | grep DWARF_DSYM_FOLDER_PATH | awk '{split($0,a," = "); print a[2]}')
+            sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+              --org "$SENTRY_ORG" --project "$SENTRY_PROJECT" "$DWARF_DSYM_FOLDER_PATH"
+    meta:
+      bitrise.io:
+        stack: osx-xcode-13.2.x
+    before_run: []
+
+
   set-default-browser-entitlement:
     steps:
     - script@1:
@@ -143,6 +161,8 @@ workflows:
       - set-default-browser-entitlement
       - configure-nimbus
       - configure-sentry
+    after_run:
+      - upload-symbols
 
 
   runParallelTests:
