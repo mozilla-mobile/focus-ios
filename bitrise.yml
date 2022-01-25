@@ -58,7 +58,6 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-13.2.x
-    before_run: []
 
 
   configure-nimbus:
@@ -76,7 +75,6 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-13.2.x
-    before_run: []
 
 
   configure-sentry:
@@ -91,7 +89,6 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-13.2.x
-    before_run: []
 
 
   set-default-browser-entitlement:
@@ -107,7 +104,6 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-13.2.x
-    before_run: []
 
 
   release:
@@ -130,7 +126,6 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            find "$BITRISE_DSYM_DIR_PATH" -ls
             tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
               --org mozilla --project focus-ios "$BITRISE_DSYM_DIR_PATH"
     - xcode-archive@3:
@@ -149,7 +144,6 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            find "$BITRISE_DSYM_DIR_PATH" -ls
             tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
               --org mozilla --project klar-ios "$BITRISE_DSYM_DIR_PATH"
     meta:
