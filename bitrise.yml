@@ -58,7 +58,6 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-13.2.x
-    before_run: []
 
 
   configure-nimbus:
@@ -70,12 +69,26 @@ workflows:
             #!/usr/bin/env bash
             set -x
             /usr/libexec/PlistBuddy -c "Add :NimbusServerURL string ${NIMBUS_SERVER_URL}" Blockzilla/Info.plist
+            /usr/libexec/PlistBuddy -c "Add :NimbusStagingServerURL string ${NIMBUS_STAGING_SERVER_URL}" Blockzilla/Info.plist
             /usr/libexec/PlistBuddy -c "Add :NimbusAppName string ${NIMBUS_APP_NAME}" Blockzilla/Info.plist
             /usr/libexec/PlistBuddy -c "Add :NimbusAppChannel string ${NIMBUS_APP_CHANNEL}" Blockzilla/Info.plist
     meta:
       bitrise.io:
         stack: osx-xcode-13.2.x
-    before_run: []
+
+
+  configure-sentry:
+    steps:
+    - script@1:
+        title: Configure Sentry
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            /usr/libexec/PlistBuddy -c "Add :SentryDSN string ${SENTRY_DSN}" Blockzilla/Info.plist
+    meta:
+      bitrise.io:
+        stack: osx-xcode-13.2.x
 
 
   set-default-browser-entitlement:
@@ -91,7 +104,6 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-13.2.x
-    before_run: []
 
 
   release:
@@ -108,6 +120,14 @@ workflows:
         - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"
         - itunescon_user: "$APPLE_ACCOUNT_ID"
+    - script@1:
+        title: Upload Focus Symbols
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+              --org mozilla --project focus-ios "$BITRISE_DSYM_DIR_PATH"
     - xcode-archive@3:
         inputs:
         - scheme: Klar
@@ -118,6 +138,14 @@ workflows:
         - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"
         - itunescon_user: "$APPLE_ACCOUNT_ID"
+    - script@1:
+        title: Upload Klar Symbols
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+              --org mozilla --project klar-ios "$BITRISE_DSYM_DIR_PATH"
     meta:
       bitrise.io:
         stack: osx-xcode-13.2.x
@@ -127,6 +155,7 @@ workflows:
       - set-project-version
       - set-default-browser-entitlement
       - configure-nimbus
+      - configure-sentry
 
 
   runParallelTests:
