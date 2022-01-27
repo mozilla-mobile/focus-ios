@@ -83,7 +83,7 @@ class SettingAppearanceTest: BaseTestCase {
 
         otherContentSwitch.tap()
         let alertsQuery = app.alerts
-
+        waitForExistence(alertsQuery.buttons[UIConstants.strings.settingsBlockOtherYes])
         // Say yes this time, the switch should be enabled
         alertsQuery.buttons[UIConstants.strings.settingsBlockOtherYes].tap()
         XCTAssertEqual(otherContentSwitch.value as! String, "1")
