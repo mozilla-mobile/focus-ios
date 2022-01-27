@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="URLBarApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Fne-IB-WO3"/>
+                        <viewControllerLayoutGuide type="bottom" id="yYB-CL-RRq"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yer-tv-eZi" customClass="URLBarView" customModule="URLBar">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="200"/>
+                                <color key="backgroundColor" systemColor="systemPurpleColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="MLD-cN-dg2"/>
+                                </constraints>
+                            </view>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="104" translatesAutoresizingMaskIntoConstraints="NO" id="mbe-zf-k9h">
+                                <rect key="frame" x="84" y="432.5" width="246" height="31"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kch-Zx-Nzd">
+                                        <rect key="frame" x="0.0" y="0.0" width="71" height="31"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="filled" title="browse"/>
+                                        <connections>
+                                            <action selector="browse:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4xF-fP-3A0"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gql-HK-X6h">
+                                        <rect key="frame" x="175" y="0.0" width="71" height="31"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="filled" title="home"/>
+                                        <connections>
+                                            <action selector="home:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FUc-hp-Qfd"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Yer-tv-eZi" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="BHF-Uf-X9L"/>
+                            <constraint firstItem="Yer-tv-eZi" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Fix-NA-XUY"/>
+                            <constraint firstAttribute="trailing" secondItem="Yer-tv-eZi" secondAttribute="trailing" id="drd-UD-cRR"/>
+                            <constraint firstItem="mbe-zf-k9h" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="jpI-dd-U7u"/>
+                            <constraint firstItem="mbe-zf-k9h" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="nt0-hI-AbC"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="urlBar" destination="Yer-tv-eZi" id="eoP-an-bFw"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="139" y="87"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemPurpleColor">
+            <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

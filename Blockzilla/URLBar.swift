@@ -1042,6 +1042,10 @@ class TrackingProtectionBadge: UIView {
             connectionNotSecure.alpha = 0
         }
     }
+    
+    override var intrinsicContentSize: CGSize {
+        return CGSize(width: CGFloat(UIConstants.layout.shieldIconSize), height:  CGFloat(UIConstants.layout.shieldIconSize))
+    }
 }
 
 class CollapsedTrackingProtectionBadge: TrackingProtectionBadge {
