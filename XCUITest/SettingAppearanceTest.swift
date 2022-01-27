@@ -49,6 +49,7 @@ class SettingAppearanceTest: BaseTestCase {
         safariSwitch.tap()
 
         // Check the information page
+        waitForExistence(app.staticTexts["Open Settings App"], timeout: 5)
         XCTAssert(app.staticTexts["Open Settings App"].exists)
         XCTAssert(app.staticTexts["Tap Safari, then select Content Blockers"].exists)
         if app.label == "Firefox Focus" {
