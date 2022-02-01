@@ -13,18 +13,18 @@
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="URLBarApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Fne-IB-WO3"/>
-                        <viewControllerLayoutGuide type="bottom" id="yYB-CL-RRq"/>
+                        <viewControllerLayoutGuide type="top" id="bv0-h8-ou6"/>
+                        <viewControllerLayoutGuide type="bottom" id="cN8-pk-8Rz"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yer-tv-eZi" customClass="URLBarView" customModule="URLBar">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="200"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="150"/>
                                 <color key="backgroundColor" systemColor="systemPurpleColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="MLD-cN-dg2"/>
+                                    <constraint firstAttribute="height" constant="150" id="MLD-cN-dg2"/>
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="104" translatesAutoresizingMaskIntoConstraints="NO" id="mbe-zf-k9h">

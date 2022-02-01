@@ -11,6 +11,9 @@ let package = Package(
         .library(
             name: "URLBar",
             targets: ["URLBar"]),
+        .library(
+            name: "UIHelpers",
+            targets: ["UIHelpers"])
     ],
     dependencies: [
         .package(url: "https://github.com/SnapKit/SnapKit.git", from: "5.0.1")
@@ -19,8 +22,12 @@ let package = Package(
         .target(
             name: "URLBar",
             dependencies: [
+                "UIHelpers",
                 .product(name: "SnapKit", package: "SnapKit")
             ]
+        ),
+        .target(
+            name: "UIHelpers"
         )
     ]
 )

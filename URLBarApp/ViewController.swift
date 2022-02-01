@@ -18,13 +18,11 @@ class ViewController: UIViewController {
     }
 
     @IBAction func browse(_ sender: Any) {
-        urlBar.browsingSubject.send(.browsing)
-        print("hello")
+        urlBar.browsingState = .browsing
     }
     
     @IBAction func home(_ sender: Any) {
-        urlBar.browsingSubject.send(.home)
-        print("hello")
+        urlBar.browsingState = .home
     }
     
 }

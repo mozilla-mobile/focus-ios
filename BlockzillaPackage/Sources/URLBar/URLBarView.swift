@@ -2,135 +2,140 @@ import UIKit
 import SwiftUI
 import SnapKit
 import Combine
+import UIHelpers
 
 typealias UISpacer = UIView
 
-extension UIApplication {
-    var orientation : UIInterfaceOrientation? {
-        UIApplication
-            .shared
-            .windows
-            .first(where: { $0.isKeyWindow })?
-            .windowScene?
-            .interfaceOrientation
-    }
-}
-
-extension UIView {
-    func show() {
-        self.isHidden = false
-        self.alpha = 1
-    }
-    
-    func hide() {
-        self.isHidden = true
-        self.alpha = 0
-    }
-}
-
 public class URLBarView: UIView {
     
-    public enum BrowsingState {
+    public enum BrowsingState: Equatable {
         case home
         case browsing
     }
     
-    public enum Orientation {
+    public enum Orientation: Equatable {
         case portrait
         case landscape
+        
+        init () {
+            self = UIApplication.shared.orientation?.isPortrait ?? true ? .portrait : .landscape
+        }
     }
     
-    public enum Selection {
+    public enum Selection: Equatable {
         case selected
         case unselected
     }
     
-    public let browsingSubject = CurrentValueSubject<BrowsingState, Never>(.home)
-    public let selectionSubject = CurrentValueSubject<Selection, Never>(.selected)
+    public enum Device: Equatable {
+        case iPhone
+        case iPad
+        
+        init() {
+            self = UIDevice.current.userInterfaceIdiom == .phone ? .iPhone : .iPad
+        }
+    }
+    
+    
+    @Published var currentSelection = Selection.selected
+    @Published public var browsingState = BrowsingState.home
     
     private let leftSpacer = UISpacer()
     private let rightSpacer = UISpacer()
     
-    
-    func adaptUI(for state: BrowsingState, selection: Selection) {
-        let device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
-        let orientation: Orientation = UIApplication.shared.orientation?.isPortrait ?? true ? .portrait : .landscape
-        
-        switch (state, device, orientation) {
-        case (.home, .phone, _):
-            siteNavigationStackView.hide()
-            leftSpacer.hide()
-            urlStackView.show()
-            rightSpacer.hide()
-            menuStackView.show()
-            stopReloadButton.hide()
-            contextMenuButton.show()
-            deleteButton.hide()
+    func adaptUI(for browsingState: BrowsingState, device: Device = .init(), orientation: Orientation = .init()) {
+        switch (browsingState, device, orientation) {
+        case (.home, .iPhone, .portrait), (.home, .iPhone, .landscape):
+            menuStackView.animateShow(firstDo: {
+                self.deleteButton.animateHideFromSuperview()
+                self.stackView.appendArrangedSubview(self.menuStackView)
+            })
+            
+            stopReloadButton.animateHideFromSuperview()
+            siteNavigationStackView.animateHideFromSuperview()
            
-        case (.browsing, .phone, .portrait):
-            siteNavigationStackView.hide()
-            leftSpacer.hide()
-            urlStackView.show()
-            rightSpacer.hide()
-            stopReloadButton.show()
+        case (.browsing, .iPhone, .portrait):
+            siteNavigationStackView.animateHideFromSuperview()
             
-            menuStackView.hide()
-            contextMenuButton.hide()
-            deleteButton.hide()
+            stopReloadButton.animateShow(firstDo: {
+                self.urlStackView.appendArrangedSubview(self.stopReloadButton)
+            })
+
+            menuStackView.animateHideFromSuperview()
             
-        case (.browsing, .phone, .landscape):
-            siteNavigationStackView.show()
-            leftSpacer.hide()
-            urlStackView.show()
-            rightSpacer.hide()
-            stopReloadButton.show()
-            menuStackView.show()
-            deleteButton.show()
+        case (.browsing, .iPhone, .landscape):
+            siteNavigationStackView.animateShow(firstDo: {
+                self.stackView.prependArrangedSubview(self.siteNavigationStackView)
+            })
             
-        case (.home, .pad, _):
-            siteNavigationStackView.hide()
-            leftSpacer.show()
-            urlStackView.show()
-            rightSpacer.show()
-            stopReloadButton.hide()
-            menuStackView.show()
-            deleteButton.hide()
+            menuStackView.animateShow {
+                self.deleteButton.animateShow(firstDo: {
+                    self.menuStackView.prependArrangedSubview(self.deleteButton)
+                })
+                self.stackView.appendArrangedSubview(self.menuStackView)
+            } thenDo: {
+                self.stopReloadButton.animateShow(firstDo: {
+                    self.urlStackView.appendArrangedSubview(self.stopReloadButton)
+                })
+            }
             
-        case (.browsing, .pad, _):
-            siteNavigationStackView.show()
-            leftSpacer.show()
-            urlStackView.show()
-            rightSpacer.hide()
-            stopReloadButton.show()
-            menuStackView.show()
-            deleteButton.show()
+        case (.home, .iPad, _):
+            siteNavigationStackView.animateHideFromSuperview()
+            stopReloadButton.animateHideFromSuperview()
+            deleteButton.animateHide()
             
-        default: ()
+        case (.browsing, .iPad, _):
+            siteNavigationStackView.animateShow(firstDo: {
+                self.stackView.prependArrangedSubview(self.siteNavigationStackView)
+            })
+            stopReloadButton.animateShow(firstDo: {
+                self.urlStackView.appendArrangedSubview(self.stopReloadButton)
+            })
+            deleteButton.animateShow()
         }
-        
-        switch selection {
-        case .selected:
-            self.cancelButton.show()
-            self.shieldIcon.hide()
-        case .unselected:
-            self.cancelButton.hide()
-            self.shieldIcon.show()
-        }
-//        stackView.setNeedsLayout()
-//        stackView.layoutIfNeeded()
     }
     
-    lazy var stackView: UIStackView = {
-        let stackView = UIStackView(
-            arrangedSubviews: [
-                siteNavigationStackView,
+    func adaptUI(for selection: Selection) {
+        switch selection {
+        case .selected:
+            self.cancelButton.animateShow(firstDo: {
+                guard
+                    let index = self.stackView.arrangedSubviews.firstIndex(of: self.urlStackView)
+                else { return }
+                
+                self.stackView.insertArrangedSubview(self.cancelButton, at: index)
+            })
+            
+            self.shieldIcon.animateHide(thenDo:  {
+                self.urlTextField.becomeFirstResponder()
+            })
+            
+            
+        case .unselected:
+            self.urlTextField.resignFirstResponder()
+            self.cancelButton.animateHideFromSuperview()
+            self.shieldIcon.animateShow()
+        }
+    }
+    
+    var views: [UIView] {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            return [
+                urlStackView,
+                menuStackView
+            ]
+        } else {
+            return [
                 leftSpacer,
-                cancelButton,
                 urlStackView,
                 rightSpacer,
                 menuStackView
             ]
-        )
+        }
+    }
+    
+    lazy var stackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: self.views)
         stackView.axis = .horizontal
         stackView.spacing = 8
         stackView.isLayoutMarginsRelativeArrangement = true
@@ -158,14 +163,16 @@ public class URLBarView: UIView {
     
     lazy var cancelButton: UIButton = {
         let cancelButton = UIButton()
-//        cancelButton.isHidden = true
-//        cancelButton.alpha = 0
         cancelButton.setImage(.cancel, for: .normal)
         cancelButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         cancelButton.setContentHuggingPriority(.required, for: .horizontal)
         cancelButton.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
         cancelButton.accessibilityIdentifier = "URLBar.cancelButton"
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            cancelButton.widthAnchor.constraint(equalToConstant: 44),
+            cancelButton.heightAnchor.constraint(equalToConstant: 44),
+        ])
         return cancelButton
     }()
     
@@ -185,6 +192,10 @@ public class URLBarView: UIView {
         contextMenuButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         contextMenuButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         contextMenuButton.setContentHuggingPriority(.required, for: .horizontal)
+        NSLayoutConstraint.activate([
+            contextMenuButton.widthAnchor.constraint(equalToConstant: 44),
+            contextMenuButton.heightAnchor.constraint(equalToConstant: 44),
+        ])
         return contextMenuButton
     }()
     
@@ -211,9 +222,7 @@ public class URLBarView: UIView {
     lazy var siteNavigationStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [backButton, forwardButton])
         stackView.axis = .horizontal
-        stackView.spacing = 8
-        stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.layoutMargins = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+        stackView.spacing = 0
         stackView.setContentCompressionResistancePriority(.required, for: .horizontal)
         stackView.setContentHuggingPriority(.required, for: .horizontal)
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -223,9 +232,7 @@ public class URLBarView: UIView {
     lazy var menuStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [deleteButton, contextMenuButton])
         stackView.axis = .horizontal
-        stackView.spacing = 8
-        stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.layoutMargins = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+        stackView.spacing = 0
         stackView.setContentCompressionResistancePriority(.required, for: .horizontal)
         stackView.setContentHuggingPriority(.required, for: .horizontal)
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -241,6 +248,10 @@ public class URLBarView: UIView {
         backButton.isEnabled = false
         backButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         backButton.setContentHuggingPriority(.required, for: .horizontal)
+        NSLayoutConstraint.activate([
+            backButton.widthAnchor.constraint(equalToConstant: 44),
+            backButton.heightAnchor.constraint(equalToConstant: 44),
+        ])
         return backButton
     }()
     
@@ -251,8 +262,12 @@ public class URLBarView: UIView {
         forwardButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
 //        forwardButton.accessibilityLabel = UIConstants.strings.browserForward
         forwardButton.isEnabled = false
-        forwardButton.setContentCompressionResistancePriority(.required, for: .horizontal)
-        forwardButton.setContentHuggingPriority(.required, for: .horizontal)
+        NSLayoutConstraint.activate([
+            forwardButton.widthAnchor.constraint(equalToConstant: 44),
+            forwardButton.heightAnchor.constraint(equalToConstant: 44),
+        ])
+//        forwardButton.setContentCompressionResistancePriority(.required, for: .horizontal)
+//        forwardButton.setContentHuggingPriority(.required, for: .horizontal)
         return forwardButton
     }()
     
@@ -276,6 +291,10 @@ public class URLBarView: UIView {
         deleteButton.isEnabled = false
         deleteButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         deleteButton.setContentHuggingPriority(.required, for: .horizontal)
+        NSLayoutConstraint.activate([
+            deleteButton.widthAnchor.constraint(equalToConstant: 44),
+            deleteButton.heightAnchor.constraint(equalToConstant: 44),
+        ])
         return deleteButton
     }()
     
@@ -284,7 +303,7 @@ public class URLBarView: UIView {
 //        urlText.font = .body15
         urlText.tintColor = .primaryText
         urlText.textColor = .primaryText
-        urlText.highlightColor = .accent.withAlphaComponent(0.4)
+//        urlText.highlightColor = .accent.withAlphaComponent(0.4)
         urlText.keyboardType = .webSearch
         urlText.autocapitalizationType = .none
         urlText.autocorrectionType = .no
@@ -317,18 +336,27 @@ public class URLBarView: UIView {
             .default
             .publisher(for: UIDevice.orientationDidChangeNotification, object: nil)
         
-        cancellable = Publishers.CombineLatest3(browsingSubject, selectionSubject, notificationSubject)
+        cancellable = Publishers.CombineLatest($browsingState, notificationSubject)
             .receive(on: DispatchQueue.main)
-            .sink { (browsingState, selection, _) in
-//                UIView.animate(withDuration: 0.1) {
-                    self.adaptUI(for: browsingState, selection: selection)
-//                }
-                
+            .map { (browsingState, _) in
+                return (browsingState, Orientation())
             }
+            .sink { newBrowsingState, orientation in
+                self.adaptUI(for: newBrowsingState, orientation: orientation)
+            }
+        
+        cancellable2 =  $currentSelection
+            .sink { newSelection in
+                guard newSelection != self.currentSelection else { return }
+                self.adaptUI(for: newSelection)
+            }
+        
+        adaptUI(for: browsingState)
+        adaptUI(for: currentSelection)
+        
         addSubview(urlBarBackgroundView)
         addSubview(stackView)
         setupLayout()
-        selectionSubject.send(.unselected)
     }
     
     private func setupLayout() {
@@ -351,8 +379,7 @@ public class URLBarView: UIView {
             //            stackView.topAnchor.constraint(equalTo: topAnchor),
 //            urlStackView.heightAnchor.constraint(equalToConstant: 40),
             
-            
-//            stackView.heightAnchor.constraint(equalToConstant: 50),
+            stackView.heightAnchor.constraint(equalToConstant: 44),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
             stackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
@@ -363,13 +390,12 @@ public class URLBarView: UIView {
     //custom views should override this to return true if
     //they cannot layout correctly using autoresizing.
     //from apple docs https://developer.apple.com/documentation/uikit/uiview/1622549-requiresconstraintbasedlayout
-    public override class var requiresConstraintBasedLayout: Bool {
-        return true
-    }
+//    public override class var requiresConstraintBasedLayout: Bool {
+//        return true
+//    }
     
     @objc func cancelPressed() {
-        selectionSubject.send(.unselected)
-        self.urlTextField.resignFirstResponder()
+        currentSelection = .unselected
     }
 }
 
@@ -390,7 +416,7 @@ extension URLBarView: AutocompleteTextFieldDelegate {
 //        }
         
         
-        selectionSubject.send(.selected)
+        currentSelection = .selected
         
         return true
     }
@@ -440,7 +466,7 @@ struct BackgroundViewContainer: UIViewRepresentable {
         return bar
     }
     func updateUIView(_ uiView: URLBarView, context: Context) {
-        uiView.browsingSubject.send(state)
+        uiView.browsingState = state
     }
 }
 
