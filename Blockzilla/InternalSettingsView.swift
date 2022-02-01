@@ -18,10 +18,10 @@ struct InternalSettingsView: View {
                 }
             }
             SwiftUI.Section {
-                Text("The settings in this section are used by Focus developers and testers.")
+                Text(verbatim: "The settings in this section are used by Focus developers and testers.")
                     .font(.caption)
             }
-        }.navigationBarTitle("Internal Settings")
+        }.navigationBarTitle(Text(verbatim: "Internal Settings"))
     }
 }
 

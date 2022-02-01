@@ -8,7 +8,7 @@ import Sentry
 struct InternalCrashReportingSettingsView: View {
     var body: some View {
         Form {
-            SwiftUI.Section(header: Text("Crash Triggers")) {
+            SwiftUI.Section(header: Text(verbatim: "Crash Triggers")) {
                 Button("SentrySDK.crash()") {
                     SentrySDK.crash()
                 }
@@ -22,7 +22,7 @@ struct InternalCrashReportingSettingsView: View {
                     SentrySDK.capture(error: NSError(domain: "TestDomain", code: 42, userInfo: ["UserInfo": "Something"]))
                 }
             }
-        }.navigationBarTitle("Crash Reporting Settings")
+        }.navigationBarTitle(Text(verbatim: "Crash Reporting Settings"))
     }
 }
 
