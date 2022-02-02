@@ -1755,17 +1755,21 @@ extension BrowserViewController: MenuActionable {
                   return
               }
         
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.menu, value: "firefox")
         UIApplication.shared.open(firefoxURL, options: [:])
+
+        GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "open_in_firefox"))
     }
     
     func findInPage() {
         NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: UIConstants.strings.findInPageNotification)))
+
+        GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "find_in_page"))
     }
     
     func openInDefaultBrowser(url: URL) {
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.menu, value: "default")
         UIApplication.shared.open(url, options: [:])
+
+        GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "open_in_default_browser"))
     }
     
     func openInChrome(url: URL) {
@@ -1785,6 +1789,8 @@ extension BrowserViewController: MenuActionable {
         
         // Open the URL with Chrome.
         UIApplication.shared.open(chromeURL, options: [:])
+
+        GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "open_in_chrome"))
     }
     
     var canOpenInFirefox: Bool {
@@ -1796,13 +1802,15 @@ extension BrowserViewController: MenuActionable {
     }
     
     func requestDesktopBrowsing() {
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.requestDesktop)
         NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification)))
+
+        GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "desktop_view_on"))
     }
     
     func requestMobileBrowsing() {
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.requestMobile)
         NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: UIConstants.strings.requestMobileNotification)))
+
+        GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "desktop_view_off"))
     }
     
     func showSharePage(for utils: OpenUtils, sender: UIView) {
@@ -1820,6 +1828,8 @@ extension BrowserViewController: MenuActionable {
         
         shareVC.becomeFirstResponder()
         self.present(shareVC, animated: true, completion: nil)
+
+        GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "share"))
     }
     
     func showSettings(shouldScrollToSiri: Bool = false) {
@@ -1831,7 +1841,7 @@ extension BrowserViewController: MenuActionable {
 
         modalDelegate.presentModal(viewController: settingsNavController, animated: true)
 
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.settingsButton)
+        GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "settings"))
     }
     
     func showHelp() {
@@ -1841,6 +1851,8 @@ extension BrowserViewController: MenuActionable {
     func showCopy() {
         urlBar.copyToClipboard()
         Toast(text: UIConstants.strings.copyURLToast).show()
+
+        GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "copy_url"))
     }
     
     func addToShortcuts(url: URL) {
@@ -1848,11 +1860,15 @@ extension BrowserViewController: MenuActionable {
         self.shortcutManager.addToShortcuts(shortcut: shortcut)
         GleanMetrics.Shortcuts.shortcutAddedCounter.add()
         TipManager.shortcutsTip = false
+
+        GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "add_to_shortcuts"))
     }
     
     func removeShortcut(url: URL) {
         let shortcut = Shortcut(url: url)
         self.shortcutManager.removeFromShortcuts(shortcut: shortcut)
         GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_browser_menu"].add()
+
+        GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "remove_from_shortcuts"))
     }
 }
