@@ -5,6 +5,7 @@
 import UIKit
 import Telemetry
 import Glean
+import Sentry
 
 protocol AppSplashController {
     var splashView: SplashView { get }
@@ -49,6 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             UserDefaults.standard.removePersistentDomain(forName: AppInfo.sharedContainerIdentifier)
         }
 
+        setupCrashReporting()
         setupTelemetry()
         setupExperimentation()
         
@@ -353,6 +355,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     }
 }
 
+
+// MARK: - Crash Reporting
+
+private let SentryDSNKey = "SentryDSN"
+
+extension AppDelegate {
+    func setupCrashReporting() {
+        // Do not enable crash reporting if collection of anonymous usage data is disabled.
+        if !Settings.getToggle(.sendAnonymousUsageData) {
+            return
+        }
+        
+        if let sentryDSN = Bundle.main.object(forInfoDictionaryKey: SentryDSNKey) as? String {
+            SentrySDK.start { options in
+                options.dsn = sentryDSN
+            }
+        }
+    }
+}
+
 // MARK: - Telemetry & Tooling setup
 extension AppDelegate {
 
@@ -403,7 +425,7 @@ extension AppDelegate {
         }
 
         let channel = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" ? "testflight" : "release"
-        Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData), configuration: Configuration(channel: channel))
+        Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData), configuration: Configuration(channel: channel), buildInfo: GleanMetrics.GleanBuild.info)
         
         // Send "at startup" telemetry
         GleanMetrics.Shortcuts.shortcutsOnHomeNumber.set(Int64(ShortcutsManager.shared.numberOfShortcuts))
