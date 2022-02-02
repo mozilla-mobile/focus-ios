@@ -31,7 +31,7 @@ extension InternalTelemetrySettingsView {
 extension InternalTelemetrySettingsView: View {
     var body: some View {
         Form {
-            if #available(iOS 16, *) {
+            if #available(iOS 14, *) {
                 SwiftUI.Section(header: Text(verbatim: "Logging")) {
                     Toggle(isOn: $internalSettings.gleanLogPingsToConsole) {
                         VStack(alignment: .leading) {
