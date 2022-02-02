@@ -13,7 +13,10 @@ let package = Package(
             targets: ["URLBar"]),
         .library(
             name: "UIHelpers",
-            targets: ["UIHelpers"])
+            targets: ["UIHelpers"]),
+        .library(
+            name: "DesignSystem",
+            targets: ["DesignSystem"])
     ],
     dependencies: [
         .package(url: "https://github.com/SnapKit/SnapKit.git", from: "5.0.1")
@@ -23,11 +26,16 @@ let package = Package(
             name: "URLBar",
             dependencies: [
                 "UIHelpers",
+                "DesignSystem",
                 .product(name: "SnapKit", package: "SnapKit")
-            ]
+            ],
+            resources: [.copy("topdomains.txt")]
         ),
         .target(
             name: "UIHelpers"
+        ),
+        .target(
+            name: "DesignSystem"
         )
     ]
 )

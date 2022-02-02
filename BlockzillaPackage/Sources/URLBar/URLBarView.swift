@@ -3,6 +3,7 @@ import SwiftUI
 import SnapKit
 import Combine
 import UIHelpers
+import DesignSystem
 
 typealias UISpacer = UIView
 
@@ -17,7 +18,7 @@ public class URLBarView: UIView {
         case portrait
         case landscape
         
-        init () {
+        init() {
             self = UIApplication.shared.orientation?.isPortrait ?? true ? .portrait : .landscape
         }
     }
@@ -152,7 +153,7 @@ public class URLBarView: UIView {
                 stopReloadButton
             ])
         stackView.axis = .horizontal
-        stackView.spacing = 8
+        stackView.spacing = 0
         stackView.isLayoutMarginsRelativeArrangement = true
         stackView.layoutMargins = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
         stackView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
@@ -170,7 +171,7 @@ public class URLBarView: UIView {
         cancelButton.accessibilityIdentifier = "URLBar.cancelButton"
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            cancelButton.widthAnchor.constraint(equalToConstant: 44),
+            cancelButton.widthAnchor.constraint(equalToConstant: 24),
             cancelButton.heightAnchor.constraint(equalToConstant: 44),
         ])
         return cancelButton
@@ -193,7 +194,7 @@ public class URLBarView: UIView {
         contextMenuButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         contextMenuButton.setContentHuggingPriority(.required, for: .horizontal)
         NSLayoutConstraint.activate([
-            contextMenuButton.widthAnchor.constraint(equalToConstant: 44),
+            contextMenuButton.widthAnchor.constraint(equalToConstant: 24),
             contextMenuButton.heightAnchor.constraint(equalToConstant: 44),
         ])
         return contextMenuButton
@@ -215,6 +216,10 @@ public class URLBarView: UIView {
         shieldIcon.accessibilityIdentifier = "URLBar.trackingProtectionIcon"
         shieldIcon.setContentCompressionResistancePriority(.required, for: .horizontal)
         shieldIcon.setContentHuggingPriority(.required, for: .horizontal)
+        NSLayoutConstraint.activate([
+            shieldIcon.widthAnchor.constraint(equalToConstant: 36),
+            shieldIcon.heightAnchor.constraint(equalToConstant: 44),
+        ])
         return shieldIcon
     }()
     
@@ -300,10 +305,10 @@ public class URLBarView: UIView {
     
     lazy var urlTextField: URLTextField = {
         let urlText = URLTextField()
-//        urlText.font = .body15
+        urlText.font = .body15
         urlText.tintColor = .primaryText
         urlText.textColor = .primaryText
-//        urlText.highlightColor = .accent.withAlphaComponent(0.4)
+        urlText.highlightColor = .accent.withAlphaComponent(0.4)
         urlText.keyboardType = .webSearch
         urlText.autocapitalizationType = .none
         urlText.autocorrectionType = .no
@@ -311,11 +316,13 @@ public class URLBarView: UIView {
         urlText.rightViewMode = .whileEditing
         urlText.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .vertical)
         urlText.autocompleteDelegate = self
-//        urlText.completionSource = domainCompletion
+        urlText.completionSource = domainCompletion
         urlText.accessibilityIdentifier = "URLBar.urlText"
         urlText.placeholder = UIConstants.strings.urlTextPlaceholder
         return urlText
     }()
+    
+    private let domainCompletion = DomainCompletion(completionSources: [TopDomainsCompletionSource(), CustomCompletionSource()])
     
     private var cancellable: AnyCancellable?
     private var cancellable2: AnyCancellable?
@@ -400,21 +407,8 @@ public class URLBarView: UIView {
 }
 
 extension URLBarView: AutocompleteTextFieldDelegate {
+    
     public func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
-        
-//        setTextToURL(displayFullUrl: true)
-//        autocompleteTextField.highlightAll()
-//
-//        if !isEditing {
-//            isEditing = true
-//            delegate?.urlBarDidActivate(self)
-//        }
-//
-//        // When text.characters.count == 0, it is the HomeView
-//        if let text = autocompleteTextField.text, !isEditing, text.count == 0 {
-//            shouldPresent = true
-//        }
-        
         
         currentSelection = .selected
         
@@ -423,35 +417,11 @@ extension URLBarView: AutocompleteTextFieldDelegate {
     
     public func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool {
         cancelPressed()
-//        if let autocompleteText = autocompleteTextField.text, autocompleteText != userInputText {
-//            Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.autofill))
-//        }
-//        userInputText = nil
-//
-//        delegate?.urlBar(self, didSubmitText: autocompleteTextField.text ?? "")
-//
-//        if Settings.getToggle(.enableSearchSuggestions) {
-//            Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionNotSelected))
-//        }
-//
         return true
     }
     
     public func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didTextChange text: String) {
 //        userInputText = text
-//
-//        if !text.isEmpty {
-//            displayClearButton(shouldDisplay: true, animated: true)
-//        }
-//
-//        autocompleteTextField.rightView?.isHidden = text.isEmpty
-//
-//        if !isEditing && shouldPresent {
-//            isEditing = true
-//            delegate?.urlBarDidActivate(self)
-//        }
-//
-//        delegate?.urlBar(self, didEnterText: text)
     }
 }
 
@@ -501,11 +471,11 @@ struct BackgroundViewContainer_Previews: PreviewProvider {
 //            .previewDevice("iPad mini (6th generation)")
         if #available(iOS 15.0, *) {
             URLBarContainerView()
-                .previewInterfaceOrientation(.landscapeLeft)
+//                .previewInterfaceOrientation(.landscapeLeft)
 
-            URLBarContainerView()
-                .previewDevice("iPad mini (6th generation)")
-                .previewInterfaceOrientation(.landscapeLeft)
+//            URLBarContainerView()
+//                .previewDevice("iPad mini (6th generation)")
+//                .previewInterfaceOrientation(.landscapeLeft)
         }
         
         
