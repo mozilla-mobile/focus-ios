@@ -297,7 +297,7 @@ browser_menu:
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/3004
     data_reviews:
-      - https://github.com/mozilla-mobile/focus-ios/pull/TODO
+      - https://github.com/mozilla-mobile/focus-ios/pull/3015
     data_sensitivity:
       - interaction
     notification_emails:
