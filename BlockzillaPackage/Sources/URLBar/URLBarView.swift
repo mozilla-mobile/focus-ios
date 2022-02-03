@@ -9,48 +9,23 @@ typealias UISpacer = UIView
 
 public class URLBarView: UIView {
     
-    public enum BrowsingState: Equatable {
-        case home
-        case browsing
-    }
-    
-    public enum Orientation: Equatable {
-        case portrait
-        case landscape
-        
-        init() {
-            self = UIApplication.shared.orientation?.isPortrait ?? true ? .portrait : .landscape
-        }
-    }
-    
-    public enum Selection: Equatable {
-        case selected
-        case unselected
-    }
-    
-    public enum Device: Equatable {
-        case iPhone
-        case iPad
-        
-        init() {
-            self = UIDevice.current.userInterfaceIdiom == .phone ? .iPhone : .iPad
-        }
-    }
-    
-    
-    @Published var currentSelection = Selection.selected
-    @Published public var browsingState = BrowsingState.home
-    
     private let leftSpacer = UISpacer()
     private let rightSpacer = UISpacer()
     
-    func adaptUI(for browsingState: BrowsingState, device: Device = .init(), orientation: Orientation = .init()) {
+    func adaptUI(
+        for browsingState: URLBarViewModel.BrowsingState,
+        device: URLBarViewModel.Device,
+        orientation: URLBarViewModel.Orientation
+    ) {
         switch (browsingState, device, orientation) {
         case (.home, .iPhone, .portrait), (.home, .iPhone, .landscape):
-            menuStackView.animateShow(firstDo: {
-                self.deleteButton.animateHideFromSuperview()
-                self.stackView.appendArrangedSubview(self.menuStackView)
-            })
+            menuStackView
+                .animateShow(
+                    firstDo: { [deleteButton, stackView, menuStackView] in
+                        deleteButton.animateHideFromSuperview()
+                        stackView.appendArrangedSubview(menuStackView)
+                    }
+                )
             
             stopReloadButton.animateHideFromSuperview()
             siteNavigationStackView.animateHideFromSuperview()
@@ -58,27 +33,34 @@ public class URLBarView: UIView {
         case (.browsing, .iPhone, .portrait):
             siteNavigationStackView.animateHideFromSuperview()
             
-            stopReloadButton.animateShow(firstDo: {
-                self.urlStackView.appendArrangedSubview(self.stopReloadButton)
-            })
+            stopReloadButton
+                .animateShow(
+                    firstDo: { [urlStackView, stopReloadButton] in
+                        urlStackView.appendArrangedSubview(stopReloadButton)
+                    }
+                )
 
             menuStackView.animateHideFromSuperview()
             
         case (.browsing, .iPhone, .landscape):
-            siteNavigationStackView.animateShow(firstDo: {
-                self.stackView.prependArrangedSubview(self.siteNavigationStackView)
-            })
+            siteNavigationStackView
+                .animateShow(
+                    firstDo: { [stackView, siteNavigationStackView] in
+                        stackView.prependArrangedSubview(siteNavigationStackView)
+                    }
+                )
             
-            menuStackView.animateShow {
-                self.deleteButton.animateShow(firstDo: {
-                    self.menuStackView.prependArrangedSubview(self.deleteButton)
-                })
-                self.stackView.appendArrangedSubview(self.menuStackView)
-            } thenDo: {
-                self.stopReloadButton.animateShow(firstDo: {
-                    self.urlStackView.appendArrangedSubview(self.stopReloadButton)
-                })
-            }
+            menuStackView
+                .animateShow(
+                    firstDo: { [deleteButton, menuStackView, stackView] in
+                        deleteButton
+                            .animateShow(firstDo: { menuStackView.prependArrangedSubview(deleteButton) })
+                        stackView.appendArrangedSubview(menuStackView)
+                    },
+                    thenDo: { [stopReloadButton, urlStackView] in
+                        stopReloadButton
+                            .animateShow(firstDo: {urlStackView.appendArrangedSubview(stopReloadButton) })
+                    })
             
         case (.home, .iPad, _):
             siteNavigationStackView.animateHideFromSuperview()
@@ -86,17 +68,21 @@ public class URLBarView: UIView {
             deleteButton.animateHide()
             
         case (.browsing, .iPad, _):
-            siteNavigationStackView.animateShow(firstDo: {
-                self.stackView.prependArrangedSubview(self.siteNavigationStackView)
-            })
-            stopReloadButton.animateShow(firstDo: {
-                self.urlStackView.appendArrangedSubview(self.stopReloadButton)
-            })
+            siteNavigationStackView
+                .animateShow(
+                    firstDo: { [stackView, siteNavigationStackView] in
+                        stackView.prependArrangedSubview(siteNavigationStackView)
+                    })
+            stopReloadButton
+                .animateShow(
+                    firstDo: { [urlStackView, stopReloadButton] in
+                        urlStackView.appendArrangedSubview(stopReloadButton)
+                    })
             deleteButton.animateShow()
         }
     }
     
-    func adaptUI(for selection: Selection) {
+    func adaptUI(for selection: URLBarViewModel.Selection) {
         switch selection {
         case .selected:
             self.cancelButton.animateShow(firstDo: {
@@ -324,9 +310,7 @@ public class URLBarView: UIView {
     
     private let domainCompletion = DomainCompletion(completionSources: [TopDomainsCompletionSource(), CustomCompletionSource()])
     
-    private var cancellable: AnyCancellable?
-    private var cancellable2: AnyCancellable?
-    private var cancellable3: AnyCancellable?
+    public var viewModel: URLBarViewModel = .init()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -338,28 +322,19 @@ public class URLBarView: UIView {
         setupView()
     }
     
+    private var cancellables: Set<AnyCancellable> = []
+    
     private func setupView() {
-        let notificationSubject = NotificationCenter
-            .default
-            .publisher(for: UIDevice.orientationDidChangeNotification, object: nil)
-        
-        cancellable = Publishers.CombineLatest($browsingState, notificationSubject)
-            .receive(on: DispatchQueue.main)
-            .map { (browsingState, _) in
-                return (browsingState, Orientation())
-            }
-            .sink { newBrowsingState, orientation in
-                self.adaptUI(for: newBrowsingState, orientation: orientation)
-            }
-        
-        cancellable2 =  $currentSelection
-            .sink { newSelection in
-                guard newSelection != self.currentSelection else { return }
-                self.adaptUI(for: newSelection)
-            }
-        
-        adaptUI(for: browsingState)
-        adaptUI(for: currentSelection)
+        viewModel.currentSelection
+            .dropFirst()
+            .removeDuplicates(by: ==)
+            .sink(receiveValue: self.adaptUI)
+            .store(in: &cancellables)
+       
+        viewModel.statePublisher
+            .removeDuplicates(by: ==)
+            .sink(receiveValue: self.adaptUI)
+            .store(in: &cancellables)
         
         addSubview(urlBarBackgroundView)
         addSubview(stackView)
@@ -382,10 +357,6 @@ public class URLBarView: UIView {
             urlBarBackgroundView.trailingAnchor.constraint(equalTo: urlStackView.trailingAnchor),
             urlBarBackgroundView.bottomAnchor.constraint(equalTo: urlStackView.bottomAnchor),
             
-            //layout stackView
-            //            stackView.topAnchor.constraint(equalTo: topAnchor),
-//            urlStackView.heightAnchor.constraint(equalToConstant: 40),
-            
             stackView.heightAnchor.constraint(equalToConstant: 44),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
             stackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
@@ -402,7 +373,9 @@ public class URLBarView: UIView {
 //    }
     
     @objc func cancelPressed() {
-        currentSelection = .unselected
+        viewModel
+            .currentSelection
+            .send(.unselected)
     }
 }
 
@@ -410,7 +383,9 @@ extension URLBarView: AutocompleteTextFieldDelegate {
     
     public func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
         
-        currentSelection = .selected
+        viewModel
+            .currentSelection
+            .send(.selected)
         
         return true
     }
@@ -428,7 +403,7 @@ extension URLBarView: AutocompleteTextFieldDelegate {
 // MARK: SwiftUI Preview
 
 struct BackgroundViewContainer: UIViewRepresentable {
-    var state: URLBarView.BrowsingState = .home
+    var state: URLBarViewModel.BrowsingState = .home
     
     func makeUIView(context: Context) -> URLBarView {
         let bar = URLBarView(frame: .zero)
@@ -436,12 +411,12 @@ struct BackgroundViewContainer: UIViewRepresentable {
         return bar
     }
     func updateUIView(_ uiView: URLBarView, context: Context) {
-        uiView.browsingState = state
+        uiView.viewModel.browsingState.send(state)
     }
 }
 
 public struct URLBarContainerView: View {
-    @State private var state: URLBarView.BrowsingState = .home
+    @State private var state: URLBarViewModel.BrowsingState = .home
     
     public init() { }
     

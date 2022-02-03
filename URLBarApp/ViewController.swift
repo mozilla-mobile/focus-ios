@@ -14,15 +14,20 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        urlBar.viewModel.currentSelection.send(.selected)
     }
 
     @IBAction func browse(_ sender: Any) {
-        urlBar.browsingState = .browsing
+        urlBar.viewModel.browsingState.send(.browsing)
     }
     
     @IBAction func home(_ sender: Any) {
-        urlBar.browsingState = .home
+        urlBar.viewModel.browsingState.send(.home)
     }
     
 }
