@@ -160,9 +160,6 @@
 /* Label on button to cancel edits */
 "Cancel" = "Annuler";
 
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Lien copié : %@";
-
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "Copier l’image";
 
@@ -394,9 +391,6 @@
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "RECHERCHE";
 
-/* Label for Safari integration section */
-"Settings.sectionIntegration" = "INTÉGRATION";
-
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
@@ -542,7 +536,7 @@
 "Siri.urlToOpen" = "URL à ouvrir";
 
 /* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
-"Tip.Biometric.Title" = "Verrouiller %@ lorsqu’un site est ouvert :";
+"Tip.Biometric.Title" = "Verrouillez %@ lorsqu’un site est ouvert :";
 
 /* Text for a label that indicates the description for biometric Face ID tip. */
 "Tip.BiometricFaceId.Description" = "Activer Face ID";

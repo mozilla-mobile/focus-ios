@@ -24,7 +24,7 @@ class AutocompleteCustomUrlViewController: UIViewController {
 
         let label = SmartLabel()
         label.text = UIConstants.strings.autocompleteEmptyState
-        label.font = UIConstants.fonts.settingsDescriptionText
+        label.font = .footnote12
         label.textColor = .primaryText
         label.textAlignment = .center
         emptyStateView.addSubview(label)
@@ -33,7 +33,7 @@ class AutocompleteCustomUrlViewController: UIViewController {
 
         label.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(UIConstants.layout.AutocompleteCustomURLLabelOffset)
+            make.top.equalToSuperview().offset(UIConstants.layout.autocompleteCustomURLLabelOffset)
         }
 
         tableView.snp.makeConstraints { make in

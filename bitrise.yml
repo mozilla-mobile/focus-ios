@@ -30,7 +30,7 @@ workflows:
         title: ContentBlockerGen
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.2.x
 
 
   set-project-version:
@@ -57,8 +57,7 @@ workflows:
         title: Set OpenInFocus version numbers
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
-    before_run: []
+        stack: osx-xcode-13.2.x
 
 
   configure-nimbus:
@@ -70,12 +69,26 @@ workflows:
             #!/usr/bin/env bash
             set -x
             /usr/libexec/PlistBuddy -c "Add :NimbusServerURL string ${NIMBUS_SERVER_URL}" Blockzilla/Info.plist
+            /usr/libexec/PlistBuddy -c "Add :NimbusStagingServerURL string ${NIMBUS_STAGING_SERVER_URL}" Blockzilla/Info.plist
             /usr/libexec/PlistBuddy -c "Add :NimbusAppName string ${NIMBUS_APP_NAME}" Blockzilla/Info.plist
             /usr/libexec/PlistBuddy -c "Add :NimbusAppChannel string ${NIMBUS_APP_CHANNEL}" Blockzilla/Info.plist
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
-    before_run: []
+        stack: osx-xcode-13.2.x
+
+
+  configure-sentry:
+    steps:
+    - script@1:
+        title: Configure Sentry
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            /usr/libexec/PlistBuddy -c "Add :SentryDSN string ${SENTRY_DSN}" Blockzilla/Info.plist
+    meta:
+      bitrise.io:
+        stack: osx-xcode-13.2.x
 
 
   set-default-browser-entitlement:
@@ -90,8 +103,7 @@ workflows:
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
-    before_run: []
+        stack: osx-xcode-13.2.x
 
 
   release:
@@ -108,6 +120,14 @@ workflows:
         - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"
         - itunescon_user: "$APPLE_ACCOUNT_ID"
+    - script@1:
+        title: Upload Focus Symbols
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+              --org mozilla --project focus-ios "$BITRISE_DSYM_DIR_PATH"
     - xcode-archive@3:
         inputs:
         - scheme: Klar
@@ -118,15 +138,24 @@ workflows:
         - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"
         - itunescon_user: "$APPLE_ACCOUNT_ID"
+    - script@1:
+        title: Upload Klar Symbols
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+              --org mozilla --project klar-ios "$BITRISE_DSYM_DIR_PATH"
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.2.x
         machine_type_id: g2.8core
     before_run:
       - clone-and-build-dependencies
       - set-project-version
       - set-default-browser-entitlement
       - configure-nimbus
+      - configure-sentry
 
 
   runParallelTests:
@@ -150,7 +179,7 @@ workflows:
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.2.x
         machine_type_id: g2.4core
 
 
@@ -206,6 +235,9 @@ workflows:
             CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan $TEST_PLAN_NAME
         - scheme: Focus
     - deploy-to-bitrise-io@1: {}
+    - github-status@2:
+        inputs:
+        - status_identifier: "Focus-build"
     - slack@3:
         run_if: ".IsBuildFailed"
         inputs:
@@ -214,7 +246,7 @@ workflows:
         - webhook_url: "$SLACK_WEBHOOK"
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.2.x
         machine_type_id: g2.8core
 
   runKlar:
@@ -268,6 +300,9 @@ workflows:
             CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan "$TEST_PLAN_NAME"
         - scheme: Klar
     - deploy-to-bitrise-io@1: {}
+    - github-status@2:
+        inputs:
+        - status_identifier: "Klar-build"
     - slack@3:
         run_if: ".IsBuildFailed"
         inputs:
@@ -276,7 +311,7 @@ workflows:
         - webhook_url: "$SLACK_WEBHOOK"
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.2.x
         machine_type_id: g2.8core
   runFocus-iPad:
     steps:
@@ -319,7 +354,7 @@ workflows:
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.2.x
         machine_type_id: g2.8core
   L10nScreenshotsTests:
     steps:
@@ -384,7 +419,7 @@ workflows:
         - deploy_path: artifacts/
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.2.x
         machine_type_id: g2.4core
   L10nBuild:
     steps:
@@ -426,7 +461,7 @@ workflows:
         - is_compress: 'true'
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.2.x
         machine_type_id: g2.4core
 
 app:

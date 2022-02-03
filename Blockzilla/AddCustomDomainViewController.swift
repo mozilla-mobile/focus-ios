@@ -40,7 +40,7 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
         view.backgroundColor = .systemGroupedBackground
 
         inputLabel.text = UIConstants.strings.autocompleteAddCustomUrlLabel
-        inputLabel.font = UIConstants.fonts.settingsInputLabel
+        inputLabel.font = .body18
         inputLabel.textColor = .primaryText
         view.addSubview(inputLabel)
 
@@ -51,7 +51,7 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
         textInput.returnKeyType = .done
         textInput.textColor = .primaryText
         textInput.delegate = self
-        textInput.attributedPlaceholder = NSAttributedString(string: UIConstants.strings.autocompleteAddCustomUrlPlaceholder, attributes: [.foregroundColor: UIConstants.colors.inputPlaceholder])
+        textInput.attributedPlaceholder = NSAttributedString(string: UIConstants.strings.autocompleteAddCustomUrlPlaceholder, attributes: [.foregroundColor: UIColor.inputPlaceholder])
         textInput.accessibilityIdentifier = "urlInput"
         textInput.layer.cornerRadius = UIConstants.layout.settingsCellCornerRadius
         textInput.tintColor = .accent
@@ -60,7 +60,7 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
 
         inputDescription.text = UIConstants.strings.autocompleteAddCustomUrlExample
         inputDescription.textColor = .primaryText
-        inputDescription.font = UIConstants.fonts.settingsDescriptionText
+        inputDescription.font = .footnote12
         view.addSubview(inputDescription)
 
         inputLabel.snp.makeConstraints { make in
@@ -98,9 +98,9 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
         }
 
         switch autocompleteSource.add(suggestion: domain) {
-        case .error(.duplicateDomain):
+        case .failure(.duplicateDomain):
             finish()
-        case .error(let error):
+        case .failure(let error):
             guard !error.message.isEmpty else { return }
             Toast(text: error.message).show()
         case .success:

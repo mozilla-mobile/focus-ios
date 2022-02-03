@@ -28,9 +28,7 @@ class IndexedInsetButton: InsetButton {
 
 class OverlayView: UIView {
     weak var delegate: OverlayViewDelegate?
-    private let searchButton = InsetButton()
     private let addToAutocompleteButton = InsetButton()
-    private var presented = false
     private var searchQuery = ""
     private var searchSuggestions = [String]()
     private var searchButtonGroup = [IndexedInsetButton]()
@@ -54,7 +52,6 @@ class OverlayView: UIView {
     
     private var shouldShowFindInPage: Bool =  false {
         didSet {
-            searchSuggestionsPrompt.shouldShowFindInPage = shouldShowFindInPage
             updateDesign(shouldShowFindInPage)
         }
     }
@@ -75,13 +72,13 @@ class OverlayView: UIView {
             makeSearchSuggestionButton(atIndex: i)
         }
 
-        topBorder.backgroundColor = UIConstants.Photon.Grey90.withAlphaComponent(0.4)
+        topBorder.backgroundColor = .grey90.withAlphaComponent(0.4)
         addSubview(topBorder)
 
         let padding = UIConstants.layout.searchButtonInset
-        let attributedString = NSMutableAttributedString(string: UIConstants.strings.addToAutocompleteButton, attributes: [.foregroundColor: UIConstants.Photon.Grey10])
+        let attributedString = NSMutableAttributedString(string: UIConstants.strings.addToAutocompleteButton, attributes: [.foregroundColor: UIColor.grey10])
 
-        addToAutocompleteButton.titleLabel?.font = UIConstants.fonts.copyButton
+        addToAutocompleteButton.titleLabel?.font = .body16
         addToAutocompleteButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         addToAutocompleteButton.titleLabel?.lineBreakMode = .byTruncatingTail
         addToAutocompleteButton.setImage(#imageLiteral(resourceName: "icon_add_to_autocomplete"), for: .normal)
@@ -89,7 +86,7 @@ class OverlayView: UIView {
         addToAutocompleteButton.setAttributedTitle(attributedString, for: .normal)
         addToAutocompleteButton.addTarget(self, action: #selector(didPressAddToAutocomplete), for: .touchUpInside)
         addToAutocompleteButton.accessibilityIdentifier = "AddToAutocomplete.button"
-        addToAutocompleteButton.backgroundColor = UIConstants.colors.background
+        addToAutocompleteButton.backgroundColor = .ink90
         setUpOverlayButton(button: addToAutocompleteButton)
         addSubview(addToAutocompleteButton)
 
@@ -99,7 +96,7 @@ class OverlayView: UIView {
 
         findInPageButton.isHidden = true
         shouldShowFindInPage = false
-        findInPageButton.titleLabel?.font = UIConstants.fonts.copyButton
+        findInPageButton.titleLabel?.font = .body16
         findInPageButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         findInPageButton.titleLabel?.lineBreakMode = .byTruncatingTail
         findInPageButton.addTarget(self, action: #selector(didPressFindOnPage), for: .touchUpInside)
@@ -115,10 +112,10 @@ class OverlayView: UIView {
         lastSeparator.isHidden = true
         addSubview(lastSeparator)
         
-        copyButton.titleLabel?.font = UIConstants.fonts.copyButton
+        copyButton.titleLabel?.font = .body16
         copyButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         copyButton.titleLabel?.lineBreakMode = .byTruncatingTail
-        copyButton.backgroundColor = UIConstants.colors.background
+        copyButton.backgroundColor = .ink90
         if UIView.userInterfaceLayoutDirection(for: copyButton.semanticContentAttribute) == .rightToLeft {
             copyButton.contentHorizontalAlignment = .right
         } else {
@@ -131,7 +128,7 @@ class OverlayView: UIView {
     }
     
     private func updateLayout(for iPadView: Bool) {
-        searchSuggestionsPrompt.backgroundColor = iPadView ? .clear : UIConstants.colors.background
+        searchSuggestionsPrompt.backgroundColor = iPadView ? .clear : .ink90
         
         topBorder.snp.remakeConstraints { make in
             make.top.equalTo(searchSuggestionsPrompt.snp.bottom)
@@ -187,7 +184,7 @@ class OverlayView: UIView {
             searchButtonGroup.first?.layer.cornerRadius = 0
             findInPageButton.layer.cornerRadius = 0
             lastSeparator.backgroundColor = .clear
-            topBorder.backgroundColor =  UIConstants.Photon.Grey90.withAlphaComponent(0.4)
+            topBorder.backgroundColor =  .grey90.withAlphaComponent(0.4)
             
         }
         setColorstToSearchButtons()
@@ -200,7 +197,7 @@ class OverlayView: UIView {
         searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .normal)
         searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .highlighted)
         searchButton.backgroundColor = .above
-        searchButton.titleLabel?.font = UIConstants.fonts.searchButton
+        searchButton.titleLabel?.font = .body16
 
         searchButton.setIndex(i)
         setUpOverlayButton(button: searchButton)
@@ -262,16 +259,16 @@ class OverlayView: UIView {
      */
 	func getAttributedButtonTitle(phrase: String, localizedStringFormat: String) -> NSAttributedString {
         let attributedString = NSMutableAttributedString(string: localizedStringFormat, attributes: [.foregroundColor: UIColor.primaryText])
-		let phraseString = NSAttributedString(string: phrase, attributes: [.font: UIConstants.fonts.copyButtonQuery,
+		let phraseString = NSAttributedString(string: phrase, attributes: [.font: UIFont.body17,
                                                                            .foregroundColor: UIColor.primaryText])
 		if phrase != searchQuery {
-			let searchString = NSAttributedString(string: searchQuery, attributes: [.font: UIConstants.fonts.copyButtonQuery,
+			let searchString = NSAttributedString(string: searchQuery, attributes: [.font: UIFont.body17,
                                                                                     .foregroundColor: UIColor.primaryText])
 			// split suggestion into searchQuery and suggested part
 			let suggestion = phrase.components(separatedBy: searchQuery)
 			// suggestion was split
 			if suggestion.count > 1 {
-                let restOfSuggestion = NSAttributedString(string: suggestion[1], attributes: [.font: UIConstants.fonts.copyButtonRest,
+                let restOfSuggestion = NSAttributedString(string: suggestion[1], attributes: [.font: UIFont.body17,
                                                                                               .foregroundColor: UIColor.primaryText])
 				attributedString.append(searchString)
 				attributedString.append(restOfSuggestion)
@@ -305,7 +302,7 @@ class OverlayView: UIView {
             // Hide the autocomplete button on home screen and when the user is typing
             self.addToAutocompleteButton.isHidden = true
             if !self.isIpadView {
-            self.topBorder.backgroundColor =  searchSuggestionsPromptHidden ? UIConstants.Photon.Grey90.withAlphaComponent(0.4) : UIColor(rgb: 0x42455A)
+                self.topBorder.backgroundColor =  searchSuggestionsPromptHidden ? .grey90.withAlphaComponent(0.4) : UIColor(rgb: 0x42455A)
             }
             self.updateSearchButtons()
             let lastSearchButtonIndex = min(self.searchSuggestions.count, self.searchButtonGroup.count) - 1
@@ -403,12 +400,22 @@ class OverlayView: UIView {
         searchButtonGroup.first?.layer.cornerRadius = UIConstants.layout.suggestionViewCornerRadius
         searchButtonGroup.first?.clipsToBounds = true
         
-        if searchSuggestions.count == 1 {
-            searchButtonGroup.first?.layer.maskedCorners = findInPageButton.isHidden ? [.layerMaxXMinYCorner, .layerMinXMinYCorner, .layerMaxXMaxYCorner, .layerMinXMaxYCorner] : [.layerMaxXMinYCorner, .layerMinXMinYCorner]
-        } else {
-            searchButtonGroup.first?.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
-            searchButtonGroup.last?.layer.maskedCorners = findInPageButton.isHidden ? [.layerMaxXMaxYCorner, .layerMinXMaxYCorner] : []
+        let searchSuggestionsPromptHidden = UserDefaults.standard.bool(forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt) || searchQuery.isEmpty
+        
+        let topCorners: CACornerMask = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        let bottomCorners: CACornerMask = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+        let allCorners: CACornerMask = [.layerMaxXMinYCorner, .layerMinXMinYCorner, .layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+        
+        var firstSearchButtonMaskedCorners = topCorners
+        
+        if !searchSuggestionsPromptHidden {
+            firstSearchButtonMaskedCorners = findInPageButton.isHidden ? bottomCorners : []
+        } else if searchSuggestions.count == 1 {
+            firstSearchButtonMaskedCorners = findInPageButton.isHidden ? allCorners : topCorners
         }
+        
+        searchButtonGroup.first?.layer.maskedCorners = firstSearchButtonMaskedCorners
+        searchButtonGroup.last?.layer.maskedCorners = findInPageButton.isHidden ? bottomCorners : []
     }
     
     private func remakeConstraintsForFindInPage() {

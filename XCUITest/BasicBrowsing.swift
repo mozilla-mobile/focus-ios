@@ -18,15 +18,21 @@ class BasicBrowsing: BaseTestCase {
         app.buttons["HomeView.settingsButton"].tap()
 
         // Tap Share button
-        let ShareButton = app.cells["Share Page With..."]
-        waitForExistence( ShareButton)
-        ShareButton.tap()
+        
+        let shareButton: XCUIElement
+        if #available(iOS 14, *) {
+            shareButton = app.cells.buttons["Share Page With..."]
+        } else {
+            shareButton = app.cells["Share Page With..."]
+        }
+        waitForExistence(shareButton)
+        shareButton.tap()
 
         // Launch external app
         let RemindersApp = app.collectionViews.scrollViews.cells.element(boundBy: 0)
-        waitForExistence( RemindersApp)
+        waitForExistence(RemindersApp, timeout: 5)
         RemindersApp.tap()
-        waitForExistence(app.buttons["Add"])
+        waitForExistence(app.buttons["Add"], timeout: 10)
         XCTAssertTrue(app.buttons["Add"].exists)
     }
     

@@ -52,7 +52,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
                 case 0:
                     return URL(string: "https://support.mozilla.org/\(AppInfo.config.supportPath)")
                 case 1:
-                    return Bundle.main.url(forResource: AppInfo.config.rightsFile, withExtension: nil)
+                    return URL(string: "https://www.mozilla.org/en-US/about/legal/terms/firefox/")
                 case 2:
                     return URL(string: "https://www.mozilla.org/privacy/firefox-focus")
                 default:
@@ -203,7 +203,7 @@ private class AboutHeaderView: UIView {
         let aboutParagraph = SmartLabel()
         aboutParagraph.attributedText = attributed
         aboutParagraph.textColor = .secondaryLabel
-        aboutParagraph.font = UIConstants.fonts.aboutText
+        aboutParagraph.font = .footnote14
         aboutParagraph.numberOfLines = 0
         return aboutParagraph
     }()
@@ -211,7 +211,7 @@ private class AboutHeaderView: UIView {
     private lazy var versionNumber: UILabel = {
         let label = SmartLabel()
         label.text = "\(AppInfo.shortVersion) (\(AppInfo.buildNumber)) / \(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
-        label.font = UIConstants.fonts.aboutText
+        label.font = .footnote14
         label.textColor = .secondaryLabel
         return label
     }()
@@ -221,7 +221,7 @@ private class AboutHeaderView: UIView {
         learnMoreButton.setTitle(UIConstants.strings.aboutLearnMoreButton, for: .normal)
         learnMoreButton.setTitleColor(.accent, for: .normal)
         learnMoreButton.setTitleColor(.accent, for: .highlighted)
-        learnMoreButton.titleLabel?.font = UIConstants.fonts.aboutText
+        learnMoreButton.titleLabel?.font = .footnote14
         learnMoreButton.addTarget(self, action: #selector(didPressLearnMore), for: .touchUpInside)
         return learnMoreButton
     }()
@@ -230,6 +230,7 @@ private class AboutHeaderView: UIView {
         self.init(frame: CGRect.zero)
         addSubviews()
         configureConstraints()
+        setupSecretMenuActivation()
     }
 
     @objc private func didPressLearnMore() {
@@ -271,5 +272,20 @@ private class AboutHeaderView: UIView {
             make.bottom.equalTo(self).inset(50).priority(.low)
         }
     }
+    
+    private func setupSecretMenuActivation() {
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleSecretMenuActivation(sender:)))
+        gestureRecognizer.numberOfTapsRequired = 5
+        logo.isUserInteractionEnabled = true
+        logo.addGestureRecognizer(gestureRecognizer)
+    }
 
+    @objc private func handleSecretMenuActivation(sender: UITapGestureRecognizer) {
+        Settings.set(true, forToggle: .displaySecretMenu)
+        // Give the logo a little shake as a confirmation
+        logo.transform = CGAffineTransform(translationX: 20, y: 0)
+        UIView.animate(withDuration: 0.25, delay: 0, usingSpringWithDamping: 0.1, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
+            self.logo.transform = CGAffineTransform.identity
+        }, completion: nil)
+    }
 }

@@ -19,8 +19,7 @@ class SnapshotTests: BaseTestCaseL10n {
 
     func test02Settings() {
         dismissURLBarFocused()
-        app.buttons["HomeView.settingsButton"].tap()
-        app.tables.cells["icon_settings"].tap()
+        openSettings()
         snapshot("08Settings")
         app.swipeUp()
         snapshot("9Settings")
@@ -54,8 +53,7 @@ class SnapshotTests: BaseTestCaseL10n {
     
     func test03About() {
         dismissURLBarFocused()
-        app.buttons["HomeView.settingsButton"].tap()
-        app.tables.cells["icon_settings"].tap()
+        openSettings()
         waitForExistence(app.cells["settingsViewController.about"])
         app.cells["settingsViewController.about"].tap()
         snapshot("13About")
@@ -68,20 +66,19 @@ class SnapshotTests: BaseTestCaseL10n {
         waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
         app.buttons["HomeView.settingsButton"].tap()
         snapshot("WebsiteSettingsMenu")
-        waitForExistence(app.cells["icon_shortcuts_add"])
-        app.tables.cells["icon_shortcuts_add"].tap()
+        waitForExistence(app.cells.buttons.element(boundBy: 6))
+        app.cells.buttons.element(boundBy: 6).tap()
         waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
-        waitForExistence(app.tables["Context Menu"].cells["icon_openwith_active"])
+        waitForExistence(app.cells.buttons.element(boundBy: 5))
         snapshot("WebsiteSettingsMenu-RemovePin")
-        app.tables["Context Menu"].cells["icon_openwith_active"].tap()
+        app.cells.buttons.element(boundBy: 5).tap()
         snapshot("14ShareMenu")
     }
 
     func test05SafariIntegration() {
         dismissURLBarFocused()
-        app.buttons["HomeView.settingsButton"].tap()
-        app.tables.cells["icon_settings"].tap()
+        openSettings()
         waitForExistence(app.tables.switches["BlockerToggle.Safari"])
         app.tables.switches["BlockerToggle.Safari"].tap()
         snapshot("15SafariIntegrationInstructions")
@@ -89,8 +86,7 @@ class SnapshotTests: BaseTestCaseL10n {
 
     func test06Theme() {
         dismissURLBarFocused()
-        app.buttons["HomeView.settingsButton"].tap()
-        app.tables.cells["icon_settings"].tap()
+        openSettings()
         waitForExistence(app.cells["settingsViewController.themeCell"])
         app.cells["settingsViewController.themeCell"].tap()
         // Toggle the switch on-off to see the different menus
@@ -123,7 +119,7 @@ class SnapshotTests: BaseTestCaseL10n {
         dismissURLBarFocused()
         app.buttons["HomeView.settingsButton"].tap()
         snapshot("20HomeViewSettings")
-        app.tables.cells["icon_settings"].tap()
+        app.collectionViews.buttons.element(boundBy: 1).tap()
         waitForExistence(app.cells["SettingsViewController.searchCell"])
         app.cells["SettingsViewController.searchCell"].tap()
         snapshot("SettingsSearchEngine")
@@ -144,6 +140,38 @@ class SnapshotTests: BaseTestCaseL10n {
         waitForExistence(app.buttons["URLBar.deleteButton"], timeout: 10)
         app.buttons["URLBar.deleteButton"].tap()
         snapshot("07YourBrowsingHistoryHasBeenErased")
+    }
+
+    func test12RemoveShortcut() {
+        loadWebPage("mozilla.org")
+        waitForWebPageLoad()
+
+        // Tap on shortcuts settings menu option
+        app.buttons["HomeView.settingsButton"].tap()
+        waitForExistence(app.collectionViews.cells.buttons.element(boundBy: 6))
+        app.collectionViews.cells.buttons.element(boundBy: 6).tap()
+
+        // Tap on erase button to go to homepage and check the shortcut created
+        app.buttons["URLBar.deleteButton"].firstMatch.tap()
+        // Verify the shortcut is created
+        waitForExistence(app.otherElements.staticTexts["M"], timeout: 5)
+
+        // Open shortcut to check the tab menu label for shortcut option
+        app.otherElements.staticTexts["M"].tap()
+        app.buttons["HomeView.settingsButton"].tap()
+        waitForExistence(app.collectionViews.cells.buttons.element(boundBy: 6), timeout: 5)
+        snapshot("1-RemoveShortcutTabMenu")
+
+        // Go back to homescreen
+        app.collectionViews.cells.buttons.element(boundBy: 0).tap()
+        app.navigationBars.buttons["SettingsViewController.doneButton"].tap()
+        app.buttons["URLBar.deleteButton"].firstMatch.tap()
+        waitForExistence(app.otherElements.staticTexts["M"], timeout: 5)
+
+        // Remove created shortcut
+        app.otherElements.staticTexts["M"].press(forDuration: 2)
+        waitForExistence(app.collectionViews.cells.buttons.firstMatch)
+        snapshot("2-RemoveShortcutLongPressOnIt")
     }
 
 //    Run it only for EN locales for now

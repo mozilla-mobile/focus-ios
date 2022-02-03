@@ -17,7 +17,7 @@ class SettingAppearanceTest: BaseTestCase {
         waitForExistence(app.buttons["Settings"], timeout: 5)
         app.buttons["Settings"].tap()
 
-        let settingsButton = app.cells["Settings"]
+        let settingsButton = app.settingsButton
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
         
@@ -43,11 +43,13 @@ class SettingAppearanceTest: BaseTestCase {
 
         //Check the initial state of the switch values
         let safariSwitch = app.tables.switches["Safari"]
+        waitForExistence(app.tables.switches["Safari"], timeout: 5)
 
         XCTAssertEqual(safariSwitch.value as! String, "0")
         safariSwitch.tap()
 
         // Check the information page
+        waitForExistence(app.staticTexts["Open Settings App"], timeout: 5)
         XCTAssert(app.staticTexts["Open Settings App"].exists)
         XCTAssert(app.staticTexts["Tap Safari, then select Content Blockers"].exists)
         if app.label == "Firefox Focus" {
@@ -81,7 +83,7 @@ class SettingAppearanceTest: BaseTestCase {
 
         otherContentSwitch.tap()
         let alertsQuery = app.alerts
-
+        waitForExistence(alertsQuery.buttons[UIConstants.strings.settingsBlockOtherYes])
         // Say yes this time, the switch should be enabled
         alertsQuery.buttons[UIConstants.strings.settingsBlockOtherYes].tap()
         XCTAssertEqual(otherContentSwitch.value as! String, "1")
@@ -120,8 +122,7 @@ class SettingAppearanceTest: BaseTestCase {
 
         waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
-
-        let safariButton = app.cells["icon_favicon"]
+        let safariButton = app.collectionViews.cells.element(boundBy: 5)
         waitForExistence(safariButton)
         safariButton.tap()
 
@@ -149,14 +150,14 @@ class SettingAppearanceTest: BaseTestCase {
 
         // Navigate to Settings
         waitForExistence(app.buttons["HomeView.settingsButton"])
-        app.buttons["Settings"].tap()
+        app.buttons["HomeView.settingsButton"].tap()
 
-        let settingsButton = app.cells["Settings"]
+        let settingsButton = app.settingsButton
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
 
         // Navigate to Autocomplete Settings
-        waitForHittable(app.tables.cells["SettingsViewController.autocompleteCell"])
+        waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
 
         // Verify that autocomplete is enabled
@@ -178,20 +179,20 @@ class SettingAppearanceTest: BaseTestCase {
         waitForExistence(app.buttons["Settings"])
         app.buttons["Settings"].tap()
 
-        let settingsButton = app.cells["Settings"]
+        let settingsButton = app.settingsButton
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
 
         // Navigate to Autocomplete Settings
-        waitForHittable(app.tables.cells["SettingsViewController.autocompleteCell"])
+        waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
 
         // Navigate to the customURL list
-        waitForHittable(app.tables.cells["customURLS"])
+        waitForExistence(app.tables.cells["customURLS"])
         app.tables.cells["customURLS"].tap()
 
         // Navigate to add domain screen
-        waitForHittable(app.tables.cells["addCustomDomainCell"])
+        waitForExistence(app.tables.cells["addCustomDomainCell"])
         app.tables.cells["addCustomDomainCell"].tap()
 
         // Edit Text Field
@@ -228,11 +229,13 @@ class SettingAppearanceTest: BaseTestCase {
         waitForExistence(app.buttons["Settings"], timeout: 5)
         app.buttons["Settings"].tap()
 
-        let settingsButton = app.cells["Settings"]
+        let settingsButton = app.settingsButton
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
-        
-        waitForHittable(app.tables.cells["SettingsViewController.autocompleteCell"])
+        waitForExistence(app.tables.cells["settingsViewController.themeCell"])
+        app.tables.cells["settingsViewController.themeCell"].swipeUp()
+
+        waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
         app.tables.cells["SettingsViewController.autocompleteCell"].swipeUp()
 
         // Check that Safari toggle is off, swipe to get to Safarin Integration menu

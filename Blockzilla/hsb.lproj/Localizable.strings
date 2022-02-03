@@ -160,9 +160,6 @@
 /* Label on button to cancel edits */
 "Cancel" = "Přetorhnyć";
 
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Wotkaz, kotryž sće kopěrował: %@";
-
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "Wobraz kopěrować";
 
@@ -269,7 +266,7 @@
 "photosPermission.openSettings" = "Nastajenja wočinić";
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "„%@“ prosy wo přistup na waše fota";
+"photosPermission.title" = "„%@“ prosy wo přistup k wašim fotam";
 
 /* This is the value for a label that indicates if a user is on an unencrypted website. */
 "ProtectionStatus.NotSecure" = "Zwisk wěsty njeje";
@@ -393,9 +390,6 @@
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "PYTANJE";
-
-/* Label for Safari integration section */
-"Settings.sectionIntegration" = "INTEGRACIJA";
 
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";

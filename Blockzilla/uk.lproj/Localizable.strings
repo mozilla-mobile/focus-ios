@@ -5,7 +5,7 @@
 "About.missionLabel" = "%@ створено в Mozilla. Наша місія — сприяння розвитку здорового й відкритого Інтернету.";
 
 /* Label on About screen */
-"About.privateBullet1" = "Пошук і перегляд прямо в програмі";
+"About.privateBullet1" = "Шукайте й переглядайте просто з програми";
 
 /* Label on About screen */
 "About.privateBullet2" = "Блокуйте стеження (або оновіть налаштування, щоб дозволити стеження)";
@@ -14,7 +14,7 @@
 "About.privateBullet3" = "Стирайте для видалення куків, а також історії пошуку й перегляду";
 
 /* Label on About screen */
-"About.privateBulletHeader" = "Використовуйте його як приватний браузер:";
+"About.privateBulletHeader" = "Використовуйте як приватний браузер:";
 
 /* Label for row in About screen */
 "About.rowHelp" = "Допомога";
@@ -26,13 +26,13 @@
 "About.rowRights" = "Ваші права";
 
 /* Label on About screen */
-"About.safariBullet1" = "Блокуйте стеження для покращення приватності";
+"About.safariBullet1" = "Блокуйте стеження для посилення приватності";
 
 /* Label on About screen */
 "About.safariBullet2" = "Блокуйте вебшрифти для зменшення розміру сторінок";
 
 /* Label on About screen */
-"About.safariBulletHeader" = "Використовуйте його як розширення для Safari:";
+"About.safariBulletHeader" = "Використовуйте як розширення для Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "Про %@";
@@ -53,7 +53,7 @@
 "AddPass.Error.Title" = "Не вдалося додати картку";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
-"Authentication.reason" = "Зареєструйтеся для повернення до %@";
+"Authentication.reason" = "Автентифікуйтеся для повернення до %@";
 
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Додати власну URL-адресу";
@@ -74,7 +74,7 @@
 "Autocomplete.addCustomUrlWithPlus" = "+ Додати власну URL-адресу";
 
 /* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "Додавання й керування автозавершенням власних URL-адрес.";
+"Autocomplete.customDescriptoin" = "Додавайте і керуйте автозавершенням власних URL-адрес.";
 
 /* Label for button taking you to your custom Autocomplete URL list */
 "Autocomplete.customLabel" = "Власні URL";
@@ -113,7 +113,7 @@
 "Autocomplete.mySites" = "Мої сайти";
 
 /* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.mySitesDesc" = "Увімкнути, щоб %@ автоматично завершував URL-адреси популярних сайтів.";
+"Autocomplete.mySitesDesc" = "Увімкніть, щоб %@ автоматично завершував URL-адреси ваших улюблених сайтів.";
 
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "Популярні сайти";
@@ -160,9 +160,6 @@
 /* Label on button to cancel edits */
 "Cancel" = "Скасувати";
 
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Ваше скопійоване посилання: %@";
-
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "Копіювати зображення";
 
@@ -170,7 +167,7 @@
 "contextMenu.copyLink" = "Копіювати посилання";
 
 /* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "Ваше скопійоване посилання:";
+"contextMenu.linkCopied" = "Скопійоване посилання:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "Зберегти зображення";
@@ -263,7 +260,7 @@
 "Open.Safari" = "Safari";
 
 /* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "Це дозволяє вам зберігати зображення до своєї фотоплівки";
+"photosPermission.description" = "Це дозволить вам зберігати зображення до своєї фотоплівки";
 
 /* Title for button that takes the user to system settings */
 "photosPermission.openSettings" = "Відкрити параметри";
@@ -296,7 +293,7 @@
 "Save" = "Зберегти";
 
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
-"SearchEngine.addEngineError" = "Це не спрацювало. Спробуйте змінити пошуковий запит цим: %s.";
+"SearchEngine.addEngineError" = "Це не спрацювало. Спробуйте замінити пошуковий запит цим: %s.";
 
 /* Label for disable option on search suggestions prompt */
 "SearchSuggestions.promptDisable" = "Ні";
@@ -314,7 +311,7 @@
 "Settings.autocompleteSection" = "Автозавершення URL";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Блокування інших елементів стеження може пошкодити деякі відео і вебсторінки.";
+"Settings.blockOtherMessage" = "Блокування інших елементів стеження може порушити роботу деяких відео й вебсторінок.";
 
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo2" = "Скасувати";
@@ -329,7 +326,7 @@
 "Settings.detailTextSearchSuggestion" = "%@ відправлятиме провайдеру пошуку текст, введений в адресному рядку.";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "Mozilla зобов'язується збирати лише дані, що необхідні для роботи і вдосконалення %@.";
+"Settings.detailTextSendUsageData" = "Mozilla зобов'язується збирати лише ті дані, що необхідні для роботи та вдосконалення %@.";
 
 /* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextStudies" = "%@ може час від часу встановлювати й виконувати дослідження.";
@@ -394,9 +391,6 @@
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "ПОШУК";
 
-/* Label for Safari integration section */
-"Settings.sectionIntegration" = "ІНТЕГРАЦІЯ";
-
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
@@ -437,13 +431,13 @@
 "Settings.toggleFaceID" = "Використовувати Face ID для розблокування програми";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
-"Settings.toggleFaceIDDescription" = "Face ID може розблокувати %@ якщо URL-адреса вже відкрита в програмі";
+"Settings.toggleFaceIDDescription" = "Face ID блокуватиме %@, якщо в програмі відкрито якусь сторінку";
 
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Показувати поради на головному екрані";
 
 /* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "Може пошкодити деякі відео і вебсторінки";
+"Settings.toggleOtherSubtitle" = "Може порушити роботу деяких відео й вебсторінок";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
@@ -458,7 +452,7 @@
 "Settings.toggleTouchID" = "Використовувати Touch ID для розблокування програми";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
-"Settings.toggleTouchIDDescription" = "Touch ID може розблокувати %@ якщо URL-адреса вже відкрита в програмі";
+"Settings.toggleTouchIDDescription" = "Touch ID блокуватиме %@, якщо в програмі відкрито якусь сторінку";
 
 /* Status off for tracking protection in settings screen */
 "Settings.trackingProtectionOff" = "Вимкнено";
@@ -467,7 +461,7 @@
 "Settings.trackingProtectionOn" = "Увімкнено";
 
 /* Value for theme toggle in settings menu */
-"Settings.useSystemTheme" = "Системна світла / темна тема";
+"Settings.useSystemTheme" = "Повторювати тему системи";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Що нового";
@@ -506,7 +500,7 @@
 "ShareMenu.ShareOpenChrome" = "Відкрити в Chrome";
 
 /* Text for the share menu option when a user wants to open the current website in the default browser. */
-"ShareMenu.ShareOpenDefaultBrowser" = "Відкрити у типовому браузері";
+"ShareMenu.ShareOpenDefaultBrowser" = "Відкрити в типовому браузері";
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Відкрити у Firefox";
@@ -539,7 +533,7 @@
 "Siri.openURL" = "Відкрити улюблений сайт";
 
 /* Label for input to set a favorite URL to be opened by Siri. */
-"Siri.urlToOpen" = "Відкрити URL";
+"Siri.urlToOpen" = "URL-адреса";
 
 /* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
 "Tip.Biometric.Title" = "Блокувати %@, якщо сайт відкрито:";
@@ -581,7 +575,7 @@
 "Tip.SiriErase.Title" = "“Siri, зітри мій сеанс %@.”";
 
 /* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
-"Tip.SiriFavorite.Description" = "Додати ярлик Siri";
+"Tip.SiriFavorite.Description" = "Додати швидку команду Siri";
 
 /* Text for a label that indicates the title for siri favorite tip. */
 "Tip.SiriFavorite.Title" = "“Siri, відкрий мій улюблений сайт.”";
@@ -659,7 +653,7 @@
 "URL.cancelLabel" = "Скасувати";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "Вставити і перейти";
+"URL.contextMenu" = "Уставити й перейти";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "СТЕРТИ";

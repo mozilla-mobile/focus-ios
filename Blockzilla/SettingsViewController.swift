@@ -9,10 +9,11 @@ import LocalAuthentication
 import Intents
 import IntentsUI
 import Glean
+import SwiftUI
 
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     enum Section: String {
-        case general, privacy, usageData, studies, search, siri, integration, mozilla
+        case general, privacy, usageData, studies, search, siri, integration, mozilla, secret
 
         var numberOfRows: Int {
             switch self {
@@ -26,6 +27,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             case .siri: return 3
             case .integration: return 1
             case .mozilla: return 3
+            case .secret: return 1
             }
         }
 
@@ -39,11 +41,16 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             case .siri: return UIConstants.strings.siriShortcutsTitle
             case .integration: return UIConstants.strings.toggleSectionSafari
             case .mozilla: return UIConstants.strings.toggleSectionMozilla
+            case .secret: return nil
             }
         }
 
         static func getSections() -> [Section] {
-            return [.general, .privacy, .usageData, .studies, .search, .siri, integration, .mozilla]
+            var sections = [.general, .privacy, .usageData, .studies, .search, .siri, integration, .mozilla]
+            if Settings.getToggle(.displaySecretMenu) {
+                sections.append(.secret)
+            }
+            return sections
         }
     }
 
@@ -166,13 +173,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             toggles[mozillaIndex] = [0: homeScreenTipsToggle]
         }
     }
-
-    /// Used to calculate cell heights.
-    private lazy var dummyToggleCell: UITableViewCell = {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "dummyCell")
-        cell.accessoryView = PaddedSwitch(switchView: UISwitch())
-        return cell
-    }()
 
     private var shouldScrollToSiri: Bool
     init(searchEngineManager: SearchEngineManager, whatsNew: WhatsNewDelegate, shouldScrollToSiri: Bool = false) {
@@ -376,6 +376,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.textLabel?.text = String(format: UIConstants.strings.ratingSetting, AppInfo.productName)
                 cell.accessibilityIdentifier = "settingsViewController.rateFocus"
             }
+        case .secret:
+            cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "secretSettingsCell")
+            cell.textLabel?.text = "Internal Settings"
         }
 
         cell.textLabel?.textColor = .primaryText
@@ -391,13 +394,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
-    }
-
-    private func heightForLabel(_ label: UILabel, width: CGFloat, text: String) -> CGFloat {
-        let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
-        let attrs: [NSAttributedString.Key: Any] = [.font: label.font as Any]
-        let boundingRect = NSString(string: text).boundingRect(with: size, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: attrs, context: nil)
-        return boundingRect.height
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -473,6 +469,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 if let reviewURL = URL(string: "https://itunes.apple.com/app/id\(appId)?action=write-review"), UIApplication.shared.canOpenURL(reviewURL) {
                     UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
                 }
+            }
+        case .secret:
+            if indexPath.row == 0 {
+                let hostingController = UIHostingController(rootView: InternalSettingsView())
+                hostingController.title = "Internal Settings"
+                navigationController?.pushViewController(hostingController, animated: true)
             }
         default: break
         }

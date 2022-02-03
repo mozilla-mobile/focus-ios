@@ -145,9 +145,6 @@
 /* Label on button to cancel edits */
 "Cancel" = "منسوخ کریں";
 
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "جو ربط آپ نے نقل کیا: %@";
-
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "نقش نقل کریں";
 
@@ -361,9 +358,6 @@
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "SEARCH";
 
-/* Label for Safari integration section */
-"Settings.sectionIntegration" = "تکمل";
-
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
@@ -484,6 +478,9 @@
 /* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
 "Siri.openURL" = "پسندیدہ سائٹ کھولیں";
 
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "سائٹ کا مکمل ڈیسک ٹاپ ورژن دیکھنا چاہتے ہیں؟";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "اشتھاری ٹریکرز";
 
@@ -534,6 +531,9 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "مٹائيں";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "براؤزنگ کی سابقات صاف ہو گئی۔";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "صفحہ میں ڈھونڈیں: %@";

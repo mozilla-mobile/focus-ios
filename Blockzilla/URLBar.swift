@@ -89,7 +89,6 @@ class URLBar: UIView {
     private var centeredURLConstraints = [Constraint]()
     private var fullWidthURLConstraints = [Constraint]()
     var editingURLTextConstrains = [Constraint]()
-    var pageURLTextConstrains = [Constraint]()
     var isIPadRegularDimensions = false {
         didSet {
             updateViews()
@@ -193,7 +192,7 @@ class URLBar: UIView {
 
         truncatedUrlText.alpha = 0
         truncatedUrlText.isUserInteractionEnabled = false
-        truncatedUrlText.font = UIConstants.fonts.truncatedUrlText
+        truncatedUrlText.font = .footnote12
         truncatedUrlText.tintColor = .primaryText
         truncatedUrlText.textColor = .primaryText
         truncatedUrlText.backgroundColor = UIColor.clear
@@ -218,7 +217,7 @@ class URLBar: UIView {
         clearButton.setImage(#imageLiteral(resourceName: "icon_clear"), for: .normal)
         clearButton.addTarget(self, action: #selector(didPressClear), for: .touchUpInside)
 
-        urlText.font = UIConstants.fonts.urlText
+        urlText.font = .body15
         urlText.tintColor = .primaryText
         urlText.textColor = .primaryText
         urlText.highlightColor = .accent.withAlphaComponent(0.4)
@@ -285,7 +284,11 @@ class URLBar: UIView {
         }
 
         toolset.contextMenuButton.snp.makeConstraints { make in
-            make.trailing.equalTo(safeAreaLayoutGuide)
+            if inBrowsingMode {
+                make.trailing.equalTo(safeAreaLayoutGuide)
+            }else {
+                make.trailing.equalTo(safeAreaLayoutGuide).offset(-UIConstants.layout.urlBarMargin)
+            }
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
         }
@@ -301,7 +304,11 @@ class URLBar: UIView {
             make.top.bottom.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
 
             compressedBarConstraints.append(make.height.equalTo(UIConstants.layout.urlBarBorderHeight).constraint)
-            compressedBarConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide.snp.trailing).inset(UIConstants.layout.urlBarMargin).constraint)
+            if inBrowsingMode {
+                compressedBarConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide.snp.trailing).inset(UIConstants.layout.urlBarMargin).constraint)
+            } else {
+                compressedBarConstraints.append(make.trailing.equalTo(contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarMargin).constraint)
+            }
 
             expandedBarConstraints.append(make.trailing.equalTo(rightBarViewLayoutGuide.snp.trailing).constraint)
 
@@ -337,7 +344,7 @@ class URLBar: UIView {
 
         toolset.stopReloadButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.trailing.equalTo(textAndLockContainer).priority(.required)
+            make.trailing.equalTo(urlBarBorderView).priority(.required)
             make.width.equalTo(UIConstants.layout.urlBarButtonTargetSize).priority(900)
         }
 
@@ -364,7 +371,7 @@ class URLBar: UIView {
         }
 
         truncatedUrlText.snp.makeConstraints { make in
-            make.centerY.equalTo(self).offset(4)
+            make.centerY.equalTo(self).offset(8)
             make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview().offset(UIConstants.layout.truncatedUrlTextOffset)
         }
@@ -535,9 +542,6 @@ class URLBar: UIView {
         }
     }
 
-    /// The outer view the URL bar will shrink from/to when transitioning to/from edit mode.
-    weak var shrinkFromView: UIView?
-
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Since the URL text field is smaller and centered on iPads, make sure
         // that touching the surrounding area will trigger editing.
@@ -663,7 +667,11 @@ class URLBar: UIView {
 
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
             self.layoutIfNeeded()
-
+            
+            if self.inBrowsingMode && !self.isIPadRegularDimensions {
+                self.updateURLBorderConstraints()
+            }
+            
             self.urlBarBackgroundView.snp.remakeConstraints { make in
                 make.edges.equalToSuperview().inset(showBackgroundView ? UIConstants.layout.urlBarBorderInset : 1)
             }
@@ -676,6 +684,26 @@ class URLBar: UIView {
                 }
             }
         })
+    }
+    
+    func updateURLBorderConstraints() {
+        self.urlBarBorderView.snp.remakeConstraints { make in
+            make.height.equalTo(UIConstants.layout.urlBarBorderHeight).priority(.medium)
+            make.top.bottom.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
+            
+            compressedBarConstraints.append(make.height.equalTo(UIConstants.layout.urlBarBorderHeight).constraint)
+            if inBrowsingMode {
+                compressedBarConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide.snp.trailing).inset(UIConstants.layout.urlBarMargin).constraint)
+            } else {
+                compressedBarConstraints.append(make.trailing.equalTo(contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarMargin).constraint)
+            }
+            
+            if isEditing {
+                make.leading.equalTo(leftBarViewLayoutGuide.snp.trailing).offset(UIConstants.layout.urlBarIconInset)
+            } else {
+                make.leading.equalTo(shieldIcon.snp.leading).offset(-UIConstants.layout.urlBarIconInset)
+            }
+        }
     }
 
     /* This separate @objc function is necessary as selector methods pass sender by default. Calling
@@ -722,7 +750,7 @@ class URLBar: UIView {
         toolset.backButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         toolset.forwardButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         toolset.deleteButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
-        toolset.contextMenuButton.animateHidden(isIPadRegularDimensions ? false : isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+        toolset.contextMenuButton.animateHidden(!inBrowsingMode ? false : (isIPadRegularDimensions ? false : isHidden), duration: UIConstants.layout.urlBarTransitionAnimationDuration)
 
     }
 
@@ -775,8 +803,33 @@ class URLBar: UIView {
         (activate ? hiddenConstraints : shownConstraints)?.forEach { $0.deactivate() }
         (activate ? shownConstraints : hiddenConstraints)?.forEach { $0.activate() }
     }
+    
+    enum CollapsedState: Equatable {
+        case extended
+        case intermediate(expandAlpha: CGFloat, collapseAlpha: CGFloat)
+        case collapsed
+    }
+    
+    var collapsedState: CollapsedState = .extended {
+        didSet {
+            DispatchQueue.main.async {
+                self.updateCollapsedState()
+            }
+        }
+    }
+    
+    func updateCollapsedState() {
+        switch collapsedState {
+        case .extended:
+            collapseUrlBar(expandAlpha: 1, collapseAlpha: 0)
+        case .intermediate(expandAlpha: let expandAlpha, collapseAlpha: let collapseAlpha):
+            collapseUrlBar(expandAlpha: expandAlpha, collapseAlpha: collapseAlpha)
+        case .collapsed:
+            collapseUrlBar(expandAlpha: 0, collapseAlpha: 1)
+        }
+    }
 
-    func collapseUrlBar(expandAlpha: CGFloat, collapseAlpha: CGFloat) {
+    private func collapseUrlBar(expandAlpha: CGFloat, collapseAlpha: CGFloat) {
         urlBarBorderView.alpha = expandAlpha
         urlBarBackgroundView.alpha = expandAlpha
         truncatedUrlText.alpha = collapseAlpha
@@ -784,9 +837,9 @@ class URLBar: UIView {
         toolset.backButton.alpha = shouldShowToolset ? expandAlpha : 0
         toolset.forwardButton.alpha = shouldShowToolset ? expandAlpha : 0
         toolset.deleteButton.alpha = shouldShowToolset ? expandAlpha : 0
-        toolset.contextMenuButton.alpha = shouldShowToolset ? expandAlpha : 0
+        toolset.contextMenuButton.alpha = isEditing ? expandAlpha : (shouldShowToolset ? expandAlpha : 0)
 
-        collapsedTrackingProtectionBadge.alpha = collapseAlpha
+        collapsedTrackingProtectionBadge.alpha = 0
         if isEditing {
             shieldIcon.alpha = collapseAlpha
         } else {

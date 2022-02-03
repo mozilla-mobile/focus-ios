@@ -24,13 +24,6 @@ class SearchSuggestionsPromptView: UIView {
             updateUI(isIpadView)
         }
     }
-    var shouldShowFindInPage: Bool = false {
-        didSet {
-            if shouldShowFindInPage{
-                promptContainer.layer.maskedCorners = isIpadView ? [.layerMaxXMinYCorner, .layerMinXMinYCorner] : []
-            }
-        }
-    }
 
     init() {
         super.init(frame: CGRect.zero)
@@ -39,7 +32,7 @@ class SearchSuggestionsPromptView: UIView {
         
         promptTitle.text = UIConstants.strings.searchSuggestionsPromptTitle
         promptTitle.textColor = .primaryText
-        promptTitle.font = UIConstants.fonts.promptTitle
+        promptTitle.font = .title20Bold
         promptTitle.textAlignment = NSTextAlignment.center
         promptTitle.numberOfLines = 0
         promptTitle.lineBreakMode = .byWordWrapping
@@ -53,7 +46,7 @@ class SearchSuggestionsPromptView: UIView {
 
         promptMessage.text = String(format: UIConstants.strings.searchSuggestionsPromptMessage, AppInfo.productName)
         promptMessage.textColor = .primaryText
-        promptMessage.font = UIConstants.fonts.promptMessage
+        promptMessage.font = .body15
         promptMessage.textAlignment = NSTextAlignment.center
         promptMessage.numberOfLines = 0
         promptMessage.lineBreakMode = .byWordWrapping
@@ -67,7 +60,7 @@ class SearchSuggestionsPromptView: UIView {
 
         disableButton.accessibilityIdentifier = "SearchSuggestionsPromptView.disableButton"
         disableButton.setTitle(UIConstants.strings.searchSuggestionsPromptDisable, for: .normal)
-        disableButton.titleLabel?.font = UIConstants.fonts.promptButton
+        disableButton.titleLabel?.font = .body17Medium
         disableButton.titleLabel?.textColor = .primaryText
         disableButton.backgroundColor = .primaryDark.withAlphaComponent(0.36)
         disableButton.layer.cornerRadius = UIConstants.layout.promptButtonHeight / 2
@@ -84,7 +77,7 @@ class SearchSuggestionsPromptView: UIView {
 
         enableButton.accessibilityIdentifier = "SearchSuggestionsPromptView.enableButton"
         enableButton.setTitle(UIConstants.strings.searchSuggestionsPromptEnable, for: .normal)
-        enableButton.titleLabel?.font = UIConstants.fonts.promptButton
+        enableButton.titleLabel?.font = .body17Medium
         enableButton.titleLabel?.textColor = .primaryText
         enableButton.backgroundColor = .primaryDark.withAlphaComponent(0.36)
         enableButton.layer.cornerRadius = UIConstants.layout.promptButtonHeight / 2
@@ -105,9 +98,10 @@ class SearchSuggestionsPromptView: UIView {
     }
     
     private func updateUI(_ isIpadView: Bool) {
-        promptContainer.backgroundColor = isIpadView ? .systemBackground.withAlphaComponent(0.95) : .foundation
+        promptContainer.backgroundColor = isIpadView ? .secondarySystemBackground.withAlphaComponent(0.95) : .foundation
         if isIpadView {
             promptContainer.layer.cornerRadius = UIConstants.layout.suggestionViewCornerRadius
+            promptContainer.layer.maskedCorners =  [.layerMaxXMinYCorner, .layerMinXMinYCorner]
             promptContainer.clipsToBounds = true
         } else {
             promptContainer.layer.cornerRadius = 0

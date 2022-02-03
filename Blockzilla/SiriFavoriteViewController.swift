@@ -34,12 +34,12 @@ class SiriFavoriteViewController: UIViewController {
     private func setUpInputUI() {
         title = UIConstants.strings.favoriteUrlTitle
         navigationController?.navigationBar.tintColor = .accent
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIConstants.colors.defaultFont]
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.defaultFont]
         navigationController?.navigationBar.isTranslucent = false
         view.backgroundColor = .systemGroupedBackground
 
         inputLabel.text = UIConstants.strings.urlToOpen
-        inputLabel.font = UIConstants.fonts.settingsInputLabel
+        inputLabel.font = .body18
         inputLabel.textColor = .primaryText
         view.addSubview(inputLabel)
 
@@ -55,7 +55,7 @@ class SiriFavoriteViewController: UIViewController {
         if let storedFavorite = UserDefaults.standard.value(forKey: "favoriteUrl") as? String {
             textInput.text = storedFavorite
         } else {
-            textInput.attributedPlaceholder = NSAttributedString(string: UIConstants.strings.autocompleteAddCustomUrlPlaceholder, attributes: [.foregroundColor: UIConstants.colors.inputPlaceholder])
+            textInput.attributedPlaceholder = NSAttributedString(string: UIConstants.strings.autocompleteAddCustomUrlPlaceholder, attributes: [.foregroundColor: UIColor.inputPlaceholder])
         }
 
         textInput.accessibilityIdentifier = "urlInput"
@@ -64,7 +64,7 @@ class SiriFavoriteViewController: UIViewController {
 
         inputDescription.text = UIConstants.strings.autocompleteAddCustomUrlExample
         inputDescription.textColor = .primaryText
-        inputDescription.font = UIConstants.fonts.settingsDescriptionText
+        inputDescription.font = .footnote12
         view.addSubview(inputDescription)
 
         inputLabel.snp.makeConstraints { make in
@@ -73,21 +73,37 @@ class SiriFavoriteViewController: UIViewController {
             make.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading).offset(UIConstants.layout.settingsItemOffset)
         }
 
-        textInput.snp.makeConstraints { make in
-            make.height.equalTo(UIConstants.layout.settingsSectionHeight)
-            make.top.equalTo(inputLabel.snp.bottom).offset(UIConstants.layout.settingsTextPadding)
-            make.leading.trailing.equalToSuperview().inset(UIConstants.layout.settingsItemInset)
-        }
-
-        inputDescription.snp.makeConstraints { make in
+        addConstraintsForLandscape()
+        
+        inputDescription.snp.remakeConstraints { make in
             make.top.equalTo(textInput.snp.bottom).offset(UIConstants.layout.settingsTextPadding)
-            make.leading.equalToSuperview().offset(UIConstants.layout.settingsItemOffset)
+            make.leading.equalTo(inputLabel)
         }
-
+        
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(SiriFavoriteViewController.cancelTapped))
         self.navigationItem.leftBarButtonItem?.tintColor = .accent
     }
-
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        addConstraintsForLandscape()
+    }
+    
+    private func addConstraintsForLandscape() {
+        
+        textInput.snp.remakeConstraints { make in
+            make.height.equalTo(UIConstants.layout.settingsSectionHeight)
+            make.top.equalTo(inputLabel.snp.bottom).offset(UIConstants.layout.settingsTextPadding)
+            
+            switch (UIDevice.current.userInterfaceIdiom, UIDevice.current.orientation) {
+            case (.phone, .landscapeRight), (.phone, .landscapeLeft):
+                make.leading.trailing.equalTo(inputLabel).offset(-UIConstants.layout.settingsTextPadding)
+            default:
+                make.leading.trailing.equalToSuperview().inset(UIConstants.layout.settingsItemInset)
+                
+            }
+        }
+    }
+    
     private func setUpEditUI() {
         editView.backgroundColor = .systemGroupedBackground
         view.addSubview(editView)

@@ -5,30 +5,15 @@
 import UIKit
 import SnapKit
 
-struct PhotonActionSheetCellUX {
-    static let LabelColor = UIColor.blue
-    static let BorderWidth: CGFloat = CGFloat(0.5)
-    static let CellSideOffset = 20
-    static let TitleLabelOffset = 10
-    static let CellTopBottomOffset = 12
-    static let StatusIconSize = 24
-    static let SelectedOverlayColor = UIColor(rgb: 0x5D5F79)
-    static let CornerRadius: CGFloat = 3
-}
-
 class PhotonActionSheetCell: UITableViewCell {
-    static let Padding: CGFloat = 16
-    static let HorizontalPadding: CGFloat = 10
-    static let VerticalPadding: CGFloat = 2
-    static let IconSize = 16
+
     var actionSheet: PhotonActionSheet?
-    
     static let reuseIdentifier = "PhotonActionSheetCell"
     
     private func createLabel() -> UILabel {
         let label = UILabel()
         label.minimumScaleFactor = 0.75 // Scale the font if we run out of space
-        label.textColor = PhotonActionSheetCellUX.LabelColor
+        label.textColor = .blue
         label.setContentHuggingPriority(.defaultHigh, for: .vertical)
         label.adjustsFontSizeToFitWidth = true
         return label
@@ -38,7 +23,7 @@ class PhotonActionSheetCell: UITableViewCell {
         let icon = UIImageView()
         icon.contentMode = .scaleAspectFit
         icon.clipsToBounds = true
-        icon.layer.cornerRadius = PhotonActionSheetCellUX.CornerRadius
+        icon.layer.cornerRadius = UIConstants.layout.actionSheetCellCornerRadius
         icon.setContentHuggingPriority(.required, for: .horizontal)
         icon.setContentCompressionResistancePriority(.required, for: .horizontal)
         return icon
@@ -47,14 +32,14 @@ class PhotonActionSheetCell: UITableViewCell {
     lazy var titleLabel: UILabel = {
         let label = createLabel()
         label.numberOfLines = 4
-        label.font = UIConstants.fonts.actionMenuItem
+        label.font = .body16
         return label
     }()
     
     lazy var subtitleLabel: UILabel = {
         let label = createLabel()
         label.numberOfLines = 0
-        label.font = UIConstants.fonts.actionMenuItem
+        label.font = .body16
         return label
     }()
     
@@ -75,7 +60,7 @@ class PhotonActionSheetCell: UITableViewCell {
     
     lazy var stackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.spacing = PhotonActionSheetCell.Padding
+        stackView.spacing = UIConstants.layout.actionSheetCellPadding
         stackView.alignment = .center
         stackView.axis = .horizontal
         return stackView
@@ -85,7 +70,7 @@ class PhotonActionSheetCell: UITableViewCell {
         self.statusIcon.image = nil
         disclosureIndicator.removeFromSuperview()
         disclosureLabel.removeFromSuperview()
-        statusIcon.layer.cornerRadius = PhotonActionSheetCellUX.CornerRadius
+        statusIcon.layer.cornerRadius = UIConstants.layout.actionSheetCellCornerRadius
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -96,7 +81,7 @@ class PhotonActionSheetCell: UITableViewCell {
         
         // Setup our StackViews
         let textStackView = UIStackView(arrangedSubviews: [titleLabel, subtitleLabel])
-        textStackView.spacing = PhotonActionSheetCell.VerticalPadding
+        textStackView.spacing = UIConstants.layout.actionSheetCellVerticalPadding
         textStackView.setContentHuggingPriority(.defaultLow, for: .horizontal)
         textStackView.alignment = .leading
         textStackView.axis = .vertical
@@ -105,9 +90,9 @@ class PhotonActionSheetCell: UITableViewCell {
         stackView.addArrangedSubview(statusIcon)
         contentView.addSubview(stackView)
         
-        let padding = PhotonActionSheetCell.Padding
+        let padding = UIConstants.layout.actionSheetCellPadding
         let shrinkage: CGFloat = UIScreen.main.isSmallScreen ? 3 : 0
-        let topPadding = PhotonActionSheetCell.HorizontalPadding - shrinkage
+        let topPadding = UIConstants.layout.actionSheetCellHorizontalPadding - shrinkage
         stackView.snp.makeConstraints { make in
             make.edges.equalTo(contentView).inset(UIEdgeInsets(top: topPadding, left: padding, bottom: topPadding, right: padding))
         }
@@ -126,13 +111,13 @@ class PhotonActionSheetCell: UITableViewCell {
         subtitleLabel.text = action.text
         subtitleLabel.textColor = .secondaryText
         subtitleLabel.isHidden = action.text == nil
-        titleLabel.font  = action.bold ? UIConstants.fonts.actionMenuItemBold : UIConstants.fonts.actionMenuItem
+        titleLabel.font = action.bold ? .body16Bold : .body16
         accessibilityIdentifier = action.iconString
         accessibilityLabel = action.title
         selectionStyle = .none
         
         if let iconName = action.iconString, let image = UIImage(named: iconName) {
-            statusIcon.image = image.createScaled(size: PhotonActionSheetUX.IconSize)
+            statusIcon.image = image.createScaled(size: UIConstants.layout.actionSheetIconSize)
             if statusIcon.superview == nil {
                 if action.iconAlignment == .right {
                     stackView.addArrangedSubview(statusIcon)
@@ -151,12 +136,12 @@ class PhotonActionSheetCell: UITableViewCell {
         
         if action.textStyle == .subtitle {
             subtitleLabel.textColor = .tertiaryLabel
-            subtitleLabel.font = UIConstants.fonts.actionMenuItemSubtitle
+            subtitleLabel.font = .footnote12
         }
         
         switch action.accessory {
         case .Text:
-            disclosureLabel.font  = action.bold ? UIConstants.fonts.actionMenuItemBold : UIConstants.fonts.actionMenuItem
+            disclosureLabel.font = action.bold ? .body16Bold : .body16
             disclosureLabel.text = action.accessoryText
             disclosureLabel.textColor = titleLabel.textColor
             disclosureLabel.accessibilityIdentifier = "\(action.title).Subtitle"
@@ -164,8 +149,8 @@ class PhotonActionSheetCell: UITableViewCell {
         case .Switch:
             let toggle = UISwitch()
             toggle.isOn = action.isEnabled
-            toggle.onTintColor = UIConstants.colors.toggleOn
-            toggle.tintColor = UIConstants.colors.toggleOff
+            toggle.onTintColor = .magenta40
+            toggle.tintColor = .grey10.withAlphaComponent(0.2)
             toggle.addTarget(self, action: #selector(valueChanged(sender:)), for: .valueChanged)
             toggle.accessibilityIdentifier = "\(action.title).Toggle"
             stackView.addArrangedSubview(toggle)

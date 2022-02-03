@@ -5,11 +5,12 @@
 import UIKit
 import Telemetry
 import Glean
+import Sentry
 
 protocol AppSplashController {
-    var splashView: UIView { get }
-
-    func toggleSplashView(hide: Bool)
+    var splashView: SplashView { get }
+    func hideSplashView()
+    func showSplashView()
 }
 
 @UIApplicationMain
@@ -33,7 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
     var window: UIWindow?
 
-    var splashView: UIView = UIView()
+    var splashView = SplashView()
     private lazy var browserViewController = {
         BrowserViewController(appSplashController: self)
     }()
@@ -49,6 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             UserDefaults.standard.removePersistentDomain(forName: AppInfo.sharedContainerIdentifier)
         }
 
+        setupCrashReporting()
         setupTelemetry()
         setupExperimentation()
         
@@ -244,39 +246,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             string as CFString,
             "" as CFString) as String
     }
-
+    
     private func displaySplashAnimation() {
-        let splashView = self.splashView
-        splashView.backgroundColor = .launchScreenBackground
         window!.addSubview(splashView)
-
-        let logoImage = UIImageView(image: AppInfo.config.wordmark)
-        splashView.addSubview(logoImage)
-
         splashView.snp.makeConstraints { make in
             make.edges.equalTo(window!)
         }
-
-        logoImage.snp.makeConstraints { make in
-            make.center.equalTo(splashView)
-        }
-
-        let animationDuration = 0.25
-        UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIView.AnimationOptions(), animations: {
-            logoImage.layer.transform = CATransform3DMakeScale(0.8, 0.8, 1.0)
-        }, completion: { success in
-            UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIView.AnimationOptions(), animations: {
-                splashView.alpha = 0
-                logoImage.layer.transform = CATransform3DMakeScale(2.0, 2.0, 1.0)
-            }, completion: { success in
-                splashView.isHidden = true
-                logoImage.layer.transform = CATransform3DIdentity
-            })
-        })
+        splashView.animateDissapear()
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-        toggleSplashView(hide: false)
+        showSplashView()
         browserViewController.exitFullScreenVideo()
         browserViewController.dismissActionSheet()
         browserViewController.deactivateUrlBar()
@@ -358,15 +338,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         }
         return true
     }
+    
+    func hideSplashView() {
+        browserViewController.activateUrlBarOnHomeView()
+        splashView.animateHidden(true, duration: 0.25)
+        splashView.removeFromSuperview()
+    }
+    
+    func showSplashView() {
+        browserViewController.deactivateUrlBarOnHomeView()
+        window!.addSubview(splashView)
+        splashView.snp.makeConstraints { make in
+            make.edges.equalTo(window!)
+        }
+        splashView.animateHidden(false, duration: 0.25)
+    }
+}
 
-    func toggleSplashView(hide: Bool) {
-        let duration = 0.25
-        splashView.animateHidden(hide, duration: duration)
 
-        if !hide {
-            browserViewController.deactivateUrlBarOnHomeView()
-        } else {
-            browserViewController.activateUrlBarOnHomeView()
+// MARK: - Crash Reporting
+
+private let SentryDSNKey = "SentryDSN"
+
+extension AppDelegate {
+    func setupCrashReporting() {
+        // Do not enable crash reporting if collection of anonymous usage data is disabled.
+        if !Settings.getToggle(.sendAnonymousUsageData) {
+            return
+        }
+        
+        if let sentryDSN = Bundle.main.object(forInfoDictionaryKey: SentryDSNKey) as? String {
+            SentrySDK.start { options in
+                options.dsn = sentryDSN
+            }
         }
     }
 }
@@ -419,10 +423,20 @@ extension AppDelegate {
             .flatMap(UUID.init(uuidString:)) {
             GleanMetrics.LegacyIds.clientId.set(clientId)
         }
+        
+        if UserDefaults.standard.bool(forKey: GleanLogPingsToConsole) {
+            Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?logPings=true")!)
+        }
+        
+        if UserDefaults.standard.bool(forKey: GleanEnableDebugView) {
+            if let tag = UserDefaults.standard.string(forKey: GleanDebugViewTag), !tag.isEmpty, let encodedTag = tag.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed) {
+                Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?debugViewTag=\(encodedTag)")!)
+            }
+        }
 
         let channel = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" ? "testflight" : "release"
-        Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData), configuration: Configuration(channel: channel))
-        
+        Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData), configuration: Configuration(channel: channel), buildInfo: GleanMetrics.GleanBuild.info)
+
         // Send "at startup" telemetry
         GleanMetrics.Shortcuts.shortcutsOnHomeNumber.set(Int64(ShortcutsManager.shared.numberOfShortcuts))
         GleanMetrics.TrackingProtection.hasAdvertisingBlocked.set(Settings.getToggle(.blockAds))

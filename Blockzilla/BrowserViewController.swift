@@ -31,7 +31,6 @@ class BrowserViewController: UIViewController {
     private let searchEngineManager = SearchEngineManager(prefs: UserDefaults.standard)
     private let urlBarContainer = UIView()
     private var urlBar: URLBar!
-    private let requestHandler = RequestHandler()
     private let searchSuggestClient = SearchSuggestClient()
     private var findInPageBar: FindInPageBar?
     private var fillerView: UIView?
@@ -150,7 +149,7 @@ class BrowserViewController: UIViewController {
         isIPadRegularDimensions = traitCollection.horizontalSizeClass == .regular && traitCollection.verticalSizeClass == .regular
 
         darkView.isHidden = true
-        darkView.backgroundColor = UIConstants.colors.background
+        darkView.backgroundColor = .ink90
         darkView.alpha = 0.4
         view.addSubview(darkView)
         darkView.snp.makeConstraints { make in
@@ -244,7 +243,7 @@ class BrowserViewController: UIViewController {
         overlayView.snp.makeConstraints { make in
             make.top.equalTo(urlBarContainer.snp.bottom)
             make.leading.trailing.equalTo(mainContainerView)
-            make.bottom.equalTo(homeViewController.tipViewTop)
+            make.bottom.equalToSuperview().inset(UIConstants.layout.toolbarHeight + UIConstants.layout.tipViewHeight)
         }
 
         // Listen for request desktop site notifications
@@ -301,7 +300,7 @@ class BrowserViewController: UIViewController {
 
             // Check if user is already in a cleared session, or doesn't have biometrics enabled in settings
             if  !Settings.getToggle(SettingsToggle.biometricLogin) || !AppDelegate.needsAuthenticated || self.webViewContainer.isHidden {
-                self.appSplashController.toggleSplashView(hide: true)
+                self.appSplashController.hideSplashView()
                 return
             }
             AppDelegate.needsAuthenticated = false
@@ -316,11 +315,11 @@ class BrowserViewController: UIViewController {
                     DispatchQueue.main.async {
                         if success {
                             self.showToolbars()
-                            self.appSplashController.toggleSplashView(hide: true)
+                            self.appSplashController.hideSplashView()
                         } else {
                             // Clear the browser session, as the user failed to authenticate
                             self.resetBrowser(hidePreviousSession: true)
-                            self.appSplashController.toggleSplashView(hide: true)
+                            self.appSplashController.hideSplashView()
                         }
                     }
                 }
@@ -328,7 +327,7 @@ class BrowserViewController: UIViewController {
                 // Ran into an error with biometrics, so disable them and clear the browser:
                 Settings.set(false, forToggle: SettingsToggle.biometricLogin)
                 self.resetBrowser()
-                self.appSplashController.toggleSplashView(hide: true)
+                self.appSplashController.hideSplashView()
             }
         }
     }
@@ -453,7 +452,6 @@ class BrowserViewController: UIViewController {
         urlBar = URLBar()
         urlBar.delegate = self
         urlBar.toolsetDelegate = self
-        urlBar.shrinkFromView = urlBarContainer
         urlBar.isIPadRegularDimensions = isIPadRegularDimensions
         urlBar.shouldShowToolset = showsToolsetInURLBar
         mainContainerView.insertSubview(urlBar, aboveSubview: urlBarContainer)
@@ -476,24 +474,6 @@ class BrowserViewController: UIViewController {
                 make.leading.trailing.equalToSuperview()
             }
         }
-    }
-
-    private func buildTrackingProtectionMenu(info: TPPageStats?) -> PhotonActionSheet {
-        var actions = [[PhotonActionSheetItem]]()
-        if info != nil {
-            let titleItem = PhotonActionSheetItem(title: UIConstants.strings.trackingProtectionLabel, text: UIConstants.strings.trackingProtectionLabelDescription, textStyle: .subtitle, iconString: "tracking_protection", isEnabled: true, accessory: .Switch)
-            actions.append([titleItem])
-        } else {
-            let titleItem = PhotonActionSheetItem(title: UIConstants.strings.trackingProtectionLabel, iconString: "tracking_protection_off", isEnabled: false, accessory: .Switch)
-            actions.append([titleItem])
-        }
-        let totalCount = PhotonActionSheetItem(title: UIConstants.strings.trackersBlocked, accessory: .Text, accessoryText: String(info?.total ?? 0), bold: true)
-        let adCount = PhotonActionSheetItem(title: UIConstants.strings.adTrackerLabel, accessory: .Text, accessoryText: String(info?.adCount ?? 0))
-        let analyticCount = PhotonActionSheetItem(title: UIConstants.strings.analyticTrackerLabel, accessory: .Text, accessoryText: String(info?.analyticCount ?? 0))
-        let socialCount = PhotonActionSheetItem(title: UIConstants.strings.socialTrackerLabel, accessory: .Text, accessoryText: String(info?.socialCount ?? 0))
-        let contentCount = PhotonActionSheetItem(title: UIConstants.strings.contentTrackerLabel, accessory: .Text, accessoryText: String(info?.contentCount ?? 0))
-        actions.append([totalCount, adCount, analyticCount, socialCount, contentCount])
-        return PhotonActionSheet(actions: actions)
     }
 
     override func updateViewConstraints() {
@@ -526,7 +506,7 @@ class BrowserViewController: UIViewController {
                     self.findInPageBar = findInPageBar
                     let fillerView = UIView()
                     self.fillerView = fillerView
-                    fillerView.backgroundColor = UIConstants.Photon.Grey70
+                    fillerView.backgroundColor = .grey70
                     findInPageBar.text = text
                     findInPageBar.delegate = self
 
@@ -534,7 +514,7 @@ class BrowserViewController: UIViewController {
                     self.mainContainerView.insertSubview(fillerView, belowSubview: self.browserToolbar)
 
                     findInPageBar.snp.makeConstraints { make in
-                        make.height.equalTo(UIConstants.ToolbarHeight)
+                        make.height.equalTo(UIConstants.layout.toolbarHeight)
                         make.leading.trailing.equalTo(self.alertStackView)
                         make.bottom.equalTo(self.alertStackView.snp.bottom)
                     }
@@ -669,18 +649,6 @@ class BrowserViewController: UIViewController {
         SKStoreReviewController.requestReview()
     }
 
-    private func showSettings(shouldScrollToSiri: Bool = false) {
-        guard let modalDelegate = modalDelegate else { return }
-
-        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset, shouldScrollToSiri: shouldScrollToSiri)
-        let settingsNavController = UINavigationController(rootViewController: settingsViewController)
-        settingsNavController.modalPresentationStyle = .formSheet
-
-        modalDelegate.presentModal(viewController: settingsNavController, animated: true)
-
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.settingsButton)
-    }
-
     private func showSiriFavoriteSettings() {
         guard let modalDelegate = modalDelegate else { return }
 
@@ -779,7 +747,6 @@ class BrowserViewController: UIViewController {
         urlBar.updateConstraints()
         browserToolbar.updateConstraints()
         
-        homeViewController.toolbar.isIPadRegularDimensions = isIPadRegularDimensions
         
         shortcutsContainer.spacing = size.width < UIConstants.layout.smallestSplitViewMaxWidthLimit ?
                                         UIConstants.layout.shortcutsContainerSpacingSmallestSplitView :
@@ -803,36 +770,10 @@ class BrowserViewController: UIViewController {
         
         shortcutsBackground.snp.removeConstraints()
         addShortcutsBackgroundConstraints()
-    }
-
-    private func presentImageActionSheet(title: String, link: String?, saveAction: @escaping () -> Void, copyAction: @escaping () -> Void) {
-
-        var normalizedTitle = title
-        if title.count > UIConstants.layout.truncateCharactersLimit {
-            normalizedTitle = String("\(title.prefix(UIConstants.layout.truncateHeadCharactersCount))\(UIConstants.strings.truncateLeader)\(title.suffix(UIConstants.layout.truncateTailCharactersCount))")
+        
+        DispatchQueue.main.async {
+            self.urlBar.updateCollapsedState()
         }
-
-        let alertController = UIAlertController(title: normalizedTitle, message: nil, preferredStyle: .actionSheet)
-
-        if let link = link {
-            alertController.addAction(UIAlertAction(title: UIConstants.strings.copyLink, style: .default) { _ in
-                UIPasteboard.general.string = link
-            })
-
-            alertController.addAction(UIAlertAction(title: UIConstants.strings.shareLink, style: .default) { _ in
-                let activityViewController = UIActivityViewController(activityItems: [link], applicationActivities: nil)
-                self.present(activityViewController, animated: true, completion: nil)
-            })
-        }
-
-        alertController.addAction(UIAlertAction(title: UIConstants.strings.saveImage, style: .default) { _ in saveAction() })
-        alertController.addAction(UIAlertAction(title: UIConstants.strings.copyImage, style: .default) { _ in copyAction() })
-        alertController.addAction(UIAlertAction(title: UIConstants.strings.cancel, style: .cancel))
-
-        alertController.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection(rawValue: 0)
-        alertController.popoverPresentationController?.sourceView = self.view
-        alertController.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.size.width / 2.0, y: self.view.bounds.size.height / 2.0, width: 1.0, height: 1.0)
-        present(alertController, animated: true, completion: nil)
     }
 
     @objc private func selectLocationBar() {
@@ -861,15 +802,6 @@ class BrowserViewController: UIViewController {
 
     private func toggleURLBarBackground(isBright: Bool) {
         urlBarContainer.backgroundColor = urlBar.inBrowsingMode ? .foundation : .clear
-    }
-
-    private func toggleToolbarBackground() {
-        switch trackingProtectionStatus {
-        case .off:
-            browserToolbar.color = .dark
-        case .on:
-            browserToolbar.color = .bright
-        }
     }
 
     override var keyCommands: [UIKeyCommand]? {
@@ -925,7 +857,92 @@ class BrowserViewController: UIViewController {
             overlayView.currentURL = urlBar.url?.absoluteString ?? ""
         }
     }
+    
+    @available(iOS 14, *)
+    func buildActions(for sender: UIView) -> [UIMenuElement] {
+        var actions: [UIMenuElement] = []
+
+        if let url = urlBar.url {
+            let utils = OpenUtils(url: url, webViewController: webViewController)
+
+            getShortcutsItem(for: url)
+                .map(UIAction.init)
+                .map { UIMenu(options: .displayInline, children: [$0]) }
+                .map {
+                    actions.append($0)
+                }
+            
+
+            var actionItems: [UIMenuElement] = [UIAction(findInPageItem)]
+            actionItems.append(
+                webViewController.requestMobileSite
+                ? UIAction(requestMobileItem)
+                : UIAction(requestDesktopItem)
+            )
+            
+            let actionMenu = UIMenu(options: .displayInline, children: actionItems)
+            actions.append(actionMenu)
+
+            var shareItems: [UIMenuElement?] = [UIAction(copyItem)]
+            shareItems.append(UIAction(sharePageItem(for: utils, sender: sender)))
+            shareItems.append(openInFireFoxItem(for: url).map(UIAction.init))
+            shareItems.append(openInChromeItem(for: url).map(UIAction.init))
+            shareItems.append(UIAction(openInDefaultBrowserItem(for: url)))
+        
+            let shareMenu = UIMenu(options: .displayInline, children: shareItems.compactMap { $0 })
+            actions.append(shareMenu)
+            
+        } else {
+            actions.append(UIMenu(options: .displayInline, children: [UIAction(helpItem)]))
+        }
+        actions.append(UIMenu(options: .displayInline, children: [UIAction(settingsItem)]))
+        
+        return actions
+    }
+    
+    func buildActions(for sender: UIView) -> [[PhotonActionSheetItem]] {
+        var actions: [[PhotonActionSheetItem]] = []
+        
+        if let url = urlBar.url {
+            let utils = OpenUtils(url: url, webViewController: webViewController)
+
+            actions.append([getShortcutsItem(for: url).map(PhotonActionSheetItem.init)].compactMap{ $0 })
+            
+            var actionItems = [PhotonActionSheetItem(findInPageItem)]
+            actionItems.append(
+                webViewController.requestMobileSite
+                ? PhotonActionSheetItem(requestMobileItem)
+                : PhotonActionSheetItem(requestDesktopItem)
+            )
+            
+            var shareItems: [PhotonActionSheetItem?] = [PhotonActionSheetItem(copyItem)]
+            shareItems.append(PhotonActionSheetItem(sharePageItem(for: utils, sender: sender)))
+            shareItems.append(openInFireFoxItem(for: url).map(PhotonActionSheetItem.init))
+            shareItems.append(openInChromeItem(for: url).map(PhotonActionSheetItem.init))
+            shareItems.append(PhotonActionSheetItem(openInDefaultBrowserItem(for: url)))
+            
+            actions.append(actionItems)
+            actions.append(shareItems.compactMap { $0 })
+        } else {
+            actions.append([PhotonActionSheetItem(helpItem)])
+        }
+        
+        actions.append([PhotonActionSheetItem(settingsItem)])
+        return actions
+    }
+    
+    func presentContextMenu(from sender: InsetButton) {
+        if #available(iOS 14, *) {
+            sender.showsMenuAsPrimaryAction = true
+            sender.menu = UIMenu(children: buildActions(for: sender))
+        } else {
+            let pageActionsMenu = PhotonActionSheet(actions: buildActions(for: sender))
+            presentPhotonActionSheet(pageActionsMenu, from: sender)
+        }
+    }
 }
+
+extension BrowserViewController: MenuItemProvider {}
 
 extension BrowserViewController: UIDropInteractionDelegate {
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
@@ -977,6 +994,16 @@ extension BrowserViewController: FindInPageBarDelegate {
         let escaped = text.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"")
         webViewController.evaluate("__firefox__.\(function)(\"\(escaped)\")", completion: nil)
     }
+    
+    private func shortcutContextMenuIsOpenOnIpad() -> Bool {
+        var shortcutContextMenuIsDisplayed: Bool =  false
+        for element in shortcutsContainer.subviews {
+            if let shortcut = element as? ShortcutView, shortcut.contextMenuIsDisplayed {
+                shortcutContextMenuIsDisplayed = true
+            }
+        }
+        return isIPadRegularDimensions && shortcutContextMenuIsDisplayed
+    }
 }
 
 extension BrowserViewController: URLBarDelegate {
@@ -986,9 +1013,9 @@ extension BrowserViewController: URLBarDelegate {
         let autocompleteSource = CustomCompletionSource()
 
         switch autocompleteSource.add(suggestion: url.absoluteString) {
-        case .error(.duplicateDomain):
+        case .failure(.duplicateDomain):
             break
-        case .error(let error):
+        case .failure(let error):
             guard !error.message.isEmpty else { return }
             Toast(text: error.message).show()
         case .success:
@@ -1084,6 +1111,8 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidDismiss(_ urlBar: URLBar) {
+       
+        guard !shortcutContextMenuIsOpenOnIpad() else { return }
         overlayView.dismiss()
         toggleURLBarBackground(isBright: !webViewController.isLoading)
         shortcutsContainer.isHidden = urlBar.inBrowsingMode
@@ -1166,80 +1195,6 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidLongPress(_ urlBar: URLBar) { }
-    
-    func presentContextMenu(from sender: UIView) {
-        var actions: [[PhotonActionSheetItem]] = []
-        
-        if let url = urlBar.url {
-            let utils = OpenUtils(url: url, webViewController: webViewController)
-            let items = PageActionSheetItems(url: url)
-            
-            let shortcut = Shortcut(url: url)
-            if shortcutManager.isSaved(shortcut: shortcut) {
-                let shortcutItem = [items.removeFromShortcutsItem]
-                actions.append(shortcutItem)
-            } else if shortcutManager.numberOfShortcuts < UIConstants.maximumNumberOfShortcuts {
-                let shortcutItem = [items.addToShortcutsItem]
-                actions.append(shortcutItem)
-            }
-            
-            let sharePageItem = PhotonActionSheetItem(title: UIConstants.strings.sharePage, iconString: "icon_openwith_active") { [weak self] _ in
-                guard let self = self else { return }
-                let shareVC = utils.buildShareViewController()
-                
-                // Exact frame dimensions taken from presentPhotonActionSheet
-                shareVC.popoverPresentationController?.sourceView = sender
-                shareVC.popoverPresentationController?.sourceRect = CGRect(x: sender.frame.width/2, y: sender.frame.size.height * 0.75, width: 1, height: 1)
-                
-                shareVC.becomeFirstResponder()
-                self.present(shareVC, animated: true, completion: nil)
-            }
-            
-            var actionItems = [items.findInPageItem]
-            actionItems.append(
-                webViewController.requestMobileSite
-                    ? items.requestMobileItem
-                    : items.requestDesktopItem
-            )
-            
-            let copyItem = PhotonActionSheetItem(title: UIConstants.strings.copyAddress, iconString: "icon_link") { [weak self] _ in
-                guard let self = self else { return }
-                self.urlBar.copyToClipboard()
-                Toast(text: UIConstants.strings.copyURLToast).show()
-            }
-            var shareItems = [copyItem]
-            shareItems.append(sharePageItem)
-            
-            if items.canOpenInFirefox {
-                shareItems.append(items.openInFireFoxItem)
-            }
-            if items.canOpenInChrome {
-                shareItems.append(items.openInChromeItem)
-            }
-            shareItems.append(items.openInDefaultBrowserItem)
-            
-            actions.append(actionItems)
-            actions.append(shareItems)
-        } else {
-            let helpItem = PhotonActionSheetItem(title: UIConstants.strings.aboutRowHelp, iconString: "icon_help") { [weak self] _ in
-                guard let self = self else { return }
-                self.submit(text: "https://support.mozilla.org/en-US/products/focus-firefox/Focus-ios")
-            }
-            
-            actions.append([helpItem])
-        }
-        
-        let settingsItem = PhotonActionSheetItem(title: UIConstants.strings.settingsTitle, iconString: "icon_settings") { [weak self] _ in
-            guard let self = self else { return }
-            self.showSettings()
-        }
-        
-        actions.append([settingsItem])
-        
-        let pageActionsMenu = PhotonActionSheet(actions: actions)
-        
-        presentPhotonActionSheet(pageActionsMenu, from: sender)
-    }
 }
 
 extension BrowserViewController: PhotonActionSheetDelegate {
@@ -1282,6 +1237,12 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 }
 
 extension BrowserViewController: ShortcutViewDelegate {
+    
+    func dismissShortcut() {
+        guard isIPadRegularDimensions else { return }
+        urlBarDidDismiss(urlBar)
+    }
+    
     func shortcutTapped(shortcut: Shortcut) {
         ensureBrowsingMode()
         urlBar.url = shortcut.url
@@ -1289,19 +1250,11 @@ extension BrowserViewController: ShortcutViewDelegate {
         submit(url: shortcut.url)
         GleanMetrics.Shortcuts.shortcutOpenedCounter.add()
     }
-
-    func shortcutLongPressed(shortcut: Shortcut, shortcutView: ShortcutView) {
-        let removeFromShortcutsItem = PhotonActionSheetItem(title: UIConstants.strings.removeFromShortcuts, iconString: "icon_shortcuts_remove") { action in
-            ShortcutsManager.shared.removeFromShortcuts(shortcut: shortcut)
-            self.shortcutsBackground.isHidden = self.shortcutManager.numberOfShortcuts == 0 || !self.urlBar.inBrowsingMode ? true : false
-            GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_home_screen"].add()
-        }
-        
-        var actions: [[PhotonActionSheetItem]] = []
-        actions.append([removeFromShortcutsItem])
-        
-        let shortcutActionsMenu = PhotonActionSheet(actions: actions)
-        presentPhotonActionSheet(shortcutActionsMenu, from: shortcutView, arrowDirection: .up)
+    
+    func removeFromShortcutsAction(shortcut: Shortcut) {
+        ShortcutsManager.shared.removeFromShortcuts(shortcut: shortcut)
+        self.shortcutsBackground.isHidden = self.shortcutManager.numberOfShortcuts == 0 || !self.urlBar.inBrowsingMode ? true : false
+        GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_home_screen"].add()
     }
 }
 
@@ -1466,9 +1419,9 @@ extension BrowserViewController: OverlayViewDelegate {
 
         let autocompleteSource = CustomCompletionSource()
         switch autocompleteSource.add(suggestion: query) {
-        case .error(.duplicateDomain):
+        case .failure(.duplicateDomain):
             Toast(text: UIConstants.strings.autocompleteCustomURLDuplicate).show()
-        case .error(let error):
+        case .failure(let error):
             guard !error.message.isEmpty else { return }
             Toast(text: error.message).show()
         case .success:
@@ -1551,7 +1504,6 @@ extension BrowserViewController: WebControllerDelegate {
         urlBar.isLoading = true
         urlBar.canDelete = true
         browserToolbar.canDelete = true
-        browserToolbar.color = .loading
         toggleURLBarBackground(isBright: false)
         updateURLBar()
         if trackingProtectionStatus == .off {
@@ -1562,7 +1514,6 @@ extension BrowserViewController: WebControllerDelegate {
     func webControllerDidFinishNavigation(_ controller: WebController) {
         updateURLBar()
         urlBar.isLoading = false
-        toggleToolbarBackground()
         toggleURLBarBackground(isBright: !urlBar.isEditing)
         urlBar.progressBar.hideProgressBar()
         GleanMetrics.Browser.totalUriCount.add()
@@ -1576,7 +1527,6 @@ extension BrowserViewController: WebControllerDelegate {
         urlBar.url = webViewController.url
         urlBar.isLoading = false
         toggleURLBarBackground(isBright: true)
-        toggleToolbarBackground()
         urlBar.progressBar.hideProgressBar()
     }
 
@@ -1650,8 +1600,16 @@ extension BrowserViewController: WebControllerDelegate {
         default:
             scrollBarState = .transitioning
         }
-
-        self.urlBar.collapseUrlBar(expandAlpha: max(0, (1 - scrollBarOffsetAlpha * 2)), collapseAlpha: max(0, -(1 - scrollBarOffsetAlpha * 2)))
+        
+        let expandAlpha = max(0, (1 - scrollBarOffsetAlpha * 2))
+        let collapseAlpha = max(0, -(1 - scrollBarOffsetAlpha * 2))
+        
+        if expandAlpha == 1, collapseAlpha == 0 {
+            self.urlBar.collapsedState = .extended
+        } else {
+            self.urlBar.collapsedState = .intermediate(expandAlpha: expandAlpha, collapseAlpha: collapseAlpha)
+        }
+        
         self.urlBarTopConstraint.update(offset: -scrollBarOffsetAlpha * (UIConstants.layout.urlBarHeight - UIConstants.layout.collapsedUrlBarHeight))
         self.toolbarBottomConstraint.update(offset: scrollBarOffsetAlpha * (UIConstants.layout.browserToolbarHeight + view.safeAreaInsets.bottom))
         updateViewConstraints()
@@ -1677,8 +1635,6 @@ extension BrowserViewController: WebControllerDelegate {
         handleNavigationForward()
     }
 
-    func webController(_ controller: WebController, stateDidChange state: BrowserState) {}
-
     func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus) {
         // Calculate the number of trackers blocked and add that to lifetime total
         if case .on(let info) = trackingStatus,
@@ -1696,7 +1652,7 @@ extension BrowserViewController: WebControllerDelegate {
         scrollBarState = .animating
 
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: {
-            self.urlBar.collapseUrlBar(expandAlpha: 1, collapseAlpha: 0)
+            self.urlBar.collapsedState = .extended
             self.urlBarTopConstraint.update(offset: 0)
             self.toolbarBottomConstraint.update(inset: 0)
             scrollView.bounds.origin.y += self.scrollBarOffsetAlpha * UIConstants.layout.urlBarHeight
@@ -1709,10 +1665,9 @@ extension BrowserViewController: WebControllerDelegate {
 
     private func hideToolbars() {
         let scrollView = webViewController.scrollView
-
         scrollBarState = .animating
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: {
-            self.urlBar.collapseUrlBar(expandAlpha: 0, collapseAlpha: 1)
+            self.urlBar.collapsedState = .collapsed
             self.urlBarTopConstraint.update(offset: -UIConstants.layout.urlBarHeight + UIConstants.layout.collapsedUrlBarHeight)
             self.toolbarBottomConstraint.update(offset: UIConstants.layout.browserToolbarHeight + self.view.safeAreaInsets.bottom)
             scrollView.bounds.origin.y += (self.scrollBarOffsetAlpha - 1) * UIConstants.layout.urlBarHeight
@@ -1771,7 +1726,9 @@ extension BrowserViewController: UIPopoverPresentationControllerDelegate {
     
     func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>) {
         guard urlBar.inBrowsingMode else { return }
-        guard popoverPresentationController.presentedViewController is PhotonActionSheet  else { return }
+        guard let menuSheet = popoverPresentationController.presentedViewController as? PhotonActionSheet, !(menuSheet.popoverPresentationController?.sourceView is ShortcutView) else {
+            return
+        }
         view.pointee = self.showsToolsetInURLBar ? urlBar.contextMenuButton : browserToolbar.contextMenuButton
     }
 }
@@ -1787,4 +1744,115 @@ extension BrowserViewController {
 protocol WhatsNewDelegate {
     func shouldShowWhatsNew() -> Bool
     func didShowWhatsNew()
+}
+
+extension BrowserViewController: MenuActionable {
+    
+    func openInFirefox(url: URL) {
+        guard let escaped = url.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed),
+              let firefoxURL = URL(string: "firefox://open-url?url=\(escaped)&private=true"),
+              UIApplication.shared.canOpenURL(firefoxURL) else {
+                  return
+              }
+        
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.menu, value: "firefox")
+        UIApplication.shared.open(firefoxURL, options: [:])
+    }
+    
+    func findInPage() {
+        NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: UIConstants.strings.findInPageNotification)))
+    }
+    
+    func openInDefaultBrowser(url: URL) {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.menu, value: "default")
+        UIApplication.shared.open(url, options: [:])
+    }
+    
+    func openInChrome(url: URL) {
+        // Code pulled from https://github.com/GoogleChrome/OpenInChrome
+        // Replace the URL Scheme with the Chrome equivalent.
+        var chromeScheme: String?
+        if url.scheme == "http" {
+            chromeScheme = "googlechrome"
+        } else if url.scheme == "https" {
+            chromeScheme = "googlechromes"
+        }
+        
+        // Proceed only if a valid Google Chrome URI Scheme is available.
+        guard let scheme = chromeScheme,
+              let rangeForScheme = url.absoluteString.range(of: ":"),
+              let chromeURL = URL(string: scheme + url.absoluteString[rangeForScheme.lowerBound...]) else { return }
+        
+        // Open the URL with Chrome.
+        UIApplication.shared.open(chromeURL, options: [:])
+    }
+    
+    var canOpenInFirefox: Bool {
+        return UIApplication.shared.canOpenURL(URL(string: "firefox://")!)
+    }
+
+    var canOpenInChrome: Bool {
+        return UIApplication.shared.canOpenURL(URL(string: "googlechrome://")!)
+    }
+    
+    func requestDesktopBrowsing() {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.requestDesktop)
+        NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification)))
+    }
+    
+    func requestMobileBrowsing() {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.requestMobile)
+        NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: UIConstants.strings.requestMobileNotification)))
+    }
+    
+    func showSharePage(for utils: OpenUtils, sender: UIView) {
+        let shareVC = utils.buildShareViewController()
+        
+        // Exact frame dimensions taken from presentPhotonActionSheet
+        shareVC.popoverPresentationController?.sourceView = sender
+        shareVC.popoverPresentationController?.sourceRect =
+        CGRect(
+            x: sender.frame.width/2,
+            y: sender.frame.size.height,
+            width: 1,
+            height: 1
+        )
+        
+        shareVC.becomeFirstResponder()
+        self.present(shareVC, animated: true, completion: nil)
+    }
+    
+    func showSettings(shouldScrollToSiri: Bool = false) {
+        guard let modalDelegate = modalDelegate else { return }
+
+        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset, shouldScrollToSiri: shouldScrollToSiri)
+        let settingsNavController = UINavigationController(rootViewController: settingsViewController)
+        settingsNavController.modalPresentationStyle = .formSheet
+
+        modalDelegate.presentModal(viewController: settingsNavController, animated: true)
+
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.settingsButton)
+    }
+    
+    func showHelp() {
+        submit(text: "https://support.mozilla.org/en-US/products/focus-firefox/Focus-ios")
+    }
+    
+    func showCopy() {
+        urlBar.copyToClipboard()
+        Toast(text: UIConstants.strings.copyURLToast).show()
+    }
+    
+    func addToShortcuts(url: URL) {
+        let shortcut = Shortcut(url: url)
+        self.shortcutManager.addToShortcuts(shortcut: shortcut)
+        GleanMetrics.Shortcuts.shortcutAddedCounter.add()
+        TipManager.shortcutsTip = false
+    }
+    
+    func removeShortcut(url: URL) {
+        let shortcut = Shortcut(url: url)
+        self.shortcutManager.removeFromShortcuts(shortcut: shortcut)
+        GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_browser_menu"].add()
+    }
 }
