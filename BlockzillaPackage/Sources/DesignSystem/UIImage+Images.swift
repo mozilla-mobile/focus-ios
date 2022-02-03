@@ -17,5 +17,6 @@ public extension UIImage {
     static let back = UIImage(named: "icon_back_active", in: .module, with: nil)!
     static let forward = UIImage(named: "icon_forward_active", in: .module, with: nil)!
     static let refresh = UIImage(named: "icon_refresh_menu", in: .module, with: nil)!
+    static let stopRefresh = UIImage(named: "icon_stop_menu", in: .module, with: nil)!
     static let delete = UIImage(named: "icon_delete", in: .module, with: nil)!
 }

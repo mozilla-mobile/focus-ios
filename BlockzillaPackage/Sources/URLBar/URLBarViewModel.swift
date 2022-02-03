@@ -1,10 +1,26 @@
 import UIKit
 import Combine
 
+public enum URLViewAction {
+    case contextMenuTap
+    case cancelButtonTap
+    case backButtonTap
+    case forwardButtonTap
+    case stopReloadButtonTap
+    case deleteButtonTap
+    case searchTapped
+    case urlBarSelected
+    case urlBarDismissed
+}
+
 public class URLBarViewModel {
     public enum BrowsingState: Equatable {
+        public enum LoadingState: Equatable {
+            case stop
+            case refresh
+        }
         case home
-        case browsing
+        case browsing(LoadingState)
     }
     
     public enum Orientation: Equatable {
@@ -30,9 +46,15 @@ public class URLBarViewModel {
         }
     }
     
+    internal var viewActionSubject = PassthroughSubject<URLViewAction, Never>()
+    public var viewActionPublisher: AnyPublisher<URLViewAction, Never> { viewActionSubject.eraseToAnyPublisher() }
     
-    public var currentSelection = CurrentValueSubject<Selection, Never>(.selected)
-    public var browsingState = CurrentValueSubject<BrowsingState, Never>(.home)
+    private var currentSelectionSubject = CurrentValueSubject<Selection, Never>(.selected)
+    public var currentSelectionPublisher: AnyPublisher<Selection, Never> { currentSelectionSubject.eraseToAnyPublisher() }
+    
+    private var browsingStateSubject = CurrentValueSubject<BrowsingState, Never>(.home)
+    public var browsingStatePublisher: AnyPublisher<BrowsingState, Never> { browsingStateSubject.eraseToAnyPublisher() }
+    
     private var cancellables: Set<AnyCancellable> = []
     
     private let orientationSubject = NotificationCenter
@@ -43,12 +65,70 @@ public class URLBarViewModel {
         }
     
     var statePublisher: AnyPublisher<(BrowsingState, Device, Orientation), Never> {
-        Publishers.CombineLatest(browsingState, orientationSubject)
+        Publishers.CombineLatest(browsingStateSubject, orientationSubject)
             .receive(on: DispatchQueue.main)
             .map { browsingState, orientation in
                 return (browsingState, Device(), orientation)
             }
             .eraseToAnyPublisher()
     }
-    public init() {}
+    
+    var cancellable: AnyCancellable?
+    
+    public init() {
+        cancellable = viewActionPublisher
+            .sink { action in
+                switch action {
+                case .contextMenuTap:
+                    print("contextMenuTap")
+                    
+                case .cancelButtonTap:
+                    self.currentSelectionSubject
+                        .send(.unselected)
+                    
+                case .backButtonTap:
+                    print("backButtonTap")
+                    
+                case .forwardButtonTap:
+                    print("forwardButtonTap")
+                    
+                case .stopReloadButtonTap:
+                    print("stopReloadButtonTap")
+                    
+                case .deleteButtonTap:
+                    self.goHome()
+                    print("deleteButtonTap")
+                    
+                case .searchTapped:
+                    self.startBrowsing()
+                    
+                case .urlBarSelected:
+                    self.selectURLBar()
+                    
+                case .urlBarDismissed:
+                    self.currentSelectionSubject
+                        .send(.unselected)
+                }
+            }
+    }
+    
+    public func selectURLBar() {
+        self.currentSelectionSubject
+            .send(.selected)
+    }
+    
+    public func startBrowsing() {
+        self.browsingStateSubject
+            .send(.browsing(.stop))
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.browsingStateSubject
+                .send(.browsing(.refresh))
+        }
+    }
+    
+    public func goHome() {
+        self.browsingStateSubject
+            .send(.home)
+    }
 }

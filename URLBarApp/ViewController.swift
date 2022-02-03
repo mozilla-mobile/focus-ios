@@ -1,33 +1,26 @@
-//
-//  ViewController.swift
-//  URLBarApp
-//
-//  Created by razvan.litianu on 26.01.2022.
-//  Copyright © 2022 Mozilla. All rights reserved.
-//
-
 import UIKit
 import URLBar
+import Combine
 
 class ViewController: UIViewController {
     @IBOutlet weak var urlBar: URLBarView!
     
+    var cancellable: AnyCancellable?
     override func viewDidLoad() {
         super.viewDidLoad()
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        urlBar.viewModel.currentSelection.send(.selected)
+        urlBar.viewModel.selectURLBar()
     }
 
     @IBAction func browse(_ sender: Any) {
-        urlBar.viewModel.browsingState.send(.browsing)
+        urlBar.viewModel.startBrowsing()
     }
     
     @IBAction func home(_ sender: Any) {
-        urlBar.viewModel.browsingState.send(.home)
+        urlBar.viewModel.goHome()
     }
     
 }
