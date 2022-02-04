@@ -11,6 +11,7 @@ public enum URLViewAction {
     case searchTapped
     case urlBarSelected
     case urlBarDismissed
+    case shieldIconTap
 }
 
 public class URLBarViewModel {
@@ -55,6 +56,9 @@ public class URLBarViewModel {
     private var browsingStateSubject = CurrentValueSubject<BrowsingState, Never>(.home)
     public var browsingStatePublisher: AnyPublisher<BrowsingState, Never> { browsingStateSubject.eraseToAnyPublisher() }
     
+    public var connectionStateSubject = CurrentValueSubject<TrackingProtectionStatus, Never>(.on(.empty))
+    public var connectionStatePublisher: AnyPublisher<TrackingProtectionStatus, Never> { connectionStateSubject.eraseToAnyPublisher() }
+    
     private var cancellables: Set<AnyCancellable> = []
     
     private let orientationSubject = NotificationCenter
@@ -73,10 +77,8 @@ public class URLBarViewModel {
             .eraseToAnyPublisher()
     }
     
-    var cancellable: AnyCancellable?
-    
     public init() {
-        cancellable = viewActionPublisher
+        viewActionPublisher
             .sink { action in
                 switch action {
                 case .contextMenuTap:
@@ -93,7 +95,18 @@ public class URLBarViewModel {
                     print("forwardButtonTap")
                     
                 case .stopReloadButtonTap:
-                    print("stopReloadButtonTap")
+                    switch self.browsingStateSubject.value {
+                    case .home:
+                        ()
+                    case .browsing(let loadingState):
+                        switch loadingState {
+                        case .stop:
+                            self.browsingStateSubject
+                                .send(.browsing(.refresh))
+                        case .refresh:
+                            self.startBrowsing()
+                        }
+                    }
                     
                 case .deleteButtonTap:
                     self.goHome()
@@ -108,8 +121,12 @@ public class URLBarViewModel {
                 case .urlBarDismissed:
                     self.currentSelectionSubject
                         .send(.unselected)
+                    
+                case .shieldIconTap:
+                    print("shieldIconTap")
                 }
             }
+            .store(in: &cancellables)
     }
     
     public func selectURLBar() {

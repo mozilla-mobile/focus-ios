@@ -27,25 +27,30 @@
                                     <constraint firstAttribute="height" constant="150" id="MLD-cN-dg2"/>
                                 </constraints>
                             </view>
-                            <stackView opaque="NO" contentMode="scaleToFill" spacing="104" translatesAutoresizingMaskIntoConstraints="NO" id="mbe-zf-k9h">
-                                <rect key="frame" x="84" y="432.5" width="246" height="31"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="WGw-V7-HQm">
+                                <rect key="frame" x="80" y="401" width="254" height="94"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kch-Zx-Nzd">
-                                        <rect key="frame" x="0.0" y="0.0" width="71" height="31"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="filled" title="browse"/>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="NJz-Wn-vUu">
+                                        <rect key="frame" x="0.0" y="0.0" width="254" height="32"/>
+                                        <segments>
+                                            <segment title="Home"/>
+                                            <segment title="Browsing"/>
+                                        </segments>
                                         <connections>
-                                            <action selector="browse:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4xF-fP-3A0"/>
+                                            <action selector="homeSegment:" destination="BYZ-38-t0r" eventType="valueChanged" id="3fG-7T-AxP"/>
                                         </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gql-HK-X6h">
-                                        <rect key="frame" x="175" y="0.0" width="71" height="31"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="filled" title="home"/>
+                                    </segmentedControl>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="SOX-qt-ezC">
+                                        <rect key="frame" x="0.0" y="63" width="254" height="32"/>
+                                        <segments>
+                                            <segment title="on"/>
+                                            <segment title="off"/>
+                                            <segment title="not secure"/>
+                                        </segments>
                                         <connections>
-                                            <action selector="home:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FUc-hp-Qfd"/>
+                                            <action selector="connectionSegment:" destination="BYZ-38-t0r" eventType="valueChanged" id="cF0-UA-hYc"/>
                                         </connections>
-                                    </button>
+                                    </segmentedControl>
                                 </subviews>
                             </stackView>
                         </subviews>
@@ -53,9 +58,9 @@
                         <constraints>
                             <constraint firstItem="Yer-tv-eZi" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="BHF-Uf-X9L"/>
                             <constraint firstItem="Yer-tv-eZi" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Fix-NA-XUY"/>
+                            <constraint firstItem="WGw-V7-HQm" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="alS-kl-Jpm"/>
                             <constraint firstAttribute="trailing" secondItem="Yer-tv-eZi" secondAttribute="trailing" id="drd-UD-cRR"/>
-                            <constraint firstItem="mbe-zf-k9h" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="jpI-dd-U7u"/>
-                            <constraint firstItem="mbe-zf-k9h" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="nt0-hI-AbC"/>
+                            <constraint firstItem="WGw-V7-HQm" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="fdI-qu-ToS"/>
                         </constraints>
                     </view>
                     <connections>

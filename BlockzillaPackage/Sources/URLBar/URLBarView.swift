@@ -62,7 +62,7 @@ public class URLBarView: UIView {
     private lazy var urlStackView: UIStackView = {
         let stackView = UIStackView(
             arrangedSubviews: [
-                shieldIcon,
+                shieldIconButton,
                 urlTextField
             ])
         stackView.axis = .horizontal
@@ -97,8 +97,8 @@ public class URLBarView: UIView {
                     .send(.cancelButtonTap)
             }
             .store(in: &cancellables)
-        cancelButton.tintColor = .label
         cancelButton.setImage(.cancel, for: .normal)
+        cancelButton.tintColor = .label
         cancelButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         cancelButton.setContentHuggingPriority(.required, for: .horizontal)
         cancelButton.accessibilityIdentifier = "URLBar.cancelButton"
@@ -125,8 +125,8 @@ public class URLBarView: UIView {
                 self.viewModel.viewActionSubject.send(.contextMenuTap)
             }
             .store(in: &cancellables)
-        contextMenuButton.tintColor = .label
         contextMenuButton.setImage(.menu, for: .normal)
+        contextMenuButton.tintColor = .label
         contextMenuButton.accessibilityLabel = UIConstants.strings.browserSettings
         contextMenuButton.accessibilityIdentifier = "HomeView.settingsButton"
         contextMenuButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
@@ -140,9 +140,17 @@ public class URLBarView: UIView {
     }()
     
     // TODO: make shield icon a button
-    lazy var shieldIcon: TrackingProtectionBadge = {
-        let shieldIcon = TrackingProtectionBadge()
-        shieldIcon.tintColor = .primaryText
+    lazy var shieldIconButton: UIButton = {
+        let shieldIcon = UIButton()
+        shieldIcon
+            .publisher(event: .touchUpInside)
+            .sink { [unowned self] _ in
+                self.viewModel
+                    .viewActionSubject
+                    .send(.shieldIconTap)
+            }
+            .store(in: &cancellables)
+        shieldIcon.setImage(.trackingProtectionOn, for: .normal)
         shieldIcon.contentMode = .center
         shieldIcon.accessibilityIdentifier = "URLBar.trackingProtectionIcon"
         shieldIcon.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -155,7 +163,7 @@ public class URLBarView: UIView {
     }()
     
     lazy var backButton: UIButton = {
-        let backButton = UIButton()
+        let backButton =  UIButton(type: .system)
         backButton
             .publisher(event: .touchUpInside)
             .sink { [unowned self] _ in
@@ -165,6 +173,7 @@ public class URLBarView: UIView {
             }
             .store(in: &cancellables)
         backButton.setImage(.back, for: .normal)
+        backButton.tintColor = .label
         backButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
 //        backButton.accessibilityLabel = UIConstants.strings.browserBack
 //        backButton.isEnabled = false
@@ -178,7 +187,7 @@ public class URLBarView: UIView {
     }()
     
     lazy var forwardButton: UIButton = {
-        let forwardButton = UIButton()
+        let forwardButton =  UIButton(type: .system)
         forwardButton
             .publisher(event: .touchUpInside)
             .sink { [unowned self] _ in
@@ -188,6 +197,7 @@ public class URLBarView: UIView {
             }
             .store(in: &cancellables)
         forwardButton.setImage(.forward, for: .normal)
+        forwardButton.tintColor = .label
         forwardButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
 //        forwardButton.accessibilityLabel = UIConstants.strings.browserForward
 //        forwardButton.isEnabled = false
@@ -201,7 +211,7 @@ public class URLBarView: UIView {
     }()
     
     private lazy var stopReloadButton: UIButton = {
-        let stopReloadButton = UIButton()
+        let stopReloadButton =  UIButton(type: .system)
         stopReloadButton
             .publisher(event: .touchUpInside)
             .sink { [unowned self] _ in
@@ -211,6 +221,7 @@ public class URLBarView: UIView {
             }
             .store(in: &cancellables)
         stopReloadButton.setImage(.refresh, for: .normal)
+        stopReloadButton.tintColor = .label
         stopReloadButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         stopReloadButton.accessibilityIdentifier = "BrowserToolset.stopReloadButton"
         stopReloadButton.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -219,7 +230,7 @@ public class URLBarView: UIView {
     }()
 
     lazy var deleteButton: UIButton = {
-        let deleteButton = UIButton()
+        let deleteButton =  UIButton(type: .system)
         deleteButton
             .publisher(event: .touchUpInside)
             .sink { [unowned self] _ in
@@ -229,6 +240,7 @@ public class URLBarView: UIView {
             }
             .store(in: &cancellables)
         deleteButton.setImage(.delete, for: .normal)
+        deleteButton.tintColor = .label
         deleteButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         deleteButton.accessibilityIdentifier = "URLBar.deleteButton"
 //        deleteButton.isEnabled = false
@@ -251,6 +263,8 @@ public class URLBarView: UIView {
         urlText.autocapitalizationType = .none
         urlText.autocorrectionType = .no
 //        urlText.rightView = clearButton
+        
+        //TODO: check how we can tint the clear button, previosly it had a dark tint
         urlText.rightViewMode = .whileEditing
         urlText.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .vertical)
         urlText.autocompleteDelegate = self
@@ -286,6 +300,30 @@ public class URLBarView: UIView {
         viewModel.statePublisher
             .removeDuplicates(by: ==)
             .sink(receiveValue: self.adaptUI)
+            .store(in: &cancellables)
+        
+        viewModel
+            .connectionStatePublisher
+            .removeDuplicates(by: ==)
+            .map { trackingProtectionStatus -> UIImage in
+                switch trackingProtectionStatus {
+                case .on:
+                    return .trackingProtectionOn
+                case .off:
+                    return .trackingProtectionOff
+                case .connectionNotSecure:
+                    return .connectionNotSecure
+                }
+            }
+            .sink(receiveValue: { [shieldIconButton] image in
+                UIView.transition(
+                    with: shieldIconButton,
+                    duration: 0.1,
+                    options: .transitionCrossDissolve,
+                    animations: {
+                        shieldIconButton.setImage(image, for: .normal)
+                    })
+            })
             .store(in: &cancellables)
         
         addSubview(urlBarBackgroundView)
@@ -412,12 +450,12 @@ private extension URLBarView {
                     }
                 )
             
-            shieldIcon.animateHide(thenDo: { [urlTextField] in urlTextField.becomeFirstResponder() })
+            shieldIconButton.animateHide(thenDo: { [urlTextField] in urlTextField.becomeFirstResponder() })
             
         case .unselected:
             urlTextField.resignFirstResponder()
             cancelButton.animateHideFromSuperview()
-            shieldIcon.animateShow()
+            shieldIconButton.animateShow()
         }
     }
 }

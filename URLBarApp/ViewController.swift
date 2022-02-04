@@ -14,14 +14,29 @@ class ViewController: UIViewController {
         super.viewDidAppear(animated)
         urlBar.viewModel.selectURLBar()
     }
-
-    @IBAction func browse(_ sender: Any) {
-        urlBar.viewModel.startBrowsing()
-    }
     
-    @IBAction func home(_ sender: Any) {
-        urlBar.viewModel.goHome()
+    @IBAction func homeSegment(_ sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 0:
+            urlBar.viewModel.goHome()
+        case 1 :
+            urlBar.viewModel.startBrowsing()
+        default:
+            break
+        }
     }
-    
+    @IBAction func connectionSegment(_ sender: UISegmentedControl) {
+        
+        switch sender.selectedSegmentIndex {
+        case 0:
+            urlBar.viewModel.connectionStateSubject.send(.on(TPPageStats()))
+        case 1 :
+            urlBar.viewModel.connectionStateSubject.send(.off)
+        case 2:
+            urlBar.viewModel.connectionStateSubject.send(.connectionNotSecure)
+        default:
+            break
+        }
+    }
 }
 

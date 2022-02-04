@@ -1,4 +1,10 @@
-struct TPPageStats {
+public enum TrackingProtectionStatus: Equatable {
+    case on(TPPageStats)
+    case off
+    case connectionNotSecure
+}
+
+public struct TPPageStats: Equatable {
     let adCount: Int
     let analyticCount: Int
     let contentCount: Int
@@ -6,7 +12,7 @@ struct TPPageStats {
     
     var total: Int { return adCount + socialCount + analyticCount + contentCount }
     
-    init() {
+    public init() {
         adCount = 0
         analyticCount = 0
         contentCount = 0
@@ -28,4 +34,8 @@ struct TPPageStats {
         case .social: return TPPageStats(adCount: adCount, analyticCount: analyticCount, contentCount: contentCount, socialCount: socialCount + 1)
         }
     }
+}
+
+extension TPPageStats {
+    static let empty = TPPageStats()
 }
