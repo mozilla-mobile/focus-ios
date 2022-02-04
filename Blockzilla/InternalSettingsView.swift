@@ -8,20 +8,25 @@ struct InternalSettingsView: View {
     var body: some View {
         Form {
             SwiftUI.Section {
-                NavigationLink("Experiments") {
-                    InternalExperimentsSettingsView(availableExperiments: NimbusWrapper.shared.getAvailableExperiments())
+                NavigationLink(destination: InternalExperimentsSettingsView(availableExperiments: NimbusWrapper.shared.getAvailableExperiments())) {
+                    Text(verbatim: "Experiments")
                 }
             }
             SwiftUI.Section {
-                NavigationLink("Crash Reporting") {
-                    InternalCrashReportingSettingsView()
+                NavigationLink(destination: InternalTelemetrySettingsView()) {
+                    Text(verbatim: "Telemetry")
                 }
             }
             SwiftUI.Section {
-                Text("The settings in this section are used by Focus developers and testers.")
+                NavigationLink(destination: InternalCrashReportingSettingsView()) {
+                    Text(verbatim: "Crash Reporting")
+                }
+            }
+            SwiftUI.Section {
+                Text(verbatim: "The settings in this section are used by Focus developers and testers.")
                     .font(.caption)
             }
-        }.navigationBarTitle("Internal Settings")
+        }.navigationBarTitle(Text(verbatim: "Internal Settings"))
     }
 }
 
