@@ -1,29 +1,44 @@
 import UIKit
 
 public extension UIView {
-    func animateShow(firstDo: (() -> Void)? = nil, thenDo:  (() -> Void)? = nil) {
-        firstDo?()
-        UIView.animate(withDuration: 0.2) {
+    func show(animated: Bool = true, firstDo: (() -> Void)? = nil, thenDo:  (() -> Void)? = nil) {
+        if animated {
+            firstDo?()
+            UIView.animate(withDuration: 0.2) {
+                self.isHidden = false
+                self.alpha = 1
+            } completion: { _ in
+                thenDo?()
+            }
+        } else {
+            firstDo?()
             self.isHidden = false
             self.alpha = 1
-        } completion: { _ in
             thenDo?()
         }
     }
     
-    func animateHide(firstDo: (() -> Void)? = nil, thenDo:  (() -> Void)? = nil) {
-        firstDo?()
-        UIView.animate(withDuration: 0.2) {
+    func hide(animated: Bool = true, firstDo: (() -> Void)? = nil, thenDo:  (() -> Void)? = nil) {
+        if animated {
+            firstDo?()
+            UIView.animate(withDuration: 0.2) {
+                self.isHidden = true
+                self.alpha = 0
+            } completion: { _ in
+                thenDo?()
+            }
+        } else {
+            firstDo?()
             self.isHidden = true
             self.alpha = 0
-        } completion: { _ in
             thenDo?()
         }
     }
     
-    func animateHideFromSuperview() {
-        animateHide(thenDo: {
+    func animateHideFromSuperview(thenDo:  (() -> Void)? = nil) {
+        hide(thenDo: {
             self.removeFromSuperview()
+            thenDo?()
         })
     }
 }
