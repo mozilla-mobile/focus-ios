@@ -42,6 +42,9 @@
 		30DFF98021810BF20055707C /* SearchSuggestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DFF97F21810BF20055707C /* SearchSuggestClient.swift */; };
 		31421EB12176492A0015F48B /* TitleActivityItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31421EB02176492A0015F48B /* TitleActivityItemProvider.swift */; };
 		3AEC0B3E267DE30A007B7850 /* URIFixupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEC0B3D267DE30A007B7850 /* URIFixupTests.swift */; };
+		45D96F3127B196E100096BC0 /* Nimbus in Frameworks */ = {isa = PBXBuildFile; productRef = 45D96F3027B196E100096BC0 /* Nimbus */; };
+		45D96F3327B196E100096BC0 /* RustLog in Frameworks */ = {isa = PBXBuildFile; productRef = 45D96F3227B196E100096BC0 /* RustLog */; };
+		45D96F3527B196E100096BC0 /* Viaduct in Frameworks */ = {isa = PBXBuildFile; productRef = 45D96F3427B196E100096BC0 /* Viaduct */; };
 		4F1284861FC5E242001A775B /* TPSettingsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1284851FC5E242001A775B /* TPSettingsTest.swift */; };
 		4F582F7B1F44A10F006C744B /* OpenInFocusTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F582F7A1F44A10F006C744B /* OpenInFocusTest.swift */; };
 		4FE4E6F61FBB5E2C001BB779 /* TPSidebarBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE4E6F51FBB5E2C001BB779 /* TPSidebarBadge.swift */; };
@@ -119,7 +122,6 @@
 		C8EADCD22742A00300E76AE6 /* MenuActionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EADCD12742A00300E76AE6 /* MenuActionable.swift */; };
 		C8EADCD42742A0AB00E76AE6 /* MenuItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EADCD32742A0AB00E76AE6 /* MenuItemProvider.swift */; };
 		C8F3EABF2762558F00C2AF0C /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F3EABE2762558F00C2AF0C /* SplashView.swift */; };
-		CD2029FF27B1462600475C7F /* MozillaAppServices in Frameworks */ = {isa = PBXBuildFile; productRef = CD2029FE27B1462600475C7F /* MozillaAppServices */; };
 		CDFA746F27ABD43D0055FE55 /* Glean in Frameworks */ = {isa = PBXBuildFile; productRef = CDFA746E27ABD43D0055FE55 /* Glean */; };
 		D025F225218B64D600B262D8 /* SearchEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D025F224218B64D600B262D8 /* SearchEngineTests.swift */; };
 		D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0967A801EC50002009D937F /* TelemetryIntegration.swift */; };
@@ -1090,11 +1092,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				F85F7A292655AD5800395515 /* SnapKit in Frameworks */,
-				CD2029FF27B1462600475C7F /* MozillaAppServices in Frameworks */,
 				CDFA746F27ABD43D0055FE55 /* Glean in Frameworks */,
 				F85F7A2F2655AD5800395515 /* Telemetry in Frameworks */,
 				F8B92FBE279EC73700183998 /* Sentry in Frameworks */,
+				45D96F3127B196E100096BC0 /* Nimbus in Frameworks */,
+				45D96F3327B196E100096BC0 /* RustLog in Frameworks */,
 				F85F7A2B2655AD5800395515 /* Fuzi in Frameworks */,
+				45D96F3527B196E100096BC0 /* Viaduct in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1739,7 +1743,9 @@
 				F85F7A2E2655AD5800395515 /* Telemetry */,
 				F8B92FBD279EC73700183998 /* Sentry */,
 				CDFA746E27ABD43D0055FE55 /* Glean */,
-				CD2029FE27B1462600475C7F /* MozillaAppServices */,
+				45D96F3027B196E100096BC0 /* Nimbus */,
+				45D96F3227B196E100096BC0 /* RustLog */,
+				45D96F3427B196E100096BC0 /* Viaduct */,
 			);
 			productName = Blockzilla;
 			productReference = E4BF2DD31BACE8CA00DA9D68 /* Firefox Klar.app */;
@@ -5476,8 +5482,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 91.0.1;
+				kind = exactVersion;
+				version = 91.0.0;
 			};
 		};
 		CDFA746D27ABD43D0055FE55 /* XCRemoteSwiftPackageReference "glean-swift" */ = {
@@ -5523,10 +5529,20 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		CD2029FE27B1462600475C7F /* MozillaAppServices */ = {
+		45D96F3027B196E100096BC0 /* Nimbus */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1B56C58327221B1C00BB1152 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = MozillaAppServices;
+			productName = Nimbus;
+		};
+		45D96F3227B196E100096BC0 /* RustLog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B56C58327221B1C00BB1152 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = RustLog;
+		};
+		45D96F3427B196E100096BC0 /* Viaduct */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B56C58327221B1C00BB1152 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = Viaduct;
 		};
 		CDFA746E27ABD43D0055FE55 /* Glean */ = {
 			isa = XCSwiftPackageProductDependency;

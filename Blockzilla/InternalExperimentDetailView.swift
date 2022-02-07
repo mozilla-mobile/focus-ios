@@ -4,7 +4,7 @@
 
 import Combine
 import SwiftUI
-import MozillaAppServices
+import Nimbus
 
 private let notEnrolledBranchSlug = "not-enrolled"
 
