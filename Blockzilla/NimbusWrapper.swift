@@ -4,9 +4,7 @@
 
 import os.log
 
-import RustLog
-import Viaduct
-import Nimbus
+import MozillaAppServices
 
 
 let NimbusUseStagingServerDefault = "NimbusUseStagingServer"
