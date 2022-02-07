@@ -102,7 +102,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             // Only show the First Run UI if the test asks for it.
             if AppInfo.isFirstRunUIEnabled() {
                 let firstRunViewController = IntroViewController()
-                firstRunViewController.modalPresentationStyle = .fullScreen
                 self.browserViewController.present(firstRunViewController, animated: false, completion: nil)
             }
             return true
@@ -116,7 +115,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
                 UserDefaults.standard.set(AppDelegate.prefIntroVersion, forKey: AppDelegate.prefIntroDone)
                 UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
                 let introViewController = IntroViewController()
-                introViewController.modalPresentationStyle = .fullScreen
                 self.browserViewController.present(introViewController, animated: false, completion: nil)
             }
         }
