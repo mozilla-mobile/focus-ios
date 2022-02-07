@@ -290,6 +290,26 @@ public class URLBarView: UIView {
     
     private var cancellables: Set<AnyCancellable> = []
     
+    fileprivate func showBottomBar() {
+        addSubview(bottomBackgroundView)
+        bottomBackgroundView.addSubview(bottomStackView)
+        
+        
+        NSLayoutConstraint.activate([
+            
+            bottomBackgroundView.topAnchor.constraint(equalTo: bottomStackView.topAnchor),
+            bottomBackgroundView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            bottomBackgroundView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            bottomBackgroundView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            
+            bottomStackView.heightAnchor.constraint(equalToConstant: 44),
+            bottomStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            bottomStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            bottomStackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+            
+        ])
+    }
+    
     private func setupView() {
         viewModel.currentSelectionPublisher
             .dropFirst()
@@ -326,10 +346,36 @@ public class URLBarView: UIView {
             })
             .store(in: &cancellables)
         
+        addSubview(topBackgroundView)
         addSubview(urlBarBackgroundView)
         addSubview(stackView)
         setupLayout()
     }
+    
+    private lazy var topBackgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .foundation
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private lazy var bottomBackgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .foundation
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private lazy var bottomStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [forwardButton, backButton, deleteButton, contextMenuButton])
+        stackView.axis = .horizontal
+        stackView.distribution = .equalCentering
+        stackView.spacing = 8
+        stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.layoutMargins = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
     
     private func setupLayout() {
         
@@ -339,6 +385,10 @@ public class URLBarView: UIView {
         }
         
         NSLayoutConstraint.activate([
+            topBackgroundView.topAnchor.constraint(equalTo: topAnchor, constant: 0),
+            topBackgroundView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            topBackgroundView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            topBackgroundView.bottomAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 16),
             //
             //pin urlBarBackgroundView to stackView
             urlBarBackgroundView.topAnchor.constraint(equalTo: urlStackView.topAnchor),
@@ -346,8 +396,9 @@ public class URLBarView: UIView {
             urlBarBackgroundView.trailingAnchor.constraint(equalTo: urlStackView.trailingAnchor),
             urlBarBackgroundView.bottomAnchor.constraint(equalTo: urlStackView.bottomAnchor),
             
+            
             stackView.heightAnchor.constraint(equalToConstant: 44),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
+            stackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 8),
             stackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
 
@@ -382,7 +433,6 @@ private extension URLBarView {
             
         case (.browsing(let loadingState), .iPhone, .portrait):
             siteNavigationStackView.animateHideFromSuperview()
-            
             
             stopReloadButton
                 .animateShow(

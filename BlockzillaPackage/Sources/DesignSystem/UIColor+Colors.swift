@@ -14,7 +14,7 @@ public extension UIColor {
     //
     //    static let defaultFont = UIColor(named: "DefaultFont")!
     //    static let firstRunTitle = UIColor(named: "FirstRunTitle")!
-    //    static let foundation = UIColor(named: "Foundation")!
+    static let foundation = UIColor(named: "Foundation", in: .module, compatibleWith: nil)!
     //    static let gradientBackground = UIColor(named: "GradientBackground")!
     //    static let gradientFirst = UIColor(named: "GradientFirst")!
     //    static let gradientSecond = UIColor(named: "GradientSecond")!

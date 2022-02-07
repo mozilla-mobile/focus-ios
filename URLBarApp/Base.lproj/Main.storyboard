@@ -4,7 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -21,11 +21,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yer-tv-eZi" customClass="URLBarView" customModule="URLBar">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="150"/>
-                                <color key="backgroundColor" systemColor="systemPurpleColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="150" id="MLD-cN-dg2"/>
-                                </constraints>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="WGw-V7-HQm">
                                 <rect key="frame" x="80" y="401" width="254" height="94"/>
@@ -54,13 +50,14 @@
                                 </subviews>
                             </stackView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="Accent"/>
                         <constraints>
-                            <constraint firstItem="Yer-tv-eZi" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="BHF-Uf-X9L"/>
-                            <constraint firstItem="Yer-tv-eZi" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Fix-NA-XUY"/>
+                            <constraint firstItem="Yer-tv-eZi" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="I3u-6o-2cQ"/>
+                            <constraint firstAttribute="bottom" secondItem="Yer-tv-eZi" secondAttribute="bottom" id="aIs-ZY-gX1"/>
                             <constraint firstItem="WGw-V7-HQm" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="alS-kl-Jpm"/>
-                            <constraint firstAttribute="trailing" secondItem="Yer-tv-eZi" secondAttribute="trailing" id="drd-UD-cRR"/>
                             <constraint firstItem="WGw-V7-HQm" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="fdI-qu-ToS"/>
+                            <constraint firstAttribute="trailing" secondItem="Yer-tv-eZi" secondAttribute="trailing" id="kLs-8s-bJU"/>
+                            <constraint firstItem="Yer-tv-eZi" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="wYb-cd-vYv"/>
                         </constraints>
                     </view>
                     <connections>
@@ -69,15 +66,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="139" y="87"/>
+            <point key="canvasLocation" x="137.68115942028987" y="86.383928571428569"/>
         </scene>
     </scenes>
     <resources>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemPurpleColor">
-            <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
+        <namedColor name="Accent">
+            <color red="0.77647058823529413" green="0.0" blue="0.51764705882352946" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>
