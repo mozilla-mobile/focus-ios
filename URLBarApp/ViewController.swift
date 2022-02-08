@@ -38,5 +38,9 @@ class ViewController: UIViewController {
             break
         }
     }
+    
+    @IBAction func progressChanged(_ sender: UISlider) {
+        urlBar.viewModel.loadingProgresSubject.send(sender.value)
+    }
 }
 

@@ -320,9 +320,16 @@ public class URLBarView: UIView {
             })
             .store(in: &cancellables)
         
+        viewModel
+            .loadingProgresPublisher
+            .sink { [progressBar] in progressBar.setProgress($0, animated: true) }
+            .store(in: &cancellables)
+        
         addSubview(topBackgroundView)
         addSubview(urlBarBackgroundView)
         addSubview(stackView)
+        addSubview(progressBar)
+        progressBar.translatesAutoresizingMaskIntoConstraints = false
         setupLayout()
     }
     
@@ -350,8 +357,9 @@ public class URLBarView: UIView {
         return stackView
     }()
     
+    private let progressBar = GradientProgressBar(progressViewStyle: .bar)
+    
     private func setupLayout() {
-        
         if UIDevice.current.userInterfaceIdiom == .pad {
             urlStackView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 0.6).isActive = true
             urlStackView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
@@ -374,7 +382,11 @@ public class URLBarView: UIView {
             stackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 8),
             stackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
-
+            
+            progressBar.heightAnchor.constraint(equalToConstant: 1.5),
+            progressBar.topAnchor.constraint(equalTo: topBackgroundView.bottomAnchor),
+            progressBar.leadingAnchor.constraint(equalTo: leadingAnchor),
+            progressBar.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
     }
 }
@@ -542,7 +554,6 @@ private extension URLBarView {
 extension URLBarView: AutocompleteTextFieldDelegate {
     
     public func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
-        
         viewModel
             .viewActionSubject
             .send(.urlBarSelected)
@@ -581,8 +592,6 @@ struct BackgroundViewContainer: UIViewRepresentable {
 public struct URLBarContainerView: View {
     @State private var state: URLBarViewModel.BrowsingState = .home
     
-    public init() { }
-    
     public var body: some View {
         ZStack {
             VStack {
@@ -604,18 +613,6 @@ public struct URLBarContainerView: View {
 
 struct BackgroundViewContainer_Previews: PreviewProvider {
     static var previews: some View {
-//        BackgroundViewContainerPreviewContainer()
-//        BackgroundViewContainerPreviewContainer()
-//            .previewDevice("iPad mini (6th generation)")
-        if #available(iOS 15.0, *) {
-            URLBarContainerView()
-//                .previewInterfaceOrientation(.landscapeLeft)
-
-//            URLBarContainerView()
-//                .previewDevice("iPad mini (6th generation)")
-//                .previewInterfaceOrientation(.landscapeLeft)
-        }
-        
-        
+        URLBarContainerView()
     }
 }

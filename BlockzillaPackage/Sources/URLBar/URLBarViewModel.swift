@@ -59,6 +59,13 @@ public class URLBarViewModel {
     public var connectionStateSubject = CurrentValueSubject<TrackingProtectionStatus, Never>(.on(.empty))
     public var connectionStatePublisher: AnyPublisher<TrackingProtectionStatus, Never> { connectionStateSubject.eraseToAnyPublisher() }
     
+    public var loadingProgresSubject = CurrentValueSubject<Float, Never>(0)
+    internal var loadingProgresPublisher: AnyPublisher<Float, Never> {
+        loadingProgresSubject
+        .filter { 0 <= $0 && $0 <= 1 }
+        .eraseToAnyPublisher()
+    }
+    
     private var cancellables: Set<AnyCancellable> = []
     
     private let orientationSubject = NotificationCenter

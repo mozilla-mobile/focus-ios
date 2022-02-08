@@ -17,13 +17,13 @@ struct UIConstants {
         static let urlBarWidthInset: CGFloat = 8
         static let urlBarContainerHeightInset: CGFloat = 10
         static let toolbarButtonInsets = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+        static let overlayAnimationDuration: TimeInterval = 0.25
         
 //        static let browserToolbarDisabledOpacity: CGFloat = 0.4
 //        static let browserToolbarHeight: CGFloat = 44
 //        static let deleteAnimationDuration: TimeInterval = 0.25
 //        static let shieldIconInset: Float = 9
 //        static let shieldIconIPadInset: Float = 15
-//        static let overlayAnimationDuration: TimeInterval = 0.25
 //        static let autocompleteAnimationDuration: TimeInterval = 0.2
 //        static let autocompleteAfterDelayDuration: TimeInterval = 0.5
 //        static let overlayButtonHeight: Int = 56
@@ -72,7 +72,7 @@ struct UIConstants {
 //        static let homeViewLabelMinimumScale: CGFloat = 0.65
 //        static let findInPageSearchTextInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0)
 //        static let findInPagePreviousButtonOffset: CGFloat = 16
-//        static let progressBarHeight: CGFloat = 1.5
+        static let progressBarHeight: CGFloat = 1.5
 //        static let trackingProtectionHeight: CGFloat = 18
 //        static let collapsedProtectionBadgeOffset: CGFloat = 10
 //        static let truncatedUrlTextOffset: CGFloat = 5

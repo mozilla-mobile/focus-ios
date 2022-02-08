@@ -16,9 +16,9 @@ public extension UIColor {
     //    static let firstRunTitle = UIColor(named: "FirstRunTitle")!
     static let foundation = UIColor(named: "Foundation", in: .module, compatibleWith: nil)!
     //    static let gradientBackground = UIColor(named: "GradientBackground")!
-    //    static let gradientFirst = UIColor(named: "GradientFirst")!
-    //    static let gradientSecond = UIColor(named: "GradientSecond")!
-    //    static let gradientThird = UIColor(named: "GradientThird")!
+        static let gradientFirst = UIColor(named: "GradientFirst", in: .module, compatibleWith: nil)!
+        static let gradientSecond = UIColor(named: "GradientSecond", in: .module, compatibleWith: nil)!
+        static let gradientThird = UIColor(named: "GradientThird", in: .module, compatibleWith: nil)!
     //    static let grey10 = UIColor(named: "Grey10")!
     //    static let grey30 = UIColor(named: "Grey30")!
     //    static let grey50 = UIColor(named: "Grey50")!
