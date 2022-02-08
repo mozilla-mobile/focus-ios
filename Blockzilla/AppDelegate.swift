@@ -102,6 +102,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             // Only show the First Run UI if the test asks for it.
             if AppInfo.isFirstRunUIEnabled() {
                 let firstRunViewController = IntroViewController()
+                firstRunViewController.modalPresentationStyle = .fullScreen
                 self.browserViewController.present(firstRunViewController, animated: false, completion: nil)
             }
             return true
@@ -109,14 +110,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
         let needToShowFirstRunExperience = prefIntroDone < AppDelegate.prefIntroVersion
         if needToShowFirstRunExperience {
-            // Show the first run UI asynchronously to avoid the "unbalanced calls to begin/end appearance transitions" warning.
-            DispatchQueue.main.async {
-                // Set the prefIntroVersion viewed number in the same context as the presentation.
-                UserDefaults.standard.set(AppDelegate.prefIntroVersion, forKey: AppDelegate.prefIntroDone)
-                UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
-                let introViewController = IntroViewController()
-                self.browserViewController.present(introViewController, animated: false, completion: nil)
-            }
+            
+            // Set the prefIntroVersion viewed number in the same context as the presentation.
+            UserDefaults.standard.set(AppDelegate.prefIntroVersion, forKey: AppDelegate.prefIntroDone)
+            UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
+            let introViewController = IntroViewController()
+            introViewController.modalPresentationStyle = .fullScreen
+            self.browserViewController.present(introViewController, animated: false, completion: nil)
+            
         }
 
         // Don't highlight whats new on a fresh install (prefIntroDone == 0 on a fresh install)
