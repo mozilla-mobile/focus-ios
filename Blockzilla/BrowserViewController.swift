@@ -283,14 +283,10 @@ class BrowserViewController: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        // Prevent the keyboard from showing up until after the user has viewed the Intro.
-        let userHasSeenIntro = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone) == AppDelegate.prefIntroVersion
-
-        if userHasSeenIntro && !urlBar.inBrowsingMode {
+        super.viewDidAppear(animated)
+        if OnboardingEventsHandler.sharedInstance.userHasSeenTheIntro && !urlBar.inBrowsingMode {
             urlBar.activateTextField()
         }
-
-        super.viewDidAppear(animated)
     }
 
     private func setupBiometrics() {

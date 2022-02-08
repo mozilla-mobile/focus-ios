@@ -132,12 +132,10 @@ class BrowserToolset {
 
 extension BrowserToolset: WhatsNewDelegate {
     func shouldShowWhatsNew() -> Bool {
-        let counter = UserDefaults.standard.integer(forKey: AppDelegate.prefWhatsNewCounter)
-        return counter != 0
+        WhatsNewEventsHandler.sharedInstance.shouldShowWhatsNewButton
     }
 
     func didShowWhatsNew() {
-        UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
-        UserDefaults.standard.removeObject(forKey: AppDelegate.prefWhatsNewCounter)
+        WhatsNewEventsHandler.sharedInstance.didShowWhatsNewButton()
     }
 }
