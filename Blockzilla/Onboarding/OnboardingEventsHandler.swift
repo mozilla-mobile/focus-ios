@@ -14,6 +14,7 @@ struct OnboardingEventsHandler {
             UserDefaults.standard.set(OnboardingConstants.prefIntroVersion, forKey: OnboardingConstants.prefIntroDone)
             UserDefaults.standard.set(AppInfo.shortVersion, forKey: OnboardingConstants.prefWhatsNewDone)
             let introViewController = IntroViewController()
+            introViewController.modalPresentationStyle = .fullScreen
             viewController.present(introViewController, animated: true, completion: nil)
         }
     }
