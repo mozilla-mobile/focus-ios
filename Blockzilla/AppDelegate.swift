@@ -82,18 +82,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         window?.rootViewController = browserViewController
         window?.makeKeyAndVisible()
         window?.overrideUserInterfaceStyle = UserDefaults.standard.theme.userInterfaceStyle
-
+        
         WebCacheUtils.reset()
-
+        
         displaySplashAnimation()
         KeyboardHelper.defaultHelper.startObserving()
         
         if AppInfo.isTesting() {
             // Only show the First Run UI if the test asks for it.
             if AppInfo.isFirstRunUIEnabled() {
-                let firstRunViewController = IntroViewController()
-                firstRunViewController.modalPresentationStyle = .fullScreen
-                self.browserViewController.present(firstRunViewController, animated: false, completion: nil)
+                OnboardingEventsHandler.sharedInstance.presentOnboardingScreen(from: browserViewController)
             }
             return true
         }
@@ -101,6 +99,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         OnboardingEventsHandler.sharedInstance.presentOnboardingScreen(from: browserViewController)
         
         WhatsNewEventsHandler.sharedInstance.highlightWhatsNewButton()
+        
         
         return true
     }

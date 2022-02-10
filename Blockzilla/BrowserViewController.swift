@@ -284,7 +284,11 @@ class BrowserViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if OnboardingEventsHandler.sharedInstance.userHasSeenTheIntro && !urlBar.inBrowsingMode {
+        activateTextFieldAfterOnboarding()
+    }
+    
+    func activateTextFieldAfterOnboarding() {
+        if !OnboardingEventsHandler.sharedInstance.shouldDisplayOnboarding && !urlBar.inBrowsingMode {
             urlBar.activateTextField()
         }
     }
