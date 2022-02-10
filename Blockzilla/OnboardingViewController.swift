@@ -156,10 +156,10 @@ class OnboardingViewController: UIViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.alignment = .center
-        stackView.distribution = .equalSpacing
-//        stackView.spacing = 20
+        stackView.distribution = .fill
+        stackView.spacing = 22
         stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.layoutMargins = .init(top: 20, left: 10, bottom: 40, right: 10)
+//        stackView.layoutMargins = .init(top: 20, left: 10, bottom: 40, right: 10)
         stackView.accessibilityIdentifier = "OnboardingViewController.mainStackView"
         return stackView
     }()
@@ -177,7 +177,7 @@ class OnboardingViewController: UIViewController {
         let stackView = UIStackView(arrangedSubviews: [incognitoStackView, historyStackView, protectionStackView])
         stackView.axis = .vertical
         stackView.alignment = .leading
-        stackView.distribution = .equalSpacing
+        stackView.distribution = .fillProportionally
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.spacing = 18
         stackView.accessibilityIdentifier = "OnboardingViewController.middleStackView"
@@ -248,17 +248,17 @@ class OnboardingViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        addSubViews()
         
-        print("----------\(view.frame)")
-       
+    }
+    
+    func addSubViews() {
         view.addSubview(mainStackView)
         view.backgroundColor = .white
         
         mainStackView.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().inset(100)
-            make.top.equalToSuperview().inset(100)
-            make.trailing.equalToSuperview().inset(26)
-            make.leading.equalToSuperview().inset(26)
+            make.center.equalToSuperview()
+            make.trailing.leading.equalToSuperview().inset(24)
         }
 
         mozillaIconImageView.snp.makeConstraints { $0.width.height.equalTo(60) }
@@ -270,9 +270,7 @@ class OnboardingViewController: UIViewController {
         startBrowsingButton.snp.makeConstraints { make in
             make.width.equalTo(232)
             make.height.equalTo(36)
-//            make.center.equalToSuperview()
         }
-        
     }
 
     @objc func didTapStartButton() {
