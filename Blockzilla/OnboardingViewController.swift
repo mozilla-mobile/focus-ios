@@ -147,7 +147,6 @@ class OnboardingViewController: UIViewController {
         button.setTitle(.onboardingButtonTitle, for: .normal)
         button.titleLabel?.font = .footnote14
         button.setTitleColor(.white, for: .normal)
- 
         button.accessibilityIdentifier = "IntroViewController.startBrowsingButton"
         button.addTarget(self, action: #selector(IntroViewController.didTapStartButton), for: .touchUpInside)
         return button
@@ -163,7 +162,6 @@ class OnboardingViewController: UIViewController {
         stackView.distribution = .fill
         stackView.spacing = 22
         stackView.isLayoutMarginsRelativeArrangement = true
-//        stackView.layoutMargins = .init(top: 20, left: 10, bottom: 40, right: 10)
         stackView.accessibilityIdentifier = "OnboardingViewController.mainStackView"
         return stackView
     }()
