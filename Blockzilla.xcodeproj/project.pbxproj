@@ -58,6 +58,7 @@
 		7460BD671F58B1B10096B745 /* GradientProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7460BD661F58B1B10096B745 /* GradientProgressBar.swift */; };
 		746BD9281F75C45A00BE8DB9 /* DictionaryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BD9271F75C45A00BE8DB9 /* DictionaryExtensions.swift */; };
 		747ADA181FC38EFC00970132 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747ADA171FC38EFC00970132 /* IntroViewController.swift */; };
+		74C7117027B407D000FA92AB /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C7116F27B407D000FA92AB /* OnboardingViewController.swift */; };
 		74F94FF21FD9CA070047E629 /* Intro.strings in Resources */ = {isa = PBXBuildFile; fileRef = 74F94FF41FD9CA070047E629 /* Intro.strings */; };
 		840057502735182900E48144 /* PageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400574F2735182800E48144 /* PageControl.swift */; };
 		8400575227351B7800E48144 /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400575127351B7700E48144 /* EditView.swift */; };
@@ -507,6 +508,7 @@
 		7460BD661F58B1B10096B745 /* GradientProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientProgressBar.swift; sourceTree = "<group>"; };
 		746BD9271F75C45A00BE8DB9 /* DictionaryExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtensions.swift; sourceTree = "<group>"; };
 		747ADA171FC38EFC00970132 /* IntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
+		74C7116F27B407D000FA92AB /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		74CC0ADA1FAD28DB00972A78 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		74CC0ADB1FAD28DC00972A78 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		74CC0ADC1FAD28DD00972A78 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1522,6 +1524,7 @@
 				1D3BEDFA20C5E76A0019B722 /* FindInPageBar.swift */,
 				846A23172668CC4500DB3C37 /* FullScreen.js */,
 				747ADA171FC38EFC00970132 /* IntroViewController.swift */,
+				74C7116F27B407D000FA92AB /* OnboardingViewController.swift */,
 				8400574F2735182800E48144 /* PageControl.swift */,
 				D30179C21BCC6F65009AD388 /* AboutViewController.swift */,
 				74584E341FA1077000AF2582 /* SettingsContentViewController.swift */,
@@ -2255,6 +2258,7 @@
 				D3E3CA7D1DA827AD0079C94B /* HomeViewController.swift in Sources */,
 				840057542735301600E48144 /* SettingsTableViewCell.swift in Sources */,
 				D8E0152C1FB4136E00CA3B9F /* AddSearchEngineViewController.swift in Sources */,
+				74C7117027B407D000FA92AB /* OnboardingViewController.swift in Sources */,
 				D3E251EB1DAD714C005918DC /* SafariInstructionsViewController.swift in Sources */,
 				C80F901C26C554B800F5112B /* PhotonActionSheetCell.swift in Sources */,
 				D35A0E021E26C94F00297884 /* ClosedRangeExtensions.swift in Sources */,

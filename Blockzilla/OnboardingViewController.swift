@@ -11,7 +11,7 @@ class OnboardingViewController: UIViewController {
     //MARK: Mozilla Icon
     
     private lazy var mozillaIconImageView: UIImageView = {
-        let image = UIImage(named: "highlight")
+        let image = UIImage(named: "icon_mozilla")
         let imageView = UIImageView(image: image)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.accessibilityIdentifier = "OnboardingViewController.mozillaIconImageView"
@@ -24,7 +24,7 @@ class OnboardingViewController: UIViewController {
     private lazy var welcomeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Welcome to Firefox Focus!"
+        label.text = .onboardingTitle
         label.font = .title20Bold
         label.textColor = .darkGray
         label.accessibilityIdentifier = "OnboardingViewController.welcomeLabel"
@@ -34,9 +34,10 @@ class OnboardingViewController: UIViewController {
     private lazy var subWelcomeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Take your private browsing to the next level."
+        label.text = .onboardingSubtitle
         label.font = .footnote14
         label.textColor = .darkGray
+        label.numberOfLines = 0
         label.accessibilityIdentifier = "OnboardingViewController.subWelcomeLabel"
         return label
     }()
@@ -46,7 +47,7 @@ class OnboardingViewController: UIViewController {
     private lazy var incognitoTitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "More than just incognito"
+        label.text = .onboardingIncognitoTitle
         label.font = .footnote14Bold
         label.textColor = .darkGray
         label.accessibilityIdentifier = "OnboardingViewController.incognitoTitleLabel"
@@ -56,7 +57,7 @@ class OnboardingViewController: UIViewController {
     private lazy var incognitoDescriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Focus is a dedicated privacy browser with tracking protection and content blocking."
+        label.text = .onboardingIncognitoDescription
         label.numberOfLines = 0
         label.font = .footnote14
         label.textColor = .darkGray
@@ -65,9 +66,10 @@ class OnboardingViewController: UIViewController {
     }()
     
     private lazy var incognitoImageView: UIImageView = {
-        let image = UIImage(named: "highlight") //UIImage(named: "IncognitoImage") //Asset not in app
+        let image = UIImage(named: "icon_private_mode")
         let imageView = UIImageView(image: image)
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
         imageView.accessibilityIdentifier = "OnboardingViewController.incognitoImageView"
         return imageView
     }()
@@ -77,7 +79,7 @@ class OnboardingViewController: UIViewController {
     private lazy var historyTitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Your history doesn’t follow you"
+        label.text = .onboardingHistoryTitle
         label.font = .footnote14Bold
         label.textColor = .darkGray
         label.accessibilityIdentifier = "OnboardingViewController.historyTitleLabel"
@@ -87,7 +89,7 @@ class OnboardingViewController: UIViewController {
     private lazy var historyDescriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Erase your browsing history, passwords, bookmarks, cookies, and prevent unwanted ads from following you in a simple click!"
+        label.text = .onboardingHistoryDescription
         label.numberOfLines = 0
         label.font = .footnote14
         label.textColor = .darkGray
@@ -96,9 +98,10 @@ class OnboardingViewController: UIViewController {
     }()
     
     private lazy var historyImageView: UIImageView = {
-        let image = UIImage(named: "highlight") //UIImage(named: "HistoryImage") //Asset not in app
+        let image = UIImage(named: "icon_history")
         let imageView = UIImageView(image: image)
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
         imageView.accessibilityIdentifier = "OnboardingViewController.historyImageView"
         return imageView
     }()
@@ -108,7 +111,7 @@ class OnboardingViewController: UIViewController {
     private lazy var protectionTitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Protection at your own discretion"
+        label.text = .onboardingProtectionTitle
         label.font = .footnote14Bold
         label.textColor = .darkGray
         label.accessibilityIdentifier = "OnboardingViewController.protectionTitleLabel"
@@ -118,7 +121,7 @@ class OnboardingViewController: UIViewController {
     private lazy var protectionDescriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Configure settings so you can decide how much or how little you share."
+        label.text = .onboardingProtectionDescription
         label.numberOfLines = 0
         label.font = .footnote14
         label.textColor = .darkGray
@@ -127,9 +130,10 @@ class OnboardingViewController: UIViewController {
     }()
     
     private lazy var protectionImageView: UIImageView = {
-        let image = UIImage(named: "highlight")//UIImage(named: "ProtectionImage") //Asset not in app
+        let image = UIImage(named: "icon_settings")
         let imageView = UIImageView(image: image)
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
         imageView.accessibilityIdentifier = "OnboardingViewController.protectionImageView"
         return imageView
     }()
@@ -140,7 +144,7 @@ class OnboardingViewController: UIViewController {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .secondaryButton
-        button.setTitle("Start Browsing", for: .normal)
+        button.setTitle(.onboardingButtonTitle, for: .normal)
         button.titleLabel?.font = .footnote14
         button.setTitleColor(.white, for: .normal)
  
@@ -287,3 +291,15 @@ class OnboardingViewController: UIViewController {
     }
 }
 
+fileprivate extension String {
+    
+    static let onboardingTitle = NSLocalizedString("Onboarding.Title", value: "Welcome to Firefox Focus!", comment: "Text for a label that indicates the title for onboarding screen.")
+    static let onboardingSubtitle = NSLocalizedString("Onboarding.Subtitle", value: "Take your private browsing to the next level.", comment: "Text for a label that indicates the subtitle for onboarding screen.")
+    static let onboardingIncognitoTitle = NSLocalizedString("Onboarding.Incognito.Title", value: "More than just incognito", comment: "Text for a label that indicates the title of incognito section from onboarding screen.")
+    static let onboardingIncognitoDescription = NSLocalizedString("Onboarding.Incognito.Description", value: "Focus is a dedicated privacy browser with tracking protection and content blocking.", comment: "Text for a label that indicates the description of incognito section from onboarding screen.")
+    static let onboardingHistoryTitle = NSLocalizedString("Onboarding.History.Title", value: "Your history doesn’t follow you.", comment: "Text for a label that indicates the title of history section from onboarding screen.")
+    static let onboardingHistoryDescription = NSLocalizedString("Onboarding.History.Description", value: "Erase your browsing history, passwords, bookmarks, cookies, and prevent unwanted ads from following you in a simple click!", comment: "Text for a label that indicates the description of history section from onboarding screen.")
+    static let onboardingProtectionTitle = NSLocalizedString("Onboarding.Protection.Title", value: "Your history doesn’t follow you.", comment: "Text for a label that indicates the title of history section from onboarding screen.")
+    static let onboardingProtectionDescription = NSLocalizedString("Onboarding.Protection.Description", value: "Erase your browsing history, passwords, bookmarks, cookies, and prevent unwanted ads from following you in a simple click!", comment: "Text for a label that indicates the description of history section from onboarding screen.")
+    static let onboardingButtonTitle = NSLocalizedString("Onboarding.Button.Title", value: "Start browsing", comment: "Text for a label that indicates the title of button from onboarding screen")
+}
