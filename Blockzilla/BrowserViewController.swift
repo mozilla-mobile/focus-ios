@@ -1764,13 +1764,13 @@ extension BrowserViewController: MenuActionable {
     func findInPage() {
         NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: UIConstants.strings.findInPageNotification)))
         
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.menu, value: "default")
         GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "find_in_page"))
     }
     
     func openInDefaultBrowser(url: URL) {
         UIApplication.shared.open(url, options: [:])
 
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.menu, value: "default")
         GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "open_in_default_browser"))
     }
     
