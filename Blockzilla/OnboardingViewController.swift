@@ -7,6 +7,12 @@ import SnapKit
 import Telemetry
 
 class OnboardingViewController: UIViewController {
+    
+    lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
 
     //MARK: Mozilla Icon
     
@@ -146,6 +152,7 @@ class OnboardingViewController: UIViewController {
         button.backgroundColor = .secondaryButton
         button.setTitle(.onboardingButtonTitle, for: .normal)
         button.titleLabel?.font = .footnote14
+        button.layer.cornerRadius = 5
         button.setTitleColor(.white, for: .normal)
         button.accessibilityIdentifier = "IntroViewController.startBrowsingButton"
         button.addTarget(self, action: #selector(IntroViewController.didTapStartButton), for: .touchUpInside)
@@ -162,6 +169,7 @@ class OnboardingViewController: UIViewController {
         stackView.distribution = .fill
         stackView.spacing = 22
         stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.layoutMargins = .init(top: 50, left: 24, bottom: 50, right:24)
         stackView.accessibilityIdentifier = "OnboardingViewController.mainStackView"
         return stackView
     }()
@@ -254,14 +262,48 @@ class OnboardingViewController: UIViewController {
         
     }
     
-    func addSubViews() {
-        view.addSubview(mainStackView)
-        view.backgroundColor = .white
-        
-        mainStackView.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-            make.trailing.leading.equalToSuperview().inset(24)
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            if UIDevice.current.orientation.isLandscape {
+                mainStackView.snp.remakeConstraints { make in
+                    make.centerX.equalTo(scrollView.snp.centerX)
+                    make.width.equalTo(scrollView.snp.width)
+                    make.top.greaterThanOrEqualToSuperview()
+                    make.bottom.lessThanOrEqualToSuperview()
+                }
+            } else {
+                mainStackView.snp.remakeConstraints { make in
+                    make.centerX.equalTo(scrollView.snp.centerX)
+                    make.centerY.equalTo(scrollView.snp.centerY)
+                    make.width.equalTo(scrollView.snp.width)
+                    make.top.greaterThanOrEqualToSuperview()
+                    make.bottom.lessThanOrEqualToSuperview()
+                }
+            }
         }
+    }
+    
+    func addSubViews() {
+        
+        view.addSubview(scrollView)
+        scrollView.snp.makeConstraints { make in
+            make.centerX.equalTo(self.view.snp.centerX)
+            make.width.equalTo(self.view.snp.width)
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+            make.bottom.equalTo(self.view.snp.bottom)
+        }
+        
+        scrollView.addSubview(mainStackView)
+        mainStackView.snp.makeConstraints { make in
+            make.centerX.equalTo(scrollView.snp.centerX)
+            make.centerY.equalTo(scrollView.snp.centerY)
+            make.width.equalTo(scrollView.snp.width)
+            make.top.greaterThanOrEqualToSuperview()
+            make.bottom.lessThanOrEqualToSuperview()
+        }
+        
+        view.backgroundColor = .systemBackground
 
         mozillaIconImageView.snp.makeConstraints { $0.width.height.equalTo(60) }
         
