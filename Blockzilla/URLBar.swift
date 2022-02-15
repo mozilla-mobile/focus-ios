@@ -465,6 +465,7 @@ class URLBar: UIView {
         delegate?.urlBar(self, didSubmitText: clipboardString)
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.pasteAndGo)
+        GleanMetrics.UrlInteraction.pasteAndGo.record()
     }
 
     @objc func pasteAndGoFromContextMenu() {
