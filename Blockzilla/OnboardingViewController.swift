@@ -8,6 +8,8 @@ import Telemetry
 
 class OnboardingViewController: UIViewController {
     
+    private let textColor: UIColor = .label
+    
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -32,7 +34,7 @@ class OnboardingViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = .onboardingTitle
         label.font = .title20Bold
-        label.textColor = .darkGray
+        label.textColor = textColor
         label.accessibilityIdentifier = "OnboardingViewController.welcomeLabel"
         return label
     }()
@@ -42,7 +44,7 @@ class OnboardingViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = .onboardingSubtitle
         label.font = .footnote14
-        label.textColor = .darkGray
+        label.textColor = textColor
         label.numberOfLines = 0
         label.accessibilityIdentifier = "OnboardingViewController.subWelcomeLabel"
         return label
@@ -55,7 +57,7 @@ class OnboardingViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = .onboardingIncognitoTitle
         label.font = .footnote14Bold
-        label.textColor = .darkGray
+        label.textColor = textColor
         label.accessibilityIdentifier = "OnboardingViewController.incognitoTitleLabel"
         return label
     }()
@@ -66,7 +68,7 @@ class OnboardingViewController: UIViewController {
         label.text = .onboardingIncognitoDescription
         label.numberOfLines = 0
         label.font = .footnote14
-        label.textColor = .darkGray
+        label.textColor = textColor
         label.accessibilityIdentifier = "OnboardingViewController.incognitoDescriptionLabel"
         return label
     }()
@@ -87,7 +89,7 @@ class OnboardingViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = .onboardingHistoryTitle
         label.font = .footnote14Bold
-        label.textColor = .darkGray
+        label.textColor = textColor
         label.accessibilityIdentifier = "OnboardingViewController.historyTitleLabel"
         return label
     }()
@@ -98,7 +100,7 @@ class OnboardingViewController: UIViewController {
         label.text = .onboardingHistoryDescription
         label.numberOfLines = 0
         label.font = .footnote14
-        label.textColor = .darkGray
+        label.textColor = textColor
         label.accessibilityIdentifier = "OnboardingViewController.historyDescriptionLabel"
         return label
     }()
@@ -119,7 +121,7 @@ class OnboardingViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = .onboardingProtectionTitle
         label.font = .footnote14Bold
-        label.textColor = .darkGray
+        label.textColor = textColor
         label.accessibilityIdentifier = "OnboardingViewController.protectionTitleLabel"
         return label
     }()
@@ -130,7 +132,7 @@ class OnboardingViewController: UIViewController {
         label.text = .onboardingProtectionDescription
         label.numberOfLines = 0
         label.font = .footnote14
-        label.textColor = .darkGray
+        label.textColor = textColor
         label.accessibilityIdentifier = "OnboardingViewController.protectionDescriptionLabel"
         return label
     }()
