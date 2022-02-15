@@ -8,7 +8,7 @@ import Telemetry
 
 class OnboardingViewController: UIViewController {
     
-    private let textColor: UIColor = .label
+    private let textColor: UIColor = .darkGray
     
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -305,7 +305,7 @@ class OnboardingViewController: UIViewController {
             make.bottom.lessThanOrEqualToSuperview()
         }
         
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .white
 
         mozillaIconImageView.snp.makeConstraints { $0.width.height.equalTo(60) }
         
