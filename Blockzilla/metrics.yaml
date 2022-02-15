@@ -319,7 +319,7 @@ url_interaction:
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/2999
     data_reviews:
-      - https://github.com/mozilla-mobile/focus-ios/pull/3031
+      - https://github.com/mozilla-mobile/focus-ios/pull/3035
     data_sensitivity:
       - interaction
     notification_emails:
@@ -331,7 +331,7 @@ url_interaction:
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/2999
     data_reviews:
-      - https://github.com/mozilla-mobile/focus-ios/pull/3031
+      - https://github.com/mozilla-mobile/focus-ios/pull/3035
     data_sensitivity:
       - interaction
     notification_emails:
