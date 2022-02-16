@@ -302,6 +302,7 @@ workflows:
         - scheme: Klar
     - xcode-test@2:
         inputs:
+        - scheme: Klar
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO -testPlan UnitTests
     - xcode-test@2:
