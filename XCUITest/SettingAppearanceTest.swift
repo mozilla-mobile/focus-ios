@@ -79,6 +79,7 @@ class SettingAppearanceTest: BaseTestCase {
         XCTAssertEqual(app.tables.switches["BlockerToggle.BlockAnalytics"].value as! String, "1")
         XCTAssertEqual(app.tables.switches["BlockerToggle.BlockSocial"].value as! String, "1")
         let otherContentSwitch = app.tables.switches["BlockerToggle.BlockOther"]
+        waitForExistence(app.tables.switches["BlockerToggle.BlockOther"], timeout: 5)
         XCTAssertEqual(otherContentSwitch.value as! String, "0")
 
         otherContentSwitch.tap()
