@@ -357,7 +357,7 @@ siri:
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/3000
     data_reviews:
-      - https://github.com/mozilla-mobile/focus-ios/pull/3035
+      - https://github.com/mozilla-mobile/focus-ios/pull/3040
     data_sensitivity:
       - interaction
     notification_emails:
@@ -369,7 +369,7 @@ siri:
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/3000
     data_reviews:
-      - https://github.com/mozilla-mobile/focus-ios/pull/3035
+      - https://github.com/mozilla-mobile/focus-ios/pull/3040
     data_sensitivity:
       - interaction
     notification_emails:
@@ -381,7 +381,7 @@ siri:
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/3000
     data_reviews:
-      - https://github.com/mozilla-mobile/focus-ios/pull/3035
+      - https://github.com/mozilla-mobile/focus-ios/pull/3040
     data_sensitivity:
       - interaction
     notification_emails:
