@@ -221,6 +221,8 @@ class TrackingProtectionViewController: UIViewController {
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.primaryText]
         navigationController?.navigationBar.tintColor = .accent
         
+        OnboardingEventsHandler.sharedInstance.showTrackingProtectionspopup(from: self)
+        
         if case .settings = state {
             let doneButton = UIBarButtonItem(title: UIConstants.strings.done, style: .plain, target: self, action: #selector(doneTapped))
             doneButton.tintColor = .accent

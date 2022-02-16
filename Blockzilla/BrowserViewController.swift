@@ -584,6 +584,7 @@ class BrowserViewController: UIViewController {
         
         // Reenable tracking protection after reset
         Settings.set(true, forToggle: .trackingProtection)
+        OnboardingEventsHandler.sharedInstance.showSettingspopup(from: self)
     }
 
     private func clearBrowser() {
@@ -707,15 +708,21 @@ class BrowserViewController: UIViewController {
                 browserToolbar.animateHidden(false, duration: UIConstants.layout.toolbarFadeAnimationDuration)
             }
         }
-
+        
         webViewController.load(URLRequest(url: url))
         if urlBar.url == nil {
             urlBar.url = url
         }
+        
+        OnboardingEventsHandler.sharedInstance.showFirstPopUp(from: self)
+        OnboardingEventsHandler.sharedInstance.incrementCounter()
+        OnboardingEventsHandler.sharedInstance.showtrashpopup(from: self)
         guard let savedUrl = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return }
         if let currentDomain = url.baseDomain, let savedDomain = URL(string: savedUrl)?.baseDomain, currentDomain == savedDomain {
             userActivity = SiriShortcuts().getActivity(for: .openURL)
         }
+        
+        
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
