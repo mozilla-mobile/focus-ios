@@ -11,29 +11,29 @@ struct WhatsNewEventsHandler {
     
     //TODO: check which should be the logic of implementation
     var shouldShowWhatsNewButton: Bool {
-        UserDefaults.standard.integer(forKey: OnboardingConstants.prefWhatsNewCounter) != 0
+        UserDefaults.standard.integer(forKey: OnboardingConstants.whatsNewCounter) != 0
     }
     
     func didShowWhatsNewButton() {
-        UserDefaults.standard.set(AppInfo.shortVersion, forKey: OnboardingConstants.prefWhatsNewDone)
-        UserDefaults.standard.removeObject(forKey: OnboardingConstants.prefWhatsNewCounter)
+        UserDefaults.standard.set(AppInfo.shortVersion, forKey: OnboardingConstants.whatsNewVersion)
+        UserDefaults.standard.removeObject(forKey: OnboardingConstants.whatsNewCounter)
     }
     
     func highlightWhatsNewButton() {
-        let prefIntroDone = UserDefaults.standard.integer(forKey: OnboardingConstants.prefIntroDone)
-        // Don't highlight whats new on a fresh install (prefIntroDone == 0 on a fresh install)
-        if let lastShownWhatsNew = UserDefaults.standard.string(forKey: OnboardingConstants.prefWhatsNewDone)?.first, let currentMajorRelease = AppInfo.shortVersion.first {
-            if prefIntroDone != 0 && lastShownWhatsNew != currentMajorRelease {
+        let onboardingVersion = UserDefaults.standard.integer(forKey: OnboardingConstants.onboardingVersion)
+        // Don't highlight whats new on a fresh install (onboardingVersion == 0 on a fresh install)
+        if let lastShownWhatsNew = UserDefaults.standard.string(forKey: OnboardingConstants.whatsNewVersion)?.first, let currentMajorRelease = AppInfo.shortVersion.first {
+            if onboardingVersion != 0 && lastShownWhatsNew != currentMajorRelease {
                 
-                let counter = UserDefaults.standard.integer(forKey: OnboardingConstants.prefWhatsNewCounter)
+                let counter = UserDefaults.standard.integer(forKey: OnboardingConstants.whatsNewCounter)
                 switch counter {
                 case 4:
                     // Shown three times, remove counter
-                    UserDefaults.standard.set(AppInfo.shortVersion, forKey: OnboardingConstants.prefWhatsNewDone)
-                    UserDefaults.standard.removeObject(forKey: OnboardingConstants.prefWhatsNewCounter)
+                    UserDefaults.standard.set(AppInfo.shortVersion, forKey: OnboardingConstants.whatsNewVersion)
+                    UserDefaults.standard.removeObject(forKey: OnboardingConstants.whatsNewCounter)
                 default:
                     // Show highlight
-                    UserDefaults.standard.set(counter+1, forKey: OnboardingConstants.prefWhatsNewCounter)
+                    UserDefaults.standard.set(counter+1, forKey: OnboardingConstants.whatsNewCounter)
                 }
             }
         }

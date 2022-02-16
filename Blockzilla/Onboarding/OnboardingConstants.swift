@@ -5,9 +5,9 @@
 import Foundation
 
 struct OnboardingConstants {
-    static let prefIntroDone = "IntroDone"
-    static let prefIntroVersion = 2
-    static let prefWhatsNewDone = "WhatsNewDone"
-    static let prefWhatsNewCounter = "WhatsNewCounter"
+    static let onboardingVersion = "OnboardingVersion"
+    static let introVersion = 2
+    static let whatsNewVersion = "whatsNewVersion"
+    static let whatsNewCounter = "WhatsNewCounter"
     
 }
