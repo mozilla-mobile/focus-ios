@@ -32,7 +32,7 @@ class OnboardingViewController: UIViewController {
     private lazy var welcomeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = .onboardingTitle
+        label.text = String(format: .onboardingTitle, AppInfo.config.productName)
         label.font = .title20Bold
         label.textColor = textColor
         label.accessibilityIdentifier = "OnboardingViewController.welcomeLabel"
@@ -78,6 +78,7 @@ class OnboardingViewController: UIViewController {
         let imageView = UIImageView(image: image)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
+        imageView.overrideUserInterfaceStyle = .light
         imageView.accessibilityIdentifier = "OnboardingViewController.incognitoImageView"
         return imageView
     }()
@@ -110,6 +111,7 @@ class OnboardingViewController: UIViewController {
         let imageView = UIImageView(image: image)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
+        imageView.overrideUserInterfaceStyle = .light
         imageView.accessibilityIdentifier = "OnboardingViewController.historyImageView"
         return imageView
     }()
@@ -143,6 +145,7 @@ class OnboardingViewController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
         imageView.accessibilityIdentifier = "OnboardingViewController.protectionImageView"
+        imageView.overrideUserInterfaceStyle = .light
         return imageView
     }()
     
@@ -335,7 +338,7 @@ class OnboardingViewController: UIViewController {
 
 fileprivate extension String {
     
-    static let onboardingTitle = NSLocalizedString("Onboarding.Title", value: "Welcome to Firefox Focus!", comment: "Text for a label that indicates the title for onboarding screen.")
+    static let onboardingTitle = NSLocalizedString("Onboarding.Title", value: "Welcome to Firefox %@!", comment: "Text for a label that indicates the title for onboarding screen. (Focus and Klar)")
     static let onboardingSubtitle = NSLocalizedString("Onboarding.Subtitle", value: "Take your private browsing to the next level.", comment: "Text for a label that indicates the subtitle for onboarding screen.")
     static let onboardingIncognitoTitle = NSLocalizedString("Onboarding.Incognito.Title", value: "More than just incognito", comment: "Text for a label that indicates the title of incognito section from onboarding screen.")
     static let onboardingIncognitoDescription = NSLocalizedString("Onboarding.Incognito.Description", value: "Focus is a dedicated privacy browser with tracking protection and content blocking.", comment: "Text for a label that indicates the description of incognito section from onboarding screen.")
