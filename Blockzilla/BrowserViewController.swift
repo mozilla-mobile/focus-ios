@@ -47,6 +47,8 @@ class BrowserViewController: UIViewController {
     private var scrollBarOffsetAlpha: CGFloat = 0
     private var scrollBarState: URLBarScrollState = .expanded
     private var background = UIImageView()
+    private let onboardingEventsHandler = OnboardingEventsHandler.sharedInstance
+    private var cancellables = Set<AnyCancellable>()
 
     private enum URLBarScrollState {
         case collapsed
@@ -263,11 +265,36 @@ class BrowserViewController: UIViewController {
         NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.findInPageNotification), object: nil, queue: nil) { _ in
             self.updateFindInPageVisibility(visible: true, text: "")
         }
-
+        
+        onboardingEventsHandler
+           .$shouldPresentShieldToolTip
+           .filter { $0 == true }
+           .sink { _ in
+               self.presentShieldPopUp()
+           }
+           .store(in: &cancellables)
+        
+        onboardingEventsHandler
+           .$shouldPresentTrashToolTip
+           .filter { $0 == true }
+           .sink { _ in
+               self.presentTrashPopUp()
+           }
+           .store(in: &cancellables)
+       
+        onboardingEventsHandler
+           .$shouldPresentMenuToolTip
+           .filter { $0 == true }
+           .sink { _ in
+               self.presentMenuPopUp()
+           }
+           .store(in: &cancellables)
+       
         guard shouldEnsureBrowsingMode else { return }
         ensureBrowsingMode()
         guard let url = initialUrl else { return }
         submit(url: url)
+        
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -284,13 +311,14 @@ class BrowserViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        activateTextFieldAfterOnboarding()
+        if presentedViewController == nil && !urlBar.inBrowsingMode {
+            urlBar.activateTextField()
+        }
     }
     
     func activateTextFieldAfterOnboarding() {
-        if !OnboardingEventsHandler.sharedInstance.shouldDisplayOnboarding && !urlBar.inBrowsingMode {
-            urlBar.activateTextField()
-        }
+        urlBar.activateTextField()
+        
     }
 
     private func setupBiometrics() {
@@ -584,9 +612,21 @@ class BrowserViewController: UIViewController {
         
         // Reenable tracking protection after reset
         Settings.set(true, forToggle: .trackingProtection)
-        OnboardingEventsHandler.sharedInstance.showSettingsToolTip(from: self)
+        onboardingEventsHandler.send(.resetBrowser, handler: presentMenuPopUp)
     }
-
+    
+    private func presentMenuPopUp() {
+        presentTemporaryAlert(message: "Showed menu pop up")
+    }
+    private func presentTemporaryAlert(message: String) {
+        let alert = UIAlertController(title: "Test Alert", message: message, preferredStyle: .alert)
+        let dismissAction = UIAlertAction(title: "OK", style: .default) { (UIAlertAction) in
+            alert.dismiss(animated: true, completion: nil)
+        }
+        alert.addAction(dismissAction)
+        present(alert, animated: true, completion: nil)
+    }
+    
     private func clearBrowser() {
         // Helper function for resetBrowser that handles all the logic of actually clearing user data and the browsing session
         overlayView.currentURL = ""
@@ -708,22 +748,26 @@ class BrowserViewController: UIViewController {
                 browserToolbar.animateHidden(false, duration: UIConstants.layout.toolbarFadeAnimationDuration)
             }
         }
-        
         webViewController.load(URLRequest(url: url))
+        
         if urlBar.url == nil {
             urlBar.url = url
         }
+        onboardingEventsHandler.send(.startBrowsing)
         
-        OnboardingEventsHandler.sharedInstance.showShieldToolTip(from: self)
-        OnboardingEventsHandler.sharedInstance.incrementCounter()
-        OnboardingEventsHandler.sharedInstance.showTrashToolTip(from: self)
         guard let savedUrl = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return }
         if let currentDomain = url.baseDomain, let savedDomain = URL(string: savedUrl)?.baseDomain, currentDomain == savedDomain {
             userActivity = SiriShortcuts().getActivity(for: .openURL)
         }
-        
-        
     }
+    
+    private func presentShieldPopUp() {
+        presentTemporaryAlert(message: "Showed shield pop up")
+    }
+    private func presentTrashPopUp() {
+        presentTemporaryAlert(message: "Showed trash pop up")
+    }
+    
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)

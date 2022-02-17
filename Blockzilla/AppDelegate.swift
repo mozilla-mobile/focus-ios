@@ -6,6 +6,7 @@ import UIKit
 import Telemetry
 import Glean
 import Sentry
+import Combine
 
 protocol AppSplashController {
     var splashView: SplashView { get }
@@ -37,6 +38,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
     private var queuedUrl: URL?
     private var queuedString: String?
+    private let onboardingEventsHandler = OnboardingEventsHandler.sharedInstance
+    private var cancellable: AnyCancellable?
+    
+    //TODO: Check when old onboarding should be displayed
+    private let displayOldOnboarding = false
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         if AppInfo.testRequestsReset() {
@@ -91,17 +97,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         if AppInfo.isTesting() {
             // Only show the First Run UI if the test asks for it.
             if AppInfo.isFirstRunUIEnabled() {
-                OnboardingEventsHandler.sharedInstance.presentOnboardingScreen(from: browserViewController)
+                onboardingEventsHandler.send(.applicationDidLaunch)
             }
             return true
         }
-        
-        OnboardingEventsHandler.sharedInstance.presentOnboardingScreen(from: browserViewController)
-        
+        onboardingEventsHandler.send(.applicationDidLaunch)
+        cancellable = onboardingEventsHandler
+            .$shouldPresentOnboarding
+            .filter { $0 == true }
+            .sink { _ in
+                self.presentOnboarding()
+            }
         WhatsNewEventsHandler.sharedInstance.highlightWhatsNewButton()
         
         
         return true
+    }
+    
+    func presentOnboarding() {
+        let introViewController = IntroViewController()
+        introViewController.modalPresentationStyle = .fullScreen
+        let newOnboardingViewController = NewOnboardingReplaceViewController()
+        newOnboardingViewController.modalPresentationStyle = .formSheet
+        browserViewController.present(displayOldOnboarding ? introViewController : newOnboardingViewController, animated: true, completion: nil)
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {

@@ -13,6 +13,7 @@ class IntroViewController: UIViewController {
     let skipButton = UIButton()
     private let backgroundDark = GradientBackgroundView()
     private let backgroundBright = GradientBackgroundView(alpha: 0.8)
+    private var onboardingEventsHandler = OnboardingEventsHandler.sharedInstance
 
     var isBright: Bool = false {
         didSet {
@@ -80,7 +81,7 @@ class IntroViewController: UIViewController {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.onboarding, value: "skip")
         backgroundDark.removeFromSuperview()
         backgroundBright.removeFromSuperview()
-        OnboardingEventsHandler.sharedInstance.onboardingDidDismiss()
+        onboardingEventsHandler.send(.onboardingDidDismiss, handler: nil)
         dismiss(animated: true, completion: nil)
     }
 
@@ -98,7 +99,7 @@ extension IntroViewController: ScrollViewControllerDelegate {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.onboarding, value: "finish")
         backgroundDark.removeFromSuperview()
         backgroundBright.removeFromSuperview()
-        OnboardingEventsHandler.sharedInstance.onboardingDidDismiss()
+        onboardingEventsHandler.send(.onboardingDidDismiss, handler: nil)
         dismiss(animated: true, completion: nil)
     }
 

@@ -10,6 +10,7 @@ class NewOnboardingReplaceViewController: UIViewController {
     
     //TODO: Add specific UI for Onboarding screen
     let startBrowsingButton = UIButton()
+    private var onboardingEventsHandler = OnboardingEventsHandler.sharedInstance
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +35,7 @@ class NewOnboardingReplaceViewController: UIViewController {
     
     @objc func didTapStartButton() {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.onboarding, value: "finish")
-        OnboardingEventsHandler.sharedInstance.onboardingDidDismiss()
+        onboardingEventsHandler.send(.onboardingDidDismiss, handler: nil)
         (presentingViewController as? BrowserViewController)?.activateTextFieldAfterOnboarding()
         dismiss(animated: true)
     }
