@@ -289,3 +289,189 @@ preferences:
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
     expires: "2022-10-01"
+
+browser_menu:
+  browser_menu_action:
+    type: event
+    description: The user has tapped on a browser menu item.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3004
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3015
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-02"
+    extra_keys:
+      item:
+        description: |
+          A string containing the name of the item the user tapped:
+          settings, open_in_firefox, open_in_chrome, open_in_default_browser,
+          share, copy_url, desktop_view_off, desktop_view_on, find_in_page,
+          add_to_shortcuts, remove_from_shortcuts
+        type: string
+
+show_search_suggestions:
+  enabled_from_panel:
+    type: event
+    description: The "yes" option from the suggestion panel has been tapped.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3003
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3031
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-14"
+  disabled_from_panel:
+    type: event
+    description: The "no"" option from the suggestion panel has been tapped.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3003
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3031
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-14"
+  changed_from_settings:
+    type: event
+    description: The enabled state has been changed from the settings screen.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3003
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3031
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-14"
+    extra_keys:
+      is_enabled:
+        description: The new setting value, true for ON, false for OFF
+        type: boolean
+
+search_suggestions:
+  suggestion_tapped:
+    type: event
+    description: Search suggestion selected.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3003
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3031
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-14"
+    extra_keys:
+      engine_name:
+        description: The name of the engine used to perform the search.
+        type: string
+  search_tapped:
+    type: event
+    description: The typed text search was selected.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3003
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3031
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-14"
+    extra_keys:
+      engine_name:
+        description: The name of the engine used to perform the search.
+        type: string
+  autocomplete_arrow_tapped:
+    type: event
+    description: Search suggestion selected.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3003
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3031
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-14"
+
+url_interaction:
+  drag_started:
+    type: event
+    description: Drag interaction started.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2999
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3035
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-15"
+  drop_ended:
+    type: event
+    description: Drop interaction ended.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2999
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3035
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-15"
+  paste_and_go:
+    type: event
+    description: Paste url and navigate.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3001
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3035
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-15"
+
+siri:
+  open_favorite_site:
+    type: event
+    description: Siri request open favorite site.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3000
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3040
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-16"
+  erase_and_open:
+    type: event
+    description: Siri request erase session and open.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3000
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3040
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-16"
+  erase_in_background:
+    type: event
+    description: Siri request erase session.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3000
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3040
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-16"
