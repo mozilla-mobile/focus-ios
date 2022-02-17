@@ -3,6 +3,16 @@
     {
       "filename" : "Private mode.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "Private mode-24.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {

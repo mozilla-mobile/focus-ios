@@ -5,10 +5,11 @@
 import UIKit
 import SnapKit
 import Telemetry
+import SwiftUI
 
 class OnboardingViewController: UIViewController {
     
-    private let textColor: UIColor = .darkGray
+    private let textColor: UIColor = .label
     
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -34,7 +35,7 @@ class OnboardingViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = String(format: .onboardingTitle, AppInfo.config.productName)
         label.font = .title20Bold
-        label.textColor = textColor
+        label.textColor = .primaryText
         label.accessibilityIdentifier = "OnboardingViewController.welcomeLabel"
         return label
     }()
@@ -44,8 +45,8 @@ class OnboardingViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = .onboardingSubtitle
         label.font = .footnote14
-        label.textColor = textColor
-        label.numberOfLines = 0
+        label.textColor = .secondaryText
+        label.numberOfLines = 1
         label.accessibilityIdentifier = "OnboardingViewController.subWelcomeLabel"
         return label
     }()
@@ -57,7 +58,7 @@ class OnboardingViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = .onboardingIncognitoTitle
         label.font = .footnote14Bold
-        label.textColor = textColor
+        label.textColor = .primaryText
         label.accessibilityIdentifier = "OnboardingViewController.incognitoTitleLabel"
         return label
     }()
@@ -68,7 +69,7 @@ class OnboardingViewController: UIViewController {
         label.text = .onboardingIncognitoDescription
         label.numberOfLines = 0
         label.font = .footnote14
-        label.textColor = textColor
+        label.textColor = .secondaryText
         label.accessibilityIdentifier = "OnboardingViewController.incognitoDescriptionLabel"
         return label
     }()
@@ -78,7 +79,6 @@ class OnboardingViewController: UIViewController {
         let imageView = UIImageView(image: image)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
-        imageView.overrideUserInterfaceStyle = .light
         imageView.accessibilityIdentifier = "OnboardingViewController.incognitoImageView"
         return imageView
     }()
@@ -90,7 +90,7 @@ class OnboardingViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = .onboardingHistoryTitle
         label.font = .footnote14Bold
-        label.textColor = textColor
+        label.textColor = .primaryText
         label.accessibilityIdentifier = "OnboardingViewController.historyTitleLabel"
         return label
     }()
@@ -101,7 +101,7 @@ class OnboardingViewController: UIViewController {
         label.text = .onboardingHistoryDescription
         label.numberOfLines = 0
         label.font = .footnote14
-        label.textColor = textColor
+        label.textColor = .secondaryText
         label.accessibilityIdentifier = "OnboardingViewController.historyDescriptionLabel"
         return label
     }()
@@ -111,7 +111,6 @@ class OnboardingViewController: UIViewController {
         let imageView = UIImageView(image: image)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
-        imageView.overrideUserInterfaceStyle = .light
         imageView.accessibilityIdentifier = "OnboardingViewController.historyImageView"
         return imageView
     }()
@@ -123,7 +122,7 @@ class OnboardingViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = .onboardingProtectionTitle
         label.font = .footnote14Bold
-        label.textColor = textColor
+        label.textColor = .primaryText
         label.accessibilityIdentifier = "OnboardingViewController.protectionTitleLabel"
         return label
     }()
@@ -134,7 +133,7 @@ class OnboardingViewController: UIViewController {
         label.text = .onboardingProtectionDescription
         label.numberOfLines = 0
         label.font = .footnote14
-        label.textColor = textColor
+        label.textColor = .secondaryText
         label.accessibilityIdentifier = "OnboardingViewController.protectionDescriptionLabel"
         return label
     }()
@@ -145,7 +144,6 @@ class OnboardingViewController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
         imageView.accessibilityIdentifier = "OnboardingViewController.protectionImageView"
-        imageView.overrideUserInterfaceStyle = .light
         return imageView
     }()
     
@@ -154,7 +152,7 @@ class OnboardingViewController: UIViewController {
     private lazy var startBrowsingButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .secondaryButton
+        button.backgroundColor = .primaryButton
         button.setTitle(.onboardingButtonTitle, for: .normal)
         button.titleLabel?.font = .footnote14
         button.layer.cornerRadius = 5
@@ -172,9 +170,9 @@ class OnboardingViewController: UIViewController {
         stackView.axis = .vertical
         stackView.alignment = .center
         stackView.distribution = .fill
-        stackView.spacing = 22
+        stackView.spacing = UIConstants.layout.onboardingMainStackViewSpacing
         stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.layoutMargins = .init(top: 50, left: 24, bottom: 50, right:24)
+        stackView.layoutMargins = .init(top: 50, left: 20, bottom: 50, right: 20)
         stackView.accessibilityIdentifier = "OnboardingViewController.mainStackView"
         return stackView
     }()
@@ -194,7 +192,7 @@ class OnboardingViewController: UIViewController {
         stackView.alignment = .leading
         stackView.distribution = .fillProportionally
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.spacing = 18
+        stackView.spacing = UIConstants.layout.onboardingMiddleStackViewSpacing
         stackView.accessibilityIdentifier = "OnboardingViewController.middleStackView"
         return stackView
     }()
@@ -203,7 +201,7 @@ class OnboardingViewController: UIViewController {
         let stackView = UIStackView(arrangedSubviews: [incognitoTitleLabel, incognitoDescriptionLabel])
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
-        stackView.spacing = 6
+        stackView.spacing = UIConstants.layout.onboardingTextStackViewSpacing
         stackView.accessibilityIdentifier = "OnboardingViewController.incognitoTextStackView"
         return stackView
     }()
@@ -214,7 +212,7 @@ class OnboardingViewController: UIViewController {
         stackView.axis = .horizontal
         stackView.alignment = .top
         stackView.distribution = .fill
-        stackView.spacing = 18
+        stackView.spacing = UIConstants.layout.onboardingMiddleStackViewSpacing
         stackView.accessibilityIdentifier = "OnboardingViewController.incognitoStackView"
         return stackView
     }()
@@ -223,7 +221,7 @@ class OnboardingViewController: UIViewController {
         let stackView = UIStackView(arrangedSubviews: [historyTitleLabel, historyDescriptionLabel])
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
-        stackView.spacing = 6
+        stackView.spacing = UIConstants.layout.onboardingTextStackViewSpacing
         stackView.distribution = .fillProportionally
         stackView.accessibilityIdentifier = "OnboardingViewController.historyTextStackView"
         return stackView
@@ -235,7 +233,7 @@ class OnboardingViewController: UIViewController {
         stackView.axis = .horizontal
         stackView.alignment = .top
         stackView.distribution = .fill
-        stackView.spacing = 18
+        stackView.spacing = UIConstants.layout.onboardingMiddleStackViewSpacing
         stackView.accessibilityIdentifier = "OnboardingViewController.historyStackView"
         return stackView
     }()
@@ -244,7 +242,7 @@ class OnboardingViewController: UIViewController {
         let stackView = UIStackView(arrangedSubviews: [protectionTitleLabel, protectionDescriptionLabel])
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
-        stackView.spacing = 6
+        stackView.spacing = UIConstants.layout.onboardingTextStackViewSpacing
         stackView.distribution = .fillProportionally
         stackView.accessibilityIdentifier = "OnboardingViewController.protectionTextStackView"
         return stackView
@@ -256,7 +254,7 @@ class OnboardingViewController: UIViewController {
         stackView.axis = .horizontal
         stackView.alignment = .top
         stackView.distribution = .fill
-        stackView.spacing = 18
+        stackView.spacing = UIConstants.layout.onboardingMiddleStackViewSpacing
         stackView.accessibilityIdentifier = "OnboardingViewController.protectionStackView"
         return stackView
     }()
@@ -281,7 +279,7 @@ class OnboardingViewController: UIViewController {
                 mainStackView.snp.remakeConstraints { make in
                     make.centerX.equalTo(scrollView.snp.centerX)
                     make.centerY.equalTo(scrollView.snp.centerY)
-                    make.width.equalTo(scrollView.snp.width)
+                    make.width.equalTo(scrollView.snp.width).multipliedBy(0.9)
                     make.top.greaterThanOrEqualToSuperview()
                     make.bottom.lessThanOrEqualToSuperview()
                 }
@@ -303,22 +301,22 @@ class OnboardingViewController: UIViewController {
         mainStackView.snp.makeConstraints { make in
             make.centerX.equalTo(scrollView.snp.centerX)
             make.centerY.equalTo(scrollView.snp.centerY)
-            make.width.equalTo(scrollView.snp.width)
+            make.width.equalTo(scrollView.snp.width).multipliedBy(0.9)
             make.top.greaterThanOrEqualToSuperview()
             make.bottom.lessThanOrEqualToSuperview()
         }
         
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
 
         mozillaIconImageView.snp.makeConstraints { $0.width.height.equalTo(60) }
         
-        incognitoImageView.snp.makeConstraints { $0.width.height.equalTo(20) }
-        historyImageView.snp.makeConstraints { $0.width.height.equalTo(20) }
-        protectionImageView.snp.makeConstraints { $0.width.height.equalTo(20) }
+        incognitoImageView.snp.makeConstraints { $0.width.height.equalTo(UIConstants.layout.onboardingIconsWidthHeight) }
+        historyImageView.snp.makeConstraints { $0.width.height.equalTo(UIConstants.layout.onboardingIconsWidthHeight) }
+        protectionImageView.snp.makeConstraints { $0.width.height.equalTo(UIConstants.layout.onboardingIconsWidthHeight) }
         
         startBrowsingButton.snp.makeConstraints { make in
-            make.width.equalTo(232)
-            make.height.equalTo(36)
+            make.width.equalTo(UIConstants.layout.onboardingButtonWidth)
+            make.height.equalTo(UIConstants.layout.onboardingButtonHeight)
         }
     }
 
@@ -344,7 +342,7 @@ fileprivate extension String {
     static let onboardingIncognitoDescription = NSLocalizedString("Onboarding.Incognito.Description", value: "Focus is a dedicated privacy browser with tracking protection and content blocking.", comment: "Text for a label that indicates the description of incognito section from onboarding screen.")
     static let onboardingHistoryTitle = NSLocalizedString("Onboarding.History.Title", value: "Your history doesn’t follow you.", comment: "Text for a label that indicates the title of history section from onboarding screen.")
     static let onboardingHistoryDescription = NSLocalizedString("Onboarding.History.Description", value: "Erase your browsing history, passwords, bookmarks, cookies, and prevent unwanted ads from following you in a simple click!", comment: "Text for a label that indicates the description of history section from onboarding screen.")
-    static let onboardingProtectionTitle = NSLocalizedString("Onboarding.Protection.Title", value: "Your history doesn’t follow you.", comment: "Text for a label that indicates the title of history section from onboarding screen.")
-    static let onboardingProtectionDescription = NSLocalizedString("Onboarding.Protection.Description", value: "Erase your browsing history, passwords, bookmarks, cookies, and prevent unwanted ads from following you in a simple click!", comment: "Text for a label that indicates the description of history section from onboarding screen.")
+    static let onboardingProtectionTitle = NSLocalizedString("Onboarding.Protection.Title", value: "Protection at your own discretion", comment: "Text for a label that indicates the title of protection section from onboarding screen.")
+    static let onboardingProtectionDescription = NSLocalizedString("Onboarding.Protection.Description", value: "Configure settings so you can decide how much or how little you share.", comment: "Text for a label that indicates the description of protection section from onboarding screen.")
     static let onboardingButtonTitle = NSLocalizedString("Onboarding.Button.Title", value: "Start browsing", comment: "Text for a label that indicates the title of button from onboarding screen")
 }
