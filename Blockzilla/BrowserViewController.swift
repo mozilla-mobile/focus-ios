@@ -1249,7 +1249,7 @@ extension BrowserViewController: ShortcutViewDelegate {
         alert.addAction(UIAlertAction(title: UIConstants.strings.renameShortcutAlertSecondaryAction, style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: UIConstants.strings.renameShortcutAlertPrimaryAction, style: .default, handler: { [unowned alert] action in
             let newName = (alert.textFields?.first?.text ?? shortcut.name).trimmingCharacters(in: .whitespacesAndNewlines)
-            guard newName != shortcut.name else { return }
+            guard !newName.isEmpty, newName != shortcut.name else { return }
             ShortcutsManager.shared.rename(shortcut: shortcut, newName: newName)
         }))
         self.show(alert, sender: nil)

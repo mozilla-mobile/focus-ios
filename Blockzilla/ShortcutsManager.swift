@@ -28,6 +28,23 @@ struct Shortcut: Equatable, Codable {
         }
         return ""
     }
+    
+    var firstLetter: String {
+        if let host = self.url.host {
+            var shortUrl = host.replacingOccurrences(of: "www.", with: "")
+            if shortUrl.hasPrefix("mobile.") {
+                shortUrl = shortUrl.replacingOccurrences(of: "mobile.", with: "")
+            }
+            if shortUrl.hasPrefix("m.") {
+                shortUrl = shortUrl.replacingOccurrences(of: "m.", with: "")
+            }
+            if let firstLetter = shortUrl.first {
+                let firstLetterString = String(firstLetter).capitalized
+                return firstLetterString
+            }
+        }
+        return ""
+    }
 }
 
 protocol ShortcutsManagerDelegate: AnyObject {
@@ -103,22 +120,5 @@ class ShortcutsManager {
     
     func canSave(shortcut: Shortcut) -> Bool {
         shortcuts.count < UIConstants.maximumNumberOfShortcuts && !isSaved(shortcut: shortcut)
-    }
-    
-    func firstLetterFor(shortcut: Shortcut) -> String {
-        if let host = shortcut.url.host {
-            var shortUrl = host.replacingOccurrences(of: "www.", with: "")
-            if shortUrl.hasPrefix("mobile.") {
-                shortUrl = shortUrl.replacingOccurrences(of: "mobile.", with: "")
-            }
-            if shortUrl.hasPrefix("m.") {
-                shortUrl = shortUrl.replacingOccurrences(of: "m.", with: "")
-            }
-            if let firstLetter = shortUrl.first {
-                let firstLetterString = String(firstLetter).capitalized
-                return firstLetterString
-            }
-        }
-        return ""
     }
 }
