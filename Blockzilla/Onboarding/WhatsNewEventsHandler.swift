@@ -19,21 +19,25 @@ struct WhatsNewEventsHandler {
     
     func highlightWhatsNewButton() {
         let onboardingVersion = UserDefaults.standard.integer(forKey: OnboardingConstants.onboardingVersion)
+        
         // Don't highlight whats new on a fresh install (onboardingVersion == 0 on a fresh install)
         if let lastShownWhatsNew = UserDefaults.standard.string(forKey: OnboardingConstants.whatsNewVersion)?.first, let currentMajorRelease = AppInfo.shortVersion.first {
             if onboardingVersion != 0 && lastShownWhatsNew != currentMajorRelease {
-                
-                let counter = UserDefaults.standard.integer(forKey: OnboardingConstants.whatsNewCounter)
-                switch counter {
-                case 4:
-                    // Shown three times, remove counter
-                    UserDefaults.standard.set(AppInfo.shortVersion, forKey: OnboardingConstants.whatsNewVersion)
-                    UserDefaults.standard.removeObject(forKey: OnboardingConstants.whatsNewCounter)
-                default:
-                    // Show highlight
-                    UserDefaults.standard.set(counter+1, forKey: OnboardingConstants.whatsNewCounter)
-                }
+                setupWhatsNewFeature()
             }
+        }
+    }
+    
+    private func setupWhatsNewFeature () {
+        let counter = UserDefaults.standard.integer(forKey: OnboardingConstants.whatsNewCounter)
+        switch counter {
+        case 4:
+            // Shown three times, remove counter
+            UserDefaults.standard.set(AppInfo.shortVersion, forKey: OnboardingConstants.whatsNewVersion)
+            UserDefaults.standard.removeObject(forKey: OnboardingConstants.whatsNewCounter)
+        default:
+            // Show highlight
+            UserDefaults.standard.set(counter+1, forKey: OnboardingConstants.whatsNewCounter)
         }
     }
 }

@@ -23,7 +23,7 @@ class BrowserViewController: UIViewController {
     private let webViewContainer = UIView()
 
     var modalDelegate: ModalDelegate?
-    var onboardingEventsHandler: OnboardingEventsHandler?
+    var onboardingEventsHandler: OnboardingEventsHandler!
 
     private var keyboardState: KeyboardState?
     private let browserToolbar = BrowserToolbar()
@@ -266,7 +266,7 @@ class BrowserViewController: UIViewController {
             self.updateFindInPageVisibility(visible: true, text: "")
         }
         
-        onboardingEventsHandler?
+        onboardingEventsHandler
            .$shouldPresentShieldToolTip
            .filter { $0 == true }
            .sink { _ in
@@ -274,7 +274,7 @@ class BrowserViewController: UIViewController {
            }
            .store(in: &cancellables)
         
-        onboardingEventsHandler?
+        onboardingEventsHandler
            .$shouldPresentTrashToolTip
            .filter { $0 == true }
            .sink { _ in
@@ -282,7 +282,7 @@ class BrowserViewController: UIViewController {
            }
            .store(in: &cancellables)
        
-        onboardingEventsHandler?
+        onboardingEventsHandler
            .$shouldPresentMenuToolTip
            .filter { $0 == true }
            .sink { _ in
@@ -294,7 +294,6 @@ class BrowserViewController: UIViewController {
         ensureBrowsingMode()
         guard let url = initialUrl else { return }
         submit(url: url)
-        
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -318,7 +317,6 @@ class BrowserViewController: UIViewController {
     
     func activateTextFieldAfterOnboarding() {
         urlBar.activateTextField()
-        
     }
 
     private func setupBiometrics() {
@@ -612,9 +610,9 @@ class BrowserViewController: UIViewController {
         
         // Reenable tracking protection after reset
         Settings.set(true, forToggle: .trackingProtection)
-        onboardingEventsHandler?.send(.resetBrowser)
+        onboardingEventsHandler.send(.resetBrowser)
     }
-    
+
     private func clearBrowser() {
         // Helper function for resetBrowser that handles all the logic of actually clearing user data and the browsing session
         overlayView.currentURL = ""
@@ -741,7 +739,7 @@ class BrowserViewController: UIViewController {
         if urlBar.url == nil {
             urlBar.url = url
         }
-        onboardingEventsHandler?.send(.startBrowsing)
+        onboardingEventsHandler.send(.startBrowsing)
         
         guard let savedUrl = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return }
         if let currentDomain = url.baseDomain, let savedDomain = URL(string: savedUrl)?.baseDomain, currentDomain == savedDomain {

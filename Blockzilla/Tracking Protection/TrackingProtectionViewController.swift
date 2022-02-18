@@ -202,7 +202,7 @@ class TrackingProtectionViewController: UIViewController {
     }
     var state: TrackingProtectionState
     let favIconPublisher: AnyPublisher<UIImage, Never>?
-    var onboardingEventsHandler: OnboardingEventsHandler?
+    var onboardingEventsHandler: OnboardingEventsHandler!
     private var cancellable: AnyCancellable?
     
     //MARK: - VC Lifecycle
@@ -224,8 +224,8 @@ class TrackingProtectionViewController: UIViewController {
         navigationController?.navigationBar.tintColor = .accent
         
         onboardingEventsHandler = delegate?.onboardingEventsHandler
-        onboardingEventsHandler?.send(.showTrackingProtection)
-        cancellable = onboardingEventsHandler?
+        onboardingEventsHandler.send(.showTrackingProtection)
+        cancellable = onboardingEventsHandler
             .$shouldPresentTrackingProtectionToolTip
             .filter { $0 == true }
             .sink { _ in

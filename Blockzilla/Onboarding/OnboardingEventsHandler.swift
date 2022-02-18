@@ -51,7 +51,6 @@ class OnboardingEventsHandler {
             //TODO: Check how the UI should be displayed depending on which of the two versions of TrackingProtectionVC is displayed
             shouldPresentTrackingProtectionToolTip = shouldPresentOnboarding && !trackingProtectionToolTipDidAppear
             trackingProtectionToolTipDidAppear = true
-            
         }
     }
     
