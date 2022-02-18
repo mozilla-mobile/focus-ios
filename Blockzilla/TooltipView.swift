@@ -15,7 +15,8 @@ class TooltipView: UIView {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        self.setupLayout()    }
+        self.setupLayout()
+    }
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
