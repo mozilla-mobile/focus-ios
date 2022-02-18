@@ -1,25 +1,47 @@
-//
-//  TooltipView.swift
-//  Blockzilla
-//
-//  Created by Sorin Paraipan on 16.02.2022.
-//  Copyright © 2022 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import SnapKit
 
-class TooltipView {
+class TooltipView: UIView {
     
-    let labelTextColor = UIColor(red: 251/255, green: 251/255, blue: 254/255, alpha: 1)
-    let colorRight = UIColor(red: 171/255, green: 113/255, blue: 255/255, alpha: 1).cgColor
-    let colorLeft = UIColor(red: 89/255, green: 42/255, blue: 203/255, alpha: 1).cgColor
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupLayout()
+    }
     
-    lazy var gradient: CAGradientLayer = {
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        self.setupLayout()    }
+    
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        layer.insertSublayer(gradient, at: 0)
+    }
+    
+    override func layoutSublayers(of layer: CALayer) {
+        super.layoutSublayers(of: layer)
+        gradient.frame = bounds
+    }
+    
+    func setupLayout() {
+        addSubview(mainStackView)
+        translatesAutoresizingMaskIntoConstraints = false
+        snp.makeConstraints {
+            $0.leading.trailing.top.bottom.equalTo(mainStackView)
+        }
+    }
+    
+    private lazy var gradient: CAGradientLayer = {
         let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = UIScreen.main.bounds
-        gradientLayer.colors = [colorLeft, colorRight]
-        gradientLayer.startPoint = CGPoint(x: 0, y: 1)
-        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
+        gradientLayer.frame = bounds
+        gradientLayer.cornerRadius = .cornerRadius
+        gradientLayer.colors = [UIColor.purple70.cgColor, UIColor.purple30.cgColor]
+        gradientLayer.startPoint = .startPoint
+        gradientLayer.endPoint = .endPoint
         return gradientLayer
     }()
     
@@ -29,10 +51,9 @@ class TooltipView {
         stackView.axis = .horizontal
         stackView.alignment = .top
         stackView.distribution = .equalCentering
-        stackView.spacing = 16
-        stackView.layoutMargins = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        stackView.spacing = .space
+        stackView.layoutMargins = UIEdgeInsets(top: .margin, left: .margin, bottom: .margin, right: .margin)
         stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.layer.insertSublayer(gradient, at: 0)
         return stackView
     }()
     
@@ -40,34 +61,36 @@ class TooltipView {
         let stackView = UIStackView(arrangedSubviews: [titleLabel, bodyLabel])
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
-        stackView.spacing = 16
+        stackView.spacing = .space
         return stackView
     }()
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont(name: "Metropolis-SemiBold", size: 16)
+        label.font = .systemFont(ofSize: .fontSize, weight: .bold)
+        label.textColor = .defaultFont
         label.numberOfLines = 0
-        label.textColor = .white
         return label
     }()
     
     lazy var bodyLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont(name: "Inter-Regular", size: 16)
+        label.font = .systemFont(ofSize: .fontSize)
+        label.textColor = .defaultFont
         label.numberOfLines = 0
-        label.textColor = labelTextColor
         return label
     }()
     
     lazy var dismissButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.widthAnchor.constraint(equalToConstant: 24).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 24).isActive = true
-        button.setImage(UIImage(imageLiteralResourceName: "icon_stop_menu"), for: .normal)
+        button.snp.makeConstraints {
+            $0.height.equalTo(Int.side)
+            $0.width.equalTo(Int.side)
+        }
+        button.setImage(.iconStopMenu, for: .normal)
         return button
     }()
     
@@ -76,4 +99,20 @@ class TooltipView {
         titleLabel.isHidden = title.isEmpty
         bodyLabel.text = body
     }
+}
+
+fileprivate extension CGFloat {
+    static let fontSize: CGFloat = 16
+    static let space: CGFloat = 12
+    static let margin: CGFloat = 16
+    static let cornerRadius: CGFloat = 12
+}
+
+fileprivate extension CGPoint {
+    static let startPoint = CGPoint(x: 0, y: 1)
+    static let endPoint = CGPoint(x: 1, y: 1)
+}
+
+fileprivate extension Int {
+    static let side: Int = 24
 }
