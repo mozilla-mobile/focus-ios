@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     private var cancellable: AnyCancellable?
     
     //TODO: Check when old onboarding should be displayed
-    private let displayOldOnboarding = false
+    private let displayOldOnboarding = true
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         if AppInfo.testRequestsReset() {
