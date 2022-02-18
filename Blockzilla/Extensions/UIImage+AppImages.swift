@@ -16,5 +16,5 @@ extension UIImage {
     static let defaultFavicon = UIImage(named: "icon_favicon")!
     
     static let removeShortcut = UIImage(named: "icon_shortcuts_remove")!
-    static let renameShortcut = UIImage(systemName: "pencil")!
+    static let renameShortcut = UIImage(named: "edit")!
 }

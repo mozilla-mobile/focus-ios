@@ -121,7 +121,7 @@ extension ShortcutView: UIContextMenuInteractionDelegate {
                     CHHapticEngine.capabilitiesForHardware().supportsHaptics ? feedbackGenerator.impactOccurred() : AudioServicesPlaySystemSound(1519)
                     self.delegate?.removeFromShortcutsAction(shortcut: self.shortcut)
                 }
-            return UIMenu(children: [renameAction, removeFromShortcutsAction])
+            return UIMenu(children: [removeFromShortcutsAction, renameAction])
         })
     }
     
