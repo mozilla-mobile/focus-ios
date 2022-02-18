@@ -23,6 +23,7 @@ class BrowserViewController: UIViewController {
     private let webViewContainer = UIView()
 
     var modalDelegate: ModalDelegate?
+    var onboardingEventsHandler: OnboardingEventsHandler?
 
     private var keyboardState: KeyboardState?
     private let browserToolbar = BrowserToolbar()
@@ -47,7 +48,6 @@ class BrowserViewController: UIViewController {
     private var scrollBarOffsetAlpha: CGFloat = 0
     private var scrollBarState: URLBarScrollState = .expanded
     private var background = UIImageView()
-    private let onboardingEventsHandler = OnboardingEventsHandler.sharedInstance
     private var cancellables = Set<AnyCancellable>()
 
     private enum URLBarScrollState {
@@ -266,7 +266,7 @@ class BrowserViewController: UIViewController {
             self.updateFindInPageVisibility(visible: true, text: "")
         }
         
-        onboardingEventsHandler
+        onboardingEventsHandler?
            .$shouldPresentShieldToolTip
            .filter { $0 == true }
            .sink { _ in
@@ -274,7 +274,7 @@ class BrowserViewController: UIViewController {
            }
            .store(in: &cancellables)
         
-        onboardingEventsHandler
+        onboardingEventsHandler?
            .$shouldPresentTrashToolTip
            .filter { $0 == true }
            .sink { _ in
@@ -282,7 +282,7 @@ class BrowserViewController: UIViewController {
            }
            .store(in: &cancellables)
        
-        onboardingEventsHandler
+        onboardingEventsHandler?
            .$shouldPresentMenuToolTip
            .filter { $0 == true }
            .sink { _ in
@@ -612,7 +612,7 @@ class BrowserViewController: UIViewController {
         
         // Reenable tracking protection after reset
         Settings.set(true, forToggle: .trackingProtection)
-        onboardingEventsHandler.send(.resetBrowser, handler: presentMenuPopUp)
+        onboardingEventsHandler?.send(.resetBrowser)
     }
     
     private func presentMenuPopUp() {
@@ -753,7 +753,7 @@ class BrowserViewController: UIViewController {
         if urlBar.url == nil {
             urlBar.url = url
         }
-        onboardingEventsHandler.send(.startBrowsing)
+        onboardingEventsHandler?.send(.startBrowsing)
         
         guard let savedUrl = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return }
         if let currentDomain = url.baseDomain, let savedDomain = URL(string: savedUrl)?.baseDomain, currentDomain == savedDomain {

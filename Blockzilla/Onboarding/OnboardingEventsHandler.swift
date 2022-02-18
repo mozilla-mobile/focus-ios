@@ -15,8 +15,6 @@ class OnboardingEventsHandler {
         case showTrackingProtection
     }
     
-    static var sharedInstance = OnboardingEventsHandler()
-    
     @Published var shouldPresentOnboarding: Bool = false
     @Published var shouldPresentShieldToolTip: Bool = false
     @Published var shouldPresentTrashToolTip: Bool = false
@@ -27,11 +25,7 @@ class OnboardingEventsHandler {
     private var menuToolTipDidAppear = false
     private var trackingProtectionToolTipDidAppear = false
     
-    var shouldDisplayOnboarding: Bool {
-        UserDefaults.standard.integer(forKey: OnboardingConstants.onboardingVersion) != OnboardingConstants.introVersion
-    }
-    
-    func send(_ action: OnboardingEventsHandler.Action, handler: (()->Void)? = nil) {
+    func send(_ action: OnboardingEventsHandler.Action) {
         switch action {
         case .applicationDidLaunch:
             let prefIntroDone = UserDefaults.standard.integer(forKey: OnboardingConstants.onboardingVersion)

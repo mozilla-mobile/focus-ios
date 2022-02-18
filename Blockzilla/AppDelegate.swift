@@ -38,7 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
     private var queuedUrl: URL?
     private var queuedString: String?
-    private let onboardingEventsHandler = OnboardingEventsHandler.sharedInstance
+    private let onboardingEventsHandler = OnboardingEventsHandler()
     private var cancellable: AnyCancellable?
     
     //TODO: Check when old onboarding should be displayed
@@ -85,6 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         window = UIWindow(frame: UIScreen.main.bounds)
 
         browserViewController.modalDelegate = self
+        browserViewController.onboardingEventsHandler = onboardingEventsHandler
         window?.rootViewController = browserViewController
         window?.makeKeyAndVisible()
         window?.overrideUserInterfaceStyle = UserDefaults.standard.theme.userInterfaceStyle
@@ -117,8 +118,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     func presentOnboarding() {
         let introViewController = IntroViewController()
         introViewController.modalPresentationStyle = .fullScreen
+        introViewController.onboardingEventsHandler = onboardingEventsHandler
         let newOnboardingViewController = NewOnboardingReplaceViewController()
         newOnboardingViewController.modalPresentationStyle = .formSheet
+        newOnboardingViewController.onboardingEventsHandler = onboardingEventsHandler
         browserViewController.present(displayOldOnboarding ? introViewController : newOnboardingViewController, animated: true, completion: nil)
     }
 
