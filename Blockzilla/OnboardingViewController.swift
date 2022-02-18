@@ -46,7 +46,7 @@ class OnboardingViewController: UIViewController {
         label.text = .onboardingSubtitle
         label.font = .footnote14
         label.textColor = .secondaryText
-        label.numberOfLines = 1
+        label.numberOfLines = 0
         label.accessibilityIdentifier = "OnboardingViewController.subWelcomeLabel"
         return label
     }()
@@ -57,6 +57,7 @@ class OnboardingViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = .onboardingIncognitoTitle
+        label.numberOfLines = 0
         label.font = .footnote14Bold
         label.textColor = .primaryText
         label.accessibilityIdentifier = "OnboardingViewController.incognitoTitleLabel"
@@ -90,6 +91,7 @@ class OnboardingViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = .onboardingHistoryTitle
         label.font = .footnote14Bold
+        label.numberOfLines = 0
         label.textColor = .primaryText
         label.accessibilityIdentifier = "OnboardingViewController.historyTitleLabel"
         return label
@@ -123,6 +125,7 @@ class OnboardingViewController: UIViewController {
         label.text = .onboardingProtectionTitle
         label.font = .footnote14Bold
         label.textColor = .primaryText
+        label.numberOfLines = 0
         label.accessibilityIdentifier = "OnboardingViewController.protectionTitleLabel"
         return label
     }()
@@ -165,20 +168,25 @@ class OnboardingViewController: UIViewController {
     // MARK: - StackViews
     
     private lazy var mainStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [topStackView, subWelcomeLabel, middleStackView, startBrowsingButton])
+        let stackView = UIStackView(arrangedSubviews: [topStackView, middleStackView])
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.alignment = .center
         stackView.distribution = .fill
-        stackView.spacing = UIConstants.layout.onboardingMainStackViewSpacing
         stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.layoutMargins = .init(top: 50, left: 20, bottom: 50, right: 20)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            stackView.layoutMargins = .init(top: view.frame.height/10, left: view.frame.width/10, bottom: 0, right: view.frame.width/10)
+            stackView.spacing = view.frame.height/15
+        } else {
+            stackView.layoutMargins = .init(top: 50, left: view.frame.width/10, bottom: 0, right: view.frame.width/10)
+            stackView.spacing = view.frame.height/28
+        }
         stackView.accessibilityIdentifier = "OnboardingViewController.mainStackView"
         return stackView
     }()
     
     private lazy var topStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [mozillaIconImageView, welcomeLabel])
+        let stackView = UIStackView(arrangedSubviews: [mozillaIconImageView, welcomeLabel, subWelcomeLabel])
         stackView.axis = .vertical
         stackView.alignment = .center
         stackView.spacing = 16
@@ -190,7 +198,6 @@ class OnboardingViewController: UIViewController {
         let stackView = UIStackView(arrangedSubviews: [incognitoStackView, historyStackView, protectionStackView])
         stackView.axis = .vertical
         stackView.alignment = .leading
-        stackView.distribution = .fillProportionally
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.spacing = UIConstants.layout.onboardingMiddleStackViewSpacing
         stackView.accessibilityIdentifier = "OnboardingViewController.middleStackView"
@@ -211,7 +218,6 @@ class OnboardingViewController: UIViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
         stackView.alignment = .top
-        stackView.distribution = .fill
         stackView.spacing = UIConstants.layout.onboardingMiddleStackViewSpacing
         stackView.accessibilityIdentifier = "OnboardingViewController.incognitoStackView"
         return stackView
@@ -222,7 +228,6 @@ class OnboardingViewController: UIViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.spacing = UIConstants.layout.onboardingTextStackViewSpacing
-        stackView.distribution = .fillProportionally
         stackView.accessibilityIdentifier = "OnboardingViewController.historyTextStackView"
         return stackView
     }()
@@ -232,7 +237,6 @@ class OnboardingViewController: UIViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
         stackView.alignment = .top
-        stackView.distribution = .fill
         stackView.spacing = UIConstants.layout.onboardingMiddleStackViewSpacing
         stackView.accessibilityIdentifier = "OnboardingViewController.historyStackView"
         return stackView
@@ -243,7 +247,6 @@ class OnboardingViewController: UIViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.spacing = UIConstants.layout.onboardingTextStackViewSpacing
-        stackView.distribution = .fillProportionally
         stackView.accessibilityIdentifier = "OnboardingViewController.protectionTextStackView"
         return stackView
     }()
@@ -253,10 +256,14 @@ class OnboardingViewController: UIViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
         stackView.alignment = .top
-        stackView.distribution = .fill
         stackView.spacing = UIConstants.layout.onboardingMiddleStackViewSpacing
         stackView.accessibilityIdentifier = "OnboardingViewController.protectionStackView"
         return stackView
+    }()
+    
+    private lazy var contentView: UIView = {
+        let view = UIView()
+        return view
     }()
 
     override func viewDidLoad() {
@@ -265,48 +272,19 @@ class OnboardingViewController: UIViewController {
         
     }
     
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            if UIDevice.current.orientation.isLandscape {
-                mainStackView.snp.remakeConstraints { make in
-                    make.centerX.equalTo(scrollView.snp.centerX)
-                    make.width.equalTo(scrollView.snp.width)
-                    make.top.greaterThanOrEqualToSuperview()
-                    make.bottom.lessThanOrEqualToSuperview()
-                }
-            } else {
-                mainStackView.snp.remakeConstraints { make in
-                    make.centerX.equalTo(scrollView.snp.centerX)
-                    make.centerY.equalTo(scrollView.snp.centerY)
-                    make.width.equalTo(scrollView.snp.width).multipliedBy(0.9)
-                    make.top.greaterThanOrEqualToSuperview()
-                    make.bottom.lessThanOrEqualToSuperview()
-                }
-            }
-        }
-    }
-    
     func addSubViews() {
         
+        view.backgroundColor = .systemBackground
         view.addSubview(scrollView)
         scrollView.snp.makeConstraints { make in
-            make.centerX.equalTo(self.view.snp.centerX)
-            make.width.equalTo(self.view.snp.width)
-            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
-            make.bottom.equalTo(self.view.snp.bottom)
+            make.top.leading.trailing.equalToSuperview()
         }
         
         scrollView.addSubview(mainStackView)
         mainStackView.snp.makeConstraints { make in
-            make.centerX.equalTo(scrollView.snp.centerX)
-            make.centerY.equalTo(scrollView.snp.centerY)
-            make.width.equalTo(scrollView.snp.width).multipliedBy(0.9)
-            make.top.greaterThanOrEqualToSuperview()
-            make.bottom.lessThanOrEqualToSuperview()
+            make.top.bottom.leading.trailing.equalToSuperview()
+            make.width.equalTo(view)
         }
-        
-        view.backgroundColor = .systemBackground
 
         mozillaIconImageView.snp.makeConstraints { $0.width.height.equalTo(60) }
         
@@ -314,9 +292,12 @@ class OnboardingViewController: UIViewController {
         historyImageView.snp.makeConstraints { $0.width.height.equalTo(UIConstants.layout.onboardingIconsWidthHeight) }
         protectionImageView.snp.makeConstraints { $0.width.height.equalTo(UIConstants.layout.onboardingIconsWidthHeight) }
         
+        view.addSubview(startBrowsingButton)
         startBrowsingButton.snp.makeConstraints { make in
-            make.width.equalTo(UIConstants.layout.onboardingButtonWidth)
-            make.height.equalTo(UIConstants.layout.onboardingButtonHeight)
+            make.height.equalTo(44)
+            make.bottom.equalToSuperview().inset(view.frame.height/20)
+            make.leading.trailing.equalToSuperview().inset(view.frame.width/5)
+            make.top.equalTo(scrollView.snp.bottom).inset(-20)
         }
     }
 
