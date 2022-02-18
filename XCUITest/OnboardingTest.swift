@@ -43,32 +43,31 @@ class OnboardingTest: XCTestCase {
         let pageIndicatorButton1 = stackElement.children(matching: .button).matching(identifier: "page indicator").element(boundBy: 0)
         let pageIndicatorButton2 = stackElement.children(matching: .button).matching(identifier: "page indicator").element(boundBy: 1)
         let pageIndicatorButton3 = stackElement.children(matching: .button).matching(identifier: "page indicator").element(boundBy: 2)
-        
+
         waitForExistence(app.staticTexts["Power up your privacy"], timeout: 3)
-        
+
         pageIndicatorButton2.tap()
         waitForExistence(app.staticTexts["Your search, your way"], timeout: 3)
         XCTAssert(pageIndicatorButton2.isSelected)
-        
+
         pageIndicatorButton3.tap()
         waitForExistence(app.staticTexts["Your history is history"], timeout: 3)
         XCTAssert(pageIndicatorButton3.isSelected)
-        
+
         pageIndicatorButton1.tap()
         waitForExistence(app.staticTexts["Your search, your way"], timeout: 3)
         XCTAssert(pageIndicatorButton2.isSelected)
-        
+
         pageIndicatorButton1.tap()
         waitForExistence(app.staticTexts["Power up your privacy"], timeout: 3)
         XCTAssert(pageIndicatorButton1.isSelected)
         XCTAssert(!pageIndicatorButton2.isSelected)
-        
+
         // Make sure button alpha values update even when selecting "Next" button
         let nextButton = app.buttons["Next"]
         nextButton.tap()
         waitForExistence(app.staticTexts["Your search, your way"], timeout: 3)
         XCTAssert(pageIndicatorButton2.isSelected)
-        
     }
-    
+
 }
