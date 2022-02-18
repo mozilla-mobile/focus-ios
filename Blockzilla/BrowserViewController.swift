@@ -615,18 +615,6 @@ class BrowserViewController: UIViewController {
         onboardingEventsHandler?.send(.resetBrowser)
     }
     
-    private func presentMenuPopUp() {
-        presentTemporaryAlert(message: "Showed menu pop up")
-    }
-    private func presentTemporaryAlert(message: String) {
-        let alert = UIAlertController(title: "Test Alert", message: message, preferredStyle: .alert)
-        let dismissAction = UIAlertAction(title: "OK", style: .default) { (UIAlertAction) in
-            alert.dismiss(animated: true, completion: nil)
-        }
-        alert.addAction(dismissAction)
-        present(alert, animated: true, completion: nil)
-    }
-    
     private func clearBrowser() {
         // Helper function for resetBrowser that handles all the logic of actually clearing user data and the browsing session
         overlayView.currentURL = ""
@@ -761,13 +749,26 @@ class BrowserViewController: UIViewController {
         }
     }
     
+    private func presentTemporaryAlert(message: String) {
+        let alert = UIAlertController(title: "Test Alert", message: message, preferredStyle: .alert)
+        let dismissAction = UIAlertAction(title: "OK", style: .default) { (UIAlertAction) in
+            alert.dismiss(animated: true, completion: nil)
+        }
+        alert.addAction(dismissAction)
+        present(alert, animated: true, completion: nil)
+    }
+    
     private func presentShieldPopUp() {
         presentTemporaryAlert(message: "Showed shield pop up")
     }
+    
     private func presentTrashPopUp() {
         presentTemporaryAlert(message: "Showed trash pop up")
     }
     
+    private func presentMenuPopUp() {
+        presentTemporaryAlert(message: "Showed menu pop up")
+    }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)

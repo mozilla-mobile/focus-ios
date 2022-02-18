@@ -7,8 +7,6 @@ import Foundation
 
 struct WhatsNewEventsHandler {
     
-    static let sharedInstance = WhatsNewEventsHandler()
-    
     //TODO: check which should be the logic of implementation
     var shouldShowWhatsNewButton: Bool {
         UserDefaults.standard.integer(forKey: OnboardingConstants.whatsNewCounter) != 0

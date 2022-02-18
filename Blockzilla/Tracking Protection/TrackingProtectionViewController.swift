@@ -229,7 +229,7 @@ class TrackingProtectionViewController: UIViewController {
             .$shouldPresentTrackingProtectionToolTip
             .filter { $0 == true }
             .sink { _ in
-                self.presenTrackingProtectionPopUp()
+                self.presentTrackingProtectionPopUp()
             }
         
         
@@ -291,7 +291,7 @@ class TrackingProtectionViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
-    private func presenTrackingProtectionPopUp() {
+    private func presentTrackingProtectionPopUp() {
         presentTemporaryAlert(message: "Showed tracking protection pop up")
     }
     

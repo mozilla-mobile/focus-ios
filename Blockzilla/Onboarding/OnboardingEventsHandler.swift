@@ -34,25 +34,25 @@ class OnboardingEventsHandler {
         case .onboardingDidDismiss:
             UserDefaults.standard.set(OnboardingConstants.introVersion, forKey: OnboardingConstants.onboardingVersion)
             UserDefaults.standard.set(AppInfo.shortVersion, forKey: OnboardingConstants.whatsNewVersion)
-
+            
         case .startBrowsing:
             visitedURLcounter += 1
-            shouldPresentShieldToolTip = visitedURLcounter == 1 && shouldPresentOnboarding
-            shouldPresentTrashToolTip = visitedURLcounter == 3 && shouldPresentOnboarding
+            shouldPresentShieldToolTip = shouldPresentOnboarding && visitedURLcounter == 1
+            shouldPresentTrashToolTip = shouldPresentOnboarding && visitedURLcounter == 3
             
         case .resetBrowser:
             //TODO: Check after how many visited URLs should be displayed
-            shouldPresentMenuToolTip = (visitedURLcounter >= 5 && !menuToolTipDidAppear) && shouldPresentOnboarding
+            shouldPresentMenuToolTip = shouldPresentOnboarding && (visitedURLcounter >= 5 && !menuToolTipDidAppear)
             if shouldPresentMenuToolTip {
                 menuToolTipDidAppear = true
             }
             
         case .showTrackingProtection:
             //TODO: Check how the UI should be displayed depending on which of the two versions of TrackingProtectionVC is displayed
-            shouldPresentTrackingProtectionToolTip = !trackingProtectionToolTipDidAppear && shouldPresentOnboarding
+            shouldPresentTrackingProtectionToolTip = shouldPresentOnboarding && !trackingProtectionToolTipDidAppear
             trackingProtectionToolTipDidAppear = true
-        
+            
         }
     }
-  
+    
 }

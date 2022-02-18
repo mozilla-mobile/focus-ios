@@ -38,6 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
     private var queuedUrl: URL?
     private var queuedString: String?
+    private let whatsNewEventsHandler = WhatsNewEventsHandler()
     private let onboardingEventsHandler = OnboardingEventsHandler()
     private var cancellable: AnyCancellable?
     
@@ -102,6 +103,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             }
             return true
         }
+        
         onboardingEventsHandler.send(.applicationDidLaunch)
         cancellable = onboardingEventsHandler
             .$shouldPresentOnboarding
@@ -109,20 +111,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             .sink { _ in
                 self.presentOnboarding()
             }
-        WhatsNewEventsHandler.sharedInstance.highlightWhatsNewButton()
-        
+        whatsNewEventsHandler.highlightWhatsNewButton()
         
         return true
-    }
-    
-    func presentOnboarding() {
-        let introViewController = IntroViewController()
-        introViewController.modalPresentationStyle = .fullScreen
-        introViewController.onboardingEventsHandler = onboardingEventsHandler
-        let newOnboardingViewController = NewOnboardingReplaceViewController()
-        newOnboardingViewController.modalPresentationStyle = .formSheet
-        newOnboardingViewController.onboardingEventsHandler = onboardingEventsHandler
-        browserViewController.present(displayOldOnboarding ? introViewController : newOnboardingViewController, animated: true, completion: nil)
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
@@ -188,6 +179,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: (Bool) -> Void) {
 
         completionHandler(handleShortcut(shortcutItem: shortcutItem))
+    }
+    
+    private func presentOnboarding() {
+        let introViewController = IntroViewController()
+        introViewController.modalPresentationStyle = .fullScreen
+        introViewController.onboardingEventsHandler = onboardingEventsHandler
+        let newOnboardingViewController = NewOnboardingReplaceViewController()
+        newOnboardingViewController.modalPresentationStyle = .formSheet
+        newOnboardingViewController.onboardingEventsHandler = onboardingEventsHandler
+        browserViewController.present(displayOldOnboarding ? introViewController : newOnboardingViewController, animated: true, completion: nil)
     }
 
     private func handleShortcut(shortcutItem: UIApplicationShortcutItem) -> Bool {
