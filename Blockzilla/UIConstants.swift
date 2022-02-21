@@ -139,7 +139,10 @@ struct UIConstants {
         static let actionSheetTitleHeaderHeight: CGFloat = 36
         static let actionSheetSeparatorHeaderHeight: CGFloat = 12
         static let settingsCellLeftInset: CGFloat = 20
-     
+        static let onboardingButtonHeight: CGFloat = 44
+        static let onboardingIconsWidthHeight: CGFloat = 20
+        static let onboardingTextStackViewSpacing: CGFloat = 6
+        static let onboardingMiddleStackViewSpacing: CGFloat = 24
     }
 
     struct strings {
