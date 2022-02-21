@@ -202,6 +202,8 @@ class TrackingProtectionViewController: UIViewController {
     }
     var state: TrackingProtectionState
     let favIconPublisher: AnyPublisher<UIImage, Never>?
+    var onboardingEventsHandler: OnboardingEventsHandler!
+    private var cancellable: AnyCancellable?
     
     //MARK: - VC Lifecycle
     init(state: TrackingProtectionState, favIconPublisher: AnyPublisher<UIImage, Never>? = nil) {
@@ -220,6 +222,16 @@ class TrackingProtectionViewController: UIViewController {
         title = UIConstants.strings.trackingProtectionLabel
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.primaryText]
         navigationController?.navigationBar.tintColor = .accent
+        
+        onboardingEventsHandler = delegate?.onboardingEventsHandler
+        onboardingEventsHandler.send(.showTrackingProtection)
+        cancellable = onboardingEventsHandler
+            .$shouldPresentTrackingProtectionToolTip
+            .filter { $0 == true }
+            .sink { _ in
+                self.presentTrackingProtectionPopUp()
+            }
+        
         
         if case .settings = state {
             let doneButton = UIBarButtonItem(title: UIConstants.strings.done, style: .plain, target: self, action: #selector(doneTapped))
@@ -277,6 +289,19 @@ class TrackingProtectionViewController: UIViewController {
     
     @objc private func doneTapped() {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    private func presentTrackingProtectionPopUp() {
+        presentTemporaryAlert(message: "Showed tracking protection pop up")
+    }
+    
+    private func presentTemporaryAlert(message: String) {
+        let alert = UIAlertController(title: "Test Alert", message: message, preferredStyle: .alert)
+        let dismissAction = UIAlertAction(title: "OK", style: .default) { (UIAlertAction) in
+            alert.dismiss(animated: true, completion: nil)
+        }
+        alert.addAction(dismissAction)
+        present(alert, animated: true, completion: nil)
     }
     
     fileprivate func updateTelemetry(_ settingsKey: SettingsToggle, _ isOn: Bool) {

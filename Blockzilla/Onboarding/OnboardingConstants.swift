@@ -4,6 +4,10 @@
 
 import Foundation
 
-class OboardingEventsHandler {
+struct OnboardingConstants {
+    static let onboardingVersion = "OnboardingVersion"
+    static let introVersion = 2
+    static let whatsNewVersion = "whatsNewVersion"
+    static let whatsNewCounter = "WhatsNewCounter"
     
 }

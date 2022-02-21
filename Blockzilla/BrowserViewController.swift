@@ -23,6 +23,7 @@ class BrowserViewController: UIViewController {
     private let webViewContainer = UIView()
 
     var modalDelegate: ModalDelegate?
+    var onboardingEventsHandler: OnboardingEventsHandler!
 
     private var keyboardState: KeyboardState?
     private let browserToolbar = BrowserToolbar()
@@ -47,6 +48,7 @@ class BrowserViewController: UIViewController {
     private var scrollBarOffsetAlpha: CGFloat = 0
     private var scrollBarState: URLBarScrollState = .expanded
     private var background = UIImageView()
+    private var cancellables = Set<AnyCancellable>()
 
     private enum URLBarScrollState {
         case collapsed
@@ -263,7 +265,31 @@ class BrowserViewController: UIViewController {
         NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.findInPageNotification), object: nil, queue: nil) { _ in
             self.updateFindInPageVisibility(visible: true, text: "")
         }
-
+        
+        onboardingEventsHandler
+           .$shouldPresentShieldToolTip
+           .filter { $0 == true }
+           .sink { _ in
+               self.presentShieldPopUp()
+           }
+           .store(in: &cancellables)
+        
+        onboardingEventsHandler
+           .$shouldPresentTrashToolTip
+           .filter { $0 == true }
+           .sink { _ in
+               self.presentTrashPopUp()
+           }
+           .store(in: &cancellables)
+       
+        onboardingEventsHandler
+           .$shouldPresentMenuToolTip
+           .filter { $0 == true }
+           .sink { _ in
+               self.presentMenuPopUp()
+           }
+           .store(in: &cancellables)
+       
         guard shouldEnsureBrowsingMode else { return }
         ensureBrowsingMode()
         guard let url = initialUrl else { return }
@@ -283,14 +309,14 @@ class BrowserViewController: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        // Prevent the keyboard from showing up until after the user has viewed the Intro.
-        let userHasSeenIntro = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone) == AppDelegate.prefIntroVersion
-
-        if userHasSeenIntro && !urlBar.inBrowsingMode {
+        super.viewDidAppear(animated)
+        if presentedViewController == nil && !urlBar.inBrowsingMode {
             urlBar.activateTextField()
         }
-
-        super.viewDidAppear(animated)
+    }
+    
+    func activateTextFieldAfterOnboarding() {
+        urlBar.activateTextField()
     }
 
     private func setupBiometrics() {
@@ -584,6 +610,7 @@ class BrowserViewController: UIViewController {
         
         // Reenable tracking protection after reset
         Settings.set(true, forToggle: .trackingProtection)
+        onboardingEventsHandler.send(.resetBrowser)
     }
 
     private func clearBrowser() {
@@ -707,15 +734,38 @@ class BrowserViewController: UIViewController {
                 browserToolbar.animateHidden(false, duration: UIConstants.layout.toolbarFadeAnimationDuration)
             }
         }
-
         webViewController.load(URLRequest(url: url))
+        
         if urlBar.url == nil {
             urlBar.url = url
         }
+        onboardingEventsHandler.send(.startBrowsing)
+        
         guard let savedUrl = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return }
         if let currentDomain = url.baseDomain, let savedDomain = URL(string: savedUrl)?.baseDomain, currentDomain == savedDomain {
             userActivity = SiriShortcuts().getActivity(for: .openURL)
         }
+    }
+    
+    private func presentTemporaryAlert(message: String) {
+        let alert = UIAlertController(title: "Test Alert", message: message, preferredStyle: .alert)
+        let dismissAction = UIAlertAction(title: "OK", style: .default) { (UIAlertAction) in
+            alert.dismiss(animated: true, completion: nil)
+        }
+        alert.addAction(dismissAction)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    private func presentShieldPopUp() {
+        presentTemporaryAlert(message: "Showed shield pop up")
+    }
+    
+    private func presentTrashPopUp() {
+        presentTemporaryAlert(message: "Showed trash pop up")
+    }
+    
+    private func presentMenuPopUp() {
+        presentTemporaryAlert(message: "Showed menu pop up")
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
