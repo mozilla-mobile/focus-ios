@@ -159,7 +159,7 @@ class OnboardingViewController: UIViewController {
         button.layer.cornerRadius = 5
         button.setTitleColor(.white, for: .normal)
         button.accessibilityIdentifier = "IntroViewController.startBrowsingButton"
-        button.addTarget(self, action: #selector(IntroViewController.didTapStartButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(OnboardingViewController.didTapStartButton), for: .touchUpInside)
         return button
     }()
 
