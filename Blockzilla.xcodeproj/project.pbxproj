@@ -53,7 +53,6 @@
 		6028813E27B1259100CAF588 /* OnboardingEventsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6028813D27B1259100CAF588 /* OnboardingEventsHandler.swift */; };
 		6028814027B2C6BB00CAF588 /* OnboardingConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6028813F27B2C6BB00CAF588 /* OnboardingConstants.swift */; };
 		6028814227B2C6CE00CAF588 /* WhatsNewEventsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6028814127B2C6CE00CAF588 /* WhatsNewEventsHandler.swift */; };
-		6028814427B539F600CAF588 /* NewOnboardingReplaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6028814327B539F600CAF588 /* NewOnboardingReplaceViewController.swift */; };
 		60D779C327469A2300DF8047 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D779C227469A2300DF8047 /* DesignSystem.swift */; };
 		742C99D41F3A3AD200717D69 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 742C99D31F3A3AD200717D69 /* Assets.xcassets */; };
 		74584E351FA1077000AF2582 /* SettingsContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74584E341FA1077000AF2582 /* SettingsContentViewController.swift */; };
@@ -443,7 +442,6 @@
 		6028813D27B1259100CAF588 /* OnboardingEventsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingEventsHandler.swift; sourceTree = "<group>"; };
 		6028813F27B2C6BB00CAF588 /* OnboardingConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingConstants.swift; sourceTree = "<group>"; };
 		6028814127B2C6CE00CAF588 /* WhatsNewEventsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewEventsHandler.swift; sourceTree = "<group>"; };
-		6028814327B539F600CAF588 /* NewOnboardingReplaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewOnboardingReplaceViewController.swift; sourceTree = "<group>"; };
 		60D779C227469A2300DF8047 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
 		742C99D31F3A3AD200717D69 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7449B1361F290F7B001A199D /* af */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = af; path = af.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1179,7 +1177,7 @@
 				6028813F27B2C6BB00CAF588 /* OnboardingConstants.swift */,
 				6028813D27B1259100CAF588 /* OnboardingEventsHandler.swift */,
 				6028814127B2C6CE00CAF588 /* WhatsNewEventsHandler.swift */,
-				6028814327B539F600CAF588 /* NewOnboardingReplaceViewController.swift */,
+				74C7116F27B407D000FA92AB /* OnboardingViewController.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -1539,7 +1537,6 @@
 				1D3BEDFA20C5E76A0019B722 /* FindInPageBar.swift */,
 				846A23172668CC4500DB3C37 /* FullScreen.js */,
 				747ADA171FC38EFC00970132 /* IntroViewController.swift */,
-				74C7116F27B407D000FA92AB /* OnboardingViewController.swift */,
 				8400574F2735182800E48144 /* PageControl.swift */,
 				8400574D273516F600E48144 /* ScrollViewController.swift */,
 				D30179C21BCC6F65009AD388 /* AboutViewController.swift */,
@@ -2266,7 +2263,6 @@
 				84EF9F97269489980000E361 /* TipsPageControl.swift in Sources */,
 				D30DF93E1DC1634F0064736C /* Toast.swift in Sources */,
 				6028813E27B1259100CAF588 /* OnboardingEventsHandler.swift in Sources */,
-				6028814427B539F600CAF588 /* NewOnboardingReplaceViewController.swift in Sources */,
 				F861799F27961F4200CFD324 /* InternalSettings.swift in Sources */,
 				D33A1AB11BC48FAC0003D929 /* SettingsViewController.swift in Sources */,
 				6028814227B2C6CE00CAF588 /* WhatsNewEventsHandler.swift in Sources */,

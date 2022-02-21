@@ -185,7 +185,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         let introViewController = IntroViewController()
         introViewController.modalPresentationStyle = .fullScreen
         introViewController.onboardingEventsHandler = onboardingEventsHandler
-        let newOnboardingViewController = NewOnboardingReplaceViewController()
+        let newOnboardingViewController = OnboardingViewController()
         newOnboardingViewController.modalPresentationStyle = .formSheet
         newOnboardingViewController.onboardingEventsHandler = onboardingEventsHandler
         browserViewController.present(displayOldOnboarding ? introViewController : newOnboardingViewController, animated: true, completion: nil)
