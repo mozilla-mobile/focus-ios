@@ -255,6 +255,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             browserViewController.resetBrowser(hidePreviousSession: true)
             Settings.setSiriRequestErase(to: false)
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.siri, object: TelemetryEventObject.eraseInBackground)
+            GleanMetrics.Siri.eraseInBackground.record()
         }
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
 
@@ -308,6 +309,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         case "org.mozilla.ios.Klar.eraseAndOpen":
             browserViewController.resetBrowser(hidePreviousSession: true)
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.siri, object: TelemetryEventObject.eraseAndOpen)
+            GleanMetrics.Siri.eraseAndOpen.record()
         case "org.mozilla.ios.Klar.openUrl":
             guard let urlString = userActivity.userInfo?["url"] as? String,
                 let url = URL(string: urlString) else { return false }
@@ -316,10 +318,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             browserViewController.deactivateUrlBarOnHomeView()
             browserViewController.submit(url: url)
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.siri, object: TelemetryEventObject.openFavoriteSite)
+            GleanMetrics.Siri.openFavoriteSite.record()
         case "EraseIntent":
             guard userActivity.interaction?.intent as? EraseIntent != nil else { return false }
             browserViewController.resetBrowser()
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.siri, object: TelemetryEventObject.eraseInBackground)
+            GleanMetrics.Siri.eraseInBackground.record()
         default: break
         }
         return true
