@@ -72,7 +72,7 @@ class ShortcutView: UIView {
             make.center.equalTo(outerView)
         }
         
-        letterLabel.text = shortcut.firstLetter
+        letterLabel.text = shortcut.name.first.map(String.init)?.capitalized
         innerView.addSubview(letterLabel)
         letterLabel.snp.makeConstraints { make in
             make.center.equalTo(innerView)
