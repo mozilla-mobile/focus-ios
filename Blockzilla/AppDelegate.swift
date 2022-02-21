@@ -189,7 +189,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         newOnboardingViewController.modalPresentationStyle = .formSheet
         newOnboardingViewController.isModalInPresentation = true
         newOnboardingViewController.onboardingEventsHandler = onboardingEventsHandler
-        browserViewController.present(displayOldOnboarding ? introViewController : newOnboardingViewController, animated: displayOldOnboarding ? false : true, completion: nil)
+        browserViewController.present(displayOldOnboarding ? introViewController : newOnboardingViewController, animated: !displayOldOnboarding, completion: nil)
     }
 
     private func handleShortcut(shortcutItem: UIApplicationShortcutItem) -> Bool {
