@@ -236,9 +236,6 @@ class SettingAppearanceTest: BaseTestCase {
         waitForExistence(app.tables.cells["settingsViewController.themeCell"], timeout: 10)
         app.tables.cells["settingsViewController.themeCell"].swipeUp()
 
-        waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"], timeout: 10)
-        app.tables.cells["SettingsViewController.autocompleteCell"].swipeUp()
-
         // Check that Safari toggle is off, swipe to get to Safarin Integration menu
         waitForExistence(app.otherElements["SIRI SHORTCUTS"], timeout: 10)
         app.otherElements["SIRI SHORTCUTS"].swipeUp()
