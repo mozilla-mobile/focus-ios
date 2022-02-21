@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     private var cancellable: AnyCancellable?
     
     //TODO: Check when old onboarding should be displayed
-    private let displayOldOnboarding = true
+    private let displayOldOnboarding = false
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         if AppInfo.testRequestsReset() {
@@ -187,6 +187,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         introViewController.onboardingEventsHandler = onboardingEventsHandler
         let newOnboardingViewController = OnboardingViewController()
         newOnboardingViewController.modalPresentationStyle = .formSheet
+        newOnboardingViewController.isModalInPresentation = true
         newOnboardingViewController.onboardingEventsHandler = onboardingEventsHandler
         browserViewController.present(displayOldOnboarding ? introViewController : newOnboardingViewController, animated: true, completion: nil)
     }
