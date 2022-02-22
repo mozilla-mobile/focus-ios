@@ -182,9 +182,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         let introViewController = IntroViewController()
         introViewController.modalPresentationStyle = .fullScreen
         introViewController.onboardingEventsHandler = onboardingEventsHandler
-        let newOnboardingViewController = NewOnboardingReplaceViewController()
+        let newOnboardingViewController = OnboardingViewController()
         newOnboardingViewController.modalPresentationStyle = .formSheet
-        newOnboardingViewController.onboardingEventsHandler = onboardingEventsHandler
+        newOnboardingViewController.isModalInPresentation = true
+        newOnboardingViewController.dismissOnboardingScreen = { [weak self] in
+            guard let self = self else { return }
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.onboarding, value: "finish")
+            self.onboardingEventsHandler.send(.onboardingDidDismiss)
+            self.browserViewController.activateTextFieldAfterOnboarding()
+            self.browserViewController.presentedViewController?.dismiss(animated: true)
+        }
         browserViewController.present(onboardingEventsHandler.shouldShowNewOnboarding ? newOnboardingViewController : introViewController, animated: false)
     }
 
