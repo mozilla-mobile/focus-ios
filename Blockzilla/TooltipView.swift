@@ -1,5 +1,4 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
@@ -91,7 +90,7 @@ class TooltipView: UIView {
             $0.height.equalTo(Int.side)
             $0.width.equalTo(Int.side)
         }
-        button.setImage(.iconStopMenu, for: .normal)
+        button.setImage(.iconClose, for: .normal)
         return button
     }()
     

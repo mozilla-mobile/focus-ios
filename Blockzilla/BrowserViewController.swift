@@ -24,6 +24,8 @@ class BrowserViewController: UIViewController {
 
     var modalDelegate: ModalDelegate?
     var onboardingEventsHandler: OnboardingEventsHandler!
+    
+    private let tooltipViewController = TooltipViewController()
 
     private var keyboardState: KeyboardState?
     private let browserToolbar = BrowserToolbar()
@@ -756,8 +758,14 @@ class BrowserViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    private func presentTooltip(anchoredBy sourceView: UIView, sourceRect: CGRect, title: String = "", body: String) {
+        tooltipViewController.tooltipView.set(title: title, body: body)
+        tooltipViewController.createTooltipPopover(anchoredBy: sourceView, sourceRect: sourceRect, viewController: tooltipViewController)
+        present(tooltipViewController, animated: true)
+    }
+    
     private func presentShieldPopUp() {
-        presentTemporaryAlert(message: "Showed shield pop up")
+        presentTooltip(anchoredBy: urlBar.shieldIcon, sourceRect: CGRect(x: urlBar.shieldIcon.bounds.midX, y: urlBar.shieldIcon.bounds.midY + 10, width: 0, height: 0), body: UIConstants.strings.tooltipBodyTextForShieldIcon)
     }
     
     private func presentTrashPopUp() {

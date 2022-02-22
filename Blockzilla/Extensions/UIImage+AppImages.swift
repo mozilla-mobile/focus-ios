@@ -15,5 +15,5 @@ extension UIImage {
     
     static let defaultFavicon = UIImage(named: "icon_favicon")!
     
-    static let iconStopMenu = UIImage(named: "icon_stop_menu")!
+    static let iconClose = UIImage(named: "icon_close")!
 }
