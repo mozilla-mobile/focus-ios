@@ -98,6 +98,7 @@ class TipManager {
     }
     
     private var availableTips: [Tip] {
+        guard !OnboardingEventsHandler().shouldShowNewOnboarding else { return [] }
         guard Settings.getToggle(.showHomeScreenTips) else { return [] }
         return tips.filter { $0.canShow() }
     }

@@ -26,7 +26,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             case .search: return 3
             case .siri: return 3
             case .integration: return 1
-            case .mozilla: return 3
+            case .mozilla: if OnboardingEventsHandler().shouldShowNewOnboarding { return  2 }
+                return 3
             case .secret: return 1
             }
         }
@@ -113,6 +114,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     private var isSafariEnabled = false
     private let searchEngineManager: SearchEngineManager
     private var highlightsButton = UIBarButtonItem()
+    private let onboardingEventsHandler = OnboardingEventsHandler()
     private let whatsNew: WhatsNewDelegate
     private lazy var sections = {
         Section.getSections()
@@ -365,9 +367,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case .integration:
             cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
         case .mozilla:
-            if indexPath.row == 0 {
+            
+            if !onboardingEventsHandler.shouldShowNewOnboarding && indexPath.row == 0 {
                 cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
-            } else if indexPath.row == 1 {
+            } else if (!onboardingEventsHandler.shouldShowNewOnboarding && indexPath.row == 1) || indexPath.row == 0 {
                 cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
                 cell.textLabel?.text = String(format: UIConstants.strings.aboutTitle, AppInfo.productName)
                 cell.accessibilityIdentifier = "settingsViewController.about"
@@ -511,6 +514,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     @objc private func dismissSettings() {
+        #if DEBUG
+        if let browserViewController = presentingViewController as? BrowserViewController {
+            browserViewController.refreshTipsDisplay()
+        }
+        #endif
         self.dismiss(animated: true, completion: nil)
     }
 

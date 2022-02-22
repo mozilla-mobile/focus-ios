@@ -7,6 +7,15 @@ import Combine
 
 class OnboardingEventsHandler {
     
+    var shouldShowNewOnboarding: Bool {
+    #if DEBUG
+        return UserDefaults.standard.bool(forKey: "ShowNewOnboarding")
+    #else
+        //TODO: Replace with suitable value from A/B Testing
+        return false
+    #endif
+    }
+    
     enum Action {
         case applicationDidLaunch
         case onboardingDidDismiss
@@ -28,11 +37,16 @@ class OnboardingEventsHandler {
     func send(_ action: OnboardingEventsHandler.Action) {
         switch action {
         case .applicationDidLaunch:
-            let prefIntroDone = UserDefaults.standard.integer(forKey: OnboardingConstants.onboardingVersion)
-            shouldPresentOnboarding = prefIntroDone < OnboardingConstants.introVersion
+            var onboardingDidAppear = UserDefaults.standard.bool(forKey: OnboardingConstants.onboardingDidAppear)
+        #if DEBUG
+            if UserDefaults.standard.bool(forKey: "AlwaysShowOnboarding") {
+                onboardingDidAppear = false
+            }
+        #endif
+            shouldPresentOnboarding = !onboardingDidAppear
             
         case .onboardingDidDismiss:
-            UserDefaults.standard.set(OnboardingConstants.introVersion, forKey: OnboardingConstants.onboardingVersion)
+            UserDefaults.standard.set(true, forKey: OnboardingConstants.onboardingDidAppear)
             UserDefaults.standard.set(AppInfo.shortVersion, forKey: OnboardingConstants.whatsNewVersion)
             
         case .startBrowsing:

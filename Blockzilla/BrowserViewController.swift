@@ -748,6 +748,7 @@ class BrowserViewController: UIViewController {
     }
     
     private func presentTemporaryAlert(message: String) {
+        guard onboardingEventsHandler.shouldShowNewOnboarding else { return }
         let alert = UIAlertController(title: "Test Alert", message: message, preferredStyle: .alert)
         let dismissAction = UIAlertAction(title: "OK", style: .default) { (UIAlertAction) in
             alert.dismiss(animated: true, completion: nil)

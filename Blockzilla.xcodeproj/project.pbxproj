@@ -54,6 +54,7 @@
 		6028814027B2C6BB00CAF588 /* OnboardingConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6028813F27B2C6BB00CAF588 /* OnboardingConstants.swift */; };
 		6028814227B2C6CE00CAF588 /* WhatsNewEventsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6028814127B2C6CE00CAF588 /* WhatsNewEventsHandler.swift */; };
 		6028814427B539F600CAF588 /* NewOnboardingReplaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6028814327B539F600CAF588 /* NewOnboardingReplaceViewController.swift */; };
+		60CF785927C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CF785827C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift */; };
 		60D779C327469A2300DF8047 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D779C227469A2300DF8047 /* DesignSystem.swift */; };
 		742C99D41F3A3AD200717D69 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 742C99D31F3A3AD200717D69 /* Assets.xcassets */; };
 		74584E351FA1077000AF2582 /* SettingsContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74584E341FA1077000AF2582 /* SettingsContentViewController.swift */; };
@@ -444,6 +445,7 @@
 		6028813F27B2C6BB00CAF588 /* OnboardingConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingConstants.swift; sourceTree = "<group>"; };
 		6028814127B2C6CE00CAF588 /* WhatsNewEventsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewEventsHandler.swift; sourceTree = "<group>"; };
 		6028814327B539F600CAF588 /* NewOnboardingReplaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewOnboardingReplaceViewController.swift; sourceTree = "<group>"; };
+		60CF785827C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalOnboardingSettingsView.swift; sourceTree = "<group>"; };
 		60D779C227469A2300DF8047 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
 		742C99D31F3A3AD200717D69 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7449B1361F290F7B001A199D /* af */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = af; path = af.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1623,6 +1625,7 @@
 				F861799E27961F4200CFD324 /* InternalSettings.swift */,
 				F86D00602790978700E83177 /* InternalSettingsView.swift */,
 				F861799A2795D95E00CFD324 /* InternalExperimentsSettingsView.swift */,
+				60CF785827C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift */,
 				F8714D2027A1E1F400CEB695 /* InternalCrashReportingSettingsView.swift */,
 				F861799C2795EE9800CFD324 /* InternalExperimentDetailView.swift */,
 				E439815027AAD63200F382B0 /* InternalTelemetrySettingsView.swift */,
@@ -2269,6 +2272,7 @@
 				6028814427B539F600CAF588 /* NewOnboardingReplaceViewController.swift in Sources */,
 				F861799F27961F4200CFD324 /* InternalSettings.swift in Sources */,
 				D33A1AB11BC48FAC0003D929 /* SettingsViewController.swift in Sources */,
+				60CF785927C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift in Sources */,
 				6028814227B2C6CE00CAF588 /* WhatsNewEventsHandler.swift in Sources */,
 				747ADA181FC38EFC00970132 /* IntroViewController.swift in Sources */,
 				D30AEEBB1DE4CB1B0096A2E7 /* FileManagerExtensions.swift in Sources */,

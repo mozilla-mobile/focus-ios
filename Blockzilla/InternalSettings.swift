@@ -8,6 +8,8 @@ import Combine
 let GleanEnableDebugView = "GleanEnableDebugView"
 let GleanDebugViewTag = "GleanDebugViewTag"
 let GleanLogPingsToConsole = "GleanLogPingsToConsole"
+let AlwaysShowOnboarding = "AlwaysShowOnboarding"
+let ShowNewOnboarding = "ShowNewOnboarding"
 
 final class InternalSettings: ObservableObject {
     let objectWillChange = PassthroughSubject<Void, Never>()
@@ -42,6 +44,20 @@ final class InternalSettings: ObservableObject {
 
     @UserDefault(key: GleanLogPingsToConsole, defaultValue: false)
     var gleanLogPingsToConsole: Bool {
+        willSet {
+            objectWillChange.send()
+        }
+    }
+    
+    @UserDefault(key: AlwaysShowOnboarding, defaultValue: false)
+    var alwaysShowOnboarding: Bool {
+        willSet {
+            objectWillChange.send()
+        }
+    }
+
+    @UserDefault(key: ShowNewOnboarding, defaultValue: false)
+    var showNewOnboarding: Bool {
         willSet {
             objectWillChange.send()
         }
