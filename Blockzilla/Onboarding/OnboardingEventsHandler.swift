@@ -12,7 +12,7 @@ class OnboardingEventsHandler {
         return UserDefaults.standard.bool(forKey: "ShowNewOnboarding")
     #else
         //TODO: Replace with suitable value from A/B Testing
-        return false
+        return true
     #endif
     }
     
