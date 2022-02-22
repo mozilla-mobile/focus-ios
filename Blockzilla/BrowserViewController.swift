@@ -25,8 +25,6 @@ class BrowserViewController: UIViewController {
     var modalDelegate: ModalDelegate?
     var onboardingEventsHandler: OnboardingEventsHandler!
     
-    private let tooltipViewController = TooltipViewController()
-
     private var keyboardState: KeyboardState?
     private let browserToolbar = BrowserToolbar()
     private var homeViewController: HomeViewController!
@@ -272,7 +270,7 @@ class BrowserViewController: UIViewController {
            .$shouldPresentShieldToolTip
            .filter { $0 == true }
            .sink { _ in
-               self.presentShieldPopUp()
+               self.presentTooltip(anchoredBy: self.urlBar.shieldIcon, body: UIConstants.strings.tooltipBodyTextForShieldIcon)
            }
            .store(in: &cancellables)
         
@@ -758,16 +756,14 @@ class BrowserViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    private func presentTooltip(anchoredBy sourceView: UIView, sourceRect: CGRect, title: String = "", body: String) {
+    private func presentTooltip(anchoredBy sourceView: UIView, title: String = "", body: String) {
+        let tooltipViewController = TooltipViewController()
+
         tooltipViewController.tooltipView.set(title: title, body: body)
-        tooltipViewController.createTooltipPopover(anchoredBy: sourceView, sourceRect: sourceRect, viewController: tooltipViewController)
+        tooltipViewController.createTooltipPopover(anchoredBy: sourceView)
         present(tooltipViewController, animated: true)
     }
-    
-    private func presentShieldPopUp() {
-        presentTooltip(anchoredBy: urlBar.shieldIcon, sourceRect: CGRect(x: urlBar.shieldIcon.bounds.midX, y: urlBar.shieldIcon.bounds.midY + 10, width: 0, height: 0), body: UIConstants.strings.tooltipBodyTextForShieldIcon)
-    }
-    
+        
     private func presentTrashPopUp() {
         presentTemporaryAlert(message: "Showed trash pop up")
     }

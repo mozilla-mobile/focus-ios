@@ -26,12 +26,12 @@ class TooltipViewController: UIViewController {
         }
     }
     
-    func createTooltipPopover(anchoredBy sourceView: UIView, sourceRect: CGRect, viewController: UIViewController) {
-        viewController.modalPresentationStyle = .popover
-        viewController.popoverPresentationController?.sourceView = sourceView
-        viewController.popoverPresentationController?.sourceRect = sourceRect
-        viewController.popoverPresentationController?.permittedArrowDirections = [.up, .down]
-        viewController.popoverPresentationController?.delegate = self
+    func createTooltipPopover(anchoredBy sourceView: UIView) {
+        modalPresentationStyle = .popover
+        popoverPresentationController?.sourceView = sourceView
+        popoverPresentationController?.sourceRect = CGRect(x: sourceView.bounds.midX, y: sourceView.bounds.midY + 10, width: 0, height: 0)
+        popoverPresentationController?.permittedArrowDirections = [.up, .down]
+        popoverPresentationController?.delegate = self
     }
     
     @objc func tooltipDismissButtonTapped(_ sender: UIButton) {
