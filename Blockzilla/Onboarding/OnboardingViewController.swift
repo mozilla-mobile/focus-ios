@@ -8,7 +8,7 @@ import Telemetry
 
 class OnboardingViewController: UIViewController {
     
-    var onboardingEventsHandler: OnboardingEventsHandler!
+    var dismissOnboardingScreen: (() -> Void)!
     
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -299,10 +299,7 @@ class OnboardingViewController: UIViewController {
     }
 
     @objc func didTapStartButton() {
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.onboarding, value: "finish")
-        onboardingEventsHandler.send(.onboardingDidDismiss)
-        (presentingViewController as? BrowserViewController)?.activateTextFieldAfterOnboarding()
-        dismiss(animated: true)
+        dismissOnboardingScreen()
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {

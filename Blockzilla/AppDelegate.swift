@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     private var cancellable: AnyCancellable?
     
     //TODO: Check when old onboarding should be displayed
-    private let displayOldOnboarding = false
+    private let displayOldOnboarding = true
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         if AppInfo.testRequestsReset() {
@@ -188,7 +188,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         let newOnboardingViewController = OnboardingViewController()
         newOnboardingViewController.modalPresentationStyle = .formSheet
         newOnboardingViewController.isModalInPresentation = true
-        newOnboardingViewController.onboardingEventsHandler = onboardingEventsHandler
+        newOnboardingViewController.dismissOnboardingScreen = { [weak self] in
+            guard let self = self else { return }
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.onboarding, value: "finish")
+            self.onboardingEventsHandler.send(.onboardingDidDismiss)
+            self.browserViewController.activateTextFieldAfterOnboarding()
+            self.browserViewController.presentedViewController?.dismiss(animated: true)
+        }
         browserViewController.present(displayOldOnboarding ? introViewController : newOnboardingViewController, animated: !displayOldOnboarding, completion: nil)
     }
 
