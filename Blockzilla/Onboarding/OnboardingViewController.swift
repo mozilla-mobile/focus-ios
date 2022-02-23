@@ -5,9 +5,10 @@
 import UIKit
 import SnapKit
 import Telemetry
-import SwiftUI
 
 class OnboardingViewController: UIViewController {
+    
+    var dismissOnboardingScreen: (() -> Void)!
     
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -298,8 +299,7 @@ class OnboardingViewController: UIViewController {
     }
 
     @objc func didTapStartButton() {
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.onboarding, value: "finish")
-        dismiss(animated: true, completion: nil)
+        dismissOnboardingScreen()
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
