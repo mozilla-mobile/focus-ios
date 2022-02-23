@@ -470,6 +470,7 @@ class BrowserViewController: UIViewController {
         homeViewController = HomeViewController(tipManager: tipManager)
         homeViewController.delegate = self
         homeViewController.toolbar.toolset.delegate = self
+        homeViewController.onboardingEventsHandler = onboardingEventsHandler
         install(homeViewController, on: homeViewContainer)
     }
 
@@ -1892,6 +1893,7 @@ extension BrowserViewController: MenuActionable {
         guard let modalDelegate = modalDelegate else { return }
 
         let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset, shouldScrollToSiri: shouldScrollToSiri)
+        settingsViewController.onboardingEventsHandler = onboardingEventsHandler
         let settingsNavController = UINavigationController(rootViewController: settingsViewController)
         settingsNavController.modalPresentationStyle = .formSheet
 

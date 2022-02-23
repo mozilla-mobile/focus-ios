@@ -26,8 +26,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             case .search: return 3
             case .siri: return 3
             case .integration: return 1
-            case .mozilla: if OnboardingEventsHandler().shouldShowNewOnboarding { return  2 }
-                return 3
+            case .mozilla: return 3
             case .secret: return 1
             }
         }
@@ -106,7 +105,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.estimatedRowHeight = UITableView.automaticDimension
         return tableView
     }()
-
+    
+    var onboardingEventsHandler: OnboardingEventsHandler!
+    
     // Hold a strong reference to the block detector so it isn't deallocated
     // in the middle of its detection.
     private let detector = BlockerEnabledDetector()
@@ -114,7 +115,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     private var isSafariEnabled = false
     private let searchEngineManager: SearchEngineManager
     private var highlightsButton = UIBarButtonItem()
-    private let onboardingEventsHandler = OnboardingEventsHandler()
     private let whatsNew: WhatsNewDelegate
     private lazy var sections = {
         Section.getSections()
@@ -392,7 +392,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sections[section].numberOfRows
+        (sections[section] == .mozilla && onboardingEventsHandler.shouldShowNewOnboarding) ? 2 : sections[section].numberOfRows
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
