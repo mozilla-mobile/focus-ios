@@ -18,11 +18,11 @@ struct WhatsNewEventsHandler {
     }
     
     func highlightWhatsNewButton() {
-        let onboardingVersion = UserDefaults.standard.integer(forKey: OnboardingConstants.onboardingVersion)
+        let onboardingDidAppear = UserDefaults.standard.bool(forKey: OnboardingConstants.onboardingDidAppear)
         
-        // Don't highlight whats new on a fresh install (onboardingVersion == 0 on a fresh install)
+        // Don't highlight whats new on a fresh install (onboardingDidAppear == false on a fresh install)
         if let lastShownWhatsNew = UserDefaults.standard.string(forKey: OnboardingConstants.whatsNewVersion)?.first, let currentMajorRelease = AppInfo.shortVersion.first {
-            if onboardingVersion != 0 && lastShownWhatsNew != currentMajorRelease {
+            if onboardingDidAppear && lastShownWhatsNew != currentMajorRelease {
                 setupWhatsNewFeature()
             }
         }

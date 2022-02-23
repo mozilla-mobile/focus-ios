@@ -54,6 +54,8 @@
 		6028813E27B1259100CAF588 /* OnboardingEventsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6028813D27B1259100CAF588 /* OnboardingEventsHandler.swift */; };
 		6028814027B2C6BB00CAF588 /* OnboardingConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6028813F27B2C6BB00CAF588 /* OnboardingConstants.swift */; };
 		6028814227B2C6CE00CAF588 /* WhatsNewEventsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6028814127B2C6CE00CAF588 /* WhatsNewEventsHandler.swift */; };
+		60CF785927C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CF785827C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift */; };
+		60CF785B27C5206A005AAB69 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CF785A27C5206A005AAB69 /* OnboardingViewController.swift */; };
 		60D779C327469A2300DF8047 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D779C227469A2300DF8047 /* DesignSystem.swift */; };
 		742C99D41F3A3AD200717D69 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 742C99D31F3A3AD200717D69 /* Assets.xcassets */; };
 		74584E351FA1077000AF2582 /* SettingsContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74584E341FA1077000AF2582 /* SettingsContentViewController.swift */; };
@@ -62,7 +64,6 @@
 		7460BD671F58B1B10096B745 /* GradientProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7460BD661F58B1B10096B745 /* GradientProgressBar.swift */; };
 		746BD9281F75C45A00BE8DB9 /* DictionaryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BD9271F75C45A00BE8DB9 /* DictionaryExtensions.swift */; };
 		747ADA181FC38EFC00970132 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747ADA171FC38EFC00970132 /* IntroViewController.swift */; };
-		74C7117027B407D000FA92AB /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C7116F27B407D000FA92AB /* OnboardingViewController.swift */; };
 		74F94FF21FD9CA070047E629 /* Intro.strings in Resources */ = {isa = PBXBuildFile; fileRef = 74F94FF41FD9CA070047E629 /* Intro.strings */; };
 		8400574E273516F600E48144 /* ScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400574D273516F600E48144 /* ScrollViewController.swift */; };
 		840057502735182900E48144 /* PageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400574F2735182800E48144 /* PageControl.swift */; };
@@ -444,6 +445,8 @@
 		6028813D27B1259100CAF588 /* OnboardingEventsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingEventsHandler.swift; sourceTree = "<group>"; };
 		6028813F27B2C6BB00CAF588 /* OnboardingConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingConstants.swift; sourceTree = "<group>"; };
 		6028814127B2C6CE00CAF588 /* WhatsNewEventsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewEventsHandler.swift; sourceTree = "<group>"; };
+		60CF785827C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalOnboardingSettingsView.swift; sourceTree = "<group>"; };
+		60CF785A27C5206A005AAB69 /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		60D779C227469A2300DF8047 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
 		742C99D31F3A3AD200717D69 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7449B1361F290F7B001A199D /* af */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = af; path = af.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -518,7 +521,6 @@
 		7460BD661F58B1B10096B745 /* GradientProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientProgressBar.swift; sourceTree = "<group>"; };
 		746BD9271F75C45A00BE8DB9 /* DictionaryExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtensions.swift; sourceTree = "<group>"; };
 		747ADA171FC38EFC00970132 /* IntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
-		74C7116F27B407D000FA92AB /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		74CC0ADA1FAD28DB00972A78 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		74CC0ADB1FAD28DC00972A78 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		74CC0ADC1FAD28DD00972A78 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1176,10 +1178,10 @@
 		6028813C27B1255E00CAF588 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
+				60CF785A27C5206A005AAB69 /* OnboardingViewController.swift */,
 				6028813F27B2C6BB00CAF588 /* OnboardingConstants.swift */,
 				6028813D27B1259100CAF588 /* OnboardingEventsHandler.swift */,
 				6028814127B2C6CE00CAF588 /* WhatsNewEventsHandler.swift */,
-				74C7116F27B407D000FA92AB /* OnboardingViewController.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -1622,6 +1624,7 @@
 				F861799E27961F4200CFD324 /* InternalSettings.swift */,
 				F86D00602790978700E83177 /* InternalSettingsView.swift */,
 				F861799A2795D95E00CFD324 /* InternalExperimentsSettingsView.swift */,
+				60CF785827C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift */,
 				F8714D2027A1E1F400CEB695 /* InternalCrashReportingSettingsView.swift */,
 				F861799C2795EE9800CFD324 /* InternalExperimentDetailView.swift */,
 				E439815027AAD63200F382B0 /* InternalTelemetrySettingsView.swift */,
@@ -2230,6 +2233,7 @@
 				D3E54FE01DF0E221003E1AFF /* SearchSettingsViewController.swift in Sources */,
 				30DFF98021810BF20055707C /* SearchSuggestClient.swift in Sources */,
 				C8337E06271089C200093D42 /* Section.swift in Sources */,
+				60CF785B27C5206A005AAB69 /* OnboardingViewController.swift in Sources */,
 				F861799D2795EE9800CFD324 /* InternalExperimentDetailView.swift in Sources */,
 				840057582735309500E48144 /* SettingsTableViewToggleCell.swift in Sources */,
 				16D7169C2114EF76000C8A66 /* BlockerToggle.swift in Sources */,
@@ -2269,6 +2273,7 @@
 				6028813E27B1259100CAF588 /* OnboardingEventsHandler.swift in Sources */,
 				F861799F27961F4200CFD324 /* InternalSettings.swift in Sources */,
 				D33A1AB11BC48FAC0003D929 /* SettingsViewController.swift in Sources */,
+				60CF785927C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift in Sources */,
 				6028814227B2C6CE00CAF588 /* WhatsNewEventsHandler.swift in Sources */,
 				747ADA181FC38EFC00970132 /* IntroViewController.swift in Sources */,
 				D30AEEBB1DE4CB1B0096A2E7 /* FileManagerExtensions.swift in Sources */,
@@ -2281,7 +2286,6 @@
 				D3E3CA7D1DA827AD0079C94B /* HomeViewController.swift in Sources */,
 				840057542735301600E48144 /* SettingsTableViewCell.swift in Sources */,
 				D8E0152C1FB4136E00CA3B9F /* AddSearchEngineViewController.swift in Sources */,
-				74C7117027B407D000FA92AB /* OnboardingViewController.swift in Sources */,
 				D3E251EB1DAD714C005918DC /* SafariInstructionsViewController.swift in Sources */,
 				C80F901C26C554B800F5112B /* PhotonActionSheetCell.swift in Sources */,
 				6028814027B2C6BB00CAF588 /* OnboardingConstants.swift in Sources */,

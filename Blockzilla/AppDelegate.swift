@@ -41,9 +41,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     private let whatsNewEventsHandler = WhatsNewEventsHandler()
     private let onboardingEventsHandler = OnboardingEventsHandler()
     private var cancellable: AnyCancellable?
-    
-    //TODO: Check when old onboarding should be displayed
-    private let displayOldOnboarding = true
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         if AppInfo.testRequestsReset() {
@@ -195,7 +192,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             self.browserViewController.activateTextFieldAfterOnboarding()
             self.browserViewController.presentedViewController?.dismiss(animated: true)
         }
-        browserViewController.present(displayOldOnboarding ? introViewController : newOnboardingViewController, animated: !displayOldOnboarding, completion: nil)
+        browserViewController.present(onboardingEventsHandler.shouldShowNewOnboarding ? newOnboardingViewController : introViewController, animated: false)
     }
 
     private func handleShortcut(shortcutItem: UIApplicationShortcutItem) -> Bool {
