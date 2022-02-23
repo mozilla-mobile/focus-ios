@@ -24,7 +24,7 @@ class BrowserViewController: UIViewController {
 
     var modalDelegate: ModalDelegate?
     var onboardingEventsHandler: OnboardingEventsHandler!
-
+    
     private var keyboardState: KeyboardState?
     private let browserToolbar = BrowserToolbar()
     private var homeViewController: HomeViewController!
@@ -270,7 +270,7 @@ class BrowserViewController: UIViewController {
            .$shouldPresentShieldToolTip
            .filter { $0 == true }
            .sink { _ in
-               self.presentShieldPopUp()
+               self.presentTooltip(anchoredBy: self.urlBar.shieldIcon, body: UIConstants.strings.tooltipBodyTextForShieldIcon)
            }
            .store(in: &cancellables)
         
@@ -758,10 +758,13 @@ class BrowserViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    private func presentShieldPopUp() {
-        presentTemporaryAlert(message: "Showed shield pop up")
+    private func presentTooltip(anchoredBy sourceView: UIView, title: String = "", body: String) {
+        let tooltipViewController = TooltipViewController()
+        tooltipViewController.set(title: title, body: body)
+        tooltipViewController.configure(anchoredBy: sourceView)
+        present(tooltipViewController, animated: true)
     }
-    
+        
     private func presentTrashPopUp() {
         presentTemporaryAlert(message: "Showed trash pop up")
     }
