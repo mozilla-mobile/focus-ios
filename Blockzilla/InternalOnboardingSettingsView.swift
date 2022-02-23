@@ -12,14 +12,10 @@ extension InternalOnboardingSettingsView: View {
     var body: some View {
         Form {
             Toggle(isOn: $internalSettings.alwaysShowOnboarding) {
-                VStack(alignment: .leading) {
-                    Text(verbatim: "Always Show Onboarding")
-                }
+                Text(verbatim: "Always Show Onboarding")
             }
             Toggle(isOn: $internalSettings.showNewOnboarding) {
-                VStack(alignment: .leading) {
-                    Text(verbatim: "Show New Onboarding")
-                }
+                Text(verbatim: "Show New Onboarding")
             }
         }.navigationBarTitle(Text(verbatim: "Onboarding Settings"))
     }
