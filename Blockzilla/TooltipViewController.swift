@@ -11,18 +11,15 @@ class TooltipViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tooltipView.dismissButton.addTarget(self, action: #selector(tooltipDismissButtonTapped), for: .primaryActionTriggered)
         setupLayout()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        preferredContentSize.height = tooltipView.frame.size.height - tooltipView.mainStackView.frame.size.height
+        tooltipView.dismissButton.addTarget(self, action: #selector(tooltipDismissButtonTapped), for: .primaryActionTriggered)
+        preferredContentSize = tooltipView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
     }
             
     private func setupLayout() {
         view.addSubview(tooltipView)
-        tooltipView.mainStackView.snp.makeConstraints {
-            $0.top.leading.trailing.equalTo(view)
+        tooltipView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
     }
     
