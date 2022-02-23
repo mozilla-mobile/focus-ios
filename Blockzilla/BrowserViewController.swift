@@ -749,7 +749,6 @@ class BrowserViewController: UIViewController {
     }
     
     private func presentTemporaryAlert(message: String) {
-        guard onboardingEventsHandler.shouldShowNewOnboarding else { return }
         let alert = UIAlertController(title: "Test Alert", message: message, preferredStyle: .alert)
         let dismissAction = UIAlertAction(title: "OK", style: .default) { (UIAlertAction) in
             alert.dismiss(animated: true, completion: nil)
@@ -759,6 +758,7 @@ class BrowserViewController: UIViewController {
     }
     
     private func presentTooltip(anchoredBy sourceView: UIView, title: String = "", body: String) {
+        guard onboardingEventsHandler.shouldShowNewOnboarding else { return }
         let tooltipViewController = TooltipViewController()
         tooltipViewController.set(title: title, body: body)
         tooltipViewController.configure(anchoredBy: sourceView)
@@ -766,10 +766,12 @@ class BrowserViewController: UIViewController {
     }
         
     private func presentTrashPopUp() {
+        guard onboardingEventsHandler.shouldShowNewOnboarding else { return }
         presentTemporaryAlert(message: "Showed trash pop up")
     }
     
     private func presentMenuPopUp() {
+        guard onboardingEventsHandler.shouldShowNewOnboarding else { return }
         presentTemporaryAlert(message: "Showed menu pop up")
     }
     
