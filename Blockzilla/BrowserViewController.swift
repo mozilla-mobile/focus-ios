@@ -758,9 +758,8 @@ class BrowserViewController: UIViewController {
     
     private func presentTooltip(anchoredBy sourceView: UIView, title: String = "", body: String) {
         let tooltipViewController = TooltipViewController()
-
-        tooltipViewController.tooltipView.set(title: title, body: body)
-        tooltipViewController.createTooltipPopover(anchoredBy: sourceView)
+        tooltipViewController.set(title: title, body: body)
+        tooltipViewController.configure(anchoredBy: sourceView)
         present(tooltipViewController, animated: true)
     }
         

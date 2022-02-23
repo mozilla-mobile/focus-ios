@@ -7,7 +7,7 @@ import SnapKit
 
 class TooltipViewController: UIViewController {
         
-    let tooltipView = TooltipView()
+    private let tooltipView = TooltipView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,19 +19,23 @@ class TooltipViewController: UIViewController {
         preferredContentSize.height = tooltipView.frame.size.height - tooltipView.mainStackView.frame.size.height
     }
             
-    func setupLayout() {
+    private func setupLayout() {
         view.addSubview(tooltipView)
         tooltipView.mainStackView.snp.makeConstraints {
             $0.top.leading.trailing.equalTo(view)
         }
     }
     
-    func createTooltipPopover(anchoredBy sourceView: UIView) {
+    func configure(anchoredBy sourceView: UIView) {
         modalPresentationStyle = .popover
         popoverPresentationController?.sourceView = sourceView
         popoverPresentationController?.sourceRect = CGRect(x: sourceView.bounds.midX, y: sourceView.bounds.midY + 10, width: 0, height: 0)
         popoverPresentationController?.permittedArrowDirections = [.up, .down]
         popoverPresentationController?.delegate = self
+    }
+    
+    func set(title: String = "", body: String) {
+        tooltipView.set(title: title, body: body)
     }
     
     @objc func tooltipDismissButtonTapped(_ sender: UIButton) {
