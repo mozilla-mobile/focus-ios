@@ -26,10 +26,10 @@ class TooltipViewController: UIViewController {
         }
     }
     
-    func configure(anchoredBy sourceView: UIView) {
+    func configure(anchoredBy sourceView: UIView, sourceRect: CGRect) {
         modalPresentationStyle = .popover
         popoverPresentationController?.sourceView = sourceView
-        popoverPresentationController?.sourceRect = CGRect(x: sourceView.bounds.midX, y: sourceView.bounds.midY + 10, width: 0, height: 0)
+        popoverPresentationController?.sourceRect = sourceRect
         popoverPresentationController?.permittedArrowDirections = [.up, .down]
         popoverPresentationController?.delegate = self
     }

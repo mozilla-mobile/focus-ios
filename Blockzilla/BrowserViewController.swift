@@ -270,7 +270,7 @@ class BrowserViewController: UIViewController {
            .$shouldPresentShieldToolTip
            .filter { $0 == true }
            .sink { _ in
-               self.presentTooltip(anchoredBy: self.urlBar.shieldIcon, body: UIConstants.strings.tooltipBodyTextForShieldIcon)
+               self.presentTooltip(anchoredBy: self.urlBar.shieldIcon, sourceRect: CGRect(x: self.urlBar.shieldIcon.bounds.midX, y: self.urlBar.shieldIcon.bounds.midY + 10, width: 0, height: 0), body: UIConstants.strings.tooltipBodyTextForShieldIcon)
            }
            .store(in: &cancellables)
         
@@ -286,7 +286,7 @@ class BrowserViewController: UIViewController {
            .$shouldPresentMenuToolTip
            .filter { $0 == true }
            .sink { _ in
-               self.presentMenuPopUp()
+               self.presentTooltip(anchoredBy: self.urlBar.contextMenuButton, sourceRect: CGRect(x: self.urlBar.contextMenuButton.bounds.maxX, y: self.urlBar.contextMenuButton.bounds.midY + 10, width: 0, height: 0), body: UIConstants.strings.tootipBodyTextForContextMenuIcon)
            }
            .store(in: &cancellables)
        
@@ -757,22 +757,17 @@ class BrowserViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    private func presentTooltip(anchoredBy sourceView: UIView, title: String = "", body: String) {
+    private func presentTooltip(anchoredBy sourceView: UIView, sourceRect: CGRect, title: String = "", body: String) {
         guard onboardingEventsHandler.shouldShowNewOnboarding else { return }
         let tooltipViewController = TooltipViewController()
         tooltipViewController.set(title: title, body: body)
-        tooltipViewController.configure(anchoredBy: sourceView)
+        tooltipViewController.configure(anchoredBy: sourceView, sourceRect: sourceRect)
         present(tooltipViewController, animated: true)
     }
         
     private func presentTrashPopUp() {
         guard onboardingEventsHandler.shouldShowNewOnboarding else { return }
         presentTemporaryAlert(message: "Showed trash pop up")
-    }
-    
-    private func presentMenuPopUp() {
-        guard onboardingEventsHandler.shouldShowNewOnboarding else { return }
-        presentTemporaryAlert(message: "Showed menu pop up")
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
