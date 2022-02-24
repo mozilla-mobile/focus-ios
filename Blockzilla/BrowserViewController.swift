@@ -278,7 +278,7 @@ class BrowserViewController: UIViewController {
            .$shouldPresentTrashToolTip
            .filter { $0 == true }
            .sink { _ in
-               self.presentTrashPopUp()
+               self.presentTooltip(anchoredBy: self.browserToolbar.toolset.deleteButton, sourceRect: CGRect(x: self.browserToolbar.toolset.deleteButton.bounds.midX, y: self.browserToolbar.toolset.deleteButton.bounds.minY, width: 0, height: 0), body: UIConstants.strings.tooltipBodyTextForTrashIcon)
            }
            .store(in: &cancellables)
        
@@ -763,11 +763,6 @@ class BrowserViewController: UIViewController {
         tooltipViewController.set(title: title, body: body)
         tooltipViewController.configure(anchoredBy: sourceView, sourceRect: sourceRect)
         present(tooltipViewController, animated: true)
-    }
-        
-    private func presentTrashPopUp() {
-        guard onboardingEventsHandler.shouldShowNewOnboarding else { return }
-        presentTemporaryAlert(message: "Showed trash pop up")
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
