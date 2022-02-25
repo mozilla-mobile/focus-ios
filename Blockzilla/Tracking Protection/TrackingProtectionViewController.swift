@@ -11,6 +11,13 @@ import Combine
 
 class TrackingProtectionViewController: UIViewController {
     
+    private lazy var tooltipView: TooltipView = {
+        let tooltip = TooltipView()
+        return tooltip
+    }()
+    private var showToolTipView = false
+    var tooltipHeight: Constraint?
+    
     //MARK: - Data source
     private var tableViewSections: [Section?] {
         let secureSection: Section?
@@ -229,7 +236,7 @@ class TrackingProtectionViewController: UIViewController {
             .$shouldPresentTrackingProtectionToolTip
             .filter { $0 == true }
             .sink { _ in
-                self.presentTrackingProtectionPopUp()
+                self.presentTrackingProtectionPopUp(title: "merge", body: "foarte bine")
             }
         
         
@@ -243,12 +250,26 @@ class TrackingProtectionViewController: UIViewController {
             self.navigationController?.navigationBar.isTranslucent = false
         }
         
+        if showToolTipView {
+            view.addSubview(tooltipView)
+            tooltipView.snp.makeConstraints { make in
+                make.top.equalToSuperview()
+                make.leading.trailing.equalToSuperview().inset(50)
+                self.tooltipHeight = make.height.equalTo(tooltipView).constraint
+            }
+        }
+        
         if case let .browsing(browsingStatus) = state,
            let baseDomain = browsingStatus.url.baseDomain {
             view.addSubview(header)
             header.snp.makeConstraints { make in
                 self.headerHeight = make.height.equalTo(72).constraint
-                make.leading.top.trailing.equalToSuperview()
+                make.leading.trailing.equalToSuperview()
+                if showToolTipView {
+                    make.top.equalTo(tooltipView.snp.bottom)
+                } else {
+                    make.top.equalToSuperview()
+                }
             }
             if let publisher = favIconPublisher {
                 header.configure(domain: baseDomain, publisher: publisher)
@@ -260,7 +281,7 @@ class TrackingProtectionViewController: UIViewController {
             if case .browsing = state {
                 make.top.equalTo(header.snp.bottom)
             } else {
-                make.top.equalTo(view).inset(self.tableViewTopInset)
+                make.top.equalTo(showToolTipView ? tooltipView.snp.bottom : view).inset(self.tableViewTopInset)
             }
             make.leading.trailing.equalTo(self.view)
             make.bottom.equalTo(self.view)
@@ -272,12 +293,12 @@ class TrackingProtectionViewController: UIViewController {
         
         preferredContentSize = CGSize(
             width: tableView.contentSize.width,
-            height: tableView.contentSize.height + (headerHeight?.layoutConstraints[0].constant ?? .zero)
+            height: tableView.contentSize.height + (headerHeight?.layoutConstraints[0].constant ?? .zero) + (tooltipHeight?.layoutConstraints[0].constant ?? .zero)
         )
         if UIDevice.current.userInterfaceIdiom == .pad {
             self.presentingViewController?.presentedViewController?.preferredContentSize = CGSize(
                 width: tableView.contentSize.width,
-                height: tableView.contentSize.height + (headerHeight?.layoutConstraints[0].constant ?? .zero)
+                height: tableView.contentSize.height + (headerHeight?.layoutConstraints[0].constant ?? .zero) + (tooltipHeight?.layoutConstraints[0].constant ?? .zero)
             )
         }
     }
@@ -291,7 +312,11 @@ class TrackingProtectionViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
-    private func presentTrackingProtectionPopUp() {
+    private func presentTrackingProtectionPopUp(title: String, body: String) {
+        
+        guard onboardingEventsHandler.shouldShowNewOnboarding, !showToolTipView, presentingViewController is BrowserViewController else { return }
+        tooltipView.set(title: UIConstants.strings.tooltipTitleTextForPrivacy, body: UIConstants.strings.tooltipBodyTextForPrivacy)
+        showToolTipView = true
         presentTemporaryAlert(message: "Showed tracking protection pop up")
     }
     
