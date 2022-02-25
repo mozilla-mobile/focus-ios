@@ -11,25 +11,22 @@ class TooltipViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tooltipView.dismissButton.addTarget(self, action: #selector(tooltipDismissButtonTapped), for: .primaryActionTriggered)
         setupLayout()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        preferredContentSize.height = tooltipView.frame.size.height - tooltipView.mainStackView.frame.size.height
+        tooltipView.delegate = self
+        preferredContentSize = tooltipView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
     }
             
     private func setupLayout() {
         view.addSubview(tooltipView)
-        tooltipView.mainStackView.snp.makeConstraints {
-            $0.top.leading.trailing.equalTo(view)
+        tooltipView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
     }
     
-    func configure(anchoredBy sourceView: UIView) {
+    func configure(anchoredBy sourceView: UIView, sourceRect: CGRect) {
         modalPresentationStyle = .popover
         popoverPresentationController?.sourceView = sourceView
-        popoverPresentationController?.sourceRect = CGRect(x: sourceView.bounds.midX, y: sourceView.bounds.midY + 10, width: 0, height: 0)
+        popoverPresentationController?.sourceRect = sourceRect
         popoverPresentationController?.permittedArrowDirections = [.up, .down]
         popoverPresentationController?.delegate = self
     }
@@ -38,13 +35,20 @@ class TooltipViewController: UIViewController {
         tooltipView.set(title: title, body: body)
     }
     
-    @objc func tooltipDismissButtonTapped(_ sender: UIButton) {
+    @objc func didTapTooltipDismissButton(_ sender: UIButton) {
         dismiss(animated: true)
     }
 }
 
+// MARK: - Delegates
 extension TooltipViewController: UIPopoverPresentationControllerDelegate {
     public func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
         return .none
+    }
+}
+
+extension TooltipViewController: TooltipViewDelegate {
+    func didTapTooltipDismissButton() {
+        dismiss(animated: true)
     }
 }
