@@ -278,7 +278,7 @@ class BrowserViewController: UIViewController {
            .$shouldPresentTrashToolTip
            .filter { $0 == true }
            .sink { _ in
-               self.presentTooltip(anchoredBy: self.browserToolbar.toolset.deleteButton, sourceRect: CGRect(x: self.browserToolbar.toolset.deleteButton.bounds.midX, y: self.browserToolbar.toolset.deleteButton.bounds.minY, width: 0, height: 0), body: UIConstants.strings.tooltipBodyTextForTrashIcon)
+               self.presentTrashToolTip()
            }
            .store(in: &cancellables)
        
@@ -765,6 +765,13 @@ class BrowserViewController: UIViewController {
         present(tooltipViewController, animated: true)
     }
     
+    private func presentTrashToolTip() {
+        let sourceButton = showsToolsetInURLBar ? urlBar.deleteButton : browserToolbar.deleteButton
+        let sourceRect = showsToolsetInURLBar ? CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.maxY - 10, width: 0, height: 0) :
+                                                CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.minY + 10, width: 0, height: 0)
+        presentTooltip(anchoredBy: sourceButton, sourceRect: sourceRect, body: UIConstants.strings.tooltipBodyTextForTrashIcon)
+    }
+    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
 
@@ -820,6 +827,10 @@ class BrowserViewController: UIViewController {
         
         DispatchQueue.main.async {
             self.urlBar.updateCollapsedState()
+            if self.presentedViewController is TooltipViewController && self.onboardingEventsHandler.shouldPresentTrashToolTip {
+                self.presentedViewController?.dismiss(animated: true, completion: nil)
+                self.presentTrashToolTip()
+            }
         }
     }
 
