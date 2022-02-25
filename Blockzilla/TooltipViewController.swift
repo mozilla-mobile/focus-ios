@@ -12,7 +12,7 @@ class TooltipViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLayout()
-        tooltipView.dismissButton.addTarget(self, action: #selector(tooltipDismissButtonTapped), for: .primaryActionTriggered)
+        tooltipView.delegate = self
         preferredContentSize = tooltipView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
     }
             
@@ -35,13 +35,20 @@ class TooltipViewController: UIViewController {
         tooltipView.set(title: title, body: body)
     }
     
-    @objc func tooltipDismissButtonTapped(_ sender: UIButton) {
+    @objc func didTapTooltipDismissButton(_ sender: UIButton) {
         dismiss(animated: true)
     }
 }
 
+// MARK: - Delegates
 extension TooltipViewController: UIPopoverPresentationControllerDelegate {
     public func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
         return .none
+    }
+}
+
+extension TooltipViewController: TooltipViewDelegate {
+    func didTapTooltipDismissButton() {
+        dismiss(animated: true)
     }
 }

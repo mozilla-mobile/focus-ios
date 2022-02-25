@@ -5,7 +5,13 @@
 import UIKit
 import SnapKit
 
+protocol TooltipViewDelegate: AnyObject {
+    func didTapTooltipDismissButton()
+}
+
 class TooltipView: UIView {
+    
+    weak var delegate: TooltipViewDelegate?
     
     private lazy var gradient: CAGradientLayer = {
         let gradientLayer = CAGradientLayer()
@@ -55,7 +61,7 @@ class TooltipView: UIView {
         return label
     }()
     
-    lazy var dismissButton: UIButton = {
+    private lazy var dismissButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.snp.makeConstraints {
@@ -63,6 +69,7 @@ class TooltipView: UIView {
             $0.width.equalTo(Int.side)
         }
         button.setImage(.iconClose, for: .normal)
+        button.addTarget(self, action: #selector(didTapTooltipDismissButton), for: .primaryActionTriggered)
         return button
     }()
     
@@ -101,6 +108,10 @@ class TooltipView: UIView {
         let maxSize = CGSize(width: .maxWidth, height: CGFloat.greatestFiniteMagnitude)
         let idealSize = body.boundingRect(with: maxSize, options: [.usesLineFragmentOrigin], context: nil).size
         labelContainerStackView.snp.makeConstraints { $0.width.equalTo(idealSize.width) }
+    }
+    
+    @objc func didTapTooltipDismissButton() {
+        delegate?.didTapTooltipDismissButton()
     }
 }
 
