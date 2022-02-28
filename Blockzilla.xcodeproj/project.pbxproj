@@ -109,7 +109,6 @@
 		C8337DFF2710898800093D42 /* SheetModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DF22710898800093D42 /* SheetModalViewController.swift */; };
 		C8337E002710898800093D42 /* SheetMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DF32710898800093D42 /* SheetMetrics.swift */; };
 		C8337E05271089C200093D42 /* SectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337E02271089C200093D42 /* SectionItem.swift */; };
-		C8337E06271089C200093D42 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337E03271089C200093D42 /* Section.swift */; };
 		C8337E07271089C200093D42 /* DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337E04271089C200093D42 /* DataSource.swift */; };
 		C8337E09271089EF00093D42 /* UITableView+Dequeue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337E08271089EF00093D42 /* UITableView+Dequeue.swift */; };
 		C83FB7D2273AA13300B78CC5 /* MetadataHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = C83FB7D1273AA13200B78CC5 /* MetadataHelper.js */; };
@@ -663,7 +662,6 @@
 		C8337DF22710898800093D42 /* SheetModalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetModalViewController.swift; sourceTree = "<group>"; };
 		C8337DF32710898800093D42 /* SheetMetrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetMetrics.swift; sourceTree = "<group>"; };
 		C8337E02271089C200093D42 /* SectionItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionItem.swift; sourceTree = "<group>"; };
-		C8337E03271089C200093D42 /* Section.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
 		C8337E04271089C200093D42 /* DataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSource.swift; sourceTree = "<group>"; };
 		C8337E08271089EF00093D42 /* UITableView+Dequeue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableView+Dequeue.swift"; sourceTree = "<group>"; };
 		C83FB7D1273AA13200B78CC5 /* MetadataHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = MetadataHelper.js; sourceTree = "<group>"; };
@@ -1311,7 +1309,6 @@
 			isa = PBXGroup;
 			children = (
 				C8337E02271089C200093D42 /* SectionItem.swift */,
-				C8337E03271089C200093D42 /* Section.swift */,
 				C8337E04271089C200093D42 /* DataSource.swift */,
 			);
 			name = "Declarative DataSource";
@@ -2236,7 +2233,6 @@
 				C8F3EABF2762558F00C2AF0C /* SplashView.swift in Sources */,
 				D3E54FE01DF0E221003E1AFF /* SearchSettingsViewController.swift in Sources */,
 				30DFF98021810BF20055707C /* SearchSuggestClient.swift in Sources */,
-				C8337E06271089C200093D42 /* Section.swift in Sources */,
 				60CF785B27C5206A005AAB69 /* OnboardingViewController.swift in Sources */,
 				F861799D2795EE9800CFD324 /* InternalExperimentDetailView.swift in Sources */,
 				840057582735309500E48144 /* SettingsTableViewToggleCell.swift in Sources */,
