@@ -10,10 +10,7 @@ import UIKit
 
 class TooltipTableViewCell: UITableViewCell {
 
-    lazy var tooltip: TooltipView = {
-        let tooltip = TooltipView()
-        return tooltip
-    }()
+    var tooltip = TooltipView()
     
     convenience init(title: String, body: String, style: UITableViewCell.CellStyle = .default, reuseIdentifier: String? = nil) {
         self.init(style: style, reuseIdentifier: reuseIdentifier)
