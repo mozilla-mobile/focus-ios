@@ -17,8 +17,8 @@ class DataSource: UITableViewDiffableDataSource<SectionType, SectionItem> {
         super.init(tableView: tableView, cellProvider: cellProvider)
     }
     
-    var headerForSection: (SectionType) -> String?
-    var footerForSection: (SectionType) -> String?
+    private var headerForSection: (SectionType) -> String?
+    private var footerForSection: (SectionType) -> String?
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let sectionType = self.snapshot().sectionIdentifiers[section]
