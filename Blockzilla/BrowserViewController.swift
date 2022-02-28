@@ -315,8 +315,9 @@ class BrowserViewController: UIViewController {
         }
     }
     
-    func activateTextFieldAfterOnboarding() {
+    func showToolTipAfterOnboarding() {
         urlBar.activateTextField()
+        onboardingEventsHandler.send(.enterHome)
     }
 
     private func setupBiometrics() {
@@ -611,7 +612,6 @@ class BrowserViewController: UIViewController {
         
         // Reenable tracking protection after reset
         Settings.set(true, forToggle: .trackingProtection)
-        onboardingEventsHandler.send(.resetBrowser)
     }
 
     private func clearBrowser() {
