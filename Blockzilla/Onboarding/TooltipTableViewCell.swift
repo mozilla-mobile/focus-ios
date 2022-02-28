@@ -10,7 +10,7 @@ import UIKit
 
 class TooltipTableViewCell: UITableViewCell {
 
-    private lazy var tooltip: TooltipView = {
+    lazy var tooltip: TooltipView = {
         let tooltip = TooltipView()
         return tooltip
     }()

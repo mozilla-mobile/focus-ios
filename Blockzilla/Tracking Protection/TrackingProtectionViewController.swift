@@ -10,30 +10,11 @@ import Glean
 import Combine
 
 class TrackingProtectionViewController: UIViewController {
-    
-    private var showToolTipView = false
     var tooltipHeight: Constraint?
     
     //MARK: - Data source
-    private var tableViewSections: [Section?] {
-        let secureSection: Section?
-        if case let .browsing(browsingStatus) = state {
-            let title = browsingStatus.isSecureConnection ? UIConstants.strings.connectionSecure : UIConstants.strings.connectionNotSecure
-            let image = browsingStatus.isSecureConnection ? UIImage.connectionSecure : .connectionNotSecure
-            secureSection = secureConnectionSection(title: title, image: image)
-        } else {
-            secureSection = nil
-        }
-        return [
-            //tooltipSection,
-            secureSection,
-            enableTrackersSection,
-            trackingProtectionItem.settingsValue ? trackersSection : nil,
-            statsSection
-        ]
-    }
     
-    private lazy var profileDataSource = DataSource(tableViewSections: tableViewSections.compactMap { $0 })
+    private var profileDataSource: DataSource!
     
     //MARK: - Toggles items
     private lazy var trackingProtectionItem = ToggleItem(
@@ -59,6 +40,7 @@ class TrackingProtectionViewController: UIViewController {
     lazy var tooltipSection = Section(items: [
         SectionItem(configureCell: { [unowned self] tableView, indexPath in
             let cell = TooltipTableViewCell(title: UIConstants.strings.tooltipTitleTextForPrivacy, body: UIConstants.strings.tooltipBodyTextForPrivacy)
+            cell.tooltip.delegate = self
             
             return cell
         })
@@ -222,6 +204,22 @@ class TrackingProtectionViewController: UIViewController {
         self.favIconPublisher = favIconPublisher
         self.state = state
         super.init(nibName: nil, bundle: nil)
+        let secureSection: Section?
+        if case let .browsing(browsingStatus) = state {
+            let title = browsingStatus.isSecureConnection ? UIConstants.strings.connectionSecure : UIConstants.strings.connectionNotSecure
+            let image = browsingStatus.isSecureConnection ? UIImage.connectionSecure : .connectionNotSecure
+            secureSection = self.secureConnectionSection(title: title, image: image)
+        } else {
+            secureSection = nil
+        }
+        
+        let tableViewSections = [
+            secureSection,
+            self.enableTrackersSection,
+            self.trackingProtectionItem.settingsValue ? trackersSection : nil,
+            self.statsSection
+        ]
+        self.profileDataSource = DataSource(tableViewSections: tableViewSections.compactMap { $0 })
     }
     
     required init?(coder: NSCoder) {
@@ -241,7 +239,7 @@ class TrackingProtectionViewController: UIViewController {
             .$shouldPresentTrackingProtectionToolTip
             .filter { $0 == true }
             .sink { _ in
-                self.presentTrackingProtectionPopUp(title: "merge", body: "foarte bine")
+                self.presentTrackingProtectionPopUp()
             }
         
         
@@ -303,20 +301,9 @@ class TrackingProtectionViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
-    private func presentTrackingProtectionPopUp(title: String, body: String) {
-        
-        guard onboardingEventsHandler.shouldShowNewOnboarding, !showToolTipView, presentingViewController is BrowserViewController else { return }
-        showToolTipView = true
-        presentTemporaryAlert(message: "Showed tracking protection pop up")
-    }
-    
-    private func presentTemporaryAlert(message: String) {
-        let alert = UIAlertController(title: "Test Alert", message: message, preferredStyle: .alert)
-        let dismissAction = UIAlertAction(title: "OK", style: .default) { (UIAlertAction) in
-            alert.dismiss(animated: true, completion: nil)
-        }
-        alert.addAction(dismissAction)
-        present(alert, animated: true, completion: nil)
+    private func presentTrackingProtectionPopUp() {
+        guard onboardingEventsHandler.shouldShowNewOnboarding else { return }
+        profileDataSource.tableViewSections.insert(tooltipSection, at: 0)
     }
     
     fileprivate func updateTelemetry(_ settingsKey: SettingsToggle, _ isOn: Bool) {
@@ -361,4 +348,12 @@ class TrackingProtectionViewController: UIViewController {
         
         delegate?.trackingProtectionDidToggleProtection(enabled: isOn)
     }
+}
+
+extension TrackingProtectionViewController: TooltipViewDelegate {
+    func didTapTooltipDismissButton() {
+        profileDataSource.tableViewSections.remove(at: 0)
+        tableView.deleteSections([0], with: .automatic)
+    }
+    
 }
