@@ -64,6 +64,7 @@
 		7460BD671F58B1B10096B745 /* GradientProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7460BD661F58B1B10096B745 /* GradientProgressBar.swift */; };
 		746BD9281F75C45A00BE8DB9 /* DictionaryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BD9271F75C45A00BE8DB9 /* DictionaryExtensions.swift */; };
 		747ADA181FC38EFC00970132 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747ADA171FC38EFC00970132 /* IntroViewController.swift */; };
+		74C16C5D27C91DB10064D6E3 /* TooltipTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C16C5C27C91DB00064D6E3 /* TooltipTableViewCell.swift */; };
 		74F94FF21FD9CA070047E629 /* Intro.strings in Resources */ = {isa = PBXBuildFile; fileRef = 74F94FF41FD9CA070047E629 /* Intro.strings */; };
 		8400574E273516F600E48144 /* ScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400574D273516F600E48144 /* ScrollViewController.swift */; };
 		840057502735182900E48144 /* PageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400574F2735182800E48144 /* PageControl.swift */; };
@@ -521,6 +522,7 @@
 		7460BD661F58B1B10096B745 /* GradientProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientProgressBar.swift; sourceTree = "<group>"; };
 		746BD9271F75C45A00BE8DB9 /* DictionaryExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtensions.swift; sourceTree = "<group>"; };
 		747ADA171FC38EFC00970132 /* IntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
+		74C16C5C27C91DB00064D6E3 /* TooltipTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooltipTableViewCell.swift; sourceTree = "<group>"; };
 		74CC0ADA1FAD28DB00972A78 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		74CC0ADB1FAD28DC00972A78 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		74CC0ADC1FAD28DD00972A78 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1182,6 +1184,7 @@
 				6028813F27B2C6BB00CAF588 /* OnboardingConstants.swift */,
 				6028813D27B1259100CAF588 /* OnboardingEventsHandler.swift */,
 				6028814127B2C6CE00CAF588 /* WhatsNewEventsHandler.swift */,
+				74C16C5C27C91DB00064D6E3 /* TooltipTableViewCell.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -2194,6 +2197,7 @@
 				C8337DF62710898800093D42 /* TrackingProtectionState.swift in Sources */,
 				D3E2C8EA1D9F0E6200DEBE3D /* BrowserViewController.swift in Sources */,
 				C817A35922CE73B4002529FF /* LockProtected.swift in Sources */,
+				74C16C5D27C91DB10064D6E3 /* TooltipTableViewCell.swift in Sources */,
 				2696EB04211F540600F0C73F /* SearchHistoryUtils.swift in Sources */,
 				D3426AED1DB846310016DA5A /* DomainCompletion.swift in Sources */,
 				C82D143226EF634E007B275C /* TipViewController.swift in Sources */,
