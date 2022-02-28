@@ -189,8 +189,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             guard let self = self else { return }
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.onboarding, value: "finish")
             self.onboardingEventsHandler.send(.onboardingDidDismiss)
-            self.browserViewController.activateTextFieldAfterOnboarding()
-            self.browserViewController.presentedViewController?.dismiss(animated: true)
+            self.browserViewController.presentedViewController?.dismiss(animated: true, completion: self.browserViewController.showToolTipAfterOnboarding)
         }
         browserViewController.present(onboardingEventsHandler.shouldShowNewOnboarding ? newOnboardingViewController : introViewController, animated: false)
     }
