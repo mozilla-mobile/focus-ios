@@ -8,15 +8,10 @@
 
 import UIKit
 
-protocol TooltipTableViewCellDelegate: AnyObject {
-    func dismissButtonTapped()
-}
-
 class TooltipTableViewCell: UITableViewCell {
 
     private var tooltip = TooltipView()
-    
-    weak var delegate: TooltipTableViewCellDelegate?
+    weak var delegate: TooltipViewDelegate?
     
     convenience init(title: String, body: String, style: UITableViewCell.CellStyle = .default, reuseIdentifier: String? = nil) {
         self.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -35,11 +30,10 @@ class TooltipTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
 }
 
 extension TooltipTableViewCell: TooltipViewDelegate {
     func didTapTooltipDismissButton() {
-        delegate?.dismissButtonTapped()
+        delegate?.didTapTooltipDismissButton()
     }
 }

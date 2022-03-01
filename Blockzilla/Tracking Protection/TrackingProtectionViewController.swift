@@ -385,8 +385,8 @@ class TrackingProtectionViewController: UIViewController {
     }
 }
 
-extension TrackingProtectionViewController: TooltipTableViewCellDelegate {
-    func dismissButtonTapped() {
+extension TrackingProtectionViewController: TooltipViewDelegate {
+    func didTapTooltipDismissButton() {
         var snapshot = dataSource.snapshot()
         snapshot.deleteSections([.tip])
         dataSource.apply(snapshot, animatingDifferences: true)
