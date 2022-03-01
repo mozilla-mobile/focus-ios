@@ -6,16 +6,12 @@ import Foundation
 import UIKit
 import SnapKit
 import Telemetry
-import LocalAuthentication
 import StoreKit
 import Intents
 import Glean
 import Combine
 
 class BrowserViewController: UIViewController {
-    let appSplashController: AppSplashController
-
-    private var context = LAContext()
     private let mainContainerView = UIView(frame: .zero)
     let darkView = UIView()
 
@@ -87,8 +83,7 @@ class BrowserViewController: UIViewController {
 
     static let userDefaultsTrackersBlockedKey = "lifetimeTrackersBlocked"
 
-    init(appSplashController: AppSplashController, tipManager: TipManager = TipManager.shared, shortcutManager: ShortcutsManager = ShortcutsManager.shared) {
-        self.appSplashController = appSplashController
+    init(tipManager: TipManager = TipManager.shared, shortcutManager: ShortcutsManager = ShortcutsManager.shared) {
         self.tipManager = tipManager
         self.shortcutManager = shortcutManager
         super.init(nibName: nil, bundle: nil)
@@ -142,7 +137,6 @@ class BrowserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupBiometrics()
         NotificationCenter.default.addObserver(self, selector: #selector(orientationChanged), name: UIDevice.orientationDidChangeNotification, object: nil)
         view.addSubview(mainContainerView)
         
@@ -280,56 +274,6 @@ class BrowserViewController: UIViewController {
         browserToolbar.layoutIfNeeded()
 
         super.viewWillAppear(animated)
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        // Prevent the keyboard from showing up until after the user has viewed the Intro.
-        let userHasSeenIntro = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone) == AppDelegate.prefIntroVersion
-
-        if userHasSeenIntro && !urlBar.inBrowsingMode {
-            urlBar.activateTextField()
-        }
-
-        super.viewDidAppear(animated)
-    }
-
-    private func setupBiometrics() {
-        // Register for foreground notification to check biometric authentication
-        NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: nil) { notification in
-            var biometricError: NSError?
-
-            // Check if user is already in a cleared session, or doesn't have biometrics enabled in settings
-            if  !Settings.getToggle(SettingsToggle.biometricLogin) || !AppDelegate.needsAuthenticated || self.webViewContainer.isHidden {
-                self.appSplashController.hideSplashView()
-                return
-            }
-            AppDelegate.needsAuthenticated = false
-
-            self.context = LAContext()
-            self.context.localizedReason = String(format: UIConstants.strings.authenticationReason, AppInfo.productName)
-            self.context.localizedCancelTitle = UIConstants.strings.newSessionFromBiometricFailure
-
-            if self.context.canEvaluatePolicy(LAPolicy.deviceOwnerAuthentication, error: &biometricError) {
-                self.context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: self.context.localizedReason) {
-                    [unowned self] (success, _) in
-                    DispatchQueue.main.async {
-                        if success {
-                            self.showToolbars()
-                            self.appSplashController.hideSplashView()
-                        } else {
-                            // Clear the browser session, as the user failed to authenticate
-                            self.resetBrowser(hidePreviousSession: true)
-                            self.appSplashController.hideSplashView()
-                        }
-                    }
-                }
-            } else {
-                // Ran into an error with biometrics, so disable them and clear the browser:
-                Settings.set(false, forToggle: SettingsToggle.biometricLogin)
-                self.resetBrowser()
-                self.appSplashController.hideSplashView()
-            }
-        }
     }
     
     private func addShortcuts() {

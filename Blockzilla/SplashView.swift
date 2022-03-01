@@ -6,8 +6,37 @@ import UIKit
 
 class SplashView: UIView {
     
+    enum State {
+        case needsAuth
+        case `default`
+    }
+    
+    var state = State.default {
+        didSet {
+            self.updateUI()
+        }
+    }
+    
+    var authenticationManager: AuthenticationManager! {
+        didSet {
+            authButton.setImage(
+                UIImage(systemName: authenticationManager.biometricType == .faceID ? "faceid" : "touchid"),
+                for: .normal
+            )
+        }
+    }
+    
     private let logoImage = UIImageView(image: AppInfo.config.wordmark)
-
+    
+    private lazy var authButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.tintColor = .black
+        button.contentHorizontalAlignment = .fill
+        button.contentVerticalAlignment = .fill
+        button.addTarget(self, action:#selector(self.showAuth), for: .touchUpInside)
+        return button
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -18,15 +47,31 @@ class SplashView: UIView {
         commonInit()
     }
     
-    convenience init() {
-        self.init(frame: .zero)
-    }
-    
     private func commonInit() {
         backgroundColor = .launchScreenBackground
         addSubview(logoImage)
         logoImage.snp.makeConstraints { make in
             make.center.equalTo(self)
+        }
+        
+        addSubview(authButton)
+        authButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(logoImage).inset(100)
+            make.height.width.equalTo(44)
+        }
+        
+        updateUI()
+    }
+    
+    private func updateUI() {
+        authButton.isHidden = state == .default
+    }
+    
+    @objc private func showAuth() {
+        state = .default
+        Task {
+            await authenticationManager.authenticateWithBiometrics()
         }
     }
     
