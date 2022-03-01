@@ -68,9 +68,7 @@ class TrackingProtectionViewController: UIViewController {
     
     lazy var tooltipSectionItems = [
         SectionItem(configureCell: { [unowned self] tableView, indexPath in
-            let cell = TooltipTableViewCell(title: UIConstants.strings.tooltipTitleTextForPrivacy, body: UIConstants.strings.tooltipBodyTextForPrivacy)
-            cell.tooltip.delegate = self
-            
+            let cell = TooltipTableViewCell(title: UIConstants.strings.tooltipTitleTextForPrivacy, body: UIConstants.strings.tooltipBodyTextForPrivacy, delegate: self)
             return cell
         })
     ]

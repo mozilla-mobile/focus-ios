@@ -12,10 +12,11 @@ class TooltipTableViewCell: UITableViewCell {
 
     var tooltip = TooltipView()
     
-    convenience init(title: String, body: String, style: UITableViewCell.CellStyle = .default, reuseIdentifier: String? = nil) {
+    convenience init(title: String, body: String, style: UITableViewCell.CellStyle = .default, reuseIdentifier: String? = nil, delegate: TooltipViewDelegate) {
         self.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(tooltip)
         tooltip.set(title: title, body: body, maxWidth: UIScreen.main.bounds.width)
+        tooltip.delegate = delegate
         tooltip.snp.makeConstraints { make in
             make.top.leading.trailing.bottom.equalToSuperview()
         }
