@@ -8,15 +8,21 @@
 
 import UIKit
 
+protocol TooltipTableViewCellDelegate: AnyObject {
+    func dismissButtonTapped()
+}
+
 class TooltipTableViewCell: UITableViewCell {
 
-    var tooltip = TooltipView()
+    private var tooltip = TooltipView()
     
-    convenience init(title: String, body: String, style: UITableViewCell.CellStyle = .default, reuseIdentifier: String? = nil, delegate: TooltipViewDelegate) {
+    weak var delegate: TooltipTableViewCellDelegate?
+    
+    convenience init(title: String, body: String, style: UITableViewCell.CellStyle = .default, reuseIdentifier: String? = nil) {
         self.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(tooltip)
         tooltip.set(title: title, body: body, maxWidth: UIScreen.main.bounds.width)
-        tooltip.delegate = delegate
+        tooltip.delegate = self
         tooltip.snp.makeConstraints { make in
             make.top.leading.trailing.bottom.equalToSuperview()
         }
@@ -30,4 +36,10 @@ class TooltipTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+}
+
+extension TooltipTableViewCell: TooltipViewDelegate {
+    func didTapTooltipDismissButton() {
+        delegate?.dismissButtonTapped()
+    }
 }

@@ -68,7 +68,8 @@ class TrackingProtectionViewController: UIViewController {
     
     lazy var tooltipSectionItems = [
         SectionItem(configureCell: { [unowned self] tableView, indexPath in
-            let cell = TooltipTableViewCell(title: UIConstants.strings.tooltipTitleTextForPrivacy, body: UIConstants.strings.tooltipBodyTextForPrivacy, delegate: self)
+            let cell = TooltipTableViewCell(title: UIConstants.strings.tooltipTitleTextForPrivacy, body: UIConstants.strings.tooltipBodyTextForPrivacy)
+            cell.delegate = self
             return cell
         })
     ]
@@ -384,8 +385,8 @@ class TrackingProtectionViewController: UIViewController {
     }
 }
 
-extension TrackingProtectionViewController: TooltipViewDelegate {
-    func didTapTooltipDismissButton() {
+extension TrackingProtectionViewController: TooltipTableViewCellDelegate {
+    func dismissButtonTapped() {
         var snapshot = dataSource.snapshot()
         snapshot.deleteSections([.tip])
         dataSource.apply(snapshot, animatingDifferences: true)
