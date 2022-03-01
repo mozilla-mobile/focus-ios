@@ -265,16 +265,6 @@ class TrackingProtectionViewController: UIViewController {
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.primaryText]
         navigationController?.navigationBar.tintColor = .accent
         
-        onboardingEventsHandler = delegate?.onboardingEventsHandler
-        onboardingEventsHandler.send(.showTrackingProtection)
-        cancellable = onboardingEventsHandler
-            .$shouldPresentTrackingProtectionToolTip
-            .filter { $0 == true }
-            .sink { _ in
-                self.presentTrackingProtectionPopUp()
-            }
-        
-        
         if case .settings = state {
             let doneButton = UIBarButtonItem(title: UIConstants.strings.done, style: .plain, target: self, action: #selector(doneTapped))
             doneButton.tintColor = .accent
@@ -283,6 +273,15 @@ class TrackingProtectionViewController: UIViewController {
             self.navigationController?.navigationBar.shadowImage = UIImage()
             self.navigationController?.navigationBar.layoutIfNeeded()
             self.navigationController?.navigationBar.isTranslucent = false
+            
+            onboardingEventsHandler = delegate?.onboardingEventsHandler
+            onboardingEventsHandler.send(.showTrackingProtection)
+            cancellable = onboardingEventsHandler
+                .$shouldPresentTrackingProtectionToolTip
+                .filter { $0 == true }
+                .sink { _ in
+                    self.presentTrackingProtectionPopUp()
+                }
         }
         
         if case let .browsing(browsingStatus) = state,
