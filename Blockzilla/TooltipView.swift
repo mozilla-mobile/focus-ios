@@ -101,11 +101,11 @@ class TooltipView: UIView {
         }
     }
     
-    func set(title: String = "", body: String) {
+    func set(title: String = "", body: String, maxWidth: CGFloat = .maxWidth) {
         titleLabel.text = title
         titleLabel.isHidden = title.isEmpty
         bodyLabel.text = body
-        let maxSize = CGSize(width: .maxWidth, height: CGFloat.greatestFiniteMagnitude)
+        let maxSize = CGSize(width: maxWidth, height: CGFloat.greatestFiniteMagnitude)
         let idealSize = body.boundingRect(with: maxSize, options: [.usesLineFragmentOrigin], context: nil).size
         labelContainerStackView.snp.makeConstraints { $0.width.equalTo(idealSize.width) }
     }

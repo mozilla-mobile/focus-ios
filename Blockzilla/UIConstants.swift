@@ -380,6 +380,8 @@ struct UIConstants {
         static let protectionStatusSecure = NSLocalizedString("ProtectionStatus.Secure", value: "Connection is secure", comment: "This is the value for a label that indicates if a user is on a secure https connection.")
         static let protectionStatusNotSecure = NSLocalizedString("ProtectionStatus.NotSecure", value: "Connection is not secure", comment: "This is the value for a label that indicates if a user is on an unencrypted website.")
         static let tooltipBodyTextForShieldIcon = NSLocalizedString("TooltipBodyText.ShieldIcon", value: "Focus stopped this site from spying on you. Tap the shield for info on what we blocked.", comment: "This is the body text that is displayed for the Shield icon tooltip")
+        static let tooltipTitleTextForPrivacy = NSLocalizedString("TooltipTitleText.Privacy", value: "You’re protected! ", comment: "This is the title text that is displayed for the Privacy tooltip")
+        static let tooltipBodyTextForPrivacy = NSLocalizedString("TooltipBodyText.Privacy", value: "These default settings offer strong protection. But it’s easy to tweak the settings to meet your specific needs.", comment: "This is the body text that is displayed for the Privacy tooltip")
         static let tootipBodyTextForContextMenuIcon = NSLocalizedString("TooltipBodyText.ContextMenu", value: "Go to Settings to manage specific privacy & security options.", comment: "This is the body text that is displayed for the Context Menu icon tooltip")
         static let tooltipBodyTextForTrashIcon = NSLocalizedString("TooltipBodyText.TrashIcon", value: "Tap the trash anytime to remove all traces of your current session.", comment: "This is the body text that is displayed for the Trash icon tooltip")
         
