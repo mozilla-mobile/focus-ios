@@ -19,8 +19,8 @@ class OnboardingEventsHandler {
     enum Action {
         case applicationDidLaunch
         case onboardingDidDismiss
+        case enterHome
         case startBrowsing
-        case resetBrowser
         case showTrackingProtection
     }
     
@@ -49,20 +49,16 @@ class OnboardingEventsHandler {
             UserDefaults.standard.set(true, forKey: OnboardingConstants.onboardingDidAppear)
             UserDefaults.standard.set(AppInfo.shortVersion, forKey: OnboardingConstants.whatsNewVersion)
             
+        case .enterHome:
+            shouldPresentMenuToolTip = shouldPresentOnboarding && !menuToolTipDidAppear
+            menuToolTipDidAppear = true
+            
         case .startBrowsing:
             visitedURLcounter += 1
             shouldPresentShieldToolTip = shouldPresentOnboarding && visitedURLcounter == 1
             shouldPresentTrashToolTip = shouldPresentOnboarding && visitedURLcounter == 3
             
-        case .resetBrowser:
-            //TODO: Check after how many visited URLs should be displayed
-            shouldPresentMenuToolTip = shouldPresentOnboarding && (visitedURLcounter >= 5 && !menuToolTipDidAppear)
-            if shouldPresentMenuToolTip {
-                menuToolTipDidAppear = true
-            }
-            
         case .showTrackingProtection:
-            //TODO: Check how the UI should be displayed depending on which of the two versions of TrackingProtectionVC is displayed
             shouldPresentTrackingProtectionToolTip = shouldPresentOnboarding && !trackingProtectionToolTipDidAppear
             trackingProtectionToolTipDidAppear = true
         }
