@@ -264,7 +264,24 @@ class OnboardingViewController: UIViewController {
         let view = UIView()
         return view
     }()
-
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            mainStackView.layoutMargins = .init(top: size.height/10, left: size.width/10, bottom: 0, right: size.width/10)
+            mainStackView.spacing = size.height/15
+        } else {
+            mainStackView.layoutMargins = .init(top: 50, left: size.width/10, bottom: 0, right: size.width/10)
+            mainStackView.spacing = size.height/28
+        }
+        
+        startBrowsingButton.snp.updateConstraints { make in
+            make.bottom.equalToSuperview().inset(size.height/20)
+            make.leading.trailing.equalToSuperview().inset(size.width/5)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         addSubViews()
