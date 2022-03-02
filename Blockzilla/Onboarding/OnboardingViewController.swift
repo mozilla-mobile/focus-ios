@@ -174,11 +174,11 @@ class OnboardingViewController: UIViewController {
         stackView.distribution = .fill
         stackView.isLayoutMarginsRelativeArrangement = true
         if UIDevice.current.userInterfaceIdiom == .phone {
-            mainStackView.layoutMargins = .init(top: size.height / UIConstants.layout.onboardingLayoutMarginTopDivider, left: size.width / UIConstants.layout.onboardingLayoutMarginLeadingTrailingDivider, bottom: UIConstants.layout.onboardingLayoutMarginBottom, right: size.width / UIConstants.layout.onboardingLayoutMarginLeadingTrailingDivider)
-            mainStackView.spacing = size.height / UIConstants.layout.onboardingSpacingDividerPhone
+            stackView.layoutMargins = .init(top: view.frame.height / UIConstants.layout.onboardingLayoutMarginTopDivider, left: view.frame.width / UIConstants.layout.onboardingLayoutMarginLeadingTrailingDivider, bottom: UIConstants.layout.onboardingLayoutMarginBottom, right: view.frame.width / UIConstants.layout.onboardingLayoutMarginLeadingTrailingDivider)
+            stackView.spacing = view.frame.height / UIConstants.layout.onboardingSpacingDividerPhone
         } else {
-            mainStackView.layoutMargins = .init(top: UIConstants.layout.onboardingLayoutMarginTop, left: size.width / UIConstants.layout.onboardingLayoutMarginLeadingTrailingDivider, bottom: UIConstants.layout.onboardingLayoutMarginBottom, right: size.width / UIConstants.layout.onboardingLayoutMarginLeadingTrailingDivider)
-            mainStackView.spacing = size.height / UIConstants.layout.onboardingSpacingDividerPad
+            stackView.layoutMargins = .init(top: UIConstants.layout.onboardingLayoutMarginTop, left: view.frame.width / UIConstants.layout.onboardingLayoutMarginLeadingTrailingDivider, bottom: UIConstants.layout.onboardingLayoutMarginBottom, right: view.frame.width / UIConstants.layout.onboardingLayoutMarginLeadingTrailingDivider)
+            stackView.spacing = view.frame.height / UIConstants.layout.onboardingSpacingDividerPad
         }
         stackView.accessibilityIdentifier = "OnboardingViewController.mainStackView"
         return stackView
