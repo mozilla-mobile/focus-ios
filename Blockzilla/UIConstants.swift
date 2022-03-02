@@ -143,6 +143,14 @@ struct UIConstants {
         static let onboardingIconsWidthHeight: CGFloat = 20
         static let onboardingTextStackViewSpacing: CGFloat = 6
         static let onboardingMiddleStackViewSpacing: CGFloat = 24
+        static let onboardingSpacingDividerPhone: CGFloat = 15
+        static let onboardingSpacingDividerPad: CGFloat = 28
+        static let onboardingLayoutMarginTopDivider: CGFloat = 10
+        static let onboardingLayoutMarginTop: CGFloat = 50
+        static let onboardingLayoutMarginLeadingTrailingDivider: CGFloat = 10
+        static let onboardingLayoutMarginBottom: CGFloat = 0
+        static let onboardingButtonButtomInsetDivider: CGFloat = 20
+        static let onboardingButtonLeadingTrailingInsetDivider: CGFloat = 5
     }
 
     struct strings {
