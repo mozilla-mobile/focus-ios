@@ -11,6 +11,9 @@ struct InternalOnboardingSettingsView {
 extension InternalOnboardingSettingsView: View {
     var body: some View {
         Form {
+            Toggle(isOn: $internalSettings.ignoreOnboardingExperiment) {
+                Text(verbatim: "Ignore Onboarding Experiment")
+            }
             Toggle(isOn: $internalSettings.alwaysShowOnboarding) {
                 Text(verbatim: "Always Show Onboarding")
             }
