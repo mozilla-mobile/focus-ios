@@ -20,7 +20,7 @@ class SplashView: UIView {
     var authenticationManager: AuthenticationManager! {
         didSet {
             authButton.setImage(
-                UIImage(systemName: authenticationManager.biometricType == .faceID ? "faceid" : "touchid"),
+                authenticationManager.biometricType == .faceID ? .faceid : .touchid,
                 for: .normal
             )
         }
@@ -33,6 +33,7 @@ class SplashView: UIView {
         button.tintColor = .black
         button.contentHorizontalAlignment = .fill
         button.contentVerticalAlignment = .fill
+        button.addBackgroundView(cornerRadius: 22, padding: 8)
         button.addTarget(self, action:#selector(self.showAuth), for: .touchUpInside)
         return button
     }()
