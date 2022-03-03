@@ -174,11 +174,11 @@ class OnboardingViewController: UIViewController {
         stackView.distribution = .fill
         stackView.isLayoutMarginsRelativeArrangement = true
         if UIDevice.current.userInterfaceIdiom == .phone {
-            stackView.layoutMargins = .init(top: view.frame.height/10, left: view.frame.width/10, bottom: 0, right: view.frame.width/10)
-            stackView.spacing = view.frame.height/15
+            stackView.layoutMargins = .init(top: view.frame.height / UIConstants.layout.onboardingLayoutMarginTopDivider, left: view.frame.width / UIConstants.layout.onboardingLayoutMarginLeadingTrailingDivider, bottom: UIConstants.layout.onboardingLayoutMarginBottom, right: view.frame.width / UIConstants.layout.onboardingLayoutMarginLeadingTrailingDivider)
+            stackView.spacing = view.frame.height / UIConstants.layout.onboardingSpacingDividerPhone
         } else {
-            stackView.layoutMargins = .init(top: 50, left: view.frame.width/10, bottom: 0, right: view.frame.width/10)
-            stackView.spacing = view.frame.height/28
+            stackView.layoutMargins = .init(top: UIConstants.layout.onboardingLayoutMarginTop, left: view.frame.width / UIConstants.layout.onboardingLayoutMarginLeadingTrailingDivider, bottom: UIConstants.layout.onboardingLayoutMarginBottom, right: view.frame.width / UIConstants.layout.onboardingLayoutMarginLeadingTrailingDivider)
+            stackView.spacing = view.frame.height / UIConstants.layout.onboardingSpacingDividerPad
         }
         stackView.accessibilityIdentifier = "OnboardingViewController.mainStackView"
         return stackView
@@ -264,7 +264,24 @@ class OnboardingViewController: UIViewController {
         let view = UIView()
         return view
     }()
-
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            mainStackView.layoutMargins = .init(top: size.height / UIConstants.layout.onboardingLayoutMarginTopDivider, left: size.width / UIConstants.layout.onboardingLayoutMarginLeadingTrailingDivider, bottom: UIConstants.layout.onboardingLayoutMarginBottom, right: size.width / UIConstants.layout.onboardingLayoutMarginLeadingTrailingDivider)
+            mainStackView.spacing = size.height / UIConstants.layout.onboardingSpacingDividerPhone
+        } else {
+            mainStackView.layoutMargins = .init(top: UIConstants.layout.onboardingLayoutMarginTop, left: size.width / UIConstants.layout.onboardingLayoutMarginLeadingTrailingDivider, bottom: UIConstants.layout.onboardingLayoutMarginBottom, right: size.width / UIConstants.layout.onboardingLayoutMarginLeadingTrailingDivider)
+            mainStackView.spacing = size.height / UIConstants.layout.onboardingSpacingDividerPad
+        }
+        
+        startBrowsingButton.snp.updateConstraints { make in
+            make.bottom.equalToSuperview().inset(size.height / UIConstants.layout.onboardingButtonButtomInsetDivider)
+            make.leading.trailing.equalToSuperview().inset(size.width / UIConstants.layout.onboardingButtonLeadingTrailingInsetDivider)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         addSubViews()
@@ -292,8 +309,8 @@ class OnboardingViewController: UIViewController {
         view.addSubview(startBrowsingButton)
         startBrowsingButton.snp.makeConstraints { make in
             make.height.equalTo(44)
-            make.bottom.equalToSuperview().inset(view.frame.height/20)
-            make.leading.trailing.equalToSuperview().inset(view.frame.width/5)
+            make.bottom.equalToSuperview().inset(view.frame.height / UIConstants.layout.onboardingButtonButtomInsetDivider)
+            make.leading.trailing.equalToSuperview().inset(view.frame.width / UIConstants.layout.onboardingButtonLeadingTrailingInsetDivider)
             make.top.equalTo(scrollView.snp.bottom).inset(-20)
         }
     }
