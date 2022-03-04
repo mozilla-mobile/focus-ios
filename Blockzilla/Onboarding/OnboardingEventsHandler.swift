@@ -7,12 +7,16 @@ import Combine
 
 class OnboardingEventsHandler {
     
+    private let nimbus = NimbusWrapper.shared
+    
     var shouldShowNewOnboarding: Bool {
     #if DEBUG
+        guard UserDefaults.standard.bool(forKey: "IgnoreOnboardingExperiment") else {
+            return nimbus.shouldShowNewOnboarding
+        }
         return UserDefaults.standard.bool(forKey: "ShowNewOnboarding")
     #else
-        //TODO: Replace with suitable value from A/B Testing
-        return true
+        return nimbus.shouldShowNewOnboarding
     #endif
     }
     

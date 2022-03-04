@@ -10,6 +10,7 @@ let GleanDebugViewTag = "GleanDebugViewTag"
 let GleanLogPingsToConsole = "GleanLogPingsToConsole"
 let AlwaysShowOnboarding = "AlwaysShowOnboarding"
 let ShowNewOnboarding = "ShowNewOnboarding"
+let IgnoreOnboardingExperiment = "IgnoreOnboardingExperiment"
 
 final class InternalSettings: ObservableObject {
     let objectWillChange = PassthroughSubject<Void, Never>()
@@ -58,6 +59,13 @@ final class InternalSettings: ObservableObject {
 
     @UserDefault(key: ShowNewOnboarding, defaultValue: false)
     var showNewOnboarding: Bool {
+        willSet {
+            objectWillChange.send()
+        }
+    }
+    
+    @UserDefault(key: IgnoreOnboardingExperiment, defaultValue: false)
+    var ignoreOnboardingExperiment: Bool {
         willSet {
             objectWillChange.send()
         }
