@@ -8,6 +8,16 @@ import Glean
 import Sentry
 import Combine
 
+enum AppPhase {
+    case notRunning
+    case didFinishLaunching
+    case willEnterForeground
+    case didBecomeActive
+    case willResignActive
+    case didEnterBackgroundkground
+    case willTerminate
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {    
     static let prefIntroDone = "IntroDone"
@@ -16,6 +26,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
     static let prefWhatsNewCounter = "WhatsNewCounter"
     
     private var authenticationManager = AuthenticationManager()
+    
+    @Published private var appPhase: AppPhase = .notRunning
 
     // This enum can be expanded to support all new shortcuts added to menu.
     enum ShortcutIdentifier: String {
@@ -40,8 +52,55 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
 
     private var queuedUrl: URL?
     private var queuedString: String?
+    private var cancellables = Set<AnyCancellable>()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        appPhase = .didFinishLaunching
+        
+        $appPhase.sink { [unowned self] phase in
+            switch phase {
+            case .notRunning:
+                break
+                
+            case .didFinishLaunching:
+                authenticateWithBiometrics()
+                
+            case .willEnterForeground:
+                authenticateWithBiometrics()
+                
+            case .didBecomeActive:
+                if authenticationManager.authenticationState == .loggedin { hideSplashView() }
+            
+            case .willResignActive:
+                showSplashView()
+                
+            case .didEnterBackgroundkground:
+                authenticationManager.logout()
+                
+            case .willTerminate:
+                break
+            }
+        }
+        .store(in: &cancellables)
+        
+        authenticationManager
+            .$authenticationState
+            .receive(on: DispatchQueue.main)
+            .sink { state in
+                switch state {
+                case .loggedin:
+                    self.hideSplashView()
+                    
+                case .loggedout:
+                    self.splashView.state = .default
+                    self.showSplashView()
+                    
+                case .canceled:
+                    self.splashView.state = .needsAuth
+                }
+            }
+            .store(in: &cancellables)
+        
         if AppInfo.testRequestsReset() {
             if let bundleID = Bundle.main.bundleIdentifier {
                 UserDefaults.standard.removePersistentDomain(forName: bundleID)
@@ -88,7 +147,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
 
         WebCacheUtils.reset()
 
-        authenticateWithBiometrics()
         KeyboardHelper.defaultHelper.startObserving()
 
         let prefIntroDone = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone)
@@ -136,28 +194,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
                 }
             }
         }
-        
-        cancellable = authenticationManager
-            .$authenticationState
-            .receive(on: DispatchQueue.main)
-            .sink { state in
-            switch state {
-            case .loggedin:
-                self.hideSplashView()
-                
-            case .loggedout:
-                self.splashView.state = .default
-                self.showSplashView()
-                
-            case .canceled:
-                self.splashView.state = .needsAuth
-            }
-        }
 
         return true
     }
     
-    var cancellable: AnyCancellable?
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
@@ -272,16 +312,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-        showSplashView()
+        appPhase = .willResignActive
         browserViewController.exitFullScreenVideo()
         browserViewController.dismissActionSheet()
         browserViewController.deactivateUrlBar()
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        if authenticationManager.authenticationState == .loggedin {
-            hideSplashView()
-        }
+        appPhase = .didBecomeActive
         
         if Settings.siriRequestsErase() {
             browserViewController.photonActionSheetDidDismiss()
@@ -322,7 +360,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
     }
     
     func applicationWillEnterForeground(_ application: UIApplication) {
-        authenticateWithBiometrics()
+        appPhase = .willEnterForeground
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -330,7 +368,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
         // session. This gets called every time the app goes to background but should not get
         // called for *temporary* interruptions such as an incoming phone call until the user
         // takes action and we are officially backgrounded.
-        authenticationManager.logout()
+        appPhase = .didEnterBackgroundkground
         let orientation = UIDevice.current.orientation.isPortrait ? "Portrait" : "Landscape"
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.background, object:
             TelemetryEventObject.app, value: nil, extras: ["orientation": orientation])
