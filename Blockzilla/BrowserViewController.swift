@@ -78,14 +78,20 @@ class BrowserViewController: UIViewController {
     }
     private var initialUrl: URL?
     private var orientationWillChange = false
-    var tipManager: TipManager
-    var shortcutManager: ShortcutsManager
+    private let tipManager: TipManager
+    internal let shortcutManager: ShortcutsManager
+    private let authenticationManager: AuthenticationManager
 
     static let userDefaultsTrackersBlockedKey = "lifetimeTrackersBlocked"
 
-    init(tipManager: TipManager = TipManager.shared, shortcutManager: ShortcutsManager = ShortcutsManager.shared) {
+    init(
+        tipManager: TipManager = TipManager.shared,
+        shortcutManager: ShortcutsManager = ShortcutsManager.shared,
+        authenticationManager: AuthenticationManager
+    ) {
         self.tipManager = tipManager
         self.shortcutManager = shortcutManager
+        self.authenticationManager = authenticationManager
         super.init(nibName: nil, bundle: nil)
         shortcutManager.delegate = self
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
@@ -1800,7 +1806,12 @@ extension BrowserViewController: MenuActionable {
     func showSettings(shouldScrollToSiri: Bool = false) {
         guard let modalDelegate = modalDelegate else { return }
 
-        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset, shouldScrollToSiri: shouldScrollToSiri)
+        let settingsViewController = SettingsViewController(
+            searchEngineManager: searchEngineManager,
+            whatsNew: browserToolbar.toolset,
+            authenticationManager: authenticationManager,
+            shouldScrollToSiri: shouldScrollToSiri
+        )
         let settingsNavController = UINavigationController(rootViewController: settingsViewController)
         settingsNavController.modalPresentationStyle = .formSheet
 

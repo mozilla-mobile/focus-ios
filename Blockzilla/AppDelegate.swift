@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
     static let prefWhatsNewDone = "WhatsNewDone"
     static let prefWhatsNewCounter = "WhatsNewCounter"
     
-    private var authenticationManager = AuthenticationManager()
+    private lazy var authenticationManager = AuthenticationManager()
     
     @Published private var appPhase: AppPhase = .notRunning
 
@@ -48,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
         return splashView
     }()
     
-    private lazy var browserViewController = BrowserViewController()
+    private lazy var browserViewController = BrowserViewController(authenticationManager: authenticationManager)
 
     private var queuedUrl: URL?
     private var queuedString: String?

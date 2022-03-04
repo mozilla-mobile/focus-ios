@@ -5,31 +5,15 @@
 import SnapKit
 import UIKit
 import Telemetry
-import LocalAuthentication
 import Intents
 import IntentsUI
 import Glean
 import SwiftUI
 
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    
     enum Section: String {
         case general, privacy, usageData, studies, search, siri, integration, mozilla, secret
-
-        var numberOfRows: Int {
-            switch self {
-            case .general: return 1
-            case .privacy:
-                if BiometryType(context: LAContext()).hasBiometry { return 3 }
-                return 2
-            case .usageData: return 1
-            case .studies: return 1
-            case .search: return 3
-            case .siri: return 3
-            case .integration: return 1
-            case .mozilla: return 3
-            case .secret: return 1
-            }
-        }
 
         var headerText: String? {
             switch self {
@@ -54,48 +38,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
 
-    enum BiometryType {
-        enum Status {
-            case hasIdentities
-            case hasNoIdentities
-
-            init(_ hasIdentities: Bool) {
-                self = hasIdentities ? .hasIdentities : .hasNoIdentities
-            }
-        }
-
-        case faceID(Status), touchID(Status), none
-
-        private static let NO_IDENTITY_ERROR = -7
-
-        var hasBiometry: Bool {
-            switch self {
-            case .touchID, .faceID: return true
-            case .none: return false
-            }
-        }
-
-        var hasIdentities: Bool {
-            switch self {
-            case .touchID(Status.hasIdentities), .faceID(Status.hasIdentities): return true
-            default: return false
-            }
-        }
-
-        init(context: LAContext) {
-            var biometricError: NSError?
-            guard context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &biometricError) else { self = .none; return }
-            let status = Status(biometricError.map({ $0.code != BiometryType.NO_IDENTITY_ERROR }) ?? true)
-
-            switch context.biometryType {
-            case .faceID: self = .faceID(status)
-            case .touchID: self = .touchID(status)
-            case .none: self = .none
-            @unknown default: self = .none
-            }
-        }
-    }
-
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.dataSource = self
@@ -109,7 +51,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     // Hold a strong reference to the block detector so it isn't deallocated
     // in the middle of its detection.
     private let detector = BlockerEnabledDetector()
-    private let biometryType = BiometryType(context: LAContext())
+    private let authenticationManager: AuthenticationManager
     private var isSafariEnabled = false
     private let searchEngineManager: SearchEngineManager
     private var highlightsButton = UIBarButtonItem()
@@ -175,12 +117,18 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     private var shouldScrollToSiri: Bool
-    init(searchEngineManager: SearchEngineManager, whatsNew: WhatsNewDelegate, shouldScrollToSiri: Bool = false) {
+    init(
+        searchEngineManager: SearchEngineManager,
+        whatsNew: WhatsNewDelegate,
+        authenticationManager: AuthenticationManager,
+        shouldScrollToSiri: Bool = false
+    ) {
         self.searchEngineManager = searchEngineManager
         self.whatsNew = whatsNew
         self.shouldScrollToSiri = shouldScrollToSiri
+        self.authenticationManager = authenticationManager
         super.init(nibName: nil, bundle: nil)
-
+        
         tableView.register(SettingsTableViewAccessoryCell.self, forCellReuseIdentifier: "accessoryCell")
     }
 
@@ -265,12 +213,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     private func createBiometricLoginToggleIfAvailable() -> BlockerToggle? {
-        guard biometryType.hasBiometry else { return nil }
+        
+        guard authenticationManager.canEvaluatePolicy else { return nil }
 
         let label: String
         let subtitle: String
 
-        switch biometryType {
+        switch authenticationManager.biometricType {
             case .faceID:
                 label = UIConstants.strings.labelFaceIDLogin
                 subtitle = String(format: UIConstants.strings.labelFaceIDLoginDescription, AppInfo.productName)
@@ -283,7 +232,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
 
         let toggle = BlockerToggle(label: label, setting: SettingsToggle.biometricLogin, subtitle: subtitle)
-        toggle.toggle.isEnabled = biometryType.hasIdentities
+        toggle.toggle.isEnabled = authenticationManager.canEvaluatePolicy
         return toggle
     }
 
@@ -387,9 +336,25 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         
         return cell
     }
+    
+    func numberOfRows(for section: Section) -> Int {
+        switch section {
+        case .general: return 1
+        case .privacy:
+            if authenticationManager.canEvaluatePolicy { return 3 }
+            return 2
+        case .usageData: return 1
+        case .studies: return 1
+        case .search: return 3
+        case .siri: return 3
+        case .integration: return 1
+        case .mozilla: return 3
+        case .secret: return 1
+        }
+    }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sections[section].numberOfRows
+        return numberOfRows(for: sections[section])
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
