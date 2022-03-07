@@ -270,6 +270,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             browserViewController.resetBrowser(hidePreviousSession: true)
             Settings.setSiriRequestErase(to: false)
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.siri, object: TelemetryEventObject.eraseInBackground)
+            GleanMetrics.Siri.eraseInBackground.record()
         }
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
 
@@ -308,6 +309,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         // called for *temporary* interruptions such as an incoming phone call until the user
         // takes action and we are officially backgrounded.
         AppDelegate.needsAuthenticated = true
+        showSplashView()
         let orientation = UIDevice.current.orientation.isPortrait ? "Portrait" : "Landscape"
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.background, object:
             TelemetryEventObject.app, value: nil, extras: ["orientation": orientation])
@@ -322,6 +324,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         case "org.mozilla.ios.Klar.eraseAndOpen":
             browserViewController.resetBrowser(hidePreviousSession: true)
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.siri, object: TelemetryEventObject.eraseAndOpen)
+            GleanMetrics.Siri.eraseAndOpen.record()
         case "org.mozilla.ios.Klar.openUrl":
             guard let urlString = userActivity.userInfo?["url"] as? String,
                 let url = URL(string: urlString) else { return false }
@@ -330,10 +333,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             browserViewController.deactivateUrlBarOnHomeView()
             browserViewController.submit(url: url)
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.siri, object: TelemetryEventObject.openFavoriteSite)
+            GleanMetrics.Siri.openFavoriteSite.record()
         case "EraseIntent":
             guard userActivity.interaction?.intent as? EraseIntent != nil else { return false }
             browserViewController.resetBrowser()
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.siri, object: TelemetryEventObject.eraseInBackground)
+            GleanMetrics.Siri.eraseInBackground.record()
         default: break
         }
         return true
@@ -341,7 +346,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     
     func hideSplashView() {
         browserViewController.activateUrlBarOnHomeView()
-        splashView.animateHidden(true, duration: 0.25)
+        splashView.alpha = 0
+        splashView.isHidden = true
         splashView.removeFromSuperview()
     }
     
@@ -351,7 +357,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         splashView.snp.makeConstraints { make in
             make.edges.equalTo(window!)
         }
-        splashView.animateHidden(false, duration: 0.25)
+        splashView.alpha = 1
+        splashView.isHidden = false
     }
 }
 
@@ -423,10 +430,20 @@ extension AppDelegate {
             .flatMap(UUID.init(uuidString:)) {
             GleanMetrics.LegacyIds.clientId.set(clientId)
         }
+        
+        if UserDefaults.standard.bool(forKey: GleanLogPingsToConsole) {
+            Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?logPings=true")!)
+        }
+        
+        if UserDefaults.standard.bool(forKey: GleanEnableDebugView) {
+            if let tag = UserDefaults.standard.string(forKey: GleanDebugViewTag), !tag.isEmpty, let encodedTag = tag.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed) {
+                Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?debugViewTag=\(encodedTag)")!)
+            }
+        }
 
         let channel = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" ? "testflight" : "release"
         Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData), configuration: Configuration(channel: channel), buildInfo: GleanMetrics.GleanBuild.info)
-        
+
         // Send "at startup" telemetry
         GleanMetrics.Shortcuts.shortcutsOnHomeNumber.set(Int64(ShortcutsManager.shared.numberOfShortcuts))
         GleanMetrics.TrackingProtection.hasAdvertisingBlocked.set(Settings.getToggle(.blockAds))
