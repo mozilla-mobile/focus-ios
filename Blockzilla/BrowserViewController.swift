@@ -740,6 +740,10 @@ class BrowserViewController: UIViewController {
         if urlBar.url == nil {
             urlBar.url = url
         }
+        
+        if presentedViewController is TooltipViewController {
+            presentedViewController?.dismiss(animated: false)
+        }
         onboardingEventsHandler.send(.startBrowsing)
         
         guard let savedUrl = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return }
