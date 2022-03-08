@@ -320,6 +320,9 @@ class BrowserViewController: UIViewController {
                             // Clear the browser session, as the user failed to authenticate
                             self.resetBrowser(hidePreviousSession: true)
                             self.appSplashController.hideSplashView()
+                            if presentedViewController != nil {
+                                presentedViewController?.dismiss(animated: true)
+                            }
                         }
                     }
                 }
@@ -328,6 +331,9 @@ class BrowserViewController: UIViewController {
                 Settings.set(false, forToggle: SettingsToggle.biometricLogin)
                 self.resetBrowser()
                 self.appSplashController.hideSplashView()
+                if self.presentedViewController != nil {
+                    self.presentedViewController?.dismiss(animated: true)
+                }
             }
         }
     }
