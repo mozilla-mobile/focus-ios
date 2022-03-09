@@ -16,12 +16,43 @@ class BrowserViewController: UIViewController {
     let appSplashController: AppSplashController
 
     private var context = LAContext()
-    private let mainContainerView = UIView(frame: .zero)
-    let darkView = UIView()
+    
+    // MARK: Containers
+    private let mainContainerView: UIView = {
+        let view = UIView()
+        view.accessibilityIdentifier = "mainContainerView"
+        return view
+    }()
+    private let darkView: UIView = {
+        let view = UIView()
+        view.accessibilityIdentifier = "darkView"
+        return view
+    }()
+    private let webViewContainer: UIView = {
+        let view = UIView()
+        view.accessibilityIdentifier = "webViewContainer"
+        return view
+    }()
+    private let urlBarContainer: UIView = {
+        let view = UIView()
+        view.accessibilityIdentifier = "urlBarContainer"
+        return view
+    }()
+    private let shortcutsBackground: UIView = {
+        let view = UIView()
+        view.accessibilityIdentifier = "shortcutsBackground"
+        return view
+    }()
+    private var homeViewContainer: UIView = {
+        let view = UIView()
+        view.accessibilityIdentifier = "homeViewContainer"
+        return view
+    }()
+    
+    private var fillerView: UIView?
 
     private let webViewController = WebViewController()
-    private let webViewContainer = UIView()
-
+    
     var modalDelegate: ModalDelegate?
 
     private var keyboardState: KeyboardState?
@@ -29,14 +60,12 @@ class BrowserViewController: UIViewController {
     private var homeViewController: HomeViewController!
     private let overlayView = OverlayView()
     private let searchEngineManager = SearchEngineManager(prefs: UserDefaults.standard)
-    private let urlBarContainer = UIView()
     private var urlBar: URLBar!
     private let searchSuggestClient = SearchSuggestClient()
     private var findInPageBar: FindInPageBar?
-    private var fillerView: UIView?
+    
     private let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
     private let shortcutsContainer = UIStackView()
-    private let shortcutsBackground = UIView()
 
     private var toolbarBottomConstraint: Constraint!
     private var urlBarTopConstraint: Constraint!
@@ -60,8 +89,6 @@ class BrowserViewController: UIViewController {
             updateLockIcon()
         }
     }
-
-    private var homeViewContainer = UIView()
 
     fileprivate var showsToolsetInURLBar = false {
         didSet {
@@ -199,7 +226,7 @@ class BrowserViewController: UIViewController {
 
         urlBarContainer.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(mainContainerView)
-            make.height.equalTo(mainContainerView).multipliedBy(0.6).priority(500)
+//            make.height.equalTo(mainContainerView).multipliedBy(0.6).priority(500)
         }
 
         browserToolbar.snp.makeConstraints { make in
