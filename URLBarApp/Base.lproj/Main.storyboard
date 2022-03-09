@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -23,10 +22,10 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="WGw-V7-HQm">
-                                <rect key="frame" x="66" y="370" width="282" height="156"/>
+                                <rect key="frame" x="64" y="370" width="286" height="156"/>
                                 <subviews>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="NJz-Wn-vUu">
-                                        <rect key="frame" x="0.0" y="0.0" width="282" height="32"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="286" height="32"/>
                                         <segments>
                                             <segment title="Home"/>
                                             <segment title="Browsing"/>
@@ -36,7 +35,7 @@
                                         </connections>
                                     </segmentedControl>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="SOX-qt-ezC">
-                                        <rect key="frame" x="0.0" y="63" width="282" height="32"/>
+                                        <rect key="frame" x="0.0" y="63" width="286" height="32"/>
                                         <segments>
                                             <segment title="on"/>
                                             <segment title="off"/>
@@ -47,7 +46,7 @@
                                         </connections>
                                     </segmentedControl>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="l4X-2w-zSo">
-                                        <rect key="frame" x="-2" y="126" width="286" height="31"/>
+                                        <rect key="frame" x="-2" y="126" width="290" height="31"/>
                                         <connections>
                                             <action selector="progressChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="oPz-xW-Ksn"/>
                                         </connections>
@@ -66,7 +65,8 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="urlBar" destination="Yer-tv-eZi" id="eoP-an-bFw"/>
+                        <outlet property="browsingStateSegmentedControl" destination="NJz-Wn-vUu" id="FlH-e2-Xa4"/>
+                        <outlet property="urlBarView" destination="Yer-tv-eZi" id="eoP-an-bFw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

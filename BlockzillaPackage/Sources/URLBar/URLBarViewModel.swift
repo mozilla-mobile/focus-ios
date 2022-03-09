@@ -12,6 +12,8 @@ public enum URLViewAction {
     case urlBarSelected
     case urlBarDismissed
     case shieldIconTap
+    case submit(text: String)
+    case enter(text: String)
 }
 
 public class URLBarViewModel {
@@ -50,10 +52,10 @@ public class URLBarViewModel {
     internal var viewActionSubject = PassthroughSubject<URLViewAction, Never>()
     public var viewActionPublisher: AnyPublisher<URLViewAction, Never> { viewActionSubject.eraseToAnyPublisher() }
     
-    private var currentSelectionSubject = CurrentValueSubject<Selection, Never>(.selected)
+    public var currentSelectionSubject = CurrentValueSubject<Selection, Never>(.selected)
     public var currentSelectionPublisher: AnyPublisher<Selection, Never> { currentSelectionSubject.eraseToAnyPublisher() }
     
-    private var browsingStateSubject = CurrentValueSubject<BrowsingState, Never>(.home)
+    public var browsingStateSubject = CurrentValueSubject<BrowsingState, Never>(.home)
     public var browsingStatePublisher: AnyPublisher<BrowsingState, Never> { browsingStateSubject.eraseToAnyPublisher() }
     
     public var connectionStateSubject = CurrentValueSubject<TrackingProtectionStatus, Never>(.on(.empty))
@@ -82,58 +84,6 @@ public class URLBarViewModel {
                 return (browsingState, Device(), orientation)
             }
             .eraseToAnyPublisher()
-    }
-    
-    public init() {
-        viewActionPublisher
-            .sink { action in
-                switch action {
-                case .contextMenuTap:
-                    print("contextMenuTap")
-                    
-                case .cancelButtonTap:
-                    self.currentSelectionSubject
-                        .send(.unselected)
-                    
-                case .backButtonTap:
-                    print("backButtonTap")
-                    
-                case .forwardButtonTap:
-                    print("forwardButtonTap")
-                    
-                case .stopReloadButtonTap:
-                    switch self.browsingStateSubject.value {
-                    case .home:
-                        ()
-                    case .browsing(let loadingState):
-                        switch loadingState {
-                        case .stop:
-                            self.browsingStateSubject
-                                .send(.browsing(.refresh))
-                        case .refresh:
-                            self.startBrowsing()
-                        }
-                    }
-                    
-                case .deleteButtonTap:
-                    self.goHome()
-                    print("deleteButtonTap")
-                    
-                case .searchTapped:
-                    self.startBrowsing()
-                    
-                case .urlBarSelected:
-                    self.selectURLBar()
-                    
-                case .urlBarDismissed:
-                    self.currentSelectionSubject
-                        .send(.unselected)
-                    
-                case .shieldIconTap:
-                    print("shieldIconTap")
-                }
-            }
-            .store(in: &cancellables)
     }
     
     public func selectURLBar() {
