@@ -28,7 +28,6 @@ class TooltipView: UIView {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
         stackView.alignment = .top
-        stackView.distribution = .equalCentering
         stackView.spacing = .space
         stackView.layoutMargins = UIEdgeInsets(top: .margin, left: .margin, bottom: .margin, right: .margin)
         stackView.isLayoutMarginsRelativeArrangement = true
@@ -101,13 +100,14 @@ class TooltipView: UIView {
         }
     }
     
-    func set(title: String = "", body: String, maxWidth: CGFloat = .maxWidth) {
+    func set(title: String = "", body: String, maxWidth: CGFloat? = nil) {
         titleLabel.text = title
         titleLabel.isHidden = title.isEmpty
         bodyLabel.text = body
+        guard let maxWidth = maxWidth else { return }
         let maxSize = CGSize(width: maxWidth, height: CGFloat.greatestFiniteMagnitude)
         let idealSize = body.boundingRect(with: maxSize, options: [.usesLineFragmentOrigin], context: nil).size
-        labelContainerStackView.snp.makeConstraints { $0.width.equalTo(idealSize.width) }
+        labelContainerStackView.snp.makeConstraints { $0.width.lessThanOrEqualTo(idealSize.width) }
     }
     
     @objc func didTapTooltipDismissButton() {
@@ -120,7 +120,6 @@ fileprivate extension CGFloat {
     static let space: CGFloat = 12
     static let margin: CGFloat = 16
     static let cornerRadius: CGFloat = 12
-    static let maxWidth: CGFloat = 220
 }
 
 fileprivate extension CGPoint {

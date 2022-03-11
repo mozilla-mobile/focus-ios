@@ -34,7 +34,7 @@ class TooltipViewController: UIViewController {
     }
     
     func set(title: String = "", body: String) {
-        tooltipView.set(title: title, body: body)
+        tooltipView.set(title: title, body: body, maxWidth: .maxWidth)
     }
 }
 
@@ -49,4 +49,8 @@ extension TooltipViewController: TooltipViewDelegate {
     func didTapTooltipDismissButton() {
         dismiss?()
     }
+}
+
+fileprivate extension CGFloat {
+    static let maxWidth: CGFloat = 220
 }
