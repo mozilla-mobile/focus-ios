@@ -55,7 +55,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         },
         onboardingDidAppear: {
             UserDefaults.standard.bool(forKey: OnboardingConstants.onboardingDidAppear)
-        })
+        }, getShownTips: {
+            return UserDefaults
+                .standard
+                .data(forKey: OnboardingConstants.shownTips)
+                .flatMap {
+                    try? JSONDecoder().decode(Set<OnboardingEventsHandler.ToolTipRoute>.self, from: $0)
+                } ?? []
+        }, setShownTips: { tips in
+            let data = try? JSONEncoder().encode(tips)
+            UserDefaults.standard.set(data, forKey: OnboardingConstants.shownTips)
+        }
+    )
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         if AppInfo.testRequestsReset() {

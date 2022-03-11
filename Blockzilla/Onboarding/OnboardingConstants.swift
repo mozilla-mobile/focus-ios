@@ -11,4 +11,5 @@ struct OnboardingConstants {
     static let alwaysShowOnboarding = "AlwaysShowOnboarding"
     static let ignoreOnboardingExperiment = "IgnoreOnboardingExperiment"
     static let showNewOnboarding = "ShowNewOnboarding"
+    static let shownTips = "ShownTips"
 }

@@ -9,6 +9,7 @@ class OnboardingEventsHandler {
     
     private let alwaysShowOnboarding: () -> Bool
     private let onboardingDidAppear: () -> Bool
+    private let setShownTips: (Set<ToolTipRoute>) -> Void
     public let shouldShowNewOnboarding: () -> Bool
     
     enum Action {
@@ -18,7 +19,7 @@ class OnboardingEventsHandler {
         case showTrackingProtection
     }
     
-    enum OnboardingType: Equatable, Hashable {
+    enum OnboardingType: Equatable, Hashable, Codable {
         init(_ shouldShowNewOnboarding: Bool) {
             self = shouldShowNewOnboarding ? .new : .old
         }
@@ -26,7 +27,7 @@ class OnboardingEventsHandler {
         case old
     }
     
-    enum ToolTipRoute: Equatable, Hashable {
+    enum ToolTipRoute: Equatable, Hashable, Codable {
         case onboarding(OnboardingType)
         case trackingProtection
         case trackingProtectionShield
@@ -37,20 +38,27 @@ class OnboardingEventsHandler {
     @Published var route: ToolTipRoute?
     
     private var visitedURLcounter = 0
-    private var shownTips = Set<ToolTipRoute>()
+    private var shownTips = Set<ToolTipRoute>() {
+        didSet {
+            setShownTips(shownTips)
+        }
+    }
     
     internal init(
         alwaysShowOnboarding: @escaping () -> Bool,
         shouldShowNewOnboarding: @escaping () -> Bool,
         onboardingDidAppear: @escaping () -> Bool,
         visitedURLcounter: Int = 0,
-        shownTips: Set<OnboardingEventsHandler.ToolTipRoute> = Set<ToolTipRoute>()) {
-            self.alwaysShowOnboarding = alwaysShowOnboarding
-            self.shouldShowNewOnboarding = shouldShowNewOnboarding
-            self.onboardingDidAppear = onboardingDidAppear
-            self.visitedURLcounter = visitedURLcounter
-            self.shownTips = shownTips
-        }
+        getShownTips: () -> Set<OnboardingEventsHandler.ToolTipRoute>,
+        setShownTips: @escaping (Set<OnboardingEventsHandler.ToolTipRoute>) -> Void
+    ) {
+        self.alwaysShowOnboarding = alwaysShowOnboarding
+        self.shouldShowNewOnboarding = shouldShowNewOnboarding
+        self.onboardingDidAppear = onboardingDidAppear
+        self.visitedURLcounter = visitedURLcounter
+        self.setShownTips = setShownTips
+        self.shownTips = getShownTips()
+    }
     
     func send(_ action: OnboardingEventsHandler.Action) {
         switch action {
