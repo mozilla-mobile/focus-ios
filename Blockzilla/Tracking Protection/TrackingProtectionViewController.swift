@@ -342,6 +342,7 @@ class TrackingProtectionViewController: UIViewController {
     }
     
     @objc private func doneTapped() {
+        onboardingEventsHandler.route = nil
         self.dismiss(animated: true, completion: nil)
     }
     
