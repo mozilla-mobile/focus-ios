@@ -16,10 +16,10 @@ class TooltipTableViewCell: UITableViewCell {
     convenience init(title: String, body: String, style: UITableViewCell.CellStyle = .default, reuseIdentifier: String? = nil) {
         self.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(tooltip)
-        tooltip.set(title: title, body: body, maxWidth: UIScreen.main.bounds.width)
+        tooltip.set(title: title, body: body)
         tooltip.delegate = self
         tooltip.snp.makeConstraints { make in
-            make.top.leading.trailing.bottom.equalToSuperview()
+            make.edges.equalToSuperview()
         }
     }
     
