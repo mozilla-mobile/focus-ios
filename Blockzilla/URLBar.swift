@@ -112,6 +112,8 @@ class URLBar: UIView {
             guard oldValue != showToolset else { return }
             isIPadRegularDimensions = showToolset
             activateConstraints(showToolset, shownConstraints: showToolsetConstraints, hiddenConstraints: hideToolsetConstraints)
+            guard UIDevice.current.orientation.isLandscape && UIDevice.current.userInterfaceIdiom == .phone else { return }
+            showToolset = false
         }
     }
     private var hideToolsetConstraints = [Constraint]()
