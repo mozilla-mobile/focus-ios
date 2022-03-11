@@ -48,14 +48,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             guard UserDefaults.standard.bool(forKey: OnboardingConstants.ignoreOnboardingExperiment) else {
                 return nimbus.shouldShowNewOnboarding
             }
-            return UserDefaults.standard.bool(forKey: OnboardingConstants.showNewOnboarding)
+            return !UserDefaults.standard.bool(forKey: OnboardingConstants.showOldOnboarding)
             #else
             return nimbus.shouldShowNewOnboarding
             #endif
         },
-        onboardingDidAppear: {
-            UserDefaults.standard.bool(forKey: OnboardingConstants.onboardingDidAppear)
-        }, getShownTips: {
+        getShownTips: {
             return UserDefaults
                 .standard
                 .data(forKey: OnboardingConstants.shownTips)

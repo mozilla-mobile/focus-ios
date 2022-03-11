@@ -10,6 +10,6 @@ struct OnboardingConstants {
     static let whatsNewCounter = "WhatsNewCounter"
     static let alwaysShowOnboarding = "AlwaysShowOnboarding"
     static let ignoreOnboardingExperiment = "IgnoreOnboardingExperiment"
-    static let showNewOnboarding = "ShowNewOnboarding"
+    static let showOldOnboarding = "ShowOldOnboarding"
     static let shownTips = "ShownTips"
 }

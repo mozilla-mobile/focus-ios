@@ -8,7 +8,6 @@ import Combine
 class OnboardingEventsHandler {
     
     private let alwaysShowOnboarding: () -> Bool
-    private let onboardingDidAppear: () -> Bool
     private let setShownTips: (Set<ToolTipRoute>) -> Void
     public let shouldShowNewOnboarding: () -> Bool
     
@@ -47,14 +46,12 @@ class OnboardingEventsHandler {
     internal init(
         alwaysShowOnboarding: @escaping () -> Bool,
         shouldShowNewOnboarding: @escaping () -> Bool,
-        onboardingDidAppear: @escaping () -> Bool,
         visitedURLcounter: Int = 0,
         getShownTips: () -> Set<OnboardingEventsHandler.ToolTipRoute>,
         setShownTips: @escaping (Set<OnboardingEventsHandler.ToolTipRoute>) -> Void
     ) {
         self.alwaysShowOnboarding = alwaysShowOnboarding
         self.shouldShowNewOnboarding = shouldShowNewOnboarding
-        self.onboardingDidAppear = onboardingDidAppear
         self.visitedURLcounter = visitedURLcounter
         self.setShownTips = setShownTips
         self.shownTips = getShownTips()
@@ -64,15 +61,6 @@ class OnboardingEventsHandler {
         switch action {
         case .applicationDidLaunch:
             let onboardingRoute = ToolTipRoute.onboarding(OnboardingType(shouldShowNewOnboarding()))
-            
-            if onboardingDidAppear() {
-                shownTips.insert(onboardingRoute)
-            }
-            #if DEBUG
-            if alwaysShowOnboarding() {
-                shownTips.remove(onboardingRoute)
-            }
-            #endif
             show(route: onboardingRoute)
             
         case .enterHome:
@@ -98,6 +86,12 @@ class OnboardingEventsHandler {
     }
     
     private func show(route: ToolTipRoute) {
+        #if DEBUG
+        if alwaysShowOnboarding() {
+            shownTips.remove(route)
+        }
+        #endif
+        
         if !shownTips.contains(route) {
             self.route = route
             shownTips.insert(route)
