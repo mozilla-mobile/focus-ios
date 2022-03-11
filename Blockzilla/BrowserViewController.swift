@@ -47,6 +47,8 @@ class BrowserViewController: UIViewController {
     private var scrollBarOffsetAlpha: CGFloat = 0
     private var scrollBarState: URLBarScrollState = .expanded
     private var background = UIImageView()
+    
+    private var scrollView = UIScrollView()
 
     private enum URLBarScrollState {
         case collapsed
@@ -185,7 +187,9 @@ class BrowserViewController: UIViewController {
         overlayView.delegate = self
         overlayView.backgroundColor = isIPadRegularDimensions ? .clear : .scrim.withAlphaComponent(0.48)
         overlayView.setSearchSuggestionsPromptViewDelegate(delegate: self)
-        mainContainerView.addSubview(overlayView)
+        scrollView.isUserInteractionEnabled = true
+        mainContainerView.addSubview(scrollView)
+        scrollView.addSubview(overlayView)
         
         mainContainerView.addSubview(shortcutsBackground)
         shortcutsBackground.isHidden = true
@@ -240,11 +244,24 @@ class BrowserViewController: UIViewController {
         createURLBar()
         updateViewConstraints()
         
-        overlayView.snp.makeConstraints { make in
-            make.top.equalTo(urlBarContainer.snp.bottom)
-            make.leading.trailing.equalTo(mainContainerView)
-            make.bottom.equalToSuperview().inset(UIConstants.layout.toolbarHeight + UIConstants.layout.tipViewHeight)
+        scrollView.snp.makeConstraints { make in
+            make.top.equalTo(urlBar.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+//            make.height.equalTo(400)
+            make.bottom.equalToSuperview()
         }
+        
+        overlayView.snp.makeConstraints { make in
+            make.top.leading.bottom.trailing.equalToSuperview()
+            make.width.equalTo(view)
+//            make.height.equalTo(500)
+        }
+        
+//        overlayView.snp.makeConstraints { make in
+//            make.top.equalTo(urlBarContainer.snp.bottom)
+//            make.leading.trailing.equalTo(mainContainerView)
+//            make.bottom.equalToSuperview().inset(UIConstants.layout.toolbarHeight + UIConstants.layout.tipViewHeight)
+//        }
 
         // Listen for request desktop site notifications
         NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification), object: nil, queue: nil) { _ in
@@ -1115,6 +1132,11 @@ extension BrowserViewController: URLBarDelegate {
        
         guard !shortcutContextMenuIsOpenOnIpad() else { return }
         overlayView.dismiss()
+        scrollView.snp.updateConstraints { make in
+            make.bottom.equalToSuperview()
+//            make.height.equalTo(0)
+        }
+//        scrollView.isHidden = true
         toggleURLBarBackground(isBright: !webViewController.isLoading)
         shortcutsContainer.isHidden = urlBar.inBrowsingMode
         shortcutsBackground.isHidden = true
@@ -1421,6 +1443,7 @@ extension BrowserViewController: OverlayViewDelegate {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.selectQuery, object: TelemetryEventObject.searchBar)
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
             urlBar(urlBar, didSubmitText: query)
+            scrollView.isHidden = false
         }
 
         urlBar.dismiss()
@@ -1484,6 +1507,7 @@ extension BrowserViewController: SearchSuggestionsPromptViewDelegate {
         UserDefaults.standard.set(true, forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt)
         Settings.set(didEnable, forToggle: SettingsToggle.enableSearchSuggestions)
         overlayView.updateSearchSuggestionsPrompt(hidden: true)
+        scrollView.isHidden = true
         if didEnable, let urlbar = self.urlBar, let value = self.urlBar?.userInputText {
             urlBar(urlbar, didEnterText: value)
         }
@@ -1715,6 +1739,10 @@ extension BrowserViewController: KeyboardHelperDelegate {
             self.homeViewBottomConstraint.update(offset: -state.intersectionHeightForView(view: self.view))
             self.view.layoutIfNeeded()
         }
+        scrollView.snp.updateConstraints { make in
+            make.bottom.equalToSuperview().offset(-state.intersectionHeightForView(view: self.view))
+//            make.height.equalTo(400)
+        }
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
@@ -1723,6 +1751,13 @@ extension BrowserViewController: KeyboardHelperDelegate {
         UIView.animate(withDuration: state.animationDuration) {
             self.homeViewBottomConstraint.update(offset: 0)
             self.view.layoutIfNeeded()
+        }
+        if urlBar.inBrowsingMode{
+            
+        }
+        scrollView.snp.updateConstraints { make in
+            make.bottom.equalToSuperview()
+//            make.height.equalTo(200)
         }
     }
 
