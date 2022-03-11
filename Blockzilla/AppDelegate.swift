@@ -35,12 +35,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     private lazy var browserViewController = {
         BrowserViewController(appSplashController: self)
     }()
-
+    private let nimbus = NimbusWrapper.shared
     private var queuedUrl: URL?
     private var queuedString: String?
     private let whatsNewEventsHandler = WhatsNewEventsHandler()
-    private let onboardingEventsHandler = OnboardingEventsHandler()
-    private var cancellable: AnyCancellable?
+    private lazy var onboardingEventsHandler = OnboardingEventsHandler(
+        alwaysShowOnboarding: {
+            UserDefaults.standard.bool(forKey: OnboardingConstants.alwaysShowOnboarding)
+        },
+        shouldShowNewOnboarding: { [unowned self] in
+            #if DEBUG
+            guard UserDefaults.standard.bool(forKey: OnboardingConstants.ignoreOnboardingExperiment) else {
+                return nimbus.shouldShowNewOnboarding
+            }
+            return !UserDefaults.standard.bool(forKey: OnboardingConstants.showOldOnboarding)
+            #else
+            return nimbus.shouldShowNewOnboarding
+            #endif
+        },
+        getShownTips: {
+            return UserDefaults
+                .standard
+                .data(forKey: OnboardingConstants.shownTips)
+                .flatMap {
+                    try? JSONDecoder().decode(Set<OnboardingEventsHandler.ToolTipRoute>.self, from: $0)
+                } ?? []
+        }, setShownTips: { tips in
+            let data = try? JSONEncoder().encode(tips)
+            UserDefaults.standard.set(data, forKey: OnboardingConstants.shownTips)
+        }
+    )
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         if AppInfo.testRequestsReset() {
@@ -102,12 +126,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         }
         
         onboardingEventsHandler.send(.applicationDidLaunch)
-        cancellable = onboardingEventsHandler
-            .$shouldPresentOnboarding
-            .filter { $0 == true }
-            .sink { _ in
-                self.presentOnboarding()
-            }
         whatsNewEventsHandler.highlightWhatsNewButton()
         
         return true
@@ -176,22 +194,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: (Bool) -> Void) {
 
         completionHandler(handleShortcut(shortcutItem: shortcutItem))
-    }
-    
-    private func presentOnboarding() {
-        let introViewController = IntroViewController()
-        introViewController.modalPresentationStyle = .fullScreen
-        introViewController.onboardingEventsHandler = onboardingEventsHandler
-        let newOnboardingViewController = OnboardingViewController()
-        newOnboardingViewController.modalPresentationStyle = .formSheet
-        newOnboardingViewController.isModalInPresentation = true
-        newOnboardingViewController.dismissOnboardingScreen = { [weak self] in
-            guard let self = self else { return }
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.onboarding, value: "finish")
-            self.onboardingEventsHandler.send(.onboardingDidDismiss)
-            self.browserViewController.presentedViewController?.dismiss(animated: true, completion: self.browserViewController.showToolTipAfterOnboarding)
-        }
-        browserViewController.present(onboardingEventsHandler.shouldShowNewOnboarding ? newOnboardingViewController : introViewController, animated: false)
     }
 
     private func handleShortcut(shortcutItem: UIApplicationShortcutItem) -> Bool {

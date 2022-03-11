@@ -9,6 +9,8 @@ class TooltipViewController: UIViewController {
         
     private let tooltipView = TooltipView()
     
+    var dismiss: (()->Void)?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLayout()
@@ -34,10 +36,6 @@ class TooltipViewController: UIViewController {
     func set(title: String = "", body: String) {
         tooltipView.set(title: title, body: body)
     }
-    
-    @objc func didTapTooltipDismissButton(_ sender: UIButton) {
-        dismiss(animated: true)
-    }
 }
 
 // MARK: - Delegates
@@ -49,6 +47,6 @@ extension TooltipViewController: UIPopoverPresentationControllerDelegate {
 
 extension TooltipViewController: TooltipViewDelegate {
     func didTapTooltipDismissButton() {
-        dismiss(animated: true)
+        dismiss?()
     }
 }

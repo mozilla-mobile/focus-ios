@@ -82,7 +82,7 @@ class HomeViewController: UIViewController {
     }
     
     func refreshTipsDisplay() {
-        if let tip = tipManager.fetchFirstTip(), !onboardingEventsHandler.shouldShowNewOnboarding {
+        if let tip = tipManager.fetchFirstTip(), !onboardingEventsHandler.shouldShowNewOnboarding() {
             logTelemetry(for: tip)
             tipsViewController.setupPageController(with: .showTips)
         } else {

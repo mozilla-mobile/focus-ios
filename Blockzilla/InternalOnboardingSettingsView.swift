@@ -15,10 +15,10 @@ extension InternalOnboardingSettingsView: View {
                 Text(verbatim: "Ignore Onboarding Experiment")
             }
             Toggle(isOn: $internalSettings.alwaysShowOnboarding) {
-                Text(verbatim: "Always Show Onboarding")
+                Text(verbatim: "Always Show Onboarding + Tips")
             }
-            Toggle(isOn: $internalSettings.showNewOnboarding) {
-                Text(verbatim: "Show New Onboarding")
+            Toggle(isOn: $internalSettings.showOldOnboarding) {
+                Text(verbatim: "Show Old Onboarding")
             }
         }.navigationBarTitle(Text(verbatim: "Onboarding Settings"))
     }

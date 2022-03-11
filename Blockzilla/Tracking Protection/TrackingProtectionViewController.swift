@@ -277,10 +277,23 @@ class TrackingProtectionViewController: UIViewController {
             onboardingEventsHandler = delegate?.onboardingEventsHandler
             onboardingEventsHandler.send(.showTrackingProtection)
             cancellable = onboardingEventsHandler
-                .$shouldPresentTrackingProtectionToolTip
-                .filter { $0 == true }
-                .sink { _ in
-                    self.presentTrackingProtectionPopUp()
+                .$route
+                .sink { [unowned self] route in
+                    switch route {
+                    case .none:
+                        var snapshot = dataSource.snapshot()
+                        snapshot.deleteSections([.tip])
+                        dataSource.apply(snapshot, animatingDifferences: true)
+                        
+                    case .trackingProtection:
+                        var snapshot = dataSource.snapshot()
+                        snapshot.insertSections([.tip], beforeSection: .enableTrackers)
+                        snapshot.appendItems(tooltipSectionItems, toSection: .tip)
+                        dataSource.apply(snapshot)
+                        
+                    default:
+                        break
+                    }
                 }
         }
         
@@ -329,15 +342,8 @@ class TrackingProtectionViewController: UIViewController {
     }
     
     @objc private func doneTapped() {
+        onboardingEventsHandler.route = nil
         self.dismiss(animated: true, completion: nil)
-    }
-    
-    private func presentTrackingProtectionPopUp() {
-        guard onboardingEventsHandler.shouldShowNewOnboarding else { return }
-        var snapshot = dataSource.snapshot()
-        snapshot.insertSections([.tip], beforeSection: .enableTrackers)
-        snapshot.appendItems(tooltipSectionItems, toSection: .tip)
-        dataSource.apply(snapshot)
     }
     
     fileprivate func updateTelemetry(_ settingsKey: SettingsToggle, _ isOn: Bool) {
@@ -386,8 +392,6 @@ class TrackingProtectionViewController: UIViewController {
 
 extension TrackingProtectionViewController: TooltipViewDelegate {
     func didTapTooltipDismissButton() {
-        var snapshot = dataSource.snapshot()
-        snapshot.deleteSections([.tip])
-        dataSource.apply(snapshot, animatingDifferences: true)
+        onboardingEventsHandler.route = nil
     }
 }

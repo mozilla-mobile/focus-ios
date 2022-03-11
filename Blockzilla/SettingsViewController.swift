@@ -368,9 +368,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
         case .mozilla:
             
-            if !onboardingEventsHandler.shouldShowNewOnboarding && indexPath.row == 0 {
+            if !onboardingEventsHandler.shouldShowNewOnboarding() && indexPath.row == 0 {
                 cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
-            } else if (!onboardingEventsHandler.shouldShowNewOnboarding && indexPath.row == 1) || indexPath.row == 0 {
+            } else if (!onboardingEventsHandler.shouldShowNewOnboarding() && indexPath.row == 1) || indexPath.row == 0 {
                 cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
                 cell.textLabel?.text = String(format: UIConstants.strings.aboutTitle, AppInfo.productName)
                 cell.accessibilityIdentifier = "settingsViewController.about"
@@ -392,7 +392,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        (sections[section] == .mozilla && onboardingEventsHandler.shouldShowNewOnboarding) ? 2 : sections[section].numberOfRows
+        (sections[section] == .mozilla && onboardingEventsHandler.shouldShowNewOnboarding()) ? 2 : sections[section].numberOfRows
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {

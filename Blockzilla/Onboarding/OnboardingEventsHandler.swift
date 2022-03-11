@@ -7,65 +7,94 @@ import Combine
 
 class OnboardingEventsHandler {
     
-    private let nimbus = NimbusWrapper.shared
-    
-    var shouldShowNewOnboarding: Bool {
-    #if DEBUG
-        guard UserDefaults.standard.bool(forKey: "IgnoreOnboardingExperiment") else {
-            return nimbus.shouldShowNewOnboarding
-        }
-        return UserDefaults.standard.bool(forKey: "ShowNewOnboarding")
-    #else
-        return nimbus.shouldShowNewOnboarding
-    #endif
-    }
+    private let alwaysShowOnboarding: () -> Bool
+    private let setShownTips: (Set<ToolTipRoute>) -> Void
+    public let shouldShowNewOnboarding: () -> Bool
     
     enum Action {
         case applicationDidLaunch
-        case onboardingDidDismiss
         case enterHome
         case startBrowsing
         case showTrackingProtection
     }
     
-    @Published var shouldPresentOnboarding: Bool = false
-    @Published var shouldPresentShieldToolTip: Bool = false
-    @Published var shouldPresentTrashToolTip: Bool = false
-    @Published var shouldPresentMenuToolTip: Bool = false
-    @Published var shouldPresentTrackingProtectionToolTip: Bool = false
+    enum OnboardingType: Equatable, Hashable, Codable {
+        init(_ shouldShowNewOnboarding: Bool) {
+            self = shouldShowNewOnboarding ? .new : .old
+        }
+        case new
+        case old
+    }
+    
+    enum ToolTipRoute: Equatable, Hashable, Codable {
+        case onboarding(OnboardingType)
+        case trackingProtection
+        case trackingProtectionShield
+        case trash
+        case menu
+    }
+    
+    @Published var route: ToolTipRoute?
     
     private var visitedURLcounter = 0
-    private var menuToolTipDidAppear = false
-    private var trackingProtectionToolTipDidAppear = false
+    private var shownTips = Set<ToolTipRoute>() {
+        didSet {
+            setShownTips(shownTips)
+        }
+    }
+    
+    internal init(
+        alwaysShowOnboarding: @escaping () -> Bool,
+        shouldShowNewOnboarding: @escaping () -> Bool,
+        visitedURLcounter: Int = 0,
+        getShownTips: () -> Set<OnboardingEventsHandler.ToolTipRoute>,
+        setShownTips: @escaping (Set<OnboardingEventsHandler.ToolTipRoute>) -> Void
+    ) {
+        self.alwaysShowOnboarding = alwaysShowOnboarding
+        self.shouldShowNewOnboarding = shouldShowNewOnboarding
+        self.visitedURLcounter = visitedURLcounter
+        self.setShownTips = setShownTips
+        self.shownTips = getShownTips()
+    }
     
     func send(_ action: OnboardingEventsHandler.Action) {
         switch action {
         case .applicationDidLaunch:
-            var onboardingDidAppear = UserDefaults.standard.bool(forKey: OnboardingConstants.onboardingDidAppear)
-        #if DEBUG
-            if UserDefaults.standard.bool(forKey: "AlwaysShowOnboarding") {
-                onboardingDidAppear = false
-            }
-        #endif
-            shouldPresentOnboarding = !onboardingDidAppear
-            
-        case .onboardingDidDismiss:
-            UserDefaults.standard.set(true, forKey: OnboardingConstants.onboardingDidAppear)
-            UserDefaults.standard.set(AppInfo.shortVersion, forKey: OnboardingConstants.whatsNewVersion)
+            let onboardingRoute = ToolTipRoute.onboarding(OnboardingType(shouldShowNewOnboarding()))
+            show(route: onboardingRoute)
             
         case .enterHome:
-            shouldPresentMenuToolTip = shouldPresentOnboarding && !menuToolTipDidAppear
-            menuToolTipDidAppear = true
+            guard shouldShowNewOnboarding() else { return }
+            show(route: .menu)
             
         case .startBrowsing:
             visitedURLcounter += 1
-            shouldPresentShieldToolTip = shouldPresentOnboarding && visitedURLcounter == 1
-            shouldPresentTrashToolTip = shouldPresentOnboarding && visitedURLcounter == 3
+            guard shouldShowNewOnboarding() else { return }
+            
+            if visitedURLcounter == 1 {
+                show(route: .trackingProtectionShield)
+            }
+            
+            if visitedURLcounter == 3 {
+                show(route: .trash)
+            }
             
         case .showTrackingProtection:
-            shouldPresentTrackingProtectionToolTip = shouldPresentOnboarding && !trackingProtectionToolTipDidAppear
-            trackingProtectionToolTipDidAppear = true
+            guard shouldShowNewOnboarding() else { return }
+            show(route: .trackingProtection)
         }
     }
     
+    private func show(route: ToolTipRoute) {
+        #if DEBUG
+        if alwaysShowOnboarding() {
+            shownTips.remove(route)
+        }
+        #endif
+        
+        if !shownTips.contains(route) {
+            self.route = route
+            shownTips.insert(route)
+        }
+    }
 }
