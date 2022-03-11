@@ -7,18 +7,9 @@ import Combine
 
 class OnboardingEventsHandler {
     
-    private let nimbus = NimbusWrapper.shared
-    
-    public var shouldShowNewOnboarding: Bool {
-    #if DEBUG
-        guard UserDefaults.standard.bool(forKey: "IgnoreOnboardingExperiment") else {
-            return nimbus.shouldShowNewOnboarding
-        }
-        return UserDefaults.standard.bool(forKey: "ShowNewOnboarding")
-    #else
-        return nimbus.shouldShowNewOnboarding
-    #endif
-    }
+    private let alwaysShowOnboarding: () -> Bool
+    private let onboardingDidAppear: () -> Bool
+    public let shouldShowNewOnboarding: () -> Bool
     
     enum Action {
         case applicationDidLaunch
@@ -48,28 +39,41 @@ class OnboardingEventsHandler {
     private var visitedURLcounter = 0
     private var shownTips = Set<ToolTipRoute>()
     
+    internal init(
+        alwaysShowOnboarding: @escaping () -> Bool,
+        shouldShowNewOnboarding: @escaping () -> Bool,
+        onboardingDidAppear: @escaping () -> Bool,
+        visitedURLcounter: Int = 0,
+        shownTips: Set<OnboardingEventsHandler.ToolTipRoute> = Set<ToolTipRoute>()) {
+            self.alwaysShowOnboarding = alwaysShowOnboarding
+            self.shouldShowNewOnboarding = shouldShowNewOnboarding
+            self.onboardingDidAppear = onboardingDidAppear
+            self.visitedURLcounter = visitedURLcounter
+            self.shownTips = shownTips
+        }
+    
     func send(_ action: OnboardingEventsHandler.Action) {
         switch action {
         case .applicationDidLaunch:
-            let type = OnboardingType(shouldShowNewOnboarding)
-            let onboardingRoute = ToolTipRoute.onboarding(type)
-            if UserDefaults.standard.bool(forKey: OnboardingConstants.onboardingDidAppear) {
+            let onboardingRoute = ToolTipRoute.onboarding(OnboardingType(shouldShowNewOnboarding()))
+            
+            if onboardingDidAppear() {
                 shownTips.insert(onboardingRoute)
             }
-        #if DEBUG
-            if UserDefaults.standard.bool(forKey: "AlwaysShowOnboarding") {
+            #if DEBUG
+            if alwaysShowOnboarding() {
                 shownTips.remove(onboardingRoute)
             }
-        #endif
+            #endif
             show(route: onboardingRoute)
             
         case .enterHome:
-            guard shouldShowNewOnboarding else { return }
+            guard shouldShowNewOnboarding() else { return }
             show(route: .menu)
             
         case .startBrowsing:
             visitedURLcounter += 1
-            guard shouldShowNewOnboarding else { return }
+            guard shouldShowNewOnboarding() else { return }
             
             if visitedURLcounter == 1 {
                 show(route: .trackingProtectionShield)
@@ -80,7 +84,7 @@ class OnboardingEventsHandler {
             }
             
         case .showTrackingProtection:
-            guard shouldShowNewOnboarding else { return }
+            guard shouldShowNewOnboarding() else { return }
             show(route: .trackingProtection)
         }
     }

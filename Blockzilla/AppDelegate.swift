@@ -35,11 +35,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     private lazy var browserViewController = {
         BrowserViewController(appSplashController: self)
     }()
-
+    private let nimbus = NimbusWrapper.shared
     private var queuedUrl: URL?
     private var queuedString: String?
     private let whatsNewEventsHandler = WhatsNewEventsHandler()
-    private let onboardingEventsHandler = OnboardingEventsHandler()
+    private lazy var onboardingEventsHandler = OnboardingEventsHandler(
+        alwaysShowOnboarding: {
+            UserDefaults.standard.bool(forKey: OnboardingConstants.alwaysShowOnboarding)
+        },
+        shouldShowNewOnboarding: { [unowned self] in
+            #if DEBUG
+            guard UserDefaults.standard.bool(forKey: OnboardingConstants.ignoreOnboardingExperiment) else {
+                return nimbus.shouldShowNewOnboarding
+            }
+            return UserDefaults.standard.bool(forKey: OnboardingConstants.showNewOnboarding)
+            #else
+            return nimbus.shouldShowNewOnboarding
+            #endif
+        },
+        onboardingDidAppear: {
+            UserDefaults.standard.bool(forKey: OnboardingConstants.onboardingDidAppear)
+        })
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         if AppInfo.testRequestsReset() {
