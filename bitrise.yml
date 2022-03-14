@@ -182,6 +182,28 @@ workflows:
         stack: osx-xcode-13.2.x
         machine_type_id: g2.4core
 
+  runParallelTestsM1Beta:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - cache-pull@2: {}
+    - cache-push@2:
+        inputs:
+        - cache_paths: "/Users/vagrant/git"
+    - build-router-start@0:
+        inputs:
+        - wait_for_builds: 'true'
+        - access_token: "$FOCUS_PARALLEL"
+        - workflows: |-
+            runFocus
+            runKlar
+    - build-router-wait@0:
+        inputs:
+        - access_token: "$FOCUS_PARALLEL"
+    - deploy-to-bitrise-io@1: {}
+    meta:
+      bitrise.io:
+        stack: osx-xcode-13.2.x
 
   runFocus:
     steps:
@@ -232,8 +254,14 @@ workflows:
     - xcode-test@2:
         inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+            CODE_SIGNING_ALLOWED=NO -testPlan UnitTests
+        - scheme: Focus
+    - xcode-test@2:
+        inputs:
+        - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan $TEST_PLAN_NAME
         - scheme: Focus
+        - simulator_device: iPhone 11
     - deploy-to-bitrise-io@1: {}
     - github-status@2:
         inputs:
@@ -296,9 +324,15 @@ workflows:
         - scheme: Klar
     - xcode-test@2:
         inputs:
+        - scheme: Klar
+        - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+            CODE_SIGNING_ALLOWED=NO -testPlan UnitTests
+    - xcode-test@2:
+        inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan "$TEST_PLAN_NAME"
         - scheme: Klar
+        - simulator_device: iPhone 11
     - deploy-to-bitrise-io@1: {}
     - github-status@2:
         inputs:
@@ -404,7 +438,6 @@ workflows:
             # debug log
             set -x
             # workaround until 2.187 version is installed. Error with 2.186
-            fastlane update_fastlane
 
             ./l10n-screenshots.sh --test-without-building $MOZ_LOCALES
             mkdir -p artifacts
@@ -449,7 +482,7 @@ workflows:
             #!/usr/bin/env bash
             set -x
             # workaround until 2.187 version is installed. Error with 2.186
-            fastlane update_fastlane
+            
             ./l10n-screenshots.sh en-US
     - deploy-to-bitrise-io@1.10:
         inputs:

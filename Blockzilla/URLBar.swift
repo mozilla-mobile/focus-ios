@@ -111,6 +111,8 @@ class URLBar: UIView {
             guard oldValue != showToolset else { return }
             isIPadRegularDimensions = showToolset
             activateConstraints(showToolset, shownConstraints: showToolsetConstraints, hiddenConstraints: hideToolsetConstraints)
+            guard UIDevice.current.orientation.isLandscape && UIDevice.current.userInterfaceIdiom == .phone else { return }
+            showToolset = false
         }
     }
     private var hideToolsetConstraints = [Constraint]()
@@ -839,7 +841,7 @@ class URLBar: UIView {
         toolset.backButton.alpha = shouldShowToolset ? expandAlpha : 0
         toolset.forwardButton.alpha = shouldShowToolset ? expandAlpha : 0
         toolset.deleteButton.alpha = shouldShowToolset ? expandAlpha : 0
-        toolset.contextMenuButton.alpha = isEditing ? expandAlpha : (shouldShowToolset ? expandAlpha : 0)
+        toolset.contextMenuButton.alpha = expandAlpha
 
         collapsedTrackingProtectionBadge.alpha = 0
         if isEditing {
