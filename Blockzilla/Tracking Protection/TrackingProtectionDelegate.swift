@@ -6,5 +6,6 @@
 import Foundation
 
 protocol TrackingProtectionDelegate: AnyObject {
+        
     func trackingProtectionDidToggleProtection(enabled: Bool)
 }
