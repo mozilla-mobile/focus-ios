@@ -19,14 +19,8 @@ enum AppPhase {
 }
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {    
-    static let prefIntroDone = "IntroDone"
-    static let prefIntroVersion = 2
-    static let prefWhatsNewDone = "WhatsNewDone"
-    static let prefWhatsNewCounter = "WhatsNewCounter"
-    
+class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
     private lazy var authenticationManager = AuthenticationManager()
-    
     @Published private var appPhase: AppPhase = .notRunning
 
     // This enum can be expanded to support all new shortcuts added to menu.
@@ -48,11 +42,46 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
         return splashView
     }()
     
-    private lazy var browserViewController = BrowserViewController(authenticationManager: authenticationManager)
-
+    private lazy var browserViewController = BrowserViewController(
+        authenticationManager: authenticationManager,
+        onboardingEventsHandler: onboardingEventsHandler
+    )
+    
+    private let nimbus = NimbusWrapper.shared
     private var queuedUrl: URL?
     private var queuedString: String?
+    private let whatsNewEventsHandler = WhatsNewEventsHandler()
     private var cancellables = Set<AnyCancellable>()
+    
+    private lazy var onboardingEventsHandler = OnboardingEventsHandler(
+        alwaysShowOnboarding: {
+            UserDefaults.standard.bool(forKey: OnboardingConstants.alwaysShowOnboarding)
+        },
+        shouldShowNewOnboarding: { [unowned self] in
+            #if DEBUG
+            if AppInfo.isTesting() {
+                return false
+            }
+            if UserDefaults.standard.bool(forKey: OnboardingConstants.ignoreOnboardingExperiment) {
+                return true
+            }
+            return !UserDefaults.standard.bool(forKey: OnboardingConstants.showOldOnboarding)
+            #else
+            return nimbus.shouldShowNewOnboarding
+            #endif
+        },
+        getShownTips: {
+            return UserDefaults
+                .standard
+                .data(forKey: OnboardingConstants.shownTips)
+                .flatMap {
+                    try? JSONDecoder().decode(Set<OnboardingEventsHandler.ToolTipRoute>.self, from: $0)
+                } ?? []
+        }, setShownTips: { tips in
+            let data = try? JSONEncoder().encode(tips)
+            UserDefaults.standard.set(data, forKey: OnboardingConstants.shownTips)
+        }
+    )
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         appPhase = .didFinishLaunching
@@ -144,60 +173,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
         window?.rootViewController = browserViewController
         window?.makeKeyAndVisible()
         window?.overrideUserInterfaceStyle = UserDefaults.standard.theme.userInterfaceStyle
-
+        
         WebCacheUtils.reset()
-
+        
         KeyboardHelper.defaultHelper.startObserving()
-
-        let prefIntroDone = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone)
-
-        // Short circuit if we are testing. We special case the first run handling and completely
-        // skip the what's new handling. This logic could be put below but that is already way
-        // too complicated. Everything under this commen should really be refactored.
         
         if AppInfo.isTesting() {
             // Only show the First Run UI if the test asks for it.
             if AppInfo.isFirstRunUIEnabled() {
-                let firstRunViewController = IntroViewController()
-                firstRunViewController.modalPresentationStyle = .fullScreen
-                self.browserViewController.present(firstRunViewController, animated: false, completion: nil)
+                onboardingEventsHandler.send(.applicationDidLaunch)
             }
             return true
         }
-
-        let needToShowFirstRunExperience = prefIntroDone < AppDelegate.prefIntroVersion
-        if needToShowFirstRunExperience {
-            // Show the first run UI asynchronously to avoid the "unbalanced calls to begin/end appearance transitions" warning.
-            DispatchQueue.main.async {
-                // Set the prefIntroVersion viewed number in the same context as the presentation.
-                UserDefaults.standard.set(AppDelegate.prefIntroVersion, forKey: AppDelegate.prefIntroDone)
-                UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
-                let introViewController = IntroViewController()
-                introViewController.modalPresentationStyle = .fullScreen
-                self.browserViewController.present(introViewController, animated: false, completion: nil)
-            }
-        }
-
-        // Don't highlight whats new on a fresh install (prefIntroDone == 0 on a fresh install)
-        if let lastShownWhatsNew = UserDefaults.standard.string(forKey: AppDelegate.prefWhatsNewDone)?.first, let currentMajorRelease = AppInfo.shortVersion.first {
-            if prefIntroDone != 0 && lastShownWhatsNew != currentMajorRelease {
-
-                let counter = UserDefaults.standard.integer(forKey: AppDelegate.prefWhatsNewCounter)
-                switch counter {
-                case 4:
-                    // Shown three times, remove counter
-                    UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
-                    UserDefaults.standard.removeObject(forKey: AppDelegate.prefWhatsNewCounter)
-                default:
-                    // Show highlight
-                    UserDefaults.standard.set(counter+1, forKey: AppDelegate.prefWhatsNewCounter)
-                }
-            }
-        }
-
+        
+        onboardingEventsHandler.send(.applicationDidLaunch)
+        whatsNewEventsHandler.highlightWhatsNewButton()
+        
         return true
     }
-    
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
@@ -409,7 +402,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
         splashView.isHidden = true
         splashView.removeFromSuperview()
     }
-
+    
     func showSplashView() {
         browserViewController.deactivateUrlBarOnHomeView()
         window!.addSubview(splashView)
