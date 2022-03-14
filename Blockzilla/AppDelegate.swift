@@ -45,8 +45,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         },
         shouldShowNewOnboarding: { [unowned self] in
             #if DEBUG
-            guard UserDefaults.standard.bool(forKey: OnboardingConstants.ignoreOnboardingExperiment) else {
-                return nimbus.shouldShowNewOnboarding
+            if AppInfo.isTesting() {
+                return false
+            }
+            if UserDefaults.standard.bool(forKey: OnboardingConstants.ignoreOnboardingExperiment) {
+                return true
             }
             return !UserDefaults.standard.bool(forKey: OnboardingConstants.showOldOnboarding)
             #else
