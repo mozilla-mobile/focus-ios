@@ -63,9 +63,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
                 return false
             }
             if UserDefaults.standard.bool(forKey: OnboardingConstants.ignoreOnboardingExperiment) {
-                return true
+                return !UserDefaults.standard.bool(forKey: OnboardingConstants.showOldOnboarding)
+            } else {
+                return nimbus.shouldShowNewOnboarding
             }
-            return !UserDefaults.standard.bool(forKey: OnboardingConstants.showOldOnboarding)
             #else
             return nimbus.shouldShowNewOnboarding
             #endif

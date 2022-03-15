@@ -429,9 +429,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 navigationController?.pushViewController(siriFavoriteVC, animated: true)
             }
         case .mozilla:
-            if indexPath.row == 1 {
+            if (!onboardingEventsHandler.shouldShowNewOnboarding() && indexPath.row == 1) || indexPath.row == 0 {
                 aboutClicked()
-            } else if indexPath.row == 2 {
+            } else {
                 let appId = AppInfo.config.appId
                 if let reviewURL = URL(string: "https://itunes.apple.com/app/id\(appId)?action=write-review"), UIApplication.shared.canOpenURL(reviewURL) {
                     UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
