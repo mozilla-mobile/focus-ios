@@ -62,7 +62,8 @@ class URLBar: UIView {
     var shouldPresent = false
     
     public var contextMenuButton: InsetButton { toolset.contextMenuButton }
-
+    public var deleteButton: InsetButton { toolset.deleteButton }
+    
     private let leftBarViewLayoutGuide = UILayoutGuide()
     private let rightBarViewLayoutGuide = UILayoutGuide()
 
@@ -841,7 +842,7 @@ class URLBar: UIView {
         toolset.backButton.alpha = shouldShowToolset ? expandAlpha : 0
         toolset.forwardButton.alpha = shouldShowToolset ? expandAlpha : 0
         toolset.deleteButton.alpha = shouldShowToolset ? expandAlpha : 0
-        toolset.contextMenuButton.alpha = isEditing ? expandAlpha : (shouldShowToolset ? expandAlpha : 0)
+        toolset.contextMenuButton.alpha = expandAlpha
 
         collapsedTrackingProtectionBadge.alpha = 0
         if isEditing {
