@@ -89,13 +89,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
         
         $appPhase.sink { [unowned self] phase in
             switch phase {
-            case .notRunning:
-                break
-                
-            case .didFinishLaunching:
-                authenticateWithBiometrics()
-                
-            case .willEnterForeground:
+            case .didFinishLaunching, .willEnterForeground:
                 authenticateWithBiometrics()
                 
             case .didBecomeActive:
@@ -107,7 +101,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
             case .didEnterBackgroundkground:
                 authenticationManager.logout()
                 
-            case .willTerminate:
+            case .notRunning, .willTerminate:
                 break
             }
         }
