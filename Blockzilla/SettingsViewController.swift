@@ -215,7 +215,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     private func createBiometricLoginToggleIfAvailable() -> BlockerToggle? {
-        
         guard authenticationManager.canEvaluatePolicy else { return nil }
 
         let label: String

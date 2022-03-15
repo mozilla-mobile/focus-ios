@@ -33,7 +33,7 @@ class SplashView: UIView {
         button.tintColor = .black
         button.contentHorizontalAlignment = .fill
         button.contentVerticalAlignment = .fill
-        button.addBackgroundView(cornerRadius: 22, padding: 8)
+        button.addBackgroundView(cornerRadius: .cornerRadius, padding: .padding)
         button.addTarget(self, action:#selector(self.showAuth), for: .touchUpInside)
         return button
     }()
@@ -59,7 +59,7 @@ class SplashView: UIView {
         authButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(logoImage).inset(100)
-            make.height.width.equalTo(44)
+            make.height.width.equalTo(CGFloat.authButtonSize)
         }
         
         updateUI()
@@ -78,15 +78,26 @@ class SplashView: UIView {
     
     func animateDissapear(_ duration: Double = 0.25) {
         UIView.animate(withDuration: duration, delay: 0.0, options: UIView.AnimationOptions(), animations: {
-            self.logoImage.layer.transform = CATransform3DMakeScale(0.8, 0.8, 1.0)
+            self.logoImage.layer.transform = .start
         }, completion: { success in
             UIView.animate(withDuration: duration, delay: 0.0, options: UIView.AnimationOptions(), animations: {
                 self.alpha = 0
-                self.logoImage.layer.transform = CATransform3DMakeScale(2.0, 2.0, 1.0)
+                self.logoImage.layer.transform = .mid
             }, completion: { success in
                 self.isHidden = true
                 self.logoImage.layer.transform = CATransform3DIdentity
             })
         })
     }
+}
+
+extension CGFloat {
+    static let cornerRadius: CGFloat = 22
+    static let padding: CGFloat = 8
+    static let authButtonSize = 44
+}
+
+extension CATransform3D {
+    static let start = CATransform3DMakeScale(0.8, 0.8, 1.0)
+    static let mid = CATransform3DMakeScale(2.0, 2.0, 1.0)
 }
