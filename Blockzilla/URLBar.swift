@@ -291,10 +291,10 @@ class URLBar: UIView {
             if inBrowsingMode {
                 make.trailing.equalTo(safeAreaLayoutGuide)
             }else {
-                make.trailing.equalTo(safeAreaLayoutGuide).offset(-UIConstants.layout.urlBarMargin)
+                make.trailing.equalTo(safeAreaLayoutGuide).offset(-14)
             }
             make.centerY.equalTo(self)
-            make.size.equalTo(toolset.backButton)
+            make.size.equalTo(36)
         }
         
         toolset.deleteButton.snp.makeConstraints { make in
@@ -311,7 +311,7 @@ class URLBar: UIView {
             if inBrowsingMode {
                 compressedBarConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide.snp.trailing).inset(UIConstants.layout.urlBarMargin).constraint)
             } else {
-                compressedBarConstraints.append(make.trailing.equalTo(contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarMargin).constraint)
+                compressedBarConstraints.append(make.trailing.equalTo(contextMenuButton.snp.leading).constraint)
             }
 
             expandedBarConstraints.append(make.trailing.equalTo(rightBarViewLayoutGuide.snp.trailing).constraint)
