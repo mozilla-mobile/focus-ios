@@ -33,7 +33,7 @@ class SplashView: UIView {
         button.tintColor = .black
         button.contentHorizontalAlignment = .fill
         button.contentVerticalAlignment = .fill
-        button.addBackgroundView(cornerRadius: .cornerRadius, padding: .padding)
+        button.addBackgroundView(color: .authButtonBackground, cornerRadius: .cornerRadius, padding: .padding)
         button.addTarget(self, action:#selector(self.showAuth), for: .touchUpInside)
         return button
     }()
@@ -91,13 +91,17 @@ class SplashView: UIView {
     }
 }
 
-extension CGFloat {
+fileprivate extension UIColor {
+    static let authButtonBackground = UIColor.white.withAlphaComponent(0.5)
+}
+
+fileprivate extension CGFloat {
     static let cornerRadius: CGFloat = 22
     static let padding: CGFloat = 8
     static let authButtonSize = 44
 }
 
-extension CATransform3D {
+fileprivate extension CATransform3D {
     static let start = CATransform3DMakeScale(0.8, 0.8, 1.0)
     static let mid = CATransform3DMakeScale(2.0, 2.0, 1.0)
 }
