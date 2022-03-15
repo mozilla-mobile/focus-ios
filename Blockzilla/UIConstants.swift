@@ -15,6 +15,9 @@ struct UIConstants {
         static let shieldIconInset: Float = 9
         static let shieldIconIPadInset: Float = 15
         static let shieldIconSize: Float = 19
+        static let contextMenuButtonSize: CGFloat = 36
+        static let contextMenuButtonMargin: CGFloat = 14
+        static let contextMenuIconSize: CGFloat = 28
         static let overlayAnimationDuration: TimeInterval = 0.25
         static let autocompleteAnimationDuration: TimeInterval = 0.2
         static let autocompleteAfterDelayDuration: TimeInterval = 0.5
