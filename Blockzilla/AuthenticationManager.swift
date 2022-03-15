@@ -16,14 +16,14 @@ class AuthenticationManager {
     var userEnabledBiometrics: Bool {  Settings.getToggle(SettingsToggle.biometricLogin) }
     
     init() {
-        canEvaluatePolicy = context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil)
+        canEvaluatePolicy = context.canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
         biometricType = context.biometryType
     }
     
     @MainActor
     func authenticateWithBiometrics() async {
         context = LAContext()
-        canEvaluatePolicy = context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil)
+        canEvaluatePolicy = context.canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
         
         guard userEnabledBiometrics, canEvaluatePolicy else {
             authenticationState = .loggedin
