@@ -14,10 +14,6 @@ struct UIConstants {
         static let deleteAnimationDuration: TimeInterval = 0.25
         static let shieldIconInset: Float = 9
         static let shieldIconIPadInset: Float = 15
-        static let shieldIconSize: Float = 19
-        static let contextMenuButtonSize: CGFloat = 36
-        static let contextMenuButtonMargin: CGFloat = 14
-        static let contextMenuIconSize: CGFloat = 28
         static let shieldIconSize: Float = 24
         static let overlayAnimationDuration: TimeInterval = 0.25
         static let autocompleteAnimationDuration: TimeInterval = 0.2
@@ -155,6 +151,9 @@ struct UIConstants {
         static let onboardingLayoutMarginBottom: CGFloat = 0
         static let onboardingButtonButtomInsetDivider: CGFloat = 20
         static let onboardingButtonLeadingTrailingInsetDivider: CGFloat = 5
+        static let contextMenuButtonSize: CGFloat = 36
+        static let contextMenuButtonMargin: CGFloat = 14
+        static let contextMenuIconSize: CGFloat = 28
     }
 
     struct strings {
