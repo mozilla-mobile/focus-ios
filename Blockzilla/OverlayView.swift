@@ -43,6 +43,9 @@ class OverlayView: UIView {
     private let maxNumOfSuggestions = UIDevice.current.isSmallDevice() ? UIConstants.layout.smallDeviceMaxNumSuggestions : UIConstants.layout.largeDeviceMaxNumSuggestions
     public var currentURL = ""
     
+    private var scrollView = UIScrollView()
+    public var scrollViewContentSize: ConstraintRelatableTarget!
+    
     var isIpadView: Bool = false {
         didSet {
             searchSuggestionsPrompt.isIpadView = isIpadView
@@ -60,13 +63,19 @@ class OverlayView: UIView {
     init() {
         super.init(frame: CGRect.zero)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
+        
+        addSubview(scrollView)
+        
+        scrollView.snp.makeConstraints { make in
+            make.top.leading.bottom.trailing.equalTo(safeAreaLayoutGuide)
+        }
     
         searchSuggestionsPrompt.clipsToBounds = true
         searchSuggestionsPrompt.accessibilityIdentifier = "SearchSuggestionsPromptView"
-        addSubview(searchSuggestionsPrompt)
+        scrollView.addSubview(searchSuggestionsPrompt)
 
         searchSuggestionsPrompt.snp.makeConstraints { make in
-            make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
+            make.top.leading.trailing.equalToSuperview()
         }
 
         for i in 0..<maxNumOfSuggestions {
@@ -74,7 +83,7 @@ class OverlayView: UIView {
         }
 
         topBorder.backgroundColor = .grey90.withAlphaComponent(0.4)
-        addSubview(topBorder)
+        scrollView.addSubview(topBorder)
 
         let padding = UIConstants.layout.searchButtonInset
         let attributedString = NSMutableAttributedString(string: UIConstants.strings.addToAutocompleteButton, attributes: [.foregroundColor: UIColor.grey10])
@@ -89,7 +98,7 @@ class OverlayView: UIView {
         addToAutocompleteButton.accessibilityIdentifier = "AddToAutocomplete.button"
         addToAutocompleteButton.backgroundColor = .ink90
         setUpOverlayButton(button: addToAutocompleteButton)
-        addSubview(addToAutocompleteButton)
+        scrollView.addSubview(addToAutocompleteButton)
 
         addToAutocompleteButton.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
@@ -108,10 +117,10 @@ class OverlayView: UIView {
         } else {
             findInPageButton.contentHorizontalAlignment = .left
         }
-        addSubview(findInPageButton)
+        scrollView.addSubview(findInPageButton)
         
         lastSeparator.isHidden = true
-        addSubview(lastSeparator)
+        scrollView.addSubview(lastSeparator)
         
         copyButton.titleLabel?.font = .body16
         copyButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
@@ -123,7 +132,7 @@ class OverlayView: UIView {
             copyButton.contentHorizontalAlignment = .left
         }
         copyButton.addTarget(self, action: #selector(didPressCopy), for: .touchUpInside)
-        addSubview(copyButton)
+        scrollView.addSubview(copyButton)
         
         updateLayout(for: isIpadView)
     }
@@ -132,9 +141,10 @@ class OverlayView: UIView {
         searchSuggestionsPrompt.backgroundColor = iPadView ? .clear : .ink90
         
         topBorder.snp.remakeConstraints { make in
-            make.top.equalTo(searchSuggestionsPrompt.snp.bottom)
-            make.leading.trailing.equalTo(safeAreaLayoutGuide)
+            make.top.equalTo(scrollView.snp.bottom)
+            make.leading.trailing.equalTo(scrollView)
             make.height.equalTo(iPadView ? 0.5 : 0)
+            make.width.equalTo(scrollViewContentSize)
         }
         
         self.searchButtonGroup[0].snp.remakeConstraints { make in
@@ -143,7 +153,7 @@ class OverlayView: UIView {
                 make.width.equalTo(searchSuggestionsPrompt).multipliedBy(UIConstants.layout.suggestionViewWidthMultiplier)
                 make.centerX.equalToSuperview()
             } else {
-                make.width.equalTo(safeAreaLayoutGuide)
+                make.width.equalTo(scrollViewContentSize)
                 make.leading.trailing.equalTo(safeAreaLayoutGuide)
             }
         }
@@ -154,10 +164,12 @@ class OverlayView: UIView {
                 make.top.equalTo(searchButtonGroup[i-1].snp.bottom)
                 make.leading.trailing.equalTo(iPadView ? searchButtonGroup[i-1] :safeAreaLayoutGuide)
                 make.height.equalTo(UIConstants.layout.overlayButtonHeight)
+                make.width.equalTo(scrollViewContentSize)
             }
             
             self.separatorGroup[i - 1].snp.remakeConstraints { make in
                 make.height.equalTo(0.5)
+                make.width.equalTo(scrollViewContentSize)
                 make.top.equalTo(searchButtonGroup[i - 1].snp.bottom)
                 make.leading.equalTo(searchButtonGroup[i].snp.leading).inset(52)
                 make.trailing.equalTo(searchButtonGroup[i].snp.trailing)
@@ -430,6 +442,7 @@ class OverlayView: UIView {
                 }
             } else {
                 make.leading.trailing.equalTo(safeAreaLayoutGuide)
+                make.width.equalTo(scrollViewContentSize)
             }
             if let lastSearchButton = searchButtonGroup.last {
                 if searchButtonGroup.count >= 0 && !lastSearchButton.isHidden {

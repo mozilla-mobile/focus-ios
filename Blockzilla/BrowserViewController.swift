@@ -28,7 +28,16 @@ class BrowserViewController: UIViewController {
     private var keyboardState: KeyboardState?
     private let browserToolbar = BrowserToolbar()
     private var homeViewController: HomeViewController!
-    private let overlayView = OverlayView()
+    private lazy var overlayView: OverlayView = {
+        let overlayView = OverlayView()
+        overlayView.isHidden = true
+        overlayView.alpha = 0
+        overlayView.delegate = self
+        overlayView.backgroundColor = isIPadRegularDimensions ? .clear : .scrim.withAlphaComponent(0.48)
+        overlayView.setSearchSuggestionsPromptViewDelegate(delegate: self)
+        overlayView.scrollViewContentSize = view.snp.width
+        return overlayView
+    }()
     private let searchEngineManager = SearchEngineManager(prefs: UserDefaults.standard)
     private let urlBarContainer = UIView()
     private var urlBar: URLBar!
@@ -182,11 +191,12 @@ class BrowserViewController: UIViewController {
         browserToolbar.translatesAutoresizingMaskIntoConstraints = false
         mainContainerView.addSubview(browserToolbar)
 
-        overlayView.isHidden = true
-        overlayView.alpha = 0
-        overlayView.delegate = self
-        overlayView.backgroundColor = isIPadRegularDimensions ? .clear : .scrim.withAlphaComponent(0.48)
-        overlayView.setSearchSuggestionsPromptViewDelegate(delegate: self)
+//        overlayView.isHidden = true
+//        overlayView.alpha = 0
+//        overlayView.delegate = self
+//        overlayView.backgroundColor = isIPadRegularDimensions ? .clear : .scrim.withAlphaComponent(0.48)
+//        overlayView.setSearchSuggestionsPromptViewDelegate(delegate: self)
+//        overlayView.scrollViewContentSize = view.snp.width
         mainContainerView.addSubview(overlayView)
         
         mainContainerView.addSubview(shortcutsBackground)
