@@ -1243,7 +1243,7 @@ extension BrowserViewController: URLBarDelegate {
             isSecureConnection: webViewController.connectionIsSecure))
         : .homescreen
         
-        let trackingProtectionViewController = TrackingProtectionViewController(state: state, favIconPublisher: favIconPublisher)
+        let trackingProtectionViewController = TrackingProtectionViewController(state: state, onboardingEventsHandler: onboardingEventsHandler, favIconPublisher: favIconPublisher)
         trackingProtectionViewController.delegate = self
         if UIDevice.current.userInterfaceIdiom == .pad {
             trackingProtectionViewController.modalPresentationStyle = .popover
