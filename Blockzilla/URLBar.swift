@@ -1010,19 +1010,19 @@ class TrackingProtectionBadge: UIView {
         trackingProtectionOn.setContentHuggingPriority(.required, for: .horizontal)
         trackingProtectionOn.snp.makeConstraints { make in
             make.centerX.centerY.equalToSuperview()
-            make.width.equalTo(UIConstants.layout.urlBarButtonImageSize)
+            make.width.equalTo(UIConstants.layout.shieldIconSize)
         }
 
         trackingProtectionOff.setContentHuggingPriority(.required, for: .horizontal)
         trackingProtectionOff.snp.makeConstraints { make in
             make.centerX.centerY.equalToSuperview()
-            make.width.equalTo(UIConstants.layout.urlBarButtonImageSize)
+            make.width.equalTo(UIConstants.layout.shieldIconSize)
         }
         
         connectionNotSecure.setContentHuggingPriority(.required, for: .horizontal)
         connectionNotSecure.snp.makeConstraints { make in
             make.centerX.centerY.equalToSuperview()
-            make.width.equalTo(UIConstants.layout.urlBarButtonImageSize)
+            make.width.equalTo(UIConstants.layout.shieldIconSize)
         }
     }
 
