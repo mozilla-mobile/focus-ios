@@ -7,6 +7,8 @@ import SnapKit
 
 class SheetModalViewController: UIViewController {
     
+    public var withSpring: Bool = false
+    
     private lazy var containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemGroupedBackground
@@ -99,15 +101,23 @@ class SheetModalViewController: UIViewController {
     
     // MARK: Present and dismiss animation
     
-    func animatePresentContainer() {
-        let springTiming = UISpringTimingParameters(dampingRatio: 0.75, initialVelocity: CGVector(dx: 0, dy: 4))
-        let animator = UIViewPropertyAnimator(duration: 0.4, timingParameters: springTiming)
-        
-        animator.addAnimations {
-            self.containerViewBottomConstraint.update(offset: 0)
-            self.view.layoutIfNeeded()
+    func animatePresentContainer(/*withSpring: Bool*/) {
+        if withSpring {
+            let springTiming = UISpringTimingParameters(dampingRatio: 0.75, initialVelocity: CGVector(dx: 0, dy: 4))
+            let animator = UIViewPropertyAnimator(duration: 0.4, timingParameters: springTiming)
+            
+            animator.addAnimations {
+                self.containerViewBottomConstraint.update(offset: 0)
+                self.view.layoutIfNeeded()
+            }
+            animator.startAnimation()
+        } else {
+            let animator = UIViewPropertyAnimator(duration: 0.4, curve: .easeInOut) {
+                self.containerViewBottomConstraint?.update(offset: 0)
+                self.view.layoutIfNeeded()
+            }
+            animator.startAnimation()
         }
-        animator.startAnimation()
     }
     
     func animateContainerHeight(_ height: CGFloat) {

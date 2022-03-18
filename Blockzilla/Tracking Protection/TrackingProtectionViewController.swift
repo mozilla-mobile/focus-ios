@@ -326,7 +326,7 @@ class TrackingProtectionViewController: UIViewController {
         
         preferredContentSize = CGSize(
             width: tableView.contentSize.width,
-            height: tableView.contentSize.height + (headerHeight?.layoutConstraints[0].constant ?? .zero)
+            height: tableView.contentSize.height + (headerHeight?.layoutConstraints[0].constant ?? .zero) + (trackingProtectionItem.settingsValue ? .zero : 50)
         )
         if UIDevice.current.userInterfaceIdiom == .pad {
             self.presentingViewController?.presentedViewController?.preferredContentSize = CGSize(

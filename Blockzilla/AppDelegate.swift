@@ -514,8 +514,9 @@ extension AppDelegate {
         window?.rootViewController?.present(viewController, animated: animated, completion: nil)
     }
     
-    func presentSheet(viewController: UIViewController) {
+    func presentSheet(viewController: UIViewController, withSpring: Bool = true) {
         let vc = SheetModalViewController(containerViewController: viewController)
+        vc.withSpring = withSpring
         vc.modalPresentationStyle = .overCurrentContext
         // keep false
         // modal animation will be handled in VC itself
@@ -525,5 +526,5 @@ extension AppDelegate {
 
 protocol ModalDelegate {
     func presentModal(viewController: UIViewController, animated: Bool)
-    func presentSheet(viewController: UIViewController)
+    func presentSheet(viewController: UIViewController, withSpring: Bool)
 }

@@ -1250,7 +1250,8 @@ extension BrowserViewController: URLBarDelegate {
             trackingProtectionViewController.popoverPresentationController?.sourceView = urlBar.shieldIcon
             modalDelegate.presentModal(viewController: trackingProtectionViewController, animated: true)
         } else {
-            modalDelegate.presentSheet(viewController: trackingProtectionViewController)
+            let withSpring = trackingProtectionStatus == .off ? false : true
+            modalDelegate.presentSheet(viewController: trackingProtectionViewController, withSpring: withSpring)
         }
     }
 
