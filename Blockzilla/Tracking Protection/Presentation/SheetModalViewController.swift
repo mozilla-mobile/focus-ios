@@ -7,7 +7,7 @@ import SnapKit
 
 class SheetModalViewController: UIViewController {
     
-    public var withSpring: Bool = false
+    public var withSpring: Bool = true
     
     private lazy var containerView: UIView = {
         let view = UIView()
