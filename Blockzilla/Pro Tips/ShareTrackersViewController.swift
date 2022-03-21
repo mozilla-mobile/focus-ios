@@ -71,6 +71,8 @@ class ShareTrackersViewController: UIViewController {
         }
         stackView.snp.makeConstraints {
             $0.centerX.centerY.equalToSuperview()
+            $0.leading.greaterThanOrEqualToSuperview().offset(UIConstants.layout.shareTrackersLeadingTrailingOffset)
+            $0.trailing.lessThanOrEqualToSuperview().offset(UIConstants.layout.shareTrackersLeadingTrailingOffset)
         }
     }
     

@@ -154,6 +154,7 @@ struct UIConstants {
         static let contextMenuButtonSize: CGFloat = 36
         static let contextMenuButtonMargin: CGFloat = 14
         static let contextMenuIconSize: CGFloat = 28
+        static let shareTrackersLeadingTrailingOffset: CGFloat = 16
     }
 
     struct strings {
