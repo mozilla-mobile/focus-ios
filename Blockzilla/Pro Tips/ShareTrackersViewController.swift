@@ -68,7 +68,7 @@ class ShareTrackersViewController: UIViewController {
             $0.height.equalTo(CGFloat.trackerStatsShareButtonHeight)
         }
         shieldLogo.snp.makeConstraints {
-            $0.width.height.equalTo(CGFloat.shieldLogoSize)
+            $0.size.equalTo(CGFloat.shieldLogoSize)
         }
         stackView.snp.makeConstraints {
             $0.center.equalToSuperview()
