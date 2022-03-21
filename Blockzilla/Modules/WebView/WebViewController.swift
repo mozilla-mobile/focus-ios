@@ -236,7 +236,6 @@ class WebViewController: UIViewController, WebController {
 
         setupBlockLists()
         setupTrackingProtectionScripts()
-        trackingProtectionManager.trackingProtectionStatus = .on(TPPageStats())
     }
 
     func evaluate(_ javascript: String, completion: ((Any?, Error?) -> Void)?) {
