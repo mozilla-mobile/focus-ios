@@ -105,7 +105,6 @@ class WebViewController: UIViewController, WebController {
         browserView.load(URLRequest(url: URL(string: "about:blank")!))
         browserView.navigationDelegate = nil
         browserView.removeFromSuperview()
-        trackingProtectionManager.trackingProtectionStatus = .on(TPPageStats())
         setupWebview()
         self.browserView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
     }
@@ -233,9 +232,9 @@ class WebViewController: UIViewController, WebController {
 
     func enableTrackingProtection() {
         guard case .off = trackingProtectionManager.trackingProtectionStatus else { return }
-
         setupBlockLists()
         setupTrackingProtectionScripts()
+        trackingProtectionManager.trackingProtectionStatus = .on(TPPageStats())
     }
 
     func evaluate(_ javascript: String, completion: ((Any?, Error?) -> Void)?) {

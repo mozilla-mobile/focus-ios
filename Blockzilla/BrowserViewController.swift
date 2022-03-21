@@ -624,9 +624,6 @@ class BrowserViewController: UIViewController {
         interaction.donate { (error) in
             if let error = error { print(error.localizedDescription) }
         }
-        
-        // Reenable tracking protection after reset
-        Settings.set(true, forToggle: .trackingProtection)
     }
 
     private func clearBrowser() {
@@ -644,6 +641,7 @@ class BrowserViewController: UIViewController {
         homeViewController.refreshTipsDisplay()
         homeViewController.view.isHidden = false
         createURLBar()
+        updateLockIcon(trackingProtectionStatus: trackingProtectionManager.trackingProtectionStatus)
         shortcutsContainer.isHidden = false
         shortcutsBackground.isHidden = true
 
