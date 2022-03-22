@@ -275,15 +275,14 @@ class BrowserViewController: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         navigationController?.setNavigationBarHidden(true, animated: animated)
-
         let homeViewToolset = homeViewController.toolbar.toolset
         homeViewToolset.setHighlightWhatsNew(shouldHighlight: homeViewToolset.shouldShowWhatsNew())
         homeViewController.toolbar.layoutIfNeeded()
         browserToolbar.toolset.setHighlightWhatsNew(shouldHighlight: browserToolbar.toolset.shouldShowWhatsNew())
         browserToolbar.layoutIfNeeded()
-
-        super.viewWillAppear(animated)
     }
     
     
@@ -380,7 +379,6 @@ class BrowserViewController: UIViewController {
             .sink { [unowned self] shortcutsState in
                 
                 switch shortcutsState {
-                    
                 case .createShortcutViews:
                     self.mainContainerView.addSubview(shortcutsBackground)
                     shortcutsBackground.isHidden = true

@@ -81,7 +81,7 @@ class TrackingProtectionViewController: UIViewController {
                     item: self.trackingProtectionItem,
                     reuseIdentifier: "SwitchTableViewCell"
                 )
-                cell.valueChanged.sink { isOn in
+                cell.valueChanged.sink { [unowned self] isOn in
                     self.trackingProtectionItem.settingsValue = isOn
                     self.toggleProtection(isOn: isOn)
                     if isOn {
@@ -131,10 +131,10 @@ class TrackingProtectionViewController: UIViewController {
         SectionItem(
             configureCell: { [unowned self] _, _ in
                 let cell = SwitchTableViewCell(item: blockOtherItem, reuseIdentifier: "SwitchTableViewCell")
-                cell.valueChanged.sink { [self] isOn in
+                cell.valueChanged.sink { [unowned self] isOn in
                     if isOn {
                         let alertController = UIAlertController(title: nil, message: UIConstants.strings.settingsBlockOtherMessage, preferredStyle: .alert)
-                        alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherNo, style: .default) { _ in
+                        alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherNo, style: .default) { [unowned self] _ in
                             //TODO: Make sure to reset the toggle
                             cell.isOn = false
                             self.blockOtherItem.settingsValue = false
@@ -148,7 +148,7 @@ class TrackingProtectionViewController: UIViewController {
                                     trackerChanged: self.blockOtherItem.settingsKey.trackerChanged
                                 ))
                         })
-                        alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherYes, style: .destructive) { _ in
+                        alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherYes, style: .destructive) { [unowned self] _ in
                             self.blockOtherItem.settingsValue = true
                             self.updateTelemetry(self.blockOtherItem.settingsKey, true)
                             GleanMetrics
