@@ -158,15 +158,13 @@ class WebViewController: UIViewController, WebController {
             self.delegate?.webController(self, didUpdateEstimatedProgress: webView.estimatedProgress)
         }
         
-        switch trackingProtectionManager.trackingProtectionStatus {
-        case .on(_):
-            setupFindInPageScripts()
-            setupMetadataScripts()
-            setupFullScreen()
-            enableTrackingProtection()
-        case .off:
-            disableTrackingProtection()
+        if case .on(_) = trackingProtectionManager.trackingProtectionStatus {
+            setupBlockLists()
+            setupTrackingProtectionScripts()
         }
+        setupFindInPageScripts()
+        setupMetadataScripts()
+        setupFullScreen()
 
         view.addSubview(browserView)
         browserView.snp.makeConstraints { make in
