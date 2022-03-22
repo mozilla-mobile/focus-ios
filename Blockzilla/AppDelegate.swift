@@ -52,7 +52,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
     private var queuedString: String?
     private let whatsNewEventsHandler = WhatsNewEventsHandler()
     private var cancellables = Set<AnyCancellable>()
-    private var shownTips: Set<OnboardingEventsHandler.ToolTipRoute>?
     
     private lazy var onboardingEventsHandler = OnboardingEventsHandler(
         alwaysShowOnboarding: {
@@ -73,13 +72,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
             #endif
         },
         getShownTips: {
-            shownTips = UserDefaults
+            return UserDefaults
                 .standard
                 .data(forKey: OnboardingConstants.shownTips)
                 .flatMap {
                     try? JSONDecoder().decode(Set<OnboardingEventsHandler.ToolTipRoute>.self, from: $0)
-                }
-            return shownTips ?? []
+                } ?? []
         }, setShownTips: { tips in
             let data = try? JSONEncoder().encode(tips)
             UserDefaults.standard.set(data, forKey: OnboardingConstants.shownTips)
@@ -181,10 +179,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
                 onboardingEventsHandler.send(.applicationDidLaunch)
             }
             return true
-        }
-        
-        if shownTips?.count == 1 {
-            onboardingEventsHandler.send(.enterHome)
         }
         
         onboardingEventsHandler.send(.applicationDidLaunch)
