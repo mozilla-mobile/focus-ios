@@ -80,7 +80,7 @@ extension InternalTelemetrySettingsView: View {
                     }
                     
                     Button(action: { sendPendingBaselinePings() }) {
-                        Text(verbatim: "Send Baseline  Event Pings")
+                        Text(verbatim: "Send Baseline Event Pings")
                     }
                     
                     Button(action: { sendPendingMetricsPings() }) {
