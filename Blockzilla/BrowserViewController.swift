@@ -1327,7 +1327,7 @@ extension BrowserViewController: ShortcutViewDelegate {
             textfield.text = shortcut.name
             textfield.clearButtonMode = .always
             NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textfield, queue: OperationQueue.main, using: { _ in
-                alert.actions.last?.isEnabled = textfield.text?.trimmingCharacters(in: .whitespacesAndNewlines).count ?? 0 > 0
+                alert.actions.last?.isEnabled = !(textfield.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? false)
             })
         }
         
