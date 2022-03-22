@@ -126,6 +126,7 @@
 		C8CE05052743F9EA002057C6 /* PhotonActionSheetItem+MenuAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE05042743F9EA002057C6 /* PhotonActionSheetItem+MenuAction.swift */; };
 		C8CE05072743FA89002057C6 /* UIAction+MenuAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE05062743FA89002057C6 /* UIAction+MenuAction.swift */; };
 		C8CE050E2743FEC5002057C6 /* MenuAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE050D2743FEC5002057C6 /* MenuAction.swift */; };
+		C8D0306E27E9B03D000664DA /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D392887E1BC5E47E0016A9A0 /* UIConstants.swift */; };
 		C8EADCD22742A00300E76AE6 /* MenuActionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EADCD12742A00300E76AE6 /* MenuActionable.swift */; };
 		C8EADCD42742A0AB00E76AE6 /* MenuItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EADCD32742A0AB00E76AE6 /* MenuItemProvider.swift */; };
 		C8F3EABF2762558F00C2AF0C /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F3EABE2762558F00C2AF0C /* SplashView.swift */; };
@@ -2271,6 +2272,7 @@
 				F8DEC61326C6A2BE00C5F26B /* UIColor+AppColors.swift in Sources */,
 				F8DEC61426C6A31700C5F26B /* AppInfo.swift in Sources */,
 				F74E8109218183F400D18535 /* SearchSuggestionsTest.swift in Sources */,
+				C8D0306E27E9B03D000664DA /* UIConstants.swift in Sources */,
 				0BA39A861DD2B8E4005F970A /* WebsiteAccessTest.swift in Sources */,
 				0B0D6BC41F3CDDBB00497D08 /* CollapsedURLTest.swift in Sources */,
 			);
