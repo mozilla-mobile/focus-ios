@@ -1332,12 +1332,16 @@ extension BrowserViewController: ShortcutViewDelegate {
         }
         
         alert.addAction(UIAlertAction(title: UIConstants.strings.renameShortcutAlertSecondaryAction, style: .cancel, handler: { [unowned self] _ in
-            self.urlBar.activateTextField()
+            DispatchQueue.main.async {
+                self.urlBar.activateTextField()
+            }
         }))
         alert.addAction(UIAlertAction(title: UIConstants.strings.renameShortcutAlertPrimaryAction, style: .default, handler: { [unowned alert, unowned self] action in
             let newName = (alert.textFields?.first?.text ?? shortcut.name).trimmingCharacters(in: .whitespacesAndNewlines)
             ShortcutsManager.shared.rename(shortcut: shortcut, newName: newName)
-            self.urlBar.activateTextField()
+            DispatchQueue.main.async {
+                self.urlBar.activateTextField()
+            }
         }))
         self.show(alert, sender: nil)
     }
