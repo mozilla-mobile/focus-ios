@@ -339,7 +339,9 @@ class TrackingProtectionViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        calculatePreferredSize()
+        DispatchQueue.main.async {
+            self.calculatePreferredSize()
+        }
     }
     
     @objc private func doneTapped() {
