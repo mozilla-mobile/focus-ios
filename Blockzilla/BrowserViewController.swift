@@ -1343,7 +1343,9 @@ extension BrowserViewController: ShortcutViewDelegate {
                 self.urlBar.activateTextField()
             }
         }))
-        self.show(alert, sender: nil)
+        DispatchQueue.main.async {
+            self.show(alert, sender: nil)
+        }
     }
     
     func dismissShortcut() {
