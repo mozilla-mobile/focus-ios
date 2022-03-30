@@ -8,7 +8,7 @@ trigger_map:
 - push_branch: main
   workflow: runParallelTests
 - pull_request_source_branch: "*"
-  workflow: runParallelTests
+  workflow: runFocus-iPad
 - tag: "*"
   workflow: release
 
@@ -385,6 +385,7 @@ workflows:
             CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan SmokeTest
         - scheme: Focus
         - simulator_device: iPad Air (4th generation)
+        - simulator_os_version: '15.4'
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
