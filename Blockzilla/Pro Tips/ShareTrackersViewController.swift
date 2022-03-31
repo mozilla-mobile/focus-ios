@@ -6,19 +6,19 @@ import UIKit
 import SnapKit
 
 class ShareTrackersViewController: UIViewController {
-    
+
     private let trackerTitle: String
-    private let shareTap: (UIButton) -> ()
-    init(trackerTitle: String, shareTap: @escaping (UIButton) -> ()) {
+    private let shareTap: (UIButton) -> Void
+    init(trackerTitle: String, shareTap: @escaping (UIButton) -> Void) {
         self.trackerTitle = trackerTitle
         self.shareTap = shareTap
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     private lazy var trackerStatsLabel: SmartLabel = {
         let trackerStatsLabel = SmartLabel()
         trackerStatsLabel.font = .footnote14Light
@@ -29,14 +29,14 @@ class ShareTrackersViewController: UIViewController {
         trackerStatsLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         return trackerStatsLabel
     }()
-    
+
     private lazy var shieldLogo: UIImageView = {
         let shieldLogo = UIImageView()
         shieldLogo.image = #imageLiteral(resourceName: "tracking_protection")
         shieldLogo.tintColor = UIColor.white
         return shieldLogo
     }()
-    
+
     private lazy var trackerStatsShareButton: UIButton = {
         var button = UIButton()
         button.setTitleColor(.secondaryText, for: .normal)
@@ -50,7 +50,7 @@ class ShareTrackersViewController: UIViewController {
         button.layer.cornerRadius = 4
         return button
     }()
-    
+
     lazy var stackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [shieldLogo, trackerStatsLabel, trackerStatsShareButton])
         stackView.spacing = .shareTrackerStackViewSpacing
@@ -58,7 +58,7 @@ class ShareTrackersViewController: UIViewController {
         stackView.axis = .horizontal
         return stackView
     }()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(stackView)
@@ -76,7 +76,7 @@ class ShareTrackersViewController: UIViewController {
             $0.trailing.lessThanOrEqualToSuperview().offset(CGFloat.shareTrackersLeadingTrailingOffset)
         }
     }
-    
+
     @objc private func shareTapped(sender: UIButton) {
         shareTap(sender)
     }

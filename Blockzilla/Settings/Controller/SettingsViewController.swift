@@ -11,7 +11,7 @@ import Glean
 import SwiftUI
 
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    
+
     enum Section: String {
         case general, privacy, usageData, studies, search, siri, integration, mozilla, secret
 
@@ -61,7 +61,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }()
 
     private var toggles = [Int: [Int: BlockerToggle]]()
-    
+
     private var labelTextForCurrentTheme: String {
         var themeName = ""
         switch UserDefaults.standard.theme.userInterfaceStyle {
@@ -130,7 +130,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         self.authenticationManager = authenticationManager
         self.onboardingEventsHandler = onboardingEventsHandler
         super.init(nibName: nil, bundle: nil)
-        
+
         tableView.register(SettingsTableViewAccessoryCell.self, forCellReuseIdentifier: "accessoryCell")
     }
 
@@ -144,7 +144,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         let navigationBar = navigationController!.navigationBar
         navigationBar.isTranslucent = false
-        navigationBar.setBackgroundImage(UIImage(), for:.default)
+        navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationBar.shadowImage = UIImage()
         navigationBar.layoutIfNeeded()
         navigationBar.titleTextAttributes = [.foregroundColor: UIColor.primaryText]
@@ -153,7 +153,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         highlightsButton.image = UIImage(named: "highlight")
         highlightsButton.tintColor = .accent
         highlightsButton.accessibilityIdentifier = "SettingsViewController.whatsNewButton"
-        
+
         let doneButton = UIBarButtonItem(title: UIConstants.strings.done, style: .plain, target: self, action: #selector(dismissSettings))
         doneButton.tintColor = .accent
         doneButton.accessibilityIdentifier = "SettingsViewController.doneButton"
@@ -198,7 +198,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             shouldScrollToSiri = false
         }
     }
-    
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         DispatchQueue.main.async { [weak self] in
             self?.tableView.reloadData()
@@ -268,7 +268,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                     UIConstants.strings.settingsTrackingProtectionOn :
                     UIConstants.strings.settingsTrackingProtectionOff
                 cell = trackingCell
-                
+
             } else {
                 cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
             }
@@ -315,7 +315,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case .integration:
             cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
         case .mozilla:
-            
+
             if !onboardingEventsHandler.shouldShowNewOnboarding() && indexPath.row == 0 {
                 cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
             } else if (!onboardingEventsHandler.shouldShowNewOnboarding() && indexPath.row == 1) || indexPath.row == 0 {
@@ -335,10 +335,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         cell.textLabel?.textColor = .primaryText
         cell.layoutMargins = UIEdgeInsets.zero
         cell.detailTextLabel?.textColor = .secondaryText
-        
+
         return cell
     }
-    
+
     func numberOfRows(for section: Section) -> Int {
         switch section {
         case .general: return 1
@@ -362,11 +362,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
     }
-    
+
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sections[section].headerText
     }
-    
+
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if let text = toggles[section]?.first?.value.subtitle {
             let footer = ActionFooterView(frame: .zero)
@@ -381,7 +381,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 } else if section == getSectionIndex(.studies) {
                     selector = #selector(tappedLearnMoreStudies)
                 }
-                
+
                 let tapGesture = UITapGestureRecognizer(target: self, action: selector)
                 footer.detailTextButton.setTitle(UIConstants.strings.learnMore, for: .normal)
                 footer.detailTextButton.addGestureRecognizer(tapGesture)
@@ -458,13 +458,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             self?.isSafariEnabled = enabled
         }
     }
-    
+
     private func tappedFooter(forSupportTopic topic: SupportTopic) {
         let contentViewController = SettingsContentViewController(url: URL(forSupportTopic: topic))
         navigationController?.navigationBar.tintColor = .accent
         navigationController?.pushViewController(contentViewController, animated: true)
     }
-    
+
     @objc func tappedLearnMoreFooter(gestureRecognizer: UIGestureRecognizer) {
         tappedFooter(forSupportTopic: .usageData)
     }
@@ -476,7 +476,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     @objc func tappedLearnMoreStudies(gestureRecognizer: UIGestureRecognizer) {
         tappedFooter(forSupportTopic: .studies)
     }
-    
+
     @objc private func dismissSettings() {
         #if DEBUG
         if let browserViewController = presentingViewController as? BrowserViewController {
@@ -510,7 +510,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
 
         // The following settings are special and need to be in effect immediately.
-        
+
         if toggle.setting == .sendAnonymousUsageData {
             Telemetry.default.configuration.isCollectionEnabled = sender.isOn
             Telemetry.default.configuration.isUploadEnabled = sender.isOn

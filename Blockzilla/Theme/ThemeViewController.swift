@@ -5,11 +5,11 @@
 import UIKit
 
 class ThemeViewController: UIViewController {
-    
+
     enum ThemeSection {
         case systemTheme
         case themePicker
-        
+
         var numberOfRows: Int {
             switch self {
             case .systemTheme:
@@ -18,7 +18,7 @@ class ThemeViewController: UIViewController {
                 return 2
             }
         }
-        
+
         var name: String {
             switch self {
             case .systemTheme:
@@ -28,7 +28,7 @@ class ThemeViewController: UIViewController {
             }
         }
     }
-    
+
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.separatorStyle = .singleLine
@@ -38,36 +38,36 @@ class ThemeViewController: UIViewController {
         tableView.delegate = self
         return tableView
     }()
-    
+
     private var sections: [ThemeSection] {
         let tableSections: [ThemeSection] = currentTheme == .unspecified ? [.systemTheme] : [.systemTheme, .themePicker]
         return tableSections
     }
-    
+
     private var currentTheme: UIUserInterfaceStyle {
         return UserDefaults.standard.theme.userInterfaceStyle
     }
-    
+
     override func viewDidLoad() {
         title = UIConstants.strings.theme
         navigationController?.navigationBar.tintColor = .accent
-        
+
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
-    
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         DispatchQueue.main.async { [weak self] in
             self?.tableView.reloadData()
         }
     }
-    
+
     private func configureStyle(for theme: Theme) {
         view.window?.overrideUserInterfaceStyle = theme.userInterfaceStyle
     }
-    
+
     private func configureCell(for indexPath: IndexPath) -> UITableViewCell {
         var cell = UITableViewCell()
         if sections[indexPath.section] == .systemTheme {
@@ -87,44 +87,44 @@ class ThemeViewController: UIViewController {
             }
             cell = themeCell
         }
-        
+
         cell.textLabel?.textColor = .primaryText
         cell.layoutMargins = UIEdgeInsets.zero
         cell.detailTextLabel?.textColor = .secondaryText
         cell.textLabel?.setupShrinkage()
         cell.detailTextLabel?.setupShrinkage()
-        
+
         return cell
     }
 }
 
 extension ThemeViewController: UITableViewDataSource {
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return sections[section].numberOfRows
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         return configureCell(for: indexPath)
     }
 }
 
 extension ThemeViewController: UITableViewDelegate {
-    
+
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return  30
     }
-    
+
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sections[section].name
     }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+
         switch indexPath.section {
         case 1:
             if indexPath.row == 0 {
@@ -139,7 +139,7 @@ extension ThemeViewController: UITableViewDelegate {
         }
         tableView.reloadData()
     }
-    
+
 }
 
 extension ThemeViewController: SystemThemeDelegate {

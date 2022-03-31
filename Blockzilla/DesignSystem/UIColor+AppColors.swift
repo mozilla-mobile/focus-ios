@@ -5,10 +5,8 @@
 import Foundation
 import UIKit
 
-
-
 extension UIColor {
-    
+
     static let above = UIColor(named: "Above")!
     static let accent = UIColor(named: "Accent")!
     static let defaultFont = UIColor(named: "DefaultFont")!
@@ -44,7 +42,7 @@ extension UIColor {
     static let secondaryText = UIColor(named: "SecondaryText")!
     static let secondaryButton = UIColor(named: "SecondaryButton")!
     static let primaryButton = UIColor(named: "PrimaryButton")!
-    
+
     /**
      * Initializes and returns a color object for the given RGB hex integer.
      */

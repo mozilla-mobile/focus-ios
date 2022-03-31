@@ -7,9 +7,9 @@ import SnapKit
 import Telemetry
 
 class OnboardingViewController: UIViewController {
-    
+
     var dismissOnboardingScreen: (() -> Void)!
-    
+
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -17,7 +17,7 @@ class OnboardingViewController: UIViewController {
     }()
 
     //MARK: Mozilla Icon
-    
+
     private lazy var mozillaIconImageView: UIImageView = {
         let image = UIImage(named: "icon_mozilla")
         let imageView = UIImageView(image: image)
@@ -26,9 +26,9 @@ class OnboardingViewController: UIViewController {
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
-    
+
     //MARK: Title Labels
-    
+
     private lazy var welcomeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -38,7 +38,7 @@ class OnboardingViewController: UIViewController {
         label.accessibilityIdentifier = "OnboardingViewController.welcomeLabel"
         return label
     }()
-    
+
     private lazy var subWelcomeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -49,9 +49,9 @@ class OnboardingViewController: UIViewController {
         label.accessibilityIdentifier = "OnboardingViewController.subWelcomeLabel"
         return label
     }()
-    
+
     //MARK: Incognito
-    
+
     private lazy var incognitoTitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -62,7 +62,7 @@ class OnboardingViewController: UIViewController {
         label.accessibilityIdentifier = "OnboardingViewController.incognitoTitleLabel"
         return label
     }()
-    
+
     private lazy var incognitoDescriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -73,7 +73,7 @@ class OnboardingViewController: UIViewController {
         label.accessibilityIdentifier = "OnboardingViewController.incognitoDescriptionLabel"
         return label
     }()
-    
+
     private lazy var incognitoImageView: UIImageView = {
         let image = UIImage(named: "icon_private_mode")
         let imageView = UIImageView(image: image)
@@ -82,9 +82,9 @@ class OnboardingViewController: UIViewController {
         imageView.accessibilityIdentifier = "OnboardingViewController.incognitoImageView"
         return imageView
     }()
-    
+
     //MARK: History
-    
+
     private lazy var historyTitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -95,7 +95,7 @@ class OnboardingViewController: UIViewController {
         label.accessibilityIdentifier = "OnboardingViewController.historyTitleLabel"
         return label
     }()
-    
+
     private lazy var historyDescriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -106,7 +106,7 @@ class OnboardingViewController: UIViewController {
         label.accessibilityIdentifier = "OnboardingViewController.historyDescriptionLabel"
         return label
     }()
-    
+
     private lazy var historyImageView: UIImageView = {
         let image = UIImage(named: "icon_history")
         let imageView = UIImageView(image: image)
@@ -115,9 +115,9 @@ class OnboardingViewController: UIViewController {
         imageView.accessibilityIdentifier = "OnboardingViewController.historyImageView"
         return imageView
     }()
-    
+
     //MARK: Protection
-    
+
     private lazy var protectionTitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -128,7 +128,7 @@ class OnboardingViewController: UIViewController {
         label.accessibilityIdentifier = "OnboardingViewController.protectionTitleLabel"
         return label
     }()
-    
+
     private lazy var protectionDescriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -139,7 +139,7 @@ class OnboardingViewController: UIViewController {
         label.accessibilityIdentifier = "OnboardingViewController.protectionDescriptionLabel"
         return label
     }()
-    
+
     private lazy var protectionImageView: UIImageView = {
         let image = UIImage(named: "icon_settings")
         let imageView = UIImageView(image: image)
@@ -148,9 +148,9 @@ class OnboardingViewController: UIViewController {
         imageView.accessibilityIdentifier = "OnboardingViewController.protectionImageView"
         return imageView
     }()
-    
+
     //MARK: Start Browsing Button
-    
+
     private lazy var startBrowsingButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -165,7 +165,7 @@ class OnboardingViewController: UIViewController {
     }()
 
     // MARK: - StackViews
-    
+
     private lazy var mainStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [topStackView, middleStackView])
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -183,7 +183,7 @@ class OnboardingViewController: UIViewController {
         stackView.accessibilityIdentifier = "OnboardingViewController.mainStackView"
         return stackView
     }()
-    
+
     private lazy var topStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [mozillaIconImageView, welcomeLabel, subWelcomeLabel])
         stackView.axis = .vertical
@@ -192,7 +192,7 @@ class OnboardingViewController: UIViewController {
         stackView.accessibilityIdentifier = "OnboardingViewController.topStackView"
         return stackView
     }()
-    
+
     private lazy var middleStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [incognitoStackView, historyStackView, protectionStackView])
         stackView.axis = .vertical
@@ -202,7 +202,7 @@ class OnboardingViewController: UIViewController {
         stackView.accessibilityIdentifier = "OnboardingViewController.middleStackView"
         return stackView
     }()
-    
+
     private lazy var incognitoTextStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [incognitoTitleLabel, incognitoDescriptionLabel])
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -211,7 +211,7 @@ class OnboardingViewController: UIViewController {
         stackView.accessibilityIdentifier = "OnboardingViewController.incognitoTextStackView"
         return stackView
     }()
-    
+
     private lazy var incognitoStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [incognitoImageView, incognitoTextStackView])
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -221,7 +221,7 @@ class OnboardingViewController: UIViewController {
         stackView.accessibilityIdentifier = "OnboardingViewController.incognitoStackView"
         return stackView
     }()
-    
+
     private lazy var historyTextStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [historyTitleLabel, historyDescriptionLabel])
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -230,7 +230,7 @@ class OnboardingViewController: UIViewController {
         stackView.accessibilityIdentifier = "OnboardingViewController.historyTextStackView"
         return stackView
     }()
-    
+
     private lazy var historyStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [historyImageView, historyTextStackView])
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -240,7 +240,7 @@ class OnboardingViewController: UIViewController {
         stackView.accessibilityIdentifier = "OnboardingViewController.historyStackView"
         return stackView
     }()
-    
+
     private lazy var protectionTextStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [protectionTitleLabel, protectionDescriptionLabel])
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -249,7 +249,7 @@ class OnboardingViewController: UIViewController {
         stackView.accessibilityIdentifier = "OnboardingViewController.protectionTextStackView"
         return stackView
     }()
-    
+
     private lazy var protectionStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [protectionImageView, protectionTextStackView])
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -259,15 +259,15 @@ class OnboardingViewController: UIViewController {
         stackView.accessibilityIdentifier = "OnboardingViewController.protectionStackView"
         return stackView
     }()
-    
+
     private lazy var contentView: UIView = {
         let view = UIView()
         return view
     }()
-    
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        
+
         if UIDevice.current.userInterfaceIdiom == .phone {
             mainStackView.layoutMargins = .init(top: size.height / UIConstants.layout.onboardingLayoutMarginTopDivider, left: size.width / UIConstants.layout.onboardingLayoutMarginLeadingTrailingDivider, bottom: UIConstants.layout.onboardingLayoutMarginBottom, right: size.width / UIConstants.layout.onboardingLayoutMarginLeadingTrailingDivider)
             mainStackView.spacing = size.height / UIConstants.layout.onboardingSpacingDividerPhone
@@ -275,25 +275,25 @@ class OnboardingViewController: UIViewController {
             mainStackView.layoutMargins = .init(top: UIConstants.layout.onboardingLayoutMarginTop, left: size.width / UIConstants.layout.onboardingLayoutMarginLeadingTrailingDivider, bottom: UIConstants.layout.onboardingLayoutMarginBottom, right: size.width / UIConstants.layout.onboardingLayoutMarginLeadingTrailingDivider)
             mainStackView.spacing = size.height / UIConstants.layout.onboardingSpacingDividerPad
         }
-        
+
         startBrowsingButton.snp.updateConstraints { make in
             make.bottom.equalToSuperview().inset(size.height / UIConstants.layout.onboardingButtonButtomInsetDivider)
             make.leading.trailing.equalToSuperview().inset(size.width / UIConstants.layout.onboardingButtonLeadingTrailingInsetDivider)
         }
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         addSubViews()
     }
-    
+
     func addSubViews() {
         view.backgroundColor = .systemBackground
         view.addSubview(scrollView)
         scrollView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
         }
-        
+
         scrollView.addSubview(mainStackView)
         mainStackView.snp.makeConstraints { make in
             make.top.bottom.leading.trailing.equalToSuperview()
@@ -301,11 +301,11 @@ class OnboardingViewController: UIViewController {
         }
 
         mozillaIconImageView.snp.makeConstraints { $0.width.height.equalTo(60) }
-        
+
         incognitoImageView.snp.makeConstraints { $0.width.height.equalTo(UIConstants.layout.onboardingIconsWidthHeight) }
         historyImageView.snp.makeConstraints { $0.width.height.equalTo(UIConstants.layout.onboardingIconsWidthHeight) }
         protectionImageView.snp.makeConstraints { $0.width.height.equalTo(UIConstants.layout.onboardingIconsWidthHeight) }
-        
+
         view.addSubview(startBrowsingButton)
         startBrowsingButton.snp.makeConstraints { make in
             make.height.equalTo(44)

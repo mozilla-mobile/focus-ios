@@ -10,9 +10,9 @@ protocol TooltipViewDelegate: AnyObject {
 }
 
 class TooltipView: UIView {
-    
+
     weak var delegate: TooltipViewDelegate?
-    
+
     private lazy var gradient: CAGradientLayer = {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = bounds
@@ -22,7 +22,7 @@ class TooltipView: UIView {
         gradientLayer.endPoint = .endPoint
         return gradientLayer
     }()
-    
+
     private lazy var mainStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [labelContainerStackView, dismissButton])
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -33,7 +33,7 @@ class TooltipView: UIView {
         stackView.isLayoutMarginsRelativeArrangement = true
         return stackView
     }()
-    
+
     private lazy var labelContainerStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [titleLabel, bodyLabel])
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -41,7 +41,7 @@ class TooltipView: UIView {
         stackView.spacing = .space
         return stackView
     }()
-    
+
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -50,7 +50,7 @@ class TooltipView: UIView {
         label.numberOfLines = 0
         return label
     }()
-    
+
     private lazy var bodyLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -59,7 +59,7 @@ class TooltipView: UIView {
         label.numberOfLines = 0
         return label
     }()
-    
+
     private lazy var dismissButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -71,27 +71,27 @@ class TooltipView: UIView {
         button.addTarget(self, action: #selector(didTapTooltipDismissButton), for: .primaryActionTriggered)
         return button
     }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.setupLayout()
     }
-    
+
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         layer.insertSublayer(gradient, at: 0)
     }
-    
+
     override func layoutSublayers(of layer: CALayer) {
         super.layoutSublayers(of: layer)
         gradient.frame = bounds
     }
-    
+
     private func setupLayout() {
         addSubview(mainStackView)
         translatesAutoresizingMaskIntoConstraints = false
@@ -99,7 +99,7 @@ class TooltipView: UIView {
             $0.edges.equalToSuperview()
         }
     }
-    
+
     func set(title: String = "", body: String, maxWidth: CGFloat? = nil) {
         titleLabel.text = title
         titleLabel.isHidden = title.isEmpty
@@ -109,7 +109,7 @@ class TooltipView: UIView {
         let idealSize = body.boundingRect(with: maxSize, options: [.usesLineFragmentOrigin], context: nil).size
         labelContainerStackView.snp.makeConstraints { $0.width.lessThanOrEqualTo(idealSize.width) }
     }
-    
+
     @objc func didTapTooltipDismissButton() {
         delegate?.didTapTooltipDismissButton()
     }

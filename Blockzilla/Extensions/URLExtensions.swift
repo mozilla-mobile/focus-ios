@@ -254,7 +254,7 @@ extension URL {
         let schemes = includeDataURIs ? ["http", "https", "data"] : ["http", "https"]
         return scheme.map { schemes.contains($0) } ?? false
     }
-    
+
     public func isWebPage() -> Bool {
         let schemes = ["http", "https"]
         if let scheme = scheme, schemes.contains(scheme) {
@@ -287,7 +287,7 @@ extension URL {
 
     public var isIPv4: Bool {
         let ipv4Pattern = #"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"#
-        
+
         return host?.range(of: ipv4Pattern, options: .regularExpression) != nil
     }
 
@@ -354,7 +354,7 @@ private extension URL {
         let tokens = host.components(separatedBy: ".")
         let tokenCount = tokens.count
         var suffix: String?
-        var previousDomain: String? = nil
+        var previousDomain: String?
         var currentDomain: String = host
 
         for offset in 0..<tokenCount {

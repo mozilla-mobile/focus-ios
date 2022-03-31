@@ -7,22 +7,22 @@
 
 import Foundation
 
-var LOCALES:[String] = []
+var LOCALES: [String] = []
 
 struct ExportTask {
     let xcodeProjPath: String
     let l10nRepoPath: String
-    
+
     private let EXCLUDED_FILES: Set<String> = [
     ]
-    
+
     private let EXCLUDED_TRANSLATIONS: Set<String> = [
         "CFBundleName",
         "CFBundleDisplayName",
         "CFBundleShortVersionString",
         "1Password Fill Browser Action"
     ]
-    
+
     // Keys in Info.plist that we require. TODO Does this work because focus does not have that
     // ShortcutItemTitleQRCode and no warnings are raised. This is the Firefox iOS list.
     private let REQUIRED_TRANSLATIONS: Set<String> = [
@@ -32,26 +32,26 @@ struct ExportTask {
         "NSPhotoLibraryAddUsageDescription",
         "ShortcutItemTitleNewPrivateTab",
         "ShortcutItemTitleNewTab",
-        "ShortcutItemTitleQRCode",
+        "ShortcutItemTitleQRCode"
     ]
 
     // Mapping locale identifiers from Pontoon to Xcode
     private let XCODE_TO_PONTOON = [
-        "en" : "en-US",
-        "ga" : "ga-IE",
-        "nb" : "nb-NO",
-        "nn" : "nn-NO",
-        "sv" : "sv-SE",
-        "fil" : "tl",
+        "en": "en-US",
+        "ga": "ga-IE",
+        "nb": "nb-NO",
+        "nn": "nn-NO",
+        "sv": "sv-SE",
+        "fil": "tl"
     ]
-    
+
     private var EXPORT_BASE_PATH: String {
         "/tmp/ios-localization-\(getpid())"
     }
-    
+
     // Ask xcodebuild to export all locales
     private func exportLocales() {
-        
+
         let command = "xcodebuild -exportLocalizations -project \(xcodeProjPath) -localizationPath \(EXPORT_BASE_PATH)"
         let command2 = LOCALES.map { "-exportLanguage \($0)" }.joined(separator: " ")
 
@@ -69,11 +69,11 @@ struct ExportTask {
         }
         return filePaths
     }
-    
+
     // Get Locales that are in the Xcode project
     private func getProjectLocales() -> [String] {
-    
-        var localesList:[String] = []
+
+        var localesList: [String] = []
 
         let filePaths = getBlockzillaFolder()
 
@@ -88,9 +88,9 @@ struct ExportTask {
         // Removing Settings from the locales list as it a folder containing locales
         let toRemove = "Settings"
         uniqueLocales = uniqueLocales.filter { $0 != toRemove }
-        
+
         // Alphabetically ordered array for simplicity
-        return uniqueLocales.sorted(by:<)
+        return uniqueLocales.sorted(by: <)
     }
 
     /// Load all trans-units by id from the old (from checkout)
@@ -109,7 +109,7 @@ struct ExportTask {
             if let original = file.attribute(forName: "original")?.stringValue, EXCLUDED_FILES.contains(original) {
                 continue
             }
-            
+
             for case let transUnit as XMLElement in try! file.nodes(forXPath: "body/trans-unit") {
                 // Skip <trans-unit> nodes that we don't want to translate
                 if transUnit.attribute(forName: "id")?.stringValue.map(EXCLUDED_TRANSLATIONS.contains) == true {
@@ -174,12 +174,12 @@ struct ExportTask {
                 fileNode.detach()
                 continue
             }
-            
+
             // Change the target language identifier from Xcode to Pontoon
             if let pontoonLocale = XCODE_TO_PONTOON[locale] {
                 fileNode.attribute(forName: "target-language")?.setStringValue(pontoonLocale, resolvingEntities: false)
             }
-            
+
             for case let newTransUnit as XMLElement in try! fileNode.nodes(forXPath: "body/trans-unit") {
                 // Delete <trans-unit> nodes that we don't want to translate
                 if newTransUnit.attribute(forName: "id")?.stringValue.map(EXCLUDED_TRANSLATIONS.contains) == true {
@@ -206,27 +206,26 @@ struct ExportTask {
                     }
                 }
             }
-            
+
             // If this <file> node has no translations left then remove it
             let remainingTranslations = try! fileNode.nodes(forXPath: "body/trans-unit")
             if remainingTranslations.isEmpty {
                 fileNode.detach()
             }
         }
-        
+
         // Drop the xml:space="preserve" that is being added. XMLDocument adds it but we don't care
         // about it and it adds a lot of noise to the diff.
         let s = xml.xmlString.replacingOccurrences(of: " xml:space=\"preserve\">", with: ">") + "\n\n"
         try! s.write(to: url, atomically: true, encoding: .utf8)
     }
-    
-    
+
     // Copy the xliff file from the export into the pontoon repository
     private func copyToL10NRepo(locale: String) {
         let source = URL(fileURLWithPath: "\(EXPORT_BASE_PATH)/\(locale).xcloc/Localized Contents/\(locale).xliff")
         let pontoonLocale = XCODE_TO_PONTOON[locale] ?? locale
         let destination = URL(fileURLWithPath: "\(l10nRepoPath)/\(pontoonLocale)/focus-ios.xliff")
-        let _ = try! FileManager.default.replaceItemAt(destination, withItemAt: source)
+        _ = try! FileManager.default.replaceItemAt(destination, withItemAt: source)
     }
 
     func run() {

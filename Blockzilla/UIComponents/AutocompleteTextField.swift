@@ -158,7 +158,7 @@ open class AutocompleteTextField: UITextField, UITextFieldDelegate {
         // Add the completion suffix to the current text and highlight it.
         let completion = completion[text.endIndex...]
         let attributed = NSMutableAttributedString(string: text + completion)
-        let range = NSMakeRange((text as NSString).length, (completion as NSString).length)
+        let range = NSRange(location: (text as NSString).length, length: (completion as NSString).length)
         attributed.addAttribute(NSAttributedString.Key.backgroundColor, value: highlightColor, range: range)
         attributedText = attributed
         completionRange = range

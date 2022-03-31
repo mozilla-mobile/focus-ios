@@ -5,7 +5,7 @@
 import UIKit
 
 extension UIApplication {
-    var orientation : UIInterfaceOrientation? {
+    var orientation: UIInterfaceOrientation? {
         UIApplication
             .shared
             .windows

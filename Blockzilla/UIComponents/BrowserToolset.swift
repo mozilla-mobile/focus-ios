@@ -16,7 +16,7 @@ protocol BrowserToolsetDelegate: AnyObject {
 
 class BrowserToolset {
     weak var delegate: BrowserToolsetDelegate?
-    
+
     var whatsNewEventsHandler = WhatsNewEventsHandler()
     let backButton = InsetButton()
     let forwardButton = InsetButton()
@@ -41,7 +41,7 @@ class BrowserToolset {
         stopReloadButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         stopReloadButton.addTarget(self, action: #selector(didPressStopReload), for: .touchUpInside)
         stopReloadButton.accessibilityIdentifier = "BrowserToolset.stopReloadButton"
-        
+
         deleteButton.setImage(#imageLiteral(resourceName: "icon_delete"), for: .normal)
         deleteButton.addTarget(self, action: #selector(didPressDelete), for: .touchUpInside)
         deleteButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
@@ -60,7 +60,7 @@ class BrowserToolset {
         contextMenuButton.accessibilityIdentifier = "HomeView.settingsButton"
         contextMenuButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         contextMenuButton.imageView?.snp.makeConstraints { $0.size.equalTo(UIConstants.layout.contextMenuIconSize) }
-        
+
         setHighlightWhatsNew(shouldHighlight: shouldShowWhatsNew())
     }
 
@@ -89,7 +89,7 @@ class BrowserToolset {
             }
         }
     }
-    
+
     var canDelete: Bool = false {
         didSet {
             deleteButton.isEnabled = canDelete
@@ -112,7 +112,7 @@ class BrowserToolset {
             delegate?.browserToolsetDidPressReload(self)
         }
     }
-    
+
     @objc func didPressDelete() {
         if canDelete {
             delegate?.browserToolsetDidPressDelete(self)

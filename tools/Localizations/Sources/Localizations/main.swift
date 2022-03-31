@@ -49,21 +49,21 @@ import ArgumentParser
 struct L10NTools: ParsableCommand {
     @Option(help: "Path to the project")
     var projectPath: String
-    
+
     @Option(name: .customLong("l10n-project-path"), help: "Path to the l10n project")
     var l10nProjectPath: String
-    
+
     @Flag(name: .customLong("export"), help: "To determine if we should run the export task.")
     var runExportTask = false
-    
+
     @Flag(name: .customLong("import"), help: "To determine if we should run the import task.")
     var runImportTask = false
-    
+
     static var configuration: CommandConfiguration {
         CommandConfiguration(commandName: "l10nTools", abstract: "Scripts for automating l10n for Mozilla iOS projects.", discussion: "", version: "1.0", shouldDisplay: true, subcommands: [], defaultSubcommand: nil, helpNames: .long)
-        
+
     }
-    
+
     private func validateArguments() -> Bool {
         switch (runExportTask, runImportTask) {
         case (false, false):
@@ -72,7 +72,7 @@ struct L10NTools: ParsableCommand {
         case (true, true):
             print("Please choose a single task to run")
             return false
-        default: return true;
+        default: return true
         }
     }
 
@@ -85,7 +85,7 @@ struct L10NTools: ParsableCommand {
     }
 
     private func getLocalesFromProjectFolder () -> [String] {
-        var localesList:[String] = []
+        var localesList: [String] = []
 
         let filePaths = getBlockzillaFolder()
 
@@ -112,16 +112,16 @@ struct L10NTools: ParsableCommand {
         }
 
         // Alphabetically ordered array for simplicity
-        return uniqueLocales.sorted(by:<)
+        return uniqueLocales.sorted(by: <)
     }
 
     private let locale_mapping = [
-        "fil" : "tl",
-        "ga" : "ga-IE",
-        "nb" : "nb-NO",
-        "nn" : "nn-NO",
-        "sv" : "sv-SE",
-        "en" : "en-US"
+        "fil": "tl",
+        "ga": "ga-IE",
+        "nb": "nb-NO",
+        "nn": "nn-NO",
+        "sv": "sv-SE",
+        "en": "en-US"
     ]
 
     mutating func run() throws {
@@ -133,7 +133,7 @@ struct L10NTools: ParsableCommand {
         if runImportTask {
             ImportTask(xcodeProjPath: projectPath, l10nRepoPath: l10nProjectPath, locales: locales).run()
         }
-        
+
         if runExportTask {
             ExportTask(xcodeProjPath: projectPath, l10nRepoPath: l10nProjectPath).run()
             CreateTemplatesTask(l10nRepoPath: l10nProjectPath).run()

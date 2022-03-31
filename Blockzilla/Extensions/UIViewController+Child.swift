@@ -10,7 +10,7 @@ public extension UIViewController {
 
         child.view.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(child.view)
-        
+
         child.view.snp.makeConstraints {
             $0.top.equalToSuperview().inset(insets.top)
             $0.bottom.equalToSuperview().inset(insets.bottom)
@@ -20,7 +20,7 @@ public extension UIViewController {
 
         child.didMove(toParent: self)
     }
-    
+
     func removeAsChild() {
         self.view.removeFromSuperview()
         self.removeFromParent()

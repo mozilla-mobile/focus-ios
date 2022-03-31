@@ -9,7 +9,7 @@ let package = Package(
         .macOS(.v10_13)
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-argument-parser.git", from: "0.4.0"),
+        .package(url: "https://github.com/apple/swift-argument-parser.git", from: "0.4.0")
     ],
     targets: [
         .target(
@@ -17,6 +17,6 @@ let package = Package(
             dependencies: [.product(name: "ArgumentParser", package: "swift-argument-parser")]),
         .testTarget(
             name: "LocalizationsTests",
-            dependencies: ["Localizations"]),
+            dependencies: ["Localizations"])
     ]
 )

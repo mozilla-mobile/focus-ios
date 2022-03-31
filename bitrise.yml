@@ -239,6 +239,11 @@ workflows:
             ./checkout.sh
         title: ContentBlockerGen
     - script@1:
+        inputs:
+        - content: |-
+            swiftlint
+        title: Run swiftlint
+    - script@1:
         title: Set Default Web Browser Entitlement
         inputs:
         - content: |-
@@ -309,6 +314,11 @@ workflows:
             #!/usr/bin/env bash
             ./checkout.sh
         title: ContentBlockerGen
+    - script@1:
+        inputs:
+        - content: |-
+            swiftlint
+        title: Run swiftlint
     - script@1:
         title: Set Default Web Browser Entitlement
         inputs:
