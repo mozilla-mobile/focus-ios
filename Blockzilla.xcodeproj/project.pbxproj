@@ -1898,6 +1898,7 @@
 			buildConfigurationList = E4BF2DE51BACE8CA00DA9D68 /* Build configuration list for PBXNativeTarget "Blockzilla" */;
 			buildPhases = (
 				F84AFE711DE77ACC005C4DD1 /* Run Script (Copy Wordmark) */,
+				D48D21F027F5D87D000A90AE /* Run Swiftlint */,
 				D5D067F9252F939600C35227 /* Glean */,
 				E4BF2DCF1BACE8CA00DA9D68 /* Sources */,
 				E4BF2DD01BACE8CA00DA9D68 /* Frameworks */,
@@ -2209,6 +2210,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		D48D21F027F5D87D000A90AE /* Run Swiftlint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Swiftlint";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint > /dev/null; \n    then swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
 		D5D067F9252F939600C35227 /* Glean */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2235,6 +2254,7 @@
 			files = (
 			);
 			inputPaths = (
+				"",
 			);
 			name = "Run Script (Copy Wordmark)";
 			outputPaths = (
