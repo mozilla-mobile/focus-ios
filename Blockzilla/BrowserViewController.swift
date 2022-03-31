@@ -6,24 +6,22 @@ import Foundation
 import UIKit
 import SnapKit
 import Telemetry
-import LocalAuthentication
 import StoreKit
 import Intents
 import Glean
 import Combine
 
 class BrowserViewController: UIViewController {
-    let appSplashController: AppSplashController
-
-    private var context = LAContext()
     private let mainContainerView = UIView(frame: .zero)
     let darkView = UIView()
-
-    private let webViewController = WebViewController()
+    private lazy var trackingProtectionManager = TrackingProtectionManager(
+        isTrackingEnabled: {
+            Settings.getToggle(.trackingProtection)
+        })
+    private lazy var webViewController = WebViewController(trackingProtectionManager: trackingProtectionManager)
     private let webViewContainer = UIView()
 
     var modalDelegate: ModalDelegate?
-
     private var keyboardState: KeyboardState?
     private let browserToolbar = BrowserToolbar()
     private var homeViewController: HomeViewController!
@@ -47,18 +45,14 @@ class BrowserViewController: UIViewController {
     private var scrollBarOffsetAlpha: CGFloat = 0
     private var scrollBarState: URLBarScrollState = .expanded
     private var background = UIImageView()
+    private var cancellables = Set<AnyCancellable>()
+    private var onboardingEventsHandler: OnboardingEventsHandler
 
     private enum URLBarScrollState {
         case collapsed
         case expanded
         case transitioning
         case animating
-    }
-
-    private var trackingProtectionStatus: TrackingProtectionStatus = .on(TPPageStats()) {
-        didSet {
-            updateLockIcon()
-        }
     }
 
     private var homeViewContainer = UIView()
@@ -82,15 +76,22 @@ class BrowserViewController: UIViewController {
     }
     private var initialUrl: URL?
     private var orientationWillChange = false
-    var tipManager: TipManager
-    var shortcutManager: ShortcutsManager
+    private let tipManager: TipManager
+    internal let shortcutManager: ShortcutsManager
+    private let authenticationManager: AuthenticationManager
 
     static let userDefaultsTrackersBlockedKey = "lifetimeTrackersBlocked"
 
-    init(appSplashController: AppSplashController, tipManager: TipManager = TipManager.shared, shortcutManager: ShortcutsManager = ShortcutsManager.shared) {
-        self.appSplashController = appSplashController
+    init(
+        tipManager: TipManager = TipManager.shared,
+        shortcutManager: ShortcutsManager = ShortcutsManager.shared,
+        authenticationManager: AuthenticationManager,
+        onboardingEventsHandler: OnboardingEventsHandler
+    ) {
         self.tipManager = tipManager
         self.shortcutManager = shortcutManager
+        self.authenticationManager = authenticationManager
+        self.onboardingEventsHandler = onboardingEventsHandler
         super.init(nibName: nil, bundle: nil)
         shortcutManager.delegate = self
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
@@ -142,7 +143,6 @@ class BrowserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupBiometrics()
         NotificationCenter.default.addObserver(self, selector: #selector(orientationChanged), name: UIDevice.orientationDidChangeNotification, object: nil)
         view.addSubview(mainContainerView)
         
@@ -187,12 +187,7 @@ class BrowserViewController: UIViewController {
         overlayView.setSearchSuggestionsPromptViewDelegate(delegate: self)
         mainContainerView.addSubview(overlayView)
         
-        mainContainerView.addSubview(shortcutsBackground)
-        shortcutsBackground.isHidden = true
-        addShortcutsBackgroundConstraints()
-        setupShortcuts()
-        mainContainerView.addSubview(shortcutsContainer)
-
+        shortcutManager.shortcutsState = .createShortcutViews
         background.snp.makeConstraints { make in
             make.edges.equalTo(mainContainerView)
         }
@@ -225,8 +220,6 @@ class BrowserViewController: UIViewController {
 
             make.leading.trailing.equalTo(mainContainerView)
         }
-        
-        addShortcutsContainerConstraints()
         
         view.addSubview(alertStackView)
         alertStackView.axis = .vertical
@@ -263,7 +256,18 @@ class BrowserViewController: UIViewController {
         NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.findInPageNotification), object: nil, queue: nil) { _ in
             self.updateFindInPageVisibility(visible: true, text: "")
         }
+        
+        setupOnboardingEvents()
+        setupShortcutEvents()
+        
+        trackingProtectionManager
+            .$trackingProtectionStatus
+            .sink { [unowned self] status in
+                updateLockIcon(trackingProtectionStatus: status)
+            }
+            .store(in: &cancellables)
 
+        
         guard shouldEnsureBrowsingMode else { return }
         ensureBrowsingMode()
         guard let url = initialUrl else { return }
@@ -271,65 +275,142 @@ class BrowserViewController: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         navigationController?.setNavigationBarHidden(true, animated: animated)
-
         let homeViewToolset = homeViewController.toolbar.toolset
         homeViewToolset.setHighlightWhatsNew(shouldHighlight: homeViewToolset.shouldShowWhatsNew())
         homeViewController.toolbar.layoutIfNeeded()
         browserToolbar.toolset.setHighlightWhatsNew(shouldHighlight: browserToolbar.toolset.shouldShowWhatsNew())
         browserToolbar.layoutIfNeeded()
-
-        super.viewWillAppear(animated)
     }
-
-    override func viewDidAppear(_ animated: Bool) {
-        // Prevent the keyboard from showing up until after the user has viewed the Intro.
-        let userHasSeenIntro = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone) == AppDelegate.prefIntroVersion
-
-        if userHasSeenIntro && !urlBar.inBrowsingMode {
-            urlBar.activateTextField()
-        }
-
-        super.viewDidAppear(animated)
-    }
-
-    private func setupBiometrics() {
-        // Register for foreground notification to check biometric authentication
-        NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: nil) { notification in
-            var biometricError: NSError?
-
-            // Check if user is already in a cleared session, or doesn't have biometrics enabled in settings
-            if  !Settings.getToggle(SettingsToggle.biometricLogin) || !AppDelegate.needsAuthenticated || self.webViewContainer.isHidden {
-                self.appSplashController.hideSplashView()
-                return
-            }
-            AppDelegate.needsAuthenticated = false
-
-            self.context = LAContext()
-            self.context.localizedReason = String(format: UIConstants.strings.authenticationReason, AppInfo.productName)
-            self.context.localizedCancelTitle = UIConstants.strings.newSessionFromBiometricFailure
-
-            if self.context.canEvaluatePolicy(LAPolicy.deviceOwnerAuthentication, error: &biometricError) {
-                self.context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: self.context.localizedReason) {
-                    [unowned self] (success, _) in
-                    DispatchQueue.main.async {
-                        if success {
-                            self.showToolbars()
-                            self.appSplashController.hideSplashView()
-                        } else {
-                            // Clear the browser session, as the user failed to authenticate
-                            self.resetBrowser(hidePreviousSession: true)
-                            self.appSplashController.hideSplashView()
-                        }
+    
+    
+    private func setupOnboardingEvents() {
+        var presentedController: UIViewController?
+        onboardingEventsHandler
+            .$route
+            .sink { [unowned self] route in
+                switch route {
+                case .none:
+                    presentedController?.dismiss(animated: true)
+                    presentedController = nil
+                    
+                case .trackingProtectionShield:
+                    let controller = self.tooltipController(
+                        anchoredBy: self.urlBar.shieldIcon,
+                        sourceRect: CGRect(x: self.urlBar.shieldIcon.bounds.midX, y: self.urlBar.shieldIcon.bounds.midY + 10, width: 0, height: 0),
+                        body: UIConstants.strings.tooltipBodyTextForShieldIcon,
+                        dismiss: { self.onboardingEventsHandler.route = nil }
+                    )
+                    self.present(controller, animated: true)
+                    presentedController = controller
+                    
+                case .trash:
+                    let sourceButton = showsToolsetInURLBar ? urlBar.deleteButton : browserToolbar.deleteButton
+                    let sourceRect = showsToolsetInURLBar ? CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.maxY - 10, width: 0, height: 0) :
+                    CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.minY + 10, width: 0, height: 0)
+                    let controller = self.tooltipController(
+                        anchoredBy: sourceButton,
+                        sourceRect: sourceRect,
+                        body: UIConstants.strings.tooltipBodyTextForTrashIcon,
+                        dismiss: { self.onboardingEventsHandler.route = nil }
+                    )
+                    self.present(controller, animated: true)
+                    presentedController = controller
+                    
+                case .menu:
+                    let controller = self.tooltipController(
+                        anchoredBy: self.urlBar.contextMenuButton,
+                        sourceRect: CGRect(x: self.urlBar.contextMenuButton.bounds.maxX, y: self.urlBar.contextMenuButton.bounds.midY + 12, width: 0, height: 0),
+                        body: UIConstants.strings.tootipBodyTextForContextMenuIcon,
+                        dismiss: { self.onboardingEventsHandler.route = nil }
+                    )
+                    self.present(controller, animated: true)
+                    presentedController = controller
+                    
+                case .onboarding(let onboardingType):
+                    let dismissOnboarding = { [unowned self] in
+                        Telemetry
+                            .default
+                            .recordEvent(
+                                category: TelemetryEventCategory.action,
+                                method: TelemetryEventMethod.click,
+                                object: TelemetryEventObject.onboarding,
+                                value: "finish"
+                            )
+                        UserDefaults.standard.set(true, forKey: OnboardingConstants.onboardingDidAppear)
+                        UserDefaults.standard.set(AppInfo.shortVersion, forKey: OnboardingConstants.whatsNewVersion)
+                        urlBar.activateTextField()
+                        onboardingEventsHandler.route = nil
+                        onboardingEventsHandler.send(.enterHome)
                     }
+                    
+                    let controller: UIViewController
+                    var animated = true
+                    switch onboardingType {
+                    case .new:
+                        let newOnboardingViewController = OnboardingViewController()
+                        newOnboardingViewController.modalPresentationStyle = .formSheet
+                        newOnboardingViewController.isModalInPresentation = true
+                        newOnboardingViewController.dismissOnboardingScreen = dismissOnboarding
+                        controller = newOnboardingViewController
+                        
+                    case .old:
+                        let introViewController = IntroViewController()
+                        introViewController.modalPresentationStyle = .fullScreen
+                        introViewController.dismissOnboardingScreen = dismissOnboarding
+                        controller = introViewController
+                        animated = false
+                    }
+                    self.present(controller, animated: animated)
+                    presentedController = controller
+                    
+                case .trackingProtection:
+                    break
                 }
-            } else {
-                // Ran into an error with biometrics, so disable them and clear the browser:
-                Settings.set(false, forToggle: SettingsToggle.biometricLogin)
-                self.resetBrowser()
-                self.appSplashController.hideSplashView()
             }
-        }
+            .store(in: &cancellables)
+    }
+    
+    private func setupShortcutEvents() {
+        shortcutManager
+            .$shortcutsState
+            .sink { [unowned self] shortcutsState in
+                
+                switch shortcutsState {
+                case .createShortcutViews:
+                    self.mainContainerView.addSubview(shortcutsBackground)
+                    shortcutsBackground.isHidden = true
+                    addShortcutsBackgroundConstraints()
+                    setupShortcuts()
+                    self.mainContainerView.addSubview(shortcutsContainer)
+                    addShortcutsContainerConstraints()
+                    
+                case .onHomeView:
+                    shortcutsContainer.isHidden = false
+                    shortcutsBackground.isHidden = true
+                    
+                case .editingURL(let text):
+                    let shouldShowShortcuts = text.isEmpty && shortcutManager.numberOfShortcuts != 0
+                    shortcutsContainer.isHidden = !shouldShowShortcuts
+                    shortcutsBackground.isHidden = !urlBar.inBrowsingMode ? true : !shouldShowShortcuts
+                    
+                case .activeURLBar:
+                    let shouldShowShortcuts = shortcutManager.numberOfShortcuts != 0
+                    shortcutsContainer.isHidden = !shouldShowShortcuts
+                    shortcutsBackground.isHidden = !shouldShowShortcuts || !urlBar.inBrowsingMode
+                    
+                case .dismissedURLBar:
+                    shortcutsContainer.isHidden = urlBar.inBrowsingMode || webViewController.isLoading
+                    shortcutsBackground.isHidden = true
+                    
+                case .none:
+                    shortcutsContainer.isHidden = true
+                    shortcutsBackground.isHidden = true
+                }
+            }
+            .store(in: &cancellables)
     }
     
     private func addShortcuts() {
@@ -382,7 +463,7 @@ class BrowserViewController: UIViewController {
         }
     }
     
-    private func updateLockIcon() {
+    private func updateLockIcon(trackingProtectionStatus: TrackingProtectionStatus) {
         urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus, shouldDisplayShieldIcon:  urlBar.inBrowsingMode ? self.webViewController.connectionIsSecure : true)
     }
 
@@ -444,6 +525,7 @@ class BrowserViewController: UIViewController {
         homeViewController = HomeViewController(tipManager: tipManager)
         homeViewController.delegate = self
         homeViewController.toolbar.toolset.delegate = self
+        homeViewController.onboardingEventsHandler = onboardingEventsHandler
         install(homeViewController, on: homeViewContainer)
     }
 
@@ -581,9 +663,6 @@ class BrowserViewController: UIViewController {
         interaction.donate { (error) in
             if let error = error { print(error.localizedDescription) }
         }
-        
-        // Reenable tracking protection after reset
-        Settings.set(true, forToggle: .trackingProtection)
     }
 
     private func clearBrowser() {
@@ -601,8 +680,8 @@ class BrowserViewController: UIViewController {
         homeViewController.refreshTipsDisplay()
         homeViewController.view.isHidden = false
         createURLBar()
-        shortcutsContainer.isHidden = false
-        shortcutsBackground.isHidden = true
+        updateLockIcon(trackingProtectionStatus: trackingProtectionManager.trackingProtectionStatus)
+        shortcutManager.shortcutsState = .onHomeView
 
         // Clear the cache and cookies, starting a new session.
         WebCacheUtils.reset()
@@ -688,8 +767,7 @@ class BrowserViewController: UIViewController {
     func submit(url: URL) {
         // If this is the first navigation, show the browser and the toolbar.
         guard isViewLoaded else { initialUrl = url; return }
-        shortcutsContainer.isHidden = true
-        shortcutsBackground.isHidden = true
+        shortcutManager.shortcutsState = .none
         
         if isIPadRegularDimensions {
             urlBar.snp.makeConstraints { make in
@@ -707,16 +785,32 @@ class BrowserViewController: UIViewController {
                 browserToolbar.animateHidden(false, duration: UIConstants.layout.toolbarFadeAnimationDuration)
             }
         }
-
         webViewController.load(URLRequest(url: url))
+        
         if urlBar.url == nil {
             urlBar.url = url
         }
+        
+        onboardingEventsHandler.route = nil
+        onboardingEventsHandler.send(.startBrowsing)
+        
         guard let savedUrl = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return }
         if let currentDomain = url.baseDomain, let savedDomain = URL(string: savedUrl)?.baseDomain, currentDomain == savedDomain {
             userActivity = SiriShortcuts().getActivity(for: .openURL)
         }
     }
+    
+    private func tooltipController(
+        anchoredBy sourceView: UIView,
+        sourceRect: CGRect, title: String = "",
+        body: String,
+        dismiss: @escaping () -> Void ) -> UIViewController {
+            let tooltipViewController = TooltipViewController()
+            tooltipViewController.set(title: title, body: body)
+            tooltipViewController.configure(anchoredBy: sourceView, sourceRect: sourceRect)
+            tooltipViewController.dismiss = dismiss
+            return tooltipViewController
+        }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
@@ -773,15 +867,17 @@ class BrowserViewController: UIViewController {
         
         DispatchQueue.main.async {
             self.urlBar.updateCollapsedState()
+            if self.onboardingEventsHandler.route ~= .trash {
+                self.onboardingEventsHandler.route = nil
+                self.onboardingEventsHandler.route = .trash
+            }
         }
     }
 
     @objc private func selectLocationBar() {
         showToolbars()
         urlBar.activateTextField()
-        let shouldShowShortcuts = shortcutManager.numberOfShortcuts != 0
-        shortcutsContainer.isHidden = !shouldShowShortcuts
-        shortcutsBackground.isHidden = !shouldShowShortcuts || !urlBar.inBrowsingMode
+        shortcutManager.shortcutsState = .activeURLBar
     }
 
     @objc private func reload() {
@@ -964,6 +1060,7 @@ extension BrowserViewController: UIDropInteractionDelegate {
             self.urlBar.fillUrlBar(text: url.absoluteString)
             self.submit(url: url)
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.drop, object: TelemetryEventObject.searchBar)
+            GleanMetrics.UrlInteraction.dropEnded.record()
         }
     }
 }
@@ -1026,10 +1123,8 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBar(_ urlBar: URLBar, didEnterText text: String) {
         let trimmedText = text.trimmingCharacters(in: .whitespaces)
+        shortcutManager.shortcutsState = .editingURL(text: trimmedText)
         let isOnHomeView = !urlBar.inBrowsingMode
-        let shouldShowShortcuts = trimmedText.isEmpty && shortcutManager.numberOfShortcuts != 0
-        shortcutsContainer.isHidden = !shouldShowShortcuts
-        shortcutsBackground.isHidden = isOnHomeView ? true : !shouldShowShortcuts
         
         if Settings.getToggle(.enableSearchSuggestions) && !trimmedText.isEmpty {
             searchSuggestionsDebouncer.renewInterval()
@@ -1115,8 +1210,7 @@ extension BrowserViewController: URLBarDelegate {
         guard !shortcutContextMenuIsOpenOnIpad() else { return }
         overlayView.dismiss()
         toggleURLBarBackground(isBright: !webViewController.isLoading)
-        shortcutsContainer.isHidden = urlBar.inBrowsingMode
-        shortcutsBackground.isHidden = true
+        shortcutManager.shortcutsState = .dismissedURLBar
         webViewController.focus()
     }
 
@@ -1127,9 +1221,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidActivate(_ urlBar: URLBar) {
-        let shouldShowShortcuts = shortcutManager.numberOfShortcuts != 0
-        shortcutsContainer.isHidden = !shouldShowShortcuts
-        shortcutsBackground.isHidden = !shouldShowShortcuts || !urlBar.inBrowsingMode
+        shortcutManager.shortcutsState = .activeURLBar
         homeViewController.updateUI(urlBarIsActive: true, isBrowsing: urlBar.inBrowsingMode)
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
             self.urlBarContainer.alpha = 1
@@ -1139,8 +1231,6 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidDeactivate(_ urlBar: URLBar) {
-        shortcutsContainer.isHidden = false
-        shortcutsBackground.isHidden = true
         homeViewController.updateUI(urlBarIsActive: false)
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
             self.urlBarContainer.alpha = 0
@@ -1169,13 +1259,6 @@ extension BrowserViewController: URLBarDelegate {
             .replaceError(with: .defaultFavicon)
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
-
-        switch trackingProtectionStatus {
-        case .on:
-            Settings.set(true, forToggle: .trackingProtection)
-        case .off:
-            Settings.set(false, forToggle: .trackingProtection)
-        }
         
         let state: TrackingProtectionState = urlBar.inBrowsingMode
         ? .browsing(status: SecureConnectionStatus(
@@ -1183,7 +1266,7 @@ extension BrowserViewController: URLBarDelegate {
             isSecureConnection: webViewController.connectionIsSecure))
         : .homescreen
         
-        let trackingProtectionViewController = TrackingProtectionViewController(state: state, favIconPublisher: favIconPublisher)
+        let trackingProtectionViewController = TrackingProtectionViewController(state: state, onboardingEventsHandler: onboardingEventsHandler, favIconPublisher: favIconPublisher)
         trackingProtectionViewController.delegate = self
         if UIDevice.current.userInterfaceIdiom == .pad {
             trackingProtectionViewController.modalPresentationStyle = .popover
@@ -1237,6 +1320,27 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 }
 
 extension BrowserViewController: ShortcutViewDelegate {
+    func rename(shortcut: Shortcut) {
+        let alert = UIAlertController(title: UIConstants.strings.renameShortcut, message: nil, preferredStyle: .alert)
+        alert.addTextField { textfield in
+            textfield.placeholder = UIConstants.strings.renameShortcutAlertPlaceholder
+            textfield.text = shortcut.name
+            textfield.clearButtonMode = .always
+            NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textfield, queue: OperationQueue.main, using: { _ in
+                alert.actions.last?.isEnabled = !(textfield.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? false)
+            })
+        }
+        
+        alert.addAction(UIAlertAction(title: UIConstants.strings.renameShortcutAlertSecondaryAction, style: .cancel, handler: { [unowned self] _ in
+            self.urlBar.activateTextField()
+        }))
+        alert.addAction(UIAlertAction(title: UIConstants.strings.renameShortcutAlertPrimaryAction, style: .default, handler: { [unowned alert, unowned self] action in
+            let newName = (alert.textFields?.first?.text ?? shortcut.name).trimmingCharacters(in: .whitespacesAndNewlines)
+            ShortcutsManager.shared.rename(shortcut: shortcut, newName: newName)
+            self.urlBar.activateTextField()
+        }))
+        self.show(alert, sender: nil)
+    }
     
     func dismissShortcut() {
         guard isIPadRegularDimensions else { return }
@@ -1257,6 +1361,7 @@ extension BrowserViewController: ShortcutViewDelegate {
         GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_home_screen"].add()
     }
 }
+
 
 extension BrowserViewController: ShortcutsManagerDelegate {
     func shortcutsUpdated() {
@@ -1506,9 +1611,6 @@ extension BrowserViewController: WebControllerDelegate {
         browserToolbar.canDelete = true
         toggleURLBarBackground(isBright: false)
         updateURLBar()
-        if trackingProtectionStatus == .off {
-            updateLockIcon()
-        }
     }
 
     func webControllerDidFinishNavigation(_ controller: WebController) {
@@ -1638,12 +1740,12 @@ extension BrowserViewController: WebControllerDelegate {
     func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus) {
         // Calculate the number of trackers blocked and add that to lifetime total
         if case .on(let info) = trackingStatus,
-           case .on(let oldInfo) = trackingProtectionStatus {
+           case .on(let oldInfo) = trackingStatus {
             let differenceSinceLastUpdate = max(0, info.total - oldInfo.total)
             let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
             setNumberOfLifetimeTrackersBlocked(numberOfTrackers: numberOfTrackersBlocked + differenceSinceLastUpdate)
         }
-        trackingProtectionStatus = trackingStatus
+        updateLockIcon(trackingProtectionStatus: trackingStatus)
     }
 
     private func showToolbars() {
@@ -1755,17 +1857,23 @@ extension BrowserViewController: MenuActionable {
                   return
               }
         
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.menu, value: "firefox")
         UIApplication.shared.open(firefoxURL, options: [:])
+        
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.menu, value: "firefox")
+        GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "open_in_firefox"))
     }
     
     func findInPage() {
         NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: UIConstants.strings.findInPageNotification)))
+        
+        GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "find_in_page"))
     }
     
     func openInDefaultBrowser(url: URL) {
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.menu, value: "default")
         UIApplication.shared.open(url, options: [:])
+
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.menu, value: "default")
+        GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "open_in_default_browser"))
     }
     
     func openInChrome(url: URL) {
@@ -1785,6 +1893,8 @@ extension BrowserViewController: MenuActionable {
         
         // Open the URL with Chrome.
         UIApplication.shared.open(chromeURL, options: [:])
+
+        GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "open_in_chrome"))
     }
     
     var canOpenInFirefox: Bool {
@@ -1796,13 +1906,17 @@ extension BrowserViewController: MenuActionable {
     }
     
     func requestDesktopBrowsing() {
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.requestDesktop)
         NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification)))
+        
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.requestDesktop)
+        GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "desktop_view_on"))
     }
     
     func requestMobileBrowsing() {
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.requestMobile)
         NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: UIConstants.strings.requestMobileNotification)))
+
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.requestMobile)
+        GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "desktop_view_off"))
     }
     
     func showSharePage(for utils: OpenUtils, sender: UIView) {
@@ -1820,18 +1934,27 @@ extension BrowserViewController: MenuActionable {
         
         shareVC.becomeFirstResponder()
         self.present(shareVC, animated: true, completion: nil)
+
+        GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "share"))
     }
     
     func showSettings(shouldScrollToSiri: Bool = false) {
         guard let modalDelegate = modalDelegate else { return }
 
-        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset, shouldScrollToSiri: shouldScrollToSiri)
+        let settingsViewController = SettingsViewController(
+            searchEngineManager: searchEngineManager,
+            whatsNew: browserToolbar.toolset,
+            authenticationManager: authenticationManager,
+            onboardingEventsHandler: onboardingEventsHandler,
+            shouldScrollToSiri: shouldScrollToSiri
+        )
         let settingsNavController = UINavigationController(rootViewController: settingsViewController)
         settingsNavController.modalPresentationStyle = .formSheet
 
         modalDelegate.presentModal(viewController: settingsNavController, animated: true)
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.settingsButton)
+        GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "settings"))
     }
     
     func showHelp() {
@@ -1841,6 +1964,8 @@ extension BrowserViewController: MenuActionable {
     func showCopy() {
         urlBar.copyToClipboard()
         Toast(text: UIConstants.strings.copyURLToast).show()
+
+        GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "copy_url"))
     }
     
     func addToShortcuts(url: URL) {
@@ -1848,11 +1973,15 @@ extension BrowserViewController: MenuActionable {
         self.shortcutManager.addToShortcuts(shortcut: shortcut)
         GleanMetrics.Shortcuts.shortcutAddedCounter.add()
         TipManager.shortcutsTip = false
+
+        GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "add_to_shortcuts"))
     }
     
     func removeShortcut(url: URL) {
         let shortcut = Shortcut(url: url)
         self.shortcutManager.removeFromShortcuts(shortcut: shortcut)
         GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_browser_menu"].add()
+
+        GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "remove_from_shortcuts"))
     }
 }

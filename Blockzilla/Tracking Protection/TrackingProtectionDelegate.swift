@@ -5,6 +5,6 @@
 
 import Foundation
 
-protocol TrackingProtectionDelegate: AnyObject {
+protocol TrackingProtectionDelegate: AnyObject {    
     func trackingProtectionDidToggleProtection(enabled: Bool)
 }
