@@ -6,6 +6,7 @@ import UIKit
 import SnapKit
 import Telemetry
 import Glean
+import UIHelpers
 
 protocol OverlayViewDelegate: AnyObject {
     func overlayViewDidTouchEmptyArea(_ overlayView: OverlayView)
