@@ -33,14 +33,14 @@ disabled_rules: # rule identifiers to exclude from running
   - force_cast
   - force_try
 opt_in_rules: # some rules are only opt-in
-  - closing_brace
-  - opening_brace
-  - return_arrow_whitespace
-  - trailing_semicolon
-  - statement_position
-  - explicit_init
-  - shorthand_operator
-  - file_header
+  #- closing_brace
+  #- opening_brace
+  #- return_arrow_whitespace
+  #- trailing_semicolon
+  #- statement_position
+  #- explicit_init
+  #- shorthand_operator
+  #- file_header
   # Find all the available rules by running:
   # swiftlint rules
 included: # paths to include during linting. `--path` is ignored if present.
