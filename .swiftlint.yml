@@ -40,7 +40,7 @@ opt_in_rules: # some rules are only opt-in
   - statement_position
   - explicit_init
   - shorthand_operator
-  - file_header
+  #- file_header
   # Find all the available rules by running:
   # swiftlint rules
 included: # paths to include during linting. `--path` is ignored if present.
@@ -50,6 +50,7 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - XCUITest/
   - ClientTests/
   - ScreenshotTests/
+  - tools/
   - Search/
   - Client/Assets/Search/get_supported_locales.swift
 

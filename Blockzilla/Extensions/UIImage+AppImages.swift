@@ -4,7 +4,7 @@
 
 import UIKit
 
-//MARK: - Tracking protection images
+// MARK: - Tracking protection images
 
 extension UIImage {
     static let trackingProtectionOff = UIImage(named: "tracking_protection_off")!

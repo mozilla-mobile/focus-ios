@@ -1,3 +1,4 @@
+// swiftlint:disable all
 //
 //  Deferred.swift
 //  AsyncNetworkServer

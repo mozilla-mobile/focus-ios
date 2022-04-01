@@ -20,6 +20,7 @@ class AuthenticationManager {
         biometricType = context.biometryType
     }
 
+    @available(iOS 15.0.0, *)
     @MainActor
     func authenticateWithBiometrics() async {
         context = LAContext()

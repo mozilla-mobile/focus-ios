@@ -294,8 +294,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
     }
 
     private func authenticateWithBiometrics() {
-        Task {
-            await authenticationManager.authenticateWithBiometrics()
+        if #available(iOS 15.0, *) {
+            Task {
+                await authenticationManager.authenticateWithBiometrics()
+            }
+        } else {
+            // Fallback on earlier versions
         }
     }
 
