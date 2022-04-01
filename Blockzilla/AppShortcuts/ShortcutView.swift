@@ -19,28 +19,28 @@ class ShortcutView: UIView {
     private var shortcut: Shortcut
     weak var delegate: ShortcutViewDelegate?
     
-    lazy var outerView: UIView = {
+    private lazy var outerView: UIView = {
         let outerView = UIView()
         outerView.backgroundColor = .above
         outerView.layer.cornerRadius = 8
         return outerView
     }()
     
-    lazy var innerView: UIView = {
+    private lazy var innerView: UIView = {
         let innerView = UIView()
         innerView.backgroundColor = .foundation
         innerView.layer.cornerRadius = 4
         return innerView
     }()
     
-    lazy var letterLabel: UILabel = {
+    private lazy var letterLabel: UILabel = {
         let letterLabel = UILabel()
         letterLabel.textColor = .primaryText
         letterLabel.font = .title20
         return letterLabel
     }()
     
-    lazy var nameLabel: UILabel = {
+    private lazy var nameLabel: UILabel = {
         let nameLabel = UILabel()
         nameLabel.textColor = .primaryText
         nameLabel.font = .footnote12
@@ -95,6 +95,16 @@ class ShortcutView: UIView {
     
     @objc private func didTap() {
         delegate?.shortcutTapped(shortcut: shortcut)
+    }
+    
+    func getShortcut() -> Shortcut {
+        return shortcut
+    }
+    
+    func renameShortcut(newName: String) {
+        shortcut.name = newName
+        nameLabel.text = shortcut.name
+        letterLabel.text = shortcut.name.first.map(String.init)?.capitalized
     }
     
 }

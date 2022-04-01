@@ -32,6 +32,7 @@ struct Shortcut: Equatable, Codable {
 
 protocol ShortcutsManagerDelegate: AnyObject {
     func shortcutsUpdated()
+    func shortcutUpdated(shortcut: Shortcut, newName: String)
 }
 
 class ShortcutsManager {
@@ -96,10 +97,10 @@ class ShortcutsManager {
     func rename(shortcut: Shortcut, newName: String) {
         var renamedShortcut = shortcut
         renamedShortcut.name = newName
-        if let index = shortcuts.firstIndex(of: shortcut) {
+        if let index = shortcuts.firstIndex(of: shortcut), renamedShortcut.name != shortcuts[index].name {
             shortcuts[index] = renamedShortcut
             saveShortcuts()
-            delegate?.shortcutsUpdated()
+            delegate?.shortcutUpdated(shortcut: shortcuts[index], newName: newName)
         }
     }
     

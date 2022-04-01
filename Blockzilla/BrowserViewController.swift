@@ -1339,7 +1339,7 @@ extension BrowserViewController: ShortcutViewDelegate {
         alert.addAction(UIAlertAction(title: UIConstants.strings.renameShortcutAlertPrimaryAction, style: .default, handler: { [unowned alert, unowned self] action in
             let newName = (alert.textFields?.first?.text ?? shortcut.name).trimmingCharacters(in: .whitespacesAndNewlines)
             ShortcutsManager.shared.rename(shortcut: shortcut, newName: newName)
-            DispatchQueue.main.async {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.001) {
                 self.urlBar.activateTextField()
             }
         }))
@@ -1375,6 +1375,14 @@ extension BrowserViewController: ShortcutsManagerDelegate {
             subview.removeFromSuperview()
         }
         addShortcuts()
+    }
+    func shortcutUpdated(shortcut: Shortcut, newName: String) {
+        for subview in shortcutsContainer.subviews {
+            let subview = subview as? ShortcutView
+            if let subviewShortcut = subview?.getShortcut(), subviewShortcut.url == shortcut.url {
+                subview?.renameShortcut(newName: newName)
+            }
+        }
     }
 }
 
