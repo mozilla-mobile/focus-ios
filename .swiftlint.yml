@@ -52,19 +52,20 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - ScreenshotTests/
   - Search/
   - Client/Assets/Search/get_supported_locales.swift
+  - tools/
 
 # configurable rules can be customized from this configuration file
 # binary rules can set their severity level
-trailing_semicolon: error
-empty_count: error
-closing_brace: error
-opening_brace: error
-return_arrow_whitespace: error
-statement_position: error
-colon: error
-comma: error
-force_try: warning
-force_cast: warning
+# trailing_semicolon: error
+# empty_count: error
+# closing_brace: error
+# opening_brace: error
+# return_arrow_whitespace: error
+# statement_position: error
+# colon: error
+# comma: error
+# force_try: warning
+# force_cast: warning
 
 
 file_header:
