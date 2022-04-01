@@ -32,6 +32,10 @@ disabled_rules: # rule identifiers to exclude from running
   - for_where
   - force_cast
   - force_try
+  - unused_capture_list
+  - unneeded_notification_center_removal
+  - todo
+  - compiler_protocol_init
 opt_in_rules: # some rules are only opt-in
   - closing_brace
   - opening_brace
