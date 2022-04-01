@@ -83,7 +83,7 @@ class OnboardingViewController: UIViewController {
         return imageView
     }()
 
-    //MARK: History
+    // MARK: History
 
     private lazy var historyTitleLabel: UILabel = {
         let label = UILabel()
