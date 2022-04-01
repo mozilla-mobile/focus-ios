@@ -6,7 +6,7 @@ import Foundation
 
 struct WhatsNewEventsHandler {
 
-    //TODO: check which should be the logic of implementation
+    // TODO: check which should be the logic of implementation
     var shouldShowWhatsNewButton: Bool {
         UserDefaults.standard.integer(forKey: OnboardingConstants.whatsNewCounter) != 0
     }

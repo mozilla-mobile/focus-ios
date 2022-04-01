@@ -16,7 +16,7 @@ class OnboardingViewController: UIViewController {
         return scrollView
     }()
 
-    //MARK: Mozilla Icon
+    // MARK: Mozilla Icon
 
     private lazy var mozillaIconImageView: UIImageView = {
         let image = UIImage(named: "icon_mozilla")
@@ -27,7 +27,7 @@ class OnboardingViewController: UIViewController {
         return imageView
     }()
 
-    //MARK: Title Labels
+    // MARK: Title Labels
 
     private lazy var welcomeLabel: UILabel = {
         let label = UILabel()
@@ -50,7 +50,7 @@ class OnboardingViewController: UIViewController {
         return label
     }()
 
-    //MARK: Incognito
+    // MARK: Incognito
 
     private lazy var incognitoTitleLabel: UILabel = {
         let label = UILabel()
@@ -116,7 +116,7 @@ class OnboardingViewController: UIViewController {
         return imageView
     }()
 
-    //MARK: Protection
+    // MARK: Protection
 
     private lazy var protectionTitleLabel: UILabel = {
         let label = UILabel()
@@ -149,7 +149,7 @@ class OnboardingViewController: UIViewController {
         return imageView
     }()
 
-    //MARK: Start Browsing Button
+    // MARK: Start Browsing Button
 
     private lazy var startBrowsingButton: UIButton = {
         let button = UIButton()
