@@ -33,14 +33,14 @@ disabled_rules: # rule identifiers to exclude from running
   - force_cast
   - force_try
 opt_in_rules: # some rules are only opt-in
-  #- closing_brace
-  #- opening_brace
-  #- return_arrow_whitespace
-  #- trailing_semicolon
-  #- statement_position
-  #- explicit_init
-  #- shorthand_operator
-  #- file_header
+  # - closing_brace
+  # - opening_brace
+  # - return_arrow_whitespace
+  # - trailing_semicolon
+  # - statement_position
+  # - explicit_init
+  # - shorthand_operator
+  # - file_header
   # Find all the available rules by running:
   # swiftlint rules
 included: # paths to include during linting. `--path` is ignored if present.
@@ -72,4 +72,4 @@ file_header:
   required_string: "/* This Source Code Form is subject to the terms of the Mozilla Public\n * License, v. 2.0. If a copy of the MPL was not distributed with this\n * file, You can obtain one at http://mozilla.org/MPL/2.0/. */"
 line_length: 1000
 
-reporter: "json" # reporter type (xcode, json, csv, checkstyle)
+reporter: "xcode" # reporter type (xcode, json, csv, checkstyle)
