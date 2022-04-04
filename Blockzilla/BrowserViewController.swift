@@ -1332,20 +1332,14 @@ extension BrowserViewController: ShortcutViewDelegate {
         }
         
         alert.addAction(UIAlertAction(title: UIConstants.strings.renameShortcutAlertSecondaryAction, style: .cancel, handler: { [unowned self] _ in
-            DispatchQueue.main.async {
-                self.urlBar.activateTextField()
-            }
+            self.urlBar.activateTextField()
         }))
         alert.addAction(UIAlertAction(title: UIConstants.strings.renameShortcutAlertPrimaryAction, style: .default, handler: { [unowned alert, unowned self] action in
             let newName = (alert.textFields?.first?.text ?? shortcut.name).trimmingCharacters(in: .whitespacesAndNewlines)
             ShortcutsManager.shared.rename(shortcut: shortcut, newName: newName)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.001) {
-                self.urlBar.activateTextField()
-            }
+            self.urlBar.activateTextField()
         }))
-        DispatchQueue.main.async {
-            self.show(alert, sender: nil)
-        }
+        self.show(alert, sender: nil)
     }
     
     func dismissShortcut() {
@@ -1379,8 +1373,9 @@ extension BrowserViewController: ShortcutsManagerDelegate {
     func shortcutUpdated(shortcut: Shortcut, newName: String) {
         for subview in shortcutsContainer.subviews {
             let subview = subview as? ShortcutView
-            if let subviewShortcut = subview?.getShortcut(), subviewShortcut.url == shortcut.url {
-                subview?.renameShortcut(newName: newName)
+            if let subviewShortcut = subview?.shortcut, subviewShortcut.url == shortcut.url {
+                let newShortcut = Shortcut(url: shortcut.url, name: newName)
+                subview?.renameShortcut(with: newShortcut)
             }
         }
     }

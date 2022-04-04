@@ -16,7 +16,7 @@ protocol ShortcutViewDelegate: AnyObject {
 
 class ShortcutView: UIView {
     var contextMenuIsDisplayed = false
-    private var shortcut: Shortcut
+    private(set) var shortcut: Shortcut
     weak var delegate: ShortcutViewDelegate?
     
     private lazy var outerView: UIView = {
@@ -100,12 +100,8 @@ class ShortcutView: UIView {
         delegate?.shortcutTapped(shortcut: shortcut)
     }
     
-    func getShortcut() -> Shortcut {
-        return shortcut
-    }
-    
-    func renameShortcut(newName: String) {
-        shortcut.name = newName
+    func renameShortcut(with shortcut: Shortcut) {
+        self.shortcut = shortcut
         nameLabel.text = shortcut.name
         letterLabel.text = shortcut.name.first.map(String.init)?.capitalized
     }
