@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Network
 
 private struct ETLDEntry: CustomStringConvertible {
     let entry: String
@@ -195,7 +196,7 @@ extension URL {
      :returns: The base domain string for the given host name.
      */
     public var baseDomain: String? {
-        guard !isIPv4 && !isIPv6, let host = host else { return host }
+        guard let host = host, !isIPv4(host: host), !isIPv6(host: host) else { return host }
 
         // If this is just a hostname and not a FQDN, use the entire hostname.
         if !host.contains(".") {
@@ -285,14 +286,12 @@ extension URL {
         return host.lowercased() == "localhost" || host == "127.0.0.1"
     }
 
-    public var isIPv4: Bool {
-        let ipv4Pattern = #"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"#
-        
-        return host?.range(of: ipv4Pattern, options: .regularExpression) != nil
+    public func isIPv4(host: String) -> Bool {
+        return IPv4Address(host) != nil;
     }
 
-    public var isIPv6: Bool {
-        return host?.contains(":") ?? false
+    public func isIPv6(host: String) -> Bool {
+        return IPv6Address(host) != nil;
     }
 
     /**
