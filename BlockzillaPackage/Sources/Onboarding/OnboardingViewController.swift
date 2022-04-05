@@ -9,7 +9,7 @@ import DesignSystem
 public class OnboardingViewController: UIViewController {
     
     public init(
-        config: TextConfig,
+        config: OnboardingText,
         dismissOnboardingScreen: @escaping (() -> Void)
     ) {
         self.config = config
@@ -22,7 +22,7 @@ public class OnboardingViewController: UIViewController {
     }
     
     private let dismissOnboardingScreen: (() -> Void)
-    private let config: TextConfig
+    private let config: OnboardingText
     
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -184,11 +184,11 @@ public class OnboardingViewController: UIViewController {
         stackView.distribution = .fill
         stackView.isLayoutMarginsRelativeArrangement = true
         if UIDevice.current.userInterfaceIdiom == .phone {
-            stackView.layoutMargins = .init(top: view.frame.height / .onboardingLayoutMarginTopDivider, left: view.frame.width / .onboardingLayoutMarginLeadingTrailingDivider, bottom: .onboardingLayoutMarginBottom, right: view.frame.width / .onboardingLayoutMarginLeadingTrailingDivider)
-            stackView.spacing = view.frame.height / .onboardingSpacingDividerPhone
+            stackView.layoutMargins = .init(top: view.frame.height / .layoutMarginTopDivider, left: view.frame.width / .layoutMarginLeadingTrailingDivider, bottom: .layoutMarginBottom, right: view.frame.width / .layoutMarginLeadingTrailingDivider)
+            stackView.spacing = view.frame.height / .spacingDividerPhone
         } else {
-            stackView.layoutMargins = .init(top: .onboardingLayoutMarginTop, left: view.frame.width / .onboardingLayoutMarginLeadingTrailingDivider, bottom: .onboardingLayoutMarginBottom, right: view.frame.width / .onboardingLayoutMarginLeadingTrailingDivider)
-            stackView.spacing = view.frame.height / .onboardingSpacingDividerPad
+            stackView.layoutMargins = .init(top: .layoutMarginTop, left: view.frame.width / .layoutMarginLeadingTrailingDivider, bottom: .layoutMarginBottom, right: view.frame.width / .layoutMarginLeadingTrailingDivider)
+            stackView.spacing = view.frame.height / .spacingDividerPad
         }
         stackView.accessibilityIdentifier = "OnboardingViewController.mainStackView"
         return stackView
@@ -208,7 +208,7 @@ public class OnboardingViewController: UIViewController {
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.spacing = .onboardingMiddleStackViewSpacing
+        stackView.spacing = .middleStackViewSpacing
         stackView.accessibilityIdentifier = "OnboardingViewController.middleStackView"
         return stackView
     }()
@@ -217,7 +217,7 @@ public class OnboardingViewController: UIViewController {
         let stackView = UIStackView(arrangedSubviews: [incognitoTitleLabel, incognitoDescriptionLabel])
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
-        stackView.spacing = .onboardingTextStackViewSpacing
+        stackView.spacing = .textStackViewSpacing
         stackView.accessibilityIdentifier = "OnboardingViewController.incognitoTextStackView"
         return stackView
     }()
@@ -227,7 +227,7 @@ public class OnboardingViewController: UIViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
         stackView.alignment = .top
-        stackView.spacing = .onboardingMiddleStackViewSpacing
+        stackView.spacing = .middleStackViewSpacing
         stackView.accessibilityIdentifier = "OnboardingViewController.incognitoStackView"
         return stackView
     }()
@@ -236,7 +236,7 @@ public class OnboardingViewController: UIViewController {
         let stackView = UIStackView(arrangedSubviews: [historyTitleLabel, historyDescriptionLabel])
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
-        stackView.spacing = .onboardingTextStackViewSpacing
+        stackView.spacing = .textStackViewSpacing
         stackView.accessibilityIdentifier = "OnboardingViewController.historyTextStackView"
         return stackView
     }()
@@ -246,7 +246,7 @@ public class OnboardingViewController: UIViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
         stackView.alignment = .top
-        stackView.spacing = .onboardingMiddleStackViewSpacing
+        stackView.spacing = .middleStackViewSpacing
         stackView.accessibilityIdentifier = "OnboardingViewController.historyStackView"
         return stackView
     }()
@@ -255,7 +255,7 @@ public class OnboardingViewController: UIViewController {
         let stackView = UIStackView(arrangedSubviews: [protectionTitleLabel, protectionDescriptionLabel])
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
-        stackView.spacing = .onboardingTextStackViewSpacing
+        stackView.spacing = .textStackViewSpacing
         stackView.accessibilityIdentifier = "OnboardingViewController.protectionTextStackView"
         return stackView
     }()
@@ -265,7 +265,7 @@ public class OnboardingViewController: UIViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
         stackView.alignment = .top
-        stackView.spacing = .onboardingMiddleStackViewSpacing
+        stackView.spacing = .middleStackViewSpacing
         stackView.accessibilityIdentifier = "OnboardingViewController.protectionStackView"
         return stackView
     }()
@@ -279,16 +279,16 @@ public class OnboardingViewController: UIViewController {
         super.viewWillTransition(to: size, with: coordinator)
         
         if UIDevice.current.userInterfaceIdiom == .phone {
-            mainStackView.layoutMargins = .init(top: size.height / .onboardingLayoutMarginTopDivider, left: size.width / .onboardingLayoutMarginLeadingTrailingDivider, bottom: .onboardingLayoutMarginBottom, right: size.width / .onboardingLayoutMarginLeadingTrailingDivider)
-            mainStackView.spacing = size.height / .onboardingSpacingDividerPhone
+            mainStackView.layoutMargins = .init(top: size.height / .layoutMarginTopDivider, left: size.width / .layoutMarginLeadingTrailingDivider, bottom: .layoutMarginBottom, right: size.width / .layoutMarginLeadingTrailingDivider)
+            mainStackView.spacing = size.height / .spacingDividerPhone
         } else {
-            mainStackView.layoutMargins = .init(top: .onboardingLayoutMarginTop, left: size.width / .onboardingLayoutMarginLeadingTrailingDivider, bottom: .onboardingLayoutMarginBottom, right: size.width / .onboardingLayoutMarginLeadingTrailingDivider)
-            mainStackView.spacing = size.height / .onboardingSpacingDividerPad
+            mainStackView.layoutMargins = .init(top: .layoutMarginTop, left: size.width / .layoutMarginLeadingTrailingDivider, bottom: .layoutMarginBottom, right: size.width / .layoutMarginLeadingTrailingDivider)
+            mainStackView.spacing = size.height / .spacingDividerPad
         }
         
         startBrowsingButton.snp.updateConstraints { make in
-            make.bottom.equalToSuperview().inset(size.height / .onboardingButtonButtomInsetDivider)
-            make.leading.trailing.equalToSuperview().inset(size.width / .onboardingButtonLeadingTrailingInsetDivider)
+            make.bottom.equalToSuperview().inset(size.height / .buttonButtomInsetDivider)
+            make.leading.trailing.equalToSuperview().inset(size.width / .buttonLeadingTrailingInsetDivider)
         }
     }
     
@@ -312,16 +312,16 @@ public class OnboardingViewController: UIViewController {
 
         mozillaIconImageView.snp.makeConstraints { $0.width.height.equalTo(60) }
         
-        incognitoImageView.snp.makeConstraints { $0.width.height.equalTo(CGFloat.onboardingIconsWidthHeight) }
-        historyImageView.snp.makeConstraints { $0.width.height.equalTo(CGFloat.onboardingIconsWidthHeight) }
-        protectionImageView.snp.makeConstraints { $0.width.height.equalTo(CGFloat.onboardingIconsWidthHeight) }
+        incognitoImageView.snp.makeConstraints { $0.width.height.equalTo(CGFloat.iconsWidthHeight) }
+        historyImageView.snp.makeConstraints { $0.width.height.equalTo(CGFloat.iconsWidthHeight) }
+        protectionImageView.snp.makeConstraints { $0.width.height.equalTo(CGFloat.iconsWidthHeight) }
         
         view.addSubview(startBrowsingButton)
         startBrowsingButton.snp.makeConstraints { make in
-            make.height.equalTo(44)
-            make.bottom.equalToSuperview().inset(view.frame.height / .onboardingButtonButtomInsetDivider)
-            make.leading.trailing.equalToSuperview().inset(view.frame.width / .onboardingButtonLeadingTrailingInsetDivider)
-            make.top.equalTo(scrollView.snp.bottom).inset(-20)
+            make.height.equalTo(CGFloat.buttonHeight)
+            make.bottom.equalToSuperview().inset(view.frame.height / .buttonButtomInsetDivider)
+            make.leading.trailing.equalToSuperview().inset(view.frame.width / .buttonLeadingTrailingInsetDivider)
+            make.top.equalTo(scrollView.snp.bottom).inset(CGFloat.buttonBottomInset)
         }
     }
 
@@ -339,21 +339,22 @@ public class OnboardingViewController: UIViewController {
 }
 
 fileprivate extension CGFloat {
-    static let onboardingButtonHeight: CGFloat = 44
-    static let onboardingIconsWidthHeight: CGFloat = 20
-    static let onboardingTextStackViewSpacing: CGFloat = 6
-    static let onboardingMiddleStackViewSpacing: CGFloat = 24
-    static let onboardingSpacingDividerPhone: CGFloat = 15
-    static let onboardingSpacingDividerPad: CGFloat = 28
-    static let onboardingLayoutMarginTopDivider: CGFloat = 10
-    static let onboardingLayoutMarginTop: CGFloat = 50
-    static let onboardingLayoutMarginLeadingTrailingDivider: CGFloat = 10
-    static let onboardingLayoutMarginBottom: CGFloat = 0
-    static let onboardingButtonButtomInsetDivider: CGFloat = 20
-    static let onboardingButtonLeadingTrailingInsetDivider: CGFloat = 5
+    static let buttonHeight: CGFloat = 44
+    static let buttonBottomInset: CGFloat = -20
+    static let iconsWidthHeight: CGFloat = 20
+    static let textStackViewSpacing: CGFloat = 6
+    static let middleStackViewSpacing: CGFloat = 24
+    static let spacingDividerPhone: CGFloat = 15
+    static let spacingDividerPad: CGFloat = 28
+    static let layoutMarginTopDivider: CGFloat = 10
+    static let layoutMarginTop: CGFloat = 50
+    static let layoutMarginLeadingTrailingDivider: CGFloat = 10
+    static let layoutMarginBottom: CGFloat = 0
+    static let buttonButtomInsetDivider: CGFloat = 20
+    static let buttonLeadingTrailingInsetDivider: CGFloat = 5
 }
 
-public struct TextConfig {
+public struct OnboardingText {
     let welcomeText: String
     let onboardingTitle: String
     let onboardingSubtitle: String
