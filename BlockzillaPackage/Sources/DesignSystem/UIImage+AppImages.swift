@@ -28,4 +28,9 @@ public extension UIImage {
     
     static let faceid = UIImage(named: "faceid")!
     static let touchid = UIImage(named: "touchid")!
+    
+    static let mozilla = UIImage(named: "icon_mozilla")
+    static let privateMode = UIImage(named: "icon_private_mode")
+    static let history = UIImage(named: "icon_history")
+    static let settings = UIImage(named: "icon_settings")
 }
