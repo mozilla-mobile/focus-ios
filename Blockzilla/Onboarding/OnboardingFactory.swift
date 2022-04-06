@@ -11,15 +11,13 @@ class OnboardingFactory {
         case .new:
             let newOnboardingViewController = OnboardingViewController(
                 config: .init(
-                    welcomeText: .welcomeText,
                     onboardingTitle: .onboardingTitle,
                     onboardingSubtitle: .onboardingSubtitle,
-                    onboardingIncognitoTitle: .onboardingIncognitoTitle,
-                    onboardingIncognitoDescription: .onboardingIncognitoDescription,
-                    onboardingHistoryTitle: .onboardingHistoryTitle,
-                    onboardingHistoryDescription: .onboardingHistoryDescription,
-                    onboardingProtectionTitle: .onboardingProtectionTitle,
-                    onboardingProtectionDescription: .onboardingProtectionDescription,
+                    instructions: [
+                        .init(title: .onboardingIncognitoTitle, subtitle: .onboardingIncognitoDescription, image: .privateMode),
+                        .init(title: .onboardingHistoryTitle, subtitle: .onboardingHistoryDescription, image: .history),
+                        .init(title: .onboardingProtectionTitle, subtitle: .onboardingProtectionDescription, image: .settings),
+                    ],
                     onboardingButtonTitle: .onboardingButtonTitle
                 ),
                 dismissOnboardingScreen: dismissAction
@@ -38,8 +36,8 @@ class OnboardingFactory {
 }
 
 fileprivate extension String {
-    static let welcomeText = String(format: .onboardingTitle, AppInfo.config.productName)
-    static let onboardingTitle = NSLocalizedString("Onboarding.Title", value: "Welcome to Firefox %@!", comment: "Text for a label that indicates the title for onboarding screen. (Focus and Klar)")
+    static let onboardingTitle = String(format: .onboardingTitleFormat, AppInfo.config.productName)
+    static let onboardingTitleFormat = NSLocalizedString("Onboarding.Title", value: "Welcome to Firefox %@!", comment: "Text for a label that indicates the title for onboarding screen. (Focus and Klar)")
     static let onboardingSubtitle = NSLocalizedString("Onboarding.Subtitle", value: "Take your private browsing to the next level.", comment: "Text for a label that indicates the subtitle for onboarding screen.")
     static let onboardingIncognitoTitle = NSLocalizedString("Onboarding.Incognito.Title", value: "More than just incognito", comment: "Text for a label that indicates the title of incognito section from onboarding screen.")
     static let onboardingIncognitoDescription = NSLocalizedString("Onboarding.Incognito.Description", value: "Focus is a dedicated privacy browser with tracking protection and content blocking.", comment: "Text for a label that indicates the description of incognito section from onboarding screen.")

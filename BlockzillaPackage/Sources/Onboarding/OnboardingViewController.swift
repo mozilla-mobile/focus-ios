@@ -45,7 +45,7 @@ public class OnboardingViewController: UIViewController {
     private lazy var welcomeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = config.welcomeText
+        label.text = config.onboardingTitle
         label.font = .title20Bold
         label.textColor = .primaryText
         label.accessibilityIdentifier = "OnboardingViewController.welcomeLabel"
@@ -63,101 +63,38 @@ public class OnboardingViewController: UIViewController {
         return label
     }()
     
-    //MARK: Incognito
+    //MARK: Instruction
     
-    private lazy var incognitoTitleLabel: UILabel = {
+    private func titleLabel(title: String) -> UILabel {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = config.onboardingIncognitoTitle
+        label.text = title
         label.numberOfLines = 0
         label.font = .footnote14Bold
         label.textColor = .primaryText
         label.accessibilityIdentifier = "OnboardingViewController.incognitoTitleLabel"
         return label
-    }()
+    }
     
-    private lazy var incognitoDescriptionLabel: UILabel = {
+    private func descriptionLabel(description: String) -> UILabel {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = config.onboardingIncognitoDescription
+        label.text = description
         label.numberOfLines = 0
         label.font = .footnote14
         label.textColor = .secondaryText
         label.accessibilityIdentifier = "OnboardingViewController.incognitoDescriptionLabel"
         return label
-    }()
+    }
     
-    private lazy var incognitoImageView: UIImageView = {
-        let imageView = UIImageView(image: .privateMode)
+    private func imageView(image: UIImage) -> UIImageView {
+        let imageView = UIImageView(image: image)
+        imageView.snp.makeConstraints { $0.width.height.equalTo(CGFloat.iconsWidthHeight) }
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
         imageView.accessibilityIdentifier = "OnboardingViewController.incognitoImageView"
         return imageView
-    }()
-    
-    //MARK: History
-    
-    private lazy var historyTitleLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = config.onboardingHistoryTitle
-        label.font = .footnote14Bold
-        label.numberOfLines = 0
-        label.textColor = .primaryText
-        label.accessibilityIdentifier = "OnboardingViewController.historyTitleLabel"
-        return label
-    }()
-    
-    private lazy var historyDescriptionLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = config.onboardingHistoryDescription
-        label.numberOfLines = 0
-        label.font = .footnote14
-        label.textColor = .secondaryText
-        label.accessibilityIdentifier = "OnboardingViewController.historyDescriptionLabel"
-        return label
-    }()
-    
-    private lazy var historyImageView: UIImageView = {
-        let imageView = UIImageView(image: .history)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
-        imageView.accessibilityIdentifier = "OnboardingViewController.historyImageView"
-        return imageView
-    }()
-    
-    //MARK: Protection
-    
-    private lazy var protectionTitleLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = config.onboardingProtectionTitle
-        label.font = .footnote14Bold
-        label.textColor = .primaryText
-        label.numberOfLines = 0
-        label.accessibilityIdentifier = "OnboardingViewController.protectionTitleLabel"
-        return label
-    }()
-    
-    private lazy var protectionDescriptionLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = config.onboardingProtectionDescription
-        label.numberOfLines = 0
-        label.font = .footnote14
-        label.textColor = .secondaryText
-        label.accessibilityIdentifier = "OnboardingViewController.protectionDescriptionLabel"
-        return label
-    }()
-    
-    private lazy var protectionImageView: UIImageView = {
-        let imageView = UIImageView(image: .settings)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
-        imageView.accessibilityIdentifier = "OnboardingViewController.protectionImageView"
-        return imageView
-    }()
+    }
     
     //MARK: Start Browsing Button
     
@@ -204,7 +141,7 @@ public class OnboardingViewController: UIViewController {
     }()
     
     private lazy var middleStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [incognitoStackView, historyStackView, protectionStackView])
+        let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -213,62 +150,24 @@ public class OnboardingViewController: UIViewController {
         return stackView
     }()
     
-    private lazy var incognitoTextStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [incognitoTitleLabel, incognitoDescriptionLabel])
+    private func instructionTextStackView(with labels: [UILabel]) -> UIStackView {
+        let stackView = UIStackView(arrangedSubviews: labels)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.spacing = .textStackViewSpacing
         stackView.accessibilityIdentifier = "OnboardingViewController.incognitoTextStackView"
         return stackView
-    }()
+    }
     
-    private lazy var incognitoStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [incognitoImageView, incognitoTextStackView])
+    private func instructionStackView(with views: [UIView]) -> UIStackView {
+        let stackView = UIStackView(arrangedSubviews: views)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
         stackView.alignment = .top
         stackView.spacing = .middleStackViewSpacing
         stackView.accessibilityIdentifier = "OnboardingViewController.incognitoStackView"
         return stackView
-    }()
-    
-    private lazy var historyTextStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [historyTitleLabel, historyDescriptionLabel])
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        stackView.spacing = .textStackViewSpacing
-        stackView.accessibilityIdentifier = "OnboardingViewController.historyTextStackView"
-        return stackView
-    }()
-    
-    private lazy var historyStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [historyImageView, historyTextStackView])
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .horizontal
-        stackView.alignment = .top
-        stackView.spacing = .middleStackViewSpacing
-        stackView.accessibilityIdentifier = "OnboardingViewController.historyStackView"
-        return stackView
-    }()
-    
-    private lazy var protectionTextStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [protectionTitleLabel, protectionDescriptionLabel])
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        stackView.spacing = .textStackViewSpacing
-        stackView.accessibilityIdentifier = "OnboardingViewController.protectionTextStackView"
-        return stackView
-    }()
-    
-    private lazy var protectionStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [protectionImageView, protectionTextStackView])
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .horizontal
-        stackView.alignment = .top
-        stackView.spacing = .middleStackViewSpacing
-        stackView.accessibilityIdentifier = "OnboardingViewController.protectionStackView"
-        return stackView
-    }()
+    }
     
     private lazy var contentView: UIView = {
         let view = UIView()
@@ -309,12 +208,27 @@ public class OnboardingViewController: UIViewController {
             make.top.bottom.leading.trailing.equalToSuperview()
             make.width.equalTo(view)
         }
+        
+        config
+            .instructions
+            .map { instruction -> UIStackView in
+                return instructionStackView(
+                    with: [
+                        imageView(image: instruction.image),
+                        instructionTextStackView(
+                            with: [
+                                titleLabel(title: instruction.title),
+                                descriptionLabel(description: instruction.subtitle)
+                            ]
+                        )
+                    ]
+                )
+            }
+            .forEach {
+                middleStackView.addArrangedSubview($0)
+            }
 
         mozillaIconImageView.snp.makeConstraints { $0.width.height.equalTo(60) }
-        
-        incognitoImageView.snp.makeConstraints { $0.width.height.equalTo(CGFloat.iconsWidthHeight) }
-        historyImageView.snp.makeConstraints { $0.width.height.equalTo(CGFloat.iconsWidthHeight) }
-        protectionImageView.snp.makeConstraints { $0.width.height.equalTo(CGFloat.iconsWidthHeight) }
         
         view.addSubview(startBrowsingButton)
         startBrowsingButton.snp.makeConstraints { make in
@@ -355,40 +269,33 @@ fileprivate extension CGFloat {
 }
 
 public struct OnboardingText {
-    let welcomeText: String
     let onboardingTitle: String
     let onboardingSubtitle: String
-    let onboardingIncognitoTitle: String
-    let onboardingIncognitoDescription: String
-    let onboardingHistoryTitle: String
-    let onboardingHistoryDescription: String
-    let onboardingProtectionTitle: String
-    let onboardingProtectionDescription: String
+    let instructions: [Instruction]
     let onboardingButtonTitle: String
     
     public init(
-        welcomeText: String,
         onboardingTitle: String,
         onboardingSubtitle: String,
-        onboardingIncognitoTitle: String,
-        onboardingIncognitoDescription: String,
-        onboardingHistoryTitle: String,
-        onboardingHistoryDescription: String,
-        onboardingProtectionTitle: String,
-        onboardingProtectionDescription: String,
+        instructions: [Instruction] = [],
         onboardingButtonTitle: String
     ) {
-        self.welcomeText = welcomeText
         self.onboardingTitle = onboardingTitle
         self.onboardingSubtitle = onboardingSubtitle
-        self.onboardingIncognitoTitle = onboardingIncognitoTitle
-        self.onboardingIncognitoDescription = onboardingIncognitoDescription
-        self.onboardingHistoryTitle = onboardingHistoryTitle
-        self.onboardingHistoryDescription = onboardingHistoryDescription
-        self.onboardingProtectionTitle = onboardingProtectionTitle
-        self.onboardingProtectionDescription = onboardingProtectionDescription
+        self.instructions = instructions
         self.onboardingButtonTitle = onboardingButtonTitle
-        
     }
     
+}
+
+public class Instruction {
+    let title: String
+    let subtitle: String
+    let image: UIImage
+    
+    public init(title: String, subtitle: String, image: UIImage) {
+        self.title = title
+        self.subtitle = subtitle
+        self.image = image
+    }
 }
