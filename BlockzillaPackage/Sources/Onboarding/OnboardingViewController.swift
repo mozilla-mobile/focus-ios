@@ -72,7 +72,7 @@ public class OnboardingViewController: UIViewController {
         label.numberOfLines = 0
         label.font = .footnote14Bold
         label.textColor = .primaryText
-        label.accessibilityIdentifier = "OnboardingViewController.incognitoTitleLabel"
+        label.accessibilityIdentifier = "OnboardingViewController.instruction.titleLabel"
         return label
     }
     
@@ -83,7 +83,7 @@ public class OnboardingViewController: UIViewController {
         label.numberOfLines = 0
         label.font = .footnote14
         label.textColor = .secondaryText
-        label.accessibilityIdentifier = "OnboardingViewController.incognitoDescriptionLabel"
+        label.accessibilityIdentifier = "OnboardingViewController.instruction.descriptionLabel"
         return label
     }
     
@@ -92,7 +92,7 @@ public class OnboardingViewController: UIViewController {
         imageView.snp.makeConstraints { $0.width.height.equalTo(CGFloat.iconsWidthHeight) }
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
-        imageView.accessibilityIdentifier = "OnboardingViewController.incognitoImageView"
+        imageView.accessibilityIdentifier = "OnboardingViewController.instruction.imageView"
         return imageView
     }
     
@@ -155,7 +155,7 @@ public class OnboardingViewController: UIViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.spacing = .textStackViewSpacing
-        stackView.accessibilityIdentifier = "OnboardingViewController.incognitoTextStackView"
+        stackView.accessibilityIdentifier = "OnboardingViewController.instruction.textStackView"
         return stackView
     }
     
@@ -165,7 +165,7 @@ public class OnboardingViewController: UIViewController {
         stackView.axis = .horizontal
         stackView.alignment = .top
         stackView.spacing = .middleStackViewSpacing
-        stackView.accessibilityIdentifier = "OnboardingViewController.incognitoStackView"
+        stackView.accessibilityIdentifier = "OnboardingViewController.instruction.stackView"
         return stackView
     }
     
