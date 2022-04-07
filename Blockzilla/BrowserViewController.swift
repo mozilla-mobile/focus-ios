@@ -10,6 +10,7 @@ import StoreKit
 import Intents
 import Glean
 import Combine
+import Onboarding
 
 class BrowserViewController: UIViewController {
     private let mainContainerView = UIView(frame: .zero)
@@ -346,23 +347,7 @@ class BrowserViewController: UIViewController {
                         onboardingEventsHandler.send(.enterHome)
                     }
                     
-                    let controller: UIViewController
-                    var animated = true
-                    switch onboardingType {
-                    case .new:
-                        let newOnboardingViewController = OnboardingViewController()
-                        newOnboardingViewController.modalPresentationStyle = .formSheet
-                        newOnboardingViewController.isModalInPresentation = true
-                        newOnboardingViewController.dismissOnboardingScreen = dismissOnboarding
-                        controller = newOnboardingViewController
-                        
-                    case .old:
-                        let introViewController = IntroViewController()
-                        introViewController.modalPresentationStyle = .fullScreen
-                        introViewController.dismissOnboardingScreen = dismissOnboarding
-                        controller = introViewController
-                        animated = false
-                    }
+                    let (controller, animated) = OnboardingFactory.make(onboardingType: onboardingType, dismissAction: dismissOnboarding)
                     self.present(controller, animated: animated)
                     presentedController = controller
                     
@@ -1234,7 +1219,7 @@ extension BrowserViewController: URLBarDelegate {
         homeViewController.updateUI(urlBarIsActive: false)
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
             self.urlBarContainer.alpha = 0
-            self.view.layoutIfNeeded()
+            self.view.setNeedsLayout()
         }
     }
 
@@ -1363,12 +1348,20 @@ extension BrowserViewController: ShortcutViewDelegate {
 }
 
 
-extension BrowserViewController: ShortcutsManagerDelegate {
+extension BrowserViewController: ShortcutsManagerDelegate {    
     func shortcutsUpdated() {
         for subview in shortcutsContainer.subviews {
             subview.removeFromSuperview()
         }
         addShortcuts()
+    }
+    func shortcutDidUpdate(shortcut: Shortcut) {
+        for subview in shortcutsContainer.subviews {
+            let subview = subview as? ShortcutView
+            if let subviewShortcut = subview?.shortcut, subviewShortcut.url == shortcut.url {
+                subview?.renameShortcut(with: shortcut)
+            }
+        }
     }
 }
 
