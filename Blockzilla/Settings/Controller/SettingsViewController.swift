@@ -499,9 +499,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     @objc private func whatsNewClicked() {
-        highlightsButton.tintColor = whatsNewButtonColor
         navigationController?.pushViewController(SettingsContentViewController(url: URL(forSupportTopic: .whatsNew)), animated: true)
         whatsNewEventsHandler.didShowWhatsNew()
+        highlightsButton.tintColor = whatsNewButtonColor
     }
 
     @objc private func toggleSwitched(_ sender: UISwitch) {
