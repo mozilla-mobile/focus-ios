@@ -53,8 +53,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let barButton = UIBarButtonItem(title: UIConstants.strings.whatsNewTitle, style: .plain, target: self, action: #selector(whatsNewClicked))
         barButton.image = UIImage(named: "highlight")
         barButton.accessibilityIdentifier = "SettingsViewController.whatsNewButton"
-        let barButtonDisabledColor: UIColor = UserDefaults.standard.theme == .device ? (traitCollection.userInterfaceStyle == .light ? .systemGray2 : .white) : (UserDefaults.standard.theme == .light ? .systemGray2 : .white)
-        barButton.tintColor = whatsNewEventsHandler.shouldShowWhatsNew ? .accent : barButtonDisabledColor
+        barButton.tintColor = whatsNewButtonColor
         return barButton
     }()
     
@@ -92,6 +91,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             break
         }
         return themeName
+    }
+    
+    private var whatsNewButtonColor: UIColor {
+        let barButtonDisabledColor: UIColor = UserDefaults.standard.theme == .device ? (traitCollection.userInterfaceStyle == .light ? .systemGray2 : .white) : (UserDefaults.standard.theme == .light ? .systemGray2 : .white)
+        return whatsNewEventsHandler.shouldShowWhatsNew ? .accent : barButtonDisabledColor
     }
 
     private func getSectionIndex(_ section: Section) -> Int? {
@@ -495,7 +499,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     @objc private func whatsNewClicked() {
-        highlightsButton.tintColor = UserDefaults.standard.theme == .light ? .systemGray2 : .white
+        highlightsButton.tintColor = whatsNewButtonColor
         navigationController?.pushViewController(SettingsContentViewController(url: URL(forSupportTopic: .whatsNew)), animated: true)
         whatsNewEventsHandler.didShowWhatsNew()
     }
