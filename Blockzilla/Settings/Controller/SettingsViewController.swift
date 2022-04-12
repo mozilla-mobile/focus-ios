@@ -10,6 +10,7 @@ import IntentsUI
 import Glean
 import SwiftUI
 import Onboarding
+import Combine
 
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -66,6 +67,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     
     private var onboardingEventsHandler: OnboardingEventsHandler
     private var whatsNewEventsHandler: WhatsNewEventsHandler
+    private var themeVC = ThemeViewController()
+    private var cancellable: AnyCancellable?
     // Hold a strong reference to the block detector so it isn't deallocated
     // in the middle of its detection.
     private let detector = BlockerEnabledDetector()
@@ -176,6 +179,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        
+        cancellable = themeVC
+            .$newTheme
+            .sink { [unowned self] theme in
+                highlightsButton.tintColor = whatsNewButtonColor
+            }
 
         initializeToggles()
         for (sectionIndex, toggleArray) in toggles {
@@ -220,6 +229,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         if isViewLoaded && view.window != nil {
             updateSafariEnabledState()
         }
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard UserDefaults.standard.theme == .device  else { return }
+        themeVC.newTheme = traitCollection.userInterfaceStyle
     }
 
     private func createBiometricLoginToggleIfAvailable() -> BlockerToggle? {
@@ -408,7 +423,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.deselectRow(at: indexPath, animated: true)
         switch sections[indexPath.section] {
         case .general:
-            let themeVC = ThemeViewController()
             navigationController?.pushViewController(themeVC, animated: true)
         case .privacy:
             if indexPath.row == 0 {

@@ -30,6 +30,8 @@ class ThemeViewController: UIViewController {
         }
     }
     
+    @Published public var newTheme: UIUserInterfaceStyle = .unspecified
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.separatorStyle = .singleLine
@@ -128,13 +130,9 @@ extension ThemeViewController: UITableViewDelegate {
         
         switch indexPath.section {
         case 1:
-            if indexPath.row == 0 {
-                configureStyle(for: .light)
-                UserDefaults.standard.theme = .light
-            } else {
-                configureStyle(for: .dark)
-                UserDefaults.standard.theme = .dark
-            }
+            configureStyle(for: indexPath.row == 0 ? .light : .dark)
+            UserDefaults.standard.theme = indexPath.row == 0 ? .light : .dark
+            newTheme = indexPath.row == 0 ? .light : .dark
         default:
             break
         }
@@ -147,6 +145,7 @@ extension ThemeViewController: SystemThemeDelegate {
     func didEnableSystemTheme(_ isEnabled: Bool) {
         configureStyle(for: isEnabled ? .device : .light)
         UserDefaults.standard.theme = isEnabled ? .device : .light
+        newTheme = isEnabled ? traitCollection.userInterfaceStyle : .light
         tableView.beginUpdates()
         isEnabled ? tableView.deleteSections([1], with: .fade) :  tableView.insertSections([1], with: .fade)
         tableView.endUpdates()
