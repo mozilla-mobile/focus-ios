@@ -48,6 +48,8 @@ class BrowserViewController: UIViewController {
     private var background = UIImageView()
     private var cancellables = Set<AnyCancellable>()
     private var onboardingEventsHandler: OnboardingEventsHandler
+    private var whatsNewEventsHandler: WhatsNewEventsHandler
+    private var themeManager: ThemeManager
 
     private enum URLBarScrollState {
         case collapsed
@@ -87,12 +89,16 @@ class BrowserViewController: UIViewController {
         tipManager: TipManager = TipManager.shared,
         shortcutManager: ShortcutsManager = ShortcutsManager.shared,
         authenticationManager: AuthenticationManager,
-        onboardingEventsHandler: OnboardingEventsHandler
+        onboardingEventsHandler: OnboardingEventsHandler,
+        whatsNewEventsHandler: WhatsNewEventsHandler,
+        themeManager: ThemeManager
     ) {
         self.tipManager = tipManager
         self.shortcutManager = shortcutManager
         self.authenticationManager = authenticationManager
         self.onboardingEventsHandler = onboardingEventsHandler
+        self.whatsNewEventsHandler = whatsNewEventsHandler
+        self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
         shortcutManager.delegate = self
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
@@ -267,6 +273,15 @@ class BrowserViewController: UIViewController {
                 updateLockIcon(trackingProtectionStatus: status)
             }
             .store(in: &cancellables)
+        
+        whatsNewEventsHandler
+            .$shouldShowWhatsNew
+            .sink { [unowned self] shouldShow in
+                homeViewController.toolbar.toolset.setHighlightWhatsNew(shouldHighlight: shouldShow)
+                browserToolbar.toolset.setHighlightWhatsNew(shouldHighlight: shouldShow)
+                urlBar.setHighlightWhatsNew(shouldHighlight: shouldShow)
+            }
+            .store(in: &cancellables)
 
         
         guard shouldEnsureBrowsingMode else { return }
@@ -279,10 +294,7 @@ class BrowserViewController: UIViewController {
         super.viewWillAppear(animated)
         
         navigationController?.setNavigationBarHidden(true, animated: animated)
-        let homeViewToolset = homeViewController.toolbar.toolset
-        homeViewToolset.setHighlightWhatsNew(shouldHighlight: homeViewToolset.shouldShowWhatsNew())
         homeViewController.toolbar.layoutIfNeeded()
-        browserToolbar.toolset.setHighlightWhatsNew(shouldHighlight: browserToolbar.toolset.shouldShowWhatsNew())
         browserToolbar.layoutIfNeeded()
     }
     
@@ -341,7 +353,6 @@ class BrowserViewController: UIViewController {
                                 value: "finish"
                             )
                         UserDefaults.standard.set(true, forKey: OnboardingConstants.onboardingDidAppear)
-                        UserDefaults.standard.set(AppInfo.shortVersion, forKey: OnboardingConstants.whatsNewVersion)
                         urlBar.activateTextField()
                         onboardingEventsHandler.route = nil
                         onboardingEventsHandler.send(.enterHome)
@@ -499,11 +510,6 @@ class BrowserViewController: UIViewController {
         webViewController.view.snp.makeConstraints { make in
             make.edges.equalTo(webViewContainer.snp.edges)
         }
-    }
-
-    public func exitFullScreenVideo() {
-        let js = "document.getElementsByTagName('video')[0].webkitExitFullScreen()"
-        webViewController.evaluate(js, completion: nil)
     }
 
     private func createHomeView() {
@@ -1836,11 +1842,6 @@ extension BrowserViewController {
     }
 }
 
-protocol WhatsNewDelegate {
-    func shouldShowWhatsNew() -> Bool
-    func didShowWhatsNew()
-}
-
 extension BrowserViewController: MenuActionable {
     
     func openInFirefox(url: URL) {
@@ -1936,9 +1937,10 @@ extension BrowserViewController: MenuActionable {
 
         let settingsViewController = SettingsViewController(
             searchEngineManager: searchEngineManager,
-            whatsNew: browserToolbar.toolset,
             authenticationManager: authenticationManager,
             onboardingEventsHandler: onboardingEventsHandler,
+            whatsNewEventsHandler: whatsNewEventsHandler,
+            themeManager: themeManager,
             shouldScrollToSiri: shouldScrollToSiri
         )
         let settingsNavController = UINavigationController(rootViewController: settingsViewController)

@@ -142,6 +142,7 @@ struct UIConstants {
         static let contextMenuButtonSize: CGFloat = 36
         static let contextMenuButtonMargin: CGFloat = 14
         static let contextMenuIconSize: CGFloat = 28
+        static let deleteButtonMarginContextMenu: CGFloat = -16
     }
 
     struct strings {
@@ -378,7 +379,7 @@ struct UIConstants {
         static let autocompleteCustomDescription = NSLocalizedString("Autocomplete.customDescriptoin", value: "Add and manage custom autocomplete URLs.", comment: "Description for adding and managing custom autocomplete URLs")
         static let protectionStatusSecure = NSLocalizedString("ProtectionStatus.Secure", value: "Connection is secure", comment: "This is the value for a label that indicates if a user is on a secure https connection.")
         static let protectionStatusNotSecure = NSLocalizedString("ProtectionStatus.NotSecure", value: "Connection is not secure", comment: "This is the value for a label that indicates if a user is on an unencrypted website.")
-        static let tooltipBodyTextForShieldIcon = NSLocalizedString("TooltipBodyText.ShieldIcon", value: "Focus stopped this site from spying on you. Tap the shield for info on what we blocked.", comment: "This is the body text that is displayed for the Shield icon tooltip")
+        static let tooltipBodyTextForShieldIcon = String(format: NSLocalizedString("TooltipBodyText.ShieldIcon", value: "%@ stopped this site from spying on you. Tap the shield for info on what we blocked.", comment: "This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar)."), AppInfo.productName)
         static let tooltipTitleTextForPrivacy = NSLocalizedString("TooltipTitleText.Privacy", value: "You’re protected! ", comment: "This is the title text that is displayed for the Privacy tooltip")
         static let tooltipBodyTextForPrivacy = NSLocalizedString("TooltipBodyText.Privacy", value: "These default settings offer strong protection. But it’s easy to tweak the settings to meet your specific needs.", comment: "This is the body text that is displayed for the Privacy tooltip")
         static let tootipBodyTextForContextMenuIcon = NSLocalizedString("TooltipBodyText.ContextMenu", value: "Go to Settings to manage specific privacy & security options.", comment: "This is the body text that is displayed for the Context Menu icon tooltip")

@@ -298,7 +298,7 @@ class URLBar: UIView {
         }
         
         toolset.deleteButton.snp.makeConstraints { make in
-            make.trailing.equalTo(toolset.contextMenuButton.snp.leading).offset(isIPadRegularDimensions ? UIConstants.layout.deleteButtonOffset : 0)
+            make.trailing.equalTo(toolset.contextMenuButton.snp.leading).inset(isIPadRegularDimensions ? UIConstants.layout.deleteButtonOffset : UIConstants.layout.deleteButtonMarginContextMenu)
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
         }
@@ -444,6 +444,10 @@ class URLBar: UIView {
     public func dismissTextField() {
         urlText.isUserInteractionEnabled = false
         urlText.endEditing(true)
+    }
+    
+    public func setHighlightWhatsNew(shouldHighlight: Bool) {
+        toolset.setHighlightWhatsNew(shouldHighlight: shouldHighlight)
     }
 
     @objc func addCustomURL() {
