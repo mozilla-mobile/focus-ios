@@ -358,7 +358,7 @@ class URLBar: UIView {
             showLeftBarViewConstraints.append(make.left.equalToSuperview().constraint)
             
             hidePageActionsConstraints.append(make.trailing.equalToSuperview().constraint)
-            showPageActionsConstraints.append(make.trailing.equalTo(urlBarBorderView.snp.trailing).offset(UIConstants.layout.urlBarButtonTargetSize).constraint)
+            showPageActionsConstraints.append(make.trailing.equalTo(urlBarBorderView.snp.trailing).inset(UIConstants.layout.urlBarButtonTargetSize).constraint)
         }
 
         progressBar.snp.makeConstraints { make in
