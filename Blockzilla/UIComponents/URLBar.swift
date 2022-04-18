@@ -224,7 +224,6 @@ class URLBar: UIView {
         urlText.font = .body15
         urlText.tintColor = .primaryText
         urlText.textColor = .primaryText
-        urlText.highlightColor = .accent.withAlphaComponent(0.4)
         urlText.keyboardType = .webSearch
         urlText.autocapitalizationType = .none
         urlText.autocorrectionType = .no
@@ -232,7 +231,6 @@ class URLBar: UIView {
         urlText.rightViewMode = .whileEditing
         urlText.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .vertical)
         urlText.autocompleteDelegate = self
-        urlText.completionSource = domainCompletion
         urlText.accessibilityIdentifier = "URLBar.urlText"
         urlText.placeholder = UIConstants.strings.urlTextPlaceholder
         textAndLockContainer.addSubview(urlText)
@@ -864,10 +862,17 @@ class URLBar: UIView {
 }
 
 extension URLBar: AutocompleteTextFieldDelegate {
+    func autocompleteTextFieldShouldClear(_ autocompleteTextField: AutocompleteTextField) -> Bool { return false }
+    
+    func autocompleteTextFieldDidCancel(_ autocompleteTextField: AutocompleteTextField) { }
+    
+    func autocompletePasteAndGo(_ autocompleteTextField: AutocompleteTextField) { }
+    
+    func autocompleteTextFieldShouldEndEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool { return false }
+    
     func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
 
         setTextToURL(displayFullUrl: true)
-        autocompleteTextField.highlightAll()
 
         if !isEditing {
             isEditing = true
@@ -898,7 +903,12 @@ extension URLBar: AutocompleteTextFieldDelegate {
         return true
     }
 
-    func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didTextChange text: String) {
+    func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didEnterText text: String) {
+        if let oldValue = userInputText, oldValue.count < text.count {
+            let completion = domainCompletion.autocompleteTextFieldCompletionSource(autocompleteTextField, forText: text)
+            autocompleteTextField.setAutocompleteSuggestion(completion)
+        }
+        
         userInputText = text
         
         if !text.isEmpty {
@@ -911,7 +921,6 @@ extension URLBar: AutocompleteTextFieldDelegate {
             isEditing = true
             delegate?.urlBarDidActivate(self)
         }
-
         delegate?.urlBar(self, didEnterText: text)
     }
 }
