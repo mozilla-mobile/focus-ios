@@ -887,7 +887,8 @@ extension URLBar: AutocompleteTextFieldDelegate {
     }
 
     func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool {
-
+        // If the new search string is not longer than the previous
+        // we don't need to find an autocomplete suggestion.
         if let autocompleteText = autocompleteTextField.text, autocompleteText != userInputText {
             Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.autofill))
         }
