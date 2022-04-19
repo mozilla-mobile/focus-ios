@@ -867,7 +867,7 @@ extension URLBar: AutocompleteTextFieldDelegate {
 
     func autocompletePasteAndGo(_ autocompleteTextField: AutocompleteTextField) { }
 
-    func autocompleteTextFieldShouldEndEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool { return false }
+    func autocompleteTextFieldShouldEndEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool { return true }
 
     func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
 

@@ -14,6 +14,8 @@ protocol AutocompleteTextFieldDelegate: AnyObject {
     func autocompleteTextFieldShouldClear(_ autocompleteTextField: AutocompleteTextField) -> Bool
     func autocompleteTextFieldDidCancel(_ autocompleteTextField: AutocompleteTextField)
     func autocompletePasteAndGo(_ autocompleteTextField: AutocompleteTextField)
+    func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool
+    func autocompleteTextFieldShouldEndEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool
 }
 
 public class AutocompleteTextField: UITextField, UITextFieldDelegate {
@@ -248,9 +250,13 @@ public class AutocompleteTextField: UITextField, UITextFieldDelegate {
         return label
     }
 
+    public func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        return autocompleteDelegate?.autocompleteTextFieldShouldBeginEditing(self) ?? true
+    }
+
     public func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         applyCompletion()
-        return true
+        return autocompleteDelegate?.autocompleteTextFieldShouldEndEditing(self) ?? true
     }
 
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
