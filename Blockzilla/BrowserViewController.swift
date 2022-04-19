@@ -1433,6 +1433,7 @@ extension BrowserViewController: BrowserToolsetDelegate {
 
     func browserToolsetDidPressContextMenu(_ browserToolbar: BrowserToolset, menuButton: InsetButton) {
         updateFindInPageVisibility(visible: false)
+        urlBar.dismiss()
         presentContextMenu(from: menuButton)
     }
 }
