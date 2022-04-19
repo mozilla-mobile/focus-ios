@@ -862,13 +862,13 @@ class URLBar: UIView {
 
 extension URLBar: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldShouldClear(_ autocompleteTextField: AutocompleteTextField) -> Bool { return false }
-    
+
     func autocompleteTextFieldDidCancel(_ autocompleteTextField: AutocompleteTextField) { }
-    
+
     func autocompletePasteAndGo(_ autocompleteTextField: AutocompleteTextField) { }
-    
+
     func autocompleteTextFieldShouldEndEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool { return false }
-    
+
     func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
 
         setTextToURL(displayFullUrl: true)
@@ -907,7 +907,7 @@ extension URLBar: AutocompleteTextFieldDelegate {
             let completion = domainCompletion.autocompleteTextFieldCompletionSource(autocompleteTextField, forText: text)
             autocompleteTextField.setAutocompleteSuggestion(completion)
         }
-        
+
         userInputText = text
 
         if !text.isEmpty {
