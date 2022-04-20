@@ -25,7 +25,7 @@ class ShareTrackersViewController: UIViewController {
         trackerStatsLabel.textColor = .secondaryText
         trackerStatsLabel.numberOfLines = 2
         trackerStatsLabel.setContentHuggingPriority(.required, for: .horizontal)
-        trackerStatsLabel.setContentCompressionResistancePriority(UILayoutPriority(999), for: .horizontal)
+        trackerStatsLabel.setContentCompressionResistancePriority(.trackerStatsLabelContentCompressionPriority, for: .horizontal)
         return trackerStatsLabel
     }()
 
@@ -86,4 +86,8 @@ fileprivate extension CGFloat {
     static let trackerStatsShareButtonLeadingTrailingPadding: CGFloat = 8
     static let shareTrackersLeadingTrailingOffset: CGFloat = 16
     static let shareTrackerStackViewSpacing: CGFloat = 16
+}
+
+fileprivate extension UILayoutPriority {
+    static let trackerStatsLabelContentCompressionPriority = UILayoutPriority(999)
 }
