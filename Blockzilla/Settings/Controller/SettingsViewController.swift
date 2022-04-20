@@ -39,7 +39,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             return sections
         }
     }
-    
+
     private let dismissScreenCompletion: (() -> Void)
 
     private lazy var tableView: UITableView = {
