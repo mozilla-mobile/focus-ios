@@ -1112,10 +1112,11 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBar(_ urlBar: URLBar, didEnterText text: String) {
         let trimmedText = text.trimmingCharacters(in: .whitespaces)
+        guard urlBar.url?.absoluteString != trimmedText else { return }
         shortcutManager.shortcutsState = .editingURL(text: trimmedText)
         let isOnHomeView = !urlBar.inBrowsingMode
 
-        if Settings.getToggle(.enableSearchSuggestions) && !trimmedText.isEmpty {
+        if Settings.getToggle(.enableSearchSuggestions), !trimmedText.isEmpty {
             searchSuggestionsDebouncer.renewInterval()
             searchSuggestionsDebouncer.completion = {
                 self.searchSuggestClient.getSuggestions(trimmedText, callback: { suggestions, error in
@@ -1937,6 +1938,7 @@ extension BrowserViewController: MenuActionable {
             onboardingEventsHandler: onboardingEventsHandler,
             whatsNewEventsHandler: whatsNewEventsHandler,
             themeManager: themeManager,
+            dismissScreenCompletion: activateUrlBarOnHomeView,
             shouldScrollToSiri: shouldScrollToSiri
         )
         let settingsNavController = UINavigationController(rootViewController: settingsViewController)
