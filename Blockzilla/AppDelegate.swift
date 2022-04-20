@@ -7,6 +7,7 @@ import Telemetry
 import Glean
 import Sentry
 import Combine
+import Onboarding
 
 enum AppPhase {
     case notRunning
@@ -41,18 +42,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
         splashView.authenticationManager = authenticationManager
         return splashView
     }()
-    
+
     private lazy var browserViewController = BrowserViewController(
         authenticationManager: authenticationManager,
-        onboardingEventsHandler: onboardingEventsHandler
+        onboardingEventsHandler: onboardingEventsHandler,
+        whatsNewEventsHandler: whatsNewEventsHandler,
+        themeManager: themeManager
     )
-    
+
     private let nimbus = NimbusWrapper.shared
     private var queuedUrl: URL?
     private var queuedString: String?
     private let whatsNewEventsHandler = WhatsNewEventsHandler()
+    private let themeManager = ThemeManager()
     private var cancellables = Set<AnyCancellable>()
-    
+
     private lazy var onboardingEventsHandler = OnboardingEventsHandler(
         alwaysShowOnboarding: {
             UserDefaults.standard.bool(forKey: OnboardingConstants.alwaysShowOnboarding)
@@ -86,27 +90,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         appPhase = .didFinishLaunching
-        
+
         $appPhase.sink { [unowned self] phase in
             switch phase {
             case .didFinishLaunching, .willEnterForeground:
                 authenticateWithBiometrics()
-                
+
             case .didBecomeActive:
                 if authenticationManager.authenticationState == .loggedin { hideSplashView() }
-            
+
             case .willResignActive:
                 showSplashView()
-                
+
             case .didEnterBackgroundkground:
                 authenticationManager.logout()
-                
+
             case .notRunning, .willTerminate:
                 break
             }
         }
         .store(in: &cancellables)
-        
+
         authenticationManager
             .$authenticationState
             .receive(on: DispatchQueue.main)
@@ -114,17 +118,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
                 switch state {
                 case .loggedin:
                     self.hideSplashView()
-                    
+
                 case .loggedout:
                     self.splashView.state = .default
                     self.showSplashView()
-                    
+
                 case .canceled:
                     self.splashView.state = .needsAuth
                 }
             }
             .store(in: &cancellables)
-        
+
         if AppInfo.testRequestsReset() {
             if let bundleID = Bundle.main.bundleIdentifier {
                 UserDefaults.standard.removePersistentDomain(forName: bundleID)
@@ -135,9 +139,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
         setupCrashReporting()
         setupTelemetry()
         setupExperimentation()
-        
+
         TPStatsBlocklistChecker.shared.startup()
-        
+
         // Fix transparent navigation bar issue in iOS 15
         if #available(iOS 15, *) {
             let appearance = UINavigationBarAppearance()
@@ -167,12 +171,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
         browserViewController.modalDelegate = self
         window?.rootViewController = browserViewController
         window?.makeKeyAndVisible()
-        window?.overrideUserInterfaceStyle = UserDefaults.standard.theme.userInterfaceStyle
-        
+        window?.overrideUserInterfaceStyle = themeManager.selectedTheme
+
         WebCacheUtils.reset()
-        
+
         KeyboardHelper.defaultHelper.startObserving()
-        
+
         if AppInfo.isTesting() {
             // Only show the First Run UI if the test asks for it.
             if AppInfo.isFirstRunUIEnabled() {
@@ -180,10 +184,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
             }
             return true
         }
-        
+
         onboardingEventsHandler.send(.applicationDidLaunch)
         whatsNewEventsHandler.highlightWhatsNewButton()
-        
+
         return true
     }
 
@@ -292,7 +296,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
             string as CFString,
             "" as CFString) as String
     }
-    
+
     private func authenticateWithBiometrics() {
         Task {
             await authenticationManager.authenticateWithBiometrics()
@@ -301,14 +305,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
 
     func applicationWillResignActive(_ application: UIApplication) {
         appPhase = .willResignActive
-        browserViewController.exitFullScreenVideo()
         browserViewController.dismissActionSheet()
         browserViewController.deactivateUrlBar()
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         appPhase = .didBecomeActive
-        
+
         if Settings.siriRequestsErase() {
             browserViewController.photonActionSheetDidDismiss()
             browserViewController.dismiss(animated: true, completion: nil)
@@ -346,7 +349,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
             queuedString = nil
         }
     }
-    
+
     func applicationWillEnterForeground(_ application: UIApplication) {
         appPhase = .willEnterForeground
     }
@@ -390,14 +393,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
         }
         return true
     }
-    
+
     func hideSplashView() {
         browserViewController.activateUrlBarOnHomeView()
         splashView.alpha = 0
         splashView.isHidden = true
         splashView.removeFromSuperview()
     }
-    
+
     func showSplashView() {
         browserViewController.deactivateUrlBarOnHomeView()
         window!.addSubview(splashView)
@@ -409,7 +412,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
     }
 }
 
-
 // MARK: - Crash Reporting
 
 private let SentryDSNKey = "SentryDSN"
@@ -420,7 +422,7 @@ extension AppDelegate {
         if !Settings.getToggle(.sendAnonymousUsageData) {
             return
         }
-        
+
         if let sentryDSN = Bundle.main.object(forInfoDictionaryKey: SentryDSNKey) as? String {
             SentrySDK.start { options in
                 options.dsn = sentryDSN
@@ -477,11 +479,11 @@ extension AppDelegate {
             .flatMap(UUID.init(uuidString:)) {
             GleanMetrics.LegacyIds.clientId.set(clientId)
         }
-        
+
         if UserDefaults.standard.bool(forKey: GleanLogPingsToConsole) {
             Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?logPings=true")!)
         }
-        
+
         if UserDefaults.standard.bool(forKey: GleanEnableDebugView) {
             if let tag = UserDefaults.standard.string(forKey: GleanDebugViewTag), !tag.isEmpty, let encodedTag = tag.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed) {
                 Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?debugViewTag=\(encodedTag)")!)
@@ -500,7 +502,7 @@ extension AppDelegate {
         GleanMetrics.MozillaProducts.hasFirefoxInstalled.set(UIApplication.shared.canOpenURL(URL(string: "firefox://")!))
         GleanMetrics.Preferences.userTheme.set(UserDefaults.standard.theme.telemetryValue)
     }
-        
+
     func setupExperimentation() {
         do {
             // Enable nimbus when both Send Usage Data and Studies are enabled in the settings.
@@ -513,7 +515,7 @@ extension AppDelegate {
     func presentModal(viewController: UIViewController, animated: Bool) {
         window?.rootViewController?.present(viewController, animated: animated, completion: nil)
     }
-    
+
     func presentSheet(viewController: UIViewController) {
         let vc = SheetModalViewController(containerViewController: viewController)
         vc.modalPresentationStyle = .overCurrentContext

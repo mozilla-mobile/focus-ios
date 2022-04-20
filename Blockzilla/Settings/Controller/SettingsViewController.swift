@@ -9,9 +9,11 @@ import Intents
 import IntentsUI
 import Glean
 import SwiftUI
+import Onboarding
+import Combine
 
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    
+
     enum Section: String {
         case general, privacy, usageData, studies, search, siri, integration, mozilla, secret
 
@@ -47,24 +49,41 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.estimatedRowHeight = UITableView.automaticDimension
         return tableView
     }()
+
+    private lazy var highlightsButton: UIBarButtonItem = {
+        let barButton = UIBarButtonItem(title: UIConstants.strings.whatsNewTitle, style: .plain, target: self, action: #selector(whatsNewClicked))
+        barButton.image = UIImage(named: "highlight")
+        barButton.accessibilityIdentifier = "SettingsViewController.whatsNewButton"
+        barButton.tintColor = whatsNewButtonColor
+        return barButton
+    }()
+
+    private lazy var doneButton: UIBarButtonItem = {
+        let doneButton = UIBarButtonItem(title: UIConstants.strings.done, style: .plain, target: self, action: #selector(dismissSettings))
+        doneButton.tintColor = .accent
+        doneButton.accessibilityIdentifier = "SettingsViewController.doneButton"
+        return doneButton
+    }()
+
     private var onboardingEventsHandler: OnboardingEventsHandler
+    private var whatsNewEventsHandler: WhatsNewEventsHandler
+    private var themeManager: ThemeManager
+    private var cancellable: AnyCancellable?
     // Hold a strong reference to the block detector so it isn't deallocated
     // in the middle of its detection.
     private let detector = BlockerEnabledDetector()
     private let authenticationManager: AuthenticationManager
     private var isSafariEnabled = false
     private let searchEngineManager: SearchEngineManager
-    private var highlightsButton = UIBarButtonItem()
-    private let whatsNew: WhatsNewDelegate
     private lazy var sections = {
         Section.getSections()
     }()
 
     private var toggles = [Int: [Int: BlockerToggle]]()
-    
+
     private var labelTextForCurrentTheme: String {
         var themeName = ""
-        switch UserDefaults.standard.theme.userInterfaceStyle {
+        switch themeManager.selectedTheme {
         case .unspecified:
             themeName = UIConstants.strings.systemTheme
         case .light:
@@ -75,6 +94,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             break
         }
         return themeName
+    }
+
+    var whatsNewButtonColor: UIColor {
+        let barButtonDisabledColor: UIColor = themeManager.selectedTheme == .unspecified ? (traitCollection.userInterfaceStyle == .light ? .systemGray2 : .white) : (themeManager.selectedTheme == .light ? .systemGray2 : .white)
+        return whatsNewEventsHandler.shouldShowWhatsNew ? .accent : barButtonDisabledColor
     }
 
     private func getSectionIndex(_ section: Section) -> Int? {
@@ -117,20 +141,23 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     private var shouldScrollToSiri: Bool
+
     init(
         searchEngineManager: SearchEngineManager,
-        whatsNew: WhatsNewDelegate,
         authenticationManager: AuthenticationManager,
         onboardingEventsHandler: OnboardingEventsHandler,
+        whatsNewEventsHandler: WhatsNewEventsHandler,
+        themeManager: ThemeManager,
         shouldScrollToSiri: Bool = false
     ) {
         self.searchEngineManager = searchEngineManager
-        self.whatsNew = whatsNew
         self.shouldScrollToSiri = shouldScrollToSiri
         self.authenticationManager = authenticationManager
         self.onboardingEventsHandler = onboardingEventsHandler
+        self.whatsNewEventsHandler = whatsNewEventsHandler
+        self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
-        
+
         tableView.register(SettingsTableViewAccessoryCell.self, forCellReuseIdentifier: "accessoryCell")
     }
 
@@ -148,21 +175,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         navigationBar.shadowImage = UIImage()
         navigationBar.layoutIfNeeded()
         navigationBar.titleTextAttributes = [.foregroundColor: UIColor.primaryText]
-
-        highlightsButton = UIBarButtonItem(title: UIConstants.strings.whatsNewTitle, style: .plain, target: self, action: #selector(whatsNewClicked))
-        highlightsButton.image = UIImage(named: "highlight")
-        highlightsButton.tintColor = .accent
-        highlightsButton.accessibilityIdentifier = "SettingsViewController.whatsNewButton"
-        
-        let doneButton = UIBarButtonItem(title: UIConstants.strings.done, style: .plain, target: self, action: #selector(dismissSettings))
-        doneButton.tintColor = .accent
-        doneButton.accessibilityIdentifier = "SettingsViewController.doneButton"
-
         navigationItem.rightBarButtonItems = [doneButton, highlightsButton]
-
-        if whatsNew.shouldShowWhatsNew() {
-            highlightsButton.tintColor = .accent
-        }
 
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
@@ -197,8 +210,15 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             tableView.scrollToRow(at: siriIndexPath, at: .none, animated: false)
             shouldScrollToSiri = false
         }
+
+        cancellable = themeManager
+            .$selectedTheme
+            .sink { [unowned self] selectedTheme in
+                highlightsButton.tintColor = whatsNewButtonColor
+            }
+
     }
-    
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         DispatchQueue.main.async { [weak self] in
             self?.tableView.reloadData()
@@ -212,6 +232,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         if isViewLoaded && view.window != nil {
             updateSafariEnabledState()
         }
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard themeManager.selectedTheme == .unspecified  else { return }
+        themeManager.set(.device)
     }
 
     private func createBiometricLoginToggleIfAvailable() -> BlockerToggle? {
@@ -268,7 +294,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                     UIConstants.strings.settingsTrackingProtectionOn :
                     UIConstants.strings.settingsTrackingProtectionOff
                 cell = trackingCell
-                
+
             } else {
                 cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
             }
@@ -315,7 +341,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case .integration:
             cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
         case .mozilla:
-            
+
             if !onboardingEventsHandler.shouldShowNewOnboarding() && indexPath.row == 0 {
                 cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
             } else if (!onboardingEventsHandler.shouldShowNewOnboarding() && indexPath.row == 1) || indexPath.row == 0 {
@@ -335,10 +361,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         cell.textLabel?.textColor = .primaryText
         cell.layoutMargins = UIEdgeInsets.zero
         cell.detailTextLabel?.textColor = .secondaryText
-        
+
         return cell
     }
-    
+
     func numberOfRows(for section: Section) -> Int {
         switch section {
         case .general: return 1
@@ -362,11 +388,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
     }
-    
+
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sections[section].headerText
     }
-    
+
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if let text = toggles[section]?.first?.value.subtitle {
             let footer = ActionFooterView(frame: .zero)
@@ -381,7 +407,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 } else if section == getSectionIndex(.studies) {
                     selector = #selector(tappedLearnMoreStudies)
                 }
-                
+
                 let tapGesture = UITapGestureRecognizer(target: self, action: selector)
                 footer.detailTextButton.setTitle(UIConstants.strings.learnMore, for: .normal)
                 footer.detailTextButton.addGestureRecognizer(tapGesture)
@@ -400,7 +426,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.deselectRow(at: indexPath, animated: true)
         switch sections[indexPath.section] {
         case .general:
-            let themeVC = ThemeViewController()
+            let themeVC = ThemeViewController(themeManager: themeManager)
             navigationController?.pushViewController(themeVC, animated: true)
         case .privacy:
             if indexPath.row == 0 {
@@ -458,13 +484,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             self?.isSafariEnabled = enabled
         }
     }
-    
+
     private func tappedFooter(forSupportTopic topic: SupportTopic) {
         let contentViewController = SettingsContentViewController(url: URL(forSupportTopic: topic))
         navigationController?.navigationBar.tintColor = .accent
         navigationController?.pushViewController(contentViewController, animated: true)
     }
-    
+
     @objc func tappedLearnMoreFooter(gestureRecognizer: UIGestureRecognizer) {
         tappedFooter(forSupportTopic: .usageData)
     }
@@ -476,7 +502,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     @objc func tappedLearnMoreStudies(gestureRecognizer: UIGestureRecognizer) {
         tappedFooter(forSupportTopic: .studies)
     }
-    
+
     @objc private func dismissSettings() {
         #if DEBUG
         if let browserViewController = presentingViewController as? BrowserViewController {
@@ -491,9 +517,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     @objc private func whatsNewClicked() {
-        highlightsButton.tintColor = view.currentTheme == .light ? .systemGray2 : .white
         navigationController?.pushViewController(SettingsContentViewController(url: URL(forSupportTopic: .whatsNew)), animated: true)
-        whatsNew.didShowWhatsNew()
+        whatsNewEventsHandler.didShowWhatsNew()
+        highlightsButton.tintColor = whatsNewButtonColor
     }
 
     @objc private func toggleSwitched(_ sender: UISwitch) {
@@ -510,7 +536,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
 
         // The following settings are special and need to be in effect immediately.
-        
+
         if toggle.setting == .sendAnonymousUsageData {
             Telemetry.default.configuration.isCollectionEnabled = sender.isOn
             Telemetry.default.configuration.isUploadEnabled = sender.isOn

@@ -509,7 +509,7 @@
 "ShareMenu.ShareOpenFirefox" = "Ireki Firefoxen";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
-"ShareMenu.SharePage" = "Partekatu orria honekin...";
+"ShareMenu.SharePage" = "Partekatu orria honekin…";
 
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "Kendu lasterbideetatik";

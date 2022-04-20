@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import XCTest
+import Onboarding
 
 #if FOCUS
 @testable import Firefox_Focus
@@ -26,11 +27,16 @@ class BrowserViewControllerTests: XCTestCase {
             
         }
     )
+    
+    private lazy var whatsNewEventsHandler = WhatsNewEventsHandler()
+    private lazy var themeManager = ThemeManager()
 
     func testRequestReviewThreshold() {
         let bvc = BrowserViewController(
             authenticationManager: AuthenticationManager(),
-            onboardingEventsHandler: onboardingEventsHandler
+            onboardingEventsHandler: onboardingEventsHandler,
+            whatsNewEventsHandler: whatsNewEventsHandler,
+            themeManager: themeManager
         )
         mockUserDefaults.clear()
 

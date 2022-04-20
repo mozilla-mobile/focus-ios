@@ -5,7 +5,7 @@
 import UIKit
 
 struct UIConstants {
-    
+
     static let maximumNumberOfShortcuts = 4
 
     struct layout {
@@ -139,21 +139,10 @@ struct UIConstants {
         static let actionSheetTitleHeaderHeight: CGFloat = 36
         static let actionSheetSeparatorHeaderHeight: CGFloat = 12
         static let settingsCellLeftInset: CGFloat = 20
-        static let onboardingButtonHeight: CGFloat = 44
-        static let onboardingIconsWidthHeight: CGFloat = 20
-        static let onboardingTextStackViewSpacing: CGFloat = 6
-        static let onboardingMiddleStackViewSpacing: CGFloat = 24
-        static let onboardingSpacingDividerPhone: CGFloat = 15
-        static let onboardingSpacingDividerPad: CGFloat = 28
-        static let onboardingLayoutMarginTopDivider: CGFloat = 10
-        static let onboardingLayoutMarginTop: CGFloat = 50
-        static let onboardingLayoutMarginLeadingTrailingDivider: CGFloat = 10
-        static let onboardingLayoutMarginBottom: CGFloat = 0
-        static let onboardingButtonButtomInsetDivider: CGFloat = 20
-        static let onboardingButtonLeadingTrailingInsetDivider: CGFloat = 5
         static let contextMenuButtonSize: CGFloat = 36
         static let contextMenuButtonMargin: CGFloat = 14
         static let contextMenuIconSize: CGFloat = 28
+        static let deleteButtonMarginContextMenu: CGFloat = -16
     }
 
     struct strings {
@@ -267,7 +256,7 @@ struct UIConstants {
         static let urlBarCancel = NSLocalizedString("URL.cancelLabel", value: "Cancel", comment: "Label for cancel button shown when entering a URL or search")
         static let urlTextPlaceholder = NSLocalizedString("URL.placeholderText", value: "Search or enter address", comment: "Placeholder text shown in the URL bar before the user navigates to a page")
         static let pageActionsTitle = NSLocalizedString("ShareMenu.PageActions", value: "Page Actions", comment: "Title for the share menu where users can take actions for the current website they are on.")
-        static let sharePage = NSLocalizedString("ShareMenu.SharePage", value: "Share Page With...", comment: "Text for the share menu option when a user wants to share the current website they are on through another app.")
+        static let sharePage = NSLocalizedString("ShareMenu.SharePage", value: "Share Page With…", comment: "Text for the share menu option when a user wants to share the current website they are on through another app.")
         static let shareOpenInFirefox = NSLocalizedString("ShareMenu.ShareOpenFirefox", value: "Open in Firefox", comment: "Text for the share menu option when a user wants to open the current website in the Firefox app.")
         static let shareOpenInChrome = NSLocalizedString("ShareMenu.ShareOpenChrome", value: "Open in Chrome", comment: "Text for the share menu option when a user wants to open the current website in the Chrome app.")
         static let shareOpenInDefaultBrowser = NSLocalizedString("ShareMenu.ShareOpenDefaultBrowser", value: "Open in Default Browser", comment: "Text for the share menu option when a user wants to open the current website in the default browser.")
@@ -390,19 +379,19 @@ struct UIConstants {
         static let autocompleteCustomDescription = NSLocalizedString("Autocomplete.customDescriptoin", value: "Add and manage custom autocomplete URLs.", comment: "Description for adding and managing custom autocomplete URLs")
         static let protectionStatusSecure = NSLocalizedString("ProtectionStatus.Secure", value: "Connection is secure", comment: "This is the value for a label that indicates if a user is on a secure https connection.")
         static let protectionStatusNotSecure = NSLocalizedString("ProtectionStatus.NotSecure", value: "Connection is not secure", comment: "This is the value for a label that indicates if a user is on an unencrypted website.")
-        static let tooltipBodyTextForShieldIcon = NSLocalizedString("TooltipBodyText.ShieldIcon", value: "Focus stopped this site from spying on you. Tap the shield for info on what we blocked.", comment: "This is the body text that is displayed for the Shield icon tooltip")
+        static let tooltipBodyTextForShieldIcon = String(format: NSLocalizedString("TooltipBodyText.ShieldIcon", value: "%@ stopped this site from spying on you. Tap the shield for info on what we blocked.", comment: "This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar)."), AppInfo.productName)
         static let tooltipTitleTextForPrivacy = NSLocalizedString("TooltipTitleText.Privacy", value: "You’re protected! ", comment: "This is the title text that is displayed for the Privacy tooltip")
         static let tooltipBodyTextForPrivacy = NSLocalizedString("TooltipBodyText.Privacy", value: "These default settings offer strong protection. But it’s easy to tweak the settings to meet your specific needs.", comment: "This is the body text that is displayed for the Privacy tooltip")
         static let tootipBodyTextForContextMenuIcon = NSLocalizedString("TooltipBodyText.ContextMenu", value: "Go to Settings to manage specific privacy & security options.", comment: "This is the body text that is displayed for the Context Menu icon tooltip")
         static let tooltipBodyTextForTrashIcon = NSLocalizedString("TooltipBodyText.TrashIcon", value: "Tap the trash anytime to remove all traces of your current session.", comment: "This is the body text that is displayed for the Trash icon tooltip")
-        
+
         static let userDefaultsLaunchThresholdKey = "launchThreshold"
         static let userDefaultsLaunchCountKey = "launchCount"
         static let userDefaultsLastReviewRequestDate = "lastReviewRequestDate"
         static let requestDesktopNotification = "Notification.requestDesktop"
         static let requestMobileNotification = "Notification.requestMobile"
         static let findInPageNotification = "Notification.findInPage"
-        
+
         static let encodingNameUTF8 = "utf-8"
         static let googleAmpURLPrefix = "https://www.google.com/amp/s/"
         static let truncateLeader = "..."

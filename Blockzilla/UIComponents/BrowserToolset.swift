@@ -16,8 +16,7 @@ protocol BrowserToolsetDelegate: AnyObject {
 
 class BrowserToolset {
     weak var delegate: BrowserToolsetDelegate?
-    
-    var whatsNewEventsHandler = WhatsNewEventsHandler()
+    var shouldShowWhatsNew: Bool = false
     let backButton = InsetButton()
     let forwardButton = InsetButton()
     let stopReloadButton = InsetButton()
@@ -41,7 +40,7 @@ class BrowserToolset {
         stopReloadButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         stopReloadButton.addTarget(self, action: #selector(didPressStopReload), for: .touchUpInside)
         stopReloadButton.accessibilityIdentifier = "BrowserToolset.stopReloadButton"
-        
+
         deleteButton.setImage(#imageLiteral(resourceName: "icon_delete"), for: .normal)
         deleteButton.addTarget(self, action: #selector(didPressDelete), for: .touchUpInside)
         deleteButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
@@ -60,8 +59,8 @@ class BrowserToolset {
         contextMenuButton.accessibilityIdentifier = "HomeView.settingsButton"
         contextMenuButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         contextMenuButton.imageView?.snp.makeConstraints { $0.size.equalTo(UIConstants.layout.contextMenuIconSize) }
-        
-        setHighlightWhatsNew(shouldHighlight: shouldShowWhatsNew())
+
+       setHighlightWhatsNew(shouldHighlight: shouldShowWhatsNew)
     }
 
     var canGoBack: Bool = false {
@@ -89,7 +88,7 @@ class BrowserToolset {
             }
         }
     }
-    
+
     var canDelete: Bool = false {
         didSet {
             deleteButton.isEnabled = canDelete
@@ -112,7 +111,7 @@ class BrowserToolset {
             delegate?.browserToolsetDidPressReload(self)
         }
     }
-    
+
     @objc func didPressDelete() {
         if canDelete {
             delegate?.browserToolsetDidPressDelete(self)
@@ -124,20 +123,6 @@ class BrowserToolset {
     }
 
     func setHighlightWhatsNew(shouldHighlight: Bool) {
-        if shouldHighlight {
-            contextMenuButton.setImage(UIImage(named: "preferences_updated"), for: .normal)
-        } else {
-            contextMenuButton.setImage(UIImage(named: "icon_hamburger_menu"), for: .normal)
-        }
-    }
-}
-
-extension BrowserToolset: WhatsNewDelegate {
-    func shouldShowWhatsNew() -> Bool {
-        whatsNewEventsHandler.shouldShowWhatsNewButton
-    }
-
-    func didShowWhatsNew() {
-        whatsNewEventsHandler.didShowWhatsNewButton()
+        contextMenuButton.setImage(UIImage(named: shouldHighlight ? "preferences_updated" : "icon_hamburger_menu"), for: .normal)
     }
 }
