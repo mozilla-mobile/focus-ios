@@ -238,7 +238,6 @@ public class AutocompleteTextField: UITextField, UITextFieldDelegate {
         label.attributedText = autocompleteText
         label.font = self.font
         label.accessibilityIdentifier = "autocomplete"
-//        label.backgroundColor = self.backgroundColor
         label.textColor = self.textColor
         label.textAlignment = .left
 
