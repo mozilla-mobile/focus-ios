@@ -122,7 +122,7 @@ workflows:
 
             echo "-- test-without-building --"
             #xcodebuild -scheme Focus -showdestinations
-            xcodebuild -project "Blockzilla.xcodeproj" -scheme "Focus" -sdk iphonesimulator -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "SmokeTest" -destination "platform=iOS Simulator,name=iPhone 8,OS=latest" test
+            xcodebuild -project "Blockzilla.xcodeproj" -scheme "Focus" -sdk iphonesimulator -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "SmokeTest" -destination "platform=iOS Simulator,name=iPhone 8,OS=latest" test-without-building
     - deploy-to-bitrise-io@2: { }
     meta:
       bitrise.io:
@@ -161,7 +161,7 @@ workflows:
 
             echo "-- test-without-building --"
 
-            xcodebuild -project "Blockzilla.xcodeproj" -scheme "Focus" -sdk iphonesimulator -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "FullFunctionalTests" -destination "platform=iOS Simulator,name=iPhone 8,OS=latest" test
+            xcodebuild -project "Blockzilla.xcodeproj" -scheme "Focus" -sdk iphonesimulator -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "FullFunctionalTests" -destination "platform=iOS Simulator,name=iPhone 8,OS=latest" test-without-building
     - deploy-to-bitrise-io@2: { }
     meta:
       bitrise.io:
