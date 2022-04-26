@@ -17,7 +17,7 @@ trigger_map:
   workflow: release
 
 pipelines:
-  pipelines_multiple_shards:
+  pipeline_multiple_shards:
     stages:
         - stage_1: {}
         #- stage_2: {}
@@ -86,10 +86,6 @@ workflows:
     - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
-    meta:
-      bitrise.io:
-        stack: osx-xcode-13.3.x
-
 
   # build_and_test_1:
   #   steps:
