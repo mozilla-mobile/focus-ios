@@ -71,7 +71,7 @@ workflows:
             echo "-- build-for-testing --"
             mkdir DerivedData
                 
-            xcodebuild "-project" "/Users/vagrant/git/Blockzilla.xcodeproj" "-scheme" "Focus" "-configuration" "FocusDebug" "CODE_SIGNING_ALLOWED=NO" "-destination" "platform=iOS Simulator,name=iPhone 8,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"     
+            xcodebuild "-project" "/Users/vagrant/git/Blockzilla.xcodeproj" "-scheme" "Focus" "-configuration" "FocusDebug" "CODE_SIGNING_ALLOWED=NO" "-destination" "platform=iOS Simulator,name=iPhone 8,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "${BITRISE_SOURCE_DIR}/DerivedData"   
             echo "show files"
             ls DerivedData/
     - script@1.1:
