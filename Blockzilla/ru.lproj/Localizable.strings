@@ -247,6 +247,33 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Закрыть";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Начать веб-сёрфинг";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Одним нажатием сотрите историю посещения страниц, пароли, куки и не дайте следовать за вами нежелательной рекламе!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Ваша история за вами следовать не будет";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ — это специальный браузер для обеспечения приватности с защитой от отслеживания и блокировкой контента.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Больше, чем просто инкогнито";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Настройте параметры, чтобы вы могли решить, какими данными будете делиться.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Защита на ваше усмотрение";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Перейдите на новый уровень приватного просмотра.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Добро пожаловать в Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Отмена";
 
@@ -371,7 +398,7 @@
 "Settings.Search.NewSearchEngineAdded" = "Добавлена новая поисковая система.";
 
 /* Label for button to bring deleted default engines back */
-"Settings.Search.RestoreEngine" = "Восстановить набор поисковых систем по умолчанию";
+"Settings.Search.RestoreEngine" = "Восстановить поисковые системы по умолчанию";
 
 /* Placeholder text for input of new search engine name */
 "Settings.Search.SearchEngineName" = "Имя поисковой системы";
@@ -508,6 +535,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Открыть в Firefox";
 
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Поделиться через…";
+
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "Удалить из ярлыков";
 
@@ -597,6 +627,21 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "На сайте отсутствует контент или он ведёт себя странно?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Перейдите в «Настройки» для управления специфичными настройками приватности и безопасности.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Эти настройки по умолчанию обеспечивают надежную защиту. Но вы можете легко изменить их под ваши конкретные потребности.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ остановил слежку этого сайта за вами. Коснитесь щита, чтобы узнать, что мы заблокировали.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Коснитесь корзины в любое время, чтобы удалить все следы текущего сеанса.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Вы защищены!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Используйте Touch ID для возврата в %@";
