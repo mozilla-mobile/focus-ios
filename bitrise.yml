@@ -9,6 +9,8 @@ trigger_map:
   workflow: runParallelTests
 - pull_request_source_branch: "*"
   pipeline: pipeline_multiple_shards
+- push_branch: '*'
+  pipeline: pipeline_multiple_shards
 - tag: "*"
   workflow: release
 
@@ -85,7 +87,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-13.3.x
-        machine_type_id: g2.4core
+
 
   build_and_test_1:
     steps:
@@ -124,7 +126,8 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-13.3.x
-        machine_type_id: g2.4core
+
+
   build_and_test_2:
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
@@ -162,8 +165,6 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-13.3.x
-        machine_type_id: g2.4core
-
   clone-and-build-dependencies:
     description: Clones the repo and builds dependencies
     steps:
