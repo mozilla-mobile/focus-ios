@@ -45,6 +45,7 @@ class SearchEngine: NSObject, NSCoding {
         guard let suggestTemplate = suggestionsTemplate,
             let escaped = trimmed.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed),
             let encodedSearchTemplate = suggestTemplate.addingPercentEncoding(withAllowedCharacters: templateAllowedSet as CharacterSet) else {
+            debugPrint("Missing Suggestions")
                 return nil
         }
 
