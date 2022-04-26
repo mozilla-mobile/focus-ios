@@ -5,9 +5,11 @@ project_type: ios
 
 
 trigger_map:
-- push_branch: main
-  workflow: runParallelTests
-- pull_request_source_branch: "*"
+#- push_branch: main
+#  workflow: runParallelTests
+#- pull_request_source_branch: "*"
+#  pipeline: pipeline_multiple_shards
+- pull_request_target_branch: main
   pipeline: pipeline_multiple_shards
 - push_branch: '*'
   pipeline: pipeline_multiple_shards
