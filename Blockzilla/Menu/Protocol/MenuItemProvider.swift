@@ -87,7 +87,7 @@ extension MenuItemProvider where Self: MenuActionable {
     func getShortcutsItem(for url: URL) -> MenuAction? {
         if shortcutManager.isSaved(shortcut: Shortcut(url: url)) {
             return removeFromShortcutsItem(for: url)
-        } else if shortcutManager.numberOfShortcuts < UIConstants.maximumNumberOfShortcuts {
+        } else if shortcutManager.shortcuts.count < UIConstants.maximumNumberOfShortcuts {
             return addToShortcutsItem(for: url)
         } else {
             return nil

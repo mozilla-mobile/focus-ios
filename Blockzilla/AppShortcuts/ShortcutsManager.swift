@@ -4,39 +4,12 @@
 
 import UIKit
 
-struct Shortcut: Equatable, Codable {
-    var url: URL
-    var name: String
-
-    init(url: URL, name: String = "") {
-        self.url = url
-        self.name = name.isEmpty ? Shortcut.defaultName(for: url) : name
-    }
-
-    private static func defaultName(for url: URL) -> String {
-        if let host = url.host {
-            var shortUrl = host.replacingOccurrences(of: "www.", with: "")
-            if shortUrl.hasPrefix("mobile.") {
-                shortUrl = shortUrl.replacingOccurrences(of: "mobile.", with: "")
-            }
-            if shortUrl.hasPrefix("m.") {
-                shortUrl = shortUrl.replacingOccurrences(of: "m.", with: "")
-            }
-            if let domain = shortUrl.components(separatedBy: ".").first?.capitalized {
-                return domain
-            }
-        }
-        return ""
-    }
-}
-
 protocol ShortcutsManagerDelegate: AnyObject {
-    func shortcutsUpdated()
+    func shortcutsDidUpdate()
     func shortcutDidUpdate(shortcut: Shortcut)
 }
 
 class ShortcutsManager {
-
     enum ShortcutsState {
         case createShortcutViews
         case onHomeView
@@ -49,48 +22,28 @@ class ShortcutsManager {
 
     let shortcutsKey = "Shortcuts"
     static let shared = ShortcutsManager()
-    private var shortcuts = [Shortcut]()
-    var numberOfShortcuts: Int {
-        shortcuts.count
-    }
+    
+    private(set) var shortcuts = [Shortcut]()
+    
     weak var delegate: ShortcutsManagerDelegate?
 
-    init() {
-        getAllShortcuts()
+    private init() {
+        loadShortcuts()
     }
 
-    private func getAllShortcuts() {
-        if let storedObjItem = UserDefaults.standard.object(forKey: "Shortcuts") {
-            do {
-                let decodedShortcuts = try JSONDecoder().decode([Shortcut].self, from: storedObjItem as! Data)
-                print("Retrieved items: \(decodedShortcuts)")
-                shortcuts = decodedShortcuts
-            } catch let error {
-                print(error)
-            }
-        }
-    }
-
-    private func saveShortcuts() {
-        if let encoded = try? JSONEncoder().encode(shortcuts) {
-            UserDefaults.standard.set(encoded, forKey: "Shortcuts")
-        }
-        getAllShortcuts()
-    }
-
-    func addToShortcuts(shortcut: Shortcut) {
+    func add(shortcut: Shortcut) {
         if canSave(shortcut: shortcut) {
             shortcuts.append(shortcut)
             saveShortcuts()
-            delegate?.shortcutsUpdated()
+            delegate?.shortcutsDidUpdate()
         }
     }
 
-    func removeFromShortcuts(shortcut: Shortcut) {
+    func remove(shortcut: Shortcut) {
         if let index = shortcuts.firstIndex(of: shortcut) {
             shortcuts.remove(at: index)
             saveShortcuts()
-            delegate?.shortcutsUpdated()
+            delegate?.shortcutsDidUpdate()
         }
     }
 
@@ -104,15 +57,30 @@ class ShortcutsManager {
         }
     }
 
-    func shortcutAt(index: Int) -> Shortcut {
-        shortcuts[index]
-    }
-
     func isSaved(shortcut: Shortcut) -> Bool {
         shortcuts.contains(shortcut) ? true : false
     }
 
-    func canSave(shortcut: Shortcut) -> Bool {
+    private func canSave(shortcut: Shortcut) -> Bool {
         shortcuts.count < UIConstants.maximumNumberOfShortcuts && !isSaved(shortcut: shortcut)
+    }
+    
+    private func saveShortcuts() {
+        if let encoded = try? JSONEncoder().encode(shortcuts) {
+            UserDefaults.standard.set(encoded, forKey: "Shortcuts")
+        }
+        loadShortcuts()
+    }
+    
+    private func loadShortcuts() {
+        if let storedObjItem = UserDefaults.standard.data(forKey: "Shortcuts") {
+            do {
+                let decodedShortcuts = try JSONDecoder().decode([Shortcut].self, from: storedObjItem as! Data)
+                print("Retrieved items: \(decodedShortcuts)")
+                shortcuts = decodedShortcuts
+            } catch let error {
+                print(error)
+            }
+        }
     }
 }

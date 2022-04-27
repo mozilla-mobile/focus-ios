@@ -386,12 +386,12 @@ class BrowserViewController: UIViewController {
                     shortcutsBackground.isHidden = true
 
                 case .editingURL(let text):
-                    let shouldShowShortcuts = text.isEmpty && shortcutManager.numberOfShortcuts != 0
+                    let shouldShowShortcuts = text.isEmpty && !shortcutManager.shortcuts.isEmpty
                     shortcutsContainer.isHidden = !shouldShowShortcuts
                     shortcutsBackground.isHidden = !urlBar.inBrowsingMode ? true : !shouldShowShortcuts
 
                 case .activeURLBar:
-                    let shouldShowShortcuts = shortcutManager.numberOfShortcuts != 0
+                    let shouldShowShortcuts = !shortcutManager.shortcuts.isEmpty
                     shortcutsContainer.isHidden = !shouldShowShortcuts
                     shortcutsBackground.isHidden = !shouldShowShortcuts || !urlBar.inBrowsingMode
 
@@ -408,9 +408,8 @@ class BrowserViewController: UIViewController {
     }
 
     private func addShortcuts() {
-        if shortcutManager.numberOfShortcuts != 0 {
-            for i in 0..<shortcutManager.numberOfShortcuts {
-                let shortcut = shortcutManager.shortcutAt(index: i)
+        if !shortcutManager.shortcuts.isEmpty {
+            for shortcut in shortcutManager.shortcuts {
                 let shortcutView = ShortcutView(shortcut: shortcut, isIpad: isIPadRegularDimensions)
                 shortcutView.setContentCompressionResistancePriority(.required, for: .horizontal)
                 shortcutView.setContentHuggingPriority(.required, for: .horizontal)
@@ -426,7 +425,7 @@ class BrowserViewController: UIViewController {
                 }
             }
         }
-        if shortcutManager.numberOfShortcuts < UIConstants.maximumNumberOfShortcuts {
+        if shortcutManager.shortcuts.count < UIConstants.maximumNumberOfShortcuts {
             shortcutsContainer.addArrangedSubview(UIView())
         }
     }
@@ -1346,15 +1345,15 @@ extension BrowserViewController: ShortcutViewDelegate {
     }
 
     func removeFromShortcutsAction(shortcut: Shortcut) {
-        ShortcutsManager.shared.removeFromShortcuts(shortcut: shortcut)
-        self.shortcutsBackground.isHidden = self.shortcutManager.numberOfShortcuts == 0 || !self.urlBar.inBrowsingMode ? true : false
+        ShortcutsManager.shared.remove(shortcut: shortcut)
+        self.shortcutsBackground.isHidden = self.shortcutManager.shortcuts.count == 0 || !self.urlBar.inBrowsingMode ? true : false
         GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_home_screen"].add()
     }
 }
 
 extension BrowserViewController: ShortcutsManagerDelegate {
 
-    func shortcutsUpdated() {
+    func shortcutsDidUpdate() {
         for subview in shortcutsContainer.subviews {
             subview.removeFromSuperview()
         }
@@ -1364,7 +1363,7 @@ extension BrowserViewController: ShortcutsManagerDelegate {
         for subview in shortcutsContainer.subviews {
             let subview = subview as? ShortcutView
             if let subviewShortcut = subview?.shortcut, subviewShortcut.url == shortcut.url {
-                subview?.renameShortcut(with: shortcut)
+                subview?.rename(shortcut: shortcut)
             }
         }
     }
@@ -1963,7 +1962,7 @@ extension BrowserViewController: MenuActionable {
 
     func addToShortcuts(url: URL) {
         let shortcut = Shortcut(url: url)
-        self.shortcutManager.addToShortcuts(shortcut: shortcut)
+        self.shortcutManager.add(shortcut: shortcut)
         GleanMetrics.Shortcuts.shortcutAddedCounter.add()
         TipManager.shortcutsTip = false
 
@@ -1972,7 +1971,7 @@ extension BrowserViewController: MenuActionable {
 
     func removeShortcut(url: URL) {
         let shortcut = Shortcut(url: url)
-        self.shortcutManager.removeFromShortcuts(shortcut: shortcut)
+        self.shortcutManager.remove(shortcut: shortcut)
         GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_browser_menu"].add()
 
         GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "remove_from_shortcuts"))

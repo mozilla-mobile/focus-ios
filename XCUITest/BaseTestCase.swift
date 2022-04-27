@@ -103,10 +103,11 @@ class BaseTestCase: XCTestCase {
                 timeout: finishLoadingTimeout)
         }
     }
+    
 
     func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true) {
         app.textFields["URLBar.urlText"].tap()
-        app.textFields["URLBar.urlText"].typeText(url+"\n")
+        app.textFields["URLBar.urlText"].clearAndEnterText(text: url+"\n")
 
         if waitForLoadToFinish {
             let finishLoadingTimeout: TimeInterval = 30
@@ -141,3 +142,4 @@ class BaseTestCase: XCTestCase {
         waitForExpectations(timeout: finishLoadingTimeout, handler: nil)
     }
 }
+                       

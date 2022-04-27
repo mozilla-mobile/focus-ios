@@ -100,7 +100,7 @@ class ShortcutView: UIView {
         delegate?.shortcutTapped(shortcut: shortcut)
     }
 
-    func renameShortcut(with shortcut: Shortcut) {
+    func rename(shortcut: Shortcut) {
         self.shortcut = shortcut
         nameLabel.text = shortcut.name
         letterLabel.text = shortcut.name.first.map(String.init)?.capitalized
