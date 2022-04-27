@@ -183,7 +183,7 @@ public class OnboardingViewController: UIViewController {
             mainStackView.layoutMargins = .init(top: .layoutMarginTop, left: size.width / .layoutMarginLeadingTrailingDivider, bottom: .layoutMarginBottom, right: size.width / .layoutMarginLeadingTrailingDivider)
             mainStackView.spacing = size.height / .spacingDividerPad
         }
-        
+
         updateStartButtonConstraints(for: size)
     }
 
@@ -191,11 +191,11 @@ public class OnboardingViewController: UIViewController {
         super.viewDidLoad()
         addSubViews()
     }
-    
+
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateStartButtonConstraints(for: view.frame.size)
-        
+
     }
 
     func addSubViews() {
@@ -240,7 +240,7 @@ public class OnboardingViewController: UIViewController {
             make.top.equalTo(scrollView.snp.bottom).inset(CGFloat.buttonBottomInset)
         }
     }
-    
+
     private func updateStartButtonConstraints(for size: CGSize) {
         startBrowsingButton.snp.updateConstraints { make in
             make.bottom.equalToSuperview().inset(size.height / .buttonButtomInsetDivider)
