@@ -4,13 +4,13 @@
 
 import UIKit
 
-protocol ShortcutsManagerDelegate: AnyObject {
+public protocol ShortcutsManagerDelegate: AnyObject {
     func shortcutsDidUpdate()
     func shortcutDidUpdate(shortcut: Shortcut)
 }
 
-class ShortcutsManager {
-    enum ShortcutsState {
+public class ShortcutsManager {
+    public enum ShortcutsState {
         case createShortcutViews
         case onHomeView
         case editingURL(text: String)
@@ -18,51 +18,21 @@ class ShortcutsManager {
         case dismissedURLBar
     }
 
-    @Published var shortcutsState: ShortcutsState?
+    @Published public var shortcutsState: ShortcutsState?
 
     let shortcutsKey = "Shortcuts"
-    static let shared = ShortcutsManager()
+    public static let shared = ShortcutsManager()
     
-    private(set) var shortcuts = [Shortcut]()
+    public private(set) var shortcuts = [Shortcut]()
     
-    weak var delegate: ShortcutsManagerDelegate?
+    public weak var delegate: ShortcutsManagerDelegate?
 
     private init() {
         loadShortcuts()
     }
 
-    func add(shortcut: Shortcut) {
-        if canSave(shortcut: shortcut) {
-            shortcuts.append(shortcut)
-            saveShortcuts()
-            delegate?.shortcutsDidUpdate()
-        }
-    }
-
-    func remove(shortcut: Shortcut) {
-        if let index = shortcuts.firstIndex(of: shortcut) {
-            shortcuts.remove(at: index)
-            saveShortcuts()
-            delegate?.shortcutsDidUpdate()
-        }
-    }
-
-    func rename(shortcut: Shortcut, newName: String) {
-        var renamedShortcut = shortcut
-        renamedShortcut.name = newName
-        if let index = shortcuts.firstIndex(of: shortcut), renamedShortcut.name != shortcuts[index].name {
-            shortcuts[index] = renamedShortcut
-            saveShortcuts()
-            delegate?.shortcutDidUpdate(shortcut: shortcuts[index])
-        }
-    }
-
-    func isSaved(shortcut: Shortcut) -> Bool {
-        shortcuts.contains(shortcut) ? true : false
-    }
-
     private func canSave(shortcut: Shortcut) -> Bool {
-        shortcuts.count < UIConstants.maximumNumberOfShortcuts && !isSaved(shortcut: shortcut)
+        shortcuts.count < Self.maximumNumberOfShortcuts && !isSaved(shortcut: shortcut)
     }
     
     private func saveShortcuts() {
@@ -73,7 +43,7 @@ class ShortcutsManager {
     }
     
     private func loadShortcuts() {
-        if let storedObjItem = UserDefaults.standard.data(forKey: "Shortcuts") {
+        if let storedObjItem = UserDefaults.standard.object(forKey: "Shortcuts") {
             do {
                 let decodedShortcuts = try JSONDecoder().decode([Shortcut].self, from: storedObjItem as! Data)
                 print("Retrieved items: \(decodedShortcuts)")
@@ -83,4 +53,40 @@ class ShortcutsManager {
             }
         }
     }
+}
+
+public extension ShortcutsManager {
+    func add(shortcut: Shortcut) {
+        if canSave(shortcut: shortcut) {
+            shortcuts.append(shortcut)
+            saveShortcuts()
+            delegate?.shortcutsDidUpdate()
+        }
+    }
+    
+    func remove(shortcut: Shortcut) {
+        if let index = shortcuts.firstIndex(of: shortcut) {
+            shortcuts.remove(at: index)
+            saveShortcuts()
+            delegate?.shortcutsDidUpdate()
+        }
+    }
+    
+    func rename(shortcut: Shortcut, newName: String) {
+        var renamedShortcut = shortcut
+        renamedShortcut.name = newName
+        if let index = shortcuts.firstIndex(of: shortcut), renamedShortcut.name != shortcuts[index].name {
+            shortcuts[index] = renamedShortcut
+            saveShortcuts()
+            delegate?.shortcutDidUpdate(shortcut: shortcuts[index])
+        }
+    }
+    
+    func isSaved(shortcut: Shortcut) -> Bool {
+        shortcuts.contains(shortcut) ? true : false
+    }
+}
+
+public extension ShortcutsManager {
+    static let maximumNumberOfShortcuts = 4
 }

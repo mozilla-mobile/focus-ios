@@ -11,6 +11,7 @@ import Intents
 import Glean
 import Combine
 import Onboarding
+import AppShortcuts
 
 class BrowserViewController: UIViewController {
     private let mainContainerView = UIView(frame: .zero)
@@ -133,14 +134,13 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func addShortcutsContainerConstraints() {
+        let config: ShortcutView.LayoutConfiguration = isIPadRegularDimensions ? .iPad : .default
         shortcutsContainer.snp.makeConstraints { make in
             make.top.equalTo(urlBarContainer.snp.bottom).offset(isIPadRegularDimensions ? UIConstants.layout.shortcutsContainerOffsetIPad : UIConstants.layout.shortcutsContainerOffset)
             make.width.equalTo(isIPadRegularDimensions ?
                                UIConstants.layout.shortcutsContainerWidthIPad :
                                 UIConstants.layout.shortcutsContainerWidth).priority(.medium)
-            make.height.equalTo(isIPadRegularDimensions ?
-                                UIConstants.layout.shortcutViewHeightIPad :
-                                    UIConstants.layout.shortcutViewHeight)
+            make.height.equalTo(config.height)
             make.centerX.equalToSuperview()
             make.leading.greaterThanOrEqualTo(mainContainerView).inset(8)
             make.trailing.lessThanOrEqualTo(mainContainerView).inset(-8)
@@ -410,22 +410,21 @@ class BrowserViewController: UIViewController {
     private func addShortcuts() {
         if !shortcutManager.shortcuts.isEmpty {
             for shortcut in shortcutManager.shortcuts {
-                let shortcutView = ShortcutView(shortcut: shortcut, isIpad: isIPadRegularDimensions)
+                let config: ShortcutView.LayoutConfiguration = isIPadRegularDimensions ? .iPad : .default
+                let shortcutView = ShortcutView(shortcut: shortcut, layoutConfiguration: config)
+                let interaction = UIContextMenuInteraction(delegate: shortcutView)
+                shortcutView.outerView.addInteraction(interaction)
                 shortcutView.setContentCompressionResistancePriority(.required, for: .horizontal)
                 shortcutView.setContentHuggingPriority(.required, for: .horizontal)
                 shortcutView.delegate = self
                 shortcutsContainer.addArrangedSubview(shortcutView)
                 shortcutView.snp.makeConstraints { make in
-                    make.width.equalTo(isIPadRegularDimensions ?
-                                        UIConstants.layout.shortcutViewWidthIPad :
-                                        UIConstants.layout.shortcutViewWidth)
-                    make.height.equalTo(isIPadRegularDimensions ?
-                                            UIConstants.layout.shortcutViewHeightIPad :
-                                            UIConstants.layout.shortcutViewHeight)
+                    make.width.equalTo(config.width)
+                    make.height.equalTo(config.height)
                 }
             }
         }
-        if shortcutManager.shortcuts.count < UIConstants.maximumNumberOfShortcuts {
+        if shortcutManager.shortcuts.count < ShortcutsManager.maximumNumberOfShortcuts {
             shortcutsContainer.addArrangedSubview(UIView())
         }
     }
@@ -1345,7 +1344,7 @@ extension BrowserViewController: ShortcutViewDelegate {
     }
 
     func removeFromShortcutsAction(shortcut: Shortcut) {
-        ShortcutsManager.shared.remove(shortcut: shortcut)
+        shortcutManager.remove(shortcut: shortcut)
         self.shortcutsBackground.isHidden = self.shortcutManager.shortcuts.count == 0 || !self.urlBar.inBrowsingMode ? true : false
         GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_home_screen"].add()
     }

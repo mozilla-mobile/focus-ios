@@ -8,6 +8,7 @@ import Glean
 import Sentry
 import Combine
 import Onboarding
+import AppShortcuts
 
 enum AppPhase {
     case notRunning
