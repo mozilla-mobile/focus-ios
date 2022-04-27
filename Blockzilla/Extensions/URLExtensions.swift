@@ -317,7 +317,7 @@ extension URL {
     }
 }
 
-//MARK: Private Helpers
+// MARK: Private Helpers
 private extension URL {
     func publicSuffixFromHost( _ host: String, withAdditionalParts additionalPartCount: Int) -> String? {
         if host.isEmpty {
@@ -354,7 +354,7 @@ private extension URL {
         let tokens = host.components(separatedBy: ".")
         let tokenCount = tokens.count
         var suffix: String?
-        var previousDomain: String? = nil
+        var previousDomain: String?
         var currentDomain: String = host
 
         for offset in 0..<tokenCount {

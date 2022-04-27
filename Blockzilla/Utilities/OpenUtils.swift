@@ -33,7 +33,7 @@ class OpenUtils: NSObject {
         let shareController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
 
         shareController.popoverPresentationController?.permittedArrowDirections = .up
-        shareController.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
+        shareController.completionWithItemsHandler = { _, completed, _, _ in
             if !completed {
                 return
             }
@@ -47,4 +47,3 @@ class OpenUtils: NSObject {
         return shareController
     }
 }
-

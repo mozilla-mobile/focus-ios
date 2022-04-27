@@ -6,7 +6,7 @@ import UIKit
 import Onboarding
 
 class OnboardingFactory {
-    static func make(onboardingType :OnboardingEventsHandler.OnboardingType, dismissAction: @escaping () -> Void) -> (onboardingViewController: UIViewController, animated: Bool) {
+    static func make(onboardingType: OnboardingEventsHandler.OnboardingType, dismissAction: @escaping () -> Void) -> (onboardingViewController: UIViewController, animated: Bool) {
         switch onboardingType {
         case .new:
             let newOnboardingViewController = OnboardingViewController(
@@ -16,7 +16,7 @@ class OnboardingFactory {
                     instructions: [
                         .init(title: .onboardingIncognitoTitle, subtitle: .onboardingIncognitoDescription, image: .privateMode),
                         .init(title: .onboardingHistoryTitle, subtitle: .onboardingHistoryDescription, image: .history),
-                        .init(title: .onboardingProtectionTitle, subtitle: .onboardingProtectionDescription, image: .settings),
+                        .init(title: .onboardingProtectionTitle, subtitle: .onboardingProtectionDescription, image: .settings)
                     ],
                     onboardingButtonTitle: .onboardingButtonTitle
                 ),

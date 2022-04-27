@@ -458,7 +458,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func updateLockIcon(trackingProtectionStatus: TrackingProtectionStatus) {
-        urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus, shouldDisplayShieldIcon:  urlBar.inBrowsingMode ? self.webViewController.connectionIsSecure : true)
+        urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus, shouldDisplayShieldIcon: urlBar.inBrowsingMode ? self.webViewController.connectionIsSecure : true)
     }
 
     // These functions are used to handle displaying and hiding the keyboard after the splash view is animated
@@ -814,7 +814,7 @@ class BrowserViewController: UIViewController {
         // As a workaround, consider the phone to be in landscape if the new width is greater than the height.
         showsToolsetInURLBar = (UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == size.width || size.width > size.height)) || (UIDevice.current.userInterfaceIdiom == .phone && size.width > size.height)
 
-        //isIPadRegularDimensions check if the device is a Ipad and the app is not in split mode
+        // isIPadRegularDimensions check if the device is a Ipad and the app is not in split mode
         isIPadRegularDimensions = ((UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == size.width || size.width > size.height))) || (UIDevice.current.userInterfaceIdiom == .pad &&  UIApplication.shared.orientation?.isPortrait == true && UIScreen.main.bounds.width == size.width)
         urlBar.isIPadRegularDimensions = isIPadRegularDimensions
 
@@ -921,7 +921,7 @@ class BrowserViewController: UIViewController {
                              action: #selector(BrowserViewController.showFindInPage),
                              input: "f",
                              modifierFlags: .command,
-                             propertyList: nil),
+                             propertyList: nil)
         ]
     }
 
@@ -991,7 +991,7 @@ class BrowserViewController: UIViewController {
         if let url = urlBar.url {
             let utils = OpenUtils(url: url, webViewController: webViewController)
 
-            actions.append([getShortcutsItem(for: url).map(PhotonActionSheetItem.init)].compactMap{ $0 })
+            actions.append([getShortcutsItem(for: url).map(PhotonActionSheetItem.init)].compactMap { $0 })
 
             var actionItems = [PhotonActionSheetItem(findInPageItem)]
             actionItems.append(
@@ -1119,7 +1119,7 @@ extension BrowserViewController: URLBarDelegate {
         if Settings.getToggle(.enableSearchSuggestions), !trimmedText.isEmpty {
             searchSuggestionsDebouncer.renewInterval()
             searchSuggestionsDebouncer.completion = {
-                self.searchSuggestClient.getSuggestions(trimmedText, callback: { suggestions, error in
+                self.searchSuggestClient.getSuggestions(trimmedText, callback: { suggestions, _ in
                     let userInputText = urlBar.userInputText?.trimmingCharacters(in: .whitespaces) ?? ""
 
                     // Check if this callback is stale (new user input has been requested)
@@ -1324,7 +1324,7 @@ extension BrowserViewController: ShortcutViewDelegate {
         alert.addAction(UIAlertAction(title: UIConstants.strings.renameShortcutAlertSecondaryAction, style: .cancel, handler: { [unowned self] _ in
             self.urlBar.activateTextField()
         }))
-        alert.addAction(UIAlertAction(title: UIConstants.strings.renameShortcutAlertPrimaryAction, style: .default, handler: { [unowned alert, unowned self] action in
+        alert.addAction(UIAlertAction(title: UIConstants.strings.renameShortcutAlertPrimaryAction, style: .default, handler: { [unowned alert, unowned self] _ in
             let newName = (alert.textFields?.first?.text ?? shortcut.name).trimmingCharacters(in: .whitespacesAndNewlines)
             ShortcutsManager.shared.rename(shortcut: shortcut, newName: newName)
             self.urlBar.activateTextField()

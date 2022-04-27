@@ -58,7 +58,7 @@ class SiriShortcuts {
     }()
 
     func hasAddedActivity(type: SiriShortcuts.activityType, _ completion: @escaping (_ result: Bool) -> Void) {
-        INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
+        INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, _) in
             DispatchQueue.main.async {
                 guard let voiceShortcuts = voiceShortcuts else { return }
                 // First, check for userActivity, which is for shortcuts that work in the foreground
@@ -99,7 +99,7 @@ class SiriShortcuts {
     }
 
     func manageSiri(for activityType: SiriShortcuts.activityType, in viewController: UIViewController) {
-        INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
+        INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, _) in
             DispatchQueue.main.async {
                 guard let voiceShortcuts = voiceShortcuts else { return }
                 var foundShortcut = voiceShortcuts.filter { (attempt) in

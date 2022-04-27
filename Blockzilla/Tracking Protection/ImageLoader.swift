@@ -22,7 +22,7 @@ extension ImageLoader {
         let uuid = UUID()
         var request = URLRequest(url: url)
         request.timeoutInterval = 3
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        let task = URLSession.shared.dataTask(with: request) { data, _, error in
             defer { self.runningRequests.removeValue(forKey: uuid) }
 
             if let data = data, let image = UIImage(data: data) {

@@ -35,7 +35,7 @@ class SplashView: UIView {
         button.contentHorizontalAlignment = .fill
         button.contentVerticalAlignment = .fill
         button.addBackgroundView(color: .authButtonBackground, cornerRadius: .cornerRadius, padding: .padding)
-        button.addTarget(self, action:#selector(self.showAuth), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.showAuth), for: .touchUpInside)
         return button
     }()
 
@@ -84,7 +84,7 @@ class SplashView: UIView {
             UIView.animate(withDuration: duration, delay: 0.0, options: UIView.AnimationOptions(), animations: {
                 self.alpha = 0
                 self.logoImage.layer.transform = .mid
-            }, completion: { success in
+            }, completion: { _ in
                 self.isHidden = true
                 self.logoImage.layer.transform = CATransform3DIdentity
             })

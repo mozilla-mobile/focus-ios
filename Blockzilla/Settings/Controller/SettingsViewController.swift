@@ -175,7 +175,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         let navigationBar = navigationController!.navigationBar
         navigationBar.isTranslucent = false
-        navigationBar.setBackgroundImage(UIImage(), for:.default)
+        navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationBar.shadowImage = UIImage()
         navigationBar.layoutIfNeeded()
         navigationBar.titleTextAttributes = [.foregroundColor: UIColor.primaryText]
@@ -217,7 +217,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         cancellable = themeManager
             .$selectedTheme
-            .sink { [unowned self] selectedTheme in
+            .sink { [unowned self] _ in
                 highlightsButton.tintColor = whatsNewButtonColor
             }
 

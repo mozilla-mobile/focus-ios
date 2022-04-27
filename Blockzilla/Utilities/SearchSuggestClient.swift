@@ -19,7 +19,7 @@ class SearchSuggestClient {
         }
 
         let request = URLRequest(url: url)
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
+        URLSession.shared.dataTask(with: request) { (data, _, error) in
             do {
                 // The response will be of the following format:
                 //    ["foobar",["foobar","foobar2000 mac","foobar skins",...]]

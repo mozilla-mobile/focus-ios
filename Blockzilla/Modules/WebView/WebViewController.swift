@@ -154,11 +154,11 @@ class WebViewController: UIViewController, WebController {
         browserView.navigationDelegate = self
         browserView.uiDelegate = self
 
-        progressObserver = browserView.observe(\WKWebView.estimatedProgress) { (webView, value) in
+        progressObserver = browserView.observe(\WKWebView.estimatedProgress) { (webView, _) in
             self.delegate?.webController(self, didUpdateEstimatedProgress: webView.estimatedProgress)
         }
 
-        if case .on(_) = trackingProtectionManager.trackingProtectionStatus {
+        if case .on = trackingProtectionManager.trackingProtectionStatus {
             setupBlockLists()
             setupTrackingProtectionScripts()
         }
@@ -398,7 +398,7 @@ extension WebViewController: WKNavigationDelegate {
 
             func presentPassErrorAlert() {
                 let passErrorAlert = UIAlertController(title: UIConstants.strings.addPassErrorAlertTitle, message: UIConstants.strings.addPassErrorAlertMessage, preferredStyle: .alert)
-                let passErrorDismissAction = UIAlertAction(title: UIConstants.strings.addPassErrorAlertDismiss, style: .default) { (UIAlertAction) in
+                let passErrorDismissAction = UIAlertAction(title: UIConstants.strings.addPassErrorAlertDismiss, style: .default) { (_) in
                     passErrorAlert.dismiss(animated: true, completion: nil)
                 }
                 passErrorAlert.addAction(passErrorDismissAction)

@@ -24,7 +24,7 @@ class ContentBlockerHelper {
         for list in enabledList {
             dispatchGroup.enter()
 
-            listStore?.lookUpContentRuleList(forIdentifier: list) { (ruleList, error) in
+            listStore?.lookUpContentRuleList(forIdentifier: list) { (ruleList, _) in
                 if let ruleList = ruleList {
                     returnList.append(ruleList)
                     dispatchGroup.leave()
@@ -45,7 +45,7 @@ class ContentBlockerHelper {
     private static func compileItem(item: String, callback: @escaping (WKContentRuleList) -> Void) {
         let path = Bundle.main.path(forResource: item, ofType: "json")!
         guard let jsonFileContent = try? String(contentsOfFile: path, encoding: String.Encoding.utf8) else { fatalError("Rule list for \(item) doesn't exist!") }
-        WKContentRuleListStore.default().compileContentRuleList(forIdentifier: item, encodedContentRuleList: jsonFileContent) { (ruleList, error) in
+        WKContentRuleListStore.default().compileContentRuleList(forIdentifier: item, encodedContentRuleList: jsonFileContent) { (ruleList, _) in
             guard let ruleList = ruleList else { fatalError("problem compiling \(item)") }
             callback(ruleList)
         }

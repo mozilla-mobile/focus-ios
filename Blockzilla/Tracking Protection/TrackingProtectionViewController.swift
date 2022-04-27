@@ -22,7 +22,7 @@ enum SectionType: Int, Hashable {
 class TrackingProtectionViewController: UIViewController {
     var tooltipHeight: Constraint?
 
-    //MARK: - Data source
+    // MARK: - Data source
 
     lazy var dataSource = DataSource(
         tableView: self.tableView,
@@ -46,7 +46,7 @@ class TrackingProtectionViewController: UIViewController {
             }
         })
 
-    //MARK: - Toggles items
+    // MARK: - Toggles items
     private lazy var trackingProtectionItem = ToggleItem(
         label: UIConstants.strings.trackingProtectionToggleLabel,
         settingsKey: SettingsToggle.trackingProtection
@@ -54,11 +54,11 @@ class TrackingProtectionViewController: UIViewController {
     private lazy var toggleItems = [
         ToggleItem(label: UIConstants.strings.labelBlockAds2, settingsKey: .blockAds),
         ToggleItem(label: UIConstants.strings.labelBlockAnalytics, settingsKey: .blockAnalytics),
-        ToggleItem(label: UIConstants.strings.labelBlockSocial, settingsKey: .blockSocial),
+        ToggleItem(label: UIConstants.strings.labelBlockSocial, settingsKey: .blockSocial)
     ]
     private let blockOtherItem = ToggleItem(label: UIConstants.strings.labelBlockOther, settingsKey: .blockOther)
 
-    //MARK: - Sections
+    // MARK: - Sections
     func secureConnectionSectionItems(title: String, image: UIImage) -> [SectionItem] {
         [
             SectionItem(configureCell: { _, _ in
@@ -68,7 +68,7 @@ class TrackingProtectionViewController: UIViewController {
     }
 
     lazy var tooltipSectionItems = [
-        SectionItem(configureCell: { [unowned self] tableView, indexPath in
+        SectionItem(configureCell: { [unowned self] _, _ in
             let cell = TooltipTableViewCell(title: UIConstants.strings.tooltipTitleTextForPrivacy, body: UIConstants.strings.tooltipBodyTextForPrivacy)
             cell.delegate = self
             return cell
@@ -77,7 +77,7 @@ class TrackingProtectionViewController: UIViewController {
 
     lazy var enableTrackersSectionItems = [
         SectionItem(
-            configureCell: { [unowned self] tableView, indexPath in
+            configureCell: { [unowned self] _, _ in
                 let cell = SwitchTableViewCell(
                     item: self.trackingProtectionItem,
                     reuseIdentifier: "SwitchTableViewCell"
@@ -137,7 +137,7 @@ class TrackingProtectionViewController: UIViewController {
                     if isOn {
                         let alertController = UIAlertController(title: nil, message: UIConstants.strings.settingsBlockOtherMessage, preferredStyle: .alert)
                         alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherNo, style: .default) { [unowned self] _ in
-                            //TODO: Make sure to reset the toggle
+                            // TODO: Make sure to reset the toggle
                             cell.isOn = false
                             self.blockOtherItem.settingsValue = false
                             self.updateTelemetry(self.blockOtherItem.settingsKey, false)
@@ -193,7 +193,7 @@ class TrackingProtectionViewController: UIViewController {
         )
     ]
 
-    //MARK: - Views
+    // MARK: - Views
     private var headerHeight: Constraint?
 
     private lazy var header = TrackingHeaderView()
@@ -210,21 +210,21 @@ class TrackingProtectionViewController: UIViewController {
 
     private var modalDelegate: ModalDelegate?
     private var sourceOfChange: String {
-        if case .settings = state { return "Settings" }  else { return "Panel" }
+        if case .settings = state { return "Settings" } else { return "Panel" }
     }
     private var subscriptions = Set<AnyCancellable>()
     private var trackersSectionIndex: Int {
-        if case .browsing = state { return 2 }  else { return 1 }
+        if case .browsing = state { return 2 } else { return 1 }
     }
     private var tableViewTopInset: CGFloat {
-        if case .settings = state { return 0 }  else { return 48 }
+        if case .settings = state { return 0 } else { return 48 }
     }
     var state: TrackingProtectionState
     let favIconPublisher: AnyPublisher<UIImage, Never>?
     private let onboardingEventsHandler: OnboardingEventsHandler
     private var cancellable: AnyCancellable?
 
-    //MARK: - VC Lifecycle
+    // MARK: - VC Lifecycle
     init(state: TrackingProtectionState, onboardingEventsHandler: OnboardingEventsHandler, favIconPublisher: AnyPublisher<UIImage, Never>? = nil) {
         self.state = state
         self.onboardingEventsHandler = onboardingEventsHandler
@@ -272,7 +272,7 @@ class TrackingProtectionViewController: UIViewController {
             let doneButton = UIBarButtonItem(title: UIConstants.strings.done, style: .plain, target: self, action: #selector(doneTapped))
             doneButton.tintColor = .accent
             navigationItem.rightBarButtonItem = doneButton
-            self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for:.default)
+            self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
             self.navigationController?.navigationBar.shadowImage = UIImage()
             self.navigationController?.navigationBar.layoutIfNeeded()
             self.navigationController?.navigationBar.isTranslucent = false
