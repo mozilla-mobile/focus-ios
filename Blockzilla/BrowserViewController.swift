@@ -89,7 +89,7 @@ class BrowserViewController: UIViewController {
 
     init(
         tipManager: TipManager = TipManager.shared,
-        shortcutManager: ShortcutsManager = ShortcutsManager.shared,
+        shortcutManager: ShortcutsManager,
         authenticationManager: AuthenticationManager,
         onboardingEventsHandler: OnboardingEventsHandler,
         whatsNewEventsHandler: WhatsNewEventsHandler,
@@ -1325,7 +1325,7 @@ extension BrowserViewController: ShortcutViewDelegate {
         }))
         alert.addAction(UIAlertAction(title: UIConstants.strings.renameShortcutAlertPrimaryAction, style: .default, handler: { [unowned alert, unowned self] action in
             let newName = (alert.textFields?.first?.text ?? shortcut.name).trimmingCharacters(in: .whitespacesAndNewlines)
-            ShortcutsManager.shared.rename(shortcut: shortcut, newName: newName)
+            self.shortcutManager.rename(shortcut: shortcut, newName: newName)
             self.urlBar.activateTextField()
         }))
         self.show(alert, sender: nil)

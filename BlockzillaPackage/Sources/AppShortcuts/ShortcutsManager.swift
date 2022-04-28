@@ -11,37 +11,24 @@ public protocol ShortcutsManagerDelegate: AnyObject {
 
 public class ShortcutsManager {
     let shortcutsKey = "Shortcuts"
-    public static let shared = ShortcutsManager()
 
-    public private(set) var shortcuts = [Shortcut]()
+    public private(set) var shortcuts: [Shortcut] {
+        didSet {
+            persister.save(shortcuts: shortcuts)
+        }
+    }
 
     public weak var delegate: ShortcutsManagerDelegate?
 
-    private init() {
-        loadShortcuts()
+    private let persister: ShortcutsPersister
+
+    public init(persister: ShortcutsPersister = UserDefaults.standard) {
+        self.persister = persister
+        self.shortcuts = persister.load()
     }
 
     private func canSave(shortcut: Shortcut) -> Bool {
         shortcuts.count < Self.maximumNumberOfShortcuts && !isSaved(shortcut: shortcut)
-    }
-
-    private func saveShortcuts() {
-        if let encoded = try? JSONEncoder().encode(shortcuts) {
-            UserDefaults.standard.set(encoded, forKey: "Shortcuts")
-        }
-        loadShortcuts()
-    }
-
-    private func loadShortcuts() {
-        if let storedObjItem = UserDefaults.standard.object(forKey: "Shortcuts") {
-            do {
-                let decodedShortcuts = try JSONDecoder().decode([Shortcut].self, from: storedObjItem as! Data)
-                print("Retrieved items: \(decodedShortcuts)")
-                shortcuts = decodedShortcuts
-            } catch let error {
-                print(error)
-            }
-        }
     }
 }
 
@@ -49,7 +36,6 @@ public extension ShortcutsManager {
     func add(shortcut: Shortcut) {
         if canSave(shortcut: shortcut) {
             shortcuts.append(shortcut)
-            saveShortcuts()
             delegate?.shortcutsDidUpdate()
         }
     }
@@ -57,7 +43,6 @@ public extension ShortcutsManager {
     func remove(shortcut: Shortcut) {
         if let index = shortcuts.firstIndex(of: shortcut) {
             shortcuts.remove(at: index)
-            saveShortcuts()
             delegate?.shortcutsDidUpdate()
         }
     }
@@ -67,7 +52,6 @@ public extension ShortcutsManager {
         renamedShortcut.name = newName
         if let index = shortcuts.firstIndex(of: shortcut), renamedShortcut.name != shortcuts[index].name {
             shortcuts[index] = renamedShortcut
-            saveShortcuts()
             delegate?.shortcutDidUpdate(shortcut: shortcuts[index])
         }
     }

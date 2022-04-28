@@ -1,9 +1,6 @@
-//
-//  AppShortcutsTests.swift
-//  
-//
-//  Created by razvan.litianu on 28.04.2022.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import XCTest
 import AppShortcuts
@@ -21,12 +18,22 @@ class MockShortcutDelegate: ShortcutsManagerDelegate {
     }
 }
 
+class MockPersister: ShortcutsPersister {
+    func save(shortcuts: [Shortcut]) {
+
+    }
+
+    func load() -> [Shortcut] {
+        return []
+    }
+}
+
 class AppShortcutsTests: XCTestCase {
 
     var sut: ShortcutsManager!
 
     override func setUp() {
-        sut = ShortcutsManager.shared
+        sut = ShortcutsManager(persister: MockPersister())
     }
 
     override func tearDown() {
@@ -34,14 +41,55 @@ class AppShortcutsTests: XCTestCase {
         sut = nil
     }
 
-    func testAddingShortcutIsAddedToShortcutsList() throws {
+    func testAddingShortcutIsAddedToShortcutsList() {
         // Given
-        let shortcut = Shortcut(url: URL(string: "www.google.com")!)
+        let shortcut = Shortcut(url: URL(string: "https://www.google.com")!)
 
         // When
         sut.add(shortcut: shortcut)
 
         // Then
         XCTAssertEqual(sut.shortcuts.count, 1)
+    }
+
+    func testAddingTheSameShortcutWillNotShowTwice() {
+        // Given
+        let shortcut = Shortcut(url: URL(string: "https://www.google.com")!)
+
+        // When
+        sut.add(shortcut: shortcut)
+        sut.add(shortcut: shortcut)
+
+        // Then
+        XCTAssertEqual(sut.shortcuts.count, 1)
+    }
+
+    func testAddingShortcutTriggersShortcutsDidUpdate() {
+        // Given
+        let shortcut = Shortcut(url: URL(string: "https://www.google.com")!)
+        let delegate = MockShortcutDelegate()
+        sut.delegate = delegate
+
+        // When
+        sut.add(shortcut: shortcut)
+
+        // Then
+        XCTAssertEqual(sut.shortcuts.count, 1)
+        XCTAssertTrue(delegate.shortcutsDidUpdateTrigger)
+    }
+
+    func testRenamingShortcuTriggersShortcutViewUpdate() {
+        // Given
+        let shortcut = Shortcut(url: URL(string: "https://www.google.com")!)
+        let delegate = MockShortcutDelegate()
+        sut.delegate = delegate
+
+        // When
+        sut.add(shortcut: shortcut)
+        sut.rename(shortcut: shortcut, newName: "TestGoogle")
+
+        // Then
+        XCTAssertEqual(sut.shortcuts.count, 1)
+        XCTAssertEqual(delegate.updatedShortcut?.name, "TestGoogle")
     }
 }
