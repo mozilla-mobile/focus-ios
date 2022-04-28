@@ -83,6 +83,7 @@
 		C82F45F328193628000D7D84 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82F45F228193628000D7D84 /* TestHelpers.swift */; };
 		C82F45F528193DA5000D7D84 /* ShortcutView+UIContextMenuInteractionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82F45F428193DA5000D7D84 /* ShortcutView+UIContextMenuInteractionDelegate.swift */; };
 		C82F45F728193EE8000D7D84 /* AppShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = C82F45F628193EE8000D7D84 /* AppShortcuts */; };
+		C82F45F9281A76EF000D7D84 /* ShortcutsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82F45F8281A76EF000D7D84 /* ShortcutsPresenter.swift */; };
 		C8337DF42710898800093D42 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DE42710898800093D42 /* ImageLoader.swift */; };
 		C8337DF52710898800093D42 /* ToggleItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DE62710898800093D42 /* ToggleItem.swift */; };
 		C8337DF62710898800093D42 /* TrackingProtectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DE72710898800093D42 /* TrackingProtectionState.swift */; };
@@ -621,6 +622,7 @@
 		C82D143126EF634E007B275C /* TipViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipViewController.swift; sourceTree = "<group>"; };
 		C82F45F228193628000D7D84 /* TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
 		C82F45F428193DA5000D7D84 /* ShortcutView+UIContextMenuInteractionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShortcutView+UIContextMenuInteractionDelegate.swift"; sourceTree = "<group>"; };
+		C82F45F8281A76EF000D7D84 /* ShortcutsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsPresenter.swift; sourceTree = "<group>"; };
 		C8337DE42710898800093D42 /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		C8337DE62710898800093D42 /* ToggleItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleItem.swift; sourceTree = "<group>"; };
 		C8337DE72710898800093D42 /* TrackingProtectionState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionState.swift; sourceTree = "<group>"; };
@@ -1711,6 +1713,7 @@
 				E40AFC761DDDE96D00DA5651 /* InfoPlist.strings */,
 				D343DCC41C44356500D7EEE8 /* Localizable.strings */,
 				D5D067FA252F945D00C35227 /* metrics.yaml */,
+				C82F45F8281A76EF000D7D84 /* ShortcutsPresenter.swift */,
 			);
 			path = Blockzilla;
 			sourceTree = "<group>";
@@ -2405,6 +2408,7 @@
 				C82D143026EF62BE007B275C /* TipsPageViewController.swift in Sources */,
 				C8337DF42710898800093D42 /* ImageLoader.swift in Sources */,
 				F8714D2127A1E1F400CEB695 /* InternalCrashReportingSettingsView.swift in Sources */,
+				C82F45F9281A76EF000D7D84 /* ShortcutsPresenter.swift in Sources */,
 				F8BC6A0727224B170026AB9F /* NimbusExtensions.swift in Sources */,
 				C89AA96F271720330089838F /* ThemeTableViewAccessoryCell.swift in Sources */,
 				D3E2C96D1DA3077400DEBE3D /* CharacterSetExtensions.swift in Sources */,

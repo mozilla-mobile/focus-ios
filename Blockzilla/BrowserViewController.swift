@@ -51,6 +51,7 @@ class BrowserViewController: UIViewController {
     private var onboardingEventsHandler: OnboardingEventsHandler
     private var whatsNewEventsHandler: WhatsNewEventsHandler
     private var themeManager: ThemeManager
+    private let shortcutsPresenter = ShortcutsPresenter()
 
     private enum URLBarScrollState {
         case collapsed
@@ -194,7 +195,7 @@ class BrowserViewController: UIViewController {
         overlayView.setSearchSuggestionsPromptViewDelegate(delegate: self)
         mainContainerView.addSubview(overlayView)
 
-        shortcutManager.shortcutsState = .createShortcutViews
+        shortcutsPresenter.shortcutsState = .createShortcutViews
         background.snp.makeConstraints { make in
             make.edges.equalTo(mainContainerView)
         }
@@ -368,7 +369,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func setupShortcutEvents() {
-        shortcutManager
+        shortcutsPresenter
             .$shortcutsState
             .sink { [unowned self] shortcutsState in
 
@@ -668,7 +669,7 @@ class BrowserViewController: UIViewController {
         homeViewController.view.isHidden = false
         createURLBar()
         updateLockIcon(trackingProtectionStatus: trackingProtectionManager.trackingProtectionStatus)
-        shortcutManager.shortcutsState = .onHomeView
+        shortcutsPresenter.shortcutsState = .onHomeView
 
         // Clear the cache and cookies, starting a new session.
         WebCacheUtils.reset()
@@ -754,7 +755,7 @@ class BrowserViewController: UIViewController {
     func submit(url: URL) {
         // If this is the first navigation, show the browser and the toolbar.
         guard isViewLoaded else { initialUrl = url; return }
-        shortcutManager.shortcutsState = .none
+        shortcutsPresenter.shortcutsState = .none
 
         if isIPadRegularDimensions {
             urlBar.snp.makeConstraints { make in
@@ -865,7 +866,7 @@ class BrowserViewController: UIViewController {
     @objc private func selectLocationBar() {
         showToolbars()
         urlBar.activateTextField()
-        shortcutManager.shortcutsState = .activeURLBar
+        shortcutsPresenter.shortcutsState = .activeURLBar
     }
 
     @objc private func reload() {
@@ -1111,7 +1112,7 @@ extension BrowserViewController: URLBarDelegate {
     func urlBar(_ urlBar: URLBar, didEnterText text: String) {
         let trimmedText = text.trimmingCharacters(in: .whitespaces)
         guard urlBar.url?.absoluteString != trimmedText else { return }
-        shortcutManager.shortcutsState = .editingURL(text: trimmedText)
+        shortcutsPresenter.shortcutsState = .editingURL(text: trimmedText)
         let isOnHomeView = !urlBar.inBrowsingMode
 
         if Settings.getToggle(.enableSearchSuggestions), !trimmedText.isEmpty {
@@ -1198,7 +1199,7 @@ extension BrowserViewController: URLBarDelegate {
         guard !shortcutContextMenuIsOpenOnIpad() else { return }
         overlayView.dismiss()
         toggleURLBarBackground(isBright: !webViewController.isLoading)
-        shortcutManager.shortcutsState = .dismissedURLBar
+        shortcutsPresenter.shortcutsState = .dismissedURLBar
         webViewController.focus()
     }
 
@@ -1209,7 +1210,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidActivate(_ urlBar: URLBar) {
-        shortcutManager.shortcutsState = .activeURLBar
+        shortcutsPresenter.shortcutsState = .activeURLBar
         homeViewController.updateUI(urlBarIsActive: true, isBrowsing: urlBar.inBrowsingMode)
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
             self.urlBarContainer.alpha = 1

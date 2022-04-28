@@ -53,8 +53,16 @@ public class ShortcutView: UIView {
         public var height: CGFloat
         public var inset: CGFloat
         
-        public static let iPad: ShortcutView.LayoutConfiguration = .init(width: .shortcutViewWidthIPad, height: .shortcutViewHeightIPad, inset: .shortcutViewInnerDimensionIPad)
-        public static let `default`: ShortcutView.LayoutConfiguration = .init(width: .shortcutViewWidth, height: .shortcutViewHeight, inset: .shortcutViewInnerDimension)
+        public static let iPad = LayoutConfiguration(
+            width: .shortcutViewWidthIPad,
+            height: .shortcutViewHeightIPad,
+            inset: .shortcutViewInnerDimensionIPad
+        )
+        public static let `default` = LayoutConfiguration(
+            width: .shortcutViewWidth,
+            height: .shortcutViewHeight,
+            inset: .shortcutViewInnerDimension
+        )
     }
 
     public init(shortcut: Shortcut, layoutConfiguration: LayoutConfiguration) {
