@@ -12,6 +12,6 @@ class ShortcutsPresenter {
         case activeURLBar
         case dismissedURLBar
     }
-    
+
     @Published public var shortcutsState: ShortcutsState?
 }

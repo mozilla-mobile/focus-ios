@@ -47,12 +47,12 @@ public class ShortcutView: UIView {
         nameLabel.textAlignment = .center
         return nameLabel
     }()
-    
+
     public struct LayoutConfiguration {
         public var width: CGFloat
         public var height: CGFloat
         public var inset: CGFloat
-        
+
         public static let iPad = LayoutConfiguration(
             width: .shortcutViewWidthIPad,
             height: .shortcutViewHeightIPad,

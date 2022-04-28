@@ -12,9 +12,9 @@ public protocol ShortcutsManagerDelegate: AnyObject {
 public class ShortcutsManager {
     let shortcutsKey = "Shortcuts"
     public static let shared = ShortcutsManager()
-    
+
     public private(set) var shortcuts = [Shortcut]()
-    
+
     public weak var delegate: ShortcutsManagerDelegate?
 
     private init() {
@@ -24,14 +24,14 @@ public class ShortcutsManager {
     private func canSave(shortcut: Shortcut) -> Bool {
         shortcuts.count < Self.maximumNumberOfShortcuts && !isSaved(shortcut: shortcut)
     }
-    
+
     private func saveShortcuts() {
         if let encoded = try? JSONEncoder().encode(shortcuts) {
             UserDefaults.standard.set(encoded, forKey: "Shortcuts")
         }
         loadShortcuts()
     }
-    
+
     private func loadShortcuts() {
         if let storedObjItem = UserDefaults.standard.object(forKey: "Shortcuts") {
             do {
@@ -53,7 +53,7 @@ public extension ShortcutsManager {
             delegate?.shortcutsDidUpdate()
         }
     }
-    
+
     func remove(shortcut: Shortcut) {
         if let index = shortcuts.firstIndex(of: shortcut) {
             shortcuts.remove(at: index)
@@ -61,7 +61,7 @@ public extension ShortcutsManager {
             delegate?.shortcutsDidUpdate()
         }
     }
-    
+
     func rename(shortcut: Shortcut, newName: String) {
         var renamedShortcut = shortcut
         renamedShortcut.name = newName
@@ -71,7 +71,7 @@ public extension ShortcutsManager {
             delegate?.shortcutDidUpdate(shortcut: shortcuts[index])
         }
     }
-    
+
     func isSaved(shortcut: Shortcut) -> Bool {
         shortcuts.contains(shortcut) ? true : false
     }

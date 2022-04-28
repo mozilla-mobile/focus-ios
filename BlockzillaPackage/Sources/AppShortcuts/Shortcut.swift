@@ -7,7 +7,7 @@ import UIKit
 public struct Shortcut: Equatable, Codable, Hashable {
     public var url: URL
     public var name: String
-    
+
     public init(url: URL, name: String = "") {
         self.url = url
         self.name = name.isEmpty ? Shortcut.defaultName(for: url) : name

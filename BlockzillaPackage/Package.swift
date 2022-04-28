@@ -49,5 +49,8 @@ let package = Package(
                 .product(name: "SnapKit", package: "SnapKit")
             ]
         ),
+        .testTarget(
+            name: "BlockzillaPackageTests",
+            dependencies: ["AppShortcuts"]),
     ]
 )
