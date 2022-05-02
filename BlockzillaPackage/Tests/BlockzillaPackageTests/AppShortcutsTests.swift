@@ -78,7 +78,7 @@ class AppShortcutsTests: XCTestCase {
         XCTAssertTrue(delegate.shortcutsDidUpdateTrigger)
     }
 
-    func testRenamingShortcuTriggersShortcutViewUpdate() {
+    func testRenamingShortcutTriggersShortcutViewUpdate() {
         // Given
         let shortcut = Shortcut(url: URL(string: "https://www.google.com")!)
         let delegate = MockShortcutDelegate()
@@ -91,5 +91,25 @@ class AppShortcutsTests: XCTestCase {
         // Then
         XCTAssertEqual(sut.shortcuts.count, 1)
         XCTAssertEqual(delegate.updatedShortcut?.name, "TestGoogle")
+    }
+    
+    func testAddingFiveShortcutsAddsOnlyTheFirstFour() {
+        // Given
+        let shortcut1 = Shortcut(url: URL(string: "https://www.google.com")!)
+        let shortcut2 = Shortcut(url: URL(string: "https://www.facebook.com")!)
+        let shortcut3 = Shortcut(url: URL(string: "https://www.reddit.com")!)
+        let shortcut4 = Shortcut(url: URL(string: "https://www.twitter.com")!)
+        
+        let shortcut5 = Shortcut(url: URL(string: "https://www.dribble.com")!)
+
+        // When
+        sut.add(shortcut: shortcut1)
+        sut.add(shortcut: shortcut2)
+        sut.add(shortcut: shortcut3)
+        sut.add(shortcut: shortcut4)
+        sut.add(shortcut: shortcut5)
+
+        // Then
+        XCTAssertEqual(sut.shortcuts, [shortcut1, shortcut2, shortcut3, shortcut4])
     }
 }
