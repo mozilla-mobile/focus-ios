@@ -92,14 +92,14 @@ class AppShortcutsTests: XCTestCase {
         XCTAssertEqual(sut.shortcuts.count, 1)
         XCTAssertEqual(delegate.updatedShortcut?.name, "TestGoogle")
     }
-    
+
     func testAddingFiveShortcutsAddsOnlyTheFirstFour() {
         // Given
         let shortcut1 = Shortcut(url: URL(string: "https://www.google.com")!)
         let shortcut2 = Shortcut(url: URL(string: "https://www.facebook.com")!)
         let shortcut3 = Shortcut(url: URL(string: "https://www.reddit.com")!)
         let shortcut4 = Shortcut(url: URL(string: "https://www.twitter.com")!)
-        
+
         let shortcut5 = Shortcut(url: URL(string: "https://www.dribble.com")!)
 
         // When
