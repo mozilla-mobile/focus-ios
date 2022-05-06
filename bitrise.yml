@@ -8,7 +8,7 @@ trigger_map:
 - push_branch: main
   workflow: runParallelTests
 - pull_request_source_branch: "*"
-  workflow: L10nBuild
+  workflow: runParallelTests
 - tag: "*"
   workflow: release
 
