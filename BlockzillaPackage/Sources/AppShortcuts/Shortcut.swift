@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct Shortcut: Equatable, Codable, Hashable {
+public struct Shortcut: Equatable, Encodable, Hashable {
     public var url: URL
     public var name: String
 
@@ -29,5 +29,13 @@ extension Shortcut {
             }
         }
         return ""
+    }
+}
+
+extension Shortcut: Decodable {
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        url = try values.decode(URL.self, forKey: .url)
+        name = (try? values.decode(String.self, forKey: .name)) ?? Shortcut.defaultName(for: url)
     }
 }
