@@ -14,9 +14,9 @@ extension Foundation.Bundle {
 
     static var myModule: Bundle = {
 
-        //Name of the target
+        // Name of the target
         let bundleName = "DesignSystem_DesignSystem"
-        //Name of Package prefixed by LocalPackages_
+        // Name of Package prefixed by LocalPackages_
         let localBundleName = "LocalPackages_Focus"
 
         let candidates = [
@@ -31,7 +31,7 @@ extension Foundation.Bundle {
 
             /* Bundle should be present here when running previews from a different package (this is the path to "…/Debug-iphonesimulator/"). */
             Bundle(for: CurrentBundleFinder.self).resourceURL?.deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent(),
-            Bundle(for: CurrentBundleFinder.self).resourceURL?.deletingLastPathComponent().deletingLastPathComponent(),
+            Bundle(for: CurrentBundleFinder.self).resourceURL?.deletingLastPathComponent().deletingLastPathComponent()
         ]
 
         for candidate in candidates {
