@@ -804,9 +804,8 @@ class URLBar: UIView {
         urlTextField.text = displayFullUrl ? fullUrl : displayText
         truncatedUrlText.text = truncatedURL
     }
-    
     private func highlightText(_ textField: UITextField) {
-        guard textField != nil else { return }
+        guard textField.text != nil else { return }
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(300)) {
             textField.selectAll(nil)
         }
