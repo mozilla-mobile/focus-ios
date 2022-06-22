@@ -13,9 +13,9 @@ trigger_map:
   workflow: release
 
 meta:
-      bitrise.io:
-        stack: osx-xcode-13.3.x
-        machine_type_id: g2.4core
+  bitrise.io:
+    stack: osx-xcode-13.3.x
+    machine_type_id: g2.4core
 
 workflows:
 
