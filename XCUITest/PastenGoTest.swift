@@ -67,19 +67,22 @@ class PastenGoTest: BaseTestCase {
 
         // Select paste and go, and verify it goes to the correct place
         app.menuItems["Paste & Go"].tap()
-        waitForWebPageLoad()
+        if #available(iOS 16, *) {
+            waitForExistence(app.textFields["URLBar.urlText"], timeout: 10)
+        } else {
+            waitForWebPageLoad()
+            // Check the correct site is reached
+            waitForValueContains(searchOrEnterAddressTextField, value: "mozilla.org")
+            app.buttons["URLBar.deleteButton"].firstMatch.tap()
+            waitForExistence(app.staticTexts["Browsing history cleared"])
 
-        // Check the correct site is reached
-        waitForValueContains(searchOrEnterAddressTextField, value: "mozilla.org")
-        app.buttons["URLBar.deleteButton"].firstMatch.tap()
-        waitForExistence(app.staticTexts["Browsing history cleared"])
-
-        clipboard = "1(*&)(*%@@$^%^12345)"
-        UIPasteboard.general.string = clipboard
-        waitForExistence(searchOrEnterAddressTextField, timeout: 3)
-        searchOrEnterAddressTextField.tap()
-        waitForExistence(app.menuItems["Paste"], timeout: 5)
-        app.menuItems["Paste"].tap()
-        waitForValueContains(app.textFields["URLBar.urlText"], value: "1(*&)(*%@@$^%^12345)")
+            clipboard = "1(*&)(*%@@$^%^12345)"
+            UIPasteboard.general.string = clipboard
+            waitForExistence(searchOrEnterAddressTextField, timeout: 3)
+            searchOrEnterAddressTextField.tap()
+            waitForExistence(app.menuItems["Paste"], timeout: 5)
+            app.menuItems["Paste"].tap()
+            waitForValueContains(app.textFields["URLBar.urlText"], value: "1(*&)(*%@@$^%^12345)")
+        }
     }
 }
