@@ -54,23 +54,25 @@ class PastenGoTest: BaseTestCase {
 
     // Smoketest
     // Test Paste & Go feature
-    func testPastenGo() {
-        // Inject a string into clipboard
-        var clipboard = "https://www.mozilla.org/en-US/"
-        UIPasteboard.general.string = clipboard
-
-        // Tap url bar to show context menu
-        let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
-        waitForExistence(searchOrEnterAddressTextField, timeout: 30)
-        searchOrEnterAddressTextField.tap()
-        waitForExistence(app.menuItems["Paste"], timeout: 10)
-        XCTAssertTrue(app.menuItems["Paste & Go"].isEnabled)
-
-        // Select paste and go, and verify it goes to the correct place
-        app.menuItems["Paste & Go"].tap()
+    func testPastenGo() throws {
         if #available(iOS 16, *) {
-            waitForExistence(app.textFields["URLBar.urlText"], timeout: 10)
+            throw XCTSkip("This test needs to be updated or removed: Select menu not shown")
         } else {
+            // Inject a string into clipboard
+            var clipboard = "https://www.mozilla.org/en-US/"
+            UIPasteboard.general.string = clipboard
+
+            // Tap url bar to show context menu
+            let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
+            waitForExistence(searchOrEnterAddressTextField, timeout: 30)
+            searchOrEnterAddressTextField.tap()
+            waitForExistence(app.menuItems["Paste"], timeout: 10)
+            XCTAssertTrue(app.menuItems["Paste & Go"].isEnabled)
+
+            // Select paste and go, and verify it goes to the correct place
+            app.menuItems["Paste & Go"].tap()
+
+            waitForExistence(app.textFields["URLBar.urlText"], timeout: 10)
             waitForWebPageLoad()
             // Check the correct site is reached
             waitForValueContains(searchOrEnterAddressTextField, value: "mozilla.org")
