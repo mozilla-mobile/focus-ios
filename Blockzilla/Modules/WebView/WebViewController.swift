@@ -85,7 +85,6 @@ class WebViewController: UIViewController, WebController {
     init(trackingProtectionManager: TrackingProtectionManager) {
         self.trackingProtectionManager = trackingProtectionManager
         super.init(nibName: nil, bundle: nil)
-//        self.trackingProtectionManager.didUpdateTrackers = didUpdateTrackers
         cancellable = self.trackingProtectionManager.$trackingProtectionStatus.sink { [weak self] status in
             guard let self = self else { return }
             self.delegate?.webController(self, didUpdateTrackingProtectionStatus: status, oldTrackingProtectionStatus: self.trackingProtectionManager.trackingProtectionStatus)
