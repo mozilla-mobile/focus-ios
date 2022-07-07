@@ -3,6 +3,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import XCTest
+import Onboarding
+import AppShortcuts
 
 #if FOCUS
 @testable import Firefox_Focus
@@ -12,15 +14,32 @@ import XCTest
 
 class BrowserViewControllerTests: XCTestCase {
     private let mockUserDefaults = MockUserDefaults()
-
-    class TestAppSplashController: AppSplashController {
-        var splashView = SplashView()
-        func hideSplashView() {}
-        func showSplashView() {}
-    }
+    
+    private lazy var onboardingEventsHandler = OnboardingEventsHandler(
+        alwaysShowOnboarding: {
+            false
+        },
+        shouldShowNewOnboarding: { [unowned self] in
+            false
+        },
+        getShownTips: {
+            return []
+        }, setShownTips: { _ in
+            
+        }
+    )
+    
+    private lazy var whatsNewEventsHandler = WhatsNewEventsHandler()
+    private lazy var themeManager = ThemeManager()
 
     func testRequestReviewThreshold() {
-        let bvc = BrowserViewController(appSplashController: TestAppSplashController())
+        let bvc = BrowserViewController(
+            shortcutManager: ShortcutsManager(),
+            authenticationManager: AuthenticationManager(),
+            onboardingEventsHandler: onboardingEventsHandler,
+            whatsNewEventsHandler: whatsNewEventsHandler,
+            themeManager: themeManager
+        )
         mockUserDefaults.clear()
 
         // Ensure initial threshold is set

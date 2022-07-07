@@ -200,7 +200,7 @@
 "ShareMenu.GetFirefox" = "Firefox એપ મેળવો";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
-"ShareMenu.SharePage" = "આની સાથે પૃષ્ઠ શેર કરો...";
+"ShareMenu.SharePage" = "આની સાથે પૃષ્ઠ શેર કરો…";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "ઉમેરો";

@@ -247,6 +247,33 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "ปิด";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "เริ่มการเรียกดู";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "ลบประวัติการเรียกดู รหัสผ่าน คุกกี้ และป้องกันไม่ให้โฆษณาที่ไม่ต้องการติดตามคุณในคลิกเดียว!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "ประวัติของคุณไม่ได้ติดตามคุณ";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ เป็นเบราว์เซอร์ที่เน้นเรื่องความเป็นส่วนตัวโดยเฉพาะซึ่งมาพร้อมการป้องกันการติดตามและการปิดกั้นเนื้อหา";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "ทำได้มากกว่าปกปิดตัวตน";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "กำหนดการตั้งค่าเพื่อตัดสินใจว่าต้องการแบ่งปันข้อมูลมากน้อยเพียงใด";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "ปรับแต่งการป้องกันด้วยตัวคุณเอง";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "ให้คุณเรียกดูแบบส่วนตัวในขั้นที่เหนือกว่า";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "ยินดีต้อนรับสู่ Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "ยกเลิก";
 
@@ -379,6 +406,9 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "สตริงการค้นหาที่จะใช้";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "ตัวอย่าง: searchengine.example.com/search/?q=%s";
+
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "วางหรือป้อนสตริงการค้นหา หากจำเป็นให้แทนที่คำค้นหาด้วย: %s";
 
@@ -473,7 +503,7 @@
 "share" = "แบ่งปัน";
 
 /* Text for the share menu option when a user wants to add the site to Shortcuts */
-"ShareMenu.AddToShortcuts" = "เพิ่มทางลัด";
+"ShareMenu.AddToShortcuts" = "เพิ่มไปยังคำสั่งลัด";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "คัดลอกที่อยู่";
@@ -506,10 +536,22 @@
 "ShareMenu.ShareOpenFirefox" = "เปิดใน Firefox";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
-"ShareMenu.SharePage" = "แบ่งปันหน้าด้วย...";
+"ShareMenu.SharePage" = "แบ่งปันหน้าด้วย…";
 
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "ลบออกจากคำสั่งลัด";
+
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "เปลี่ยนชื่อคำสั่งลัด";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "ชื่อคำสั่งลัด";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "บันทึก";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "ยกเลิก";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "เพิ่ม";
@@ -547,20 +589,35 @@
 /* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
 "Tip.Release.Description" = "อ่านเพิ่มเติมเกี่ยวกับสิ่งนี้และการอัปเดตอื่นๆ ของ %@";
 
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "ใช่ เรามีรูปลักษณ์ใหม่!";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "การกระทำหน้า > ขอไซต์สำหรับเดสก์ท็อป";
+
 /* Text for a label that indicates the title for request desktop tip. */
 "Tip.RequestDesktop.Title" = "ต้องการดูไซต์เวอร์ชันเดสก์ท็อปแบบเต็มหรือไม่?";
 
 /* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
 "Tip.ShareTrackers.Description" = "%@ ตัวติดตามที่ถูกปิดกั้นจนถึงตอนนี้";
 
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "คุณเรียกดู %@ การปิดกั้น";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "เลือก เพิ่มไปยังคำสั่งลัด จากเมนู %@";
+
 /* Text for a label that indicates the title for shortcuts tip. */
 "Tip.Shortcuts.Title" = "สร้างทางลัดไปยังเว็ปไซต์ที่คุณเข้าชมบ่อยที่สุด:";
 
 /* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
-"Tip.SiriErase.Description" = "เพิ่มทางลัด Siri";
+"Tip.SiriErase.Description" = "เพิ่มคำสั่งลัด Siri";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "“Siri ลบวาระ %@ ของฉัน”";
 
 /* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
-"Tip.SiriFavorite.Description" = "เพิ่มทางลัด Siri";
+"Tip.SiriFavorite.Description" = "เพิ่มคำสั่งลัด Siri";
 
 /* Text for a label that indicates the title for siri favorite tip. */
 "Tip.SiriFavorite.Title" = "“Siri เปิดโปรดของฉัน”";
@@ -570,6 +627,21 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "ไซต์ไม่มีเนื้อหาหรือทำงานแปลก ๆ ?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "ไปที่การตั้งค่าเพื่อจัดการตัวเลือกต่าง ๆ เกี่ยวกับความเป็นส่วนตัวและความปลอดภัย";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "การตั้งค่าเริ่มต้นเหล่านี้ให้การปกป้องที่แข็งแกร่ง แต่คุณสามารถปรับแต่งการตั้งค่าให้ตรงกับความต้องการของคุณได้อย่างง่ายดาย";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ หยุดไซต์นี้ไม่ให้สอดแนมคุณแล้ว แตะโล่เพื่อดูข้อมูลเกี่ยวกับสิ่งที่เราปิดกั้น";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "แตะที่ถังขยะเมื่อใดก็ได้เพื่อลบร่องรอยการใช้งานทั้งหมดในวาระปัจจุบันของคุณออก";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "คุณได้รับการคุ้มครอง!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "ใช้ Touch ID เพื่อกลับสู่ %@";

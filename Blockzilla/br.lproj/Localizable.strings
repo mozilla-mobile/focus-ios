@@ -488,7 +488,7 @@
 "ShareMenu.ShareOpenFirefox" = "Digeriñ e Firefox";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
-"ShareMenu.SharePage" = "Rannañ ar bajenn gant...";
+"ShareMenu.SharePage" = "Rannañ ar bajenn gant…";
 
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "Lemel diouzh ar berradennoù";

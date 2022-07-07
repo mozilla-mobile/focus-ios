@@ -247,6 +247,33 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Luk";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Afslut rundvisningen";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Med ét klik kan du slette din browserhistorik, dine adgangskoder og cookies - og forhindre uønskede reklamer i at følge dig.";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Din historik følger dig ikke";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ er en browser dedikeret til at beskytte dit privatliv ved hjælp af indholdsblokering og beskyttelse mod sporing.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Mere end bare inkognito";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Konfigurer indstillingerne for selv at bestemme, hvor meget eller hvor lidt du vil dele.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Beskyttelse efter eget valg";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Tag din private browsing til det næste niveau.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Velkommen til Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Annuller";
 
@@ -379,6 +406,9 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Søgestreng der skal anvendes";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Eksempel: søgetjeneste.eksempel.dk/search/?q=%s";
+
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Indsæt eller indtast søgestreng. Om nødvendigt, erstat søgetermen med: %s.";
 
@@ -506,10 +536,22 @@
 "ShareMenu.ShareOpenFirefox" = "Åbn i Firefox";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
-"ShareMenu.SharePage" = "Del side med...";
+"ShareMenu.SharePage" = "Del side med…";
 
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "Fjern fra genveje";
+
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "Omdøb genvej";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "Genvejsnavn";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "Gem";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "Annuller";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Tilføj";
@@ -585,6 +627,21 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Mangler siden indhold eller opfører den sig underligt?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Gå til Indstillinger for at håndtere specifikke privatlivs- og sikkerhedsindstillinger.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Disse standard-indstillinger giver stærk beskyttelse. Men det er nemt at tilpasse indstillingerne, så de opfylder dine specifikke behov.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ forhindrede dette websted i at udspionere dig. Tryk på skjoldet for information om, hvad vi blokerede.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Tryk på papirkurven når som helst for at fjerne alle spor af din nuværende session.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Du er beskyttet!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Brug Touch ID for at vende tilbage til %@";

@@ -74,7 +74,7 @@
 "Autocomplete.addCustomUrlWithPlus" = "+ Legg til tilpassa adresse";
 
 /* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "Legg til og handter tilpassa autofullførte nettadressesr.";
+"Autocomplete.customDescriptoin" = "Legg til og handsam tilpassa autofullførte nettadressesr.";
 
 /* Label for button taking you to your custom Autocomplete URL list */
 "Autocomplete.customLabel" = "Tilpassa nettadresser";
@@ -107,7 +107,7 @@
 "Autocomplete.enabled" = "Slått på";
 
 /* Label for button taking you to your custom Autocomplete URL list */
-"Autocomplete.manageSites" = "Handter nettsider";
+"Autocomplete.manageSites" = "Handsam nettsider";
 
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.mySites" = "Mine nettsider";
@@ -247,6 +247,33 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Lat att";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Start surfinga";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Slett nettlesarhistorikken, passorda, infokapslane og hindre uønskte annonsar frå å følgje deg med eit enkelt klikk!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Historikken din følgjer deg ikkje";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ er ein dedikert personvernnettlesar med sporingsvern og innhaldsblokkering.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Meir enn berre inkognito";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Konfigurer innstillingane slik at du kan bestemme kor mykje eller lite du deler.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Vern etter eige skjønn";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Ta den private surfinga di til neste nivå.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Velkomen til Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Avbryt";
 
@@ -378,6 +405,9 @@
 
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Søkjestreng å bruke";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Døme: searchengine.example.com/search/?q=%s";
 
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Lim inn eller skriv inn søkjestrengen. Om nødvendig, erstatt søkjeordet med: %s.";
@@ -511,6 +541,18 @@
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "Fjern frå snarvegar";
 
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "Gi nytt namn til snarveg";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "Namn på snarveg";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "Lagre";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "Avbryt";
+
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Legg til";
 
@@ -585,6 +627,21 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Manglar nettstaden innhald eller oppfører han seg rart?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Gå til Innstillingar for å behandle spesifikke personvern- og sikkerheitsalternativ.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Desse standardinnstillingane gir sterkt vern. Men det er enkelt å tilpasse innstillingane for å møte dine spesielle behov.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ stoppa denne sida frå å spionere på deg. Trykk på skjoldet for informasjon om kva vi blokkerte.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Trykk på papirkorga når som helst for å fjerne alle spor etter gjeldande økt.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Du er verna!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Bruk «Touch ID» for å gå tilbake til %@";

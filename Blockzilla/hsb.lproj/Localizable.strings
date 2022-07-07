@@ -247,6 +247,33 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Začinić";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Přehladowanje započeć";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Zhašejće swoju přehladowansku historiju, hesła, placki, a zadźěwajće z jednym kliknjenjom tomu, zo wam njewitane wabjenje slěduje!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Waša historija wam njeslěduje";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ je wobhladowak z funkcijemi priwatnosće ze škitom před slědowanjom a blokowanjom wobsaha.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Wjace hač jenož njespóznaty";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Konfigurujće nastajenja, zo byšće móhł rozsudźić, kelko abo kak mało přeradźeće.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Škit po swójskim dobrozdaću";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Zběhńće swój priwatny modus na přichodnu runinu.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Witajće k Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Přetorhnyć";
 
@@ -379,6 +406,9 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Pytanski wuraz, kotryž ma so wužiwać";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Přikład: searchengine.example.com/search/?q=%s";
+
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Pytanski wuraz zasadźić abo zapodać. Jeli trjeba, wuměńće pytanski wuraz přez: %s.";
 
@@ -506,10 +536,22 @@
 "ShareMenu.ShareOpenFirefox" = "We Firefox wočinić";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
-"ShareMenu.SharePage" = "Stronu dźělić z...";
+"ShareMenu.SharePage" = "Stronu dźělić z…";
 
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "Ze zwjazanjow wotstronić";
+
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "Zwjazanje přemjenować";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "Mjeno zwjazanja";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "Składować";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "Přetorhnyć";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Přidać";
@@ -585,6 +627,21 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Sydło so dźiwnje zadźeržuje abo wobsah faluje?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Wočińće nastajenja, zo byšće wěste nastajenja priwatnosće a wěstoty rjadował.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Tute standardne nastajenja mócny škit poskićeja. Ale je lochko, nastajenja wašim specifiskim potrjebam přměrić.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ je sydłu zadźěwał was wuskušować. Podótkńće so tarče, zo byšće informacije wo tym dóstał, štož smy zablokowali.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Podótkńće so kóždy čas papjernika, zo byšće wšě slědy swojeho posedźenja wotstronił.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Sće škitany!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Wužiwajće Touch ID, zo byšće so k %@ wróćił";

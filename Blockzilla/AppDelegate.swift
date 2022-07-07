@@ -6,20 +6,24 @@ import UIKit
 import Telemetry
 import Glean
 import Sentry
+import Combine
+import Onboarding
+import AppShortcuts
 
-protocol AppSplashController {
-    var splashView: SplashView { get }
-    func hideSplashView()
-    func showSplashView()
+enum AppPhase {
+    case notRunning
+    case didFinishLaunching
+    case willEnterForeground
+    case didBecomeActive
+    case willResignActive
+    case didEnterBackgroundkground
+    case willTerminate
 }
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashController {    
-    static let prefIntroDone = "IntroDone"
-    static let prefIntroVersion = 2
-    static let prefWhatsNewDone = "WhatsNewDone"
-    static let prefWhatsNewCounter = "WhatsNewCounter"
-    static var needsAuthenticated = false
+class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
+    private lazy var authenticationManager = AuthenticationManager()
+    @Published private var appPhase: AppPhase = .notRunning
 
     // This enum can be expanded to support all new shortcuts added to menu.
     enum ShortcutIdentifier: String {
@@ -34,15 +38,100 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
     var window: UIWindow?
 
-    var splashView = SplashView()
-    private lazy var browserViewController = {
-        BrowserViewController(appSplashController: self)
+    lazy var splashView: SplashView = {
+        let splashView = SplashView()
+        splashView.authenticationManager = authenticationManager
+        return splashView
     }()
 
+    private lazy var browserViewController = BrowserViewController(
+        shortcutManager: shortcutManager,
+        authenticationManager: authenticationManager,
+        onboardingEventsHandler: onboardingEventsHandler,
+        whatsNewEventsHandler: whatsNewEventsHandler,
+        themeManager: themeManager
+    )
+
+    private let nimbus = NimbusWrapper.shared
     private var queuedUrl: URL?
     private var queuedString: String?
+    private let whatsNewEventsHandler = WhatsNewEventsHandler()
+    private let themeManager = ThemeManager()
+    private var cancellables = Set<AnyCancellable>()
+    private lazy var shortcutManager: ShortcutsManager = .init()
+
+    private lazy var onboardingEventsHandler = OnboardingEventsHandler(
+        alwaysShowOnboarding: {
+            UserDefaults.standard.bool(forKey: OnboardingConstants.alwaysShowOnboarding)
+        },
+        shouldShowNewOnboarding: { [unowned self] in
+            #if DEBUG
+            if AppInfo.isTesting() {
+                return false
+            }
+            if UserDefaults.standard.bool(forKey: OnboardingConstants.ignoreOnboardingExperiment) {
+                return !UserDefaults.standard.bool(forKey: OnboardingConstants.showOldOnboarding)
+            } else {
+                return nimbus.shouldShowNewOnboarding
+            }
+            #else
+            return nimbus.shouldShowNewOnboarding
+            #endif
+        },
+        getShownTips: {
+            return UserDefaults
+                .standard
+                .data(forKey: OnboardingConstants.shownTips)
+                .flatMap {
+                    try? JSONDecoder().decode(Set<OnboardingEventsHandler.ToolTipRoute>.self, from: $0)
+                } ?? []
+        }, setShownTips: { tips in
+            let data = try? JSONEncoder().encode(tips)
+            UserDefaults.standard.set(data, forKey: OnboardingConstants.shownTips)
+        }
+    )
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        appPhase = .didFinishLaunching
+
+        $appPhase.sink { [unowned self] phase in
+            switch phase {
+            case .didFinishLaunching, .willEnterForeground:
+                authenticateWithBiometrics()
+
+            case .didBecomeActive:
+                if authenticationManager.authenticationState == .loggedin { hideSplashView() }
+
+            case .willResignActive:
+                showSplashView()
+
+            case .didEnterBackgroundkground:
+                authenticationManager.logout()
+
+            case .notRunning, .willTerminate:
+                break
+            }
+        }
+        .store(in: &cancellables)
+
+        authenticationManager
+            .$authenticationState
+            .receive(on: DispatchQueue.main)
+            .sink { state in
+                switch state {
+                case .loggedin:
+                    self.hideSplashView()
+
+                case .loggedout:
+                    self.splashView.state = .default
+                    self.showSplashView()
+
+                case .canceled:
+                    self.splashView.state = .needsAuth
+                }
+            }
+            .store(in: &cancellables)
+
         if AppInfo.testRequestsReset() {
             if let bundleID = Bundle.main.bundleIdentifier {
                 UserDefaults.standard.removePersistentDomain(forName: bundleID)
@@ -53,9 +142,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         setupCrashReporting()
         setupTelemetry()
         setupExperimentation()
-        
+
         TPStatsBlocklistChecker.shared.startup()
-        
+
         // Fix transparent navigation bar issue in iOS 15
         if #available(iOS 15, *) {
             let appearance = UINavigationBarAppearance()
@@ -85,58 +174,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         browserViewController.modalDelegate = self
         window?.rootViewController = browserViewController
         window?.makeKeyAndVisible()
-        window?.overrideUserInterfaceStyle = UserDefaults.standard.theme.userInterfaceStyle
+        window?.overrideUserInterfaceStyle = themeManager.selectedTheme
 
         WebCacheUtils.reset()
 
-        displaySplashAnimation()
         KeyboardHelper.defaultHelper.startObserving()
 
-        let prefIntroDone = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone)
-
-        // Short circuit if we are testing. We special case the first run handling and completely
-        // skip the what's new handling. This logic could be put below but that is already way
-        // too complicated. Everything under this commen should really be refactored.
-        
         if AppInfo.isTesting() {
             // Only show the First Run UI if the test asks for it.
             if AppInfo.isFirstRunUIEnabled() {
-                let firstRunViewController = IntroViewController()
-                firstRunViewController.modalPresentationStyle = .fullScreen
-                self.browserViewController.present(firstRunViewController, animated: false, completion: nil)
+                onboardingEventsHandler.send(.applicationDidLaunch)
             }
             return true
         }
 
-        let needToShowFirstRunExperience = prefIntroDone < AppDelegate.prefIntroVersion
-        if needToShowFirstRunExperience {
-            // Show the first run UI asynchronously to avoid the "unbalanced calls to begin/end appearance transitions" warning.
-            DispatchQueue.main.async {
-                // Set the prefIntroVersion viewed number in the same context as the presentation.
-                UserDefaults.standard.set(AppDelegate.prefIntroVersion, forKey: AppDelegate.prefIntroDone)
-                UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
-                let introViewController = IntroViewController()
-                introViewController.modalPresentationStyle = .fullScreen
-                self.browserViewController.present(introViewController, animated: false, completion: nil)
-            }
-        }
-
-        // Don't highlight whats new on a fresh install (prefIntroDone == 0 on a fresh install)
-        if let lastShownWhatsNew = UserDefaults.standard.string(forKey: AppDelegate.prefWhatsNewDone)?.first, let currentMajorRelease = AppInfo.shortVersion.first {
-            if prefIntroDone != 0 && lastShownWhatsNew != currentMajorRelease {
-
-                let counter = UserDefaults.standard.integer(forKey: AppDelegate.prefWhatsNewCounter)
-                switch counter {
-                case 4:
-                    // Shown three times, remove counter
-                    UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
-                    UserDefaults.standard.removeObject(forKey: AppDelegate.prefWhatsNewCounter)
-                default:
-                    // Show highlight
-                    UserDefaults.standard.set(counter+1, forKey: AppDelegate.prefWhatsNewCounter)
-                }
-            }
-        }
+        onboardingEventsHandler.send(.applicationDidLaunch)
+        whatsNewEventsHandler.highlightWhatsNewButton()
 
         return true
     }
@@ -246,23 +299,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             string as CFString,
             "" as CFString) as String
     }
-    
-    private func displaySplashAnimation() {
-        window!.addSubview(splashView)
-        splashView.snp.makeConstraints { make in
-            make.edges.equalTo(window!)
+
+    private func authenticateWithBiometrics() {
+        Task {
+            await authenticationManager.authenticateWithBiometrics()
         }
-        splashView.animateDissapear()
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-        showSplashView()
-        browserViewController.exitFullScreenVideo()
+        appPhase = .willResignActive
         browserViewController.dismissActionSheet()
         browserViewController.deactivateUrlBar()
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
+        appPhase = .didBecomeActive
+
         if Settings.siriRequestsErase() {
             browserViewController.photonActionSheetDidDismiss()
             browserViewController.dismiss(animated: true, completion: nil)
@@ -270,6 +322,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             browserViewController.resetBrowser(hidePreviousSession: true)
             Settings.setSiriRequestErase(to: false)
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.siri, object: TelemetryEventObject.eraseInBackground)
+            GleanMetrics.Siri.eraseInBackground.record()
         }
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
 
@@ -298,8 +351,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
             queuedString = nil
         }
-    
-        browserViewController.activateUrlBarOnHomeView()
+    }
+
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        appPhase = .willEnterForeground
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -307,8 +362,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         // session. This gets called every time the app goes to background but should not get
         // called for *temporary* interruptions such as an incoming phone call until the user
         // takes action and we are officially backgrounded.
-        AppDelegate.needsAuthenticated = true
-        showSplashView()
+        appPhase = .didEnterBackgroundkground
         let orientation = UIDevice.current.orientation.isPortrait ? "Portrait" : "Landscape"
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.background, object:
             TelemetryEventObject.app, value: nil, extras: ["orientation": orientation])
@@ -323,6 +377,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         case "org.mozilla.ios.Klar.eraseAndOpen":
             browserViewController.resetBrowser(hidePreviousSession: true)
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.siri, object: TelemetryEventObject.eraseAndOpen)
+            GleanMetrics.Siri.eraseAndOpen.record()
         case "org.mozilla.ios.Klar.openUrl":
             guard let urlString = userActivity.userInfo?["url"] as? String,
                 let url = URL(string: urlString) else { return false }
@@ -331,22 +386,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             browserViewController.deactivateUrlBarOnHomeView()
             browserViewController.submit(url: url)
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.siri, object: TelemetryEventObject.openFavoriteSite)
+            GleanMetrics.Siri.openFavoriteSite.record()
         case "EraseIntent":
             guard userActivity.interaction?.intent as? EraseIntent != nil else { return false }
             browserViewController.resetBrowser()
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.siri, object: TelemetryEventObject.eraseInBackground)
+            GleanMetrics.Siri.eraseInBackground.record()
         default: break
         }
         return true
     }
-    
+
     func hideSplashView() {
         browserViewController.activateUrlBarOnHomeView()
         splashView.alpha = 0
         splashView.isHidden = true
         splashView.removeFromSuperview()
     }
-    
+
     func showSplashView() {
         browserViewController.deactivateUrlBarOnHomeView()
         window!.addSubview(splashView)
@@ -358,7 +415,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     }
 }
 
-
 // MARK: - Crash Reporting
 
 private let SentryDSNKey = "SentryDSN"
@@ -369,7 +425,7 @@ extension AppDelegate {
         if !Settings.getToggle(.sendAnonymousUsageData) {
             return
         }
-        
+
         if let sentryDSN = Bundle.main.object(forInfoDictionaryKey: SentryDSNKey) as? String {
             SentrySDK.start { options in
                 options.dsn = sentryDSN
@@ -426,11 +482,11 @@ extension AppDelegate {
             .flatMap(UUID.init(uuidString:)) {
             GleanMetrics.LegacyIds.clientId.set(clientId)
         }
-        
+
         if UserDefaults.standard.bool(forKey: GleanLogPingsToConsole) {
             Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?logPings=true")!)
         }
-        
+
         if UserDefaults.standard.bool(forKey: GleanEnableDebugView) {
             if let tag = UserDefaults.standard.string(forKey: GleanDebugViewTag), !tag.isEmpty, let encodedTag = tag.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed) {
                 Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?debugViewTag=\(encodedTag)")!)
@@ -441,7 +497,7 @@ extension AppDelegate {
         Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData), configuration: Configuration(channel: channel), buildInfo: GleanMetrics.GleanBuild.info)
 
         // Send "at startup" telemetry
-        GleanMetrics.Shortcuts.shortcutsOnHomeNumber.set(Int64(ShortcutsManager.shared.numberOfShortcuts))
+        GleanMetrics.Shortcuts.shortcutsOnHomeNumber.set(Int64(shortcutManager.shortcuts.count))
         GleanMetrics.TrackingProtection.hasAdvertisingBlocked.set(Settings.getToggle(.blockAds))
         GleanMetrics.TrackingProtection.hasAnalyticsBlocked.set(Settings.getToggle(.blockAnalytics))
         GleanMetrics.TrackingProtection.hasContentBlocked.set(Settings.getToggle(.blockOther))
@@ -449,7 +505,7 @@ extension AppDelegate {
         GleanMetrics.MozillaProducts.hasFirefoxInstalled.set(UIApplication.shared.canOpenURL(URL(string: "firefox://")!))
         GleanMetrics.Preferences.userTheme.set(UserDefaults.standard.theme.telemetryValue)
     }
-        
+
     func setupExperimentation() {
         do {
             // Enable nimbus when both Send Usage Data and Studies are enabled in the settings.
@@ -462,7 +518,7 @@ extension AppDelegate {
     func presentModal(viewController: UIViewController, animated: Bool) {
         window?.rootViewController?.present(viewController, animated: animated, completion: nil)
     }
-    
+
     func presentSheet(viewController: UIViewController) {
         let vc = SheetModalViewController(containerViewController: viewController)
         vc.modalPresentationStyle = .overCurrentContext

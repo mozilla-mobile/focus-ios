@@ -247,6 +247,33 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Mdel";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Bdu tunigin";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Sfeḍ azray-ik•im n Tunigin, awalen-ik•im uffir, inagan-ik•im n tuqqna, tesweḥleḍ adellel akken ur ak•akem-iṭṭafar ara s yiwen kan usiti!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Azray-ik·im ur ak·akem-iṭṭafar ara";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ d iminig n tbaḍnit yettwagen i ummesten mgal aḍfar akked usewḥel n ugbur.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Ugar n tunigin tusligt tafessast";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Swel iɣewwaren akken ara tferneḍ acḥal i terniḍ tebḍiḍ-t neɣ tesneqdeḍ.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Ammesten almend n ttexmam-ik·im";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Qqim kan deg tunigin-ik·im tusligt ɣer uswir i d-iteddun.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Anṣuf ɣer Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Sefsex";
 
@@ -378,6 +405,9 @@
 
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Nadi aḍris ad tesqedceḍ";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Amedya: searchengine.example.com/search/?q=%s";
 
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Senṭeḍ neγ sekcem aḍris n unadi. ya yellaq ilaq beddel awal unadi s : %s.";
@@ -511,6 +541,18 @@
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "Kkes seg yinegzumen";
 
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "Senifel isem n unegzum";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "Isem n unegzum";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "Sekles";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "Sefsex";
+
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Rnu";
 
@@ -585,6 +627,21 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Asmel ixuṣṣ agbur neɣ ur iteddu ara akken yella uqbel?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Ddu ɣer yiɣewwaren i wakken ad tesferkeḍ tixtiṛiyin tufrinin n tbaḍnit & tɣellist.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Iɣewwaren-a s wudem amezwer ttmuddun ammesten iǧehden. Maca yeshel ad ttubeddlen, ad ten-terreḍ akken i tebɣiḍ.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ issewḥel asmel-a seg tεessast-ik·im. Sit ɣef ẓẓerb-nni i wugar n telɣut ɣef wayen i nessewḥel.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Sit ɣef tqecwalt yal tikkelt i tukksa n lǧeṛṛa n tɣimit-ik•im tamirant.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Tettummestneḍ!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Seqdec Touch ID akken ad tuɣaleḍ ar %@";
