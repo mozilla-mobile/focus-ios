@@ -53,10 +53,10 @@ class CustomCompletionSource: CustomAutocompleteSource {
 
         var domains = getSuggestions()
         guard !domains.contains(where: { domain in
-            domain.compare(sanitizedSuggestion, options: .caseInsensitive) == .orderedSame
+            domain.compare(suggestion, options: .caseInsensitive) == .orderedSame
         }) else { return .failure(.duplicateDomain) }
 
-        domains.append(sanitizedSuggestion)
+        domains.append(suggestion)
         Settings.setCustomDomainSetting(domains: domains)
 
         return .success(())
@@ -70,7 +70,7 @@ class CustomCompletionSource: CustomAutocompleteSource {
         var domains = getSuggestions()
         guard !domains.contains(sanitizedSuggestion) else { return .failure(.duplicateDomain) }
 
-        domains.insert(sanitizedSuggestion, at: atIndex)
+        domains.insert(suggestion, at: atIndex)
         Settings.setCustomDomainSetting(domains: domains)
 
         return .success(())
