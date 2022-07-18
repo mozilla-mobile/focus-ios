@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import Combine
 
 class AsyncImageView: UIView {
 
@@ -55,13 +54,13 @@ class AsyncImageView: UIView {
         loader.loadImage(imageURL) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
-                case .success(let image):
-                    self?.activityIndicator.stopAnimating()
-                    self?.imageView.image = image
+                    case .success(let image):
+                        self?.activityIndicator.stopAnimating()
+                        self?.imageView.image = image
 
-                case .failure:
-                    self?.imageView.image = defaultImage
-                    self?.activityIndicator.stopAnimating()
+                    case .failure:
+                        self?.activityIndicator.stopAnimating()
+                        self?.imageView.image = defaultImage
                 }
             }
         }
