@@ -216,7 +216,7 @@ class BrowserViewController: UIViewController {
             homeViewBottomConstraint = make.bottom.equalTo(mainContainerView).constraint
             homeViewBottomConstraint.activate()
         }
-        
+
         addWebViewConstraints()
 
         webViewContainer.snp.makeConstraints { make in
@@ -225,7 +225,7 @@ class BrowserViewController: UIViewController {
                 browserBottomConstraint.activate()
             }
         }
-        
+
         view.addSubview(alertStackView)
         alertStackView.axis = .vertical
         alertStackView.alignment = .center
@@ -542,7 +542,7 @@ class BrowserViewController: UIViewController {
             }
         }
     }
-    
+
     private func addWebViewConstraints() {
         let topConstraint = webViewContainer.topAnchor.constraint(equalTo: urlBarContainer.bottomAnchor)
         topConstraint.priority = .defaultLow
