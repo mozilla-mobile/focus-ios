@@ -8,6 +8,8 @@ import Combine
 class ImageLoader {
     private var loadedImages = [URL: UIImage]()
     private var runningRequests = [UUID: URLSessionDataTask]()
+    private init() {}
+    public static let shared = ImageLoader()
 }
 
 extension ImageLoader {
@@ -55,5 +57,15 @@ extension ImageLoader {
     func cancelLoad(_ uuid: UUID) {
         runningRequests[uuid]?.cancel()
         runningRequests.removeValue(forKey: uuid)
+    }
+}
+
+extension ImageLoader {
+    func load(_ url: URL) async throws -> UIImage {
+        return try await withCheckedThrowingContinuation { continuation in
+            loadImage(url) { result in
+                continuation.resume(with: result)
+            }
+        }
     }
 }

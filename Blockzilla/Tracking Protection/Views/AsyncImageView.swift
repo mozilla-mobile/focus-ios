@@ -10,12 +10,19 @@ class AsyncImageView: UIView {
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
 
     private lazy var activityIndicator = UIActivityIndicatorView(style: .large)
 
-    private lazy var loader = ImageLoader()
+    private lazy var loader = ImageLoader.shared
+
+    public var defaultImage: UIImage? {
+        didSet {
+            imageView.image = defaultImage
+        }
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,12 +38,16 @@ class AsyncImageView: UIView {
         addSubview(imageView)
         addSubview(activityIndicator)
         activityIndicator.hidesWhenStopped = true
-        imageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        activityIndicator.snp.makeConstraints { make in
-            make.centerY.centerY.equalToSuperview()
-        }
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: topAnchor),
+            imageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+
+            activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
     }
 
     func load(imageURL: URL, defaultImage: UIImage) {
@@ -54,16 +65,5 @@ class AsyncImageView: UIView {
                 }
             }
         }
-    }
-
-    var cancellable: AnyCancellable?
-
-    func load(from publisher: AnyPublisher<UIImage, Never>) {
-        activityIndicator.startAnimating()
-        cancellable = publisher
-            .sink { image in
-                self.activityIndicator.stopAnimating()
-                self.imageView.image = image
-            }
     }
 }

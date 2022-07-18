@@ -1235,19 +1235,12 @@ extension BrowserViewController: URLBarDelegate {
 
         guard let modalDelegate = modalDelegate else { return }
 
-        let favIconPublisher: AnyPublisher<UIImage, Never> =
+        let favIconPublisher: AnyPublisher<URL?, Never> =
         webViewController
             .getMetadata()
             .map(\.icon)
-            .tryMap {
-                if let url = $0.flatMap(URL.init(string:)) {
-                    return url
-                } else {
-                    throw WebViewController.MetadataError.missingURL
-                }
-            }
-            .flatMap { url in ImageLoader().loadImage(url) }
-            .replaceError(with: .defaultFavicon)
+            .map { $0.flatMap(URL.init(string:)) }
+            .replaceError(with: nil)
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
 
