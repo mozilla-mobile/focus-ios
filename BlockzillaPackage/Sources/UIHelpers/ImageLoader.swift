@@ -13,8 +13,12 @@ public class ImageLoader {
 }
 
 public extension ImageLoader {
+    enum Error: Swift.Error {
+        case missingImage
+    }
+
     @discardableResult
-    func loadImage(_ url: URL, _ completion: @escaping (Swift.Result<UIImage, Error>) -> Void) -> UUID? {
+    func loadImage(_ url: URL, _ completion: @escaping (Swift.Result<UIImage, Swift.Error>) -> Void) -> UUID? {
 
         if let image = cachedImages.object(forKey: url as NSURL) {
             completion(.success(image))
@@ -27,16 +31,21 @@ public extension ImageLoader {
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             defer { self.runningRequests.removeValue(forKey: uuid) }
 
-            if let data = data, let image = UIImage(data: data) {
-                self.cachedImages.setObject(image, forKey: url as NSURL)
-                completion(.success(image))
+            if let error = error {
+                completion(.failure(error))
                 return
             }
 
-            guard let error = error else { return }
+            if let httpResponse = response as? HTTPURLResponse,
+                httpResponse.statusCode == 200,
+                let data = data,
+                let image = UIImage(data: data) {
 
-            guard (error as NSError).code == NSURLErrorCancelled else {
-                completion(.failure(error))
+                self.cachedImages.setObject(image, forKey: url as NSURL)
+                completion(.success(image))
+                return
+            } else {
+                completion(.failure(Error.missingImage))
                 return
             }
         }
@@ -46,7 +55,7 @@ public extension ImageLoader {
         return uuid
     }
 
-    func loadImage(_ url: URL) -> Future<UIImage, Error> {
+    func loadImage(_ url: URL) -> Future<UIImage, Swift.Error> {
         Future { promise in
             self.loadImage(url) { result in
                 promise(result)
