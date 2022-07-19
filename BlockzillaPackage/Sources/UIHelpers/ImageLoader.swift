@@ -6,7 +6,7 @@ import UIKit
 import Combine
 
 public class ImageLoader {
-    private var loadedImages = [URL: UIImage]()
+    private let cachedImages = NSCache<NSURL, UIImage>()
     private var runningRequests = [UUID: URLSessionDataTask]()
     private init() {}
     public static let shared = ImageLoader()
@@ -16,7 +16,7 @@ public extension ImageLoader {
     @discardableResult
     func loadImage(_ url: URL, _ completion: @escaping (Swift.Result<UIImage, Error>) -> Void) -> UUID? {
 
-        if let image = loadedImages[url] {
+        if let image = cachedImages.object(forKey: url as NSURL) {
             completion(.success(image))
             return nil
         }
@@ -28,7 +28,7 @@ public extension ImageLoader {
             defer { self.runningRequests.removeValue(forKey: uuid) }
 
             if let data = data, let image = UIImage(data: data) {
-                self.loadedImages[url] = image
+                self.cachedImages.setObject(image, forKey: url as NSURL)
                 completion(.success(image))
                 return
             }
