@@ -3,8 +3,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import UIHelpers
 
-class AsyncImageView: UIView {
+public class AsyncImageView: UIView {
 
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
@@ -49,7 +50,7 @@ class AsyncImageView: UIView {
         ])
     }
 
-    func load(imageURL: URL, defaultImage: UIImage) {
+    public func load(imageURL: URL, defaultImage: UIImage) {
         activityIndicator.startAnimating()
         loader.loadImage(imageURL) { [weak self] result in
             DispatchQueue.main.async {

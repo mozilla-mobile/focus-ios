@@ -5,6 +5,7 @@
 import UIKit
 import SnapKit
 import DesignSystem
+import UIComponents
 
 public protocol ShortcutViewDelegate: AnyObject {
     func shortcutTapped(shortcut: Shortcut)
@@ -48,6 +49,14 @@ public class ShortcutView: UIView {
         return nameLabel
     }()
 
+    private lazy var faviImageView: AsyncImageView = {
+        let image = AsyncImageView()
+        image.layer.cornerRadius = 4
+        image.clipsToBounds = true
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }()
+
     public struct LayoutConfiguration {
         public var width: CGFloat
         public var height: CGFloat
@@ -81,16 +90,27 @@ public class ShortcutView: UIView {
             make.top.equalToSuperview()
         }
 
-        outerView.addSubview(innerView)
-        innerView.snp.makeConstraints { make in
-            make.width.height.equalTo(layoutConfiguration.inset)
-            make.center.equalTo(outerView)
-        }
+        let capital = shortcut.name.first.map(String.init)?.capitalized
+        if let url = shortcut.imageURL {
+            outerView.addSubview(faviImageView)
+            faviImageView.snp.makeConstraints { make in
+                make.width.height.equalTo(layoutConfiguration.inset)
+                make.center.equalTo(outerView)
+            }
 
-        letterLabel.text = shortcut.name.first.map(String.init)?.capitalized
-        innerView.addSubview(letterLabel)
-        letterLabel.snp.makeConstraints { make in
-            make.center.equalTo(innerView)
+            faviImageView.load(imageURL: url, defaultImage: faviconImage(for: capital!))
+        } else {
+            outerView.addSubview(innerView)
+            innerView.snp.makeConstraints { make in
+                make.width.height.equalTo(layoutConfiguration.inset)
+                make.center.equalTo(outerView)
+            }
+            
+            letterLabel.text = capital
+            innerView.addSubview(letterLabel)
+            letterLabel.snp.makeConstraints { make in
+                make.center.equalTo(innerView)
+            }
         }
 
         nameLabel.text = shortcut.name
@@ -100,6 +120,24 @@ public class ShortcutView: UIView {
             make.centerX.equalToSuperview()
             make.trailing.lessThanOrEqualToSuperview().offset(8)
         }
+    }
+
+    func faviconImage(for string: String) -> UIImage {
+        let faviconLetter = string
+
+        var faviconImage = UIImage()
+        let faviconLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
+        faviconLabel.text = faviconLetter
+        faviconLabel.textAlignment = .center
+        faviconLabel.font = UIFont.systemFont(ofSize: 40, weight: .regular)
+        faviconLabel.textColor = .primaryText
+        faviconLabel.backgroundColor = .foundation
+        UIGraphicsBeginImageContextWithOptions(faviconLabel.bounds.size, false, 0.0)
+        faviconLabel.layer.render(in: UIGraphicsGetCurrentContext()!)
+        faviconImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+
+        return faviconImage
     }
 
     required init?(coder aDecoder: NSCoder) {

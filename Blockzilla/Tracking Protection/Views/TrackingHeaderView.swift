@@ -4,10 +4,12 @@
 
 import UIKit
 import Combine
+import UIComponents
 
 class TrackingHeaderView: UIView {
     private lazy var faviImageView: AsyncImageView = {
         let image = AsyncImageView()
+        image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
 

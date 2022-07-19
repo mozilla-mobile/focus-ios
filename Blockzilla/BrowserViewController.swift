@@ -1956,12 +1956,17 @@ extension BrowserViewController: MenuActionable {
     }
 
     func addToShortcuts(url: URL) {
-        let shortcut = Shortcut(url: url)
-        self.shortcutManager.add(shortcut: shortcut)
-        GleanMetrics.Shortcuts.shortcutAddedCounter.add()
-        TipManager.shortcutsTip = false
+        Task {
+            let imageURL = try? await webViewController.getMetadata().icon.flatMap(URL.init(string:))
+            let shortcut = Shortcut(url: url, imageURL: imageURL)
+            self.shortcutManager.add(shortcut: shortcut)
 
-        GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "add_to_shortcuts"))
+            GleanMetrics.Shortcuts.shortcutAddedCounter.add()
+            TipManager.shortcutsTip = false
+
+            GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "add_to_shortcuts"))
+            Toast(text: UIConstants.strings.shareMenuAddToShortcutsConfirmMessage).show()
+        }
     }
 
     func removeShortcut(url: URL) {

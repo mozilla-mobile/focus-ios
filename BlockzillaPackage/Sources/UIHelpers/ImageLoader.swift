@@ -5,14 +5,14 @@
 import UIKit
 import Combine
 
-class ImageLoader {
+public class ImageLoader {
     private var loadedImages = [URL: UIImage]()
     private var runningRequests = [UUID: URLSessionDataTask]()
     private init() {}
     public static let shared = ImageLoader()
 }
 
-extension ImageLoader {
+public extension ImageLoader {
     @discardableResult
     func loadImage(_ url: URL, _ completion: @escaping (Swift.Result<UIImage, Error>) -> Void) -> UUID? {
 
@@ -60,7 +60,7 @@ extension ImageLoader {
     }
 }
 
-extension ImageLoader {
+public extension ImageLoader {
     func load(_ url: URL) async throws -> UIImage {
         return try await withCheckedThrowingContinuation { continuation in
             loadImage(url) { result in
