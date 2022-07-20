@@ -22,6 +22,7 @@ public class ShortcutView: UIView {
     public private(set) lazy var outerView: UIView = {
         let outerView = UIView()
         outerView.backgroundColor = .above
+        outerView.accessibilityIdentifier = "outerView"
         outerView.layer.cornerRadius = 8
         outerView.translatesAutoresizingMaskIntoConstraints = false
         return outerView
