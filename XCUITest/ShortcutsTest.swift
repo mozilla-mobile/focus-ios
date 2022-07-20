@@ -50,26 +50,6 @@ class ShortcutsTest: BaseTestCase {
         XCTAssertTrue(app.otherElements.staticTexts["Cheese"].exists)
     }
 
-    func testAdd4Shortcuts() {
-        addShortcut(website: "mozilla.org")
-        addShortcut(website: "example.com")
-        addShortcut(website: "pocket.com")
-        addShortcut(website: "wikipedia.com")
-
-        // Tap on erase button to go to homepage and check the shortcut created
-        app.eraseButton.tap()
-
-        // Verify the shortcut is created
-        waitForExistence(app.otherElements.staticTexts["Mozilla"])
-        XCTAssertTrue(app.otherElements.staticTexts["Mozilla"].exists)
-
-        // Change device orientation
-        XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
-        // Verify the shortcut is created
-        waitForExistence(app.otherElements.staticTexts["Mozilla"])
-        XCTAssertTrue(app.otherElements.staticTexts["Mozilla"].exists)
-    }
-
     func testShortcutShownWhileTypingURLBar() {
         addShortcut(website: "example.com")
         app.urlTextField.tap()
