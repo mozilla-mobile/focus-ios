@@ -45,33 +45,41 @@ class ShortcutsTest: BaseTestCase {
         let textField = app.alerts.textFields.element
         textField.clearAndEnterText(text: "Cheese")
         app.alerts.buttons["Save"].tap()
-        
+
         waitForExistence(app.otherElements.staticTexts["Cheese"])
         XCTAssertTrue(app.otherElements.staticTexts["Cheese"].exists)
     }
 
     func testAdd4Shortcuts() {
         addShortcut(website: "mozilla.org")
-//        addShortcut(website: "example.com")
-//        addShortcut(website: "pocket.com")
-//        addShortcut(website: "wikipedia.com")
+        addShortcut(website: "example.com")
+        addShortcut(website: "pocket.com")
+        addShortcut(website: "wikipedia.com")
 
         // Tap on erase button to go to homepage and check the shortcut created
         app.eraseButton.tap()
 
         // Verify the shortcut is created
+        waitForExistence(app.otherElements.staticTexts["Mozilla"])
         XCTAssertTrue(app.otherElements.staticTexts["Mozilla"].exists)
-        // XCTAssertTrue(app.otherElements.staticTexts["Example"].exists)
-        // XCTAssertTrue(app.otherElements.staticTexts["Getpocket"].exists)
-        // XCTAssertTrue(app.otherElements.staticTexts["Wikipedia"].exists)
+        waitForExistence(app.otherElements.staticTexts["Example"])
+        XCTAssertTrue(app.otherElements.staticTexts["Example"].exists)
+        waitForExistence(app.otherElements.staticTexts["Getpocket"])
+        XCTAssertTrue(app.otherElements.staticTexts["Getpocket"].exists)
+        waitForExistence(app.otherElements.staticTexts["Wikipedia"])
+        XCTAssertTrue(app.otherElements.staticTexts["Wikipedia"].exists)
 
         // Change device orientation
         XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
         // Verify the shortcut is created
+        waitForExistence(app.otherElements.staticTexts["Mozilla"])
         XCTAssertTrue(app.otherElements.staticTexts["Mozilla"].exists)
-        // XCTAssertTrue(app.otherElements.staticTexts["Example"].exists)
-        // XCTAssertTrue(app.otherElements.staticTexts["Getpocket"].exists)
-        // XCTAssertTrue(app.otherElements.staticTexts["Wikipedia"].exists)
+        waitForExistence(app.otherElements.staticTexts["Example"])
+        XCTAssertTrue(app.otherElements.staticTexts["Example"].exists)
+        waitForExistence(app.otherElements.staticTexts["Getpocket"])
+        XCTAssertTrue(app.otherElements.staticTexts["Getpocket"].exists)
+        waitForExistence(app.otherElements.staticTexts["Wikipedia"])
+        XCTAssertTrue(app.otherElements.staticTexts["Wikipedia"].exists)
     }
 
     func testShortcutShownWhileTypingURLBar() {
