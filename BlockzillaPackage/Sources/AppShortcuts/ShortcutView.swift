@@ -5,7 +5,7 @@
 import UIKit
 import DesignSystem
 import UIComponents
-import SnapKit
+import UIHelpers
 
 public protocol ShortcutViewDelegate: AnyObject {
     func shortcutTapped(shortcut: Shortcut)
@@ -23,6 +23,7 @@ public class ShortcutView: UIView {
         let outerView = UIView()
         outerView.backgroundColor = .above
         outerView.layer.cornerRadius = 8
+        outerView.translatesAutoresizingMaskIntoConstraints = false
         return outerView
     }()
 
@@ -30,6 +31,7 @@ public class ShortcutView: UIView {
         let innerView = UIView()
         innerView.backgroundColor = .foundation
         innerView.layer.cornerRadius = 4
+        innerView.translatesAutoresizingMaskIntoConstraints = false
         return innerView
     }()
 
@@ -37,6 +39,7 @@ public class ShortcutView: UIView {
         let letterLabel = UILabel()
         letterLabel.textColor = .primaryText
         letterLabel.font = .title20
+        letterLabel.translatesAutoresizingMaskIntoConstraints = false
         return letterLabel
     }()
 
@@ -46,6 +49,7 @@ public class ShortcutView: UIView {
         nameLabel.font = .footnote12
         nameLabel.numberOfLines = 2
         nameLabel.textAlignment = .center
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
         return nameLabel
     }()
 
@@ -74,8 +78,14 @@ public class ShortcutView: UIView {
         )
     }
 
-    public init(shortcut: Shortcut, layoutConfiguration: LayoutConfiguration = .default) {
+    private var faviconWithLetter: (String) -> UIImage?
+
+    public init(shortcut: Shortcut,
+                layoutConfiguration: LayoutConfiguration = .default) {
         self.shortcut = shortcut
+        self.faviconWithLetter = { letter in
+            FaviIconGenerator.shared.faviconImage(capitalLetter: letter, textColor: .primaryText, backgroundColor: .foundation)
+        }
 
         super.init(frame: CGRect.zero)
         self.frame = CGRect(x: 0, y: 0, width: layoutConfiguration.width, height: layoutConfiguration.height)
@@ -84,59 +94,54 @@ public class ShortcutView: UIView {
         self.addGestureRecognizer(tap)
 
         addSubview(outerView)
-        outerView.snp.makeConstraints { make in
-            make.width.height.equalTo(layoutConfiguration.width)
-            make.centerX.equalToSuperview()
-            make.top.equalToSuperview()
-        }
+
+        NSLayoutConstraint.activate([
+            outerView.widthAnchor.constraint(equalToConstant: layoutConfiguration.width),
+            outerView.heightAnchor.constraint(equalToConstant: layoutConfiguration.width),
+            outerView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            outerView.topAnchor.constraint(equalTo: topAnchor)
+        ])
 
         let capital = shortcut.name.first.map(String.init)?.capitalized
         if let url = shortcut.imageURL {
             outerView.addSubview(faviImageView)
-            faviImageView.snp.makeConstraints { make in
-                make.width.height.equalTo(layoutConfiguration.inset)
-                make.center.equalTo(outerView)
-            }
-            let shortcutImage = capital.flatMap(faviconImage(capitalLetter:)) ?? .defaultFavicon
+
+            NSLayoutConstraint.activate([
+                faviImageView.widthAnchor.constraint(equalToConstant: layoutConfiguration.inset),
+                faviImageView.heightAnchor.constraint(equalToConstant: layoutConfiguration.inset),
+                faviImageView.centerXAnchor.constraint(equalTo: outerView.centerXAnchor),
+                faviImageView.centerYAnchor.constraint(equalTo: outerView.centerYAnchor)
+            ])
+
+            let shortcutImage = capital.flatMap(faviconWithLetter) ?? .defaultFavicon
             faviImageView.load(imageURL: url, defaultImage: shortcutImage)
         } else {
             outerView.addSubview(innerView)
-            innerView.snp.makeConstraints { make in
-                make.width.height.equalTo(layoutConfiguration.inset)
-                make.center.equalTo(outerView)
-            }
+
+            NSLayoutConstraint.activate([
+                innerView.widthAnchor.constraint(equalToConstant: layoutConfiguration.inset),
+                innerView.heightAnchor.constraint(equalToConstant: layoutConfiguration.inset),
+                innerView.centerXAnchor.constraint(equalTo: outerView.centerXAnchor),
+                innerView.centerYAnchor.constraint(equalTo: outerView.centerYAnchor)
+            ])
 
             letterLabel.text = capital
             innerView.addSubview(letterLabel)
-            letterLabel.snp.makeConstraints { make in
-                make.center.equalTo(innerView)
-            }
+
+            NSLayoutConstraint.activate([
+                letterLabel.centerXAnchor.constraint(equalTo: innerView.centerXAnchor),
+                letterLabel.centerYAnchor.constraint(equalTo: innerView.centerYAnchor)
+            ])
         }
 
         nameLabel.text = shortcut.name
         addSubview(nameLabel)
-        nameLabel.snp.makeConstraints { make in
-            make.top.equalTo(outerView.snp.bottom).offset(8)
-            make.centerX.equalToSuperview()
-            make.trailing.lessThanOrEqualToSuperview().offset(8)
-        }
-    }
 
-    func faviconImage(capitalLetter: String) -> UIImage? {
-        let faviconLabel = UILabel(frame: CGRect(x: 0, y: 0, width: .shortcutViewWidth, height: .shortcutViewWidth))
-        faviconLabel.text = capitalLetter
-        faviconLabel.textAlignment = .center
-        faviconLabel.font = UIFont.systemFont(ofSize: 40, weight: .regular)
-        faviconLabel.textColor = .primaryText
-        faviconLabel.backgroundColor = .foundation
-
-        UIGraphicsBeginImageContextWithOptions(faviconLabel.bounds.size, false, 0.0)
-        defer {
-            UIGraphicsEndImageContext()
-        }
-        UIGraphicsGetCurrentContext().map(faviconLabel.layer.render(in:))
-
-        return UIGraphicsGetImageFromCurrentImageContext()
+        NSLayoutConstraint.activate([
+            nameLabel.topAnchor.constraint(equalTo: outerView.bottomAnchor, constant: 8),
+            nameLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 8)
+        ])
     }
 
     required init?(coder aDecoder: NSCoder) {
