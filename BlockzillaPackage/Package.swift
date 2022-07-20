@@ -45,16 +45,14 @@ let package = Package(
         .target(
             name: "Onboarding",
             dependencies: [
-                "DesignSystem",
-                .product(name: "SnapKit", package: "SnapKit")
+                "DesignSystem"
             ]
         ),
         .target(
             name: "AppShortcuts",
             dependencies: [
                 "UIComponents",
-                "DesignSystem",
-                .product(name: "SnapKit", package: "SnapKit")
+                "DesignSystem"
             ]
         ),
         .testTarget(

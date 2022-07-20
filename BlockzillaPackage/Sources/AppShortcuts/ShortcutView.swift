@@ -3,9 +3,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import SnapKit
 import DesignSystem
 import UIComponents
+import SnapKit
 
 public protocol ShortcutViewDelegate: AnyObject {
     func shortcutTapped(shortcut: Shortcut)
@@ -74,7 +74,7 @@ public class ShortcutView: UIView {
         )
     }
 
-    public init(shortcut: Shortcut, layoutConfiguration: LayoutConfiguration) {
+    public init(shortcut: Shortcut, layoutConfiguration: LayoutConfiguration = .default) {
         self.shortcut = shortcut
 
         super.init(frame: CGRect.zero)
@@ -97,15 +97,15 @@ public class ShortcutView: UIView {
                 make.width.height.equalTo(layoutConfiguration.inset)
                 make.center.equalTo(outerView)
             }
-
-            faviImageView.load(imageURL: url, defaultImage: faviconImage(for: capital!))
+            let shortcutImage = capital.flatMap(faviconImage(capitalLetter:)) ?? .defaultFavicon
+            faviImageView.load(imageURL: url, defaultImage: shortcutImage)
         } else {
             outerView.addSubview(innerView)
             innerView.snp.makeConstraints { make in
                 make.width.height.equalTo(layoutConfiguration.inset)
                 make.center.equalTo(outerView)
             }
-            
+
             letterLabel.text = capital
             innerView.addSubview(letterLabel)
             letterLabel.snp.makeConstraints { make in
@@ -122,22 +122,21 @@ public class ShortcutView: UIView {
         }
     }
 
-    func faviconImage(for string: String) -> UIImage {
-        let faviconLetter = string
-
-        var faviconImage = UIImage()
-        let faviconLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
-        faviconLabel.text = faviconLetter
+    func faviconImage(capitalLetter: String) -> UIImage? {
+        let faviconLabel = UILabel(frame: CGRect(x: 0, y: 0, width: .shortcutViewWidth, height: .shortcutViewWidth))
+        faviconLabel.text = capitalLetter
         faviconLabel.textAlignment = .center
         faviconLabel.font = UIFont.systemFont(ofSize: 40, weight: .regular)
         faviconLabel.textColor = .primaryText
         faviconLabel.backgroundColor = .foundation
-        UIGraphicsBeginImageContextWithOptions(faviconLabel.bounds.size, false, 0.0)
-        faviconLabel.layer.render(in: UIGraphicsGetCurrentContext()!)
-        faviconImage = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
 
-        return faviconImage
+        UIGraphicsBeginImageContextWithOptions(faviconLabel.bounds.size, false, 0.0)
+        defer {
+            UIGraphicsEndImageContext()
+        }
+        UIGraphicsGetCurrentContext().map(faviconLabel.layer.render(in:))
+
+        return UIGraphicsGetImageFromCurrentImageContext()
     }
 
     required init?(coder aDecoder: NSCoder) {
