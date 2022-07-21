@@ -286,13 +286,21 @@ extension URL {
     }
 
     public var isIPv4: Bool {
-        let ipv4Pattern = #"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"#
-
-        return host?.range(of: ipv4Pattern, options: .regularExpression) != nil
+        guard let host else { return false }
+        var addr = in_addr()
+        let retval = withUnsafeMutablePointer(to: &addr) {
+            inet_pton(AF_INET, host, UnsafeMutablePointer($0))
+        }
+        return retval == 1
     }
 
     public var isIPv6: Bool {
-        return host?.contains(":") ?? false
+        guard let host else { return false }
+        var addr = in6_addr()
+        let retval = withUnsafeMutablePointer(to: &addr) {
+            inet_pton(AF_INET6, host, UnsafeMutablePointer($0))
+        }
+        return retval == 1
     }
 
     /**
