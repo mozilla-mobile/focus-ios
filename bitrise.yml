@@ -265,7 +265,7 @@ workflows:
             CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan $TEST_PLAN_NAME
         - scheme: Focus
         - test_plan: $TEST_PLAN_NAME
-        - destination: platform=iOS Simulator,name=iPhone 11,OS=16
+        - destination: platform=iOS Simulator,name=iPhone 11,OS=latest
     - deploy-to-bitrise-io@2: {}
     - github-status@2:
         inputs:
@@ -341,7 +341,7 @@ workflows:
             CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan "$TEST_PLAN_NAME"
         - scheme: Klar
         - simulator_device: iPhone 11
-        - destination: platform=iOS Simulator,name=iPhone 11,OS=16
+        - destination: platform=iOS Simulator,name=iPhone 11,OS=latest
         - test_plan: "$TEST_PLAN_NAME"
     - deploy-to-bitrise-io@2: {}
     - github-status@2:
