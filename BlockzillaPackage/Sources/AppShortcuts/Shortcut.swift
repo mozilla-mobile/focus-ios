@@ -34,6 +34,12 @@ extension Shortcut {
     }
 }
 
+extension Shortcut {
+    var capital: String? {
+        name.first.map(String.init)?.capitalized
+    }
+}
+
 extension Shortcut: Decodable {
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)

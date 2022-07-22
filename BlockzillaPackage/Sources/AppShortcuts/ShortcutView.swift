@@ -5,19 +5,11 @@
 import UIKit
 import DesignSystem
 import UIComponents
-import UIHelpers
-
-public protocol ShortcutViewDelegate: AnyObject {
-    func shortcutTapped(shortcut: Shortcut)
-    func removeFromShortcutsAction(shortcut: Shortcut)
-    func rename(shortcut: Shortcut)
-    func dismissShortcut()
-}
+import Combine
 
 public class ShortcutView: UIView {
     public var contextMenuIsDisplayed = false
-    public private(set) var shortcut: Shortcut
-    public weak var delegate: ShortcutViewDelegate?
+    public private(set) var viewModel: ShortcutViewModel
 
     public private(set) lazy var outerView: UIView = {
         let outerView = UIView()
@@ -33,6 +25,11 @@ public class ShortcutView: UIView {
         innerView.backgroundColor = .foundation
         innerView.layer.cornerRadius = 4
         innerView.translatesAutoresizingMaskIntoConstraints = false
+        innerView.addSubview(letterLabel)
+        NSLayoutConstraint.activate([
+            letterLabel.centerXAnchor.constraint(equalTo: innerView.centerXAnchor),
+            letterLabel.centerYAnchor.constraint(equalTo: innerView.centerYAnchor)
+        ])
         return innerView
     }()
 
@@ -79,17 +76,28 @@ public class ShortcutView: UIView {
         )
     }
 
-    private var faviconWithLetter: (String) -> UIImage?
+    private var cancellables: Set<AnyCancellable> = []
 
-    public init(shortcut: Shortcut,
+    public init(shortcutViewModel: ShortcutViewModel,
                 layoutConfiguration: LayoutConfiguration = .default) {
-        self.shortcut = shortcut
-        self.faviconWithLetter = { letter in
-            FaviIconGenerator.shared.faviconImage(capitalLetter: letter, textColor: .primaryText, backgroundColor: .foundation)
-        }
+        self.viewModel = shortcutViewModel
 
         super.init(frame: CGRect.zero)
-        self.frame = CGRect(x: 0, y: 0, width: layoutConfiguration.width, height: layoutConfiguration.height)
+
+        viewModel
+            .$shortcut
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.nameLabel.text = $0.name
+
+                if let url = $0.imageURL {
+                    let shortcutImage = $0.capital.flatMap { self.viewModel.faviconWithLetter?($0) } ?? .defaultFavicon
+                    self.faviImageView.load(imageURL: url, defaultImage: shortcutImage)
+                } else {
+                    self.letterLabel.text = $0.capital
+                }
+            }
+            .store(in: &cancellables)
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(didTap))
         self.addGestureRecognizer(tap)
@@ -103,41 +111,16 @@ public class ShortcutView: UIView {
             outerView.topAnchor.constraint(equalTo: topAnchor)
         ])
 
-        let capital = shortcut.name.first.map(String.init)?.capitalized
-        if let url = shortcut.imageURL {
-            outerView.addSubview(faviImageView)
+        let centerView = viewModel.shortcut.imageURL != nil ? faviImageView : innerView
+        outerView.addSubview(centerView)
+        NSLayoutConstraint.activate([
+            centerView.widthAnchor.constraint(equalToConstant: layoutConfiguration.inset),
+            centerView.heightAnchor.constraint(equalToConstant: layoutConfiguration.inset),
+            centerView.centerXAnchor.constraint(equalTo: outerView.centerXAnchor),
+            centerView.centerYAnchor.constraint(equalTo: outerView.centerYAnchor)
+        ])
 
-            NSLayoutConstraint.activate([
-                faviImageView.widthAnchor.constraint(equalToConstant: layoutConfiguration.inset),
-                faviImageView.heightAnchor.constraint(equalToConstant: layoutConfiguration.inset),
-                faviImageView.centerXAnchor.constraint(equalTo: outerView.centerXAnchor),
-                faviImageView.centerYAnchor.constraint(equalTo: outerView.centerYAnchor)
-            ])
-
-            let shortcutImage = capital.flatMap(faviconWithLetter) ?? .defaultFavicon
-            faviImageView.load(imageURL: url, defaultImage: shortcutImage)
-        } else {
-            outerView.addSubview(innerView)
-
-            NSLayoutConstraint.activate([
-                innerView.widthAnchor.constraint(equalToConstant: layoutConfiguration.inset),
-                innerView.heightAnchor.constraint(equalToConstant: layoutConfiguration.inset),
-                innerView.centerXAnchor.constraint(equalTo: outerView.centerXAnchor),
-                innerView.centerYAnchor.constraint(equalTo: outerView.centerYAnchor)
-            ])
-
-            letterLabel.text = capital
-            innerView.addSubview(letterLabel)
-
-            NSLayoutConstraint.activate([
-                letterLabel.centerXAnchor.constraint(equalTo: innerView.centerXAnchor),
-                letterLabel.centerYAnchor.constraint(equalTo: innerView.centerYAnchor)
-            ])
-        }
-
-        nameLabel.text = shortcut.name
         addSubview(nameLabel)
-
         NSLayoutConstraint.activate([
             nameLabel.topAnchor.constraint(equalTo: outerView.bottomAnchor, constant: 8),
             nameLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -150,13 +133,7 @@ public class ShortcutView: UIView {
     }
 
     @objc private func didTap() {
-        delegate?.shortcutTapped(shortcut: shortcut)
-    }
-
-    public func rename(shortcut: Shortcut) {
-        self.shortcut = shortcut
-        nameLabel.text = shortcut.name
-        letterLabel.text = shortcut.name.first.map(String.init)?.capitalized
+        viewModel.send(action: .tapped)
     }
 }
 
