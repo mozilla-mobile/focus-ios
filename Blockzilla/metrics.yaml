@@ -59,7 +59,6 @@ mozilla_products:
     expires: "2022-09-01"
 
 settings_screen:
-
   set_as_default_browser_pressed:
     type: counter
     description: |
@@ -68,7 +67,7 @@ settings_screen:
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/3328
     data_reviews:
-      - https://github.com/mozilla-mobile/focus-ios/issues/3328
+      - https://github.com/mozilla-mobile/focus-ios/pull/3344
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
     expires: "2023-07-20"
