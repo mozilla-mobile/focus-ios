@@ -285,8 +285,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         var cell: UITableViewCell
         switch sections[indexPath.section] {
         case .defaultBrowser:
-            let defaultBrowserCell = SettingsTableViewAccessoryCell(style: .value1, reuseIdentifier: "defaultBrowserCell", hasAccessoryView: false)
-            defaultBrowserCell.labelText = String(format: UIConstants.strings.setAsDefaultBrowserLabel)
+            let defaultBrowserCell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "defaultBrowserCell")
+            defaultBrowserCell.textLabel?.text = String(format: UIConstants.strings.setAsDefaultBrowserLabel)
             defaultBrowserCell.accessibilityIdentifier = "settingsViewController.defaultBrowserCell"
             cell = defaultBrowserCell
         case .general:

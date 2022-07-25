@@ -25,12 +25,6 @@ class SettingsTableViewAccessoryCell: SettingsTableViewCell {
         tintColor = .secondaryText.withAlphaComponent(0.3)
     }
 
-    convenience init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, hasAccessoryView: Bool = true) {
-        self.init(style: style, reuseIdentifier: reuseIdentifier)
-        accessoryView = hasAccessoryView ? UIImageView(image: UIImage(systemName: "chevron.right")) : nil
-        tintColor = .secondaryText.withAlphaComponent(0.3)
-    }
-
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
