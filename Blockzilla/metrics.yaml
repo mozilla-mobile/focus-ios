@@ -70,6 +70,8 @@ settings_screen:
       - https://github.com/mozilla-mobile/focus-ios/pull/3344
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
     expires: "2023-07-20"
 
   autocomplete_domain_added:
