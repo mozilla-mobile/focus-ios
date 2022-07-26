@@ -57,6 +57,7 @@
 		7460BD671F58B1B10096B745 /* GradientProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7460BD661F58B1B10096B745 /* GradientProgressBar.swift */; };
 		747ADA181FC38EFC00970132 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747ADA171FC38EFC00970132 /* IntroViewController.swift */; };
 		74ACC3B02875A0CC00A9AC3E /* TrackingProtectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74ACC3AF2875A0CC00A9AC3E /* TrackingProtectionManager.swift */; };
+		74ACC3D0288E750700A9AC3E /* AdsTelemetryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74ACC3CF288E750700A9AC3E /* AdsTelemetryHelper.swift */; };
 		74F94FF21FD9CA070047E629 /* Intro.strings in Resources */ = {isa = PBXBuildFile; fileRef = 74F94FF41FD9CA070047E629 /* Intro.strings */; };
 		8400574E273516F600E48144 /* ScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400574D273516F600E48144 /* ScrollViewController.swift */; };
 		840057502735182900E48144 /* PageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400574F2735182800E48144 /* PageControl.swift */; };
@@ -502,6 +503,7 @@
 		7460BD661F58B1B10096B745 /* GradientProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientProgressBar.swift; sourceTree = "<group>"; };
 		747ADA171FC38EFC00970132 /* IntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 		74ACC3AF2875A0CC00A9AC3E /* TrackingProtectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionManager.swift; sourceTree = "<group>"; };
+		74ACC3CF288E750700A9AC3E /* AdsTelemetryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdsTelemetryHelper.swift; sourceTree = "<group>"; };
 		74CC0ADA1FAD28DB00972A78 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		74CC0ADB1FAD28DC00972A78 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		74CC0ADC1FAD28DD00972A78 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1449,6 +1451,7 @@
 				E40AFB131DC939FF00DA5651 /* SupportUtils.swift */,
 				D36C1BA91DB02EBB0073C1AB /* OpenUtils.swift */,
 				31421EB02176492A0015F48B /* TitleActivityItemProvider.swift */,
+				74ACC3CF288E750700A9AC3E /* AdsTelemetryHelper.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -2337,6 +2340,7 @@
 				C8337DF92710898800093D42 /* TrackingProtectionViewController.swift in Sources */,
 				C89AA970271720330089838F /* Theme.swift in Sources */,
 				C89AA96C271720330089838F /* ThemeViewController.swift in Sources */,
+				74ACC3D0288E750700A9AC3E /* AdsTelemetryHelper.swift in Sources */,
 				F7B3E49D2165C32B00118785 /* SearchSuggestionsPromptView.swift in Sources */,
 				D33E9B241E1D93DD00A39A44 /* RequestHandler.swift in Sources */,
 				8400575227351B7800E48144 /* EditView.swift in Sources */,
