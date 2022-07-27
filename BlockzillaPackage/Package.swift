@@ -34,10 +34,7 @@ let package = Package(
             ]
         ),
         .target(
-            name: "UIHelpers",
-            dependencies: [
-                .product(name: "SnapKit", package: "SnapKit")
-            ]
+            name: "UIHelpers"
         ),
         .target(
             name: "DesignSystem"
@@ -52,7 +49,8 @@ let package = Package(
             name: "AppShortcuts",
             dependencies: [
                 "UIComponents",
-                "DesignSystem"
+                "DesignSystem",
+                    .product(name: "SnapKit", package: "SnapKit")
             ]
         ),
         .testTarget(
