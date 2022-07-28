@@ -32,7 +32,6 @@ class URLBar: UIView {
     weak var delegate: URLBarDelegate?
     var userInputText: String?
 
-    let progressBar = GradientProgressBar(progressViewStyle: .bar)
     var inBrowsingMode: Bool = false {
         didSet {
             DispatchQueue.main.async {
@@ -49,26 +48,123 @@ class URLBar: UIView {
     }
     var shouldPresent = false
 
+    // MARK: - UI Components
+
+    private let toolset = BrowserToolset()
     public var contextMenuButton: InsetButton { toolset.contextMenuButton }
     public var deleteButton: InsetButton { toolset.deleteButton }
+    private lazy var urlTextField: URLTextField = {
+        let urlTextField = URLTextField()
+
+        // UITextField doesn't allow customization of the clear button, so we create
+        // our own so we can use it as the rightView.
+        let clearButton = UIButton(frame: CGRect(x: 0, y: 0, width: UIConstants.layout.urlBarClearButtonWidth, height: UIConstants.layout.urlBarClearButtonHeight))
+        clearButton.isHidden = true
+        clearButton.setImage(#imageLiteral(resourceName: "icon_clear"), for: .normal)
+        clearButton.addTarget(self, action: #selector(didPressClear), for: .touchUpInside)
+
+        urlTextField.font = .body15
+        urlTextField.tintColor = .primaryText
+        urlTextField.textColor = .primaryText
+        urlTextField.keyboardType = .webSearch
+        urlTextField.autocapitalizationType = .none
+        urlTextField.autocorrectionType = .no
+        urlTextField.rightView = clearButton
+        urlTextField.rightViewMode = .whileEditing
+        urlTextField.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .vertical)
+        urlTextField.autocompleteDelegate = self
+        urlTextField.accessibilityIdentifier = "URLBar.urlText"
+        urlTextField.placeholder = UIConstants.strings.urlTextPlaceholder
+        urlTextField.isUserInteractionEnabled = false
+        return urlTextField
+    }()
+
+    var draggableUrlTextView: UIView { return urlTextField }
+
+    private lazy var truncatedUrlText: UITextView = {
+        let truncatedUrlText = UITextView()
+        truncatedUrlText.alpha = 0
+        truncatedUrlText.isUserInteractionEnabled = false
+        truncatedUrlText.font = .footnote12
+        truncatedUrlText.tintColor = .primaryText
+        truncatedUrlText.textColor = .primaryText
+        truncatedUrlText.backgroundColor = UIColor.clear
+        truncatedUrlText.contentMode = .bottom
+        truncatedUrlText.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .vertical)
+        truncatedUrlText.isScrollEnabled = false
+        truncatedUrlText.accessibilityIdentifier = "Collapsed.truncatedUrlText"
+        return truncatedUrlText
+    }()
+
+    let progressBar: GradientProgressBar = {
+        let progressBar = GradientProgressBar(progressViewStyle: .bar)
+        progressBar.isHidden = true
+        progressBar.alpha = 0
+        return progressBar
+    }()
+
+    private lazy var cancelButton: InsetButton = {
+        let cancelButton = InsetButton()
+        cancelButton.isHidden = true
+        cancelButton.alpha = 0
+        cancelButton.setImage(#imageLiteral(resourceName: "icon_cancel"), for: .normal)
+
+        cancelButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        cancelButton.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
+        cancelButton.accessibilityIdentifier = "URLBar.cancelButton"
+        return cancelButton
+    }()
+
+    private let urlBarBorderView: UIView = {
+        let urlBarBorderView = UIView()
+        urlBarBorderView.backgroundColor = .secondaryButton
+        urlBarBorderView.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
+        urlBarBorderView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        urlBarBorderView.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        return urlBarBorderView
+    }()
+
+    private let urlBarBackgroundView: UIView = {
+        let urlBarBackgroundView = UIView()
+        urlBarBackgroundView.backgroundColor = .locationBar
+        urlBarBackgroundView.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
+        urlBarBackgroundView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        urlBarBackgroundView.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        return urlBarBackgroundView
+    }()
+
+    private let textAndLockContainer = UIView()
+    private let collapsedUrlAndLockWrapper = UIView()
+    private let collapsedTrackingProtectionBadge: CollapsedTrackingProtectionBadge = {
+        let collapsedTrackingProtectionBadge = CollapsedTrackingProtectionBadge()
+        collapsedTrackingProtectionBadge.alpha = 0
+        collapsedTrackingProtectionBadge.tintColor = .white
+        collapsedTrackingProtectionBadge.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        collapsedTrackingProtectionBadge.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        return collapsedTrackingProtectionBadge
+    }()
+
+    lazy var shieldIcon: TrackingProtectionBadge = {
+        let shieldIcon = TrackingProtectionBadge()
+
+        let gestureRecognizer = UITapGestureRecognizer()
+        gestureRecognizer.numberOfTapsRequired = 1
+        gestureRecognizer.cancelsTouchesInView = true
+        gestureRecognizer.addTarget(self, action: #selector(didTapShieldIcon))
+
+        shieldIcon.isUserInteractionEnabled = true
+        shieldIcon.tintColor = .primaryText
+        shieldIcon.contentMode = .center
+        shieldIcon.accessibilityIdentifier = "URLBar.trackingProtectionIcon"
+        shieldIcon.addGestureRecognizer(gestureRecognizer)
+        shieldIcon.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        shieldIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        return shieldIcon
+    }()
 
     private let leftBarViewLayoutGuide = UILayoutGuide()
     private let rightBarViewLayoutGuide = UILayoutGuide()
-
-    private let cancelButton = InsetButton()
     private let domainCompletion = DomainCompletion(completionSources: [TopDomainsCompletionSource(), CustomCompletionSource()])
-
-    private let toolset = BrowserToolset()
-    private let urlTextField = URLTextField()
-    var draggableUrlTextView: UIView { return urlTextField }
-    private let truncatedUrlText = UITextView()
-    private let urlBarBorderView = UIView()
-    private let urlBarBackgroundView = UIView()
-    private let textAndLockContainer = UIView()
-    private let collapsedUrlAndLockWrapper = UIView()
-    private let collapsedTrackingProtectionBadge = CollapsedTrackingProtectionBadge()
-
-    let shieldIcon = TrackingProtectionBadge()
 
     var centerURLBar = false {
         didSet {
@@ -146,90 +242,16 @@ class URLBar: UIView {
         addSubview(toolset.forwardButton)
         addSubview(toolset.deleteButton)
         addSubview(toolset.contextMenuButton)
-
-        urlTextField.isUserInteractionEnabled = false
         urlBarBackgroundView.addSubview(textAndLockContainer)
-
-        let gestureRecognizer = UITapGestureRecognizer()
-        gestureRecognizer.numberOfTapsRequired = 1
-        gestureRecognizer.cancelsTouchesInView = true
-        gestureRecognizer.addTarget(self, action: #selector(didTapShieldIcon))
-        shieldIcon.isUserInteractionEnabled = true
-        shieldIcon.addGestureRecognizer(gestureRecognizer)
-        shieldIcon.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-        shieldIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-
-        cancelButton.isHidden = true
-        cancelButton.alpha = 0
-        cancelButton.setImage(#imageLiteral(resourceName: "icon_cancel"), for: .normal)
-
-        cancelButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-        cancelButton.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
-        cancelButton.accessibilityIdentifier = "URLBar.cancelButton"
         addSubview(cancelButton)
-
         textAndLockContainer.addSubview(toolset.stopReloadButton)
-
-        urlBarBorderView.backgroundColor = .secondaryButton
-        urlBarBorderView.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
-        urlBarBorderView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-        urlBarBorderView.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         addSubview(urlBarBorderView)
-
-        urlBarBackgroundView.backgroundColor = .locationBar
-        urlBarBackgroundView.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
-        urlBarBackgroundView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-        urlBarBackgroundView.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         urlBarBorderView.addSubview(urlBarBackgroundView)
-
-        truncatedUrlText.alpha = 0
-        truncatedUrlText.isUserInteractionEnabled = false
-        truncatedUrlText.font = .footnote12
-        truncatedUrlText.tintColor = .primaryText
-        truncatedUrlText.textColor = .primaryText
-        truncatedUrlText.backgroundColor = UIColor.clear
-        truncatedUrlText.contentMode = .bottom
-        truncatedUrlText.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .vertical)
-        truncatedUrlText.isScrollEnabled = false
-        truncatedUrlText.accessibilityIdentifier = "Collapsed.truncatedUrlText"
-
-        collapsedTrackingProtectionBadge.alpha = 0
-        collapsedTrackingProtectionBadge.tintColor = .white
-        collapsedTrackingProtectionBadge.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-        collapsedTrackingProtectionBadge.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-
         collapsedUrlAndLockWrapper.addSubview(truncatedUrlText)
         collapsedUrlAndLockWrapper.addSubview(collapsedTrackingProtectionBadge)
         addSubview(collapsedUrlAndLockWrapper)
-
-        // UITextField doesn't allow customization of the clear button, so we create
-        // our own so we can use it as the rightView.
-        let clearButton = UIButton(frame: CGRect(x: 0, y: 0, width: UIConstants.layout.urlBarClearButtonWidth, height: UIConstants.layout.urlBarClearButtonHeight))
-        clearButton.isHidden = true
-        clearButton.setImage(#imageLiteral(resourceName: "icon_clear"), for: .normal)
-        clearButton.addTarget(self, action: #selector(didPressClear), for: .touchUpInside)
-
-        urlTextField.font = .body15
-        urlTextField.tintColor = .primaryText
-        urlTextField.textColor = .primaryText
-        urlTextField.keyboardType = .webSearch
-        urlTextField.autocapitalizationType = .none
-        urlTextField.autocorrectionType = .no
-        urlTextField.rightView = clearButton
-        urlTextField.rightViewMode = .whileEditing
-        urlTextField.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .vertical)
-        urlTextField.autocompleteDelegate = self
-        urlTextField.accessibilityIdentifier = "URLBar.urlText"
-        urlTextField.placeholder = UIConstants.strings.urlTextPlaceholder
         textAndLockContainer.addSubview(urlTextField)
-
-        shieldIcon.tintColor = .primaryText
-        shieldIcon.contentMode = .center
-        shieldIcon.accessibilityIdentifier = "URLBar.trackingProtectionIcon"
         addSubview(shieldIcon)
-
-        progressBar.isHidden = true
-        progressBar.alpha = 0
         addSubview(progressBar)
 
         var toolsetButtonWidthMultiplier: CGFloat {
@@ -401,7 +423,6 @@ class URLBar: UIView {
             leftBarViewLayoutGuide.snp.makeConstraints { make in
                 make.leading.equalTo(safeAreaLayoutGuide).offset(UIConstants.layout.urlBarMargin)
             }
-
         }
 
         rightBarViewLayoutGuide.snp.makeConstraints { (make) in

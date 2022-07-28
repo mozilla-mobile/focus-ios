@@ -1420,7 +1420,6 @@
 				D392887E1BC5E47E0016A9A0 /* UIConstants.swift */,
 				E5621C6228918F39008BBAC6 /* URLBar */,
 				D3E2C96E1DA3093D00DEBE3D /* BrowserToolbar.swift */,
-				D364DC251DC4163700562991 /* BrowserToolset.swift */,
 				161D90302108085F00C2A74A /* HomeViewToolbar.swift */,
 				C8F3EABE2762558F00C2AF0C /* SplashView.swift */,
 				D3561B2A1DB5925100A5EEAF /* GradientBackgroundView.swift */,
@@ -1741,6 +1740,7 @@
 				E5621C6028918DC4008BBAC6 /* URLTextField.swift */,
 				C8958C50280D84EE0064BDF8 /* AutocompleteTextField.swift */,
 				E5621C6328918F6F008BBAC6 /* URLBarDelegate.swift */,
+				D364DC251DC4163700562991 /* BrowserToolset.swift */,
 			);
 			path = URLBar;
 			sourceTree = "<group>";

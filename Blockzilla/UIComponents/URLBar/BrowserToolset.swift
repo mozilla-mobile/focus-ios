@@ -17,36 +17,48 @@ protocol BrowserToolsetDelegate: AnyObject {
 class BrowserToolset {
     weak var delegate: BrowserToolsetDelegate?
     var shouldShowWhatsNew: Bool = false
-    let backButton = InsetButton()
-    let forwardButton = InsetButton()
-    let stopReloadButton = InsetButton()
-    let deleteButton = InsetButton()
-    let contextMenuButton = InsetButton()
 
-    init() {
+    lazy var backButton: InsetButton = {
+        let backButton = InsetButton()
         backButton.setImage(#imageLiteral(resourceName: "icon_back_active"), for: .normal)
         backButton.addTarget(self, action: #selector(didPressBack), for: .touchUpInside)
         backButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         backButton.accessibilityLabel = UIConstants.strings.browserBack
         backButton.isEnabled = false
+        return backButton
+    }()
 
+    lazy var forwardButton: InsetButton = {
+        let forwardButton = InsetButton()
         forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active"), for: .normal)
         forwardButton.addTarget(self, action: #selector(didPressForward), for: .touchUpInside)
         forwardButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         forwardButton.accessibilityLabel = UIConstants.strings.browserForward
         forwardButton.isEnabled = false
+        return forwardButton
+    }()
 
+    lazy var stopReloadButton: InsetButton = {
+        let stopReloadButton = InsetButton()
         stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu"), for: .normal)
         stopReloadButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         stopReloadButton.addTarget(self, action: #selector(didPressStopReload), for: .touchUpInside)
         stopReloadButton.accessibilityIdentifier = "BrowserToolset.stopReloadButton"
+        return stopReloadButton
+    }()
 
+    lazy var deleteButton: InsetButton = {
+        let deleteButton = InsetButton()
         deleteButton.setImage(#imageLiteral(resourceName: "icon_delete"), for: .normal)
         deleteButton.addTarget(self, action: #selector(didPressDelete), for: .touchUpInside)
         deleteButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         deleteButton.accessibilityIdentifier = "URLBar.deleteButton"
         deleteButton.isEnabled = false
+        return deleteButton
+    }()
 
+    lazy var contextMenuButton: InsetButton = {
+        let contextMenuButton = InsetButton()
         contextMenuButton.tintColor = .primaryText
         if #available(iOS 14.0, *) {
             contextMenuButton.showsMenuAsPrimaryAction = true
@@ -59,7 +71,10 @@ class BrowserToolset {
         contextMenuButton.accessibilityIdentifier = "HomeView.settingsButton"
         contextMenuButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         contextMenuButton.imageView?.snp.makeConstraints { $0.size.equalTo(UIConstants.layout.contextMenuIconSize) }
+        return contextMenuButton
+    }()
 
+    init() {
        setHighlightWhatsNew(shouldHighlight: shouldShowWhatsNew)
     }
 
