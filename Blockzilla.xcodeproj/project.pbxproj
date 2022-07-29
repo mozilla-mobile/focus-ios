@@ -2028,6 +2028,7 @@
 				"en-GB",
 				co,
 				tt,
+				et,
 			);
 			mainGroup = E4BF2DCA1BACE8CA00DA9D68;
 			packageReferences = (
