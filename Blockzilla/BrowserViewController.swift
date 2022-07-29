@@ -392,15 +392,15 @@ class BrowserViewController: UIViewController {
                 case .editingURL(let text):
                     let shouldShowShortcuts = text.isEmpty && !shortcutManager.shortcutsViewModels.isEmpty
                     shortcutsContainer.isHidden = !shouldShowShortcuts
-                    shortcutsBackground.isHidden = !urlBar.inBrowsingMode ? true : !shouldShowShortcuts
+                    shortcutsBackground.isHidden = !urlBar.state.isBrowsingMode ? true : !shouldShowShortcuts
 
                 case .activeURLBar:
                     let shouldShowShortcuts = !shortcutManager.shortcutsViewModels.isEmpty
                     shortcutsContainer.isHidden = !shouldShowShortcuts
-                    shortcutsBackground.isHidden = !shouldShowShortcuts || !urlBar.inBrowsingMode
+                    shortcutsBackground.isHidden = !shouldShowShortcuts || !urlBar.state.isBrowsingMode
 
                 case .dismissedURLBar:
-                    shortcutsContainer.isHidden = urlBar.inBrowsingMode || webViewController.isLoading
+                    shortcutsContainer.isHidden = urlBar.state.isBrowsingMode || webViewController.isLoading
                     shortcutsBackground.isHidden = true
 
                 case .none:
@@ -459,7 +459,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func updateLockIcon(trackingProtectionStatus: TrackingProtectionStatus) {
-        urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus, shouldDisplayShieldIcon:  urlBar.inBrowsingMode ? self.webViewController.connectionIsSecure : true)
+        urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus, shouldDisplayShieldIcon:  urlBar.state.isBrowsingMode ? self.webViewController.connectionIsSecure : true)
     }
 
     // These functions are used to handle displaying and hiding the keyboard after the splash view is animated
@@ -471,7 +471,7 @@ class BrowserViewController: UIViewController {
         }
 
         // Do not activate if we are showing a web page, nor the overlayView hidden
-        if urlBar.inBrowsingMode {
+        if urlBar.state.isBrowsingMode {
             return
         }
 
@@ -483,7 +483,7 @@ class BrowserViewController: UIViewController {
     }
 
     public func deactivateUrlBar() {
-        if urlBar.inBrowsingMode {
+        if urlBar.state.isBrowsingMode {
             urlBar.dismiss()
         }
     }
@@ -743,7 +743,7 @@ class BrowserViewController: UIViewController {
 
     func ensureBrowsingMode() {
         guard urlBar != nil else { shouldEnsureBrowsingMode = true; return }
-        guard !urlBar.inBrowsingMode else { return }
+        guard !urlBar.state.isBrowsingMode else { return }
 
         urlBarContainer.alpha = 1
         urlBar.ensureBrowsingMode()
@@ -781,7 +781,7 @@ class BrowserViewController: UIViewController {
         if webViewContainer.isHidden {
             webViewContainer.isHidden = false
             homeViewController.view.isHidden = true
-            urlBar.inBrowsingMode = true
+            urlBar.update(state: .browsing)
 
             if !showsToolsetInURLBar {
                 browserToolbar.animateHidden(false, duration: UIConstants.layout.toolbarFadeAnimationDuration)
@@ -856,7 +856,7 @@ class BrowserViewController: UIViewController {
                 self.hideToolbars()
             }
 
-            self.browserToolbar.animateHidden(!self.urlBar.inBrowsingMode || self.showsToolsetInURLBar, duration: coordinator.transitionDuration, completion: {
+            self.browserToolbar.animateHidden(!self.urlBar.state.isBrowsingMode || self.showsToolsetInURLBar, duration: coordinator.transitionDuration, completion: {
                 self.updateViewConstraints()
                 self.webViewController.resetZoom()
             })
@@ -900,7 +900,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func toggleURLBarBackground(isBright: Bool) {
-        urlBarContainer.backgroundColor = urlBar.inBrowsingMode ? .foundation : .clear
+        urlBarContainer.backgroundColor = urlBar.state.isBrowsingMode ? .foundation : .clear
     }
 
     override var keyCommands: [UIKeyCommand]? {
@@ -1127,7 +1127,7 @@ extension BrowserViewController: URLBarDelegate {
         let trimmedText = text.trimmingCharacters(in: .whitespaces)
         guard urlBar.url?.absoluteString != trimmedText else { return }
         shortcutsPresenter.shortcutsState = .editingURL(text: trimmedText)
-        let isOnHomeView = !urlBar.inBrowsingMode
+        let isOnHomeView = !urlBar.state.isBrowsingMode
 
         if Settings.getToggle(.enableSearchSuggestions), !trimmedText.isEmpty {
             searchSuggestionsDebouncer.renewInterval()
@@ -1155,7 +1155,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressScrollTop(_: URLBar, tap: UITapGestureRecognizer) {
-        guard !urlBar.isEditing else { return }
+        guard !urlBar.state.isEditing else { return }
 
         switch scrollBarState {
         case .expanded:
@@ -1218,14 +1218,14 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidFocus(_ urlBar: URLBar) {
-        let isOnHomeView = !urlBar.inBrowsingMode
+        let isOnHomeView = !urlBar.state.isBrowsingMode
         overlayView.present(isOnHomeView: isOnHomeView)
         toggleURLBarBackground(isBright: false)
     }
 
     func urlBarDidActivate(_ urlBar: URLBar) {
         shortcutsPresenter.shortcutsState = .activeURLBar
-        homeViewController.updateUI(urlBarIsActive: true, isBrowsing: urlBar.inBrowsingMode)
+        homeViewController.updateUI(urlBarIsActive: true, isBrowsing: urlBar.state.isBrowsingMode)
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
             self.urlBarContainer.alpha = 1
             self.updateFindInPageVisibility(visible: false)
@@ -1256,7 +1256,7 @@ extension BrowserViewController: URLBarDelegate {
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
 
-        let state: TrackingProtectionState = urlBar.inBrowsingMode
+        let state: TrackingProtectionState = urlBar.state.isBrowsingMode
         ? .browsing(status: SecureConnectionStatus(
             url: webViewController.url!,
             isSecureConnection: webViewController.connectionIsSecure))
@@ -1557,7 +1557,7 @@ extension BrowserViewController: WebControllerDelegate {
     func webControllerDidFinishNavigation(_ controller: WebController) {
         updateURLBar()
         urlBar.isLoading = false
-        toggleURLBarBackground(isBright: !urlBar.isEditing)
+        toggleURLBarBackground(isBright: !urlBar.state.isEditing)
         urlBar.progressBar.hideProgressBar()
         GleanMetrics.Browser.totalUriCount.add()
     }
@@ -1586,7 +1586,7 @@ extension BrowserViewController: WebControllerDelegate {
     func webController(_ controller: WebController, didUpdateEstimatedProgress estimatedProgress: Double) {
         // Don't update progress if the home view is visible. This prevents the centered URL bar
         // from catching the global progress events.
-        guard urlBar.inBrowsingMode else { return }
+        guard urlBar.state.isBrowsingMode else { return }
 
         urlBar.progressBar.alpha = 1
         urlBar.progressBar.isHidden = false
@@ -1768,7 +1768,7 @@ extension BrowserViewController: UIPopoverPresentationControllerDelegate {
     }
 
     func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>) {
-        guard urlBar.inBrowsingMode else { return }
+        guard urlBar.state.isBrowsingMode else { return }
         guard let menuSheet = popoverPresentationController.presentedViewController as? PhotonActionSheet, !(menuSheet.popoverPresentationController?.sourceView is ShortcutView) else {
             return
         }
@@ -1945,7 +1945,7 @@ extension BrowserViewController {
     }
 
     func removeFromShortcuts() {
-        self.shortcutsBackground.isHidden = self.shortcutManager.shortcutsViewModels.isEmpty || !self.urlBar.inBrowsingMode ? true : false
+        self.shortcutsBackground.isHidden = self.shortcutManager.shortcutsViewModels.isEmpty || !self.urlBar.state.isBrowsingMode ? true : false
         GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_home_screen"].add()
     }
 

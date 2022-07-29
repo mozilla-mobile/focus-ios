@@ -13,9 +13,12 @@ class URLBar: UIView {
         case `default`
         case browsing
         case editing
+
+        var isBrowsingMode: Bool { self == .browsing }
+        var isEditing: Bool { self == .editing }
     }
 
-    var state = State.default {
+    private(set) public var state = State.default {
         didSet {
             guard oldValue != state else { return }
             updateViews()
@@ -29,23 +32,12 @@ class URLBar: UIView {
         }
     }
 
+    public func update(state: State) {
+        self.state = state
+    }
+
     weak var delegate: URLBarDelegate?
     var userInputText: String?
-
-    var inBrowsingMode: Bool = false {
-        didSet {
-            DispatchQueue.main.async {
-                self.updateBarState()
-            }
-        }
-    }
-    private(set) var isEditing = false {
-        didSet {
-            DispatchQueue.main.async {
-                self.updateBarState()
-            }
-        }
-    }
     var shouldPresent = false
 
     // MARK: - UI Components
@@ -296,7 +288,7 @@ class URLBar: UIView {
         }
 
         toolset.contextMenuButton.snp.makeConstraints { make in
-            if inBrowsingMode {
+            if state.isBrowsingMode {
                 make.trailing.equalTo(safeAreaLayoutGuide)
             } else {
                 make.trailing.equalTo(safeAreaLayoutGuide).offset(-UIConstants.layout.contextMenuButtonMargin)
@@ -316,7 +308,7 @@ class URLBar: UIView {
             make.top.bottom.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
 
             compressedBarConstraints.append(make.height.equalTo(UIConstants.layout.urlBarBorderHeight).constraint)
-            if inBrowsingMode {
+            if state.isBrowsingMode {
                 compressedBarConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide.snp.trailing).inset(UIConstants.layout.urlBarMargin).constraint)
             } else {
                 compressedBarConstraints.append(make.trailing.equalTo(contextMenuButton.snp.leading).offset(-UIConstants.layout.contextMenuButtonMargin).constraint)
@@ -438,7 +430,7 @@ class URLBar: UIView {
         urlTextField.isUserInteractionEnabled = true
         urlTextField.becomeFirstResponder()
         highlightText(urlTextField)
-        isEditing = true
+        state = .editing
     }
 
     private func displayClearButton(shouldDisplay: Bool, animated: Bool = true) {
@@ -467,13 +459,13 @@ class URLBar: UIView {
     }
 
     @objc func paste(clipboardString: String) {
-        isEditing = true
+        state = .editing
         activateTextField()
         urlTextField.text = clipboardString
     }
 
     @objc func pasteAndGo(clipboardString: String) {
-        isEditing = true
+        state = .editing
         delegate?.urlBarDidActivate(self)
         delegate?.urlBar(self, didSubmitText: clipboardString)
 
@@ -561,7 +553,7 @@ class URLBar: UIView {
         // Since the URL text field is smaller and centered on iPads, make sure
         // that touching the surrounding area will trigger editing.
         if urlTextField.isUserInteractionEnabled,
-            let touch = touches.first {
+           let touch = touches.first {
             let point = touch.location(in: urlBarBorderView)
             if urlBarBorderView.bounds.contains(point) {
                 urlTextField.becomeFirstResponder()
@@ -573,8 +565,7 @@ class URLBar: UIView {
 
     func ensureBrowsingMode() {
         shouldPresent = false
-        inBrowsingMode = true
-        isEditing = false
+        state = .browsing
     }
 
     func fillUrlBar(text: String) {
@@ -582,7 +573,7 @@ class URLBar: UIView {
     }
 
     private func updateUrlIcons() {
-        let visible = !isEditing && url != nil
+        let visible = !state.isEditing && url != nil
         let duration = UIConstants.layout.urlBarTransitionAnimationDuration / 2
 
         toolset.stopReloadButton.animateHidden(!visible, duration: duration)
@@ -598,16 +589,6 @@ class URLBar: UIView {
                 self.hidePageActionsConstraints.forEach { $0.activate() }
             }
             self.layoutIfNeeded()
-        }
-    }
-
-    private func updateBarState() {
-        if isEditing {
-            state = .editing
-        } else if inBrowsingMode {
-            state = .browsing
-        } else {
-            state = .default
         }
     }
 
@@ -660,7 +641,7 @@ class URLBar: UIView {
             compressBar = isIPadRegularDimensions ? false : true
             showBackgroundView = true
 
-            if isIPadRegularDimensions && inBrowsingMode {
+            if isIPadRegularDimensions && state.isBrowsingMode {
                 leftBarViewLayoutGuide.snp.makeConstraints { make in
                     editingURLTextConstrains.append(make.leading.equalTo(urlTextField).offset(-UIConstants.layout.urlTextOffset).constraint)
                 }
@@ -683,7 +664,7 @@ class URLBar: UIView {
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
             self.layoutIfNeeded()
 
-            if self.inBrowsingMode && !self.isIPadRegularDimensions {
+            if self.state.isBrowsingMode && !self.isIPadRegularDimensions {
                 self.updateURLBorderConstraints()
             }
 
@@ -707,13 +688,13 @@ class URLBar: UIView {
             make.top.bottom.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
 
             compressedBarConstraints.append(make.height.equalTo(UIConstants.layout.urlBarBorderHeight).constraint)
-            if inBrowsingMode {
+            if state.isBrowsingMode {
                 compressedBarConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide.snp.trailing).inset(UIConstants.layout.urlBarMargin).constraint)
             } else {
                 compressedBarConstraints.append(make.trailing.equalTo(contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarMargin).constraint)
             }
 
-            if isEditing {
+            if state.isEditing {
                 make.leading.equalTo(leftBarViewLayoutGuide.snp.trailing).offset(UIConstants.layout.urlBarIconInset)
             } else {
                 make.leading.equalTo(shieldIcon.snp.leading).offset(-UIConstants.layout.urlBarIconInset)
@@ -724,16 +705,16 @@ class URLBar: UIView {
     /* This separate @objc function is necessary as selector methods pass sender by default. Calling
      dismiss() directly from a selector would pass the sender as "completion" which results in a crash. */
     @objc func cancelPressed() {
-        isEditing = false
+        state = .default
     }
 
     func dismiss(completion: (() -> Void)? = nil) {
-        guard isEditing else {
+        guard state.isEditing else {
             completion?()
             return
         }
 
-        isEditing = false
+        state = .default
         completion?()
     }
 
@@ -756,7 +737,7 @@ class URLBar: UIView {
             showToolset = !isHidden
             centerURLBar = shouldShowToolset
         case .editing:
-            let isiPadLayoutWhileBrowsing = isIPadRegularDimensions && inBrowsingMode
+            let isiPadLayoutWhileBrowsing = isIPadRegularDimensions && state.isBrowsingMode
             isHidden =  isiPadLayoutWhileBrowsing ? !shouldShowToolset : true
             showToolset = isiPadLayoutWhileBrowsing ? !isHidden : false
             centerURLBar = false
@@ -765,7 +746,7 @@ class URLBar: UIView {
         toolset.backButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         toolset.forwardButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         toolset.deleteButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
-        toolset.contextMenuButton.animateHidden(!inBrowsingMode ? false : (isIPadRegularDimensions ? false : isHidden), duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+        toolset.contextMenuButton.animateHidden(!state.isBrowsingMode ? false : (isIPadRegularDimensions ? false : isHidden), duration: UIConstants.layout.urlBarTransitionAnimationDuration)
 
     }
 
@@ -861,7 +842,7 @@ class URLBar: UIView {
         toolset.contextMenuButton.alpha = expandAlpha
 
         collapsedTrackingProtectionBadge.alpha = 0
-        if isEditing {
+        if state.isEditing {
             shieldIcon.alpha = collapseAlpha
         } else {
             shieldIcon.alpha = expandAlpha
@@ -889,13 +870,13 @@ extension URLBar: AutocompleteTextFieldDelegate {
 
         setTextToURL(displayFullUrl: true)
 
-        if !isEditing {
-            isEditing = true
+        if !state.isEditing {
+            state = .editing
             delegate?.urlBarDidActivate(self)
         }
 
         // When text.characters.count == 0, it is the HomeView
-        if let text = autocompleteTextField.text, !isEditing, text.count == 0 {
+        if let text = autocompleteTextField.text, !state.isEditing, text.count == 0 {
             shouldPresent = true
         }
 
@@ -933,8 +914,8 @@ extension URLBar: AutocompleteTextFieldDelegate {
 
         autocompleteTextField.rightView?.isHidden = text.isEmpty
 
-        if !isEditing && shouldPresent {
-            isEditing = true
+        if !state.isEditing && shouldPresent {
+            state = .editing
             delegate?.urlBarDidActivate(self)
         }
         delegate?.urlBar(self, didEnterText: text)

@@ -53,4 +53,3 @@ class CollapsedTrackingProtectionBadge: TrackingProtectionBadge {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
