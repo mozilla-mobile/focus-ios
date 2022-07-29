@@ -74,7 +74,7 @@
 "Autocomplete.addCustomUrlWithPlus" = "+ Legg til tilpassa adresse";
 
 /* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "Legg til og handter tilpassa autofullførte nettadressesr.";
+"Autocomplete.customDescriptoin" = "Legg til og handsam tilpassa autofullførte nettadressesr.";
 
 /* Label for button taking you to your custom Autocomplete URL list */
 "Autocomplete.customLabel" = "Tilpassa nettadresser";
@@ -107,7 +107,7 @@
 "Autocomplete.enabled" = "Slått på";
 
 /* Label for button taking you to your custom Autocomplete URL list */
-"Autocomplete.manageSites" = "Handter nettsider";
+"Autocomplete.manageSites" = "Handsam nettsider";
 
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.mySites" = "Mine nettsider";
@@ -433,6 +433,12 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SIKKERHEIT";
 
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Bruk som standard nettleser";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "Spesifiser at lenker frå nettstadar, e-postmeldingar og meldingar skal opnast automatisk i %@.";
+
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Systemtema";
 
@@ -504,6 +510,9 @@
 
 /* Text for the share menu option when a user wants to add the site to Shortcuts */
 "ShareMenu.AddToShortcuts" = "Legg til i snarvegar";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "Lagt til i snarvegar";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Kopier adresse";

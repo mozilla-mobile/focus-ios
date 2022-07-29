@@ -433,6 +433,9 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SÉCURITÉ";
 
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Définir comme navigateur par défaut";
+
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Thème du système";
 
@@ -504,6 +507,9 @@
 
 /* Text for the share menu option when a user wants to add the site to Shortcuts */
 "ShareMenu.AddToShortcuts" = "Ajouter aux raccourcis";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "Ajouté aux raccourcis";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Copier l’adresse";

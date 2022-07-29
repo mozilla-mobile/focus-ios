@@ -430,6 +430,12 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "אבטחה";
 
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "הגדרה כדפדפן ברירת המחדל";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "הגדרת קישורים מאתרים, מהודעות דוא״ל ומהודעות לפתיחה אוטומטית ב־%@.";
+
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "ערכת הנושא של המערכת";
 
@@ -501,6 +507,9 @@
 
 /* Text for the share menu option when a user wants to add the site to Shortcuts */
 "ShareMenu.AddToShortcuts" = "הוספה לקיצורי הדרך";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "נוסף לקיצורי הדרך";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "העתקת כתובת";
