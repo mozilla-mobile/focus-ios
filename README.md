@@ -2,7 +2,7 @@
 
 _Browse like no one’s watching. The new Firefox Focus automatically blocks a wide range of online trackers — from the moment you launch it to the second you leave it. Easily erase your history, passwords and cookies, so you won’t get followed by things like unwanted ads._
 
-Download on the [App Store](https://itunes.apple.com/app/id1055677337).
+Download on the [App Store](https://apps.apple.com/app/id1055677337).
 
 Getting Involved
 ----------------
