@@ -5,7 +5,7 @@
 import UIKit
 import SnapKit
 import Telemetry
-import Glean
+import FocusAppServices
 
 protocol SearchSuggestionsPromptViewDelegate: AnyObject {
     func searchSuggestionsPromptView(_ searchSuggestionsPromptView: SearchSuggestionsPromptView, didEnable: Bool)

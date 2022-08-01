@@ -4,7 +4,7 @@
 
 import UIKit
 import Telemetry
-import Glean
+import FocusAppServices
 
 protocol AddCustomDomainViewControllerDelegate: AnyObject {
     func addCustomDomainViewControllerDidFinish(_ viewController: AddCustomDomainViewController)

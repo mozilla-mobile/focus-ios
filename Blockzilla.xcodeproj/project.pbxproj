@@ -127,7 +127,6 @@
 		C8F3EABF2762558F00C2AF0C /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F3EABE2762558F00C2AF0C /* SplashView.swift */; };
 		C8FB1E6427F59D9C00C60DC6 /* UIHelpers in Frameworks */ = {isa = PBXBuildFile; productRef = C8FB1E6327F59D9C00C60DC6 /* UIHelpers */; };
 		C8FB1E6627F5A79300C60DC6 /* DesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = C8FB1E6527F5A79300C60DC6 /* DesignSystem */; };
-		CDFA746F27ABD43D0055FE55 /* Glean in Frameworks */ = {isa = PBXBuildFile; productRef = CDFA746E27ABD43D0055FE55 /* Glean */; };
 		D025F225218B64D600B262D8 /* SearchEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D025F224218B64D600B262D8 /* SearchEngineTests.swift */; };
 		D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0967A801EC50002009D937F /* TelemetryIntegration.swift */; };
 		D30179071BC6CB19009AD388 /* BlockerEnabledDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */; };
@@ -1127,7 +1126,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F85F7A292655AD5800395515 /* SnapKit in Frameworks */,
-				CDFA746F27ABD43D0055FE55 /* Glean in Frameworks */,
 				45E8FFE72828DE4A0027A8F5 /* FocusAppServices in Frameworks */,
 				C8FB1E6427F59D9C00C60DC6 /* UIHelpers in Frameworks */,
 				F85F7A2F2655AD5800395515 /* Telemetry in Frameworks */,
@@ -1931,7 +1929,6 @@
 				F85F7A2A2655AD5800395515 /* Fuzi */,
 				F85F7A2E2655AD5800395515 /* Telemetry */,
 				F8B92FBD279EC73700183998 /* Sentry */,
-				CDFA746E27ABD43D0055FE55 /* Glean */,
 				C8FB1E6327F59D9C00C60DC6 /* UIHelpers */,
 				C8FB1E6527F5A79300C60DC6 /* DesignSystem */,
 				C871585F27FB29AC006224BB /* Onboarding */,
@@ -2121,7 +2118,6 @@
 				F8324CB8264DC8ED007E4BFA /* XCRemoteSwiftPackageReference "Fuzi" */,
 				F8324E0726556E45007E4BFA /* XCRemoteSwiftPackageReference "telemetry-ios" */,
 				F8B92FBC279EC73700183998 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
-				CDFA746D27ABD43D0055FE55 /* XCRemoteSwiftPackageReference "glean-swift" */,
 				45E8FFE52828DE4A0027A8F5 /* XCRemoteSwiftPackageReference "rust-components-swift" */,
 			);
 			productRefGroup = E4BF2DD41BACE8CA00DA9D68 /* Products */;
@@ -2276,7 +2272,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "bash $PWD/bin/sdk_generator.sh\n";
+			shellScript = "bash $PWD/bin/sdk_generator.sh -g FocusAppServices\n";
 		};
 		F84AFE711DE77ACC005C4DD1 /* Run Script (Copy Wordmark) */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -6272,11 +6268,6 @@
 		C8FB1E6527F5A79300C60DC6 /* DesignSystem */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = DesignSystem;
-		};
-		CDFA746E27ABD43D0055FE55 /* Glean */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = CDFA746D27ABD43D0055FE55 /* XCRemoteSwiftPackageReference "glean-swift" */;
-			productName = Glean;
 		};
 		E5ECB99C28F3FADB00CFCC87 /* Widget */ = {
 			isa = XCSwiftPackageProductDependency;

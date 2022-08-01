@@ -6,7 +6,7 @@ import Foundation
 import SnapKit
 import UIKit
 import Telemetry
-import Glean
+import FocusAppServices
 import Combine
 import UIHelpers
 import Onboarding

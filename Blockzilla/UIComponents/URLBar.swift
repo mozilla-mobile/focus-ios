@@ -5,7 +5,7 @@
 import UIKit
 import SnapKit
 import Telemetry
-import Glean
+import FocusAppServices
 
 protocol URLBarDelegate: AnyObject {
     func urlBar(_ urlBar: URLBar, didEnterText text: String)

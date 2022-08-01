@@ -11,15 +11,6 @@
         }
       },
       {
-        "package": "Glean",
-        "repositoryURL": "https://github.com/mozilla/glean-swift",
-        "state": {
-          "branch": null,
-          "revision": "5b810598dbe39579703af99af4afe4de92811d0c",
-          "version": "51.2.0"
-        }
-      },
-      {
         "package": "MozillaRustComponentsSwift",
         "repositoryURL": "https://github.com/mozilla/rust-components-swift",
         "state": {

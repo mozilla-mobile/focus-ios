@@ -4,7 +4,7 @@
 
 import Combine
 import SwiftUI
-import Glean
+import FocusAppServices
 
 private let GleanDebugViewURL = URL(string: "https://debug-ping-preview.firebaseapp.com")!
 

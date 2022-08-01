@@ -5,7 +5,7 @@
 import UIKit
 import SnapKit
 import Telemetry
-import Glean
+import FocusAppServices
 import UIHelpers
 
 protocol OverlayViewDelegate: AnyObject {

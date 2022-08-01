@@ -8,7 +8,7 @@ import SnapKit
 import Telemetry
 import StoreKit
 import Intents
-import Glean
+import FocusAppServices
 import Combine
 import Onboarding
 import AppShortcuts
