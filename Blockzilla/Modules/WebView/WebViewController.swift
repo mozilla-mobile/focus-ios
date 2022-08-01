@@ -82,6 +82,15 @@ class WebViewController: UIViewController, WebController {
     var printFormatter: UIPrintFormatter { return browserView.viewPrintFormatter() }
     var scrollView: UIScrollView { return browserView.scrollView }
 
+    var adsTelemetryUrlList: [String] = [String]() {
+        didSet {
+            startingSearchUrlWithAds = url
+        }
+    }
+    var adsTelemetryRedirectUrlList: [URL] = [URL]()
+    var startingSearchUrlWithAds: URL?
+    var adsProviderName: String = ""
+    
     init(trackingProtectionManager: TrackingProtectionManager) {
         self.trackingProtectionManager = trackingProtectionManager
         super.init(nibName: nil, bundle: nil)
@@ -460,6 +469,9 @@ extension WebViewController: WKUIDelegate {
 
 extension WebViewController: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+
+        trackAds(message: message)
+
         if message.name == "findInPageHandler" {
             let data = message.body as! [String: Int]
 
@@ -490,5 +502,29 @@ extension WebViewController: WKScriptMessageHandler {
                 trackingProtectionManager.trackingProtectionStatus.trackingInformation = currentInfo.map { $0.create(byAddingListItem: listItem) }
             }
         }
+    }
+    
+    func trackAds(message: WKScriptMessage) {
+        guard
+            let provider = getProviderForMessage(message: message),
+            let body = message.body as? [String: Any],
+            let urls = body["urls"] as? [String] else { return }
+        let adUrls = provider.listAdUrls(urls: urls)
+        if !adUrls.isEmpty {
+            AdsTelemetryHelper.trackAdsFoundOnPage(providerName: provider.name)
+            adsProviderName = provider.name
+            adsTelemetryUrlList = adUrls
+            adsTelemetryRedirectUrlList.removeAll()
+        }
+    }
+
+    func getProviderForMessage(message: WKScriptMessage) -> SearchProviderModel? {
+        guard let body = message.body as? [String: Any], let url = body["url"] as? String else { return nil }
+        for provider in SearchProviderModel.searchProviderList {
+            guard url.range(of: provider.regexp, options: .regularExpression) != nil else { continue }
+            return provider
+        }
+
+        return nil
     }
 }

@@ -51,3 +51,34 @@ public struct SearchProviderModel {
                             extraAdServersRegexps: [#"^https:\/\/www\.bing\.com\/acli?c?k"#, #"^https:\/\/www\.bing\.com\/fd\/ls\/GLinkPingPost\.aspx.*acli?c?k"#])
     ]
 }
+
+extension SearchProviderModel {
+    func listAdUrls(urls: [String]) -> [String] {
+        let predicates: [((String) -> Bool)] = extraAdServersRegexps.map { regex in
+            return { url in
+                return url.range(of: regex, options: .regularExpression) != nil
+            }
+        }
+
+        var adUrls = [String]()
+        for url in urls {
+            for predicate in predicates {
+                guard predicate(url) else { continue }
+                adUrls.append(url)
+            }
+        }
+
+        return adUrls
+    }
+}
+
+class AdsTelemetryHelper {
+    
+    public static func trackAdsFoundOnPage(providerName: String) {
+        GleanMetrics.BrowserSearch.withAds["provider-\(providerName)"].add()
+    }
+    
+    public static func trackAdsClickedOnPage(providerName: String) {
+        GleanMetrics.BrowserSearch.adClicks["provider-\(providerName)"].add()
+    }
+}
