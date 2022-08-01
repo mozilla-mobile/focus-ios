@@ -9,30 +9,43 @@ import Glean
 import DesignSystem
 
 class URLBar: UIView {
-    enum State {
-        case `default`
-        case browsing
-        case editing
 
-        var isBrowsingMode: Bool { self == .browsing }
-        var isEditing: Bool { self == .editing }
+    public enum Selection: Equatable {
+        case selected
+        case unselected
+
+        var isSelecting: Bool { self == .selected }
     }
 
-    private(set) public var state = State.default {
+    enum BrowsingState {
+        case home
+        case browsing
+
+        var isBrowsingMode: Bool { self == .browsing }
+    }
+
+    private(set) public var selectionState = Selection.unselected {
         didSet {
-            guard oldValue != state else { return }
+            guard oldValue != selectionState else { return }
             updateViews()
 
-            if oldValue == .editing {
+            if oldValue.isSelecting {
                 _ = urlTextField.resignFirstResponder()
                 delegate?.urlBarDidDismiss(self)
-            } else if state == .editing {
+            } else if selectionState.isSelecting {
                 delegate?.urlBarDidFocus(self)
             }
         }
     }
 
-    public func update(state: State) {
+    private(set) public var state = BrowsingState.home {
+        didSet {
+            guard oldValue != state else { return }
+            updateViews()
+        }
+    }
+
+    public func update(state: BrowsingState) {
         self.state = state
     }
 
@@ -430,7 +443,7 @@ class URLBar: UIView {
         urlTextField.isUserInteractionEnabled = true
         urlTextField.becomeFirstResponder()
         highlightText(urlTextField)
-        state = .editing
+        selectionState = .selected
     }
 
     private func displayClearButton(shouldDisplay: Bool, animated: Bool = true) {
@@ -459,13 +472,13 @@ class URLBar: UIView {
     }
 
     @objc func paste(clipboardString: String) {
-        state = .editing
+        selectionState = .selected
         activateTextField()
         urlTextField.text = clipboardString
     }
 
     @objc func pasteAndGo(clipboardString: String) {
-        state = .editing
+        selectionState = .selected
         delegate?.urlBarDidActivate(self)
         delegate?.urlBar(self, didSubmitText: clipboardString)
 
@@ -573,7 +586,7 @@ class URLBar: UIView {
     }
 
     private func updateUrlIcons() {
-        let visible = !state.isEditing && url != nil
+        let visible = !selectionState.isSelecting && url != nil
         let duration = UIConstants.layout.urlBarTransitionAnimationDuration / 2
 
         toolset.stopReloadButton.animateHidden(!visible, duration: duration)
@@ -602,11 +615,11 @@ class URLBar: UIView {
         displayClearButton(shouldDisplay: false)
         self.layoutIfNeeded()
 
-        let borderColor: UIColor
-        let showBackgroundView: Bool
+        var borderColor: UIColor
+        var showBackgroundView: Bool
 
         switch state {
-        case .default:
+        case .home:
             showLeftBar = false
             compressBar = isIPadRegularDimensions ? false : true
             showBackgroundView = true
@@ -635,8 +648,10 @@ class URLBar: UIView {
             urlTextField.snp.makeConstraints { make in
                 make.leading.equalTo(shieldIcon.snp.trailing).offset(UIConstants.layout.urlTextOffset)
             }
+        }
 
-        case .editing:
+        switch selectionState {
+        case .selected:
             showLeftBar = !shouldShowToolset && isIPadRegularDimensions ? false : true
             compressBar = isIPadRegularDimensions ? false : true
             showBackgroundView = true
@@ -657,6 +672,19 @@ class URLBar: UIView {
             shieldIcon.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
             cancelButton.animateHidden(isIPadRegularDimensions ? true : false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
             toolset.contextMenuButton.isEnabled = true
+            borderColor = .foundation
+            backgroundColor = .clear
+
+        case .unselected:
+            showLeftBar = false
+            compressBar = isIPadRegularDimensions ? false : true
+            showBackgroundView = true
+
+            shieldIcon.animateHidden(false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+            cancelButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+
+            setTextToURL()
+            deactivate()
             borderColor = .foundation
             backgroundColor = .clear
         }
@@ -694,7 +722,7 @@ class URLBar: UIView {
                 compressedBarConstraints.append(make.trailing.equalTo(contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarMargin).constraint)
             }
 
-            if state.isEditing {
+            if selectionState.isSelecting {
                 make.leading.equalTo(leftBarViewLayoutGuide.snp.trailing).offset(UIConstants.layout.urlBarIconInset)
             } else {
                 make.leading.equalTo(shieldIcon.snp.leading).offset(-UIConstants.layout.urlBarIconInset)
@@ -705,16 +733,16 @@ class URLBar: UIView {
     /* This separate @objc function is necessary as selector methods pass sender by default. Calling
      dismiss() directly from a selector would pass the sender as "completion" which results in a crash. */
     @objc func cancelPressed() {
-        state = .default
+        selectionState = .unselected
     }
 
     func dismiss(completion: (() -> Void)? = nil) {
-        guard state.isEditing else {
+        guard selectionState.isSelecting else {
             completion?()
             return
         }
 
-        state = .default
+        selectionState = .unselected
         completion?()
     }
 
@@ -725,10 +753,10 @@ class URLBar: UIView {
     /// Show the URL toolset buttons if we're on iPad/landscape and not editing; hide them otherwise.
     /// This method is intended to be called inside `UIView.animate` block.
     private func updateToolsetConstraints() {
-        let isHidden: Bool
+        var isHidden: Bool
 
         switch state {
-        case .default:
+        case .home:
             isHidden = true
             showToolset = false
             centerURLBar = false
@@ -736,10 +764,18 @@ class URLBar: UIView {
             isHidden = !shouldShowToolset
             showToolset = !isHidden
             centerURLBar = shouldShowToolset
-        case .editing:
+        }
+
+        switch selectionState {
+        case .selected:
             let isiPadLayoutWhileBrowsing = isIPadRegularDimensions && state.isBrowsingMode
             isHidden =  isiPadLayoutWhileBrowsing ? !shouldShowToolset : true
             showToolset = isiPadLayoutWhileBrowsing ? !isHidden : false
+            centerURLBar = false
+
+        case .unselected:
+            isHidden = true
+            showToolset = false
             centerURLBar = false
         }
 
@@ -842,7 +878,7 @@ class URLBar: UIView {
         toolset.contextMenuButton.alpha = expandAlpha
 
         collapsedTrackingProtectionBadge.alpha = 0
-        if state.isEditing {
+        if selectionState.isSelecting {
             shieldIcon.alpha = collapseAlpha
         } else {
             shieldIcon.alpha = expandAlpha
@@ -870,13 +906,13 @@ extension URLBar: AutocompleteTextFieldDelegate {
 
         setTextToURL(displayFullUrl: true)
 
-        if !state.isEditing {
-            state = .editing
+        if !selectionState.isSelecting {
+            selectionState = .selected
             delegate?.urlBarDidActivate(self)
         }
 
         // When text.characters.count == 0, it is the HomeView
-        if let text = autocompleteTextField.text, !state.isEditing, text.count == 0 {
+        if let text = autocompleteTextField.text, !selectionState.isSelecting, text.count == 0 {
             shouldPresent = true
         }
 
@@ -914,8 +950,8 @@ extension URLBar: AutocompleteTextFieldDelegate {
 
         autocompleteTextField.rightView?.isHidden = text.isEmpty
 
-        if !state.isEditing && shouldPresent {
-            state = .editing
+        if !selectionState.isSelecting && shouldPresent {
+            selectionState = .selected
             delegate?.urlBarDidActivate(self)
         }
         delegate?.urlBar(self, didEnterText: text)

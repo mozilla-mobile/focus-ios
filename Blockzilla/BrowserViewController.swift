@@ -831,7 +831,7 @@ class BrowserViewController: UIViewController {
         isIPadRegularDimensions = ((UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == size.width || size.width > size.height))) || (UIDevice.current.userInterfaceIdiom == .pad &&  UIApplication.shared.orientation?.isPortrait == true && UIScreen.main.bounds.width == size.width)
         urlBar.isIPadRegularDimensions = isIPadRegularDimensions
 
-        if urlBar.state == .default {
+        if urlBar.state == .home {
             urlBar.snp.removeConstraints()
             addURLBarConstraints()
 
@@ -1155,7 +1155,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressScrollTop(_: URLBar, tap: UITapGestureRecognizer) {
-        guard !urlBar.state.isEditing else { return }
+        guard !urlBar.selectionState.isSelecting else { return }
 
         switch scrollBarState {
         case .expanded:
@@ -1557,7 +1557,7 @@ extension BrowserViewController: WebControllerDelegate {
     func webControllerDidFinishNavigation(_ controller: WebController) {
         updateURLBar()
         urlBar.isLoading = false
-        toggleURLBarBackground(isBright: !urlBar.state.isEditing)
+        toggleURLBarBackground(isBright: !urlBar.selectionState.isSelecting)
         urlBar.progressBar.hideProgressBar()
         GleanMetrics.Browser.totalUriCount.add()
     }
