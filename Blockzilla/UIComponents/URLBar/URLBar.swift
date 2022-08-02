@@ -684,7 +684,6 @@ class URLBar: UIView {
             cancelButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
 
             setTextToURL()
-            deactivate()
             borderColor = .foundation
             backgroundColor = .clear
         }
