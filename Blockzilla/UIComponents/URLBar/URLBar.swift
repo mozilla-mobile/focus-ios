@@ -925,8 +925,9 @@ public class URLBar: UIView {
             centerURLBar = false
 
         case .unselected:
-            isHidden = true
-            showToolset = false
+            let isiPadLayoutWhileBrowsing = isIPadRegularDimensions && state.isBrowsingMode
+            isHidden =  isiPadLayoutWhileBrowsing ? !shouldShowToolset : true
+            showToolset = isiPadLayoutWhileBrowsing ? !isHidden : false
             centerURLBar = false
         }
 
