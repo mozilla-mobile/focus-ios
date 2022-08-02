@@ -4,7 +4,7 @@
 
 import UIKit
 
-protocol URLBarDelegate: AnyObject {
+public protocol URLBarDelegate: AnyObject {
     func urlBar(_ urlBar: URLBar, didEnterText text: String)
     func urlBar(_ urlBar: URLBar, didSubmitText text: String)
     func urlBar(_ urlBar: URLBar, didAddCustomURL url: URL)

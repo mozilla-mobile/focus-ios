@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct TPPageStats {
+public struct TPPageStats {
     let adCount: Int
     let analyticCount: Int
     let contentCount: Int

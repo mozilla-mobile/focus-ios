@@ -7,7 +7,7 @@ import UIKit
 /**
  * Button whose insets are included in its intrinsic size.
  */
-class InsetButton: UIButton {
+public class InsetButton: UIButton {
     init() {
         super.init(frame: CGRect.zero)
     }
@@ -16,7 +16,7 @@ class InsetButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override var intrinsicContentSize: CGSize {
+    public override var intrinsicContentSize: CGSize {
         let size = super.intrinsicContentSize
         return CGSize(width: size.width + titleEdgeInsets.left + titleEdgeInsets.right,
                       height: size.height + titleEdgeInsets.top + titleEdgeInsets.bottom)
@@ -25,7 +25,7 @@ class InsetButton: UIButton {
     var highlightedBackgroundColor: UIColor?
     var savedBackgroundColor: UIColor?
 
-    @objc override var isHighlighted: Bool {
+    @objc public override var isHighlighted: Bool {
         didSet {
             if isHighlighted {
                 if savedBackgroundColor == nil && backgroundColor != nil {

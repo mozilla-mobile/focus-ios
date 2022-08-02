@@ -4,7 +4,7 @@
 
 import Foundation
 
-enum TrackingProtectionStatus {
+public enum TrackingProtectionStatus {
     case on(TPPageStats)
     case off
 
@@ -21,7 +21,7 @@ enum TrackingProtectionStatus {
 }
 
 extension TrackingProtectionStatus: Equatable {
-    static func == (lhs: TrackingProtectionStatus, rhs: TrackingProtectionStatus) -> Bool {
+    public static func == (lhs: TrackingProtectionStatus, rhs: TrackingProtectionStatus) -> Bool {
         switch (lhs, rhs) {
         case (.on, .on), (.off, .off):
             return true

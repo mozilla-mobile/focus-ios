@@ -8,7 +8,7 @@ import Telemetry
 import Glean
 import DesignSystem
 
-class URLBar: UIView {
+public class URLBar: UIView {
 
     public enum Selection: Equatable {
         case selected
@@ -17,7 +17,7 @@ class URLBar: UIView {
         var isSelecting: Bool { self == .selected }
     }
 
-    enum BrowsingState {
+    public enum BrowsingState {
         case home
         case browsing
 
@@ -49,15 +49,23 @@ class URLBar: UIView {
         self.state = state
     }
 
-    weak var delegate: URLBarDelegate?
-    var userInputText: String?
-    var shouldPresent = false
+    public weak var delegate: URLBarDelegate?
+    public var userInputText: String?
+    public var shouldPresent = false
+    public var isIPadRegularDimensions = false {
+        didSet {
+            updateViews()
+            updateURLBarLayoutAfterSplitView()
+        }
+    }
 
     // MARK: - UI Components
 
+    public var contextMenuButton: UIView { toolset.contextMenuButton }
+    public var deleteButton: UIView { toolset.deleteButton }
+
+    private var draggableUrlTextView: UIView { urlTextField }
     private let toolset = BrowserToolset()
-    public var contextMenuButton: InsetButton { toolset.contextMenuButton }
-    public var deleteButton: InsetButton { toolset.deleteButton }
     private lazy var urlTextField: URLTextField = {
         let urlTextField = URLTextField()
 
@@ -84,8 +92,6 @@ class URLBar: UIView {
         return urlTextField
     }()
 
-    var draggableUrlTextView: UIView { return urlTextField }
-
     private lazy var truncatedUrlText: UITextView = {
         let truncatedUrlText = UITextView()
         truncatedUrlText.alpha = 0
@@ -101,7 +107,7 @@ class URLBar: UIView {
         return truncatedUrlText
     }()
 
-    let progressBar: GradientProgressBar = {
+    private let progressBar: GradientProgressBar = {
         let progressBar = GradientProgressBar(progressViewStyle: .bar)
         progressBar.isHidden = true
         progressBar.alpha = 0
@@ -171,7 +177,7 @@ class URLBar: UIView {
     private let rightBarViewLayoutGuide = UILayoutGuide()
     private let domainCompletion = DomainCompletion(completionSources: [TopDomainsCompletionSource(), CustomCompletionSource()])
 
-    var centerURLBar = false {
+    private var centerURLBar = false {
         didSet {
             guard oldValue != centerURLBar else { return }
             activateConstraints(centerURLBar, shownConstraints: centeredURLConstraints, hiddenConstraints: fullWidthURLConstraints)
@@ -179,15 +185,9 @@ class URLBar: UIView {
     }
     private var centeredURLConstraints = [Constraint]()
     private var fullWidthURLConstraints = [Constraint]()
-    var editingURLTextConstrains = [Constraint]()
-    var isIPadRegularDimensions = false {
-        didSet {
-            updateViews()
-            updateURLBarLayoutAfterSplitView()
-        }
-    }
+    private var editingURLTextConstrains = [Constraint]()
 
-    var hidePageActions = true {
+    private var hidePageActions = true {
         didSet {
             guard oldValue != hidePageActions else { return }
             activateConstraints(hidePageActions, shownConstraints: showPageActionsConstraints, hiddenConstraints: hidePageActionsConstraints)
@@ -226,9 +226,7 @@ class URLBar: UIView {
     private var showLeftBarViewConstraints = [Constraint]()
     private var hideLeftBarViewConstraints = [Constraint]()
 
-    override var canBecomeFirstResponder: Bool {
-        return true
-    }
+    public override var canBecomeFirstResponder: Bool { true }
 
     convenience init() {
         self.init(frame: CGRect.zero)
@@ -439,7 +437,7 @@ class URLBar: UIView {
         }
     }
 
-    @objc public func activateTextField() {
+    public func activateTextField() {
         urlTextField.isUserInteractionEnabled = true
         urlTextField.becomeFirstResponder()
         highlightText(urlTextField)
@@ -461,23 +459,23 @@ class URLBar: UIView {
         toolset.setHighlightWhatsNew(shouldHighlight: shouldHighlight)
     }
 
-    @objc func addCustomURL() {
+    private func addCustomURL() {
         guard let url = self.url else { return }
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.quickAddCustomDomainButton)
         delegate?.urlBar(self, didAddCustomURL: url)
     }
 
-    @objc func copyToClipboard() {
+    public func copyToClipboard() {
         UIPasteboard.general.string = self.url?.absoluteString ?? ""
     }
 
-    @objc func paste(clipboardString: String) {
+    private func paste(clipboardString: String) {
         selectionState = .selected
         activateTextField()
         urlTextField.text = clipboardString
     }
 
-    @objc func pasteAndGo(clipboardString: String) {
+    private func pasteAndGo(clipboardString: String) {
         selectionState = .selected
         delegate?.urlBarDidActivate(self)
         delegate?.urlBar(self, didSubmitText: clipboardString)
@@ -486,19 +484,19 @@ class URLBar: UIView {
         GleanMetrics.UrlInteraction.pasteAndGo.record()
     }
 
-    @objc func pasteAndGoFromContextMenu() {
-        guard let clipboardString = UIPasteboard.general.string else { return }
-        pasteAndGo(clipboardString: clipboardString)
-    }
-
-    @objc func copyLink() {
+    @objc private func copyLink() {
         self.url
             .map(\.absoluteString)
             .map { UIPasteboard.general.string = $0 }
     }
 
+    @objc private func pasteAndGoFromContextMenu() {
+        guard let clipboardString = UIPasteboard.general.string else { return }
+        pasteAndGo(clipboardString: clipboardString)
+    }
+
     // Adds Menu Item
-    func addCustomMenu() {
+    private func addCustomMenu() {
         var items = [UIMenuItem]()
 
         if urlTextField.text != nil, urlTextField.text?.isEmpty == false {
@@ -513,11 +511,13 @@ class URLBar: UIView {
 
         UIMenuController.shared.menuItems = items
     }
-    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+
+    public override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         addCustomMenu()
         return super.canPerformAction(action, withSender: sender)
     }
-    var url: URL? = nil {
+
+    public var url: URL? = nil {
         didSet {
             if !urlTextField.isEditing {
                 setTextToURL()
@@ -525,44 +525,47 @@ class URLBar: UIView {
             }
         }
     }
-    weak var toolsetDelegate: BrowserToolsetDelegate? {
+
+    // MARK: - Toolset
+
+    public weak var toolsetDelegate: BrowserToolsetDelegate? {
         didSet {
             toolset.delegate = toolsetDelegate
         }
     }
 
-    var canGoBack: Bool = false {
+    public var canGoBack: Bool = false {
         didSet {
             toolset.canGoBack = canGoBack
         }
     }
 
-    var canGoForward: Bool = false {
+    public var canGoForward: Bool = false {
         didSet {
             toolset.canGoForward = canGoForward
         }
     }
 
-    var canDelete: Bool = false {
+    public var canDelete: Bool = false {
         didSet {
             toolset.canDelete = canDelete
         }
     }
 
-    var isLoading: Bool = false {
+    public var isLoading: Bool = false {
         didSet {
             toolset.isLoading = isLoading
         }
     }
 
-    var shouldShowToolset: Bool = false {
+    public var shouldShowToolset: Bool = false {
         didSet {
             updateViews()
             updateToolsetConstraints()
         }
     }
 
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Since the URL text field is smaller and centered on iPads, make sure
         // that touching the surrounding area will trigger editing.
         if urlTextField.isUserInteractionEnabled,
@@ -576,12 +579,12 @@ class URLBar: UIView {
         super.touchesEnded(touches, with: event)
     }
 
-    func ensureBrowsingMode() {
+    public func ensureBrowsingMode() {
         shouldPresent = false
         state = .browsing
     }
 
-    func fillUrlBar(text: String) {
+    public func fillUrlBar(text: String) {
         urlTextField.text = text
     }
 
@@ -709,7 +712,7 @@ class URLBar: UIView {
         })
     }
 
-    func updateURLBorderConstraints() {
+    private func updateURLBorderConstraints() {
         self.urlBarBorderView.snp.remakeConstraints { make in
             make.height.equalTo(UIConstants.layout.urlBarBorderHeight).priority(.medium)
             make.top.bottom.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
@@ -731,11 +734,11 @@ class URLBar: UIView {
 
     /* This separate @objc function is necessary as selector methods pass sender by default. Calling
      dismiss() directly from a selector would pass the sender as "completion" which results in a crash. */
-    @objc func cancelPressed() {
+    @objc private func cancelPressed() {
         selectionState = .unselected
     }
 
-    func dismiss(completion: (() -> Void)? = nil) {
+    public func dismiss(completion: (() -> Void)? = nil) {
         guard selectionState.isSelecting else {
             completion?()
             return
@@ -841,13 +844,13 @@ class URLBar: UIView {
         (activate ? shownConstraints : hiddenConstraints)?.forEach { $0.activate() }
     }
 
-    enum CollapsedState: Equatable {
+    public enum CollapsedState: Equatable {
         case extended
         case intermediate(expandAlpha: CGFloat, collapseAlpha: CGFloat)
         case collapsed
     }
 
-    var collapsedState: CollapsedState = .extended {
+    public var collapsedState: CollapsedState = .extended {
         didSet {
             DispatchQueue.main.async {
                 self.updateCollapsedState()
@@ -855,7 +858,7 @@ class URLBar: UIView {
         }
     }
 
-    func updateCollapsedState() {
+    public func updateCollapsedState() {
         switch collapsedState {
         case .extended:
             collapseUrlBar(expandAlpha: 1, collapseAlpha: 0)
@@ -886,7 +889,7 @@ class URLBar: UIView {
         self.layoutIfNeeded()
     }
 
-    func updateTrackingProtectionBadge(trackingStatus: TrackingProtectionStatus, shouldDisplayShieldIcon: Bool) {
+    public func updateTrackingProtectionBadge(trackingStatus: TrackingProtectionStatus, shouldDisplayShieldIcon: Bool) {
         shieldIcon.updateState(trackingStatus: trackingStatus, shouldDisplayShieldIcon: shouldDisplayShieldIcon)
         collapsedTrackingProtectionBadge.updateState(trackingStatus: trackingStatus, shouldDisplayShieldIcon: shouldDisplayShieldIcon)
     }
@@ -958,7 +961,7 @@ extension URLBar: AutocompleteTextFieldDelegate {
 }
 
 extension URLBar: UIDragInteractionDelegate {
-    func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
+    public func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
         guard let url = url, let itemProvider = NSItemProvider(contentsOf: url) else { return [] }
         let dragItem = UIDragItem(itemProvider: itemProvider)
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.drag, object: TelemetryEventObject.searchBar)
@@ -966,13 +969,13 @@ extension URLBar: UIDragInteractionDelegate {
         return [dragItem]
     }
 
-    func dragInteraction(_ interaction: UIDragInteraction, previewForLifting item: UIDragItem, session: UIDragSession) -> UITargetedDragPreview? {
+    public func dragInteraction(_ interaction: UIDragInteraction, previewForLifting item: UIDragItem, session: UIDragSession) -> UITargetedDragPreview? {
         let params = UIDragPreviewParameters()
         params.backgroundColor = UIColor.clear
         return UITargetedDragPreview(view: draggableUrlTextView, parameters: params)
     }
 
-    func dragInteraction(_ interaction: UIDragInteraction, sessionDidMove session: UIDragSession) {
+    public func dragInteraction(_ interaction: UIDragInteraction, sessionDidMove session: UIDragSession) {
         for item in session.items {
             item.previewProvider = {
                 guard let url = self.url else {
@@ -982,5 +985,18 @@ extension URLBar: UIDragInteractionDelegate {
             }
         }
     }
+}
 
+// MARK: - Progress bar API
+
+public extension URLBar {
+    func hideProgressBar() {
+        progressBar.hideProgressBar()
+    }
+
+    func showProgressBar(estimatedProgress: Double) {
+        progressBar.alpha = 1
+        progressBar.isHidden = false
+        progressBar.setProgress(Float(estimatedProgress), animated: true)
+    }
 }

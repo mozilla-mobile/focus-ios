@@ -5,7 +5,7 @@
 import UIKit
 import CoreGraphics
 
-protocol BrowserToolsetDelegate: AnyObject {
+public protocol BrowserToolsetDelegate: AnyObject {
     func browserToolsetDidPressBack(_ browserToolbar: BrowserToolset)
     func browserToolsetDidPressForward(_ browserToolbar: BrowserToolset)
     func browserToolsetDidPressReload(_ browserToolbar: BrowserToolset)
@@ -14,7 +14,7 @@ protocol BrowserToolsetDelegate: AnyObject {
     func browserToolsetDidPressContextMenu(_ browserToolbar: BrowserToolset, menuButton: InsetButton)
 }
 
-class BrowserToolset {
+public class BrowserToolset {
     weak var delegate: BrowserToolsetDelegate?
     var shouldShowWhatsNew: Bool = false
 
