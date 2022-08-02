@@ -281,9 +281,7 @@ class BrowserViewController: UIViewController {
         whatsNewEventsHandler
             .$shouldShowWhatsNew
             .sink { [unowned self] shouldShow in
-                homeViewController.toolbar.toolset.setHighlightWhatsNew(shouldHighlight: shouldShow)
-                browserToolbar.toolset.setHighlightWhatsNew(shouldHighlight: shouldShow)
-                urlBar.setHighlightWhatsNew(shouldHighlight: shouldShow)
+                // tbd
             }
             .store(in: &cancellables)
 
@@ -322,7 +320,7 @@ class BrowserViewController: UIViewController {
                     presentedController = controller
 
                 case .trash:
-                    let sourceButton = showsToolsetInURLBar ? urlBar.deleteButton : browserToolbar.deleteButton
+                    let sourceButton = showsToolsetInURLBar ? urlBar.deleteButtonAnchor : browserToolbar.deleteButtonAnchor
                     let sourceRect = showsToolsetInURLBar ? CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.maxY - 10, width: 0, height: 0) :
                     CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.minY + 10, width: 0, height: 0)
                     let controller = self.tooltipController(
@@ -336,8 +334,8 @@ class BrowserViewController: UIViewController {
 
                 case .menu:
                     let controller = self.tooltipController(
-                        anchoredBy: self.urlBar.contextMenuButton,
-                        sourceRect: CGRect(x: self.urlBar.contextMenuButton.bounds.maxX, y: self.urlBar.contextMenuButton.bounds.midY + 12, width: 0, height: 0),
+                        anchoredBy: self.urlBar.contextMenuButtonAnchor,
+                        sourceRect: CGRect(x: self.urlBar.contextMenuButtonAnchor.bounds.maxX, y: self.urlBar.contextMenuButtonAnchor.bounds.midY + 12, width: 0, height: 0),
                         body: UIConstants.strings.tootipBodyTextForContextMenuIcon,
                         dismiss: { self.onboardingEventsHandler.route = nil }
                     )
@@ -524,7 +522,6 @@ class BrowserViewController: UIViewController {
     private func createHomeView() {
         homeViewController = HomeViewController(tipManager: tipManager)
         homeViewController.delegate = self
-        homeViewController.toolbar.toolset.delegate = self
         homeViewController.onboardingEventsHandler = onboardingEventsHandler
         install(homeViewController, on: homeViewContainer)
     }
@@ -1350,7 +1347,7 @@ extension BrowserViewController: TrackingProtectionDelegate {
 }
 
 extension BrowserViewController: BrowserToolsetDelegate {
-    func browserToolsetDidPressBack(_ browserToolset: BrowserToolset) {
+    func browserToolsetDidPressBack() {
         webViewController.goBack()
     }
 
@@ -1369,7 +1366,7 @@ extension BrowserViewController: BrowserToolsetDelegate {
         }
     }
 
-    func browserToolsetDidPressForward(_ browserToolset: BrowserToolset) {
+    func browserToolsetDidPressForward() {
         webViewController.goForward()
     }
 
@@ -1385,20 +1382,20 @@ extension BrowserViewController: BrowserToolsetDelegate {
         }
     }
 
-    func browserToolsetDidPressReload(_ browserToolset: BrowserToolset) {
+    func browserToolsetDidPressReload() {
         webViewController.reload()
     }
 
-    func browserToolsetDidPressStop(_ browserToolset: BrowserToolset) {
+    func browserToolsetDidPressStop() {
         webViewController.stop()
     }
 
-    func browserToolsetDidPressDelete(_ browserToolbar: BrowserToolset) {
+    func browserToolsetDidPressDelete() {
         updateFindInPageVisibility(visible: false)
         self.resetBrowser()
     }
 
-    func browserToolsetDidPressContextMenu(_ browserToolbar: BrowserToolset, menuButton: InsetButton) {
+    func browserToolsetDidPressContextMenu(menuButton: InsetButton) {
         updateFindInPageVisibility(visible: false)
         presentContextMenu(from: menuButton)
     }
@@ -1791,7 +1788,7 @@ extension BrowserViewController: UIPopoverPresentationControllerDelegate {
         guard let menuSheet = popoverPresentationController.presentedViewController as? PhotonActionSheet, !(menuSheet.popoverPresentationController?.sourceView is ShortcutView) else {
             return
         }
-        view.pointee = self.showsToolsetInURLBar ? urlBar.contextMenuButton : browserToolbar.contextMenuButton
+        view.pointee = self.showsToolsetInURLBar ? urlBar.contextMenuButtonAnchor : browserToolbar.contextMenuButtonAnchor
     }
 }
 
