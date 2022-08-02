@@ -25,7 +25,7 @@ class BrowserViewController: UIViewController {
 
     var modalDelegate: ModalDelegate?
     private var keyboardState: KeyboardState?
-    private let browserToolbar = BrowserToolbar()
+    private lazy var browserToolbar = BrowserToolbar(viewModel: urlBarViewModel)
     private var homeViewController: HomeViewController!
     private let overlayView = OverlayView()
     private let searchEngineManager = SearchEngineManager(prefs: UserDefaults.standard)
@@ -190,7 +190,6 @@ class BrowserViewController: UIViewController {
 
         browserToolbar.isHidden = true
         browserToolbar.alpha = 0
-        browserToolbar.delegate = self
         browserToolbar.translatesAutoresizingMaskIntoConstraints = false
         mainContainerView.addSubview(browserToolbar)
 
@@ -532,7 +531,6 @@ class BrowserViewController: UIViewController {
         urlBar = URLBar(viewModel: urlBarViewModel)
         bindUrlBarViewModel()
         urlBar.delegate = self
-        urlBar.toolsetDelegate = self
         urlBar.isIPadRegularDimensions = isIPadRegularDimensions
         urlBar.shouldShowToolset = showsToolsetInURLBar
         mainContainerView.insertSubview(urlBar, aboveSubview: urlBarContainer)
@@ -542,10 +540,33 @@ class BrowserViewController: UIViewController {
 
     private func bindUrlBarViewModel() {
         urlBarViewModel.viewActionPublisher
-            .sink { action in
+            .sink { [weak self] action in
+                guard let self = self else { return }
+
                 switch action {
+                case .contextMenuTap(let anchor):
+                    self.updateFindInPageVisibility(visible: false)
+                    self.presentContextMenu(from: anchor)
+
+                case .backButtonTap:
+                    self.webViewController.goBack()
+
+                case .forwardButtonTap:
+                    self.webViewController.goForward()
+
+                case .deleteButtonTap:
+                    self.updateFindInPageVisibility(visible: false)
+                    self.resetBrowser()
+
                 case .shieldIconButtonTap:
                     self.urlBarDidTapShield(self.urlBar)
+
+                case .stopButtonTap:
+                    self.webViewController.stop()
+
+                case .reloadButtonTap:
+                    self.webViewController.reload()
+
                 }
             }.store(in: &cancellables)
     }
@@ -689,9 +710,6 @@ class BrowserViewController: UIViewController {
         webViewController.reset()
         webViewContainer.isHidden = true
         browserToolbar.isHidden = true
-        browserToolbar.canGoBack = false
-        browserToolbar.canGoForward = false
-        browserToolbar.canDelete = false
         urlBar.dismiss()
         urlBar.removeFromSuperview()
         urlBarContainer.alpha = 0
@@ -815,7 +833,6 @@ class BrowserViewController: UIViewController {
         onboardingEventsHandler.send(.startBrowsing)
 
         urlBarViewModel.canDelete = true
-        browserToolbar.canDelete = true
         guard let savedUrl = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return }
         if let currentDomain = url.baseDomain, let savedDomain = URL(string: savedUrl)?.baseDomain, currentDomain == savedDomain {
             userActivity = SiriShortcuts().getActivity(for: .openURL)
@@ -1047,7 +1064,7 @@ class BrowserViewController: UIViewController {
         return actions
     }
 
-    func presentContextMenu(from sender: InsetButton) {
+    func presentContextMenu(from sender: UIButton) {
         if #available(iOS 14, *) {
             sender.showsMenuAsPrimaryAction = true
             sender.menu = UIMenu(children: buildActions(for: sender))
@@ -1346,10 +1363,7 @@ extension BrowserViewController: TrackingProtectionDelegate {
     }
 }
 
-extension BrowserViewController: BrowserToolsetDelegate {
-    func browserToolsetDidPressBack() {
-        webViewController.goBack()
-    }
+extension BrowserViewController {
 
     private func handleNavigationBack() {
         // Check if the previous site we were on was AMP
@@ -1366,10 +1380,6 @@ extension BrowserViewController: BrowserToolsetDelegate {
         }
     }
 
-    func browserToolsetDidPressForward() {
-        webViewController.goForward()
-    }
-
     private func handleNavigationForward() {
         // Make sure our navigation is not pushed to the SearchHistoryUtils stack (since it already exists there)
         SearchHistoryUtils.isFromURLBar = true
@@ -1380,24 +1390,6 @@ extension BrowserViewController: BrowserToolsetDelegate {
         if !navigatingToAmpSite {
             SearchHistoryUtils.goForward()
         }
-    }
-
-    func browserToolsetDidPressReload() {
-        webViewController.reload()
-    }
-
-    func browserToolsetDidPressStop() {
-        webViewController.stop()
-    }
-
-    func browserToolsetDidPressDelete() {
-        updateFindInPageVisibility(visible: false)
-        self.resetBrowser()
-    }
-
-    func browserToolsetDidPressContextMenu(menuButton: InsetButton) {
-        updateFindInPageVisibility(visible: false)
-        presentContextMenu(from: menuButton)
     }
 }
 
@@ -1593,12 +1585,10 @@ extension BrowserViewController: WebControllerDelegate {
 
     func webController(_ controller: WebController, didUpdateCanGoBack canGoBack: Bool) {
         urlBarViewModel.canGoBack = canGoBack
-        browserToolbar.canGoBack = canGoBack
     }
 
     func webController(_ controller: WebController, didUpdateCanGoForward canGoForward: Bool) {
         urlBarViewModel.canGoForward = canGoForward
-        browserToolbar.canGoForward = canGoForward
     }
 
     func webController(_ controller: WebController, didUpdateEstimatedProgress estimatedProgress: Double) {

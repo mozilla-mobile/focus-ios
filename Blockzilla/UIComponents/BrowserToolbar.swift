@@ -4,6 +4,7 @@
 
 import UIKit
 import SnapKit
+import Combine
 
 class BrowserToolbar: UIView {
     private let backgroundLoading = GradientBackgroundView()
@@ -14,7 +15,6 @@ class BrowserToolbar: UIView {
     private lazy var backButton: InsetButton = {
         let backButton = InsetButton()
         backButton.setImage(#imageLiteral(resourceName: "icon_back_active"), for: .normal)
-        backButton.addTarget(self, action: #selector(didPressBack), for: .touchUpInside)
         backButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         backButton.accessibilityLabel = UIConstants.strings.browserBack
         backButton.isEnabled = false
@@ -24,7 +24,6 @@ class BrowserToolbar: UIView {
     private lazy var forwardButton: InsetButton = {
         let forwardButton = InsetButton()
         forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active"), for: .normal)
-        forwardButton.addTarget(self, action: #selector(didPressForward), for: .touchUpInside)
         forwardButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         forwardButton.accessibilityLabel = UIConstants.strings.browserForward
         forwardButton.isEnabled = false
@@ -34,7 +33,6 @@ class BrowserToolbar: UIView {
     private lazy var deleteButton: InsetButton = {
         let deleteButton = InsetButton()
         deleteButton.setImage(#imageLiteral(resourceName: "icon_delete"), for: .normal)
-        deleteButton.addTarget(self, action: #selector(didPressDelete), for: .touchUpInside)
         deleteButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         deleteButton.accessibilityIdentifier = "URLBar.deleteButton"
         deleteButton.isEnabled = false
@@ -48,9 +46,6 @@ class BrowserToolbar: UIView {
         if #available(iOS 14.0, *) {
             contextMenuButton.showsMenuAsPrimaryAction = true
             contextMenuButton.menu = UIMenu(children: [])
-            contextMenuButton.addTarget(self, action: #selector(didPressContextMenu), for: .menuActionTriggered)
-        } else {
-            contextMenuButton.addTarget(self, action: #selector(didPressContextMenu), for: .touchUpInside)
         }
         contextMenuButton.accessibilityLabel = UIConstants.strings.browserSettings
         contextMenuButton.accessibilityIdentifier = "HomeView.settingsButton"
@@ -62,8 +57,14 @@ class BrowserToolbar: UIView {
     public var contextMenuButtonAnchor: UIView { contextMenuButton }
     public var deleteButtonAnchor: UIView { deleteButton }
 
-    init() {
+    let viewModel: URLBarViewModel
+    private var cancellables = Set<AnyCancellable>()
+    
+    init(viewModel: URLBarViewModel) {
+        self.viewModel = viewModel
         super.init(frame: CGRect.zero)
+        bindButtonActions()
+        bindViewModelEvents()
 
         let background = UIView()
         background.backgroundColor = .foundation
@@ -92,44 +93,71 @@ class BrowserToolbar: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    weak var delegate: BrowserToolsetDelegate?
+    private func bindButtonActions() {
+        backButton
+            .publisher(event: .touchUpInside)
+            .sink { [unowned self] _ in
+                self.viewModel
+                    .viewActionSubject
+                    .send(.backButtonTap)
+            }
+            .store(in: &cancellables)
 
-    var canDelete: Bool = false {
-        didSet {
-            deleteButton.isEnabled = canDelete
-            deleteButton.alpha = canDelete ? 1 : UIConstants.layout.browserToolbarDisabledOpacity
+        forwardButton
+            .publisher(event: .touchUpInside)
+            .sink { [unowned self] _ in
+                self.viewModel
+                    .viewActionSubject
+                    .send(.forwardButtonTap)
+            }
+            .store(in: &cancellables)
+
+        deleteButton
+            .publisher(event: .touchUpInside)
+            .sink { [unowned self] _ in
+                self.viewModel
+                    .viewActionSubject
+                    .send(.deleteButtonTap)
+            }
+            .store(in: &cancellables)
+
+        let event: UIControl.Event
+        if #available(iOS 14.0, *) {
+            event = .menuActionTriggered
+        } else {
+            event = .touchUpInside
         }
+        contextMenuButton.publisher(event: event)
+            .sink { [unowned self] _ in
+                self.viewModel.viewActionSubject.send(.contextMenuTap(anchor: self.contextMenuButton))
+            }
+            .store(in: &cancellables)
+
     }
 
-    var canGoBack: Bool = false {
-        didSet {
-            backButton.isEnabled = canGoBack
-            backButton.alpha = canGoBack ? 1 : UIConstants.layout.browserToolbarDisabledOpacity
-        }
-    }
+    private func bindViewModelEvents() {
+        viewModel
+            .$canGoBack
+            .sink { [backButton] in
+                backButton.isEnabled = $0
+                backButton.alpha = $0 ? 1 : UIConstants.layout.browserToolbarDisabledOpacity
+            }
+            .store(in: &cancellables)
 
-    var canGoForward: Bool = false {
-        didSet {
-            forwardButton.isEnabled = canGoForward
-            forwardButton.alpha = canGoForward ? 1 : UIConstants.layout.browserToolbarDisabledOpacity
-        }
-    }
+        viewModel
+            .$canGoForward
+            .sink { [forwardButton] in
+                forwardButton.isEnabled = $0
+                forwardButton.alpha = $0 ? 1 : UIConstants.layout.browserToolbarDisabledOpacity
+            }
+            .store(in: &cancellables)
 
-    @objc private func didPressBack() {
-        delegate?.browserToolsetDidPressBack()
-    }
-
-    @objc private func didPressForward() {
-        delegate?.browserToolsetDidPressForward()
-    }
-
-    @objc func didPressDelete() {
-        if canDelete {
-            delegate?.browserToolsetDidPressDelete()
-        }
-    }
-
-    @objc private func didPressContextMenu(_ sender: InsetButton) {
-        delegate?.browserToolsetDidPressContextMenu(menuButton: sender)
+        viewModel
+            .$canDelete
+            .sink { [deleteButton] in
+                deleteButton.isEnabled = $0
+                deleteButton.alpha = $0 ? 1 : UIConstants.layout.browserToolbarDisabledOpacity
+            }
+            .store(in: &cancellables)
     }
 }

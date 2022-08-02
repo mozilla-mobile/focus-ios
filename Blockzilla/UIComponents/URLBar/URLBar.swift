@@ -150,7 +150,6 @@ public class URLBar: UIView {
     private lazy var backButton: InsetButton = {
         let backButton = InsetButton()
         backButton.setImage(#imageLiteral(resourceName: "icon_back_active"), for: .normal)
-        backButton.addTarget(self, action: #selector(didPressBack), for: .touchUpInside)
         backButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         backButton.accessibilityLabel = UIConstants.strings.browserBack
         backButton.isEnabled = false
@@ -160,7 +159,6 @@ public class URLBar: UIView {
     private lazy var forwardButton: InsetButton = {
         let forwardButton = InsetButton()
         forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active"), for: .normal)
-        forwardButton.addTarget(self, action: #selector(didPressForward), for: .touchUpInside)
         forwardButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         forwardButton.accessibilityLabel = UIConstants.strings.browserForward
         forwardButton.isEnabled = false
@@ -171,7 +169,6 @@ public class URLBar: UIView {
         let stopReloadButton = InsetButton()
         stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu"), for: .normal)
         stopReloadButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
-        stopReloadButton.addTarget(self, action: #selector(didPressStopReload), for: .touchUpInside)
         stopReloadButton.accessibilityIdentifier = "BrowserToolset.stopReloadButton"
         return stopReloadButton
     }()
@@ -179,7 +176,6 @@ public class URLBar: UIView {
     private lazy var deleteButton: InsetButton = {
         let deleteButton = InsetButton()
         deleteButton.setImage(#imageLiteral(resourceName: "icon_delete"), for: .normal)
-        deleteButton.addTarget(self, action: #selector(didPressDelete), for: .touchUpInside)
         deleteButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         deleteButton.accessibilityIdentifier = "URLBar.deleteButton"
         deleteButton.isEnabled = false
@@ -193,9 +189,6 @@ public class URLBar: UIView {
         if #available(iOS 14.0, *) {
             contextMenuButton.showsMenuAsPrimaryAction = true
             contextMenuButton.menu = UIMenu(children: [])
-            contextMenuButton.addTarget(self, action: #selector(didPressContextMenu), for: .menuActionTriggered)
-        } else {
-            contextMenuButton.addTarget(self, action: #selector(didPressContextMenu), for: .touchUpInside)
         }
         contextMenuButton.accessibilityLabel = UIConstants.strings.browserSettings
         contextMenuButton.accessibilityIdentifier = "HomeView.settingsButton"
@@ -203,36 +196,6 @@ public class URLBar: UIView {
         contextMenuButton.imageView?.snp.makeConstraints { $0.size.equalTo(UIConstants.layout.contextMenuIconSize) }
         return contextMenuButton
     }()
-
-    // MARK: - Toolset
-
-    public weak var toolsetDelegate: BrowserToolsetDelegate?
-
-    @objc private func didPressBack() {
-        toolsetDelegate?.browserToolsetDidPressBack()
-    }
-
-    @objc private func didPressForward() {
-        toolsetDelegate?.browserToolsetDidPressForward()
-    }
-
-    @objc private func didPressStopReload() {
-        if viewModel.isLoading {
-            toolsetDelegate?.browserToolsetDidPressStop()
-        } else {
-            toolsetDelegate?.browserToolsetDidPressReload()
-        }
-    }
-
-    @objc func didPressDelete() {
-        if viewModel.canDelete {
-            toolsetDelegate?.browserToolsetDidPressDelete()
-        }
-    }
-
-    @objc private func didPressContextMenu(_ sender: InsetButton) {
-        toolsetDelegate?.browserToolsetDidPressContextMenu(menuButton: sender)
-    }
 
     private let textAndLockContainer = UIView()
     private let collapsedUrlAndLockWrapper = UIView()
@@ -325,6 +288,61 @@ public class URLBar: UIView {
                     .send(.shieldIconButtonTap)
             }
             .store(in: &cancellables)
+
+        backButton
+            .publisher(event: .touchUpInside)
+            .sink { [unowned self] _ in
+                self.viewModel
+                    .viewActionSubject
+                    .send(.backButtonTap)
+            }
+            .store(in: &cancellables)
+
+        forwardButton
+            .publisher(event: .touchUpInside)
+            .sink { [unowned self] _ in
+                self.viewModel
+                    .viewActionSubject
+                    .send(.forwardButtonTap)
+            }
+            .store(in: &cancellables)
+
+        stopReloadButton
+            .publisher(event: .touchUpInside)
+            .sink { [unowned self] _ in
+                if viewModel.isLoading {
+                    self.viewModel
+                        .viewActionSubject
+                        .send(.stopButtonTap)
+                } else {
+                    self.viewModel
+                        .viewActionSubject
+                        .send(.reloadButtonTap)
+                }
+            }
+            .store(in: &cancellables)
+
+        deleteButton
+            .publisher(event: .touchUpInside)
+            .sink { [unowned self] _ in
+                self.viewModel
+                    .viewActionSubject
+                    .send(.deleteButtonTap)
+            }
+            .store(in: &cancellables)
+
+        let event: UIControl.Event
+        if #available(iOS 14.0, *) {
+            event = .menuActionTriggered
+        } else {
+            event = .touchUpInside
+        }
+        contextMenuButton.publisher(event: event)
+            .sink { [unowned self] _ in
+                self.viewModel.viewActionSubject.send(.contextMenuTap(anchor: self.contextMenuButton))
+            }
+            .store(in: &cancellables)
+
     }
 
     private func bindViewModelEvents() {

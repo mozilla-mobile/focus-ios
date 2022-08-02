@@ -3,8 +3,15 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Combine
+import UIKit
 
 public enum URLViewAction {
+    case contextMenuTap(anchor: UIButton)
+    case backButtonTap
+    case forwardButtonTap
+    case stopButtonTap
+    case reloadButtonTap
+    case deleteButtonTap
     case shieldIconButtonTap
 }
 
