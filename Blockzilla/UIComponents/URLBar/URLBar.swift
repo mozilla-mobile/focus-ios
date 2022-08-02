@@ -329,7 +329,7 @@ public class URLBar: UIView {
 
     private func bindViewModelEvents() {
         viewModel
-            .connectionStatePublisher
+            .$connectionState
             .removeDuplicates()
             .map { trackingProtectionStatus -> UIImage in
                 switch trackingProtectionStatus {

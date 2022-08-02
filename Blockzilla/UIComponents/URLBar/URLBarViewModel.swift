@@ -18,12 +18,9 @@ public class URLBarViewModel {
     internal var viewActionSubject = PassthroughSubject<URLViewAction, Never>()
     public var viewActionPublisher: AnyPublisher<URLViewAction, Never> { viewActionSubject.eraseToAnyPublisher() }
 
-    public var connectionStateSubject = CurrentValueSubject<ShieldIconStatus, Never>(.on)
-    public var connectionStatePublisher: AnyPublisher<ShieldIconStatus, Never> { connectionStateSubject.eraseToAnyPublisher() }
-
-
-    @Published var canGoBack: Bool = false
-    @Published var canGoForward: Bool = false
-    @Published var canDelete: Bool = false
-    @Published var isLoading: Bool = false
+    @Published public var connectionState: ShieldIconStatus = .on
+    @Published public var canGoBack: Bool = false
+    @Published public var canGoForward: Bool = false
+    @Published public var canDelete: Bool = false
+    @Published public var isLoading: Bool = false
 }

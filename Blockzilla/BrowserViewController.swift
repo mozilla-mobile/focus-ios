@@ -467,7 +467,7 @@ class BrowserViewController: UIViewController {
         } else {
             shieldIconStatus = .connectionNotSecure
         }
-        urlBarViewModel.connectionStateSubject.send(shieldIconStatus)
+        urlBarViewModel.connectionState = shieldIconStatus
     }
 
     // These functions are used to handle displaying and hiding the keyboard after the splash view is animated
