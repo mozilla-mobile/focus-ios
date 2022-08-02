@@ -43,6 +43,7 @@ class BrowserToolbar: UIView {
 
     private lazy var contextMenuButton: InsetButton = {
         let contextMenuButton = InsetButton()
+        contextMenuButton.setImage(#imageLiteral(resourceName: "icon_hamburger_menu"), for: .normal)
         contextMenuButton.tintColor = .primaryText
         if #available(iOS 14.0, *) {
             contextMenuButton.showsMenuAsPrimaryAction = true

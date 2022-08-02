@@ -20,4 +20,10 @@ public class URLBarViewModel {
 
     public var connectionStateSubject = CurrentValueSubject<ShieldIconStatus, Never>(.on)
     public var connectionStatePublisher: AnyPublisher<ShieldIconStatus, Never> { connectionStateSubject.eraseToAnyPublisher() }
+
+
+    @Published var canGoBack: Bool = false
+    @Published var canGoForward: Bool = false
+    @Published var canDelete: Bool = false
+    @Published var isLoading: Bool = false
 }

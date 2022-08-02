@@ -814,7 +814,7 @@ class BrowserViewController: UIViewController {
         onboardingEventsHandler.route = nil
         onboardingEventsHandler.send(.startBrowsing)
 
-        urlBar.canDelete = true
+        urlBarViewModel.canDelete = true
         browserToolbar.canDelete = true
         guard let savedUrl = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return }
         if let currentDomain = url.baseDomain, let savedDomain = URL(string: savedUrl)?.baseDomain, currentDomain == savedDomain {
@@ -1567,14 +1567,14 @@ extension BrowserViewController: WebControllerDelegate {
         SearchHistoryUtils.isReload = false
         SearchHistoryUtils.isNavigating = false
         SearchHistoryUtils.isFromURLBar = false
-        urlBar.isLoading = true
+        urlBarViewModel.isLoading = true
         toggleURLBarBackground(isBright: false)
         updateURLBar()
     }
 
     func webControllerDidFinishNavigation(_ controller: WebController) {
         updateURLBar()
-        urlBar.isLoading = false
+        urlBarViewModel.isLoading = false
         toggleURLBarBackground(isBright: !urlBar.selectionState.isSelecting)
         urlBar.hideProgressBar()
         GleanMetrics.Browser.totalUriCount.add()
@@ -1586,18 +1586,18 @@ extension BrowserViewController: WebControllerDelegate {
 
     func webController(_ controller: WebController, didFailNavigationWithError error: Error) {
         urlBar.url = webViewController.url
-        urlBar.isLoading = false
+        urlBarViewModel.isLoading = false
         toggleURLBarBackground(isBright: true)
         urlBar.hideProgressBar()
     }
 
     func webController(_ controller: WebController, didUpdateCanGoBack canGoBack: Bool) {
-        urlBar.canGoBack = canGoBack
+        urlBarViewModel.canGoBack = canGoBack
         browserToolbar.canGoBack = canGoBack
     }
 
     func webController(_ controller: WebController, didUpdateCanGoForward canGoForward: Bool) {
-        urlBar.canGoForward = canGoForward
+        urlBarViewModel.canGoForward = canGoForward
         browserToolbar.canGoForward = canGoForward
     }
 

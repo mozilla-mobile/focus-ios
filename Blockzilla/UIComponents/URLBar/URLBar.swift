@@ -208,39 +208,6 @@ public class URLBar: UIView {
 
     public weak var toolsetDelegate: BrowserToolsetDelegate?
 
-    var canGoBack: Bool = false {
-        didSet {
-            backButton.isEnabled = canGoBack
-            backButton.alpha = canGoBack ? 1 : UIConstants.layout.browserToolbarDisabledOpacity
-        }
-    }
-
-    var canGoForward: Bool = false {
-        didSet {
-            forwardButton.isEnabled = canGoForward
-            forwardButton.alpha = canGoForward ? 1 : UIConstants.layout.browserToolbarDisabledOpacity
-        }
-    }
-
-    var isLoading: Bool = false {
-        didSet {
-            if isLoading {
-                stopReloadButton.setImage(#imageLiteral(resourceName: "icon_stop_menu"), for: .normal)
-                stopReloadButton.accessibilityLabel = UIConstants.strings.browserStop
-            } else {
-                stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu"), for: .normal)
-                stopReloadButton.accessibilityLabel = UIConstants.strings.browserReload
-            }
-        }
-    }
-
-    var canDelete: Bool = false {
-        didSet {
-            deleteButton.isEnabled = canDelete
-            deleteButton.alpha = canDelete ? 1 : UIConstants.layout.browserToolbarDisabledOpacity
-        }
-    }
-
     @objc private func didPressBack() {
         toolsetDelegate?.browserToolsetDidPressBack()
     }
@@ -250,7 +217,7 @@ public class URLBar: UIView {
     }
 
     @objc private func didPressStopReload() {
-        if isLoading {
+        if viewModel.isLoading {
             toolsetDelegate?.browserToolsetDidPressStop()
         } else {
             toolsetDelegate?.browserToolsetDidPressReload()
@@ -258,7 +225,7 @@ public class URLBar: UIView {
     }
 
     @objc func didPressDelete() {
-        if canDelete {
+        if viewModel.canDelete {
             toolsetDelegate?.browserToolsetDidPressDelete()
         }
     }
@@ -380,6 +347,43 @@ public class URLBar: UIView {
                         shieldIconButton.setImage(image, for: .normal)
                     })
             })
+            .store(in: &cancellables)
+
+        viewModel
+            .$canGoBack
+            .sink { [backButton] in
+                backButton.isEnabled = $0
+                backButton.alpha = $0 ? 1 : UIConstants.layout.browserToolbarDisabledOpacity
+            }
+            .store(in: &cancellables)
+
+        viewModel
+            .$canGoForward
+            .sink { [forwardButton] in
+                forwardButton.isEnabled = $0
+                forwardButton.alpha = $0 ? 1 : UIConstants.layout.browserToolbarDisabledOpacity
+            }
+            .store(in: &cancellables)
+
+        viewModel
+            .$canDelete
+            .sink { [deleteButton] in
+                deleteButton.isEnabled = $0
+                deleteButton.alpha = $0 ? 1 : UIConstants.layout.browserToolbarDisabledOpacity
+            }
+            .store(in: &cancellables)
+
+        viewModel
+            .$isLoading
+            .sink { [stopReloadButton] in
+                if $0 {
+                    stopReloadButton.setImage(#imageLiteral(resourceName: "icon_stop_menu"), for: .normal)
+                    stopReloadButton.accessibilityLabel = UIConstants.strings.browserStop
+                } else {
+                    stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu"), for: .normal)
+                    stopReloadButton.accessibilityLabel = UIConstants.strings.browserReload
+                }
+            }
             .store(in: &cancellables)
     }
 
