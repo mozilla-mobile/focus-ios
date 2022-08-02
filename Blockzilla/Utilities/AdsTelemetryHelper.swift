@@ -20,7 +20,7 @@ public struct SearchProviderModel {
     let codePrefixes: [String]
     let followOnParams: [String]
     let extraAdServersRegexps: [String]
-    
+
     public static let searchProviderList = [
         SearchProviderModel(name: BasicSearchProvider.google.rawValue,
                             regexp: #"^https:\/\/www\.google\.(?:.+)\/search"#,
@@ -73,11 +73,11 @@ extension SearchProviderModel {
 }
 
 class AdsTelemetryHelper {
-    
+
     public static func trackAdsFoundOnPage(providerName: String) {
         GleanMetrics.BrowserSearch.withAds["provider-\(providerName)"].add()
     }
-    
+
     public static func trackAdsClickedOnPage(providerName: String) {
         GleanMetrics.BrowserSearch.adClicks["provider-\(providerName)"].add()
     }

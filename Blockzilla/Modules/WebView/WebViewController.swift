@@ -90,7 +90,7 @@ class WebViewController: UIViewController, WebController {
     var adsTelemetryRedirectUrlList: [URL] = [URL]()
     var startingSearchUrlWithAds: URL?
     var adsProviderName: String = ""
-    
+
     init(trackingProtectionManager: TrackingProtectionManager) {
         self.trackingProtectionManager = trackingProtectionManager
         super.init(nibName: nil, bundle: nil)
@@ -348,6 +348,8 @@ extension WebViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, preferences: WKWebpagePreferences, decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
+        trackClickedAds()
+
         // If the user has asked for a specific content mode for this host, use that.
         if let hostName = navigationAction.request.url?.host, let preferredContentMode = contentModeForHost[hostName] {
             preferences.preferredContentMode = preferredContentMode
@@ -503,7 +505,10 @@ extension WebViewController: WKScriptMessageHandler {
             }
         }
     }
-    
+}
+
+extension WebViewController {
+
     func trackAds(message: WKScriptMessage) {
         guard
             let provider = getProviderForMessage(message: message),
@@ -526,5 +531,18 @@ extension WebViewController: WKScriptMessageHandler {
         }
 
         return nil
+    }
+
+    func trackClickedAds() {
+        if adsTelemetryUrlList.count > 0, let adUrl = url?.absoluteString {
+            if adsTelemetryUrlList.contains(adUrl) {
+                if !adsProviderName.isEmpty {
+                    AdsTelemetryHelper.trackAdsClickedOnPage(providerName: adsProviderName)
+                }
+                adsTelemetryUrlList.removeAll()
+                adsTelemetryRedirectUrlList.removeAll()
+                adsProviderName = ""
+            }
+        }
     }
 }
