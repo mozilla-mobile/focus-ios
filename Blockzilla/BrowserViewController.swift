@@ -313,8 +313,8 @@ class BrowserViewController: UIViewController {
 
                 case .trackingProtectionShield:
                     let controller = self.tooltipController(
-                        anchoredBy: self.urlBar.shieldIcon,
-                        sourceRect: CGRect(x: self.urlBar.shieldIcon.bounds.midX, y: self.urlBar.shieldIcon.bounds.midY + 10, width: 0, height: 0),
+                        anchoredBy: self.urlBar.shieldIconButtonAnchor,
+                        sourceRect: CGRect(x: self.urlBar.shieldIconButtonAnchor.bounds.midX, y: self.urlBar.shieldIconButtonAnchor.bounds.midY + 10, width: 0, height: 0),
                         body: UIConstants.strings.tooltipBodyTextForShieldIcon,
                         dismiss: { self.onboardingEventsHandler.route = nil }
                     )
@@ -459,7 +459,17 @@ class BrowserViewController: UIViewController {
     }
 
     private func updateLockIcon(trackingProtectionStatus: TrackingProtectionStatus) {
-        urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus, shouldDisplayShieldIcon:  urlBar.state.isBrowsingMode ? self.webViewController.connectionIsSecure : true)
+        let isSecureConnection = urlBar.state.isBrowsingMode ? self.webViewController.connectionIsSecure : true
+        let shieldIconStatus: ShieldIconStatus
+        if isSecureConnection {
+            switch trackingProtectionStatus {
+            case .on: shieldIconStatus = .on
+            case .off: shieldIconStatus = .off
+            }
+        } else {
+            shieldIconStatus = .connectionNotSecure
+        }
+        urlBarViewModel.connectionStateSubject.send(shieldIconStatus)
     }
 
     // These functions are used to handle displaying and hiding the keyboard after the splash view is animated
@@ -519,9 +529,11 @@ class BrowserViewController: UIViewController {
         install(homeViewController, on: homeViewContainer)
     }
 
-    private func createURLBar() {
+    let urlBarViewModel = URLBarViewModel()
 
-        urlBar = URLBar()
+    private func createURLBar() {
+        urlBar = URLBar(viewModel: urlBarViewModel)
+        bindUrlBarViewModel()
         urlBar.delegate = self
         urlBar.toolsetDelegate = self
         urlBar.isIPadRegularDimensions = isIPadRegularDimensions
@@ -529,7 +541,16 @@ class BrowserViewController: UIViewController {
         mainContainerView.insertSubview(urlBar, aboveSubview: urlBarContainer)
 
         addURLBarConstraints()
+    }
 
+    private func bindUrlBarViewModel() {
+        urlBarViewModel.viewActionPublisher
+            .sink { action in
+                switch action {
+                case .shieldIconButtonTap:
+                    self.urlBarDidTapShield(self.urlBar)
+                }
+            }.store(in: &cancellables)
     }
 
     private func addURLBarConstraints() {
@@ -1266,7 +1287,7 @@ extension BrowserViewController: URLBarDelegate {
         trackingProtectionViewController.delegate = self
         if UIDevice.current.userInterfaceIdiom == .pad {
             trackingProtectionViewController.modalPresentationStyle = .popover
-            trackingProtectionViewController.popoverPresentationController?.sourceView = urlBar.shieldIcon
+            trackingProtectionViewController.popoverPresentationController?.sourceView = urlBar.shieldIconButtonAnchor
             modalDelegate.presentModal(viewController: trackingProtectionViewController, animated: true)
         } else {
             modalDelegate.presentSheet(viewController: trackingProtectionViewController)

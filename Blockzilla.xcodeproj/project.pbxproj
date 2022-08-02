@@ -204,11 +204,10 @@
 		E4BF2DF51BACE92400DA9D68 /* ContentBlocker.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E4BF2DEC1BACE92400DA9D68 /* ContentBlocker.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E4BF2E111BAD8AC500DA9D68 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
 		E4BF2E121BAD8AC500DA9D68 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
-		E5621C5D28918D33008BBAC6 /* CollapsedTrackingProtectionBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5621C5C28918D33008BBAC6 /* CollapsedTrackingProtectionBadge.swift */; };
-		E5621C5F28918D8A008BBAC6 /* TrackingProtectionBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5621C5E28918D8A008BBAC6 /* TrackingProtectionBadge.swift */; };
 		E5621C6128918DC4008BBAC6 /* URLTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5621C6028918DC4008BBAC6 /* URLTextField.swift */; };
 		E5621C6428918F6F008BBAC6 /* URLBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5621C6328918F6F008BBAC6 /* URLBarDelegate.swift */; };
 		E5CB2ED9288E909800CE6428 /* UIAlertController+Rename.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CB2ED8288E909800CE6428 /* UIAlertController+Rename.swift */; };
+		E5CFCED5289938B10085EE06 /* URLBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CFCED4289938B10085EE06 /* URLBarViewModel.swift */; };
 		EB84F96D2093799900BA6739 /* TrackingProtectionPageStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB84F96C2093799800BA6739 /* TrackingProtectionPageStats.swift */; };
 		EB84F96F209380CE00BA6739 /* URLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB84F96E209380CE00BA6739 /* URLExtensions.swift */; };
 		EB84F9712093815500BA6739 /* effective_tld_names.dat in Resources */ = {isa = PBXBuildFile; fileRef = EB84F9702093815500BA6739 /* effective_tld_names.dat */; };
@@ -986,11 +985,10 @@
 		E4D0AB881E300EFE00DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E4D0AB891E300EFF00DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E4D0AB8A1E300F0000DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		E5621C5C28918D33008BBAC6 /* CollapsedTrackingProtectionBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollapsedTrackingProtectionBadge.swift; sourceTree = "<group>"; };
-		E5621C5E28918D8A008BBAC6 /* TrackingProtectionBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionBadge.swift; sourceTree = "<group>"; };
 		E5621C6028918DC4008BBAC6 /* URLTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLTextField.swift; sourceTree = "<group>"; };
 		E5621C6328918F6F008BBAC6 /* URLBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBarDelegate.swift; sourceTree = "<group>"; };
 		E5CB2ED8288E909800CE6428 /* UIAlertController+Rename.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Rename.swift"; sourceTree = "<group>"; };
+		E5CFCED4289938B10085EE06 /* URLBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBarViewModel.swift; sourceTree = "<group>"; };
 		EB84F96C2093799800BA6739 /* TrackingProtectionPageStats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionPageStats.swift; sourceTree = "<group>"; };
 		EB84F96E209380CE00BA6739 /* URLExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLExtensions.swift; sourceTree = "<group>"; };
 		EB84F9702093815500BA6739 /* effective_tld_names.dat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = effective_tld_names.dat; sourceTree = "<group>"; };
@@ -1735,12 +1733,11 @@
 			isa = PBXGroup;
 			children = (
 				D3E2C9601DA2F7C600DEBE3D /* URLBar.swift */,
-				E5621C5C28918D33008BBAC6 /* CollapsedTrackingProtectionBadge.swift */,
-				E5621C5E28918D8A008BBAC6 /* TrackingProtectionBadge.swift */,
 				E5621C6028918DC4008BBAC6 /* URLTextField.swift */,
 				C8958C50280D84EE0064BDF8 /* AutocompleteTextField.swift */,
 				E5621C6328918F6F008BBAC6 /* URLBarDelegate.swift */,
 				D364DC251DC4163700562991 /* BrowserToolset.swift */,
+				E5CFCED4289938B10085EE06 /* URLBarViewModel.swift */,
 			);
 			path = URLBar;
 			sourceTree = "<group>";
@@ -2308,7 +2305,6 @@
 				C8CE05072743FA89002057C6 /* UIAction+MenuAction.swift in Sources */,
 				16837EA62135EFCC000424BB /* TipManager.swift in Sources */,
 				163BFFE62125EE260007CEBC /* SiriShortcuts.swift in Sources */,
-				E5621C5F28918D8A008BBAC6 /* TrackingProtectionBadge.swift in Sources */,
 				16074B6D2114364C003B671F /* PhotonActionSheet.swift in Sources */,
 				C8337DF62710898800093D42 /* TrackingProtectionState.swift in Sources */,
 				D3E2C8EA1D9F0E6200DEBE3D /* BrowserViewController.swift in Sources */,
@@ -2330,7 +2326,6 @@
 				D597608C1F9FEFB300A2D212 /* TrackingProtection.swift in Sources */,
 				C8337DFD2710898800093D42 /* ImageCell.swift in Sources */,
 				D34E70351DA874AA00BABDCC /* StringExtensions.swift in Sources */,
-				E5621C5D28918D33008BBAC6 /* CollapsedTrackingProtectionBadge.swift in Sources */,
 				D30179C31BCC6F65009AD388 /* AboutViewController.swift in Sources */,
 				B3AFC2BC1F7C0B9F001AEF38 /* WebViewController.swift in Sources */,
 				D5ABA3DA1FCC846800D5C060 /* AutocompleteSettingViewController.swift in Sources */,
@@ -2346,6 +2341,7 @@
 				74584E351FA1077000AF2582 /* SettingsContentViewController.swift in Sources */,
 				24433101219DA46F00778D02 /* Debouncer.swift in Sources */,
 				7460BD671F58B1B10096B745 /* GradientProgressBar.swift in Sources */,
+				E5CFCED5289938B10085EE06 /* URLBarViewModel.swift in Sources */,
 				C8F3EABF2762558F00C2AF0C /* SplashView.swift in Sources */,
 				D3E54FE01DF0E221003E1AFF /* SearchSettingsViewController.swift in Sources */,
 				30DFF98021810BF20055707C /* SearchSuggestClient.swift in Sources */,
