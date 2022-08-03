@@ -277,13 +277,6 @@ class BrowserViewController: UIViewController {
             }
             .store(in: &cancellables)
 
-        whatsNewEventsHandler
-            .$shouldShowWhatsNew
-            .sink { [unowned self] shouldShow in
-                // tbd
-            }
-            .store(in: &cancellables)
-
         guard shouldEnsureBrowsingMode else { return }
         ensureBrowsingMode()
         guard let url = initialUrl else { return }
@@ -557,6 +550,7 @@ class BrowserViewController: UIViewController {
                 case .deleteButtonTap:
                     self.updateFindInPageVisibility(visible: false)
                     self.resetBrowser()
+                    self.urlBarViewModel.resetToDefaults()
 
                 case .shieldIconButtonTap:
                     self.urlBarDidTapShield(self.urlBar)
