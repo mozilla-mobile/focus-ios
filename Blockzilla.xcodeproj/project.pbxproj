@@ -206,6 +206,7 @@
 		E5621C6128918DC4008BBAC6 /* URLTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5621C6028918DC4008BBAC6 /* URLTextField.swift */; };
 		E5621C6428918F6F008BBAC6 /* URLBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5621C6328918F6F008BBAC6 /* URLBarDelegate.swift */; };
 		E5CB2ED9288E909800CE6428 /* UIAlertController+Rename.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CB2ED8288E909800CE6428 /* UIAlertController+Rename.swift */; };
+		E5CF3511289BD61B00D6F8E1 /* UIView+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CF3510289BD61B00D6F8E1 /* UIView+Animation.swift */; };
 		E5CFCED5289938B10085EE06 /* URLBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CFCED4289938B10085EE06 /* URLBarViewModel.swift */; };
 		EB84F96D2093799900BA6739 /* TrackingProtectionPageStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB84F96C2093799800BA6739 /* TrackingProtectionPageStats.swift */; };
 		EB84F96F209380CE00BA6739 /* URLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB84F96E209380CE00BA6739 /* URLExtensions.swift */; };
@@ -986,6 +987,7 @@
 		E5621C6028918DC4008BBAC6 /* URLTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLTextField.swift; sourceTree = "<group>"; };
 		E5621C6328918F6F008BBAC6 /* URLBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBarDelegate.swift; sourceTree = "<group>"; };
 		E5CB2ED8288E909800CE6428 /* UIAlertController+Rename.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Rename.swift"; sourceTree = "<group>"; };
+		E5CF3510289BD61B00D6F8E1 /* UIView+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Animation.swift"; sourceTree = "<group>"; };
 		E5CFCED4289938B10085EE06 /* URLBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBarViewModel.swift; sourceTree = "<group>"; };
 		EB84F96C2093799800BA6739 /* TrackingProtectionPageStats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionPageStats.swift; sourceTree = "<group>"; };
 		EB84F96E209380CE00BA6739 /* URLExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLExtensions.swift; sourceTree = "<group>"; };
@@ -1735,6 +1737,7 @@
 				C8958C50280D84EE0064BDF8 /* AutocompleteTextField.swift */,
 				E5621C6328918F6F008BBAC6 /* URLBarDelegate.swift */,
 				E5CFCED4289938B10085EE06 /* URLBarViewModel.swift */,
+				E5CF3510289BD61B00D6F8E1 /* UIView+Animation.swift */,
 			);
 			path = URLBar;
 			sourceTree = "<group>";
@@ -2406,6 +2409,7 @@
 				D3E2C9611DA2F7C600DEBE3D /* URLBar.swift in Sources */,
 				E40AFB141DC939FF00DA5651 /* SupportUtils.swift in Sources */,
 				D392887F1BC5E47E0016A9A0 /* UIConstants.swift in Sources */,
+				E5CF3511289BD61B00D6F8E1 /* UIView+Animation.swift in Sources */,
 				C8337E002710898800093D42 /* SheetMetrics.swift in Sources */,
 				D3E251F91DAF064B005918DC /* Utils.swift in Sources */,
 				C8337DF72710898800093D42 /* SecureConnectionStatus.swift in Sources */,

@@ -29,7 +29,12 @@ class BrowserViewController: UIViewController {
     private var homeViewController: HomeViewController!
     private let overlayView = OverlayView()
     private let searchEngineManager = SearchEngineManager(prefs: UserDefaults.standard)
-    private let urlBarContainer = UIView()
+    private lazy var urlBarContainer: UIView = {
+        let view = UIView()
+        view.accessibilityIdentifier = "URLBar.Container"
+        return view
+    }()
+
     private var urlBar: URLBar!
     private let searchSuggestClient = SearchSuggestClient()
     private var findInPageBar: FindInPageBar?
@@ -207,7 +212,6 @@ class BrowserViewController: UIViewController {
 
         urlBarContainer.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(mainContainerView)
-            make.height.equalTo(mainContainerView).multipliedBy(0.6).priority(500)
         }
 
         browserToolbar.snp.makeConstraints { make in
@@ -345,7 +349,7 @@ class BrowserViewController: UIViewController {
                                 value: "finish"
                             )
                         UserDefaults.standard.set(true, forKey: OnboardingConstants.onboardingDidAppear)
-                        urlBar.activateTextField()
+                        urlBarViewModel.selectionState = .selected
                         onboardingEventsHandler.route = nil
                         onboardingEventsHandler.send(.enterHome)
                     }
@@ -382,15 +386,15 @@ class BrowserViewController: UIViewController {
                 case .editingURL(let text):
                     let shouldShowShortcuts = text.isEmpty && !shortcutManager.shortcutsViewModels.isEmpty
                     shortcutsContainer.isHidden = !shouldShowShortcuts
-                    shortcutsBackground.isHidden = !urlBar.state.isBrowsingMode ? true : !shouldShowShortcuts
+                    shortcutsBackground.isHidden = !urlBarViewModel.browsingState.isBrowsingMode ? true : !shouldShowShortcuts
 
                 case .activeURLBar:
                     let shouldShowShortcuts = !shortcutManager.shortcutsViewModels.isEmpty
                     shortcutsContainer.isHidden = !shouldShowShortcuts
-                    shortcutsBackground.isHidden = !shouldShowShortcuts || !urlBar.state.isBrowsingMode
+                    shortcutsBackground.isHidden = !shouldShowShortcuts || !urlBarViewModel.browsingState.isBrowsingMode
 
                 case .dismissedURLBar:
-                    shortcutsContainer.isHidden = urlBar.state.isBrowsingMode || webViewController.isLoading
+                    shortcutsContainer.isHidden = urlBarViewModel.browsingState.isBrowsingMode || webViewController.isLoading
                     shortcutsBackground.isHidden = true
 
                 case .none:
@@ -449,7 +453,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func updateLockIcon(trackingProtectionStatus: TrackingProtectionStatus) {
-        let isSecureConnection = urlBar.state.isBrowsingMode ? self.webViewController.connectionIsSecure : true
+        let isSecureConnection = urlBarViewModel.browsingState.isBrowsingMode ? self.webViewController.connectionIsSecure : true
         let shieldIconStatus: ShieldIconStatus
         if isSecureConnection {
             switch trackingProtectionStatus {
@@ -471,20 +475,20 @@ class BrowserViewController: UIViewController {
         }
 
         // Do not activate if we are showing a web page, nor the overlayView hidden
-        if urlBar.state.isBrowsingMode {
+        if urlBarViewModel.browsingState.isBrowsingMode {
             return
         }
 
-        urlBar.activateTextField()
+        urlBarViewModel.selectionState = .selected
     }
 
     public func deactivateUrlBarOnHomeView() {
-        urlBar.dismissTextField()
+        urlBarViewModel.selectionState = .unselected
     }
 
     public func deactivateUrlBar() {
-        if urlBar.state.isBrowsingMode {
-            urlBar.dismiss()
+        if urlBarViewModel.browsingState.isBrowsingMode {
+            urlBarViewModel.selectionState = .unselected
         }
     }
 
@@ -549,8 +553,8 @@ class BrowserViewController: UIViewController {
 
                 case .deleteButtonTap:
                     self.updateFindInPageVisibility(visible: false)
-                    self.resetBrowser()
                     self.urlBarViewModel.resetToDefaults()
+                    self.resetBrowser()
 
                 case .shieldIconButtonTap:
                     self.urlBarDidTapShield(self.urlBar)
@@ -575,8 +579,8 @@ class BrowserViewController: UIViewController {
                 make.centerX.equalToSuperview()
                 make.bottom.equalTo(urlBarContainer)
             } else {
-                make.bottom.equalTo(urlBarContainer)
                 make.leading.trailing.equalToSuperview()
+                make.bottom.equalTo(urlBarContainer)
             }
         }
     }
@@ -661,7 +665,7 @@ class BrowserViewController: UIViewController {
         // Used when biometrics fail and the previous session should be obscured
         if hidePreviousSession {
             clearBrowser()
-            urlBar.activateTextField()
+            urlBarViewModel.selectionState = .selected
             return
         }
 
@@ -684,7 +688,7 @@ class BrowserViewController: UIViewController {
             screenshotView.alpha = 0
             self.mainContainerView.layoutIfNeeded()
         }, completion: { _ in
-            self.urlBar.activateTextField()
+            self.urlBarViewModel.selectionState = .selected
             Toast(text: UIConstants.strings.eraseMessage).show()
             screenshotView.removeFromSuperview()
         })
@@ -704,12 +708,10 @@ class BrowserViewController: UIViewController {
         webViewController.reset()
         webViewContainer.isHidden = true
         browserToolbar.isHidden = true
-        urlBar.dismiss()
-        urlBar.removeFromSuperview()
-        urlBarContainer.alpha = 0
+        urlBar.url = nil
+        urlBarViewModel.selectionState = .unselected
         homeViewController.refreshTipsDisplay()
         homeViewController.view.isHidden = false
-        createURLBar()
         updateLockIcon(trackingProtectionStatus: trackingProtectionManager.trackingProtectionStatus)
         shortcutsPresenter.shortcutsState = .onHomeView
 
@@ -773,7 +775,7 @@ class BrowserViewController: UIViewController {
 
     func ensureBrowsingMode() {
         guard urlBar != nil else { shouldEnsureBrowsingMode = true; return }
-        guard !urlBar.state.isBrowsingMode else { return }
+        guard !urlBarViewModel.browsingState.isBrowsingMode else { return }
 
         urlBarContainer.alpha = 1
         urlBar.ensureBrowsingMode()
@@ -811,7 +813,7 @@ class BrowserViewController: UIViewController {
         if webViewContainer.isHidden {
             webViewContainer.isHidden = false
             homeViewController.view.isHidden = true
-            urlBar.update(state: .browsing)
+            urlBarViewModel.browsingState = .browsing
 
             if !showsToolsetInURLBar {
                 browserToolbar.animateHidden(false, duration: UIConstants.layout.toolbarFadeAnimationDuration)
@@ -860,7 +862,7 @@ class BrowserViewController: UIViewController {
         isIPadRegularDimensions = ((UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == size.width || size.width > size.height))) || (UIDevice.current.userInterfaceIdiom == .pad &&  UIApplication.shared.orientation?.isPortrait == true && UIScreen.main.bounds.width == size.width)
         urlBar.isIPadRegularDimensions = isIPadRegularDimensions
 
-        if urlBar.state == .home {
+        if urlBarViewModel.browsingState == .home {
             urlBar.snp.removeConstraints()
             addURLBarConstraints()
 
@@ -885,7 +887,7 @@ class BrowserViewController: UIViewController {
                 self.hideToolbars()
             }
 
-            self.browserToolbar.animateHidden(!self.urlBar.state.isBrowsingMode || self.showsToolsetInURLBar, duration: coordinator.transitionDuration, completion: {
+            self.browserToolbar.animateHidden(!self.urlBarViewModel.browsingState.isBrowsingMode || self.showsToolsetInURLBar, duration: coordinator.transitionDuration, completion: {
                 self.updateViewConstraints()
                 self.webViewController.resetZoom()
             })
@@ -908,7 +910,7 @@ class BrowserViewController: UIViewController {
 
     @objc private func selectLocationBar() {
         showToolbars()
-        urlBar.activateTextField()
+        urlBarViewModel.selectionState = .selected
         shortcutsPresenter.shortcutsState = .activeURLBar
     }
 
@@ -929,7 +931,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func toggleURLBarBackground(isBright: Bool) {
-        urlBarContainer.backgroundColor = urlBar.state.isBrowsingMode ? .foundation : .clear
+        urlBarContainer.backgroundColor = urlBarViewModel.browsingState.isBrowsingMode ? .foundation : .clear
     }
 
     override var keyCommands: [UIKeyCommand]? {
@@ -1156,7 +1158,7 @@ extension BrowserViewController: URLBarDelegate {
         let trimmedText = text.trimmingCharacters(in: .whitespaces)
         guard urlBar.url?.absoluteString != trimmedText else { return }
         shortcutsPresenter.shortcutsState = .editingURL(text: trimmedText)
-        let isOnHomeView = !urlBar.state.isBrowsingMode
+        let isOnHomeView = !urlBarViewModel.browsingState.isBrowsingMode
 
         if Settings.getToggle(.enableSearchSuggestions), !trimmedText.isEmpty {
             searchSuggestionsDebouncer.renewInterval()
@@ -1184,7 +1186,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressScrollTop(_: URLBar, tap: UITapGestureRecognizer) {
-        guard !urlBar.selectionState.isSelecting else { return }
+        guard !urlBarViewModel.selectionState.isSelecting else { return }
 
         switch scrollBarState {
         case .expanded:
@@ -1192,7 +1194,7 @@ extension BrowserViewController: URLBarDelegate {
 
             // If the tap is greater than this threshold, the user wants to type in the URL bar
             if y >= 10 {
-                urlBar.activateTextField()
+                urlBarViewModel.selectionState = .selected
                 return
             }
 
@@ -1234,7 +1236,7 @@ extension BrowserViewController: URLBarDelegate {
             overlayView.currentURL = urlText
         }
 
-        urlBar.dismiss()
+        urlBarViewModel.selectionState = .unselected
     }
 
     func urlBarDidDismiss(_ urlBar: URLBar) {
@@ -1247,14 +1249,14 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidFocus(_ urlBar: URLBar) {
-        let isOnHomeView = !urlBar.state.isBrowsingMode
+        let isOnHomeView = !urlBarViewModel.browsingState.isBrowsingMode
         overlayView.present(isOnHomeView: isOnHomeView)
         toggleURLBarBackground(isBright: false)
     }
 
     func urlBarDidActivate(_ urlBar: URLBar) {
         shortcutsPresenter.shortcutsState = .activeURLBar
-        homeViewController.updateUI(urlBarIsActive: true, isBrowsing: urlBar.state.isBrowsingMode)
+        homeViewController.updateUI(urlBarIsActive: true, isBrowsing: urlBarViewModel.browsingState.isBrowsingMode)
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
             self.urlBarContainer.alpha = 1
             self.updateFindInPageVisibility(visible: false)
@@ -1285,7 +1287,7 @@ extension BrowserViewController: URLBarDelegate {
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
 
-        let state: TrackingProtectionState = urlBar.state.isBrowsingMode
+        let state: TrackingProtectionState = urlBarViewModel.browsingState.isBrowsingMode
         ? .browsing(status: SecureConnectionStatus(
             url: webViewController.url!,
             isSecureConnection: webViewController.connectionIsSecure))
@@ -1389,7 +1391,7 @@ extension BrowserViewController {
 
 extension BrowserViewController: HomeViewControllerDelegate {
     func homeViewControllerDidTouchEmptyArea(_ controller: HomeViewController) {
-        urlBar.dismiss()
+        urlBarViewModel.selectionState = .unselected
     }
 
     func homeViewControllerDidTapShareTrackers(_ controller: HomeViewController, sender: UIButton) {
@@ -1412,14 +1414,13 @@ extension BrowserViewController: HomeViewControllerDelegate {
     /// because I don't think it is the best API to expose.
     private func visit(url: URL) {
         ensureBrowsingMode()
-        deactivateUrlBarOnHomeView()
         dismissSettings()
         dismissActionSheet()
         submit(url: url)
     }
 
     func homeViewControllerDidTapTip(_ controller: HomeViewController, tip: TipManager.Tip) {
-        urlBar.dismiss()
+        urlBarViewModel.selectionState = .unselected
         guard let action = tip.action else { return }
         switch action {
         case .visit(let topic):
@@ -1443,12 +1444,12 @@ extension BrowserViewController: HomeViewControllerDelegate {
 
 extension BrowserViewController: OverlayViewDelegate {
     func overlayViewDidPressSettings(_ overlayView: OverlayView) {
-        urlBar.dismiss()
+        urlBarViewModel.selectionState = .unselected
         showSettings()
     }
 
     func overlayViewDidTouchEmptyArea(_ overlayView: OverlayView) {
-        urlBar.dismiss()
+        urlBarViewModel.selectionState = .unselected
     }
 
     func overlayView(_ overlayView: OverlayView, didSearchForQuery query: String) {
@@ -1458,7 +1459,7 @@ extension BrowserViewController: OverlayViewDelegate {
             urlBar(urlBar, didSubmitText: query)
         }
 
-        urlBar.dismiss()
+        urlBarViewModel.selectionState = .unselected
     }
 
     func overlayView(_ overlayView: OverlayView, didSearchOnPage query: String) {
@@ -1467,7 +1468,7 @@ extension BrowserViewController: OverlayViewDelegate {
     }
 
     func overlayView(_ overlayView: OverlayView, didAddToAutocomplete query: String) {
-        urlBar.dismiss()
+        urlBarViewModel.selectionState = .unselected
 
         let autocompleteSource = CustomCompletionSource()
         switch autocompleteSource.add(suggestion: query) {
@@ -1501,7 +1502,7 @@ extension BrowserViewController: OverlayViewDelegate {
             submit(url: overlayURL)
             urlBar.url = overlayURL
         }
-        urlBar.dismiss()
+        urlBarViewModel.selectionState = .unselected
     }
 
     func overlayView(_ overlayView: OverlayView, didTapArrowText text: String) {
@@ -1528,7 +1529,7 @@ extension BrowserViewController: SearchSuggestionsPromptViewDelegate {
 extension BrowserViewController: WebControllerDelegate {
 
     func webControllerDidStartProvisionalNavigation(_ controller: WebController) {
-        urlBar.dismiss()
+        urlBarViewModel.selectionState = .unselected
         updateFindInPageVisibility(visible: false)
     }
 
@@ -1561,7 +1562,7 @@ extension BrowserViewController: WebControllerDelegate {
     func webControllerDidFinishNavigation(_ controller: WebController) {
         updateURLBar()
         urlBarViewModel.isLoading = false
-        toggleURLBarBackground(isBright: !urlBar.selectionState.isSelecting)
+        toggleURLBarBackground(isBright: !urlBarViewModel.selectionState.isSelecting)
         urlBar.hideProgressBar()
         GleanMetrics.Browser.totalUriCount.add()
     }
@@ -1588,7 +1589,7 @@ extension BrowserViewController: WebControllerDelegate {
     func webController(_ controller: WebController, didUpdateEstimatedProgress estimatedProgress: Double) {
         // Don't update progress if the home view is visible. This prevents the centered URL bar
         // from catching the global progress events.
-        guard urlBar.state.isBrowsingMode else { return }
+        guard urlBarViewModel.browsingState.isBrowsingMode else { return }
 
         urlBar.showProgressBar(estimatedProgress: estimatedProgress)
     }
@@ -1653,7 +1654,9 @@ extension BrowserViewController: WebControllerDelegate {
             self.urlBar.collapsedState = .intermediate(expandAlpha: expandAlpha, collapseAlpha: collapseAlpha)
         }
 
-        self.urlBarTopConstraint.update(offset: -scrollBarOffsetAlpha * (UIConstants.layout.urlBarHeight - UIConstants.layout.collapsedUrlBarHeight))
+        let const = -scrollBarOffsetAlpha * (UIConstants.layout.urlBarHeight - UIConstants.layout.collapsedUrlBarHeight)
+        print(const)
+        self.urlBarTopConstraint.update(offset: const)
         self.toolbarBottomConstraint.update(offset: scrollBarOffsetAlpha * (UIConstants.layout.browserToolbarHeight + view.safeAreaInsets.bottom))
         updateViewConstraints()
         scrollView.bounds.origin.y += (lastOffsetAlpha - scrollBarOffsetAlpha) * UIConstants.layout.urlBarHeight
@@ -1754,7 +1757,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
         if UIDevice.current.userInterfaceIdiom == .pad && !orientationWillChange {
-            urlBar.dismiss()
+            urlBarViewModel.selectionState = .unselected
         }
         orientationWillChange = false
 
@@ -1768,7 +1771,7 @@ extension BrowserViewController: UIPopoverPresentationControllerDelegate {
     }
 
     func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>) {
-        guard urlBar.state.isBrowsingMode else { return }
+        guard urlBarViewModel.browsingState.isBrowsingMode else { return }
         guard let menuSheet = popoverPresentationController.presentedViewController as? PhotonActionSheet, !(menuSheet.popoverPresentationController?.sourceView is ShortcutView) else {
             return
         }
@@ -1935,17 +1938,17 @@ extension BrowserViewController {
             currentName: shortcut.name,
             renameAction: { newName in
                 self.shortcutManager.rename(shortcut: shortcut, newName: newName)
-                self.urlBar.activateTextField()
+                self.urlBarViewModel.selectionState = .selected
 
             }, cancelAction: {
-                self.urlBar.activateTextField()
+                self.urlBarViewModel.selectionState = .selected
 
             })
         self.show(alert, sender: nil)
     }
 
     func removeFromShortcuts() {
-        self.shortcutsBackground.isHidden = self.shortcutManager.shortcutsViewModels.isEmpty || !self.urlBar.state.isBrowsingMode ? true : false
+        self.shortcutsBackground.isHidden = self.shortcutManager.shortcutsViewModels.isEmpty || !self.urlBarViewModel.browsingState.isBrowsingMode ? true : false
         GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_home_screen"].add()
     }
 
@@ -1957,7 +1960,6 @@ extension BrowserViewController {
     func shortcutTapped(url: URL) {
         ensureBrowsingMode()
         urlBar.url = url
-        deactivateUrlBarOnHomeView()
         submit(url: url)
         GleanMetrics.Shortcuts.shortcutOpenedCounter.add()
     }

@@ -35,7 +35,6 @@ struct UIConstants {
         static let urlBarTextInset: CGFloat = 30
         static let urlBarWidthInset: CGFloat = 8
         static let urlBarBorderInset: CGFloat = 0
-        static let urlBarBorderHeight: CGFloat = 36
         static let urlBarClearButtonWidth: CGFloat = 20
         static let urlBarClearButtonHeight: CGFloat = 20
         static let urlBarLayoutPriorityRawValue: Float = 1000

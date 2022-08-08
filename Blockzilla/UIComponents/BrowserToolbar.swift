@@ -59,7 +59,7 @@ class BrowserToolbar: UIView {
 
     let viewModel: URLBarViewModel
     private var cancellables = Set<AnyCancellable>()
-    
+
     init(viewModel: URLBarViewModel) {
         self.viewModel = viewModel
         super.init(frame: CGRect.zero)
