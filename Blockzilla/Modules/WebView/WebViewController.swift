@@ -51,6 +51,7 @@ class WebViewController: UIViewController, WebController {
         case findInPageHandler
         case fullScreen
         case metadata
+        case adsScriptHandler
     }
 
     private enum KVOConstants: String, CaseIterable {
@@ -170,6 +171,7 @@ class WebViewController: UIViewController, WebController {
         setupFindInPageScripts()
         setupMetadataScripts()
         setupFullScreen()
+        setupAdsScripts()
 
         view.addSubview(browserView)
         browserView.snp.makeConstraints { make in
@@ -218,6 +220,11 @@ class WebViewController: UIViewController, WebController {
     private func setupFullScreen() {
         browserView.configuration.userContentController.add(self, name: ScriptHandlers.fullScreen.rawValue)
         addScript(forResource: "FullScreen", injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+    }
+
+    private func setupAdsScripts() {
+        browserView.configuration.userContentController.add(self, name: ScriptHandlers.adsScriptHandler.rawValue)
+        addScript(forResource: "Ads", injectionTime: .atDocumentEnd, forMainFrameOnly: false)
     }
 
     func disableTrackingProtection() {
@@ -472,7 +479,9 @@ extension WebViewController: WKUIDelegate {
 extension WebViewController: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
 
-        trackAds(message: message)
+        if message.name == "adsScriptHandler" {
+            trackAds(message: message)
+        }
 
         if message.name == "findInPageHandler" {
             let data = message.body as! [String: Int]

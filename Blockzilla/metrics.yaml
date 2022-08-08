@@ -487,8 +487,7 @@ browser_search:
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/3330
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8970
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/focus-ios/pull/3367
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
     expires: "2023-01-01"
@@ -502,8 +501,7 @@ browser_search:
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/3330
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8970
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/focus-ios/pull/3367
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
     expires: "2023-01-01"
