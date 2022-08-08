@@ -237,7 +237,7 @@ workflows:
             #!/usr/bin/env bash
             ./checkout.sh
         title: ContentBlockerGen
-    - swiftlint-extended@1.0:
+    - swiftlint-extended@1:
         inputs:
         - linting_path: "$BITRISE_SOURCE_DIR"
     - script@1:
@@ -313,7 +313,7 @@ workflows:
             #!/usr/bin/env bash
             ./checkout.sh
         title: ContentBlockerGen
-    - swiftlint-extended@1.0:
+    - swiftlint-extended@1:
         inputs:
         - linting_path: "$BITRISE_SOURCE_DIR"
     - script@1:
