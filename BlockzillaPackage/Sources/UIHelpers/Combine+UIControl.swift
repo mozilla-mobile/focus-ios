@@ -26,7 +26,7 @@ public struct UIControlPublisher<Control: UIControl>: Publisher {
         self.controlEvent = event
     }
 
-    public func receive<S>(subscriber: S) where S : Subscriber, S.Failure == UIControlPublisher.Failure, S.Input == UIControlPublisher.Output {
+    public func receive<S>(subscriber: S) where S: Subscriber, S.Failure == UIControlPublisher.Failure, S.Input == UIControlPublisher.Output {
         let subscription = UIControlSubscription(subscriber: subscriber, control: control, event: controlEvent)
         subscriber.receive(subscription: subscription)
     }

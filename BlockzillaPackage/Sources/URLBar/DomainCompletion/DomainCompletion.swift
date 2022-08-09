@@ -19,7 +19,7 @@ public enum CompletionSourceError: Error {
     public var message: String {
         guard case .invalidUrl = self else { return "" }
 
-        return "ERROR"//UIConstants.strings.autocompleteAddCustomUrlError
+        return "ERROR"// UIConstants.strings.autocompleteAddCustomUrlError
     }
 }
 

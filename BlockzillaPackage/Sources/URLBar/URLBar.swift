@@ -3,8 +3,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-//import Telemetry
-//import Glean
+// import Telemetry
+// import Glean
 import DesignSystem
 import Combine
 import UIHelpers
@@ -465,7 +465,7 @@ public class URLBar: UIView {
         super.init(frame: CGRect.zero)
         bindButtonActions()
         bindViewModelEvents()
-        
+
         let singleTap = UITapGestureRecognizer(target: self, action: #selector(didSingleTap(sender:)))
         singleTap.numberOfTapsRequired = 1
         truncatedUrlText.addGestureRecognizer(singleTap)
@@ -619,7 +619,7 @@ public class URLBar: UIView {
 
     // MARK: - URL
 
-    public var url: URL? = nil {
+    public var url: URL? {
         didSet {
             if !urlTextField.isEditing {
                 setTextToURL()
