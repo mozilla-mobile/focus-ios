@@ -57,6 +57,8 @@ public class URLBarViewModel {
     @Published public var canGoForward: Bool = false
     @Published public var canDelete: Bool = false
     @Published public var isLoading: Bool = false
+    public var userInputText: String?
+    @Published public var url: URL?
 
     private let orientationSubject = NotificationCenter
         .default

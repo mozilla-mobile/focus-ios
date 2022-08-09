@@ -381,6 +381,15 @@ public class URLBar: UIView {
                 }
             }
             .store(in: &cancellables)
+
+        viewModel
+            .$url
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] url in
+                setTextToURL(url: url)
+            }
+            .store(in: &cancellables)
     }
 
     func adaptUI(for selection: URLBarViewModel.Selection) {
@@ -522,13 +531,13 @@ public class URLBar: UIView {
     }
 
     fileprivate func addCustomURL() {
-        guard let url = self.url else { return }
+        guard let url = viewModel.url else { return }
 //        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.quickAddCustomDomainButton)
         delegate?.urlBar(self, didAddCustomURL: url)
     }
 
     public func copyToClipboard() {
-        UIPasteboard.general.string = self.url?.absoluteString ?? ""
+        UIPasteboard.general.string = viewModel.url?.absoluteString ?? ""
     }
 
     fileprivate func paste(clipboardString: String) {
@@ -546,7 +555,8 @@ public class URLBar: UIView {
     }
 
     @objc fileprivate func copyLink() {
-        self.url
+        self.viewModel
+            .url
             .map(\.absoluteString)
             .map { UIPasteboard.general.string = $0 }
     }
@@ -619,19 +629,9 @@ public class URLBar: UIView {
 
     // MARK: - URL
 
-    public var url: URL? {
-        didSet {
-            if !urlTextField.isEditing {
-                setTextToURL()
-            }
-        }
-    }
-
-    public fileprivate(set) var userInputText: String?
-
     @objc fileprivate func didPressClear() {
         urlTextField.text = nil
-        userInputText = nil
+        viewModel.userInputText = nil
         displayClearButton(shouldDisplay: false)
         delegate?.urlBar(self, didEnterText: "")
     }
@@ -640,10 +640,10 @@ public class URLBar: UIView {
         urlTextField.text = text
     }
 
-    fileprivate func setTextToURL(displayFullUrl: Bool = false) {
+    fileprivate func setTextToURL(url: URL?, displayFullUrl: Bool = false) {
         guard let url = url else {
             urlTextField.text = nil
-            userInputText = nil
+            viewModel.userInputText = nil
             return
         }
 
@@ -744,7 +744,7 @@ extension URLBar: AutocompleteTextFieldDelegate {
 
     func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
 
-        setTextToURL(displayFullUrl: true)
+        setTextToURL(url: viewModel.url, displayFullUrl: true)
 
         if !viewModel.selectionState.isSelecting {
             viewModel.selectionState = .selected
@@ -762,10 +762,10 @@ extension URLBar: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool {
         // If the new search string is not longer than the previous
         // we don't need to find an autocomplete suggestion.
-        if let autocompleteText = autocompleteTextField.text, autocompleteText != userInputText {
+        if let autocompleteText = autocompleteTextField.text, autocompleteText != viewModel.userInputText {
 //            Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.autofill))
         }
-        userInputText = nil
+        viewModel.userInputText = nil
 
         delegate?.urlBar(self, didSubmitText: autocompleteTextField.text ?? "")
 
@@ -777,12 +777,12 @@ extension URLBar: AutocompleteTextFieldDelegate {
     }
 
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didEnterText text: String) {
-        if let oldValue = userInputText, oldValue.count < text.count {
+        if let oldValue = viewModel.userInputText, oldValue.count < text.count {
             let completion = viewModel.domainCompletion.autocompleteTextFieldCompletionSource(autocompleteTextField, forText: text)
             autocompleteTextField.setAutocompleteSuggestion(completion)
         }
 
-        userInputText = text
+        viewModel.userInputText = text
 
         if !text.isEmpty {
             displayClearButton(shouldDisplay: true, animated: true)
@@ -800,7 +800,7 @@ extension URLBar: AutocompleteTextFieldDelegate {
 
 extension URLBar: UIDragInteractionDelegate {
     public func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
-        guard let url = url, let itemProvider = NSItemProvider(contentsOf: url) else { return [] }
+        guard let url = viewModel.url, let itemProvider = NSItemProvider(contentsOf: url) else { return [] }
         let dragItem = UIDragItem(itemProvider: itemProvider)
 //        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.drag, object: TelemetryEventObject.searchBar)
 //        GleanMetrics.UrlInteraction.dragStarted.record()
@@ -816,7 +816,7 @@ extension URLBar: UIDragInteractionDelegate {
     public func dragInteraction(_ interaction: UIDragInteraction, sessionDidMove session: UIDragSession) {
         for item in session.items {
             item.previewProvider = {
-                guard let url = self.url else {
+                guard let url = self.viewModel.url else {
                     return UIDragPreview(view: UIView())
                 }
                 return UIDragPreview(for: url)

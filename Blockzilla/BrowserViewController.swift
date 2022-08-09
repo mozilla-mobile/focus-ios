@@ -725,7 +725,7 @@ class BrowserViewController: UIViewController {
         webViewController.reset()
         webViewContainer.isHidden = true
         browserToolbar.isHidden = true
-        urlBar.url = nil
+        urlBarViewModel.url = nil
         urlBarViewModel.selectionState = .unselected
         homeViewController.refreshTipsDisplay()
         homeViewController.view.isHidden = false
@@ -838,8 +838,8 @@ class BrowserViewController: UIViewController {
         }
         webViewController.load(URLRequest(url: url))
 
-        if urlBar.url == nil {
-            urlBar.url = url
+        if urlBarViewModel.url == nil {
+            urlBarViewModel.url = url
         }
 
         onboardingEventsHandler.route = nil
@@ -1000,8 +1000,8 @@ class BrowserViewController: UIViewController {
 
     func updateURLBar() {
         if webViewController.url?.absoluteString != "about:blank" {
-            urlBar.url = webViewController.url
-            overlayView.currentURL = urlBar.url?.absoluteString ?? ""
+            urlBarViewModel.url = webViewController.url
+            overlayView.currentURL = urlBarViewModel.url?.absoluteString ?? ""
         }
     }
 
@@ -1009,7 +1009,7 @@ class BrowserViewController: UIViewController {
     func buildActions(for sender: UIView) -> [UIMenuElement] {
         var actions: [UIMenuElement] = []
 
-        if let url = urlBar.url {
+        if let url = urlBarViewModel.url {
             let utils = OpenUtils(url: url, webViewController: webViewController)
 
             getShortcutsItem(for: url)
@@ -1049,7 +1049,7 @@ class BrowserViewController: UIViewController {
     func buildActions(for sender: UIView) -> [[PhotonActionSheetItem]] {
         var actions: [[PhotonActionSheetItem]] = []
 
-        if let url = urlBar.url {
+        if let url = urlBarViewModel.url {
             let utils = OpenUtils(url: url, webViewController: webViewController)
 
             actions.append([getShortcutsItem(for: url).map(PhotonActionSheetItem.init)].compactMap { $0 })
@@ -1177,7 +1177,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBar(_ urlBar: URLBar, didEnterText text: String) {
         let trimmedText = text.trimmingCharacters(in: .whitespaces)
-        guard urlBar.url?.absoluteString != trimmedText else { return }
+        guard urlBarViewModel.url?.absoluteString != trimmedText else { return }
         shortcutsPresenter.shortcutsState = .editingURL(text: trimmedText)
         let isOnHomeView = !urlBarViewModel.browsingState.isBrowsingMode
 
@@ -1185,7 +1185,7 @@ extension BrowserViewController: URLBarDelegate {
             searchSuggestionsDebouncer.renewInterval()
             searchSuggestionsDebouncer.completion = {
                 self.searchSuggestClient.getSuggestions(trimmedText, callback: { suggestions, error in
-                    let userInputText = urlBar.userInputText?.trimmingCharacters(in: .whitespaces) ?? ""
+                    let userInputText = self.urlBarViewModel.userInputText?.trimmingCharacters(in: .whitespaces) ?? ""
 
                     // Check if this callback is stale (new user input has been requested)
                     if userInputText.isEmpty || userInputText != trimmedText {
@@ -1233,7 +1233,7 @@ extension BrowserViewController: URLBarDelegate {
         let text = text.trimmingCharacters(in: .whitespaces)
 
         guard !text.isEmpty else {
-            urlBar.url = webViewController.url
+            urlBarViewModel.url = webViewController.url
             return
         }
 
@@ -1250,10 +1250,10 @@ extension BrowserViewController: URLBarDelegate {
         }
         if let urlBarURL = url {
             submit(url: urlBarURL)
-            urlBar.url = urlBarURL
+            urlBarViewModel.url = urlBarURL
         }
 
-        if let urlText = urlBar.url?.absoluteString {
+        if let urlText = urlBarViewModel.url?.absoluteString {
             overlayView.currentURL = urlText
         }
 
@@ -1402,7 +1402,7 @@ extension BrowserViewController {
         SearchHistoryUtils.isFromURLBar = true
 
         // Check if we're navigating to an AMP site *after* the URL bar is updated. This is intentionally grabbing the NEW url
-        guard let navigatingToAmpSite = urlBar.url?.absoluteString.hasPrefix(UIConstants.strings.googleAmpURLPrefix) else { return }
+        guard let navigatingToAmpSite = urlBarViewModel.url?.absoluteString.hasPrefix(UIConstants.strings.googleAmpURLPrefix) else { return }
 
         if !navigatingToAmpSite {
             SearchHistoryUtils.goForward()
@@ -1511,7 +1511,7 @@ extension BrowserViewController: OverlayViewDelegate {
     func overlayView(_ overlayView: OverlayView, didSubmitText text: String) {
         let text = text.trimmingCharacters(in: .whitespaces)
         guard !text.isEmpty else {
-            urlBar.url = webViewController.url
+            urlBarViewModel.url = webViewController.url
             return
         }
 
@@ -1525,7 +1525,7 @@ extension BrowserViewController: OverlayViewDelegate {
         }
         if let overlayURL = url {
             submit(url: overlayURL)
-            urlBar.url = overlayURL
+            urlBarViewModel.url = overlayURL
         }
         urlBarViewModel.selectionState = .unselected
     }
@@ -1545,7 +1545,7 @@ extension BrowserViewController: SearchSuggestionsPromptViewDelegate {
         UserDefaults.standard.set(true, forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt)
         Settings.set(didEnable, forToggle: SettingsToggle.enableSearchSuggestions)
         overlayView.updateSearchSuggestionsPrompt(hidden: true)
-        if didEnable, let urlbar = self.urlBar, let value = self.urlBar?.userInputText {
+        if didEnable, let urlbar = self.urlBar, let value = self.urlBarViewModel.userInputText {
             urlBar(urlbar, didEnterText: value)
         }
     }
@@ -1574,7 +1574,7 @@ extension BrowserViewController: WebControllerDelegate {
 
     func webControllerDidStartNavigation(_ controller: WebController) {
         if !SearchHistoryUtils.isFromURLBar && !SearchHistoryUtils.isNavigating && !SearchHistoryUtils.isReload {
-            SearchHistoryUtils.pushSearchToStack(with: (urlBar.url?.absoluteString)!)
+            SearchHistoryUtils.pushSearchToStack(with: (urlBarViewModel.url?.absoluteString)!)
         }
         SearchHistoryUtils.isReload = false
         SearchHistoryUtils.isNavigating = false
@@ -1597,7 +1597,7 @@ extension BrowserViewController: WebControllerDelegate {
     }
 
     func webController(_ controller: WebController, didFailNavigationWithError error: Error) {
-        urlBar.url = webViewController.url
+        urlBarViewModel.url = webViewController.url
         urlBarViewModel.isLoading = false
         toggleURLBarBackground(isBright: true)
         urlBar.hideProgressBar()
@@ -1984,7 +1984,7 @@ extension BrowserViewController {
 
     func shortcutTapped(url: URL) {
         ensureBrowsingMode()
-        urlBar.url = url
+        urlBarViewModel.url = url
         submit(url: url)
         GleanMetrics.Shortcuts.shortcutOpenedCounter.add()
     }
