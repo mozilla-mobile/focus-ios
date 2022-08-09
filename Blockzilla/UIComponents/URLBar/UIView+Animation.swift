@@ -37,7 +37,7 @@ public extension UIView {
         if animated {
             firstDo?()
             UIView.transition(with: self, duration: 0.2,
-                             options: [],
+                              options: [],
                              animations: {
                 self.isHidden = true
                 self.alpha = 0
@@ -52,7 +52,7 @@ public extension UIView {
         }
     }
 
-    func animateHideFromSuperview(thenDo:  (() -> Void)? = nil) {
+    func animateFadeOutFromSuperview(thenDo:  (() -> Void)? = nil) {
         fadeOut(thenDo: {
             self.removeFromSuperview()
             thenDo?()
