@@ -4,6 +4,7 @@
 
 import UIKit
 import Telemetry
+import URLBar
 
 class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     private lazy var tableView: UITableView = {
@@ -89,7 +90,12 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         tableView.deselectRow(at: indexPath, animated: true)
 
         if indexPath.section == 1 && indexPath.row == 1 {
-            let viewController = AutocompleteCustomUrlViewController(customAutocompleteSource: CustomCompletionSource())
+            let autocompleteSource = CustomCompletionSource(
+                enableCustomDomainAutocomplete: { Settings.getToggle(.enableCustomDomainAutocomplete) },
+                getCustomDomainSetting: { Settings.getCustomDomainSetting() },
+                setCustomDomainSetting: { Settings.setCustomDomainSetting(domains: $0) }
+            )
+            let viewController = AutocompleteCustomUrlViewController(customAutocompleteSource: autocompleteSource)
             self.navigationController?.pushViewController(viewController, animated: true)
         }
     }

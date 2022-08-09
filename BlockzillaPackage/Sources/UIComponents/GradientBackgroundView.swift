@@ -3,9 +3,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import DesignSystem
 
-class GradientBackgroundView: UIView {
-    init(alpha: Float = 0.1, startPoint: CGPoint = CGPoint(x: -0.2, y: 0), endPoint: CGPoint = CGPoint(x: 1.2, y: 1), background: UIColor = .gradientBackground) {
+public class GradientBackgroundView: UIView {
+    public init(alpha: Float = 0.1, startPoint: CGPoint = CGPoint(x: -0.2, y: 0), endPoint: CGPoint = CGPoint(x: 1.2, y: 1), background: UIColor = .gradientBackground) {
         super.init(frame: CGRect.zero)
 
         backgroundColor = background
@@ -13,7 +14,7 @@ class GradientBackgroundView: UIView {
         configureGradientLayerWithPoints(start: startPoint, end: endPoint, alpha: alpha)
     }
 
-    init(colors: [CGColor]) {
+    public init(colors: [CGColor]) {
         super.init(frame: .zero)
 
         guard let gradient = self.layer as? CAGradientLayer else { return }
@@ -26,7 +27,7 @@ class GradientBackgroundView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override class var layerClass: AnyClass {
+    public override class var layerClass: AnyClass {
         return CAGradientLayer.self
     }
 
@@ -39,8 +40,8 @@ class GradientBackgroundView: UIView {
     }
 }
 
-class IntroCardGradientBackgroundView: UIView {
-    init(alpha: Float = 1) {
+public class IntroCardGradientBackgroundView: UIView {
+    public init(alpha: Float = 1) {
         super.init(frame: CGRect.zero)
 
         backgroundColor = .gradientBackground
@@ -54,7 +55,7 @@ class IntroCardGradientBackgroundView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override class var layerClass: AnyClass {
+    public override class var layerClass: AnyClass {
         return CAGradientLayer.self
     }
 }

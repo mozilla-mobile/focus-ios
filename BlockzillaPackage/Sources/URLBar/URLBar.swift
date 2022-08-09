@@ -3,137 +3,21 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import SnapKit
-import Telemetry
-import Glean
+//import Telemetry
+//import Glean
 import DesignSystem
 import Combine
 import UIHelpers
-
-class IPadURLBar: URLBar {
-    fileprivate lazy var leftStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.spacing = 0
-        stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.layoutMargins = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
-        stackView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        stackView.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
-    }()
-
-    fileprivate lazy var rightStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.spacing = 0
-        stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.layoutMargins = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
-        stackView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        stackView.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
-    }()
-
-    override func setupLayout() {
-        addSubview(urlBarBackgroundView)
-        rightStackView.addArrangedSubview(contextMenuButton)
-        urlStackView.addArrangedSubview(shieldIconButton)
-        urlStackView.addArrangedSubview(urlTextField)
-        stackView.addArrangedSubview(leftStackView)
-        stackView.addArrangedSubview(urlStackView)
-        stackView.addArrangedSubview(rightStackView)
-        addSubview(stackView)
-        addSubview(truncatedUrlText)
-        addSubview(progressBar)
-
-        stackView.distribution = .equalCentering
-        urlStackView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 0.6).isActive = true
-
-        NSLayoutConstraint.activate([
-            truncatedUrlText.centerXAnchor.constraint(equalTo: centerXAnchor),
-            truncatedUrlText.heightAnchor.constraint(equalToConstant: UIConstants.layout.collapsedUrlBarHeight),
-            truncatedUrlText.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
-
-            urlBarBackgroundView.topAnchor.constraint(equalTo: urlStackView.topAnchor),
-            urlBarBackgroundView.leadingAnchor.constraint(equalTo: urlStackView.leadingAnchor),
-            urlBarBackgroundView.trailingAnchor.constraint(equalTo: urlStackView.trailingAnchor),
-            urlBarBackgroundView.bottomAnchor.constraint(equalTo: urlStackView.bottomAnchor),
-
-            stackView.heightAnchor.constraint(equalToConstant: .urlBarHeight),
-            stackView.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            stackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10),
-
-            progressBar.heightAnchor.constraint(equalToConstant: UIConstants.layout.progressBarHeight),
-            progressBar.topAnchor.constraint(equalTo: bottomAnchor),
-            progressBar.leadingAnchor.constraint(equalTo: leadingAnchor),
-            progressBar.trailingAnchor.constraint(equalTo: trailingAnchor)
-        ])
-    }
-
-    override func adaptUI(for browsingState: URLBarViewModel.BrowsingState, orientation: URLBarViewModel.Orientation) {
-        switch (browsingState, orientation) {
-        case (.home, _):
-            forwardButton.fadeOut(animated: false)
-            backButton.fadeOut(animated: false)
-            stopReloadButton.fadeOut(animated: false)
-            deleteButton.animateFadeOutFromSuperview()
-
-        case (.browsing, _):
-            forwardButton
-                .fadeIn(
-                    firstDo: { [leftStackView, forwardButton] in
-                        leftStackView.prependArrangedSubview(forwardButton)
-                    }
-                )
-            backButton
-                .fadeIn(
-                    firstDo: { [leftStackView, backButton] in
-                        leftStackView.prependArrangedSubview(backButton)
-                    }
-                )
-
-            stopReloadButton
-                .fadeIn(
-                    firstDo: { [urlStackView, stopReloadButton] in
-                        urlStackView.appendArrangedSubview(stopReloadButton)
-                    })
-
-            deleteButton
-                .fadeIn(
-                    firstDo: { [rightStackView, deleteButton] in
-                        rightStackView.prependArrangedSubview(deleteButton)
-                    })
-        }
-    }
-
-    override func adaptUI(for selection: URLBarViewModel.Selection) {
-        switch selection {
-        case .selected:
-            shieldIconButton.fadeOut()
-            self.urlTextField.isUserInteractionEnabled = true
-            self.urlTextField.becomeFirstResponder()
-            self.highlightText(self.urlTextField)
-
-        case .unselected:
-            _ = urlTextField.resignFirstResponder()
-            urlTextField.isUserInteractionEnabled = true
-            shieldIconButton.fadeIn()
-        }
-    }
-}
 
 public class URLBar: UIView {
     public weak var delegate: URLBarDelegate?
 
     public var shouldPresent = false
-    public var isIPadRegularDimensions = false {
-        didSet {
-            print("isIPadRegularDimensions: \(isIPadRegularDimensions)")
-        }
-    }
+//    public var isIPadRegularDimensions = false {
+//        didSet {
+//            print("isIPadRegularDimensions: \(isIPadRegularDimensions)")
+//        }
+//    }
 
     // MARK: - UI Components
 
@@ -143,7 +27,7 @@ public class URLBar: UIView {
 
     fileprivate var draggableUrlTextView: UIView { urlTextField }
 
-    fileprivate lazy var urlBarBackgroundView: UIView = {
+    lazy var urlBarBackgroundView: UIView = {
         let view = UIView()
         view.backgroundColor = .locationBar
         view.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
@@ -151,7 +35,7 @@ public class URLBar: UIView {
         return view
     }()
 
-    fileprivate lazy var stackView: UIStackView = {
+    lazy var stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.spacing = 8
@@ -161,7 +45,7 @@ public class URLBar: UIView {
         return stackView
     }()
 
-    fileprivate lazy var urlStackView: UIStackView = {
+    lazy var urlStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.spacing = 0
@@ -173,7 +57,7 @@ public class URLBar: UIView {
         return stackView
     }()
 
-    fileprivate lazy var urlTextField: URLTextField = {
+    lazy var urlTextField: URLTextField = {
         let textField = URLTextField()
 
         // UITextField doesn't allow customization of the clear button, so we create
@@ -195,14 +79,14 @@ public class URLBar: UIView {
         textField.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .vertical)
         textField.autocompleteDelegate = self
         textField.accessibilityIdentifier = "URLBar.urlText"
-        textField.placeholder = UIConstants.strings.urlTextPlaceholder
+        textField.placeholder = viewModel.strings.urlTextPlaceholder
 //        if let clearButton = textField.value(forKeyPath: "_clearButton") as? UIButton {
 //            clearButton.setImage(#imageLiteral(resourceName: "icon_clear"), for: .normal)
 //        }
         return textField
     }()
 
-    fileprivate lazy var truncatedUrlText: UITextView = {
+    lazy var truncatedUrlText: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.alpha = 0
@@ -218,7 +102,7 @@ public class URLBar: UIView {
         return textView
     }()
 
-    fileprivate let progressBar: GradientProgressBar = {
+    let progressBar: GradientProgressBar = {
         let progressBar = GradientProgressBar(progressViewStyle: .bar)
         progressBar.translatesAutoresizingMaskIntoConstraints = false
         progressBar.isHidden = true
@@ -226,7 +110,7 @@ public class URLBar: UIView {
         return progressBar
     }()
 
-    fileprivate lazy var cancelButton: UIButton = {
+    lazy var cancelButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isHidden = true
@@ -243,7 +127,7 @@ public class URLBar: UIView {
         return button
     }()
 
-    fileprivate let urlBarBorderView: UIView = {
+    let urlBarBorderView: UIView = {
         let view = UIView()
         view.backgroundColor = .secondaryButton
         view.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
@@ -252,12 +136,12 @@ public class URLBar: UIView {
         return view
     }()
 
-    fileprivate lazy var backButton: UIButton = {
+    lazy var backButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(#imageLiteral(resourceName: "icon_back_active"), for: .normal)
         button.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
-        button.accessibilityLabel = UIConstants.strings.browserBack
+        button.accessibilityLabel = viewModel.strings.browserBack
         button.isEnabled = false
         NSLayoutConstraint.activate([
             button.widthAnchor.constraint(equalToConstant: .barButtonHeight),
@@ -266,12 +150,12 @@ public class URLBar: UIView {
         return button
     }()
 
-    fileprivate lazy var forwardButton: UIButton = {
+    lazy var forwardButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(#imageLiteral(resourceName: "icon_forward_active"), for: .normal)
         button.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
-        button.accessibilityLabel = UIConstants.strings.browserForward
+        button.accessibilityLabel = viewModel.strings.browserForward
         button.isEnabled = false
         NSLayoutConstraint.activate([
             button.widthAnchor.constraint(equalToConstant: .barButtonHeight),
@@ -280,7 +164,7 @@ public class URLBar: UIView {
         return button
     }()
 
-    fileprivate lazy var stopReloadButton: UIButton = {
+    lazy var stopReloadButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(#imageLiteral(resourceName: "icon_refresh_menu"), for: .normal)
@@ -293,7 +177,7 @@ public class URLBar: UIView {
         return button
     }()
 
-    fileprivate lazy var deleteButton: UIButton = {
+    lazy var deleteButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(#imageLiteral(resourceName: "icon_delete"), for: .normal)
@@ -307,7 +191,7 @@ public class URLBar: UIView {
         return button
     }()
 
-    fileprivate lazy var contextMenuButton: UIButton = {
+    lazy var contextMenuButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(#imageLiteral(resourceName: "icon_hamburger_menu"), for: .normal)
@@ -316,7 +200,7 @@ public class URLBar: UIView {
             button.showsMenuAsPrimaryAction = true
             button.menu = UIMenu(children: [])
         }
-        button.accessibilityLabel = UIConstants.strings.browserSettings
+        button.accessibilityLabel = viewModel.strings.browserSettings
         button.accessibilityIdentifier = "HomeView.settingsButton"
         button.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -330,7 +214,7 @@ public class URLBar: UIView {
 
     fileprivate var cancellables = Set<AnyCancellable>()
 
-    fileprivate lazy var shieldIconButton: UIButton = {
+    lazy var shieldIconButton: UIButton = {
         let button = UIButton()
         button.setImage(.trackingProtectionOn, for: .normal)
         button.contentMode = .center
@@ -343,8 +227,6 @@ public class URLBar: UIView {
         ])
         return button
     }()
-
-    fileprivate let domainCompletion = DomainCompletion(completionSources: [TopDomainsCompletionSource(), CustomCompletionSource()])
 
     public override var canBecomeFirstResponder: Bool { true }
 
@@ -464,13 +346,13 @@ public class URLBar: UIView {
 
         viewModel
             .$isLoading
-            .sink { [stopReloadButton] in
+            .sink { [viewModel, stopReloadButton] in
                 if $0 {
                     stopReloadButton.setImage(#imageLiteral(resourceName: "icon_stop_menu"), for: .normal)
-                    stopReloadButton.accessibilityLabel = UIConstants.strings.browserStop
+                    stopReloadButton.accessibilityLabel = viewModel.strings.browserStop
                 } else {
                     stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu"), for: .normal)
-                    stopReloadButton.accessibilityLabel = UIConstants.strings.browserReload
+                    stopReloadButton.accessibilityLabel = viewModel.strings.browserReload
                 }
             }
             .store(in: &cancellables)
@@ -578,13 +460,12 @@ public class URLBar: UIView {
         }
     }
 
-    init(viewModel: URLBarViewModel) {
+    public init(viewModel: URLBarViewModel) {
         self.viewModel = viewModel
         super.init(frame: CGRect.zero)
         bindButtonActions()
         bindViewModelEvents()
-
-        isIPadRegularDimensions = traitCollection.horizontalSizeClass == .regular && traitCollection.verticalSizeClass == .regular
+        
         let singleTap = UITapGestureRecognizer(target: self, action: #selector(didSingleTap(sender:)))
         singleTap.numberOfTapsRequired = 1
         truncatedUrlText.addGestureRecognizer(singleTap)
@@ -642,7 +523,7 @@ public class URLBar: UIView {
 
     fileprivate func addCustomURL() {
         guard let url = self.url else { return }
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.quickAddCustomDomainButton)
+//        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.quickAddCustomDomainButton)
         delegate?.urlBar(self, didAddCustomURL: url)
     }
 
@@ -660,8 +541,8 @@ public class URLBar: UIView {
         delegate?.urlBarDidActivate(self)
         delegate?.urlBar(self, didSubmitText: clipboardString)
 
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.pasteAndGo)
-        GleanMetrics.UrlInteraction.pasteAndGo.record()
+//        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.pasteAndGo)
+//        GleanMetrics.UrlInteraction.pasteAndGo.record()
     }
 
     @objc fileprivate func copyLink() {
@@ -680,12 +561,12 @@ public class URLBar: UIView {
         var items = [UIMenuItem]()
 
         if urlTextField.text != nil, urlTextField.text?.isEmpty == false {
-            let copyItem = UIMenuItem(title: UIConstants.strings.copyMenuButton, action: #selector(copyLink))
+            let copyItem = UIMenuItem(title: viewModel.strings.copyMenuButton, action: #selector(copyLink))
             items.append(copyItem)
         }
 
         if UIPasteboard.general.hasStrings {
-            let lookupMenu = UIMenuItem(title: UIConstants.strings.urlPasteAndGo, action: #selector(pasteAndGoFromContextMenu))
+            let lookupMenu = UIMenuItem(title: viewModel.strings.urlPasteAndGo, action: #selector(pasteAndGoFromContextMenu))
             items.append(lookupMenu)
         }
 
@@ -797,7 +678,7 @@ public class URLBar: UIView {
         delegate?.urlBarDidDeactivate(self)
     }
 
-    fileprivate func highlightText(_ textField: UITextField) {
+    func highlightText(_ textField: UITextField) {
         guard textField.text != nil else { return }
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(300)) {
             textField.selectAll(nil)
@@ -882,22 +763,22 @@ extension URLBar: AutocompleteTextFieldDelegate {
         // If the new search string is not longer than the previous
         // we don't need to find an autocomplete suggestion.
         if let autocompleteText = autocompleteTextField.text, autocompleteText != userInputText {
-            Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.autofill))
+//            Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.autofill))
         }
         userInputText = nil
 
         delegate?.urlBar(self, didSubmitText: autocompleteTextField.text ?? "")
 
-        if Settings.getToggle(.enableSearchSuggestions) {
-            Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionNotSelected))
-        }
+//        if Settings.getToggle(.enableSearchSuggestions) {
+//            Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionNotSelected))
+//        }
 
         return true
     }
 
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didEnterText text: String) {
         if let oldValue = userInputText, oldValue.count < text.count {
-            let completion = domainCompletion.autocompleteTextFieldCompletionSource(autocompleteTextField, forText: text)
+            let completion = viewModel.domainCompletion.autocompleteTextFieldCompletionSource(autocompleteTextField, forText: text)
             autocompleteTextField.setAutocompleteSuggestion(completion)
         }
 
@@ -921,8 +802,8 @@ extension URLBar: UIDragInteractionDelegate {
     public func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
         guard let url = url, let itemProvider = NSItemProvider(contentsOf: url) else { return [] }
         let dragItem = UIDragItem(itemProvider: itemProvider)
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.drag, object: TelemetryEventObject.searchBar)
-        GleanMetrics.UrlInteraction.dragStarted.record()
+//        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.drag, object: TelemetryEventObject.searchBar)
+//        GleanMetrics.UrlInteraction.dragStarted.record()
         return [dragItem]
     }
 
@@ -958,7 +839,7 @@ public extension URLBar {
     }
 }
 
-fileprivate extension CGFloat {
+extension CGFloat {
     static var barButtonHeight: CGFloat = 44
     static let urlBarHeight: CGFloat = 44
 }

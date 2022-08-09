@@ -6,6 +6,7 @@ import UIKit
 import SnapKit
 import Foundation
 import Telemetry
+import UIComponents
 
 class IntroViewController: UIViewController {
 

@@ -5,6 +5,7 @@
 import UIKit
 import SnapKit
 import Telemetry
+import URLBar
 
 class AutocompleteCustomUrlViewController: UIViewController {
     private let emptyStateView = UIView()

@@ -3,35 +3,35 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import SnapKit
 import Combine
+import UIComponents
 
-class BrowserToolbar: UIView {
+public class BrowserToolbar: UIView {
     private let backgroundLoading = GradientBackgroundView()
     private let backgroundDark = UIView()
     private let backgroundBright = UIView()
     private let stackView = UIStackView()
 
-    private lazy var backButton: InsetButton = {
-        let backButton = InsetButton()
+    private lazy var backButton: UIButton = {
+        let backButton = UIButton()
         backButton.setImage(#imageLiteral(resourceName: "icon_back_active"), for: .normal)
         backButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
-        backButton.accessibilityLabel = UIConstants.strings.browserBack
+        backButton.accessibilityLabel = viewModel.strings.browserBack
         backButton.isEnabled = false
         return backButton
     }()
 
-    private lazy var forwardButton: InsetButton = {
-        let forwardButton = InsetButton()
+    private lazy var forwardButton: UIButton = {
+        let forwardButton = UIButton()
         forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active"), for: .normal)
         forwardButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
-        forwardButton.accessibilityLabel = UIConstants.strings.browserForward
+        forwardButton.accessibilityLabel = viewModel.strings.browserForward
         forwardButton.isEnabled = false
         return forwardButton
     }()
 
-    private lazy var deleteButton: InsetButton = {
-        let deleteButton = InsetButton()
+    private lazy var deleteButton: UIButton = {
+        let deleteButton = UIButton()
         deleteButton.setImage(#imageLiteral(resourceName: "icon_delete"), for: .normal)
         deleteButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         deleteButton.accessibilityIdentifier = "URLBar.deleteButton"
@@ -39,18 +39,21 @@ class BrowserToolbar: UIView {
         return deleteButton
     }()
 
-    private lazy var contextMenuButton: InsetButton = {
-        let contextMenuButton = InsetButton()
+    private lazy var contextMenuButton: UIButton = {
+        let contextMenuButton = UIButton()
         contextMenuButton.setImage(#imageLiteral(resourceName: "icon_hamburger_menu"), for: .normal)
         contextMenuButton.tintColor = .primaryText
         if #available(iOS 14.0, *) {
             contextMenuButton.showsMenuAsPrimaryAction = true
             contextMenuButton.menu = UIMenu(children: [])
         }
-        contextMenuButton.accessibilityLabel = UIConstants.strings.browserSettings
+        contextMenuButton.accessibilityLabel = viewModel.strings.browserSettings
         contextMenuButton.accessibilityIdentifier = "HomeView.settingsButton"
         contextMenuButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
-        contextMenuButton.imageView?.snp.makeConstraints { $0.size.equalTo(UIConstants.layout.contextMenuIconSize) }
+        NSLayoutConstraint.activate([
+            contextMenuButton.widthAnchor.constraint(equalToConstant: UIConstants.layout.contextMenuIconSize),
+            contextMenuButton.heightAnchor.constraint(equalToConstant: UIConstants.layout.contextMenuIconSize)
+        ])
         return contextMenuButton
     }()
 
@@ -60,7 +63,7 @@ class BrowserToolbar: UIView {
     let viewModel: URLBarViewModel
     private var cancellables = Set<AnyCancellable>()
 
-    init(viewModel: URLBarViewModel) {
+    public init(viewModel: URLBarViewModel) {
         self.viewModel = viewModel
         super.init(frame: CGRect.zero)
         bindButtonActions()
@@ -68,6 +71,7 @@ class BrowserToolbar: UIView {
 
         let background = UIView()
         background.backgroundColor = .foundation
+        background.translatesAutoresizingMaskIntoConstraints = false
         addSubview(background)
 
         stackView.distribution = .fillEqually
@@ -76,17 +80,21 @@ class BrowserToolbar: UIView {
         stackView.addArrangedSubview(forwardButton)
         stackView.addArrangedSubview(deleteButton)
         stackView.addArrangedSubview(contextMenuButton)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(stackView)
 
-        stackView.snp.makeConstraints { make in
-            make.top.right.left.equalTo(self)
-            make.height.equalTo(UIConstants.layout.browserToolbarHeight)
-            make.bottom.equalTo(safeAreaLayoutGuide)
-        }
+        NSLayoutConstraint.activate([
+            background.topAnchor.constraint(equalTo: topAnchor),
+            background.leadingAnchor.constraint(equalTo: leadingAnchor),
+            background.trailingAnchor.constraint(equalTo: trailingAnchor),
+            background.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-        background.snp.makeConstraints { make in
-            make.top.leading.trailing.bottom.equalTo(self)
-        }
+            stackView.topAnchor.constraint(equalTo: topAnchor),
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+            stackView.heightAnchor.constraint(equalToConstant: UIConstants.layout.browserToolbarHeight)
+        ])
     }
 
     required init?(coder aDecoder: NSCoder) {

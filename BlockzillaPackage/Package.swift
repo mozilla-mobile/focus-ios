@@ -21,13 +21,17 @@ let package = Package(
             targets: ["AppShortcuts"]),
         .library(
             name: "UIComponents",
-            targets: ["UIComponents"])
+            targets: ["UIComponents"]),
+        .library(
+            name: "URLBar",
+            targets: ["URLBar"])
     ],
     targets: [
         .target(
             name: "UIComponents",
             dependencies: [
-                "UIHelpers"
+                "UIHelpers",
+                "DesignSystem"
             ]
         ),
         .target(
@@ -47,6 +51,13 @@ let package = Package(
             dependencies: [
                 "UIComponents",
                 "DesignSystem"
+            ]
+        ),
+        .target(
+            name: "URLBar",
+            dependencies: [
+                "DesignSystem",
+                "UIComponents"
             ]
         ),
         .testTarget(

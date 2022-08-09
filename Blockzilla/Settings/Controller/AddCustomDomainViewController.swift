@@ -5,6 +5,7 @@
 import UIKit
 import Telemetry
 import Glean
+import URLBar
 
 protocol AddCustomDomainViewControllerDelegate: AnyObject {
     func addCustomDomainViewControllerDidFinish(_ viewController: AddCustomDomainViewController)

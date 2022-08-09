@@ -12,6 +12,7 @@ import Glean
 import Combine
 import Onboarding
 import AppShortcuts
+import URLBar
 
 class BrowserViewController: UIViewController {
     private let mainContainerView = UIView(frame: .zero)
@@ -522,13 +523,29 @@ class BrowserViewController: UIViewController {
         install(homeViewController, on: homeViewContainer)
     }
 
-    let urlBarViewModel = URLBarViewModel()
+    private lazy var urlBarViewModel = URLBarViewModel(
+        strings: URLBarStrings(
+            autocompleteAddCustomUrlError: UIConstants.strings.autocompleteAddCustomUrlError,
+            urlTextPlaceholder: UIConstants.strings.urlTextPlaceholder,
+            browserBack: UIConstants.strings.browserBack,
+            browserForward: UIConstants.strings.browserForward,
+            browserSettings: UIConstants.strings.browserSettings,
+            browserStop: UIConstants.strings.browserStop,
+            browserReload: UIConstants.strings.browserReload,
+            copyMenuButton: UIConstants.strings.copyMenuButton,
+            urlPasteAndGo: UIConstants.strings.urlPasteAndGo
+        ),
+        enableCustomDomainAutocomplete: { Settings.getToggle(.enableCustomDomainAutocomplete) },
+        getCustomDomainSetting: { Settings.getCustomDomainSetting() },
+        setCustomDomainSetting: { Settings.setCustomDomainSetting(domains: $0) },
+        enableDomainAutocomplete: { Settings.getToggle(.enableDomainAutocomplete) }
+    )
 
     private func createURLBar() {
         urlBar = URLBar(viewModel: urlBarViewModel)
         bindUrlBarViewModel()
         urlBar.delegate = self
-        urlBar.isIPadRegularDimensions = isIPadRegularDimensions
+//        urlBar.isIPadRegularDimensions = isIPadRegularDimensions
         urlBar.shouldShowToolset = showsToolsetInURLBar
         mainContainerView.insertSubview(urlBar, aboveSubview: urlBarContainer)
 
@@ -860,7 +877,7 @@ class BrowserViewController: UIViewController {
 
         // isIPadRegularDimensions check if the device is a Ipad and the app is not in split mode
         isIPadRegularDimensions = ((UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == size.width || size.width > size.height))) || (UIDevice.current.userInterfaceIdiom == .pad &&  UIApplication.shared.orientation?.isPortrait == true && UIScreen.main.bounds.width == size.width)
-        urlBar.isIPadRegularDimensions = isIPadRegularDimensions
+//        urlBar.isIPadRegularDimensions = isIPadRegularDimensions
 
         if urlBarViewModel.browsingState == .home {
             urlBar.snp.removeConstraints()
@@ -1140,7 +1157,11 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBar(_ urlBar: URLBar, didAddCustomURL url: URL) {
         // Add the URL to the autocomplete list:
-        let autocompleteSource = CustomCompletionSource()
+        let autocompleteSource = CustomCompletionSource(
+            enableCustomDomainAutocomplete: { Settings.getToggle(.enableCustomDomainAutocomplete) },
+            getCustomDomainSetting: { Settings.getCustomDomainSetting() },
+            setCustomDomainSetting: { Settings.setCustomDomainSetting(domains: $0) }
+        )
 
         switch autocompleteSource.add(suggestion: url.absoluteString) {
         case .failure(.duplicateDomain):
@@ -1470,7 +1491,11 @@ extension BrowserViewController: OverlayViewDelegate {
     func overlayView(_ overlayView: OverlayView, didAddToAutocomplete query: String) {
         urlBarViewModel.selectionState = .unselected
 
-        let autocompleteSource = CustomCompletionSource()
+        let autocompleteSource = CustomCompletionSource(
+            enableCustomDomainAutocomplete: { Settings.getToggle(.enableCustomDomainAutocomplete) },
+            getCustomDomainSetting: { Settings.getCustomDomainSetting() },
+            setCustomDomainSetting: { Settings.setCustomDomainSetting(domains: $0) }
+        )
         switch autocompleteSource.add(suggestion: query) {
         case .failure(.duplicateDomain):
             Toast(text: UIConstants.strings.autocompleteCustomURLDuplicate).show()
