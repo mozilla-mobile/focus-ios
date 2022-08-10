@@ -68,19 +68,11 @@ class BrowserViewController: UIViewController {
 
     private var homeViewContainer = UIView()
 
-    fileprivate var showsToolsetInURLBar = false {
-        didSet {
-            if showsToolsetInURLBar {
-                browserBottomConstraint.deactivate()
-            } else {
-                browserBottomConstraint.activate()
-            }
-        }
-    }
+    @Published fileprivate var showsToolsetInURLBar = false
 
     private let searchSuggestionsDebouncer = Debouncer(timeInterval: 0.1)
     private var shouldEnsureBrowsingMode = false
-    private var isIPadRegularDimensions: Bool = false {
+    @Published private var isIPadRegularDimensions: Bool = false {
         didSet {
             overlayView.isIpadView = isIPadRegularDimensions
         }
@@ -245,7 +237,28 @@ class BrowserViewController: UIViewController {
 
         containWebView()
         createHomeView()
-        createURLBar()
+
+        $showsToolsetInURLBar
+            .removeDuplicates()
+            .sink { [unowned self] showsToolsetInURLBar in
+                if showsToolsetInURLBar {
+                    browserBottomConstraint.deactivate()
+                } else {
+                    browserBottomConstraint.activate()
+                }
+            }
+            .store(in: &cancellables)
+
+        $showsToolsetInURLBar
+            .removeDuplicates()
+            .map {
+                $0 ? URLBarLarge(viewModel: self.urlBarViewModel) : URLBar(viewModel: self.urlBarViewModel)
+            }
+            .sink { [unowned self] urlBar in
+                create(urlBar: urlBar)
+            }
+            .store(in: &cancellables)
+
         updateViewConstraints()
 
         overlayView.snp.makeConstraints { make in
@@ -541,13 +554,13 @@ class BrowserViewController: UIViewController {
         enableDomainAutocomplete: { Settings.getToggle(.enableDomainAutocomplete) }
     )
 
-    private func createURLBar() {
-        urlBar = URLBar(viewModel: urlBarViewModel)
+    private func create(urlBar: URLBar) {
+        self.urlBar?.removeFromSuperview()
+        self.urlBar = urlBar
         bindUrlBarViewModel()
-        urlBar.delegate = self
-//        urlBar.isIPadRegularDimensions = isIPadRegularDimensions
-        urlBar.shouldShowToolset = showsToolsetInURLBar
-        mainContainerView.insertSubview(urlBar, aboveSubview: urlBarContainer)
+        self.urlBar.delegate = self
+        self.urlBar.shouldShowToolset = showsToolsetInURLBar
+        mainContainerView.insertSubview(self.urlBar, aboveSubview: urlBarContainer)
 
         addURLBarConstraints()
     }
@@ -587,18 +600,10 @@ class BrowserViewController: UIViewController {
     }
 
     private func addURLBarConstraints() {
-
         urlBar.snp.makeConstraints { make in
             urlBarTopConstraint = make.top.equalTo(mainContainerView.safeAreaLayoutGuide.snp.top).constraint
-
-            if isIPadRegularDimensions {
-                make.leading.trailing.equalToSuperview()
-                make.centerX.equalToSuperview()
-                make.bottom.equalTo(urlBarContainer)
-            } else {
-                make.leading.trailing.equalToSuperview()
-                make.bottom.equalTo(urlBarContainer)
-            }
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(urlBarContainer)
         }
     }
 
@@ -877,7 +882,7 @@ class BrowserViewController: UIViewController {
 
         // isIPadRegularDimensions check if the device is a Ipad and the app is not in split mode
         isIPadRegularDimensions = ((UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == size.width || size.width > size.height))) || (UIDevice.current.userInterfaceIdiom == .pad &&  UIApplication.shared.orientation?.isPortrait == true && UIScreen.main.bounds.width == size.width)
-//        urlBar.isIPadRegularDimensions = isIPadRegularDimensions
+        urlBarViewModel.layout = showsToolsetInURLBar ? .large : .compact
 
         if urlBarViewModel.browsingState == .home {
             urlBar.snp.removeConstraints()

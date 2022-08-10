@@ -23,13 +23,9 @@ public enum ShieldIconStatus: Equatable {
 
 public class URLBarViewModel {
 
-    public enum Orientation: Equatable {
-        case portrait
-        case landscape
-
-        init() {
-            self = UIApplication.shared.orientation?.isPortrait ?? true ? .portrait : .landscape
-        }
+    public enum Layout: Equatable {
+        case compact
+        case large
     }
 
     public enum Selection: Equatable {
@@ -59,16 +55,10 @@ public class URLBarViewModel {
     @Published public var isLoading: Bool = false
     public var userInputText: String?
     @Published public var url: URL?
+    @Published public var layout: Layout = .compact
 
-    private let orientationSubject = NotificationCenter
-        .default
-        .publisher(for: UIDevice.orientationDidChangeNotification, object: nil)
-        .map { _ in
-            Orientation()
-        }
-
-    var statePublisher: AnyPublisher<(BrowsingState, Orientation), Never> {
-        Publishers.CombineLatest($browsingState, orientationSubject)
+    var statePublisher: AnyPublisher<(BrowsingState, Layout), Never> {
+        Publishers.CombineLatest($browsingState, $layout)
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }

@@ -4,7 +4,7 @@
 
 import UIKit
 
-public class IPadURLBar: URLBar {
+public class URLBarLarge: URLBar {
     fileprivate lazy var leftStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
@@ -42,7 +42,7 @@ public class IPadURLBar: URLBar {
         addSubview(progressBar)
 
         stackView.distribution = .equalCentering
-        urlStackView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 0.6).isActive = true
+        urlStackView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.6).isActive = true
 
         NSLayoutConstraint.activate([
             truncatedUrlText.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -67,7 +67,7 @@ public class IPadURLBar: URLBar {
         ])
     }
 
-    override func adaptUI(for browsingState: URLBarViewModel.BrowsingState, orientation: URLBarViewModel.Orientation) {
+    override func adaptUI(for browsingState: URLBarViewModel.BrowsingState, orientation: URLBarViewModel.Layout) {
         switch (browsingState, orientation) {
         case (.home, _):
             forwardButton.fadeOut(animated: false)

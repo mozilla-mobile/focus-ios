@@ -419,7 +419,7 @@ public class URLBar: UIView {
         }
     }
 
-    func adaptUI(for browsingState: URLBarViewModel.BrowsingState, orientation: URLBarViewModel.Orientation) {
+    func adaptUI(for browsingState: URLBarViewModel.BrowsingState, orientation: URLBarViewModel.Layout) {
         switch (browsingState, orientation) {
             case (.home, _):
                 stopReloadButton.animateFadeOutFromSuperview()
@@ -429,7 +429,7 @@ public class URLBar: UIView {
                 backButton.animateFadeOutFromSuperview()
                 deleteButton.animateFadeOutFromSuperview()
 
-            case (.browsing, .portrait):
+            case (.browsing, .compact):
                 stopReloadButton
                     .fadeIn(
                         firstDo: { [urlStackView, stopReloadButton] in
@@ -441,7 +441,7 @@ public class URLBar: UIView {
                 backButton.animateFadeOutFromSuperview()
                 deleteButton.animateFadeOutFromSuperview()
 
-            case (.browsing, .landscape):
+            case (.browsing, .large):
                 forwardButton
                     .fadeIn(
                         firstDo: { [stackView, forwardButton] in
