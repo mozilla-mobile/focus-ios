@@ -28,7 +28,7 @@ class URLTextField: AutocompleteTextField {
 
     private func getInsetRect(forBounds bounds: CGRect) -> CGRect {
         // Add internal padding.
-        let inset = bounds.insetBy(dx: UIConstants.layout.urlBarWidthInset, dy: UIConstants.layout.urlBarContainerHeightInset)
+        let inset = bounds.insetBy(dx: .urlBarWidthInset, dy: .urlBarContainerHeightInset)
 
         // Add a right margin so we don't overlap with the clear button.
         var clearButtonWidth: CGFloat = 0
@@ -40,7 +40,7 @@ class URLTextField: AutocompleteTextField {
     }
 
     override internal func rightViewRect(forBounds bounds: CGRect) -> CGRect {
-        return super.rightViewRect(forBounds: bounds).offsetBy(dx: -UIConstants.layout.urlBarWidthInset, dy: 0)
+        return super.rightViewRect(forBounds: bounds).offsetBy(dx: -.urlBarWidthInset, dy: 0)
     }
 
     private func textFieldDidEndEditing(_ textField: UITextField) {

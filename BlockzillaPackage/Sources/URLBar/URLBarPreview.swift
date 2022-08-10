@@ -7,7 +7,16 @@ import SwiftUI
 // MARK: SwiftUI Preview
 
 struct BackgroundViewContainer: UIViewRepresentable {
-    let urlBarViewModel = URLBarViewModel(
+    let urlBarViewModel: URLBarViewModel
+
+    func makeUIView(context: Context) -> URLBar {
+        URLBar(viewModel: urlBarViewModel)
+    }
+    func updateUIView(_ uiView: URLBar, context: Context) { }
+}
+
+public struct URLBarPreview: View {
+    @State private var urlBarViewModel = URLBarViewModel(
         strings: URLBarStrings(
             autocompleteAddCustomUrlError: "UIConstants.strings.autocompleteAddCustomUrlError",
             urlTextPlaceholder: "UIConstants.strings.urlTextPlaceholder",
@@ -25,28 +34,16 @@ struct BackgroundViewContainer: UIViewRepresentable {
         enableDomainAutocomplete: { /*Settings.getToggle(.enableDomainAutocomplete)*/  false }
     )
 
-    func makeUIView(context: Context) -> URLBar {
-        let bar = URLBar(viewModel: urlBarViewModel)
-        return bar
-    }
-    func updateUIView(_ uiView: URLBar, context: Context) {
-
-    }
-}
-
-public struct URLBarContainerView: View {
-    @State private var state: URLBarViewModel.BrowsingState = .home
-
     public var body: some View {
         ZStack {
             VStack {
-                BackgroundViewContainer()
-                    .frame(height: 100)
+                BackgroundViewContainer(urlBarViewModel: urlBarViewModel)
+                    .frame(height: 90)
                     .background(Color.purple)
                 Spacer()
                 HStack {
-                    Button("Home") { state = .home }
-                    Button("Browsing") { state = .browsing }
+                    Button("Home") { urlBarViewModel.browsingState = .home }
+                    Button("Browsing") { urlBarViewModel.browsingState = .browsing }
                 }
                 Spacer()
             }
@@ -58,6 +55,6 @@ public struct URLBarContainerView: View {
 
 struct Compact_Previews: PreviewProvider {
     static var previews: some View {
-        URLBarContainerView()
+        URLBarPreview()
     }
 }

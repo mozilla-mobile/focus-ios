@@ -15,7 +15,7 @@ public class BrowserToolbar: UIView {
     private lazy var backButton: UIButton = {
         let backButton = UIButton()
         backButton.setImage(.backActive, for: .normal)
-        backButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
+        backButton.contentEdgeInsets = .toolbarButtonInsets
         backButton.accessibilityLabel = viewModel.strings.browserBack
         backButton.isEnabled = false
         return backButton
@@ -24,7 +24,7 @@ public class BrowserToolbar: UIView {
     private lazy var forwardButton: UIButton = {
         let forwardButton = UIButton()
         forwardButton.setImage(.forwardActive, for: .normal)
-        forwardButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
+        forwardButton.contentEdgeInsets = .toolbarButtonInsets
         forwardButton.accessibilityLabel = viewModel.strings.browserForward
         forwardButton.isEnabled = false
         return forwardButton
@@ -33,7 +33,7 @@ public class BrowserToolbar: UIView {
     private lazy var deleteButton: UIButton = {
         let deleteButton = UIButton()
         deleteButton.setImage(.delete, for: .normal)
-        deleteButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
+        deleteButton.contentEdgeInsets = .toolbarButtonInsets
         deleteButton.accessibilityIdentifier = "URLBar.deleteButton"
         deleteButton.isEnabled = false
         return deleteButton
@@ -49,10 +49,10 @@ public class BrowserToolbar: UIView {
         }
         contextMenuButton.accessibilityLabel = viewModel.strings.browserSettings
         contextMenuButton.accessibilityIdentifier = "HomeView.settingsButton"
-        contextMenuButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
+        contextMenuButton.contentEdgeInsets = .toolbarButtonInsets
         NSLayoutConstraint.activate([
-            contextMenuButton.widthAnchor.constraint(equalToConstant: UIConstants.layout.contextMenuIconSize),
-            contextMenuButton.heightAnchor.constraint(equalToConstant: UIConstants.layout.contextMenuIconSize)
+            contextMenuButton.widthAnchor.constraint(equalToConstant: .contextMenuIconSize),
+            contextMenuButton.heightAnchor.constraint(equalToConstant: .contextMenuIconSize)
         ])
         return contextMenuButton
     }()
@@ -93,7 +93,7 @@ public class BrowserToolbar: UIView {
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
-            stackView.heightAnchor.constraint(equalToConstant: UIConstants.layout.browserToolbarHeight)
+            stackView.heightAnchor.constraint(equalToConstant: .browserToolbarHeight)
         ])
     }
 
@@ -148,7 +148,7 @@ public class BrowserToolbar: UIView {
             .$canGoBack
             .sink { [backButton] in
                 backButton.isEnabled = $0
-                backButton.alpha = $0 ? 1 : UIConstants.layout.browserToolbarDisabledOpacity
+                backButton.alpha = $0 ? 1 : .browserToolbarDisabledOpacity
             }
             .store(in: &cancellables)
 
@@ -156,7 +156,7 @@ public class BrowserToolbar: UIView {
             .$canGoForward
             .sink { [forwardButton] in
                 forwardButton.isEnabled = $0
-                forwardButton.alpha = $0 ? 1 : UIConstants.layout.browserToolbarDisabledOpacity
+                forwardButton.alpha = $0 ? 1 : .browserToolbarDisabledOpacity
             }
             .store(in: &cancellables)
 
@@ -164,7 +164,7 @@ public class BrowserToolbar: UIView {
             .$canDelete
             .sink { [deleteButton] in
                 deleteButton.isEnabled = $0
-                deleteButton.alpha = $0 ? 1 : UIConstants.layout.browserToolbarDisabledOpacity
+                deleteButton.alpha = $0 ? 1 : .browserToolbarDisabledOpacity
             }
             .store(in: &cancellables)
     }

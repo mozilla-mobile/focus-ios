@@ -46,7 +46,7 @@ public class URLBarLarge: URLBar {
 
         NSLayoutConstraint.activate([
             truncatedUrlText.centerXAnchor.constraint(equalTo: centerXAnchor),
-            truncatedUrlText.heightAnchor.constraint(equalToConstant: UIConstants.layout.collapsedUrlBarHeight),
+            truncatedUrlText.heightAnchor.constraint(equalToConstant: .collapsedUrlBarHeight),
             truncatedUrlText.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
 
             urlBarBackgroundView.topAnchor.constraint(equalTo: urlStackView.topAnchor),
@@ -60,7 +60,7 @@ public class URLBarLarge: URLBar {
             stackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10),
 
-            progressBar.heightAnchor.constraint(equalToConstant: UIConstants.layout.progressBarHeight),
+            progressBar.heightAnchor.constraint(equalToConstant: .progressBarHeight),
             progressBar.topAnchor.constraint(equalTo: bottomAnchor),
             progressBar.leadingAnchor.constraint(equalTo: leadingAnchor),
             progressBar.trailingAnchor.constraint(equalTo: trailingAnchor)

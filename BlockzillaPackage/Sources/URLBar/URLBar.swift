@@ -22,7 +22,7 @@ public class URLBar: UIView {
     lazy var urlBarBackgroundView: UIView = {
         let view = UIView()
         view.backgroundColor = .locationBar
-        view.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
+        view.layer.cornerRadius = .urlBarCornerRadius
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -54,11 +54,10 @@ public class URLBar: UIView {
 
         // UITextField doesn't allow customization of the clear button, so we create
         // our own so we can use it as the rightView.
-        let clearButton = UIButton(frame: CGRect(x: 0, y: 0, width: UIConstants.layout.urlBarClearButtonWidth, height: UIConstants.layout.urlBarClearButtonHeight))
+        let clearButton = UIButton(frame: CGRect(x: 0, y: 0, width: .urlBarClearButtonWidth, height: .urlBarClearButtonHeight))
         clearButton.isHidden = true
         clearButton.setImage(.clear, for: .normal)
         clearButton.addTarget(self, action: #selector(didPressClear), for: .touchUpInside)
-
         textField.font = .body15
         textField.tintColor = .primaryText
         textField.textColor = .primaryText
@@ -68,7 +67,7 @@ public class URLBar: UIView {
 //        textField.clearButtonMode = .whileEditing
         textField.rightView = clearButton
         textField.rightViewMode = .whileEditing
-        textField.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .vertical)
+        textField.setContentHuggingPriority(UILayoutPriority(rawValue: .urlBarLayoutPriorityRawValue), for: .vertical)
         textField.autocompleteDelegate = self
         textField.accessibilityIdentifier = "URLBar.urlText"
         textField.placeholder = viewModel.strings.urlTextPlaceholder
@@ -88,7 +87,7 @@ public class URLBar: UIView {
         textView.textColor = .primaryText
         textView.backgroundColor = UIColor.clear
         textView.contentMode = .bottom
-        textView.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .vertical)
+        textView.setContentHuggingPriority(UILayoutPriority(rawValue: .urlBarLayoutPriorityRawValue), for: .vertical)
         textView.isScrollEnabled = false
         textView.accessibilityIdentifier = "Collapsed.truncatedUrlText"
         return textView
@@ -103,7 +102,8 @@ public class URLBar: UIView {
     }()
 
     lazy var cancelButton: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .system)
+        button.tintColor = .label
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isHidden = true
         button.alpha = 0
@@ -122,9 +122,9 @@ public class URLBar: UIView {
     let urlBarBorderView: UIView = {
         let view = UIView()
         view.backgroundColor = .secondaryButton
-        view.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
-        view.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-        view.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        view.layer.cornerRadius = .urlBarCornerRadius
+        view.setContentCompressionResistancePriority(UILayoutPriority(rawValue: .urlBarLayoutPriorityRawValue), for: .horizontal)
+        view.setContentHuggingPriority(UILayoutPriority(rawValue: .urlBarLayoutPriorityRawValue), for: .horizontal)
         return view
     }()
 
@@ -132,7 +132,7 @@ public class URLBar: UIView {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(.backActive, for: .normal)
-        button.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
+        button.contentEdgeInsets = .toolbarButtonInsets
         button.accessibilityLabel = viewModel.strings.browserBack
         button.isEnabled = false
         NSLayoutConstraint.activate([
@@ -146,7 +146,7 @@ public class URLBar: UIView {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(.forwardActive, for: .normal)
-        button.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
+        button.contentEdgeInsets = .toolbarButtonInsets
         button.accessibilityLabel = viewModel.strings.browserForward
         button.isEnabled = false
         NSLayoutConstraint.activate([
@@ -157,10 +157,11 @@ public class URLBar: UIView {
     }()
 
     lazy var stopReloadButton: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .system)
+        button.tintColor = .label
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(.refreshMenu, for: .normal)
-        button.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
+        button.contentEdgeInsets = .toolbarButtonInsets
         button.accessibilityIdentifier = "BrowserToolset.stopReloadButton"
         NSLayoutConstraint.activate([
             button.widthAnchor.constraint(equalToConstant: .barButtonHeight),
@@ -173,7 +174,7 @@ public class URLBar: UIView {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(.delete, for: .normal)
-        button.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
+        button.contentEdgeInsets = .toolbarButtonInsets
         button.accessibilityIdentifier = "URLBar.deleteButton"
         button.isEnabled = false
         NSLayoutConstraint.activate([
@@ -184,7 +185,8 @@ public class URLBar: UIView {
     }()
 
     lazy var contextMenuButton: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .system)
+        button.tintColor = .label
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(.hamburgerMenu, for: .normal)
         button.tintColor = .primaryText
@@ -194,7 +196,7 @@ public class URLBar: UIView {
         }
         button.accessibilityLabel = viewModel.strings.browserSettings
         button.accessibilityIdentifier = "HomeView.settingsButton"
-        button.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
+        button.contentEdgeInsets = .toolbarButtonInsets
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
         button.setContentHuggingPriority(.required, for: .horizontal)
         NSLayoutConstraint.activate([
@@ -207,7 +209,8 @@ public class URLBar: UIView {
     fileprivate var cancellables = Set<AnyCancellable>()
 
     lazy var shieldIconButton: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .system)
+        button.tintColor = .label
         button.setImage(.trackingProtectionOn, for: .normal)
         button.contentMode = .center
         button.accessibilityIdentifier = "URLBar.trackingProtectionIcon"
@@ -316,7 +319,7 @@ public class URLBar: UIView {
             .$canGoBack
             .sink { [backButton] in
                 backButton.isEnabled = $0
-                backButton.alpha = $0 ? 1 : UIConstants.layout.browserToolbarDisabledOpacity
+                backButton.alpha = $0 ? 1 : .browserToolbarDisabledOpacity
             }
             .store(in: &cancellables)
 
@@ -324,7 +327,7 @@ public class URLBar: UIView {
             .$canGoForward
             .sink { [forwardButton] in
                 forwardButton.isEnabled = $0
-                forwardButton.alpha = $0 ? 1 : UIConstants.layout.browserToolbarDisabledOpacity
+                forwardButton.alpha = $0 ? 1 : .browserToolbarDisabledOpacity
             }
             .store(in: &cancellables)
 
@@ -332,7 +335,7 @@ public class URLBar: UIView {
             .$canDelete
             .sink { [deleteButton] in
                 deleteButton.isEnabled = $0
-                deleteButton.alpha = $0 ? 1 : UIConstants.layout.browserToolbarDisabledOpacity
+                deleteButton.alpha = $0 ? 1 : .browserToolbarDisabledOpacity
             }
             .store(in: &cancellables)
 
@@ -503,7 +506,7 @@ public class URLBar: UIView {
 
         NSLayoutConstraint.activate([
             truncatedUrlText.centerXAnchor.constraint(equalTo: centerXAnchor),
-            truncatedUrlText.heightAnchor.constraint(equalToConstant: UIConstants.layout.collapsedUrlBarHeight),
+            truncatedUrlText.heightAnchor.constraint(equalToConstant: .collapsedUrlBarHeight),
             truncatedUrlText.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
 
             urlBarBackgroundView.topAnchor.constraint(equalTo: urlStackView.topAnchor),
@@ -517,7 +520,7 @@ public class URLBar: UIView {
             stackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10),
 
-            progressBar.heightAnchor.constraint(equalToConstant: UIConstants.layout.progressBarHeight),
+            progressBar.heightAnchor.constraint(equalToConstant: .progressBarHeight),
             progressBar.topAnchor.constraint(equalTo: bottomAnchor),
             progressBar.leadingAnchor.constraint(equalTo: leadingAnchor),
             progressBar.trailingAnchor.constraint(equalTo: trailingAnchor)
@@ -531,14 +534,8 @@ public class URLBar: UIView {
     fileprivate func displayClearButton(shouldDisplay: Bool, animated: Bool = true) {
         // Prevent the rightView's position from being animated
         urlTextField.rightView?.layer.removeAllAnimations()
-        urlTextField.rightView?.animateHidden(!shouldDisplay, duration: animated ? UIConstants.layout.urlBarTransitionAnimationDuration : 0)
+        urlTextField.rightView?.animateHidden(!shouldDisplay, duration: animated ? .urlBarTransitionAnimationDuration : 0)
     }
-
-//    fileprivate func addCustomURL() {
-//        guard let url = viewModel.url else { return }
-//        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.quickAddCustomDomainButton)
-//        delegate?.urlBar(self, didAddCustomURL: url)
-//    }
 
     public func copyToClipboard() {
         UIPasteboard.general.string = viewModel.url?.absoluteString ?? ""
@@ -669,7 +666,7 @@ public class URLBar: UIView {
         urlTextField.text = nil
         displayClearButton(shouldDisplay: false)
 
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
+        UIView.animate(withDuration: .urlBarTransitionAnimationDuration, animations: {
             self.layoutIfNeeded()
         })
 
@@ -813,9 +810,4 @@ extension URLBar: UIDragInteractionDelegate {
             }
         }
     }
-}
-
-extension CGFloat {
-    static var barButtonHeight: CGFloat = 44
-    static let urlBarHeight: CGFloat = 44
 }

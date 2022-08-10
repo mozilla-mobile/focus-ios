@@ -88,7 +88,7 @@ open class GradientProgressBar: UIProgressView {
 
     private func setupAlphaMaskLayer() {
         alphaMaskLayer.frame = bounds
-        alphaMaskLayer.cornerRadius = UIConstants.layout.progressBarHeight
+        alphaMaskLayer.cornerRadius = .progressBarHeight
 
         alphaMaskLayer.anchorPoint = CGPoint(x: 0, y: 0)
         alphaMaskLayer.position = CGPoint(x: 0, y: 0)
@@ -115,7 +115,7 @@ open class GradientProgressBar: UIProgressView {
 
         CATransaction.begin()
         let moveAnimation = CABasicAnimation(keyPath: "position")
-        moveAnimation.duration = UIConstants.layout.overlayAnimationDuration
+        moveAnimation.duration = .overlayAnimationDuration
         moveAnimation.fromValue = gradientLayer.position
         moveAnimation.toValue = CGPoint(x: gradientLayer.frame.width, y: gradientLayer.position.y)
         moveAnimation.fillMode = .forwards
