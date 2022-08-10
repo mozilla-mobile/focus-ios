@@ -41,8 +41,6 @@ public class URLBar: UIView {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.spacing = 0
-        stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.layoutMargins = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
         stackView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         stackView.setContentHuggingPriority(.defaultLow, for: .horizontal)
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -113,7 +111,7 @@ public class URLBar: UIView {
         button.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
         button.accessibilityIdentifier = "URLBar.cancelButton"
         NSLayoutConstraint.activate([
-            button.widthAnchor.constraint(equalToConstant: 24),
+            button.widthAnchor.constraint(equalToConstant: .barButtonHeight - 8),
             button.heightAnchor.constraint(equalToConstant: .barButtonHeight)
         ])
         return button
@@ -200,7 +198,7 @@ public class URLBar: UIView {
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
         button.setContentHuggingPriority(.required, for: .horizontal)
         NSLayoutConstraint.activate([
-            button.widthAnchor.constraint(equalToConstant: 24),
+            button.widthAnchor.constraint(equalToConstant: .barButtonHeight - 16),
             button.heightAnchor.constraint(equalToConstant: .barButtonHeight)
         ])
         return button
@@ -217,7 +215,7 @@ public class URLBar: UIView {
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
         button.setContentHuggingPriority(.required, for: .horizontal)
         NSLayoutConstraint.activate([
-            button.widthAnchor.constraint(equalToConstant: 24),
+            button.widthAnchor.constraint(equalToConstant: .barButtonHeight),
             button.heightAnchor.constraint(equalToConstant: .barButtonHeight)
         ])
         return button
@@ -391,7 +389,6 @@ public class URLBar: UIView {
             .map(Float.init)
             .filter { 0 <= $0 && $0 <= 1 }
             .sink { [progressBar] in
-                print($0)
                 progressBar.alpha = 1
                 progressBar.isHidden = false
                 progressBar.setProgress($0, animated: true)

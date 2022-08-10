@@ -38,7 +38,7 @@ public struct URLBarPreview: View {
         ZStack {
             VStack {
                 BackgroundViewContainer(urlBarViewModel: urlBarViewModel)
-                    .frame(height: 90)
+                    .frame(height: 64)
                     .background(Color.purple)
                 Spacer()
                 HStack {
@@ -48,12 +48,11 @@ public struct URLBarPreview: View {
                 Spacer()
             }
         }
-        .edgesIgnoringSafeArea(.all)
     }
 }
 
 
-struct Compact_Previews: PreviewProvider {
+struct URLBarPreview_Previews: PreviewProvider {
     static var previews: some View {
         URLBarPreview()
     }
