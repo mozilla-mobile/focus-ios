@@ -58,6 +58,7 @@ public class URLBarViewModel {
     public var userInputText: String?
     @Published public var url: URL?
     @Published public var layout: Layout = .compact
+    @Published public var loadingProgres: Double = 0
 
     var statePublisher: AnyPublisher<(BrowsingState, Layout), Never> {
         Publishers.CombineLatest($browsingState, $layout)
@@ -72,6 +73,7 @@ public class URLBarViewModel {
         canGoForward = false
         canDelete = false
         isLoading = false
+        loadingProgres = 1
     }
 
     let strings: URLBarStrings

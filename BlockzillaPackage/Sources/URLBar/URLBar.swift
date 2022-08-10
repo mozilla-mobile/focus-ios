@@ -382,6 +382,18 @@ public class URLBar: UIView {
                 setTextToURL(url: url)
             }
             .store(in: &cancellables)
+
+        viewModel
+            .$loadingProgres
+            .map(Float.init)
+            .filter { 0 <= $0 && $0 <= 1 }
+            .sink { [progressBar] in
+                print($0)
+                progressBar.alpha = 1
+                progressBar.isHidden = false
+                progressBar.setProgress($0, animated: true)
+            }
+            .store(in: &cancellables)
     }
 
     func adaptUI(for selection: URLBarViewModel.Selection) {
@@ -800,20 +812,6 @@ extension URLBar: UIDragInteractionDelegate {
                 return UIDragPreview(for: url)
             }
         }
-    }
-}
-
-// MARK: - Progress bar API
-
-public extension URLBar {
-    func hideProgressBar() {
-        progressBar.hideProgressBar()
-    }
-
-    func showProgressBar(estimatedProgress: Double) {
-        progressBar.alpha = 1
-        progressBar.isHidden = false
-        progressBar.setProgress(Float(estimatedProgress), animated: true)
     }
 }
 

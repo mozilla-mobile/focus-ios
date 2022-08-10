@@ -1598,7 +1598,7 @@ extension BrowserViewController: WebControllerDelegate {
         updateURLBar()
         urlBarViewModel.isLoading = false
         toggleURLBarBackground(isBright: !urlBarViewModel.selectionState.isSelecting)
-        urlBar.hideProgressBar()
+        urlBarViewModel.loadingProgres = 1
         GleanMetrics.Browser.totalUriCount.add()
     }
 
@@ -1610,7 +1610,7 @@ extension BrowserViewController: WebControllerDelegate {
         urlBarViewModel.url = webViewController.url
         urlBarViewModel.isLoading = false
         toggleURLBarBackground(isBright: true)
-        urlBar.hideProgressBar()
+        urlBarViewModel.loadingProgres = 1
     }
 
     func webController(_ controller: WebController, didUpdateCanGoBack canGoBack: Bool) {
@@ -1626,7 +1626,7 @@ extension BrowserViewController: WebControllerDelegate {
         // from catching the global progress events.
         guard urlBarViewModel.browsingState.isBrowsingMode else { return }
 
-        urlBar.showProgressBar(estimatedProgress: estimatedProgress)
+        urlBarViewModel.loadingProgres = estimatedProgress
     }
 
     func webController(_ controller: WebController, scrollViewWillBeginDragging scrollView: UIScrollView) {
