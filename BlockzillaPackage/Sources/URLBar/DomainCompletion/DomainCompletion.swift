@@ -15,12 +15,6 @@ public enum CompletionSourceError: Error {
     case invalidUrl
     case duplicateDomain
     case indexOutOfRange
-
-    public var message: String {
-        guard case .invalidUrl = self else { return "" }
-
-        return "ERROR"// UIConstants.strings.autocompleteAddCustomUrlError
-    }
 }
 
 public typealias CustomCompletionResult = Result<Void, CompletionSourceError>

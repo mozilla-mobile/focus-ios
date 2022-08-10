@@ -14,7 +14,7 @@ public class BrowserToolbar: UIView {
 
     private lazy var backButton: UIButton = {
         let backButton = UIButton()
-        backButton.setImage(#imageLiteral(resourceName: "icon_back_active"), for: .normal)
+        backButton.setImage(.backActive, for: .normal)
         backButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         backButton.accessibilityLabel = viewModel.strings.browserBack
         backButton.isEnabled = false
@@ -23,7 +23,7 @@ public class BrowserToolbar: UIView {
 
     private lazy var forwardButton: UIButton = {
         let forwardButton = UIButton()
-        forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active"), for: .normal)
+        forwardButton.setImage(.forwardActive, for: .normal)
         forwardButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         forwardButton.accessibilityLabel = viewModel.strings.browserForward
         forwardButton.isEnabled = false
@@ -32,7 +32,7 @@ public class BrowserToolbar: UIView {
 
     private lazy var deleteButton: UIButton = {
         let deleteButton = UIButton()
-        deleteButton.setImage(#imageLiteral(resourceName: "icon_delete"), for: .normal)
+        deleteButton.setImage(.delete, for: .normal)
         deleteButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         deleteButton.accessibilityIdentifier = "URLBar.deleteButton"
         deleteButton.isEnabled = false
@@ -41,7 +41,7 @@ public class BrowserToolbar: UIView {
 
     private lazy var contextMenuButton: UIButton = {
         let contextMenuButton = UIButton()
-        contextMenuButton.setImage(#imageLiteral(resourceName: "icon_hamburger_menu"), for: .normal)
+        contextMenuButton.setImage(.hamburgerMenu, for: .normal)
         contextMenuButton.tintColor = .primaryText
         if #available(iOS 14.0, *) {
             contextMenuButton.showsMenuAsPrimaryAction = true

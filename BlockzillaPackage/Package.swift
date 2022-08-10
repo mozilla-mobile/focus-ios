@@ -56,7 +56,6 @@ let package = Package(
         .target(
             name: "URLBar",
             dependencies: [
-                "DesignSystem",
                 "UIComponents"
             ]
         ),

@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import DesignSystem
+//import DesignSystem
 import Combine
 import UIHelpers
 
@@ -56,7 +56,7 @@ public class URLBar: UIView {
         // our own so we can use it as the rightView.
         let clearButton = UIButton(frame: CGRect(x: 0, y: 0, width: UIConstants.layout.urlBarClearButtonWidth, height: UIConstants.layout.urlBarClearButtonHeight))
         clearButton.isHidden = true
-        clearButton.setImage(#imageLiteral(resourceName: "icon_clear"), for: .normal)
+        clearButton.setImage(.clear, for: .normal)
         clearButton.addTarget(self, action: #selector(didPressClear), for: .touchUpInside)
 
         textField.font = .body15
@@ -107,7 +107,7 @@ public class URLBar: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isHidden = true
         button.alpha = 0
-        button.setImage(#imageLiteral(resourceName: "icon_cancel"), for: .normal)
+        button.setImage(.cancel, for: .normal)
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
         button.setContentHuggingPriority(.required, for: .horizontal)
         button.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
@@ -131,7 +131,7 @@ public class URLBar: UIView {
     lazy var backButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(#imageLiteral(resourceName: "icon_back_active"), for: .normal)
+        button.setImage(.backActive, for: .normal)
         button.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         button.accessibilityLabel = viewModel.strings.browserBack
         button.isEnabled = false
@@ -145,7 +145,7 @@ public class URLBar: UIView {
     lazy var forwardButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(#imageLiteral(resourceName: "icon_forward_active"), for: .normal)
+        button.setImage(.forwardActive, for: .normal)
         button.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         button.accessibilityLabel = viewModel.strings.browserForward
         button.isEnabled = false
@@ -159,7 +159,7 @@ public class URLBar: UIView {
     lazy var stopReloadButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(#imageLiteral(resourceName: "icon_refresh_menu"), for: .normal)
+        button.setImage(.refreshMenu, for: .normal)
         button.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         button.accessibilityIdentifier = "BrowserToolset.stopReloadButton"
         NSLayoutConstraint.activate([
@@ -172,7 +172,7 @@ public class URLBar: UIView {
     lazy var deleteButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(#imageLiteral(resourceName: "icon_delete"), for: .normal)
+        button.setImage(.delete, for: .normal)
         button.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         button.accessibilityIdentifier = "URLBar.deleteButton"
         button.isEnabled = false
@@ -186,7 +186,7 @@ public class URLBar: UIView {
     lazy var contextMenuButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(#imageLiteral(resourceName: "icon_hamburger_menu"), for: .normal)
+        button.setImage(.hamburgerMenu, for: .normal)
         button.tintColor = .primaryText
         if #available(iOS 14.0, *) {
             button.showsMenuAsPrimaryAction = true
@@ -340,10 +340,10 @@ public class URLBar: UIView {
             .$isLoading
             .sink { [viewModel, stopReloadButton] in
                 if $0 {
-                    stopReloadButton.setImage(#imageLiteral(resourceName: "icon_stop_menu"), for: .normal)
+                    stopReloadButton.setImage(.stopMenu, for: .normal)
                     stopReloadButton.accessibilityLabel = viewModel.strings.browserStop
                 } else {
-                    stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu"), for: .normal)
+                    stopReloadButton.setImage(.refreshMenu, for: .normal)
                     stopReloadButton.accessibilityLabel = viewModel.strings.browserReload
                 }
             }
