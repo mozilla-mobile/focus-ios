@@ -3,21 +3,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-// import Telemetry
-// import Glean
 import DesignSystem
 import Combine
 import UIHelpers
 
 public class URLBar: UIView {
     public weak var delegate: URLBarDelegate?
-
     public var shouldPresent = false
-//    public var isIPadRegularDimensions = false {
-//        didSet {
-//            print("isIPadRegularDimensions: \(isIPadRegularDimensions)")
-//        }
-//    }
 
     // MARK: - UI Components
 
@@ -530,28 +522,22 @@ public class URLBar: UIView {
         urlTextField.rightView?.animateHidden(!shouldDisplay, duration: animated ? UIConstants.layout.urlBarTransitionAnimationDuration : 0)
     }
 
-    fileprivate func addCustomURL() {
-        guard let url = viewModel.url else { return }
+//    fileprivate func addCustomURL() {
+//        guard let url = viewModel.url else { return }
 //        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.quickAddCustomDomainButton)
-        delegate?.urlBar(self, didAddCustomURL: url)
-    }
+//        delegate?.urlBar(self, didAddCustomURL: url)
+//    }
 
     public func copyToClipboard() {
         UIPasteboard.general.string = viewModel.url?.absoluteString ?? ""
     }
 
-    fileprivate func paste(clipboardString: String) {
-        viewModel.selectionState = .selected
-        urlTextField.text = clipboardString
-    }
-
     fileprivate func pasteAndGo(clipboardString: String) {
-        viewModel.selectionState = .selected
         delegate?.urlBarDidActivate(self)
         delegate?.urlBar(self, didSubmitText: clipboardString)
-
-//        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.pasteAndGo)
-//        GleanMetrics.UrlInteraction.pasteAndGo.record()
+        self.viewModel
+            .viewActionSubject
+            .send(.pasteAndGo)
     }
 
     @objc fileprivate func copyLink() {
@@ -762,17 +748,8 @@ extension URLBar: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool {
         // If the new search string is not longer than the previous
         // we don't need to find an autocomplete suggestion.
-        if let autocompleteText = autocompleteTextField.text, autocompleteText != viewModel.userInputText {
-//            Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.autofill))
-        }
         viewModel.userInputText = nil
-
         delegate?.urlBar(self, didSubmitText: autocompleteTextField.text ?? "")
-
-//        if Settings.getToggle(.enableSearchSuggestions) {
-//            Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionNotSelected))
-//        }
-
         return true
     }
 
@@ -802,8 +779,9 @@ extension URLBar: UIDragInteractionDelegate {
     public func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
         guard let url = viewModel.url, let itemProvider = NSItemProvider(contentsOf: url) else { return [] }
         let dragItem = UIDragItem(itemProvider: itemProvider)
-//        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.drag, object: TelemetryEventObject.searchBar)
-//        GleanMetrics.UrlInteraction.dragStarted.record()
+        self.viewModel
+            .viewActionSubject
+            .send(.dragInteractionStarted)
         return [dragItem]
     }
 

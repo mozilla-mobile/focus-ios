@@ -13,6 +13,8 @@ public enum URLViewAction {
     case reloadButtonTap
     case deleteButtonTap
     case shieldIconButtonTap
+    case dragInteractionStarted
+    case pasteAndGo
 }
 
 public enum ShieldIconStatus: Equatable {

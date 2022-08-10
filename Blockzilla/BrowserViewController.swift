@@ -595,6 +595,11 @@ class BrowserViewController: UIViewController {
                 case .reloadButtonTap:
                     self.webViewController.reload()
 
+                case .dragInteractionStarted:
+                    GleanMetrics.UrlInteraction.dragStarted.record()
+
+                case .pasteAndGo:
+                    GleanMetrics.UrlInteraction.pasteAndGo.record()
                 }
             }.store(in: &cancellables)
     }
