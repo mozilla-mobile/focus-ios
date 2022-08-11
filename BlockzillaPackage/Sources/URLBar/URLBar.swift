@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-//import DesignSystem
 import Combine
 import UIHelpers
 
@@ -130,7 +129,6 @@ public class URLBar: UIView {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(.backActive, for: .normal)
-        button.contentEdgeInsets = .toolbarButtonInsets
         button.accessibilityLabel = viewModel.strings.browserBack
         button.isEnabled = false
         NSLayoutConstraint.activate([
@@ -144,7 +142,6 @@ public class URLBar: UIView {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(.forwardActive, for: .normal)
-        button.contentEdgeInsets = .toolbarButtonInsets
         button.accessibilityLabel = viewModel.strings.browserForward
         button.isEnabled = false
         NSLayoutConstraint.activate([
@@ -159,7 +156,6 @@ public class URLBar: UIView {
         button.tintColor = .label
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(.refreshMenu, for: .normal)
-        button.contentEdgeInsets = .toolbarButtonInsets
         button.accessibilityIdentifier = "BrowserToolset.stopReloadButton"
         NSLayoutConstraint.activate([
             button.widthAnchor.constraint(equalToConstant: .barButtonHeight),
@@ -172,7 +168,6 @@ public class URLBar: UIView {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(.delete, for: .normal)
-        button.contentEdgeInsets = .toolbarButtonInsets
         button.accessibilityIdentifier = "URLBar.deleteButton"
         button.isEnabled = false
         NSLayoutConstraint.activate([
@@ -194,7 +189,6 @@ public class URLBar: UIView {
         }
         button.accessibilityLabel = viewModel.strings.browserSettings
         button.accessibilityIdentifier = "HomeView.settingsButton"
-        button.contentEdgeInsets = .toolbarButtonInsets
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
         button.setContentHuggingPriority(.required, for: .horizontal)
         NSLayoutConstraint.activate([

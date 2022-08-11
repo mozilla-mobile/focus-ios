@@ -9,10 +9,6 @@ public class URLBarLarge: URLBar {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.spacing = 0
-        stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.layoutMargins = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
-        stackView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        stackView.setContentHuggingPriority(.defaultLow, for: .horizontal)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -21,10 +17,6 @@ public class URLBarLarge: URLBar {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.spacing = 0
-        stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.layoutMargins = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
-        stackView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        stackView.setContentHuggingPriority(.defaultLow, for: .horizontal)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
