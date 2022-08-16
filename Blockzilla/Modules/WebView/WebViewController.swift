@@ -283,6 +283,14 @@ class WebViewController: UIViewController, WebController {
         }
     }
 
+    func getMetadata() async throws -> Metadata {
+        return try await withCheckedThrowingContinuation { continuation in
+            self.getMetadata { result in
+                continuation.resume(with: result)
+            }
+        }
+    }
+
     func focus() {
         browserView.becomeFirstResponder()
     }

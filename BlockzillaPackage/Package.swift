@@ -18,35 +18,35 @@ let package = Package(
             targets: ["Onboarding"]),
         .library(
             name: "AppShortcuts",
-            targets: ["AppShortcuts"])
-    ],
-    dependencies: [
-        .package(url: "https://github.com/SnapKit/SnapKit.git", from: "5.0.1")
+            targets: ["AppShortcuts"]),
+        .library(
+            name: "UIComponents",
+            targets: ["UIComponents"])
     ],
     targets: [
         .target(
-            name: "UIHelpers",
+            name: "UIComponents",
             dependencies: [
-                .product(name: "SnapKit", package: "SnapKit")
+                "UIHelpers"
             ]
         ),
         .target(
-            name: "DesignSystem",
-            exclude: ["Preview Files"]
+            name: "UIHelpers"
+        ),
+        .target(
+            name: "DesignSystem"
         ),
         .target(
             name: "Onboarding",
             dependencies: [
-                "DesignSystem",
-                .product(name: "SnapKit", package: "SnapKit")
-            ],
-            exclude: ["Preview Files"]
+                "DesignSystem"
+            ]
         ),
         .target(
             name: "AppShortcuts",
             dependencies: [
-                "DesignSystem",
-                .product(name: "SnapKit", package: "SnapKit")
+                "UIComponents",
+                "DesignSystem"
             ]
         ),
         .testTarget(

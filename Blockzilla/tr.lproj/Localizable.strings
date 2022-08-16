@@ -433,6 +433,12 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "GÜVENLİK";
 
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Saptanmış tarayıcı yap";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "Web siteleri, e-postalar ve mesajlardaki bağlantılar otomatik olarak %@ uygulamasında açılsın.";
+
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Sistem teması";
 
@@ -504,6 +510,9 @@
 
 /* Text for the share menu option when a user wants to add the site to Shortcuts */
 "ShareMenu.AddToShortcuts" = "Kısayollara ekle";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "Kısayollara eklendi";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Adresi kopyala";

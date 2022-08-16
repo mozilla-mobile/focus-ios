@@ -433,6 +433,12 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "BIZTONSÁG";
 
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Beállítás alapértelmezett böngészőként";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "Állítsa be a webhelyek, e-mailek és üzenetek hivatkozásait, hogy azok automatikusan a %@ban nyíljanak meg.";
+
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Rendszertéma";
 
@@ -504,6 +510,9 @@
 
 /* Text for the share menu option when a user wants to add the site to Shortcuts */
 "ShareMenu.AddToShortcuts" = "Hozzáadás a Parancsokhoz";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "Hozzáadva a Parancsokhoz";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Cím másolása";

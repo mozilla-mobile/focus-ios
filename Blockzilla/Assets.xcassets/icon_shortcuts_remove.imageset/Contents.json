@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "Preferences updated.pdf",
+      "filename" : "Remove Shortcut.pdf",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "preferences_updated.pdf",
+      "filename" : "icon_shortcuts_remove.pdf",
       "idiom" : "universal"
     }
   ],
@@ -20,6 +20,7 @@
     "version" : 1
   },
   "properties" : {
-    "preserves-vector-representation" : true
+    "preserves-vector-representation" : true,
+    "template-rendering-intent" : "template"
   }
 }
