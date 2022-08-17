@@ -313,6 +313,7 @@ class BrowserViewController: UIViewController {
                     presentedController = controller
 
                 case .trash:
+                    let isTrackerBlocked = onboardingEventsHandler.shownTips.contains(.trackingProtectionShield) ? true : false
                     let sourceButton = showsToolsetInURLBar ? urlBar.deleteButton : browserToolbar.deleteButton
                     let sourceRect = showsToolsetInURLBar ? CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.maxY - 10, width: 0, height: 0) :
                     CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.minY + 10, width: 0, height: 0)
@@ -320,7 +321,13 @@ class BrowserViewController: UIViewController {
                         anchoredBy: sourceButton,
                         sourceRect: sourceRect,
                         body: UIConstants.strings.tooltipBodyTextForTrashIcon,
-                        dismiss: { self.onboardingEventsHandler.route = nil }
+                        dismiss: {
+                            self.dismiss(animated: true)
+                            if !isTrackerBlocked, self.getNumberOfLifetimeTrackersBlocked() > 0 {
+                                self.onboardingEventsHandler.shownTips.remove(.trackingProtectionShield)
+                                self.onboardingEventsHandler.send(.trackerBlocked)
+                            }
+                        }
                     )
                     self.present(controller, animated: true)
                     presentedController = controller
@@ -1675,7 +1682,9 @@ extension BrowserViewController: WebControllerDelegate {
            case .on(let oldInfo) = oldTrackingProtectionStatus {
             let differenceSinceLastUpdate = max(0, info.total - oldInfo.total)
             let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
-            setNumberOfLifetimeTrackersBlocked(numberOfTrackers: numberOfTrackersBlocked + differenceSinceLastUpdate)
+            let totalNumberOfTrackersBlocked = numberOfTrackersBlocked + differenceSinceLastUpdate
+            if totalNumberOfTrackersBlocked > 0 { onboardingEventsHandler.send(.trackerBlocked) }
+            setNumberOfLifetimeTrackersBlocked(numberOfTrackers: totalNumberOfTrackersBlocked)
         }
         updateLockIcon(trackingProtectionStatus: trackingStatus)
     }
