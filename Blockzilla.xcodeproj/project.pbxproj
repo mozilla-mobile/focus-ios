@@ -56,6 +56,7 @@
 		745DC5E41F39221100661635 /* ShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 745DC5DA1F39221100661635 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7460BD671F58B1B10096B745 /* GradientProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7460BD661F58B1B10096B745 /* GradientProgressBar.swift */; };
 		747ADA181FC38EFC00970132 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747ADA171FC38EFC00970132 /* IntroViewController.swift */; };
+		748BCE7728ACC981005BC0CF /* TrackingAdsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748BCE7628ACC981005BC0CF /* TrackingAdsTests.swift */; };
 		74ACC3B02875A0CC00A9AC3E /* TrackingProtectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74ACC3AF2875A0CC00A9AC3E /* TrackingProtectionManager.swift */; };
 		74ACC3D0288E750700A9AC3E /* AdsTelemetryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74ACC3CF288E750700A9AC3E /* AdsTelemetryHelper.swift */; };
 		74ACC3D2289CF85C00A9AC3E /* Ads.js in Resources */ = {isa = PBXBuildFile; fileRef = 74ACC3D1289CF85A00A9AC3E /* Ads.js */; };
@@ -502,6 +503,7 @@
 		745DC5E11F39221100661635 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7460BD661F58B1B10096B745 /* GradientProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientProgressBar.swift; sourceTree = "<group>"; };
 		747ADA171FC38EFC00970132 /* IntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
+		748BCE7628ACC981005BC0CF /* TrackingAdsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingAdsTests.swift; sourceTree = "<group>"; };
 		74ACC3AF2875A0CC00A9AC3E /* TrackingProtectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionManager.swift; sourceTree = "<group>"; };
 		74ACC3CF288E750700A9AC3E /* AdsTelemetryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdsTelemetryHelper.swift; sourceTree = "<group>"; };
 		74ACC3D1289CF85A00A9AC3E /* Ads.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Ads.js; sourceTree = "<group>"; };
@@ -1615,6 +1617,7 @@
 		D8E0155D1FCF409F00CA3B9F /* ClientTests */ = {
 			isa = PBXGroup;
 			children = (
+				748BCE7628ACC981005BC0CF /* TrackingAdsTests.swift */,
 				D025F224218B64D600B262D8 /* SearchEngineTests.swift */,
 				D8E0155E1FCF409F00CA3B9F /* SearchEngineManagerTests.swift */,
 				D8E015601FCF409F00CA3B9F /* Info.plist */,
@@ -2279,6 +2282,7 @@
 				F8DE0EC926CC88B200A31419 /* SupportUtils.swift in Sources */,
 				D8E0156E1FD9E40F00CA3B9F /* DomainCompletionTests.swift in Sources */,
 				D025F225218B64D600B262D8 /* SearchEngineTests.swift in Sources */,
+				748BCE7728ACC981005BC0CF /* TrackingAdsTests.swift in Sources */,
 				F8DE0EC826CC887800A31419 /* SupportUtilsTest.swift in Sources */,
 				3AEC0B3E267DE30A007B7850 /* URIFixupTests.swift in Sources */,
 			);
