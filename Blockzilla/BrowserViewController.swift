@@ -977,7 +977,7 @@ class BrowserViewController: UIViewController {
 
             let shareMenu = UIMenu(options: .displayInline, children: shareItems.compactMap { $0 })
             actions.append(shareMenu)
-            actions.append(UIMenu(options: .displayInline, children: [UIAction(settingsItem)]))
+            actions.append(UIMenu(options: .displayInline, children: [UIAction(whatsNewItem), UIAction(settingsItem)]))
 
         } else {
             var actionItems: [UIMenuElement] = [UIAction(whatsNewItem)]
