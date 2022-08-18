@@ -980,10 +980,7 @@ class BrowserViewController: UIViewController {
             actions.append(UIMenu(options: .displayInline, children: [UIAction(whatsNewItem), UIAction(settingsItem)]))
 
         } else {
-            var actionItems: [UIMenuElement] = [UIAction(whatsNewItem)]
-            actionItems.append(UIAction(helpItem))
-            actionItems.append(UIAction(settingsItem))
-            let actionMenu = UIMenu(options: .displayInline, children: actionItems)
+            let actionMenu = UIMenu(options: .displayInline, children: [UIAction(whatsNewItem), UIAction(helpItem), UIAction(settingsItem)])
             actions.append(actionMenu)
         }
         return actions
