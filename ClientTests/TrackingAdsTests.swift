@@ -3,19 +3,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import XCTest
+#if FOCUS
 @testable import Firefox_Focus
-import WebKit
+#else
+@testable import Firefox_Klar
+#endif
 
 class TrackingAdsTests: XCTestCase {
     
-    let tpm = TrackingProtectionManager(isTrackingEnabled: {
-        Settings.getToggle(.trackingProtection)
-    })
+    let tpm = TrackingProtectionManager(isTrackingEnabled: { true })
     lazy var wvc = WebViewController(trackingProtectionManager: tpm)
-    
-    override func setUpWithError() throws {
-        
-    }
     
     func testGetProviderNil() throws {
         let mockData: [String: String] = ["url": "saasj"]
