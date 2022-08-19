@@ -35,10 +35,10 @@ public class OnboardingEventsHandler {
         case menu
     }
 
-    @Published private var route: ToolTipRoute?
+    @Published public var route: ToolTipRoute?
 
     private var visitedURLcounter = 0
-    public var shownTips = Set<ToolTipRoute>() {
+    private var shownTips = Set<ToolTipRoute>() {
         didSet {
             setShownTips(shownTips)
         }
