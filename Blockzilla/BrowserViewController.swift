@@ -1558,6 +1558,11 @@ extension BrowserViewController: WebControllerDelegate {
         toggleURLBarBackground(isBright: !urlBar.isEditing)
         urlBar.progressBar.hideProgressBar()
         GleanMetrics.Browser.totalUriCount.add()
+        Task {
+            let faviconURL = try? await webViewController.getMetadata().icon.flatMap(URL.init(string:))
+            guard let faviconURL = faviconURL, let url = urlBar.url else { return }
+            shortcutManager.update(faviconURL: faviconURL, for: url)
+        }
     }
 
     func webControllerURLDidChange(_ controller: WebController, url: URL) {
