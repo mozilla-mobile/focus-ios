@@ -313,7 +313,6 @@ class BrowserViewController: UIViewController {
                     presentedController = controller
 
                 case .trash:
-                    let isTrackerBlocked = onboardingEventsHandler.shownTips.contains(.trackingProtectionShield) ? true : false
                     let sourceButton = showsToolsetInURLBar ? urlBar.deleteButton : browserToolbar.deleteButton
                     let sourceRect = showsToolsetInURLBar ? CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.maxY - 10, width: 0, height: 0) :
                     CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.minY + 10, width: 0, height: 0)
@@ -321,13 +320,7 @@ class BrowserViewController: UIViewController {
                         anchoredBy: sourceButton,
                         sourceRect: sourceRect,
                         body: UIConstants.strings.tooltipBodyTextForTrashIcon,
-                        dismiss: {
-                            self.dismiss(animated: true)
-                            if !isTrackerBlocked, self.getNumberOfLifetimeTrackersBlocked() > 0 {
-                                self.onboardingEventsHandler.shownTips.remove(.trackingProtectionShield)
-                                self.onboardingEventsHandler.send(.trackerBlocked)
-                            }
-                        }
+                        dismiss: { self.onboardingEventsHandler.route = nil }
                     )
                     self.present(controller, animated: true)
                     presentedController = controller
