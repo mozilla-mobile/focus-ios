@@ -4,8 +4,17 @@
 
 import UIKit
 import Onboarding
+import SwiftUI
 
 class OnboardingFactory {
+
+    static func makeOnboarding(dismissAction: @escaping () -> Void) -> UIViewController {
+        let controller = UIHostingController(rootView: FirstOnboardingView(dismissAction: dismissAction))
+        controller.modalPresentationStyle = .formSheet
+        controller.isModalInPresentation = true
+        return controller
+    }
+
     static func make(onboardingType :OnboardingEventsHandler.OnboardingType, dismissAction: @escaping () -> Void) -> (onboardingViewController: UIViewController, animated: Bool) {
         switch onboardingType {
         case .new:

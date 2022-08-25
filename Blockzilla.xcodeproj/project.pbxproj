@@ -48,6 +48,7 @@
 		4FE4E6F61FBB5E2C001BB779 /* TPSidebarBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE4E6F51FBB5E2C001BB779 /* TPSidebarBadge.swift */; };
 		58408BA5265FC524003C4E4F /* BasicBrowsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58408BA4265FC524003C4E4F /* BasicBrowsing.swift */; };
 		6028814027B2C6BB00CAF588 /* OnboardingConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6028813F27B2C6BB00CAF588 /* OnboardingConstants.swift */; };
+		60467FC528B7A0B7007A732B /* FirstOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60467FC428B7A0B7007A732B /* FirstOnboardingView.swift */; };
 		60CF785927C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CF785827C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift */; };
 		742C99D41F3A3AD200717D69 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 742C99D31F3A3AD200717D69 /* Assets.xcassets */; };
 		74584E351FA1077000AF2582 /* SettingsContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74584E341FA1077000AF2582 /* SettingsContentViewController.swift */; };
@@ -425,6 +426,7 @@
 		4FE4E6F51FBB5E2C001BB779 /* TPSidebarBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPSidebarBadge.swift; sourceTree = "<group>"; };
 		58408BA4265FC524003C4E4F /* BasicBrowsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicBrowsing.swift; sourceTree = "<group>"; };
 		6028813F27B2C6BB00CAF588 /* OnboardingConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingConstants.swift; sourceTree = "<group>"; };
+		60467FC428B7A0B7007A732B /* FirstOnboardingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstOnboardingView.swift; sourceTree = "<group>"; };
 		60CF785827C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalOnboardingSettingsView.swift; sourceTree = "<group>"; };
 		742C99D31F3A3AD200717D69 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7449B1361F290F7B001A199D /* af */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = af; path = af.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1158,11 +1160,20 @@
 		6028813C27B1255E00CAF588 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
+				60467FC328B7A099007A732B /* SwiftUI Onboarding */,
 				C8D0305E27E89DFF000664DA /* Old */,
 				6028813F27B2C6BB00CAF588 /* OnboardingConstants.swift */,
 				C871586127FC276D006224BB /* OnboardingFactory.swift */,
 			);
 			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		60467FC328B7A099007A732B /* SwiftUI Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				60467FC428B7A0B7007A732B /* FirstOnboardingView.swift */,
+			);
+			path = "SwiftUI Onboarding";
 			sourceTree = "<group>";
 		};
 		745DC5DB1F39221100661635 /* OpenInFocus */ = {
@@ -2366,6 +2377,7 @@
 				C8EADCD22742A00300E76AE6 /* MenuActionable.swift in Sources */,
 				1D3BEDFB20C5E76B0019B722 /* FindInPageBar.swift in Sources */,
 				D30DF93E1DC1634F0064736C /* Toast.swift in Sources */,
+				60467FC528B7A0B7007A732B /* FirstOnboardingView.swift in Sources */,
 				F861799F27961F4200CFD324 /* InternalSettings.swift in Sources */,
 				D33A1AB11BC48FAC0003D929 /* SettingsViewController.swift in Sources */,
 				60CF785927C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift in Sources */,

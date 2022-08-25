@@ -332,7 +332,7 @@ class BrowserViewController: UIViewController {
                     self.present(controller, animated: true)
                     presentedController = controller
 
-                case .onboarding(let onboardingType):
+                case .onboarding(_):
                     let dismissOnboarding = { [unowned self] in
                         Telemetry
                             .default
@@ -348,8 +348,8 @@ class BrowserViewController: UIViewController {
                         onboardingEventsHandler.send(.enterHome)
                     }
 
-                    let (controller, animated) = OnboardingFactory.make(onboardingType: onboardingType, dismissAction: dismissOnboarding)
-                    self.present(controller, animated: animated)
+                    let controller = OnboardingFactory.makeOnboarding { dismissOnboarding() }
+                    self.present(controller, animated: true)
                     presentedController = controller
 
                 case .trackingProtection:
