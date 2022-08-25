@@ -42,8 +42,8 @@ class Toast {
             toast.trailingAnchor.constraint(lessThanOrEqualTo: window.trailingAnchor),
             toast.heightAnchor.constraint(equalToConstant: UIConstants.layout.toastMessageHeight),
 
-            label.leadingAnchor.constraint(equalTo: toast.leadingAnchor, constant: 20),
-            label.trailingAnchor.constraint(equalTo: toast.trailingAnchor, constant: -20),
+            label.leadingAnchor.constraint(equalTo: toast.leadingAnchor, constant: UIConstants.layout.toastLabelOffset),
+            label.trailingAnchor.constraint(equalTo: toast.trailingAnchor, constant: -UIConstants.layout.toastLabelOffset),
             label.centerYAnchor.constraint(equalTo: toast.centerYAnchor)
         ])
 
