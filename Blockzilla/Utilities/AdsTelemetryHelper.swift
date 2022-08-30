@@ -4,6 +4,7 @@
 
 import Foundation
 import Glean
+import WebKit
 
 public enum BasicSearchProvider: String {
     case google
@@ -74,11 +75,62 @@ extension SearchProviderModel {
 
 class AdsTelemetryHelper {
 
-    public static func trackAdsFoundOnPage(providerName: String) {
+    var getURL: (() -> URL?)!
+    var adsTelemetryUrlList: [String] = [String]() {
+        didSet {
+            startingSearchUrlWithAds = getURL()
+        }
+    }
+    var adsTelemetryRedirectUrlList: [URL] = [URL]()
+    var startingSearchUrlWithAds: URL?
+    var adsProviderName: String = ""
+
+    func trackAds(message: WKScriptMessage) {
+        guard
+            let body = message.body as? [String: Any],
+            let provider = getProviderForMessage(message: body),
+            let urls = body["urls"] as? [String] else { return }
+        let adUrls = provider.listAdUrls(urls: urls)
+        if !adUrls.isEmpty {
+            trackAdsFoundOnPage(providerName: provider.name)
+            adsProviderName = provider.name
+            adsTelemetryUrlList = adUrls
+            adsTelemetryRedirectUrlList.removeAll()
+        }
+    }
+
+    func getProviderForMessage(message: [String: Any]) -> SearchProviderModel? {
+        guard let url = message["url"] as? String else { return nil }
+        for provider in SearchProviderModel.searchProviderList {
+            guard url.range(of: provider.regexp, options: .regularExpression) != nil else { continue }
+            return provider
+        }
+
+        return nil
+    }
+
+    func trackClickedAds() {
+        if adsTelemetryUrlList.count > 0, let adUrl = getURL()?.absoluteString {
+            print("------din obiect-----")
+            print("------ \(adsTelemetryUrlList.count) ------ \(adUrl) ----- \(adsTelemetryUrlList.contains(adUrl))")
+            if adsTelemetryUrlList.contains(adUrl) {
+                if !adsProviderName.isEmpty {
+                    trackAdsClickedOnPage(providerName: adsProviderName)
+                }
+                adsTelemetryUrlList.removeAll()
+                adsTelemetryRedirectUrlList.removeAll()
+                adsProviderName = ""
+            }
+        }
+    }
+
+    func trackAdsFoundOnPage(providerName: String) {
+        print("------- ads de la pagina")
         GleanMetrics.BrowserSearch.withAds["provider-\(providerName)"].add()
     }
 
-    public static func trackAdsClickedOnPage(providerName: String) {
+    func trackAdsClickedOnPage(providerName: String) {
+        print("------ clicked ads de la pagina")
         GleanMetrics.BrowserSearch.adClicks["provider-\(providerName)"].add()
     }
 }

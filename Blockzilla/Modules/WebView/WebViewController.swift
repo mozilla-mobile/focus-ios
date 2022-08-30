@@ -83,14 +83,15 @@ class WebViewController: UIViewController, WebController {
     var printFormatter: UIPrintFormatter { return browserView.viewPrintFormatter() }
     var scrollView: UIScrollView { return browserView.scrollView }
 
-    var adsTelemetryUrlList: [String] = [String]() {
-        didSet {
-            startingSearchUrlWithAds = url
-        }
-    }
-    var adsTelemetryRedirectUrlList: [URL] = [URL]()
-    var startingSearchUrlWithAds: URL?
-    var adsProviderName: String = ""
+    var adsTelemetryHelper = AdsTelemetryHelper()
+//    var adsTelemetryUrlList: [String] = [String]() {
+//        didSet {
+//            startingSearchUrlWithAds = url
+//        }
+//    }
+//    var adsTelemetryRedirectUrlList: [URL] = [URL]()
+//    var startingSearchUrlWithAds: URL?
+//    var adsProviderName: String = ""
 
     init(trackingProtectionManager: TrackingProtectionManager) {
         self.trackingProtectionManager = trackingProtectionManager
@@ -101,6 +102,10 @@ class WebViewController: UIViewController, WebController {
         }
         setupWebview()
         ContentBlockerHelper.shared.handler = reloadBlockers(_:)
+        adsTelemetryHelper.getURL = { [weak self] in
+            guard let self = self else { return nil }
+            return self.url
+        }
     }
 
     required init?(coder: NSCoder) {
@@ -364,7 +369,8 @@ extension WebViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, preferences: WKWebpagePreferences, decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
-        trackClickedAds()
+        adsTelemetryHelper.trackClickedAds()
+//        trackClickedAds()
 
         // If the user has asked for a specific content mode for this host, use that.
         if let hostName = navigationAction.request.url?.host, let preferredContentMode = contentModeForHost[hostName] {
@@ -488,7 +494,8 @@ extension WebViewController: WKUIDelegate {
 extension WebViewController: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if message.name == "adsMessageHandler" {
-            trackAds(message: message)
+            adsTelemetryHelper.trackAds(message: message)
+//            trackAds(message: message)
         }
 
         if message.name == "findInPageHandler" {
@@ -526,40 +533,42 @@ extension WebViewController: WKScriptMessageHandler {
 
 extension WebViewController {
 
-    func trackAds(message: WKScriptMessage) {
-        guard
-            let body = message.body as? [String: Any],
-            let provider = getProviderForMessage(message: body),
-            let urls = body["urls"] as? [String] else { return }
-        let adUrls = provider.listAdUrls(urls: urls)
-        if !adUrls.isEmpty {
-            AdsTelemetryHelper.trackAdsFoundOnPage(providerName: provider.name)
-            adsProviderName = provider.name
-            adsTelemetryUrlList = adUrls
-            adsTelemetryRedirectUrlList.removeAll()
-        }
-    }
-
-    func getProviderForMessage(message: [String: Any]) -> SearchProviderModel? {
-        guard let url = message["url"] as? String else { return nil }
-        for provider in SearchProviderModel.searchProviderList {
-            guard url.range(of: provider.regexp, options: .regularExpression) != nil else { continue }
-            return provider
-        }
-
-        return nil
-    }
-
-    func trackClickedAds() {
-        if adsTelemetryUrlList.count > 0, let adUrl = url?.absoluteString {
-            if adsTelemetryUrlList.contains(adUrl) {
-                if !adsProviderName.isEmpty {
-                    AdsTelemetryHelper.trackAdsClickedOnPage(providerName: adsProviderName)
-                }
-                adsTelemetryUrlList.removeAll()
-                adsTelemetryRedirectUrlList.removeAll()
-                adsProviderName = ""
-            }
-        }
-    }
+//    func trackAds(message: WKScriptMessage) {
+//        guard
+//            let body = message.body as? [String: Any],
+//            let provider = getProviderForMessage(message: body),
+//            let urls = body["urls"] as? [String] else { return }
+//        let adUrls = provider.listAdUrls(urls: urls)
+//        if !adUrls.isEmpty {
+//            adsTelemetryHelper.trackAdsFoundOnPage(providerName: provider.name)
+//            adsProviderName = provider.name
+//            adsTelemetryUrlList = adUrls
+//            adsTelemetryRedirectUrlList.removeAll()
+//        }
+//    }
+//
+//    func getProviderForMessage(message: [String: Any]) -> SearchProviderModel? {
+//        guard let url = message["url"] as? String else { return nil }
+//        for provider in SearchProviderModel.searchProviderList {
+//            guard url.range(of: provider.regexp, options: .regularExpression) != nil else { continue }
+//            return provider
+//        }
+//
+//        return nil
+//    }
+//
+//    func trackClickedAds() {
+//        if adsTelemetryUrlList.count > 0, let adUrl = url?.absoluteString {
+//            print("------din functie-----")
+//            print("------ \(adsTelemetryUrlList.count) ------ \(adUrl) ----- \(adsTelemetryUrlList.contains(adUrl))")
+//            if adsTelemetryUrlList.contains(adUrl) {
+//                if !adsProviderName.isEmpty {
+//                    adsTelemetryHelper.trackAdsClickedOnPage(providerName: adsProviderName)
+//                }
+//                adsTelemetryUrlList.removeAll()
+//                adsTelemetryRedirectUrlList.removeAll()
+//                adsProviderName = ""
+//            }
+//        }
+//    }
 }
