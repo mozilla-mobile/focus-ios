@@ -31,7 +31,7 @@ public struct FirstOnboardingView: View {
 
                 VStack {
                     Image.logo
-                    
+
                     Text(config.title)
                         .font(.title28Bold)
                         .multilineTextAlignment(.center)

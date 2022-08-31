@@ -5,7 +5,7 @@
 import SwiftUI
 
 public extension Image {
-    static let logo = Image("icon_logo", bundle: Bundle.myModule)
-    static let close = Image("icon_close", bundle: Bundle.myModule)
-    static let background = Image("icon_background", bundle: Bundle.myModule)
+    static let logo = Image("icon_logo", bundle: Bundle.module)
+    static let close = Image("icon_close", bundle: Bundle.module)
+    static let background = Image("icon_background", bundle: Bundle.module)
 }
