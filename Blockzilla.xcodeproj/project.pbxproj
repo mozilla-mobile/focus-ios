@@ -48,7 +48,6 @@
 		4FE4E6F61FBB5E2C001BB779 /* TPSidebarBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE4E6F51FBB5E2C001BB779 /* TPSidebarBadge.swift */; };
 		58408BA5265FC524003C4E4F /* BasicBrowsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58408BA4265FC524003C4E4F /* BasicBrowsing.swift */; };
 		6028814027B2C6BB00CAF588 /* OnboardingConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6028813F27B2C6BB00CAF588 /* OnboardingConstants.swift */; };
-		6028814227B2C6CE00CAF588 /* WhatsNewEventsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6028814127B2C6CE00CAF588 /* WhatsNewEventsHandler.swift */; };
 		60CF785927C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CF785827C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift */; };
 		742C99D41F3A3AD200717D69 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 742C99D31F3A3AD200717D69 /* Assets.xcassets */; };
 		74584E351FA1077000AF2582 /* SettingsContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74584E341FA1077000AF2582 /* SettingsContentViewController.swift */; };
@@ -429,7 +428,6 @@
 		4FE4E6F51FBB5E2C001BB779 /* TPSidebarBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPSidebarBadge.swift; sourceTree = "<group>"; };
 		58408BA4265FC524003C4E4F /* BasicBrowsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicBrowsing.swift; sourceTree = "<group>"; };
 		6028813F27B2C6BB00CAF588 /* OnboardingConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingConstants.swift; sourceTree = "<group>"; };
-		6028814127B2C6CE00CAF588 /* WhatsNewEventsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewEventsHandler.swift; sourceTree = "<group>"; };
 		60CF785827C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalOnboardingSettingsView.swift; sourceTree = "<group>"; };
 		742C99D31F3A3AD200717D69 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7449B1361F290F7B001A199D /* af */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = af; path = af.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -608,6 +606,10 @@
 		A847EEFB289A4F5A002AC855 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/Intents.strings"; sourceTree = "<group>"; };
 		A847EEFC289A4F5A002AC855 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/Intro.strings"; sourceTree = "<group>"; };
 		A847EEFD289A4F5A002AC855 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		A892C8D428BBA27600A64567 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A892C8D528BBA27600A64567 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/Intents.strings; sourceTree = "<group>"; };
+		A892C8D628BBA27600A64567 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/Intro.strings; sourceTree = "<group>"; };
+		A892C8D728BBA27600A64567 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A89766D31F57DCA8008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A89766D41F57DCA8008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A89766D51F57DCA8008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -1168,7 +1170,6 @@
 			children = (
 				C8D0305E27E89DFF000664DA /* Old */,
 				6028813F27B2C6BB00CAF588 /* OnboardingConstants.swift */,
-				6028814127B2C6CE00CAF588 /* WhatsNewEventsHandler.swift */,
 				C871586127FC276D006224BB /* OnboardingFactory.swift */,
 			);
 			path = Onboarding;
@@ -2047,6 +2048,7 @@
 				tt,
 				et,
 				"pa-IN",
+				si,
 			);
 			mainGroup = E4BF2DCA1BACE8CA00DA9D68;
 			packageReferences = (
@@ -2384,7 +2386,6 @@
 				F861799F27961F4200CFD324 /* InternalSettings.swift in Sources */,
 				D33A1AB11BC48FAC0003D929 /* SettingsViewController.swift in Sources */,
 				60CF785927C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift in Sources */,
-				6028814227B2C6CE00CAF588 /* WhatsNewEventsHandler.swift in Sources */,
 				747ADA181FC38EFC00970132 /* IntroViewController.swift in Sources */,
 				D30AEEBB1DE4CB1B0096A2E7 /* FileManagerExtensions.swift in Sources */,
 				E439815127AAD63200F382B0 /* InternalTelemetrySettingsView.swift in Sources */,
@@ -2563,6 +2564,7 @@
 				F8E4E8C127444A6900A97CCD /* tt */,
 				A8EA0CE5289A4F4100B99C37 /* et */,
 				A847EEFB289A4F5A002AC855 /* pa-IN */,
+				A892C8D528BBA27600A64567 /* si */,
 			);
 			name = Intents.strings;
 			sourceTree = "<group>";
@@ -2650,6 +2652,7 @@
 				F8E4E8C227444A6900A97CCD /* tt */,
 				A8EA0CE6289A4F4100B99C37 /* et */,
 				A847EEFC289A4F5A002AC855 /* pa-IN */,
+				A892C8D628BBA27600A64567 /* si */,
 			);
 			name = Intro.strings;
 			sourceTree = "<group>";
@@ -2737,6 +2740,7 @@
 				F8E4E8C327444A6900A97CCD /* tt */,
 				A8EA0CE7289A4F4100B99C37 /* et */,
 				A847EEFD289A4F5A002AC855 /* pa-IN */,
+				A892C8D728BBA27600A64567 /* si */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -2824,6 +2828,7 @@
 				F8E4E8C027444A6900A97CCD /* tt */,
 				A8EA0CE4289A4F4100B99C37 /* et */,
 				A847EEFA289A4F5A002AC855 /* pa-IN */,
+				A892C8D428BBA27600A64567 /* si */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";

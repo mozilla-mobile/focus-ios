@@ -49,7 +49,6 @@ class BrowserViewController: UIViewController {
     private var background = UIImageView()
     private var cancellables = Set<AnyCancellable>()
     private var onboardingEventsHandler: OnboardingEventsHandler
-    private var whatsNewEventsHandler: WhatsNewEventsHandler
     private var themeManager: ThemeManager
     private let shortcutsPresenter = ShortcutsPresenter()
 
@@ -92,14 +91,12 @@ class BrowserViewController: UIViewController {
         shortcutManager: ShortcutsManager,
         authenticationManager: AuthenticationManager,
         onboardingEventsHandler: OnboardingEventsHandler,
-        whatsNewEventsHandler: WhatsNewEventsHandler,
         themeManager: ThemeManager
     ) {
         self.tipManager = tipManager
         self.shortcutManager = shortcutManager
         self.authenticationManager = authenticationManager
         self.onboardingEventsHandler = onboardingEventsHandler
-        self.whatsNewEventsHandler = whatsNewEventsHandler
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
@@ -325,11 +322,14 @@ class BrowserViewController: UIViewController {
                     self.present(controller, animated: true)
                     presentedController = controller
 
-                case .menu:
+                case .searchBar:
                     let controller = self.tooltipController(
-                        anchoredBy: self.urlBar.contextMenuButton,
-                        sourceRect: CGRect(x: self.urlBar.contextMenuButton.bounds.maxX, y: self.urlBar.contextMenuButton.bounds.midY + 12, width: 0, height: 0),
-                        body: UIConstants.strings.tootipBodyTextForContextMenuIcon,
+                        anchoredBy: self.urlBar.textFieldAnchor,
+                        sourceRect: CGRect(
+                            x: self.urlBar.textFieldAnchor.bounds.minX,
+                            y: self.urlBar.textFieldAnchor.bounds.maxY, width: 0, height: 0
+                        ),
+                        body: UIConstants.strings.tooltipBodyTextStartPrivateBrowsing,
                         dismiss: { self.onboardingEventsHandler.route = nil }
                     )
                     self.present(controller, animated: true)
@@ -980,12 +980,12 @@ class BrowserViewController: UIViewController {
 
             let shareMenu = UIMenu(options: .displayInline, children: shareItems.compactMap { $0 })
             actions.append(shareMenu)
+            actions.append(UIMenu(options: .displayInline, children: [UIAction(whatsNewItem), UIAction(settingsItem)]))
 
         } else {
-            actions.append(UIMenu(options: .displayInline, children: [UIAction(helpItem)]))
+            let actionMenu = UIMenu(options: .displayInline, children: [UIAction(whatsNewItem), UIAction(helpItem), UIAction(settingsItem)])
+            actions.append(actionMenu)
         }
-        actions.append(UIMenu(options: .displayInline, children: [UIAction(settingsItem)]))
-
         return actions
     }
 
@@ -1680,7 +1680,9 @@ extension BrowserViewController: WebControllerDelegate {
            case .on(let oldInfo) = oldTrackingProtectionStatus {
             let differenceSinceLastUpdate = max(0, info.total - oldInfo.total)
             let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
-            setNumberOfLifetimeTrackersBlocked(numberOfTrackers: numberOfTrackersBlocked + differenceSinceLastUpdate)
+            let totalNumberOfTrackersBlocked = numberOfTrackersBlocked + differenceSinceLastUpdate
+            if totalNumberOfTrackersBlocked > 0 { onboardingEventsHandler.send(.trackerBlocked) }
+            setNumberOfLifetimeTrackersBlocked(numberOfTrackers: totalNumberOfTrackersBlocked)
         }
         updateLockIcon(trackingProtectionStatus: trackingStatus)
     }
@@ -1877,7 +1879,6 @@ extension BrowserViewController: MenuActionable {
             searchEngineManager: searchEngineManager,
             authenticationManager: authenticationManager,
             onboardingEventsHandler: onboardingEventsHandler,
-            whatsNewEventsHandler: whatsNewEventsHandler,
             themeManager: themeManager,
             dismissScreenCompletion: activateUrlBarOnHomeView,
             shouldScrollToSiri: shouldScrollToSiri
@@ -1893,6 +1894,10 @@ extension BrowserViewController: MenuActionable {
 
     func showHelp() {
         submit(text: "https://support.mozilla.org/en-US/products/focus-firefox/Focus-ios")
+    }
+
+    func showWhatsNew() {
+        submit(url: URL(forSupportTopic: .whatsNew))
     }
 
     func showCopy() {
@@ -1920,6 +1925,7 @@ extension BrowserViewController: MenuActionable {
         self.shortcutManager.remove(url)
         GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_browser_menu"].add()
         GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "remove_from_shortcuts"))
+        Toast(text: UIConstants.strings.shareMenuRemoveShortcutConfirmMessage).show()
     }
 }
 

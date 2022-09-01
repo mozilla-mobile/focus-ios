@@ -16,6 +16,7 @@ public class OnboardingEventsHandler {
         case enterHome
         case startBrowsing
         case showTrackingProtection
+        case trackerBlocked
     }
 
     public enum OnboardingType: Equatable, Hashable, Codable {
@@ -31,7 +32,7 @@ public class OnboardingEventsHandler {
         case trackingProtection
         case trackingProtectionShield
         case trash
-        case menu
+        case searchBar
     }
 
     @Published public var route: ToolTipRoute?
@@ -62,22 +63,18 @@ public class OnboardingEventsHandler {
         case .applicationDidLaunch:
             let onboardingRoute = ToolTipRoute.onboarding(OnboardingType(shouldShowNewOnboarding()))
             if shownTips.contains(onboardingRoute) {
-                show(route: .menu)
+                show(route: .searchBar)
             } else {
                 show(route: onboardingRoute)
             }
 
         case .enterHome:
             guard shouldShowNewOnboarding() else { return }
-            show(route: .menu)
+            show(route: .searchBar)
 
         case .startBrowsing:
             visitedURLcounter += 1
             guard shouldShowNewOnboarding() else { return }
-
-            if visitedURLcounter == 1 {
-                show(route: .trackingProtectionShield)
-            }
 
             if visitedURLcounter == 3 {
                 show(route: .trash)
@@ -86,6 +83,9 @@ public class OnboardingEventsHandler {
         case .showTrackingProtection:
             guard shouldShowNewOnboarding() else { return }
             show(route: .trackingProtection)
+        case .trackerBlocked:
+            guard shouldShowNewOnboarding() else { return }
+            show(route: .trackingProtectionShield)
         }
     }
 
