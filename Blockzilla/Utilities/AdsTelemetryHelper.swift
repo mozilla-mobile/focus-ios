@@ -109,10 +109,8 @@ class AdsTelemetryHelper {
         return nil
     }
 
-    func trackClickedAds() {
-        if adsTelemetryUrlList.count > 0, let adUrl = getURL()?.absoluteString {
-            print("------din obiect-----")
-            print("------ \(adsTelemetryUrlList.count) ------ \(adUrl) ----- \(adsTelemetryUrlList.contains(adUrl))")
+    func trackClickedAds(with nextURL: URL?) {
+        if adsTelemetryUrlList.count > 0, let adUrl = nextURL?.absoluteString {
             if adsTelemetryUrlList.contains(adUrl) {
                 if !adsProviderName.isEmpty {
                     trackAdsClickedOnPage(providerName: adsProviderName)
@@ -125,12 +123,10 @@ class AdsTelemetryHelper {
     }
 
     func trackAdsFoundOnPage(providerName: String) {
-        print("------- ads de la pagina")
         GleanMetrics.BrowserSearch.withAds["provider-\(providerName)"].add()
     }
 
     func trackAdsClickedOnPage(providerName: String) {
-        print("------ clicked ads de la pagina")
         GleanMetrics.BrowserSearch.adClicks["provider-\(providerName)"].add()
     }
 }
