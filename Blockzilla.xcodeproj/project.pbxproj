@@ -203,6 +203,7 @@
 		E4BF2DF51BACE92400DA9D68 /* ContentBlocker.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E4BF2DEC1BACE92400DA9D68 /* ContentBlocker.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E4BF2E111BAD8AC500DA9D68 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
 		E4BF2E121BAD8AC500DA9D68 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
+		E51ED62C28C0EDD9009674E7 /* SearchWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51ED62B28C0EDCA009674E7 /* SearchWidgetView.swift */; };
 		E56FB76E28C0DF96005CF1B9 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E56FB76D28C0DF96005CF1B9 /* WidgetKit.framework */; };
 		E56FB77028C0DF96005CF1B9 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E56FB76F28C0DF96005CF1B9 /* SwiftUI.framework */; };
 		E56FB77328C0DF96005CF1B9 /* FocusWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56FB77228C0DF96005CF1B9 /* FocusWidgets.swift */; };
@@ -1007,6 +1008,7 @@
 		E4D0AB881E300EFE00DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E4D0AB891E300EFF00DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E4D0AB8A1E300F0000DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E51ED62B28C0EDCA009674E7 /* SearchWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchWidgetView.swift; sourceTree = "<group>"; };
 		E56FB76C28C0DF96005CF1B9 /* FocusWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FocusWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		E56FB76D28C0DF96005CF1B9 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		E56FB76F28C0DF96005CF1B9 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -1772,6 +1774,7 @@
 		E56FB77128C0DF96005CF1B9 /* FocusWidgets */ = {
 			isa = PBXGroup;
 			children = (
+				E51ED62B28C0EDCA009674E7 /* SearchWidgetView.swift */,
 				E56FB77228C0DF96005CF1B9 /* FocusWidgets.swift */,
 				E56FB77428C0DF96005CF1B9 /* FocusWidgets.intentdefinition */,
 				E56FB77528C0DF98005CF1B9 /* Assets.xcassets */,
@@ -2515,6 +2518,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E56FB77328C0DF96005CF1B9 /* FocusWidgets.swift in Sources */,
+				E51ED62C28C0EDD9009674E7 /* SearchWidgetView.swift in Sources */,
 				E56FB77828C0DF98005CF1B9 /* FocusWidgets.intentdefinition in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
