@@ -75,7 +75,7 @@ public class OnboardingEventsHandler {
         case .showTrackingProtection:
             guard shouldShowNewOnboarding() else { return }
             show(route: .trackingProtection)
-            
+
         case .trackerBlocked:
             guard shouldShowNewOnboarding() else { return }
             show(route: .trackingProtectionShield)
