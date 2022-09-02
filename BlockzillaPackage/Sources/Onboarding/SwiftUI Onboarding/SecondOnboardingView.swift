@@ -24,6 +24,7 @@ struct SecondOnboardingView: View {
             Image.huggingFocus
                 .resizable()
                 .scaledToFit()
+                .frame(maxHeight: .imageMaxHeight)
             VStack {
                 Text(String.onboardingSecondScreenTitleV2)
                     .bold()
@@ -34,10 +35,10 @@ struct SecondOnboardingView: View {
                     Text(String.onboardingSecondScreenFirstSubtitleV2)
                         .padding(.bottom, .firstSubtitleBottomPadding)
                     Text(String.onboardingSecondScreenSecondSubtitleV2)
-                        .padding(.bottom, .bodyTextPadding)
                 }
             }
             .foregroundColor(.secondOnboardingScreenText)
+            Spacer()
             Button(action: {
                 UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
             }, label: {
@@ -81,12 +82,12 @@ fileprivate extension CGFloat {
     static let imageSize: CGFloat = 30
     static let titleSize: CGFloat = 26
     static let titleBottomPadding: CGFloat = 12
-    static let bodyTextPadding: CGFloat = 40
     static let skipButtonPadding: CGFloat = 12
     static let firstSubtitleBottomPadding: CGFloat = 14
     static let viewPadding: CGFloat = 26
     static let radius: CGFloat = 12
     static let navigationLinkViewHeight: CGFloat = 44
+    static let imageMaxHeight: CGFloat = 300
 }
 
 struct SecondOnboardingView_Previews: PreviewProvider {
