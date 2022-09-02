@@ -43,7 +43,7 @@ public struct FirstOnboardingView: View {
                         .padding(Constants.subtitlePadding)
 
                     NavigationLink {
-                        // TODO: Insert second Onboarding View
+                        SecondOnboardingView(dismiss: dismissAction)
                     } label: {
                         Text(config.buttonTitle)
                             .font(.body16Bold)
