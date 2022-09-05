@@ -5,22 +5,6 @@
 import SwiftUI
 import WidgetKit
 
-extension Image {
-    static let magnifyingGlass = Image(systemName: "magnifyingglass")
-    static let mozilla = Image("icon_mozilla")
-}
-
-extension Gradient {
-    static let quickAccessWidget = Gradient(colors: [Color("GradientFirst"), Color("GradientSecond")])
-}
-
-fileprivate extension String {
-    static var appNameForBundle: String {
-        var isKlar: Bool { return (Bundle.main.infoDictionary!["CFBundleIdentifier"] as! String).contains("Klar") }
-        return isKlar ? "Klar" : "Focus"
-    }
-}
-
 struct SearchWidgetView: View {
     var body: some View {
         VStack {
@@ -39,7 +23,7 @@ struct SearchWidgetView: View {
 
                 Image.magnifyingGlass
                     .foregroundColor(.white)
-                    .frame(height: 18)
+                    .frame(height: .magnifyingGlassHeight)
             }
             Spacer()
             HStack {
@@ -48,7 +32,7 @@ struct SearchWidgetView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .foregroundColor(.white)
-                    .frame(height: 22)
+                    .frame(height: .logoHeight)
             }
         }
         .padding()
@@ -65,5 +49,26 @@ struct SearchWidgetView_Previews: PreviewProvider {
     static var previews: some View {
         SearchWidgetView()
             .previewContext(WidgetPreviewContext(family: .systemSmall))
+    }
+}
+
+fileprivate extension CGFloat {
+    static let logoHeight: CGFloat = 22
+    static let magnifyingGlassHeight: CGFloat = 18
+}
+
+fileprivate extension Image {
+    static let magnifyingGlass = Image(systemName: "magnifyingglass")
+    static let mozilla = Image("icon_mozilla")
+}
+
+fileprivate extension Gradient {
+    static let quickAccessWidget = Gradient(colors: [Color("GradientFirst"), Color("GradientSecond")])
+}
+
+fileprivate extension String {
+    static var appNameForBundle: String {
+        var isKlar: Bool { return (Bundle.main.infoDictionary!["CFBundleIdentifier"] as! String).contains("Klar") }
+        return isKlar ? "Klar" : "Focus"
     }
 }
