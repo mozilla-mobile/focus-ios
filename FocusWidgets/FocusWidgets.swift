@@ -13,19 +13,12 @@ struct Provider: TimelineProvider {
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<SimpleEntry>) -> Void) {
-        var entries: [SimpleEntry] = [SimpleEntry(date: Date())]
-        let timeline = Timeline(entries: entries, policy: .atEnd)
+        let timeline = Timeline(entries: [SimpleEntry(date: Date())], policy: .atEnd)
         completion(timeline)
     }
 
     func placeholder(in context: Context) -> SimpleEntry {
         SimpleEntry(date: Date())
-    }
-
-    func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (SimpleEntry) -> Void) {
-    }
-
-    func getTimeline(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> Void) {
     }
 }
 
@@ -49,8 +42,8 @@ struct FocusWidgets: Widget {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             FocusWidgetsEntryView(entry: entry)
         }
-        .configurationDisplayName("Quick Actions")
-        .description("Add a Focus shortcut to your Home screen. After adding the widget, touch and hold to edit it and select a different shortcut.")
+        .configurationDisplayName(UIConstants.strings.quickActionsGalleryTitle)
+        .description(UIConstants.strings.quickActionGalleryDescription)
         .supportedFamilies([.systemSmall])
     }
 }
