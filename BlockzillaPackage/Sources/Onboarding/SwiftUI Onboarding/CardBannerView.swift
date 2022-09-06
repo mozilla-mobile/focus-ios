@@ -93,7 +93,7 @@ struct CardBannerView_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 14, *) {
             ZStack {
-                Color.pink.ignoresSafeArea()
+                Color("GradientSecond", bundle: .module).ignoresSafeArea()
                 CardBannerView(
                     config: .init(
                         title: "Browsing history cleared! 🎉",
