@@ -47,10 +47,12 @@ public struct CardBannerView: View {
     var header: some View {
         VStack(spacing: .verticalSpacing) {
             Text(config.title)
+                .foregroundColor(.black)
                 .font(.title3)
                 .fontWeight(.bold)
 
             Text(config.subtitle)
+                .foregroundColor(.black)
                 .multilineTextAlignment(.center)
         }
     }
@@ -64,11 +66,11 @@ public struct CardBannerView: View {
     var actionButton: some View {
         Button(action: dismiss, label: {
             Text(config.actionButtonTitle)
-                .foregroundColor(.systemBackground)
+                .foregroundColor(.white)
                 .font(.body16Bold)
                 .frame(maxWidth: .infinity)
                 .frame(height: .instructionButtonHeight)
-                .background(Color.secondOnboardingScreenTopButton)
+                .background(Color.actionButton)
                 .cornerRadius(.radius)
                 .padding(.horizontal, .actionButtonPadding)
         })
