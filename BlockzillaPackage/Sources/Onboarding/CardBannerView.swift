@@ -65,7 +65,7 @@ public struct CardBannerView: View {
     }
 }
 
-struct SwiftUIView_Previews: PreviewProvider {
+struct CardBannerView_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 14, *) {
             ZStack {
