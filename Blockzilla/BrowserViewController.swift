@@ -364,8 +364,17 @@ class BrowserViewController: UIViewController {
 
                 case .widget:
                     urlBar.dismiss()
-                    
-                    let cardBanner = UIHostingController(rootView: CardBannerView(dismiss: { [weak self] in
+                    let cardBanner = UIHostingController(
+                        rootView: CardBannerView(
+                            config: .init(
+                                title: UIConstants.strings.widgetOnboardingCardTitle,
+                                subtitle: UIConstants.strings.widgetOnboardingCardSubtitle,
+                                actionButtonTitle: UIConstants.strings.widgetOnboardingCardActionButton,
+                                widget: .init(
+                                    title: UIConstants.strings.searchInApp,
+                                    appName: AppInfo.shortProductName
+                                )),
+                            dismiss: { [weak self] in
                         self?.onboardingEventsHandler.route = nil
                         self?.urlBar.activateTextField()
                     }))

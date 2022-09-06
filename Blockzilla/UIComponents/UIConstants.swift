@@ -351,6 +351,21 @@ struct UIConstants {
                 value: "Search in",
                 comment: "Translate only 'Search in'. App name will is rendered in a different label.")
 
+        public static let widgetOnboardingCardTitle = NSLocalizedString(
+                "WidgetOnboardingCard.Title",
+                value: "Browsing history cleared! 🎉",
+                comment: "Title shown on card view explaining the app has a widget option")
+
+        public static let widgetOnboardingCardSubtitle = NSLocalizedString(
+                "WidgetOnboardingCard.Subtitle",
+                value: "We’ll leave you to your private browsing, but get a quicker start next time with the Focus widget on your Home screen.",
+                comment: "Subtitle shown on card view explaining the app has a widget option")
+
+        public static let widgetOnboardingCardActionButton = NSLocalizedString(
+                "WidgetOnboardingCard.ActionButton",
+                value: "Show Me How",
+                comment: "Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget")
+
         static let userDefaultsLaunchThresholdKey = "launchThreshold"
         static let userDefaultsLaunchCountKey = "launchCount"
         static let userDefaultsLastReviewRequestDate = "lastReviewRequestDate"

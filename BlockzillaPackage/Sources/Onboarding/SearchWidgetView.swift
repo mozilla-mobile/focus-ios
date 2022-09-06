@@ -13,7 +13,7 @@ public struct SearchWidgetView: View {
         self.title = title
         self.appName = appName
     }
-    
+
     public var body: some View {
         VStack {
             HStack(alignment: .top) {
@@ -37,7 +37,7 @@ public struct SearchWidgetView: View {
             Spacer()
             HStack {
                 Spacer()
-                Image.mozilla
+                Image.logo
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .foregroundColor(.white)
@@ -66,13 +66,4 @@ struct SearchWidgetView_Previews: PreviewProvider {
 fileprivate extension CGFloat {
     static let logoHeight: CGFloat = 22
     static let magnifyingGlassHeight: CGFloat = 18
-}
-
-fileprivate extension Image {
-    static let magnifyingGlass = Image(systemName: "magnifyingglass")
-    static let mozilla = Image("icon_mozilla", bundle: .module)
-}
-
-fileprivate extension Gradient {
-    static let quickAccessWidget = Gradient(colors: [Color("GradientFirst", bundle: .module), Color("GradientSecond", bundle: .module)])
 }
