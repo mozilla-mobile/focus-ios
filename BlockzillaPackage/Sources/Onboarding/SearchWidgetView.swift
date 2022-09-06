@@ -5,18 +5,27 @@
 import SwiftUI
 import WidgetKit
 
-struct SearchWidgetView: View {
-    var body: some View {
+public struct SearchWidgetView: View {
+    let title: String
+    let appName: String
+
+    public init(title: String, appName: String) {
+        self.title = title
+        self.appName = appName
+    }
+    
+    public var body: some View {
         VStack {
             HStack(alignment: .top) {
                 VStack(alignment: .leading) {
-                    Text(UIConstants.strings.searchInApp)
+                    Text(title)
                         .font(.headline)
                         .fontWeight(.medium)
-                    Text(String.appNameForBundle)
+                    Text(appName)
                         .font(.headline)
                         .fontWeight(.medium)
                 }
+                .minimumScaleFactor(0.8)
                 .foregroundColor(.white)
 
                 Spacer()
@@ -45,10 +54,12 @@ struct SearchWidgetView: View {
     }
 }
 
+@available(iOS 14, *)
 struct SearchWidgetView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchWidgetView()
-            .previewContext(WidgetPreviewContext(family: .systemSmall))
+        SearchWidgetView(title: "Search in", appName: "Focus")
+            .frame(width: 135, height: 135)
+            .clipShape(RoundedRectangle(cornerRadius: 20))
     }
 }
 
@@ -59,16 +70,9 @@ fileprivate extension CGFloat {
 
 fileprivate extension Image {
     static let magnifyingGlass = Image(systemName: "magnifyingglass")
-    static let mozilla = Image("icon_mozilla")
+    static let mozilla = Image("icon_mozilla", bundle: .module)
 }
 
 fileprivate extension Gradient {
-    static let quickAccessWidget = Gradient(colors: [Color("GradientFirst"), Color("GradientSecond")])
-}
-
-fileprivate extension String {
-    static var appNameForBundle: String {
-        var isKlar: Bool { return (Bundle.main.infoDictionary!["CFBundleIdentifier"] as! String).contains("Klar") }
-        return isKlar ? "Klar" : "Focus"
-    }
+    static let quickAccessWidget = Gradient(colors: [Color("GradientFirst", bundle: .module), Color("GradientSecond", bundle: .module)])
 }

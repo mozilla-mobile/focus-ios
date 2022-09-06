@@ -12,6 +12,7 @@ import Glean
 import Combine
 import Onboarding
 import AppShortcuts
+import SwiftUI
 
 class BrowserViewController: UIViewController {
     private let mainContainerView = UIView(frame: .zero)
@@ -360,6 +361,18 @@ class BrowserViewController: UIViewController {
 
                 case .trackingProtection:
                     break
+
+                case .widget:
+                    urlBar.dismiss()
+                    
+                    let cardBanner = UIHostingController(rootView: CardBannerView(dismiss: { [weak self] in
+                        self?.onboardingEventsHandler.route = nil
+                        self?.urlBar.activateTextField()
+                    }))
+                    cardBanner.view.backgroundColor = .clear
+                    cardBanner.modalPresentationStyle = .overFullScreen
+                    modalDelegate?.presentModal(viewController: cardBanner, animated: true)
+                    presentedController = cardBanner
                 }
             }
             .store(in: &cancellables)
@@ -648,6 +661,9 @@ class BrowserViewController: UIViewController {
             self.urlBar.activateTextField()
             Toast(text: UIConstants.strings.eraseMessage).show()
             screenshotView.removeFromSuperview()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                self.onboardingEventsHandler.send(.clearTapped)
+            }
         })
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.eraseButton)
