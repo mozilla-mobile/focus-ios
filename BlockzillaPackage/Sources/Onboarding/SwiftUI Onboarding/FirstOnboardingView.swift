@@ -6,10 +6,14 @@ import SwiftUI
 
 public struct FirstOnboardingView: View {
     private let config: FirstOnboardingViewConfig
+    private let defaultBrowserConfig: DefaultBrowserViewConfig
     private let dismissAction: () -> Void
 
-    public init(config: FirstOnboardingViewConfig, dismissAction: @escaping () -> Void) {
+    public init(config: FirstOnboardingViewConfig,
+                defaultBrowserConfig: DefaultBrowserViewConfig,
+                dismissAction: @escaping () -> Void) {
         self.config = config
+        self.defaultBrowserConfig = defaultBrowserConfig
         self.dismissAction = dismissAction
     }
 
@@ -43,7 +47,7 @@ public struct FirstOnboardingView: View {
                         .padding(Constants.subtitlePadding)
 
                     NavigationLink {
-                        SecondOnboardingView(dismiss: dismissAction)
+                        SecondOnboardingView(config: defaultBrowserConfig, dismiss: dismissAction)
                     } label: {
                         Text(config.buttonTitle)
                             .font(.body16Bold)
@@ -92,6 +96,17 @@ public struct FirstOnboardingViewConfig {
 
 struct SwiftUIView_Previews: PreviewProvider {
     static var previews: some View {
-        FirstOnboardingView(config: FirstOnboardingViewConfig(title: "Welcome to Firefox Focus", subtitle: "Fast. Private. No distractions.", buttonTitle: "Get Started"), dismissAction: {})
+        FirstOnboardingView(
+            config: FirstOnboardingViewConfig(
+                title: "Welcome to Firefox Focus",
+                subtitle: "Fast. Private. No distractions.",
+                buttonTitle: "Get Started"),
+            defaultBrowserConfig: DefaultBrowserViewConfig(
+                title: "Focus isn't like other browsers",
+                firstSubtitle: "We clear your history when you close the app for extra privacy",
+                secondSubtitle: "Make Focus your default to protect your data with every link you open.",
+                topButtonTitle: "Set as Default Browser",
+                bottomButtonTitle: "Skip"),
+            dismissAction: {})
     }
 }

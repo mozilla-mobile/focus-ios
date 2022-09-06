@@ -5,10 +5,12 @@
 import SwiftUI
 
 struct SecondOnboardingView: View {
+    private let config: DefaultBrowserViewConfig
     private let dismiss: () -> Void
 
-    init(dismiss: @escaping () -> Void) {
+    init(config: DefaultBrowserViewConfig, dismiss: @escaping () -> Void) {
         self.dismiss = dismiss
+        self.config = config
     }
 
     var body: some View {
@@ -26,15 +28,15 @@ struct SecondOnboardingView: View {
                 .scaledToFit()
                 .frame(maxHeight: .imageMaxHeight)
             VStack {
-                Text(String.onboardingSecondScreenTitleV2)
+                Text(config.title)
                     .bold()
                     .font(.system(size: .titleSize))
                     .multilineTextAlignment(.center)
                     .padding(.bottom, .titleBottomPadding)
                 VStack(alignment: .leading) {
-                    Text(String.onboardingSecondScreenFirstSubtitleV2)
+                    Text(config.firstSubtitle)
                         .padding(.bottom, .firstSubtitleBottomPadding)
-                    Text(String.onboardingSecondScreenSecondSubtitleV2)
+                    Text(config.secondSubtitle)
                 }
             }
             .foregroundColor(.secondOnboardingScreenText)
@@ -42,7 +44,7 @@ struct SecondOnboardingView: View {
             Button(action: {
                 UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
             }, label: {
-                Text(String.onboardingSecondScreenTopButtonTitleV2)
+                Text(config.topButtonTitle)
                     .foregroundColor(.systemBackground)
                     .font(.body16Bold)
                     .frame(maxWidth: .infinity)
@@ -53,7 +55,7 @@ struct SecondOnboardingView: View {
             Button(action: {
                 dismiss()
             }, label: {
-                Text(String.onboardingSecondScreenBottomButtonTitleV2)
+                Text(config.bottomButtonTitle)
                     .foregroundColor(.black)
                     .font(.body16Bold)
                     .frame(maxWidth: .infinity)
@@ -70,14 +72,6 @@ struct SecondOnboardingView: View {
     }
 }
 
-fileprivate extension String {
-    static let onboardingSecondScreenTitleV2 = NSLocalizedString("Onboarding.SecondScreen.Title.V2", value: "Focus isn't like other browsers", comment: "Text for a label that indicates the title for the second onboarding screen version 2.")
-    static let onboardingSecondScreenFirstSubtitleV2 = NSLocalizedString("Onboarding.SecondScreen.FirstSubtitle.V2", value: "We clear your history when you close the app for extra privacy.", comment: "Text for a label that indicates the first subtitle for the second onboarding screen version 2.")
-    static let onboardingSecondScreenSecondSubtitleV2 = NSLocalizedString("Onboarding.SecondScreen.SecondSubtitle.V2", value: "Make Focus your default to protect your data with every link you open.", comment: "Text for a label that indicates the second subtitle for the second onboarding screen version 2.")
-    static let onboardingSecondScreenTopButtonTitleV2 = NSLocalizedString("Onboarding.SecondScreen.TopButtonTitle.V2", value: "Set as Default Browser", comment: "Text for a label that indicates the title of the top button from the second onboarding screen version 2.")
-    static let onboardingSecondScreenBottomButtonTitleV2 = NSLocalizedString("Onboarding.SecondScreen.BottomButtonTitle.V2", value: "Skip", comment: "Text for a label that indicates the title of the bottom button from the second onboarding screen version 2.")
-}
-
 fileprivate extension CGFloat {
     static let imageSize: CGFloat = 30
     static let titleSize: CGFloat = 26
@@ -90,8 +84,30 @@ fileprivate extension CGFloat {
     static let imageMaxHeight: CGFloat = 300
 }
 
+public struct DefaultBrowserViewConfig {
+    let title: String
+    let firstSubtitle: String
+    let secondSubtitle: String
+    let topButtonTitle: String
+    let bottomButtonTitle: String
+
+    public init(title: String, firstSubtitle: String, secondSubtitle: String, topButtonTitle: String, bottomButtonTitle: String) {
+        self.title = title
+        self.firstSubtitle = firstSubtitle
+        self.secondSubtitle = secondSubtitle
+        self.topButtonTitle = topButtonTitle
+        self.bottomButtonTitle = bottomButtonTitle
+    }
+}
+
 struct SecondOnboardingView_Previews: PreviewProvider {
     static var previews: some View {
-        SecondOnboardingView(dismiss: {})
+        SecondOnboardingView(config: DefaultBrowserViewConfig(
+            title: "Focus isn't like other browsers",
+            firstSubtitle: "We clear your history when you close the app for extra privacy",
+            secondSubtitle: "Make Focus your default to protect your data with every link you open.",
+            topButtonTitle: "Set as Default Browser",
+            bottomButtonTitle: "Skip"),
+            dismiss: {})
     }
 }

@@ -379,6 +379,11 @@ struct UIConstants {
         static let tooltipBodyTextForPrivacy = NSLocalizedString("TooltipBodyText.Privacy", value: "These default settings offer strong protection. But it’s easy to tweak the settings to meet your specific needs.", comment: "This is the body text that is displayed for the Privacy tooltip")
         static let tootipBodyTextForContextMenuIcon = NSLocalizedString("TooltipBodyText.ContextMenu", value: "Go to Settings to manage specific privacy & security options.", comment: "This is the body text that is displayed for the Context Menu icon tooltip")
         static let tooltipBodyTextForTrashIcon = NSLocalizedString("TooltipBodyText.TrashIcon", value: "Tap the trash anytime to remove all traces of your current session.", comment: "This is the body text that is displayed for the Trash icon tooltip")
+        static let onboardingSecondScreenTitleV2 = NSLocalizedString("Onboarding.SecondScreen.Title.V2", value: "Focus isn't like other browsers", comment: "Text for a label that indicates the title for the second onboarding screen version 2.")
+        static let onboardingSecondScreenFirstSubtitleV2 = NSLocalizedString("Onboarding.SecondScreen.FirstSubtitle.V2", value: "We clear your history when you close the app for extra privacy.", comment: "Text for a label that indicates the first subtitle for the second onboarding screen version 2.")
+        static let onboardingSecondScreenSecondSubtitleV2 = NSLocalizedString("Onboarding.SecondScreen.SecondSubtitle.V2", value: "Make Focus your default to protect your data with every link you open.", comment: "Text for a label that indicates the second subtitle for the second onboarding screen version 2.")
+        static let onboardingSecondScreenTopButtonTitleV2 = NSLocalizedString("Onboarding.SecondScreen.TopButtonTitle.V2", value: "Set as Default Browser", comment: "Text for a label that indicates the title of the top button from the second onboarding screen version 2.")
+        static let onboardingSecondScreenBottomButtonTitleV2 = NSLocalizedString("Onboarding.SecondScreen.BottomButtonTitle.V2", value: "Skip", comment: "Text for a label that indicates the title of the bottom button from the second onboarding screen version 2.")
 
         static let userDefaultsLaunchThresholdKey = "launchThreshold"
         static let userDefaultsLaunchCountKey = "launchCount"
