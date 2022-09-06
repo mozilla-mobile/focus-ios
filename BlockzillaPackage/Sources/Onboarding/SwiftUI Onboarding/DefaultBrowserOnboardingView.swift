@@ -4,7 +4,7 @@
 
 import SwiftUI
 
-struct SecondOnboardingView: View {
+struct DefaultBrowserOnboardingView: View {
     private let config: DefaultBrowserViewConfig
     private let dismiss: () -> Void
 
@@ -102,7 +102,7 @@ public struct DefaultBrowserViewConfig {
 
 struct SecondOnboardingView_Previews: PreviewProvider {
     static var previews: some View {
-        SecondOnboardingView(config: DefaultBrowserViewConfig(
+        DefaultBrowserOnboardingView(config: DefaultBrowserViewConfig(
             title: "Focus isn't like other browsers",
             firstSubtitle: "We clear your history when you close the app for extra privacy",
             secondSubtitle: "Make Focus your default to protect your data with every link you open.",

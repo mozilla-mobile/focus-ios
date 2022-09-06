@@ -47,7 +47,7 @@ public struct FirstOnboardingView: View {
                         .padding(Constants.subtitlePadding)
 
                     NavigationLink {
-                        SecondOnboardingView(config: defaultBrowserConfig, dismiss: dismissAction)
+                        DefaultBrowserOnboardingView(config: defaultBrowserConfig, dismiss: dismissAction)
                     } label: {
                         Text(config.buttonTitle)
                             .font(.body16Bold)

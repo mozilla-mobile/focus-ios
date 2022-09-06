@@ -11,7 +11,7 @@ class OnboardingFactory {
     static func makeOnboarding(dismissAction: @escaping () -> Void) -> UIViewController {
         let controller = UIHostingController(rootView: FirstOnboardingView(
             config: .init(title: .onboardingTitle, subtitle: .onboardingSubtitleV2, buttonTitle: .onboardingButtonTitleV2),
-            defaultBrowserConfig: DefaultBrowserViewConfig(title: UIConstants.strings.onboardingSecondScreenTitleV2, firstSubtitle: UIConstants.strings.onboardingSecondScreenFirstSubtitleV2, secondSubtitle: UIConstants.strings.onboardingSecondScreenSecondSubtitleV2, topButtonTitle: UIConstants.strings.onboardingSecondScreenTopButtonTitleV2, bottomButtonTitle: UIConstants.strings.onboardingSecondScreenBottomButtonTitleV2), dismissAction: dismissAction))
+            defaultBrowserConfig: DefaultBrowserViewConfig(title: UIConstants.strings.defaultBrowserOnboardingViewTitleV2, firstSubtitle: UIConstants.strings.defaultBrowserOnboardingViewFirstSubtitleV2, secondSubtitle: UIConstants.strings.defaultBrowserOnboardingViewSecondSubtitleV2, topButtonTitle: UIConstants.strings.defaultBrowserOnboardingViewTopButtonTitleV2, bottomButtonTitle: UIConstants.strings.defaultBrowserOnboardingViewBottomButtonTitleV2), dismissAction: dismissAction))
 
         controller.modalPresentationStyle = .formSheet
         controller.isModalInPresentation = true
