@@ -34,9 +34,13 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         navigationController?.navigationBar.tintColor = .accent
 
         view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import SnapKit
 import Telemetry
 
 class AutocompleteCustomUrlViewController: UIViewController {
@@ -31,14 +30,18 @@ class AutocompleteCustomUrlViewController: UIViewController {
         tableView.backgroundView = emptyStateView
         tableView.backgroundView?.isHidden = true
 
-        label.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(UIConstants.layout.autocompleteCustomURLLabelOffset)
-        }
+        label.translatesAutoresizingMaskIntoConstraints = false
+        tableView.translatesAutoresizingMaskIntoConstraints = false
 
-        tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        NSLayoutConstraint.activate([
+            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            label.topAnchor.constraint(equalTo: view.topAnchor, constant: UIConstants.layout.autocompleteCustomURLLabelOffset),
+
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
     }
 
     required init?(coder aDecoder: NSCoder) {

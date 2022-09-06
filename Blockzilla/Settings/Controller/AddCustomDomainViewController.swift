@@ -63,22 +63,23 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
         inputDescription.font = .footnote12
         view.addSubview(inputDescription)
 
-        inputLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(40)
-            make.trailing.equalToSuperview()
-            make.leading.equalToSuperview().offset(UIConstants.layout.settingsItemOffset)
-        }
+        inputLabel.translatesAutoresizingMaskIntoConstraints = false
+        textInput.translatesAutoresizingMaskIntoConstraints = false
+        inputDescription.translatesAutoresizingMaskIntoConstraints = false
 
-        textInput.snp.makeConstraints { make in
-            make.height.equalTo(44)
-            make.top.equalTo(inputLabel.snp.bottom).offset(10)
-            make.leading.trailing.equalToSuperview().inset(UIConstants.layout.settingsItemInset)
-        }
+        NSLayoutConstraint.activate([
+            inputLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: UIConstants.layout.settingsAddCustomDomainInputTopOffset),
+            inputLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: UIConstants.layout.settingsItemOffset),
+            inputLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
 
-        inputDescription.snp.makeConstraints { make in
-            make.top.equalTo(textInput.snp.bottom).offset(10)
-            make.leading.equalToSuperview().offset(UIConstants.layout.settingsItemOffset)
-        }
+            textInput.topAnchor.constraint(equalTo: inputLabel.bottomAnchor, constant: UIConstants.layout.settingsAddCustomDomainOffset),
+            textInput.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: UIConstants.layout.settingsItemInset),
+            textInput.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -UIConstants.layout.settingsItemInset),
+            textInput.heightAnchor.constraint(equalToConstant: UIConstants.layout.settingsSectionHeight),
+
+            inputDescription.topAnchor.constraint(equalTo: textInput.bottomAnchor, constant: UIConstants.layout.settingsAddCustomDomainOffset),
+            inputDescription.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: UIConstants.layout.settingsItemOffset)
+        ])
     }
 
     @objc func cancelTapped() {

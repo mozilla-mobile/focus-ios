@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import SnapKit
 import UIKit
 import Telemetry
 import Intents
@@ -166,9 +165,14 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         navigationItem.rightBarButtonItem = doneButton
 
         view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
 
         initializeToggles()
         for (sectionIndex, toggleArray) in toggles {

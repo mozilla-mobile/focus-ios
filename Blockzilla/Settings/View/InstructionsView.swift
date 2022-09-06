@@ -12,25 +12,29 @@ class InstructionsView: UIView {
         let safariInstruction = InstructionView(text: UIConstants.strings.safariInstructionsContentBlockers, image: #imageLiteral(resourceName: "instructions-safari"))
         let enableInstruction = InstructionView(text: String(format: UIConstants.strings.safariInstructionsEnable, AppInfo.productName), image: #imageLiteral(resourceName: "instructions-switch"))
 
+        settingsInstruction.translatesAutoresizingMaskIntoConstraints = false
+        safariInstruction.translatesAutoresizingMaskIntoConstraints = false
+        enableInstruction.translatesAutoresizingMaskIntoConstraints = false
+
         addSubview(settingsInstruction)
         addSubview(safariInstruction)
         addSubview(enableInstruction)
 
-        let instructionOffset = 50
+        NSLayoutConstraint.activate([
+            settingsInstruction.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            settingsInstruction.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            settingsInstruction.topAnchor.constraint(equalTo: self.topAnchor),
 
-        settingsInstruction.snp.makeConstraints { make in
-            make.top.leading.trailing.equalTo(self)
-        }
+            safariInstruction.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            safariInstruction.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            safariInstruction.topAnchor.constraint(equalTo: settingsInstruction.bottomAnchor, constant: UIConstants.layout.settingsViewOffset),
 
-        safariInstruction.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(self)
-            make.top.equalTo(settingsInstruction.snp.bottom).offset(instructionOffset)
-        }
+            enableInstruction.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            enableInstruction.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            enableInstruction.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            enableInstruction.topAnchor.constraint(equalTo: safariInstruction.bottomAnchor, constant: UIConstants.layout.settingsViewOffset)
 
-        enableInstruction.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalTo(self)
-            make.top.equalTo(safariInstruction.snp.bottom).offset(instructionOffset)
-        }
+        ])
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -43,10 +47,12 @@ private class InstructionView: UIView {
         super.init(frame: CGRect.zero)
 
         let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = image
         addSubview(imageView)
 
         let label = SmartLabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.text = text
         label.textColor = .defaultFont
         label.numberOfLines = 0
@@ -54,16 +60,17 @@ private class InstructionView: UIView {
         label.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         addSubview(label)
 
-        imageView.snp.makeConstraints { make in
-            make.leading.centerY.equalTo(self)
-            make.width.equalTo(image.size.width)
-            make.height.equalTo(image.size.height)
-        }
+        NSLayoutConstraint.activate([
+            imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            imageView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            imageView.heightAnchor.constraint(equalToConstant: image.size.height),
+            imageView.widthAnchor.constraint(equalToConstant: image.size.width),
 
-        label.snp.makeConstraints { make in
-            make.leading.equalTo(imageView.snp.trailing).offset(30)
-            make.trailing.top.bottom.equalTo(self)
-        }
+            label.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: UIConstants.layout.settingsPadding),
+            label.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            label.topAnchor.constraint(equalTo: self.topAnchor),
+            label.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
     }
 
     required init?(coder aDecoder: NSCoder) {

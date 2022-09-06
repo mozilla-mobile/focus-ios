@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import SnapKit
 import UIKit
 import WebKit
 
@@ -101,9 +100,6 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
 
         self.webView = makeWebView()
         view.addSubview(webView)
-        self.webView.snp.remakeConstraints { make in
-            make.edges.equalTo(self.view)
-        }
 
         // Destructuring let causes problems.
         let ret = makeInterstitialViews()
@@ -111,9 +107,21 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         self.interstitialSpinnerView = ret.1
         self.interstitialErrorView = ret.2
         view.addSubview(interstitialView)
-        self.interstitialView.snp.remakeConstraints { make in
-            make.edges.equalTo(self.view)
-        }
+
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        interstitialView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            webView.topAnchor.constraint(equalTo: view.topAnchor),
+            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+            interstitialView.topAnchor.constraint(equalTo: view.topAnchor),
+            interstitialView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            interstitialView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            interstitialView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
 
         startLoading()
     }
@@ -136,14 +144,16 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         view.backgroundColor = interstitialBackgroundColor
 
         let spinner = UIActivityIndicatorView(style: .large)
+        spinner.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(spinner)
 
         let error = SmartLabel()
-
-        spinner.snp.makeConstraints { make in
-            make.center.equalTo(view)
-            return
-        }
+        NSLayoutConstraint.activate([
+            spinner.topAnchor.constraint(equalTo: view.topAnchor),
+            spinner.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            spinner.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            spinner.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
 
         return (view, spinner, error)
     }

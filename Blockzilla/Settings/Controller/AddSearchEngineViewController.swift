@@ -24,6 +24,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     private var templatePlaceholderLabel = UITextView()
     private var scrollView =  UIScrollView()
     private var container = UIView()
+    private var containerBottomConstraint = NSLayoutConstraint()
 
     init(delegate: AddSearchEngineDelegate, searchEngineManager: SearchEngineManager) {
         self.delegate = delegate
@@ -49,15 +50,20 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     private func setupUI() {
         view.backgroundColor = .systemGroupedBackground
         view.addSubview(scrollView)
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        ])
 
-        scrollView.snp.makeConstraints { (make) in
-            make.leading.trailing.top.bottom.equalToSuperview()
-        }
         scrollView.showsVerticalScrollIndicator = false
 
         let nameLabel = SmartLabel()
         nameLabel.text = UIConstants.strings.NameToDisplay
         nameLabel.textColor = .primaryText
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(nameLabel)
 
         nameInput.attributedPlaceholder = NSAttributedString(string: UIConstants.strings.AddSearchEngineName, attributes: [.foregroundColor: UIColor.primaryText.withAlphaComponent(0.65)])
@@ -70,10 +76,12 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         nameInput.autocorrectionType = .no
         nameInput.tintColor = .accent
         nameInput.layer.cornerRadius = UIConstants.layout.settingsCellCornerRadius
+        nameInput.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(nameInput)
 
         let templateContainer = UIView()
         templateContainer.backgroundColor = .systemGroupedBackground
+        templateContainer.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(templateContainer)
 
         templatePlaceholderLabel.backgroundColor = .secondarySystemGroupedBackground
@@ -84,11 +92,13 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         templatePlaceholderLabel.isEditable = false
         templatePlaceholderLabel.layer.cornerRadius = UIConstants.layout.settingsCellCornerRadius
         templatePlaceholderLabel.layer.masksToBounds = true
+        templatePlaceholderLabel.translatesAutoresizingMaskIntoConstraints = false
         templateContainer.addSubview(templatePlaceholderLabel)
 
         let templateLabel = SmartLabel()
         templateLabel.text = UIConstants.strings.AddSearchEngineTemplate
         templateLabel.textColor = .primaryText
+        templateLabel.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(templateLabel)
 
         templateInput.backgroundColor = .clear
@@ -102,6 +112,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         templateInput.tintColor = .accent
         templateInput.textContainerInset = UIEdgeInsets(top: 5, left: 5, bottom: 0, right: 0)
         templateInput.layer.cornerRadius = UIConstants.layout.settingsCellCornerRadius
+        templateInput.translatesAutoresizingMaskIntoConstraints = false
         templateContainer.addSubview(templateInput)
 
         let exampleLabel = SmartLabel()
@@ -117,84 +128,58 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         exampleLabel.adjustsFontSizeToFitWidth = true
         exampleLabel.minimumScaleFactor = 0.5
         exampleLabel.isUserInteractionEnabled = true
+        exampleLabel.translatesAutoresizingMaskIntoConstraints = false
 
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(learnMoreTapped))
         exampleLabel.addGestureRecognizer(tapGesture)
         container.addSubview(exampleLabel)
 
         scrollView.addSubview(container)
-        container.snp.makeConstraints { (make) in
-            make.leading.trailing.top.bottom.equalToSuperview()
-            make.width.height.equalToSuperview()
-        }
+        container.translatesAutoresizingMaskIntoConstraints = false
+        containerBottomConstraint = container.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
 
-        nameLabel.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(UIConstants.layout.addSearchEngineInputOffset)
-            make.height.equalTo(rowHeight)
-            make.leading.equalTo(leftMargin)
-            make.width.equalToSuperview()
-        }
+        NSLayoutConstraint.activate([
+            containerBottomConstraint,
+            container.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            container.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            container.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            container.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            container.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
 
-        nameInput.snp.makeConstraints { (make) in
-            make.top.equalTo(nameLabel.snp.bottom)
-            make.height.equalTo(rowHeight)
-            make.leading.trailing.equalToSuperview().inset(UIConstants.layout.settingsItemInset)
-        }
+            nameLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: UIConstants.layout.addSearchEngineInputOffset),
+            nameLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: leftMargin),
+            nameLabel.widthAnchor.constraint(equalTo: container.widthAnchor),
+            nameLabel.heightAnchor.constraint(equalToConstant: rowHeight),
 
-        templateLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(nameInput.snp.bottom).offset(UIConstants.layout.addSearchEngineInputOffset)
-            make.height.equalTo(rowHeight)
-            make.leading.trailing.equalToSuperview().inset(UIConstants.layout.settingsItemOffset)
-        }
+            nameInput.topAnchor.constraint(equalTo: nameLabel.bottomAnchor),
+            nameInput.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: UIConstants.layout.settingsItemInset),
+            nameInput.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -UIConstants.layout.settingsItemInset),
+            nameInput.heightAnchor.constraint(equalToConstant: rowHeight),
 
-        templateContainer.snp.makeConstraints { (make) in
-            make.top.equalTo(templateLabel.snp.bottom)
-            make.height.equalTo(UIConstants.layout.addSearchEngineTemplateContainerHeight)
-            make.width.equalToSuperview()
-        }
+            templateLabel.topAnchor.constraint(equalTo: nameInput.bottomAnchor, constant: UIConstants.layout.addSearchEngineInputOffset),
+            templateLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: UIConstants.layout.settingsItemOffset),
+            templateLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -UIConstants.layout.settingsItemOffset),
+            templateLabel.heightAnchor.constraint(equalToConstant: rowHeight),
 
-        templateInput.snp.makeConstraints { (make) in
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(UIConstants.layout.settingsItemInset)
-        }
+            templateContainer.topAnchor.constraint(equalTo: templateLabel.bottomAnchor),
+            templateContainer.widthAnchor.constraint(equalTo: container.widthAnchor),
+            templateContainer.heightAnchor.constraint(equalToConstant: UIConstants.layout.addSearchEngineTemplateContainerHeight),
 
-        templatePlaceholderLabel.snp.makeConstraints { (make) in
-            make.edges.equalTo(templateInput)
-        }
+            templateInput.topAnchor.constraint(equalTo: templateContainer.topAnchor),
+            templateInput.bottomAnchor.constraint(equalTo: templateContainer.bottomAnchor),
+            templateInput.leadingAnchor.constraint(equalTo: templateContainer.leadingAnchor, constant: UIConstants.layout.settingsItemInset),
+            templateInput.trailingAnchor.constraint(equalTo: templateContainer.trailingAnchor, constant: -UIConstants.layout.settingsItemInset),
 
-        exampleLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(templateInput.snp.bottom).offset(UIConstants.layout.addSearchEngineExampleLabelOffset)
-            make.leading.equalToSuperview().offset(leftMargin)
-            make.trailing.equalToSuperview().offset(-leftMargin)
-        }
-    }
+            templatePlaceholderLabel.bottomAnchor.constraint(equalTo: templateInput.bottomAnchor),
+            templatePlaceholderLabel.topAnchor.constraint(equalTo: templateInput.topAnchor),
+            templatePlaceholderLabel.leadingAnchor.constraint(equalTo: templateInput.leadingAnchor),
+            templatePlaceholderLabel.trailingAnchor.constraint(equalTo: templateInput.trailingAnchor),
 
-    override func viewSafeAreaInsetsDidChange() {
-        updateContainerConstraints()
-    }
+            exampleLabel.topAnchor.constraint(equalTo: templateInput.bottomAnchor, constant: UIConstants.layout.addSearchEngineExampleLabelOffset),
+            exampleLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: leftMargin),
+            exampleLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -leftMargin)
 
-    private func updateContainerConstraints() {
-        scrollView.snp.updateConstraints { make in
-            switch (UIDevice.current.userInterfaceIdiom, UIDevice.current.orientation) {
-            case (.phone, .landscapeLeft):
-                make.leading.equalTo(view).offset(self.view.safeAreaInsets.left)
-                make.trailing.equalTo(view)
-                scrollView.isScrollEnabled = true
-            case (.phone, .landscapeRight):
-                make.leading.equalTo(view)
-                make.trailing.equalTo(view).inset(self.view.safeAreaInsets.right)
-                scrollView.isScrollEnabled = true
-            default:
-                make.leading.trailing.equalTo(view)
-                scrollView.isScrollEnabled = false
-            }
-
-        }
-    }
-
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        updateContainerConstraints()
+        ])
     }
 
     @objc func learnMoreTapped() {
@@ -301,20 +286,20 @@ extension AddSearchEngineViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         self.updateViewConstraints()
         UIView.animate(withDuration: state.animationDuration) {
-            self.container.snp.updateConstraints { (make) in
-                make.bottom.equalToSuperview().offset(-state.intersectionHeightForView(view: self.view))
-            }
+            self.containerBottomConstraint.isActive = false
+            self.containerBottomConstraint = self.container.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor, constant: -state.intersectionHeightForView(view: self.view))
+            NSLayoutConstraint.activate([self.containerBottomConstraint])
             self.view.layoutIfNeeded()
         }
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
         self.updateViewConstraints()
-        UIView.animate(withDuration: state.animationDuration) {
-            self.container.snp.updateConstraints { (make) in
-                make.height.equalToSuperview()
-                self.view.layoutIfNeeded()
-            }
+        UIView.animate(withDuration: state.animationDuration) { [self] in
+            self.containerBottomConstraint.isActive = false
+            self.containerBottomConstraint = self.container.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor)
+            NSLayoutConstraint.activate([self.containerBottomConstraint])
+            self.view.layoutIfNeeded()
         }
     }
 
