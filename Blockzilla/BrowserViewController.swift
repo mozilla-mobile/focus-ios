@@ -303,8 +303,11 @@ class BrowserViewController: UIViewController {
                     let controller = self.tooltipController(
                         anchoredBy: self.urlBar.shieldIcon,
                         sourceRect: CGRect(x: self.urlBar.shieldIcon.bounds.midX, y: self.urlBar.shieldIcon.bounds.midY + 10, width: 0, height: 0),
-                        body: UIConstants.strings.tooltipBodyTextForShieldIcon,
-                        dismiss: { self.onboardingEventsHandler.route = nil }
+                        body: UIConstants.strings.tooltipBodyTextForShieldIconV2,
+                        dismiss: {
+                            self.onboardingEventsHandler.route = nil
+                            self.onboardingEventsHandler.send(.showTrash)
+                        }
                     )
                     self.present(controller, animated: true)
                     presentedController = controller
@@ -316,17 +319,20 @@ class BrowserViewController: UIViewController {
                     let controller = self.tooltipController(
                         anchoredBy: sourceButton,
                         sourceRect: sourceRect,
-                        body: UIConstants.strings.tooltipBodyTextForTrashIcon,
+                        body: UIConstants.strings.tooltipBodyTextForTrashIconV2,
                         dismiss: { self.onboardingEventsHandler.route = nil }
                     )
                     self.present(controller, animated: true)
                     presentedController = controller
 
-                case .menu:
+                case .searchBar:
                     let controller = self.tooltipController(
-                        anchoredBy: self.urlBar.contextMenuButton,
-                        sourceRect: CGRect(x: self.urlBar.contextMenuButton.bounds.maxX, y: self.urlBar.contextMenuButton.bounds.midY + 12, width: 0, height: 0),
-                        body: UIConstants.strings.tootipBodyTextForContextMenuIcon,
+                        anchoredBy: self.urlBar.textFieldAnchor,
+                        sourceRect: CGRect(
+                            x: self.urlBar.textFieldAnchor.bounds.minX,
+                            y: self.urlBar.textFieldAnchor.bounds.maxY, width: 0, height: 0
+                        ),
+                        body: UIConstants.strings.tooltipBodyTextStartPrivateBrowsing,
                         dismiss: { self.onboardingEventsHandler.route = nil }
                     )
                     self.present(controller, animated: true)
@@ -782,7 +788,6 @@ class BrowserViewController: UIViewController {
         }
 
         onboardingEventsHandler.route = nil
-        onboardingEventsHandler.send(.startBrowsing)
 
         urlBar.canDelete = true
         browserToolbar.canDelete = true
@@ -1922,6 +1927,7 @@ extension BrowserViewController: MenuActionable {
         self.shortcutManager.remove(url)
         GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_browser_menu"].add()
         GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "remove_from_shortcuts"))
+        Toast(text: UIConstants.strings.shareMenuRemoveShortcutConfirmMessage).show()
     }
 }
 
