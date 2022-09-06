@@ -8,4 +8,5 @@ public extension Image {
     static let logo = Image("icon_logo", bundle: Bundle.module)
     static let close = Image("icon_close", bundle: Bundle.module)
     static let background = Image("icon_background", bundle: Bundle.module)
+    static let huggingFocus = Image("icon_hugging_focus", bundle: .module)
 }
