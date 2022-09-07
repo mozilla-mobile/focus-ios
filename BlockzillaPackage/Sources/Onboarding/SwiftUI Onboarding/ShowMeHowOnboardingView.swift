@@ -8,29 +8,28 @@ import SwiftUI
 struct ShowMeHowOnboardingView: View {
     private let config: ShowMeHowOnboardingViewConfig
     private let dismissAction: () -> Void
-    @Environment(./presentationMode) var presentationMode
 
     public init(config: ShowMeHowOnboardingViewConfig, dismissAction: @escaping () -> Void) {
         self.config = config
         self.dismissAction = dismissAction
     }
-    
+
     var body: some View {
         NavigationView {
-            VStack(alignment: .leading, spacing: 20) {
-                HStack(alignment: .top, spacing: 10) {
+            VStack(alignment: .leading, spacing: Constants.verticalSpacing) {
+                HStack(alignment: .top, spacing: Constants.horizontalSpacing) {
                     Image(systemName: "1.circle.fill")
                         .resizable()
-                        .frame(width: 24, height: 24)
+                        .frame(width: Constants.iconSize, height: Constants.iconSize)
                         .foregroundColor(.gray)
                     Text(config.subtitleStep1)
                         .font(.body16)
                 }
-                VStack(alignment: .leading, spacing: 15) {
-                    HStack(alignment: .top, spacing: 10) {
+                VStack(alignment: .leading, spacing: Constants.horizontalSpacing) {
+                    HStack(alignment: .top, spacing: Constants.horizontalSpacing) {
                         Image(systemName: "2.circle.fill")
                             .resizable()
-                            .frame(width: 24, height: 24)
+                            .frame(width: Constants.iconSize, height: Constants.iconSize)
                             .foregroundColor(.gray)
                         Text(config.subtitleStep2)
                             .font(.body16)
@@ -41,26 +40,32 @@ struct ShowMeHowOnboardingView: View {
                         Spacer()
                     }
                 }
-                HStack(alignment: .top, spacing: 10) {
+                HStack(alignment: .top, spacing: Constants.horizontalSpacing) {
                     Image(systemName: "3.circle.fill")
                         .resizable()
-                        .frame(width: 24, height: 24)
+                        .frame(width: Constants.iconSize, height: Constants.iconSize)
                         .foregroundColor(.gray)
                     Text(config.subtitleStep3)
                         .font(.body16)
                 }
                 Spacer()
-            }.padding(EdgeInsets(top: 20, leading: 40, bottom: 20, trailing: 40))
+            }.padding(EdgeInsets(top: Constants.topBottomPadding, leading: Constants.leadingTrailingPadding, bottom: Constants.topBottomPadding, trailing: Constants.leadingTrailingPadding))
                 .navigationTitle(config.title)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     Button(config.buttonText) {
                         dismissAction()
-                        presentationMode.wrappedValue.dismiss()
-                        
                     }
                 }
         }
+    }
+
+    private struct Constants {
+        static let iconSize: CGFloat = 24
+        static let topBottomPadding: CGFloat = 30
+        static let leadingTrailingPadding: CGFloat = 40
+        static let horizontalSpacing: CGFloat = 15
+        static let verticalSpacing: CGFloat = 24
     }
 }
 
@@ -83,6 +88,6 @@ public struct ShowMeHowOnboardingViewConfig {
 @available(iOS 14.0, *)
 struct ShowMeHowOnboardingView_Previews: PreviewProvider {
     static var previews: some View {
-        ShowMeHowOnboardingView()
+        ShowMeHowOnboardingView(config: ShowMeHowOnboardingViewConfig(title: "Turn on Sync", subtitleStep1: "Long press on the Home screen until the icons start to jiggle.", subtitleStep2: "Tap on the plus icon.", subtitleStep3: "Search for FireFox Focus. Then choose a widget.", buttonText: "Done"), dismissAction: { })
     }
 }
