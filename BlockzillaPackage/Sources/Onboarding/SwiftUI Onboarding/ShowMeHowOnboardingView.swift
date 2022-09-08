@@ -57,6 +57,7 @@ struct ShowMeHowOnboardingView: View {
                         dismissAction()
                     }
                 }
+                .environment(\.colorScheme, .light)
         }
     }
 }
