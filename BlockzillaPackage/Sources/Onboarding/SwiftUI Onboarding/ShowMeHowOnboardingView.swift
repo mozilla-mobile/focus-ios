@@ -16,20 +16,20 @@ struct ShowMeHowOnboardingView: View {
 
     var body: some View {
         NavigationView {
-            VStack(alignment: .leading, spacing: Constants.verticalSpacing) {
-                HStack(alignment: .top, spacing: Constants.horizontalSpacing) {
+            VStack(alignment: .leading, spacing: .verticalSpacing) {
+                HStack(alignment: .top, spacing: .horizontalSpacing) {
                     Image(systemName: "1.circle.fill")
                         .resizable()
-                        .frame(width: Constants.iconSize, height: Constants.iconSize)
+                        .frame(width: .iconSize, height: .iconSize)
                         .foregroundColor(.gray)
                     Text(config.subtitleStep1)
                         .font(.body16)
                 }
-                VStack(alignment: .leading, spacing: Constants.horizontalSpacing) {
-                    HStack(alignment: .top, spacing: Constants.horizontalSpacing) {
+                VStack(alignment: .leading, spacing: .horizontalSpacing) {
+                    HStack(alignment: .top, spacing: .horizontalSpacing) {
                         Image(systemName: "2.circle.fill")
                             .resizable()
-                            .frame(width: Constants.iconSize, height: Constants.iconSize)
+                            .frame(width: .iconSize, height: .iconSize)
                             .foregroundColor(.gray)
                         Text(config.subtitleStep2)
                             .font(.body16)
@@ -40,16 +40,16 @@ struct ShowMeHowOnboardingView: View {
                         Spacer()
                     }
                 }
-                HStack(alignment: .top, spacing: Constants.horizontalSpacing) {
+                HStack(alignment: .top, spacing: .horizontalSpacing) {
                     Image(systemName: "3.circle.fill")
                         .resizable()
-                        .frame(width: Constants.iconSize, height: Constants.iconSize)
+                        .frame(width: .iconSize, height: .iconSize)
                         .foregroundColor(.gray)
                     Text(config.subtitleStep3)
                         .font(.body16)
                 }
                 Spacer()
-            }.padding(EdgeInsets(top: Constants.topBottomPadding, leading: Constants.leadingTrailingPadding, bottom: Constants.topBottomPadding, trailing: Constants.leadingTrailingPadding))
+            }.padding(EdgeInsets(top: .topBottomPadding, leading: .leadingTrailingPadding, bottom: .topBottomPadding, trailing: .leadingTrailingPadding))
                 .navigationTitle(config.title)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
@@ -58,14 +58,6 @@ struct ShowMeHowOnboardingView: View {
                     }
                 }
         }
-    }
-
-    private struct Constants {
-        static let iconSize: CGFloat = 24
-        static let topBottomPadding: CGFloat = 30
-        static let leadingTrailingPadding: CGFloat = 40
-        static let horizontalSpacing: CGFloat = 15
-        static let verticalSpacing: CGFloat = 24
     }
 }
 
@@ -90,4 +82,12 @@ struct ShowMeHowOnboardingView_Previews: PreviewProvider {
     static var previews: some View {
         ShowMeHowOnboardingView(config: ShowMeHowOnboardingViewConfig(title: "Turn on Sync", subtitleStep1: "Long press on the Home screen until the icons start to jiggle.", subtitleStep2: "Tap on the plus icon.", subtitleStep3: "Search for FireFox Focus. Then choose a widget.", buttonText: "Done"), dismissAction: { })
     }
+}
+
+fileprivate extension CGFloat {
+    static let iconSize: CGFloat = 24
+    static let topBottomPadding: CGFloat = 30
+    static let leadingTrailingPadding: CGFloat = 40
+    static let horizontalSpacing: CGFloat = 15
+    static let verticalSpacing: CGFloat = 24
 }
