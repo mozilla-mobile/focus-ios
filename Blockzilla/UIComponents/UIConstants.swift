@@ -359,7 +359,7 @@ struct UIConstants {
         public static let widgetOnboardingCardSubtitle = NSLocalizedString(
                 "WidgetOnboardingCard.Subtitle",
                 value: "We’ll leave you to your private browsing, but get a quicker start next time with the %@ widget on your Home screen.",
-                comment: "Subtitle shown on card view explaining the app has a widget option. . %@ is the name of the app(Focus/Klar).")
+                comment: "Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar).")
 
         public static let widgetOnboardingCardActionButton = NSLocalizedString(
                 "WidgetOnboardingCard.ActionButton",
