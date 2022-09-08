@@ -31,7 +31,7 @@ struct FocusWidgetsEntryView : View {
     var entry: Provider.Entry
 
     var body: some View {
-        SearchWidgetView(title: UIConstants.strings.searchInApp, appName: String.appNameForBundle)
+        SearchWidgetView(title: String(format: UIConstants.strings.searchInApp, String.appNameForBundle))
     }
 }
 
@@ -44,7 +44,7 @@ struct FocusWidgets: Widget {
             FocusWidgetsEntryView(entry: entry)
         }
         .configurationDisplayName(UIConstants.strings.quickActionsGalleryTitle)
-        .description(UIConstants.strings.quickActionGalleryDescription)
+        .description(String(format: UIConstants.strings.quickActionGalleryDescription, String.appNameForBundle))
         .supportedFamilies([.systemSmall])
     }
 }

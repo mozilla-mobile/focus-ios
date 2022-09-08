@@ -368,11 +368,10 @@ class BrowserViewController: UIViewController {
                         rootView: CardBannerView(
                             config: .init(
                                 title: UIConstants.strings.widgetOnboardingCardTitle,
-                                subtitle: UIConstants.strings.widgetOnboardingCardSubtitle,
+                                subtitle: String(format: UIConstants.strings.widgetOnboardingCardSubtitle, AppInfo.shortProductName),
                                 actionButtonTitle: UIConstants.strings.widgetOnboardingCardActionButton,
                                 widget: .init(
-                                    title: UIConstants.strings.searchInApp,
-                                    appName: AppInfo.shortProductName
+                                    title: String(format: UIConstants.strings.searchInApp, AppInfo.shortProductName)
                                 )),
                             dismiss: { [weak self] in
                         self?.onboardingEventsHandler.route = nil

@@ -58,7 +58,7 @@ public struct CardBannerView: View {
     }
 
     var widget: some View {
-        SearchWidgetView(title: config.widget.title, appName: config.widget.appName)
+        SearchWidgetView(title: config.widget.title)
             .frame(width: .searchWidgetSize, height: .searchWidgetSize)
             .clipShape(RoundedRectangle(cornerRadius: 20))
     }
@@ -100,8 +100,7 @@ struct CardBannerView_Previews: PreviewProvider {
                         subtitle: "We’ll leave you to your private browsing, but get a quicker start next time with the Focus widget on your Home screen.",
                         actionButtonTitle: "Show Me How",
                         widget: .init(
-                            title: "Search in",
-                            appName: "Focus"
+                            title: "Search in Focus"
                         )),
                     dismiss: {}
                 )
@@ -112,13 +111,11 @@ struct CardBannerView_Previews: PreviewProvider {
 
 public struct CardBannerViewConfig {
     public struct Widget {
-        public init(title: String, appName: String) {
+        public init(title: String) {
             self.title = title
-            self.appName = appName
         }
 
         let title: String
-        let appName: String
     }
 
     public init(title: String, subtitle: String, actionButtonTitle: String, widget: CardBannerViewConfig.Widget) {

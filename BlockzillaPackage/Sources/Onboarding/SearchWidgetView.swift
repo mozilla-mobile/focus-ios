@@ -7,24 +7,17 @@ import WidgetKit
 
 public struct SearchWidgetView: View {
     let title: String
-    let appName: String
 
-    public init(title: String, appName: String) {
+    public init(title: String) {
         self.title = title
-        self.appName = appName
     }
 
     public var body: some View {
         VStack {
             HStack(alignment: .top) {
-                VStack(alignment: .leading) {
-                    Text(title)
-                        .font(.headline)
-                        .fontWeight(.medium)
-                    Text(appName)
-                        .font(.headline)
-                        .fontWeight(.medium)
-                }
+                Text(title)
+                    .font(.headline)
+                    .fontWeight(.medium)
                 .minimumScaleFactor(0.8)
                 .foregroundColor(.white)
 
@@ -57,7 +50,7 @@ public struct SearchWidgetView: View {
 @available(iOS 14, *)
 struct SearchWidgetView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchWidgetView(title: "Search in", appName: "Focus")
+        SearchWidgetView(title: "Search in Focus")
             .frame(width: 135, height: 135)
             .clipShape(RoundedRectangle(cornerRadius: 20))
     }
