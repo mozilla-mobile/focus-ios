@@ -349,7 +349,7 @@ struct UIConstants {
         public static let searchInApp = NSLocalizedString(
                 "TodayWidget.SearchInApp",
                 value: "Search in %@",
-                comment: "Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app(Focus/Klar).")
+                comment: "Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar).")
 
         public static let widgetOnboardingCardTitle = NSLocalizedString(
                 "WidgetOnboardingCard.Title",
