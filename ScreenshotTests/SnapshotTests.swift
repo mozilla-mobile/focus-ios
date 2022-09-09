@@ -124,9 +124,9 @@ class SnapshotTests: BaseTestCaseL10n {
         waitForWebPageLoad()
 
         // Tap on shortcuts settings menu option
-        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 5)
+        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
         app.buttons["HomeView.settingsButton"].tap()
-        waitForExistence(app.collectionViews.cells.buttons.element(boundBy: 8))
+        waitForExistence(app.collectionViews.cells.buttons.element(boundBy: 8), timeout: 10)
         snapshot("WebsiteBrowserMenu")
         app.collectionViews.cells.buttons.element(boundBy: 8).tap()
 
