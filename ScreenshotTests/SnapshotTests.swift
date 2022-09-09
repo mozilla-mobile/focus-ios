@@ -124,17 +124,17 @@ class SnapshotTests: BaseTestCaseL10n {
         waitForWebPageLoad()
 
         // Tap on shortcuts settings menu option
-        waitForExistence(app.buttons["HomeView.settingsButton"])
+        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 5)
         app.buttons["HomeView.settingsButton"].tap()
         waitForExistence(app.collectionViews.cells.buttons.element(boundBy: 8))
         snapshot("WebsiteBrowserMenu")
         app.collectionViews.cells.buttons.element(boundBy: 8).tap()
 
         // Tap on erase button to go to homepage and check the shortcut created
-        waitForExistence(app.buttons["URLBar.deleteButton"])
-        app.buttons["URLBar.deleteButton"].firstMatch.tap()
-        // Verify the shortcut is created
-        waitForExistence(app.otherElements.staticTexts["Mozilla"], timeout: 5)
+//        waitForExistence(app.buttons["URLBar.deleteButton"])
+//        app.buttons["URLBar.deleteButton"].firstMatch.tap()
+//        // Verify the shortcut is created
+//        waitForExistence(app.otherElements.staticTexts["Mozilla"], timeout: 5)
 
         // Open shortcut to check the tab menu label for shortcut option
 //        app.otherElements.staticTexts["Mozilla"].tap()
