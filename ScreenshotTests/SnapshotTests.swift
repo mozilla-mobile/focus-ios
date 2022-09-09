@@ -126,36 +126,36 @@ class SnapshotTests: BaseTestCaseL10n {
         // Tap on shortcuts settings menu option
         waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
         app.buttons["HomeView.settingsButton"].tap()
-        waitForExistence(app.collectionViews.cells.buttons.element(boundBy: 8), timeout: 10)
+        waitForExistence(app.collectionViews.cells.buttons.element(boundBy: 7), timeout: 10)
         snapshot("WebsiteBrowserMenu")
-        app.collectionViews.cells.buttons.element(boundBy: 8).tap()
+        app.collectionViews.cells.buttons.element(boundBy: 7).tap()
 
         // Tap on erase button to go to homepage and check the shortcut created
-//        waitForExistence(app.buttons["URLBar.deleteButton"])
-//        app.buttons["URLBar.deleteButton"].firstMatch.tap()
-//        // Verify the shortcut is created
-//        waitForExistence(app.otherElements.staticTexts["Mozilla"], timeout: 5)
+        waitForExistence(app.buttons["URLBar.deleteButton"])
+        app.buttons["URLBar.deleteButton"].firstMatch.tap()
+        // Verify the shortcut is created
+        waitForExistence(app.otherElements.staticTexts["Mozilla"], timeout: 5)
 
         // Open shortcut to check the tab menu label for shortcut option
-//        app.otherElements.staticTexts["Mozilla"].tap()
-//        waitForExistence(app.buttons["HomeView.settingsButton"])
-//        app.buttons["HomeView.settingsButton"].tap()
-//        waitForExistence(app.collectionViews.cells.buttons.element(boundBy: 8), timeout: 5)
-//        snapshot("1-RemoveShortcutTabMenu")
-//
-//        // Go back to homescreen
-//        app.collectionViews.cells.buttons.element(boundBy: 0).tap()
-//        waitForExistence(app.navigationBars.buttons["SettingsViewController.doneButton"])
-//        app.navigationBars.buttons["SettingsViewController.doneButton"].tap()
-//        waitForExistence(app.buttons["URLBar.deleteButton"].firstMatch)
-//        app.buttons["URLBar.deleteButton"].firstMatch.tap()
-//        waitForExistence(app.otherElements.staticTexts["Mozilla"], timeout: 5)
+        app.otherElements.staticTexts["Mozilla"].tap()
+        waitForExistence(app.buttons["HomeView.settingsButton"])
+        app.buttons["HomeView.settingsButton"].tap()
+        waitForExistence(app.collectionViews.cells.buttons.element(boundBy: 7), timeout: 5)
+        snapshot("1-RemoveShortcutTabMenu")
+
+        // Go back to homescreen
+        app.collectionViews.cells.buttons.element(boundBy: 0).tap()
+        waitForExistence(app.navigationBars.buttons["SettingsViewController.doneButton"])
+        app.navigationBars.buttons["SettingsViewController.doneButton"].tap()
+        waitForExistence(app.buttons["URLBar.deleteButton"].firstMatch)
+        app.buttons["URLBar.deleteButton"].firstMatch.tap()
+        waitForExistence(app.otherElements.staticTexts["Mozilla"], timeout: 5)
 
         // Remove created shortcut
-//        let icon = app.otherElements.containing(.staticText, identifier: "Mozilla")
-//        icon.otherElements["outerView"].press(forDuration: 2)
-//        waitForExistence(app.collectionViews.cells.buttons.firstMatch)
-//        snapshot("2-RemoveShortcutLongPressOnIt")
+        let icon = app.otherElements.containing(.staticText, identifier: "Mozilla")
+        icon.otherElements["outerView"].press(forDuration: 2)
+        waitForExistence(app.collectionViews.cells.buttons.firstMatch)
+        snapshot("2-RemoveShortcutLongPressOnIt")
     }
 
 //    Run it only for EN locales for now
