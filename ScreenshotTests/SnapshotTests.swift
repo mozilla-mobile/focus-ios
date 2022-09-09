@@ -7,14 +7,8 @@ import XCTest
 class SnapshotTests: BaseTestCaseL10n {
 
     func test01FirstRunScreens() {
+        waitForExistence(app.buttons["IntroViewController.startBrowsingButton"], timeout: 10)
         snapshot("00FirstRun")
-        app.swipeLeft()
-        snapshot("01FirstRun")
-        app.swipeLeft()
-        snapshot("02FirstRun")
-        waitForExistence(app.buttons["IntroViewController.button"], timeout: 15)
-        app.buttons["IntroViewController.button"].tap()
-        snapshot("03Home")
     }
 
     func test02Settings() {
@@ -143,25 +137,25 @@ class SnapshotTests: BaseTestCaseL10n {
         waitForExistence(app.otherElements.staticTexts["Mozilla"], timeout: 5)
 
         // Open shortcut to check the tab menu label for shortcut option
-        app.otherElements.staticTexts["Mozilla"].tap()
-        waitForExistence(app.buttons["HomeView.settingsButton"])
-        app.buttons["HomeView.settingsButton"].tap()
-        waitForExistence(app.collectionViews.cells.buttons.element(boundBy: 8), timeout: 5)
-        snapshot("1-RemoveShortcutTabMenu")
-
-        // Go back to homescreen
-        app.collectionViews.cells.buttons.element(boundBy: 0).tap()
-        waitForExistence(app.navigationBars.buttons["SettingsViewController.doneButton"])
-        app.navigationBars.buttons["SettingsViewController.doneButton"].tap()
-        waitForExistence(app.buttons["URLBar.deleteButton"].firstMatch)
-        app.buttons["URLBar.deleteButton"].firstMatch.tap()
-        waitForExistence(app.otherElements.staticTexts["Mozilla"], timeout: 5)
+//        app.otherElements.staticTexts["Mozilla"].tap()
+//        waitForExistence(app.buttons["HomeView.settingsButton"])
+//        app.buttons["HomeView.settingsButton"].tap()
+//        waitForExistence(app.collectionViews.cells.buttons.element(boundBy: 8), timeout: 5)
+//        snapshot("1-RemoveShortcutTabMenu")
+//
+//        // Go back to homescreen
+//        app.collectionViews.cells.buttons.element(boundBy: 0).tap()
+//        waitForExistence(app.navigationBars.buttons["SettingsViewController.doneButton"])
+//        app.navigationBars.buttons["SettingsViewController.doneButton"].tap()
+//        waitForExistence(app.buttons["URLBar.deleteButton"].firstMatch)
+//        app.buttons["URLBar.deleteButton"].firstMatch.tap()
+//        waitForExistence(app.otherElements.staticTexts["Mozilla"], timeout: 5)
 
         // Remove created shortcut
-        let icon = app.otherElements.containing(.staticText, identifier: "Mozilla")
-        icon.otherElements["outerView"].press(forDuration: 2)
-        waitForExistence(app.collectionViews.cells.buttons.firstMatch)
-        snapshot("2-RemoveShortcutLongPressOnIt")
+//        let icon = app.otherElements.containing(.staticText, identifier: "Mozilla")
+//        icon.otherElements["outerView"].press(forDuration: 2)
+//        waitForExistence(app.collectionViews.cells.buttons.firstMatch)
+//        snapshot("2-RemoveShortcutLongPressOnIt")
     }
 
 //    Run it only for EN locales for now
