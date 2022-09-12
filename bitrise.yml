@@ -260,6 +260,7 @@ workflows:
             CODE_SIGNING_ALLOWED=NO -testPlan UnitTests
         - scheme: Focus
         - test_plan: UnitTests
+        - destination: platform=iOS Simulator,name=iPhone 14,OS=latest
     - xcode-test@4.5:
         inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
@@ -344,6 +345,7 @@ workflows:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO -testPlan UnitTests
         - test_plan: UnitTests
+        - destination: platform=iOS Simulator,name=iPhone 14,OS=latest
     - xcode-test@4.5:
         inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
