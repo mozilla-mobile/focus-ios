@@ -17,6 +17,7 @@ public class OnboardingEventsHandler {
         case showTrackingProtection
         case trackerBlocked
         case showTrash
+        case clearTapped
     }
 
     public enum OnboardingType: Equatable, Hashable, Codable {
@@ -33,6 +34,7 @@ public class OnboardingEventsHandler {
         case trackingProtectionShield
         case trash
         case searchBar
+        case widget
     }
 
     @Published public var route: ToolTipRoute?
@@ -83,6 +85,10 @@ public class OnboardingEventsHandler {
         case .showTrash:
             guard shouldShowNewOnboarding() else { return }
             show(route: .trash)
+
+        case .clearTapped:
+            guard shouldShowNewOnboarding() else { return }
+            show(route: .widget)
         }
     }
 

@@ -9,4 +9,9 @@ public extension Image {
     static let close = Image("icon_close", bundle: Bundle.module)
     static let background = Image("icon_background", bundle: Bundle.module)
     static let huggingFocus = Image("icon_hugging_focus", bundle: .module)
+    static let magnifyingGlass = Image(systemName: "magnifyingglass")
+}
+
+extension Gradient {
+    static let quickAccessWidget = Gradient(colors: [Color("GradientFirst", bundle: .module), Color("GradientSecond", bundle: .module)])
 }

@@ -54,8 +54,8 @@ public struct FirstOnboardingView: View {
                             .frame(maxWidth: .infinity)
                             .frame(height: Constants.navigationLinkViewHeight)
                             .foregroundColor(.white)
-                            .background(Color.firstOnboardingScreenButton
-                                .cornerRadius(Constants.navigationLinkViewCornerRadius))
+                            .background(Color.actionButton)
+                            .cornerRadius(Constants.navigationLinkViewCornerRadius)
                             .padding(Constants.buttonPadding)
 
                     }
@@ -94,7 +94,7 @@ public struct FirstOnboardingViewConfig {
     }
 }
 
-struct SwiftUIView_Previews: PreviewProvider {
+struct FirstOnboardingView_Previews: PreviewProvider {
     static var previews: some View {
         FirstOnboardingView(
             config: FirstOnboardingViewConfig(

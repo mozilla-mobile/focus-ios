@@ -339,8 +339,8 @@ struct UIConstants {
         // Quick Action - Small Size - Gallery View
         static let quickActionGalleryDescription = NSLocalizedString(
                 "TodayWidget.QuickActionGalleryDescription",
-                value: "Add a Firefox shortcut to your Home screen. After adding the widget, touch and hold to edit it and select a different shortcut.",
-                comment: "Description for small size widget to add it to home screen")
+                value: "Add a %@ shortcut to your Home screen. After adding the widget, touch and hold to edit it and select a different shortcut.",
+                comment: "Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar).")
         public static let quickActionsGalleryTitle = NSLocalizedString(
                 "TodayWidget.QuickActionsGalleryTitle",
                 value: "Quick Actions",
@@ -348,8 +348,23 @@ struct UIConstants {
 
         public static let searchInApp = NSLocalizedString(
                 "TodayWidget.SearchInApp",
-                value: "Search in",
-                comment: "Translate only 'Search in'. App name will is rendered in a different label.")
+                value: "Search in %@",
+                comment: "Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar).")
+
+        public static let widgetOnboardingCardTitle = NSLocalizedString(
+                "WidgetOnboardingCard.Title",
+                value: "Browsing history cleared! 🎉",
+                comment: "Title shown on card view explaining the app has a widget option")
+
+        public static let widgetOnboardingCardSubtitle = NSLocalizedString(
+                "WidgetOnboardingCard.Subtitle",
+                value: "We’ll leave you to your private browsing, but get a quicker start next time with the %@ widget on your Home screen.",
+                comment: "Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar).")
+
+        public static let widgetOnboardingCardActionButton = NSLocalizedString(
+                "WidgetOnboardingCard.ActionButton",
+                value: "Show Me How",
+                comment: "Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget")
 
         static let userDefaultsLaunchThresholdKey = "launchThreshold"
         static let userDefaultsLaunchCountKey = "launchCount"
