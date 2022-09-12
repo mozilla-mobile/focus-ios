@@ -7,21 +7,19 @@ import Onboarding
 import SwiftUI
 
 class OnboardingFactory {
-
-    static func makeOnboarding(dismissAction: @escaping () -> Void) -> UIViewController {
-        let controller = UIHostingController(rootView: FirstOnboardingView(
-            config: .init(title: .onboardingTitle, subtitle: .onboardingSubtitleV2, buttonTitle: .onboardingButtonTitleV2),
-            defaultBrowserConfig: DefaultBrowserViewConfig(title: UIConstants.strings.defaultBrowserOnboardingViewTitleV2, firstSubtitle: UIConstants.strings.defaultBrowserOnboardingViewFirstSubtitleV2, secondSubtitle: UIConstants.strings.defaultBrowserOnboardingViewSecondSubtitleV2, topButtonTitle: UIConstants.strings.defaultBrowserOnboardingViewTopButtonTitleV2, bottomButtonTitle: UIConstants.strings.defaultBrowserOnboardingViewBottomButtonTitleV2), dismissAction: dismissAction))
-
-        controller.modalPresentationStyle = .formSheet
-        controller.isModalInPresentation = true
-        return controller
-    }
-
-    static func make(onboardingType :OnboardingEventsHandler.OnboardingType, dismissAction: @escaping () -> Void) -> (onboardingViewController: UIViewController, animated: Bool) {
+    static func make(onboardingType: OnboardingVersion, dismissAction: @escaping () -> Void) -> (onboardingViewController: UIViewController, animated: Bool) {
         switch onboardingType {
-        case .new:
-            let newOnboardingViewController = OnboardingViewController(
+        case .v2:
+            let controller = UIHostingController(rootView: FirstOnboardingView(
+                config: .init(title: .onboardingTitle, subtitle: .onboardingSubtitleV2, buttonTitle: .onboardingButtonTitleV2),
+                defaultBrowserConfig: DefaultBrowserViewConfig(title: UIConstants.strings.defaultBrowserOnboardingViewTitleV2, firstSubtitle: UIConstants.strings.defaultBrowserOnboardingViewFirstSubtitleV2, secondSubtitle: UIConstants.strings.defaultBrowserOnboardingViewSecondSubtitleV2, topButtonTitle: UIConstants.strings.defaultBrowserOnboardingViewTopButtonTitleV2, bottomButtonTitle: UIConstants.strings.defaultBrowserOnboardingViewBottomButtonTitleV2), dismissAction: dismissAction))
+
+            controller.modalPresentationStyle = .formSheet
+            controller.isModalInPresentation = true
+            return (controller, true)
+
+        case .v1:
+            let controller = OnboardingViewController(
                 config: .init(
                     onboardingTitle: .onboardingTitle,
                     onboardingSubtitle: .onboardingSubtitle,
@@ -34,15 +32,10 @@ class OnboardingFactory {
                 ),
                 dismissOnboardingScreen: dismissAction
             )
-            newOnboardingViewController.modalPresentationStyle = .formSheet
-            newOnboardingViewController.isModalInPresentation = true
-            return (newOnboardingViewController, true)
+            controller.modalPresentationStyle = .formSheet
+            controller.isModalInPresentation = true
+            return (controller, true)
 
-        case .old:
-            let introViewController = IntroViewController()
-            introViewController.modalPresentationStyle = .fullScreen
-            introViewController.dismissOnboardingScreen = dismissAction
-            return (introViewController, false)
         }
     }
 }

@@ -5,39 +5,49 @@
 import Foundation
 import Combine
 
-public class OnboardingEventsHandler {
+public enum Action {
+    case applicationDidLaunch
+    case enterHome
+    case showTrackingProtection
+    case trackerBlocked
+    case showTrash
+    case clearTapped
+    case startBrowsing
+}
+
+public enum ToolTipRoute: Equatable, Hashable, Codable {
+    case onboarding(OnboardingVersion)
+    case trackingProtection
+    case trackingProtectionShield
+    case trackingProtectionShieldV2
+    case trash
+    case trashV2
+    case searchBar
+    case widget
+    case menu
+}
+
+public enum OnboardingVersion: Equatable, Hashable, Codable {
+    init(_ shouldShowNewOnboarding: Bool) {
+        self = shouldShowNewOnboarding ? .v2 : .v1
+    }
+    case v2
+    case v1
+}
+
+public protocol OnboardingEventsHandling: AnyObject {
+    var route: ToolTipRoute? { get set }
+    var routePublisher: Published<ToolTipRoute?>.Publisher { get }
+    func send(_ action: Action)
+}
+
+public class OnboardingEventsHandlerV2: OnboardingEventsHandling {
 
     private let alwaysShowOnboarding: () -> Bool
     private let setShownTips: (Set<ToolTipRoute>) -> Void
-    public let shouldShowNewOnboarding: () -> Bool
-
-    public enum Action {
-        case applicationDidLaunch
-        case enterHome
-        case showTrackingProtection
-        case trackerBlocked
-        case showTrash
-        case clearTapped
-    }
-
-    public enum OnboardingType: Equatable, Hashable, Codable {
-        init(_ shouldShowNewOnboarding: Bool) {
-            self = shouldShowNewOnboarding ? .new : .old
-        }
-        case new
-        case old
-    }
-
-    public enum ToolTipRoute: Equatable, Hashable, Codable {
-        case onboarding(OnboardingType)
-        case trackingProtection
-        case trackingProtectionShield
-        case trash
-        case searchBar
-        case widget
-    }
 
     @Published public var route: ToolTipRoute?
+    public var routePublisher: Published<ToolTipRoute?>.Publisher { $route }
 
     private var visitedURLcounter = 0
     private var shownTips = Set<ToolTipRoute>() {
@@ -48,47 +58,108 @@ public class OnboardingEventsHandler {
 
     public init(
         alwaysShowOnboarding: @escaping () -> Bool,
-        shouldShowNewOnboarding: @escaping () -> Bool,
         visitedURLcounter: Int = 0,
-        getShownTips: () -> Set<OnboardingEventsHandler.ToolTipRoute>,
-        setShownTips: @escaping (Set<OnboardingEventsHandler.ToolTipRoute>) -> Void
+        getShownTips: () -> Set<ToolTipRoute>,
+        setShownTips: @escaping (Set<ToolTipRoute>) -> Void
     ) {
         self.alwaysShowOnboarding = alwaysShowOnboarding
-        self.shouldShowNewOnboarding = shouldShowNewOnboarding
         self.visitedURLcounter = visitedURLcounter
         self.setShownTips = setShownTips
         self.shownTips = getShownTips()
     }
 
-    public func send(_ action: OnboardingEventsHandler.Action) {
+    public func send(_ action: Action) {
         switch action {
         case .applicationDidLaunch:
-            let onboardingRoute = ToolTipRoute.onboarding(OnboardingType(shouldShowNewOnboarding()))
-            if shownTips.contains(onboardingRoute) {
-                show(route: .searchBar)
-            } else {
-                show(route: onboardingRoute)
-            }
+            show(route: .onboarding(.v2))
 
         case .enterHome:
-            guard shouldShowNewOnboarding() else { return }
             show(route: .searchBar)
 
         case .showTrackingProtection:
-            guard shouldShowNewOnboarding() else { return }
             show(route: .trackingProtection)
 
         case .trackerBlocked:
-            guard shouldShowNewOnboarding() else { return }
+            show(route: .trackingProtectionShieldV2)
+
+        case .showTrash:
+            show(route: .trashV2)
+
+        case .clearTapped:
+            show(route: .widget)
+
+        case .startBrowsing:
+            break
+        }
+    }
+
+    private func show(route: ToolTipRoute) {
+        #if DEBUG
+        if alwaysShowOnboarding() {
+            shownTips.remove(route)
+        }
+        #endif
+
+        if !shownTips.contains(route) {
+            self.route = route
+            shownTips.insert(route)
+        }
+    }
+}
+
+public class OnboardingEventsHandlerV1: OnboardingEventsHandling {
+
+    private let alwaysShowOnboarding: () -> Bool
+    private let setShownTips: (Set<ToolTipRoute>) -> Void
+
+    @Published public var route: ToolTipRoute?
+    public var routePublisher: Published<ToolTipRoute?>.Publisher { $route }
+
+    private var visitedURLcounter = 0
+    private var shownTips = Set<ToolTipRoute>() {
+        didSet {
+            setShownTips(shownTips)
+        }
+    }
+
+    public init(
+        alwaysShowOnboarding: @escaping () -> Bool,
+        visitedURLcounter: Int = 0,
+        getShownTips: () -> Set<ToolTipRoute>,
+        setShownTips: @escaping (Set<ToolTipRoute>) -> Void
+    ) {
+        self.alwaysShowOnboarding = alwaysShowOnboarding
+        self.visitedURLcounter = visitedURLcounter
+        self.setShownTips = setShownTips
+        self.shownTips = getShownTips()
+    }
+
+    public func send(_ action: Action) {
+        switch action {
+        case .applicationDidLaunch:
+            show(route: .onboarding(.v1))
+
+        case .enterHome:
+            show(route: .menu)
+
+        case .startBrowsing:
+            visitedURLcounter += 1
+
+            if visitedURLcounter == 3 {
+                show(route: .trash)
+            }
+
+        case .showTrackingProtection:
+            show(route: .trackingProtection)
+
+        case .trackerBlocked:
             show(route: .trackingProtectionShield)
 
         case .showTrash:
-            guard shouldShowNewOnboarding() else { return }
-            show(route: .trash)
+            break
 
         case .clearTapped:
-            guard shouldShowNewOnboarding() else { return }
-            show(route: .widget)
+            break
         }
     }
 
