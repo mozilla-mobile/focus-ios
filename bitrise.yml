@@ -253,6 +253,7 @@ workflows:
         - configuration: FocusDebug
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
         - scheme: Focus
+        - simulator_device: iPhone 14
     - xcode-test@4.5:
         inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
@@ -324,11 +325,19 @@ workflows:
             set -x
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Focus.entitlements
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
+    - script@1:
+        title: See available sims
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            xcrun simctl list
     - xcode-build-for-simulator@0.12:
         inputs:
         - configuration: FocusDebug
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
         - scheme: Klar
+        - simulator_device: iPhone 14 Plus
+        - simulator_os_version: latest
     - xcode-test@4.5:
         inputs:
         - scheme: Klar
