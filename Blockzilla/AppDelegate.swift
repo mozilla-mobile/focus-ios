@@ -21,7 +21,7 @@ enum AppPhase {
 }
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate {
     private lazy var authenticationManager = AuthenticationManager()
     @Published private var appPhase: AppPhase = .notRunning
 
@@ -510,6 +510,12 @@ extension AppDelegate {
             NSLog("Failed to setup experimentation: \(error)")
         }
     }
+}
+
+extension AppDelegate: ModalDelegate {
+    func dismiss(animated: Bool = true) {
+        window?.rootViewController?.presentedViewController?.dismiss(animated: animated)
+    }
 
     func presentModal(viewController: UIViewController, animated: Bool) {
         window?.rootViewController?.present(viewController, animated: animated, completion: nil)
@@ -527,4 +533,5 @@ extension AppDelegate {
 protocol ModalDelegate {
     func presentModal(viewController: UIViewController, animated: Bool)
     func presentSheet(viewController: UIViewController)
+    func dismiss(animated: Bool)
 }
