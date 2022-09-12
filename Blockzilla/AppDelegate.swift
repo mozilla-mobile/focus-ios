@@ -59,57 +59,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private lazy var shortcutManager: ShortcutsManager = .init()
 
     private lazy var onboardingEventsHandler: OnboardingEventsHandling = {
-
         var shouldShowNewOnboarding: () -> Bool = { [unowned self] in
-#if DEBUG
-        if AppInfo.isTesting() {
-            return false
-        }
-        if UserDefaults.standard.bool(forKey: OnboardingConstants.ignoreOnboardingExperiment) {
-            return !UserDefaults.standard.bool(forKey: OnboardingConstants.showOldOnboarding)
-        } else {
+            #if DEBUG
+            if AppInfo.isTesting() {
+                return false
+            }
+            if UserDefaults.standard.bool(forKey: OnboardingConstants.ignoreOnboardingExperiment) {
+                return !UserDefaults.standard.bool(forKey: OnboardingConstants.showOldOnboarding)
+            } else {
+                return nimbus.shouldShowNewOnboarding
+            }
+            #else
             return nimbus.shouldShowNewOnboarding
-        }
-#else
-        return nimbus.shouldShowNewOnboarding
-#endif
+            #endif
     }
-
-        if shouldShowNewOnboarding() {
-            return OnboardingEventsHandlerV2(
-                alwaysShowOnboarding: {
-                    UserDefaults.standard.bool(forKey: OnboardingConstants.alwaysShowOnboarding)
-                },
-                getShownTips: {
-                    return UserDefaults
-                        .standard
-                        .data(forKey: OnboardingConstants.shownTips)
-                        .flatMap {
-                            try? JSONDecoder().decode(Set<ToolTipRoute>.self, from: $0)
-                        } ?? []
-                }, setShownTips: { tips in
-                    let data = try? JSONEncoder().encode(tips)
-                    UserDefaults.standard.set(data, forKey: OnboardingConstants.shownTips)
-                }
-            )
-        } else {
-            return OnboardingEventsHandlerV1(
-                alwaysShowOnboarding: {
-                    UserDefaults.standard.bool(forKey: OnboardingConstants.alwaysShowOnboarding)
-                },
-                getShownTips: {
-                    return UserDefaults
-                        .standard
-                        .data(forKey: OnboardingConstants.shownTips)
-                        .flatMap {
-                            try? JSONDecoder().decode(Set<ToolTipRoute>.self, from: $0)
-                        } ?? []
-                }, setShownTips: { tips in
-                    let data = try? JSONEncoder().encode(tips)
-                    UserDefaults.standard.set(data, forKey: OnboardingConstants.shownTips)
-                }
-            )
-        }
+        return OnboardingFactory.makeOnboardingEventsHandler(shouldShowNewOnboarding)
     }()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {

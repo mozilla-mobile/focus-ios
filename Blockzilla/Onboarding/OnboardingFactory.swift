@@ -7,6 +7,40 @@ import Onboarding
 import SwiftUI
 
 class OnboardingFactory {
+    static func makeOnboardingEventsHandler(_ shouldShowNewOnboarding: () -> Bool) -> OnboardingEventsHandling {
+        let getShownTips: () -> Set<ToolTipRoute> = {
+            return UserDefaults
+                .standard
+                .data(forKey: OnboardingConstants.shownTips)
+                .flatMap {
+                    try? JSONDecoder().decode(Set<ToolTipRoute>.self, from: $0)
+                } ?? []
+        }
+
+        let setShownTips: (Set<ToolTipRoute>) -> Void = { tips in
+            let data = try? JSONEncoder().encode(tips)
+            UserDefaults.standard.set(data, forKey: OnboardingConstants.shownTips)
+        }
+
+        let alwaysShowOnboarding: () -> Bool = {
+            UserDefaults.standard.bool(forKey: OnboardingConstants.alwaysShowOnboarding)
+        }
+
+        if shouldShowNewOnboarding() {
+            return OnboardingEventsHandlerV2(
+                alwaysShowOnboarding: alwaysShowOnboarding,
+                getShownTips: getShownTips,
+                setShownTips: setShownTips
+            )
+        } else {
+            return OnboardingEventsHandlerV1(
+                alwaysShowOnboarding: alwaysShowOnboarding,
+                getShownTips: getShownTips,
+                setShownTips: setShownTips
+            )
+        }
+    }
+
     static func make(onboardingType: OnboardingVersion, dismissAction: @escaping () -> Void) -> (onboardingViewController: UIViewController, animated: Bool) {
         switch onboardingType {
         case .v2:
