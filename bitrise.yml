@@ -254,7 +254,6 @@ workflows:
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
         - scheme: Focus
         - simulator_device: iphone 11
-        - simulator_os_version: 'latest'
     - xcode-test@4.5:
         inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
