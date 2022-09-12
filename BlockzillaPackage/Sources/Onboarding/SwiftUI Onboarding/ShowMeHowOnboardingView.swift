@@ -61,7 +61,7 @@ struct ShowMeHowOnboardingView: View {
                         }
                     }
                     Spacer()
-                }.padding(EdgeInsets(top: .topBottomPadding, leading: .leadingTrailingPadding, bottom: 10, trailing: .leadingTrailingPadding))
+                }.padding(EdgeInsets(top: .topBottomPadding, leading: .leadingTrailingPadding, bottom: .topBottomPadding, trailing: .leadingTrailingPadding))
                     .navigationTitle(config.title)
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
@@ -97,7 +97,6 @@ public struct ShowMeHowOnboardingViewConfig {
 struct ShowMeHowOnboardingView_Previews: PreviewProvider {
     static var previews: some View {
         ShowMeHowOnboardingView(config: ShowMeHowOnboardingViewConfig(title: "Turn on Sync", subtitleStep1: "Long press on the Home screen until the icons start to jiggle.", subtitleStep2: "Tap on the plus icon.", subtitleStep3: "Search for FireFox Focus. Then choose a widget.", buttonText: "Done", widgetText: "Search in Focus"), dismissAction: { })
-            .previewDevice("iPod touch (7th generation)")
     }
 }
 
