@@ -72,7 +72,7 @@ class ActionViewController: SLComposeServiceViewController {
         if let urlProvider = urlProvider {
             urlProvider.processUrl { (urlItem, error) in
                 Task { @MainActor in
-                    guard let focusUrl = (urlItem as? NSURL)?.encodedUrl.flatMap(self.focusUrl) else { self.cancel(); return }
+                    guard let url = (urlItem as? NSURL)?.encodedUrl, let focusUrl = self.focusUrl(url: url) else { self.cancel(); return }
                     self.handleUrl(focusUrl)
                 }
             }
