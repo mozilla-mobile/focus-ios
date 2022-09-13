@@ -19,9 +19,6 @@ class BrowserViewControllerTests: XCTestCase {
         alwaysShowOnboarding: {
             false
         },
-        shouldShowNewOnboarding: { [unowned self] in
-            false
-        },
         getShownTips: {
             return []
         }, setShownTips: { _ in
