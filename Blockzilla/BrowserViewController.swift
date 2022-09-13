@@ -290,6 +290,127 @@ class BrowserViewController: UIViewController {
         browserToolbar.layoutIfNeeded()
     }
 
+    private func tooltipController(
+        anchoredBy sourceView: UIView,
+        sourceRect: CGRect, title: String = "",
+        body: String,
+        dismiss: @escaping () -> Void ) -> UIViewController {
+            let tooltipViewController = TooltipViewController()
+            tooltipViewController.set(title: title, body: body)
+            tooltipViewController.configure(anchoredBy: sourceView, sourceRect: sourceRect)
+            tooltipViewController.dismiss = dismiss
+            return tooltipViewController
+        }
+
+    func controller(for route: ToolTipRoute) -> UIViewController? {
+        switch route {
+        case .trackingProtectionShield(let version):
+            switch version {
+            case .v2:
+                return self.tooltipController(
+                    anchoredBy: self.urlBar.shieldIcon,
+                    sourceRect: CGRect(x: self.urlBar.shieldIcon.bounds.midX, y: self.urlBar.shieldIcon.bounds.midY + 10, width: 0, height: 0),
+                    body: UIConstants.strings.tooltipBodyTextForShieldIconV2,
+                    dismiss: {
+                        self.onboardingEventsHandler.route = nil
+                        self.onboardingEventsHandler.send(.showTrash)
+                    }
+                )
+
+            case .v1:
+                return self.tooltipController(
+                    anchoredBy: self.urlBar.shieldIcon,
+                    sourceRect: CGRect(x: self.urlBar.shieldIcon.bounds.midX, y: self.urlBar.shieldIcon.bounds.midY + 10, width: 0, height: 0),
+                    body: UIConstants.strings.tooltipBodyTextForShieldIcon,
+                    dismiss: { self.onboardingEventsHandler.route = nil }
+                )
+            }
+
+        case .trash(let version):
+            switch version {
+            case .v2:
+                let sourceButton = showsToolsetInURLBar ? urlBar.deleteButton : browserToolbar.deleteButton
+                let sourceRect = showsToolsetInURLBar ? CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.maxY - 10, width: 0, height: 0) :
+                CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.minY + 10, width: 0, height: 0)
+                return self.tooltipController(
+                    anchoredBy: sourceButton,
+                    sourceRect: sourceRect,
+                    body: UIConstants.strings.tooltipBodyTextForTrashIconV2,
+                    dismiss: { self.onboardingEventsHandler.route = nil }
+                )
+
+            case .v1:
+                let sourceButton = showsToolsetInURLBar ? urlBar.deleteButton : browserToolbar.deleteButton
+                let sourceRect = showsToolsetInURLBar ? CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.maxY - 10, width: 0, height: 0) :
+                CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.minY + 10, width: 0, height: 0)
+                return self.tooltipController(
+                    anchoredBy: sourceButton,
+                    sourceRect: sourceRect,
+                    body: UIConstants.strings.tooltipBodyTextForTrashIcon,
+                    dismiss: { self.onboardingEventsHandler.route = nil }
+                )
+            }
+
+        case .searchBar:
+            return self.tooltipController(
+                anchoredBy: self.urlBar.textFieldAnchor,
+                sourceRect: CGRect(
+                    x: self.urlBar.textFieldAnchor.bounds.minX,
+                    y: self.urlBar.textFieldAnchor.bounds.maxY, width: 0, height: 0
+                ),
+                body: UIConstants.strings.tooltipBodyTextStartPrivateBrowsing,
+                dismiss: { self.onboardingEventsHandler.route = nil }
+            )
+
+        case .onboarding(let onboardingType):
+            let dismissOnboarding = { [unowned self] in
+                Telemetry
+                    .default
+                    .recordEvent(
+                        category: TelemetryEventCategory.action,
+                        method: TelemetryEventMethod.click,
+                        object: TelemetryEventObject.onboarding,
+                        value: "finish"
+                    )
+                UserDefaults.standard.set(true, forKey: OnboardingConstants.onboardingDidAppear)
+                urlBar.activateTextField()
+                onboardingEventsHandler.route = nil
+                onboardingEventsHandler.send(.enterHome)
+            }
+            return OnboardingFactory.make(onboardingType: onboardingType, dismissAction: dismissOnboarding)
+
+        case .trackingProtection:
+            return nil
+
+        case .widget:
+            urlBar.dismiss()
+            let cardBanner = UIHostingController(
+                rootView: CardBannerView(
+                    config: .init(
+                        title: UIConstants.strings.widgetOnboardingCardTitle,
+                        subtitle: String(format: UIConstants.strings.widgetOnboardingCardSubtitle, AppInfo.shortProductName),
+                        actionButtonTitle: UIConstants.strings.widgetOnboardingCardActionButton,
+                        widget: .init(
+                            title: String(format: UIConstants.strings.searchInApp, AppInfo.shortProductName)
+                        )),
+                    dismiss: { [weak self] in
+                        self?.onboardingEventsHandler.route = nil
+                        self?.urlBar.activateTextField()
+                    }))
+            cardBanner.view.backgroundColor = .clear
+            cardBanner.modalPresentationStyle = .overFullScreen
+            return cardBanner
+
+        case .menu:
+            return self.tooltipController(
+                anchoredBy: self.urlBar.contextMenuButton,
+                sourceRect: CGRect(x: self.urlBar.contextMenuButton.bounds.maxX, y: self.urlBar.contextMenuButton.bounds.midY + 12, width: 0, height: 0),
+                body: UIConstants.strings.tootipBodyTextForContextMenuIcon,
+                dismiss: { self.onboardingEventsHandler.route = nil }
+            )
+        }
+    }
+
     private func setupOnboardingEvents() {
         var presentedController: UIViewController?
         onboardingEventsHandler
@@ -300,122 +421,12 @@ class BrowserViewController: UIViewController {
                     presentedController?.dismiss(animated: true)
                     presentedController = nil
 
-                case .trackingProtectionShieldV2:
-                    let controller = self.tooltipController(
-                        anchoredBy: self.urlBar.shieldIcon,
-                        sourceRect: CGRect(x: self.urlBar.shieldIcon.bounds.midX, y: self.urlBar.shieldIcon.bounds.midY + 10, width: 0, height: 0),
-                        body: UIConstants.strings.tooltipBodyTextForShieldIconV2,
-                        dismiss: {
-                            self.onboardingEventsHandler.route = nil
-                            self.onboardingEventsHandler.send(.showTrash)
-                        }
-                    )
-                    self.present(controller, animated: true)
-                    presentedController = controller
-
-                case .trashV2:
-                    let sourceButton = showsToolsetInURLBar ? urlBar.deleteButton : browserToolbar.deleteButton
-                    let sourceRect = showsToolsetInURLBar ? CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.maxY - 10, width: 0, height: 0) :
-                    CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.minY + 10, width: 0, height: 0)
-                    let controller = self.tooltipController(
-                        anchoredBy: sourceButton,
-                        sourceRect: sourceRect,
-                        body: UIConstants.strings.tooltipBodyTextForTrashIconV2,
-                        dismiss: { self.onboardingEventsHandler.route = nil }
-                    )
-                    self.present(controller, animated: true)
-                    presentedController = controller
-
-                case .searchBar:
-                    let controller = self.tooltipController(
-                        anchoredBy: self.urlBar.textFieldAnchor,
-                        sourceRect: CGRect(
-                            x: self.urlBar.textFieldAnchor.bounds.minX,
-                            y: self.urlBar.textFieldAnchor.bounds.maxY, width: 0, height: 0
-                        ),
-                        body: UIConstants.strings.tooltipBodyTextStartPrivateBrowsing,
-                        dismiss: { self.onboardingEventsHandler.route = nil }
-                    )
-                    self.present(controller, animated: true)
-                    presentedController = controller
-
-                case .onboarding(let onboardingType):
-                    let dismissOnboarding = { [unowned self] in
-                        Telemetry
-                            .default
-                            .recordEvent(
-                                category: TelemetryEventCategory.action,
-                                method: TelemetryEventMethod.click,
-                                object: TelemetryEventObject.onboarding,
-                                value: "finish"
-                            )
-                        UserDefaults.standard.set(true, forKey: OnboardingConstants.onboardingDidAppear)
-                        urlBar.activateTextField()
-                        onboardingEventsHandler.route = nil
-                        onboardingEventsHandler.send(.enterHome)
+                case .some(let route):
+                    if let controller = controller(for: route) {
+                        self.present(controller, animated: true)
+                        presentedController = controller
                     }
-
-                    let (controller, animated) = OnboardingFactory.make(onboardingType: onboardingType, dismissAction: dismissOnboarding)
-                    self.present(controller, animated: animated)
-                    presentedController = controller
-
-                case .trackingProtection:
-                    break
-
-                case .widget:
-                    urlBar.dismiss()
-                    let cardBanner = UIHostingController(
-                        rootView: CardBannerView(
-                            config: .init(
-                                title: UIConstants.strings.widgetOnboardingCardTitle,
-                                subtitle: String(format: UIConstants.strings.widgetOnboardingCardSubtitle, AppInfo.shortProductName),
-                                actionButtonTitle: UIConstants.strings.widgetOnboardingCardActionButton,
-                                widget: .init(
-                                    title: String(format: UIConstants.strings.searchInApp, AppInfo.shortProductName)
-                                )),
-                            dismiss: { [weak self] in
-                        self?.onboardingEventsHandler.route = nil
-                        self?.urlBar.activateTextField()
-                    }))
-                    cardBanner.view.backgroundColor = .clear
-                    cardBanner.modalPresentationStyle = .overFullScreen
-                    modalDelegate?.presentModal(viewController: cardBanner, animated: true)
-                    presentedController = cardBanner
-
-                case .menu:
-                    let controller = self.tooltipController(
-                        anchoredBy: self.urlBar.contextMenuButton,
-                        sourceRect: CGRect(x: self.urlBar.contextMenuButton.bounds.maxX, y: self.urlBar.contextMenuButton.bounds.midY + 12, width: 0, height: 0),
-                        body: UIConstants.strings.tootipBodyTextForContextMenuIcon,
-                        dismiss: { self.onboardingEventsHandler.route = nil }
-                    )
-                    self.present(controller, animated: true)
-                    presentedController = controller
-
-                case .trash:
-                    let sourceButton = showsToolsetInURLBar ? urlBar.deleteButton : browserToolbar.deleteButton
-                    let sourceRect = showsToolsetInURLBar ? CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.maxY - 10, width: 0, height: 0) :
-                    CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.minY + 10, width: 0, height: 0)
-                    let controller = self.tooltipController(
-                        anchoredBy: sourceButton,
-                        sourceRect: sourceRect,
-                        body: UIConstants.strings.tooltipBodyTextForTrashIcon,
-                        dismiss: { self.onboardingEventsHandler.route = nil }
-                    )
-                    self.present(controller, animated: true)
-                    presentedController = controller
-
-                case .trackingProtectionShield:
-                    let controller = self.tooltipController(
-                        anchoredBy: self.urlBar.shieldIcon,
-                        sourceRect: CGRect(x: self.urlBar.shieldIcon.bounds.midX, y: self.urlBar.shieldIcon.bounds.midY + 10, width: 0, height: 0),
-                        body: UIConstants.strings.tooltipBodyTextForShieldIcon,
-                        dismiss: { self.onboardingEventsHandler.route = nil }
-                    )
-                    self.present(controller, animated: true)
-                    presentedController = controller
                 }
-
             }
             .store(in: &cancellables)
     }
@@ -856,18 +867,6 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    private func tooltipController(
-        anchoredBy sourceView: UIView,
-        sourceRect: CGRect, title: String = "",
-        body: String,
-        dismiss: @escaping () -> Void ) -> UIViewController {
-            let tooltipViewController = TooltipViewController()
-            tooltipViewController.set(title: title, body: body)
-            tooltipViewController.configure(anchoredBy: sourceView, sourceRect: sourceRect)
-            tooltipViewController.dismiss = dismiss
-            return tooltipViewController
-        }
-
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
 
@@ -922,9 +921,9 @@ class BrowserViewController: UIViewController {
 
         DispatchQueue.main.async {
             self.urlBar.updateCollapsedState()
-            if self.onboardingEventsHandler.route ~= .trash {
+            if case let .trash(version) = self.onboardingEventsHandler.route {
                 self.onboardingEventsHandler.route = nil
-                self.onboardingEventsHandler.route = .trash
+                self.onboardingEventsHandler.route = .trash(version)
             }
         }
     }

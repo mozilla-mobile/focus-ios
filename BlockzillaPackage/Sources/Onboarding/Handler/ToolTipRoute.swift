@@ -7,10 +7,8 @@ import Foundation
 public enum ToolTipRoute: Equatable, Hashable, Codable {
     case onboarding(OnboardingVersion)
     case trackingProtection
-    case trackingProtectionShield
-    case trackingProtectionShieldV2
-    case trash
-    case trashV2
+    case trackingProtectionShield(OnboardingVersion)
+    case trash(OnboardingVersion)
     case searchBar
     case widget
     case menu

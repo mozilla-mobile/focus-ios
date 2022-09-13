@@ -41,16 +41,22 @@ class OnboardingFactory {
         }
     }
 
-    static func make(onboardingType: OnboardingVersion, dismissAction: @escaping () -> Void) -> (onboardingViewController: UIViewController, animated: Bool) {
+    static func make(onboardingType: OnboardingVersion, dismissAction: @escaping () -> Void) -> UIViewController {
         switch onboardingType {
         case .v2:
-            let controller = UIHostingController(rootView: FirstOnboardingView(
+            let controller = UIHostingController(rootView: GetStartedOnboardingView(
                 config: .init(title: .onboardingTitle, subtitle: .onboardingSubtitleV2, buttonTitle: .onboardingButtonTitleV2),
-                defaultBrowserConfig: DefaultBrowserViewConfig(title: UIConstants.strings.defaultBrowserOnboardingViewTitleV2, firstSubtitle: UIConstants.strings.defaultBrowserOnboardingViewFirstSubtitleV2, secondSubtitle: UIConstants.strings.defaultBrowserOnboardingViewSecondSubtitleV2, topButtonTitle: UIConstants.strings.defaultBrowserOnboardingViewTopButtonTitleV2, bottomButtonTitle: UIConstants.strings.defaultBrowserOnboardingViewBottomButtonTitleV2), dismissAction: dismissAction))
+                defaultBrowserConfig: .init(
+                    title: .defaultBrowserOnboardingViewTitleV2,
+                    firstSubtitle: .defaultBrowserOnboardingViewFirstSubtitleV2,
+                    secondSubtitle: .defaultBrowserOnboardingViewSecondSubtitleV2,
+                    topButtonTitle: .defaultBrowserOnboardingViewTopButtonTitleV2,
+                    bottomButtonTitle: .defaultBrowserOnboardingViewBottomButtonTitleV2),
+                dismissAction: dismissAction))
 
             controller.modalPresentationStyle = .formSheet
             controller.isModalInPresentation = true
-            return (controller, true)
+            return controller
 
         case .v1:
             let controller = OnboardingViewController(
@@ -68,8 +74,7 @@ class OnboardingFactory {
             )
             controller.modalPresentationStyle = .formSheet
             controller.isModalInPresentation = true
-            return (controller, true)
-
+            return controller
         }
     }
 }
@@ -88,4 +93,9 @@ fileprivate extension String {
     static let onboardingButtonTitle = NSLocalizedString("Onboarding.Button.Title", value: "Start browsing", comment: "Text for a label that indicates the title of button from onboarding screen")
     static let onboardingButtonTitleV2 = NSLocalizedString("NewOnboarding.Button.Title.V2", value: "Get Started", comment: "Text for a label that indicates the title of button from onboarding screen version 2.")
 
+    static let defaultBrowserOnboardingViewTitleV2 = NSLocalizedString("Onboarding.DefaultBrowser.Title.V2", value: "Focus isn't like other browsers", comment: "Text for a label that indicates the title for the default browser onboarding screen version 2.")
+    static let defaultBrowserOnboardingViewFirstSubtitleV2 = NSLocalizedString("Onboarding.DefaultBrowser.FirstSubtitle.V2", value: "We clear your history when you close the app for extra privacy.", comment: "Text for a label that indicates the first subtitle for the default browser onboarding screen version 2.")
+    static let defaultBrowserOnboardingViewSecondSubtitleV2 = NSLocalizedString("Onboarding.DefaultBrowser.SecondSubtitle.V2", value: "Make Focus your default to protect your data with every link you open.", comment: "Text for a label that indicates the second subtitle for the default browser onboarding screen version 2.")
+    static let defaultBrowserOnboardingViewTopButtonTitleV2 = NSLocalizedString("Onboarding.DefaultBrowser.TopButtonTitle.V2", value: "Set as Default Browser", comment: "Text for a label that indicates the title of the top button from the default browser onboarding screen version 2.")
+    static let defaultBrowserOnboardingViewBottomButtonTitleV2 = NSLocalizedString("Onboarding.DefaultBrowser.BottomButtonTitle.V2", value: "Skip", comment: "Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2.")
 }

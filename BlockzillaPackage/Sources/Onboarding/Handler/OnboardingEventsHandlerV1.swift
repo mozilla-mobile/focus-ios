@@ -40,14 +40,14 @@ public class OnboardingEventsHandlerV1: OnboardingEventsHandling {
             visitedURLcounter += 1
 
             if visitedURLcounter == 3 {
-                show(route: .trash)
+                show(route: .trash(.v1))
             }
 
         case .showTrackingProtection:
             show(route: .trackingProtection)
 
         case .trackerBlocked:
-            show(route: .trackingProtectionShield)
+            show(route: .trackingProtectionShield(.v1))
 
         case .showTrash:
             break

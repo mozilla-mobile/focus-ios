@@ -36,10 +36,10 @@ public class OnboardingEventsHandlerV2: OnboardingEventsHandling {
             show(route: .trackingProtection)
 
         case .trackerBlocked:
-            show(route: .trackingProtectionShieldV2)
+            show(route: .trackingProtectionShield(.v2))
 
         case .showTrash:
-            show(route: .trashV2)
+            show(route: .trash(.v2))
 
         case .clearTapped:
             show(route: .widget)
