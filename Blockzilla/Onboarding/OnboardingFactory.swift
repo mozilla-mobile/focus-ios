@@ -6,22 +6,54 @@ import UIKit
 import Onboarding
 import SwiftUI
 
+class TestOnboarding: OnboardingEventsHandling {
+    @Published var route: Onboarding.ToolTipRoute? = nil
+    var routePublisher: Published<Onboarding.ToolTipRoute?>.Publisher { $route }
+    func send(_ action: Onboarding.Action) {}
+}
+
 class OnboardingFactory {
+    static func makeOnboardingEventsHandler(_ shouldShowNewOnboarding: () -> Bool) -> OnboardingEventsHandling {
+        let getShownTips: () -> Set<ToolTipRoute> = {
+            return UserDefaults
+                .standard
+                .data(forKey: OnboardingConstants.shownTips)
+                .flatMap {
+                    try? JSONDecoder().decode(Set<ToolTipRoute>.self, from: $0)
+                } ?? []
+        }
 
-    static func makeOnboarding(dismissAction: @escaping () -> Void) -> UIViewController {
-        let controller = UIHostingController(rootView: FirstOnboardingView(
-            config: .init(title: .onboardingTitle, subtitle: .onboardingSubtitleV2, buttonTitle: .onboardingButtonTitleV2),
-            defaultBrowserConfig: DefaultBrowserViewConfig(title: UIConstants.strings.defaultBrowserOnboardingViewTitleV2, firstSubtitle: UIConstants.strings.defaultBrowserOnboardingViewFirstSubtitleV2, secondSubtitle: UIConstants.strings.defaultBrowserOnboardingViewSecondSubtitleV2, topButtonTitle: UIConstants.strings.defaultBrowserOnboardingViewTopButtonTitleV2, bottomButtonTitle: UIConstants.strings.defaultBrowserOnboardingViewBottomButtonTitleV2), dismissAction: dismissAction))
+        let setShownTips: (Set<ToolTipRoute>) -> Void = { tips in
+            let data = try? JSONEncoder().encode(tips)
+            UserDefaults.standard.set(data, forKey: OnboardingConstants.shownTips)
+        }
 
-        controller.modalPresentationStyle = .formSheet
-        controller.isModalInPresentation = true
-        return controller
+        if shouldShowNewOnboarding() {
+            return OnboardingEventsHandlerV2(
+                getShownTips: getShownTips,
+                setShownTips: setShownTips
+            )
+        } else {
+            return OnboardingEventsHandlerV1(
+                getShownTips: getShownTips,
+                setShownTips: setShownTips
+            )
+        }
     }
 
-    static func make(onboardingType :OnboardingEventsHandler.OnboardingType, dismissAction: @escaping () -> Void) -> (onboardingViewController: UIViewController, animated: Bool) {
+    static func make(onboardingType: OnboardingVersion, dismissAction: @escaping () -> Void) -> (onboardingViewController: UIViewController, animated: Bool) {
         switch onboardingType {
-        case .new:
-            let newOnboardingViewController = OnboardingViewController(
+        case .v2:
+            let controller = UIHostingController(rootView: FirstOnboardingView(
+                config: .init(title: .onboardingTitle, subtitle: .onboardingSubtitleV2, buttonTitle: .onboardingButtonTitleV2),
+                defaultBrowserConfig: DefaultBrowserViewConfig(title: UIConstants.strings.defaultBrowserOnboardingViewTitleV2, firstSubtitle: UIConstants.strings.defaultBrowserOnboardingViewFirstSubtitleV2, secondSubtitle: UIConstants.strings.defaultBrowserOnboardingViewSecondSubtitleV2, topButtonTitle: UIConstants.strings.defaultBrowserOnboardingViewTopButtonTitleV2, bottomButtonTitle: UIConstants.strings.defaultBrowserOnboardingViewBottomButtonTitleV2), dismissAction: dismissAction))
+
+            controller.modalPresentationStyle = .formSheet
+            controller.isModalInPresentation = true
+            return (controller, true)
+
+        case .v1:
+            let controller = OnboardingViewController(
                 config: .init(
                     onboardingTitle: .onboardingTitle,
                     onboardingSubtitle: .onboardingSubtitle,
@@ -34,15 +66,10 @@ class OnboardingFactory {
                 ),
                 dismissOnboardingScreen: dismissAction
             )
-            newOnboardingViewController.modalPresentationStyle = .formSheet
-            newOnboardingViewController.isModalInPresentation = true
-            return (newOnboardingViewController, true)
+            controller.modalPresentationStyle = .formSheet
+            controller.isModalInPresentation = true
+            return (controller, true)
 
-        case .old:
-            let introViewController = IntroViewController()
-            introViewController.modalPresentationStyle = .fullScreen
-            introViewController.dismissOnboardingScreen = dismissAction
-            return (introViewController, false)
         }
     }
 }

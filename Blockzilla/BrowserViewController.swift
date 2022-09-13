@@ -49,7 +49,7 @@ class BrowserViewController: UIViewController {
     private var scrollBarState: URLBarScrollState = .expanded
     private var background = UIImageView()
     private var cancellables = Set<AnyCancellable>()
-    private var onboardingEventsHandler: OnboardingEventsHandler
+    private var onboardingEventsHandler: OnboardingEventsHandling
     private var themeManager: ThemeManager
     private let shortcutsPresenter = ShortcutsPresenter()
 
@@ -91,7 +91,7 @@ class BrowserViewController: UIViewController {
         tipManager: TipManager = TipManager.shared,
         shortcutManager: ShortcutsManager,
         authenticationManager: AuthenticationManager,
-        onboardingEventsHandler: OnboardingEventsHandler,
+        onboardingEventsHandler: OnboardingEventsHandling,
         themeManager: ThemeManager
     ) {
         self.tipManager = tipManager
@@ -293,14 +293,14 @@ class BrowserViewController: UIViewController {
     private func setupOnboardingEvents() {
         var presentedController: UIViewController?
         onboardingEventsHandler
-            .$route
+            .routePublisher
             .sink { [unowned self] route in
                 switch route {
                 case .none:
                     presentedController?.dismiss(animated: true)
                     presentedController = nil
 
-                case .trackingProtectionShield:
+                case .trackingProtectionShieldV2:
                     let controller = self.tooltipController(
                         anchoredBy: self.urlBar.shieldIcon,
                         sourceRect: CGRect(x: self.urlBar.shieldIcon.bounds.midX, y: self.urlBar.shieldIcon.bounds.midY + 10, width: 0, height: 0),
@@ -313,7 +313,7 @@ class BrowserViewController: UIViewController {
                     self.present(controller, animated: true)
                     presentedController = controller
 
-                case .trash:
+                case .trashV2:
                     let sourceButton = showsToolsetInURLBar ? urlBar.deleteButton : browserToolbar.deleteButton
                     let sourceRect = showsToolsetInURLBar ? CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.maxY - 10, width: 0, height: 0) :
                     CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.minY + 10, width: 0, height: 0)
@@ -339,7 +339,7 @@ class BrowserViewController: UIViewController {
                     self.present(controller, animated: true)
                     presentedController = controller
 
-                case .onboarding(_):
+                case .onboarding(let onboardingType):
                     let dismissOnboarding = { [unowned self] in
                         Telemetry
                             .default
@@ -355,8 +355,8 @@ class BrowserViewController: UIViewController {
                         onboardingEventsHandler.send(.enterHome)
                     }
 
-                    let controller = OnboardingFactory.makeOnboarding { dismissOnboarding() }
-                    self.present(controller, animated: true)
+                    let (controller, animated) = OnboardingFactory.make(onboardingType: onboardingType, dismissAction: dismissOnboarding)
+                    self.present(controller, animated: animated)
                     presentedController = controller
 
                 case .trackingProtection:
@@ -381,7 +381,41 @@ class BrowserViewController: UIViewController {
                     cardBanner.modalPresentationStyle = .overFullScreen
                     modalDelegate?.presentModal(viewController: cardBanner, animated: true)
                     presentedController = cardBanner
+
+                case .menu:
+                    let controller = self.tooltipController(
+                        anchoredBy: self.urlBar.contextMenuButton,
+                        sourceRect: CGRect(x: self.urlBar.contextMenuButton.bounds.maxX, y: self.urlBar.contextMenuButton.bounds.midY + 12, width: 0, height: 0),
+                        body: UIConstants.strings.tootipBodyTextForContextMenuIcon,
+                        dismiss: { self.onboardingEventsHandler.route = nil }
+                    )
+                    self.present(controller, animated: true)
+                    presentedController = controller
+
+                case .trash:
+                    let sourceButton = showsToolsetInURLBar ? urlBar.deleteButton : browserToolbar.deleteButton
+                    let sourceRect = showsToolsetInURLBar ? CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.maxY - 10, width: 0, height: 0) :
+                    CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.minY + 10, width: 0, height: 0)
+                    let controller = self.tooltipController(
+                        anchoredBy: sourceButton,
+                        sourceRect: sourceRect,
+                        body: UIConstants.strings.tooltipBodyTextForTrashIcon,
+                        dismiss: { self.onboardingEventsHandler.route = nil }
+                    )
+                    self.present(controller, animated: true)
+                    presentedController = controller
+
+                case .trackingProtectionShield:
+                    let controller = self.tooltipController(
+                        anchoredBy: self.urlBar.shieldIcon,
+                        sourceRect: CGRect(x: self.urlBar.shieldIcon.bounds.midX, y: self.urlBar.shieldIcon.bounds.midY + 10, width: 0, height: 0),
+                        body: UIConstants.strings.tooltipBodyTextForShieldIcon,
+                        dismiss: { self.onboardingEventsHandler.route = nil }
+                    )
+                    self.present(controller, animated: true)
+                    presentedController = controller
                 }
+
             }
             .store(in: &cancellables)
     }
@@ -812,6 +846,7 @@ class BrowserViewController: UIViewController {
         }
 
         onboardingEventsHandler.route = nil
+        onboardingEventsHandler.send(.startBrowsing)
 
         urlBar.canDelete = true
         browserToolbar.canDelete = true
