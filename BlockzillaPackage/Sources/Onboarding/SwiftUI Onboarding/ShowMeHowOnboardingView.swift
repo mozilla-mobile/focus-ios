@@ -8,70 +8,68 @@ import SwiftUI
 struct ShowMeHowOnboardingView: View {
     private let config: ShowMeHowOnboardingViewConfig
     private let dismissAction: () -> Void
-
+    
     public init(config: ShowMeHowOnboardingViewConfig, dismissAction: @escaping () -> Void) {
         self.config = config
         self.dismissAction = dismissAction
     }
-
+    
     var body: some View {
-        NavigationView {
-            ScrollView {
-                VStack(alignment: .leading, spacing: .verticalSpacing) {
+        ScrollView {
+            VStack(alignment: .leading, spacing: .verticalSpacing) {
+                HStack(alignment: .top, spacing: .horizontalSpacing) {
+                    Image(systemName: "1.circle.fill")
+                        .resizable()
+                        .frame(width: .iconSize, height: .iconSize)
+                        .foregroundColor(.gray)
+                    Text(config.subtitleStep1)
+                        .font(.body16)
+                        .multilineTextAlignment(.leading)
+                }
+                VStack(alignment: .leading, spacing: .horizontalSpacing) {
                     HStack(alignment: .top, spacing: .horizontalSpacing) {
-                        Image(systemName: "1.circle.fill")
+                        Image(systemName: "2.circle.fill")
                             .resizable()
                             .frame(width: .iconSize, height: .iconSize)
                             .foregroundColor(.gray)
-                        Text(config.subtitleStep1)
+                        Text(config.subtitleStep2)
                             .font(.body16)
                             .multilineTextAlignment(.leading)
                     }
-                    VStack(alignment: .leading, spacing: .horizontalSpacing) {
-                        HStack(alignment: .top, spacing: .horizontalSpacing) {
-                            Image(systemName: "2.circle.fill")
-                                .resizable()
-                                .frame(width: .iconSize, height: .iconSize)
-                                .foregroundColor(.gray)
-                            Text(config.subtitleStep2)
-                                .font(.body16)
-                                .multilineTextAlignment(.leading)
-                        }
-                        HStack {
-                            Spacer()
-                            Image.jiggleModeImage
-                            Spacer()
-                        }
+                    HStack {
+                        Spacer()
+                        Image.jiggleModeImage
+                        Spacer()
                     }
-                    VStack(alignment: .leading, spacing: .horizontalSpacing) {
-                        HStack(alignment: .top, spacing: .horizontalSpacing) {
-                            Image(systemName: "3.circle.fill")
-                                .resizable()
-                                .frame(width: .iconSize, height: .iconSize)
-                                .foregroundColor(.gray)
-                            Text(config.subtitleStep3)
-                                .font(.body16)
-                                .multilineTextAlignment(.leading)
-                        }
-                        HStack {
-                            Spacer()
-                            SearchWidgetView(title: config.widgetText).frame(width: .searchWidgetSize, height: .searchWidgetSize)
-                                .clipShape(RoundedRectangle(cornerRadius: 20))
-                            Spacer()
-                        }
+                }
+                VStack(alignment: .leading, spacing: .horizontalSpacing) {
+                    HStack(alignment: .top, spacing: .horizontalSpacing) {
+                        Image(systemName: "3.circle.fill")
+                            .resizable()
+                            .frame(width: .iconSize, height: .iconSize)
+                            .foregroundColor(.gray)
+                        Text(config.subtitleStep3)
+                            .font(.body16)
+                            .multilineTextAlignment(.leading)
                     }
-                    Spacer()
-                }.padding(EdgeInsets(top: .topBottomPadding, leading: .leadingTrailingPadding, bottom: .topBottomPadding, trailing: .leadingTrailingPadding))
-                    .navigationTitle(config.title)
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        Button(config.buttonText) {
-                            dismissAction()
-                        }
+                    HStack {
+                        Spacer()
+                        SearchWidgetView(title: config.widgetText).frame(width: .searchWidgetSize, height: .searchWidgetSize)
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                        Spacer()
                     }
-                .environment(\.colorScheme, .light)
-            }
+                }
+                Spacer()
+            }.padding(EdgeInsets(top: .topBottomPadding, leading: .leadingTrailingPadding, bottom: .topBottomPadding, trailing: .leadingTrailingPadding))
+                .navigationTitle(config.title)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    Button(config.buttonText) {
+                        dismissAction()
+                    }
+                }
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 
@@ -82,7 +80,7 @@ public struct ShowMeHowOnboardingViewConfig {
     let subtitleStep3: String
     let buttonText: String
     let widgetText: String
-
+    
     public init(title: String, subtitleStep1: String, subtitleStep2: String, subtitleStep3: String, buttonText: String, widgetText: String) {
         self.title = title
         self.subtitleStep1 = subtitleStep1
