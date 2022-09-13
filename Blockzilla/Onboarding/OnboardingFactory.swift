@@ -13,9 +13,7 @@ class TestOnboarding: OnboardingEventsHandling {
 }
 
 class OnboardingFactory {
-    static func makeOnboardingEventsHandler(_ shouldShowNewOnboarding: () -> Bool, isTesting: Bool) -> OnboardingEventsHandling {
-        guard !isTesting else { return TestOnboarding() }
-
+    static func makeOnboardingEventsHandler(_ shouldShowNewOnboarding: () -> Bool) -> OnboardingEventsHandling {
         let getShownTips: () -> Set<ToolTipRoute> = {
             return UserDefaults
                 .standard

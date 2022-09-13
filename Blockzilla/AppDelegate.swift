@@ -70,7 +70,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return nimbus.shouldShowNewOnboarding
             #endif
     }
-        return OnboardingFactory.makeOnboardingEventsHandler(shouldShowNewOnboarding, isTesting: AppInfo.isTesting())
+        guard !AppInfo.isTesting() else { return TestOnboarding() }
+        return OnboardingFactory.makeOnboardingEventsHandler(shouldShowNewOnboarding)
     }()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
