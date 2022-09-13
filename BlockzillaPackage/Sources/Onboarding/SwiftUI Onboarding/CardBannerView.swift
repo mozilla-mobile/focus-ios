@@ -55,6 +55,7 @@ public struct CardBannerView: View {
                 .foregroundColor(.black)
                 .multilineTextAlignment(.center)
         }
+        .padding(.horizontal)
     }
 
     var widget: some View {
