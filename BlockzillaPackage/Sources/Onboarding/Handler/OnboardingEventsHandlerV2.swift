@@ -5,8 +5,6 @@
 import Foundation
 
 public class OnboardingEventsHandlerV2: OnboardingEventsHandling {
-
-    private let alwaysShowOnboarding: () -> Bool
     private let setShownTips: (Set<ToolTipRoute>) -> Void
 
     @Published public var route: ToolTipRoute?
@@ -19,11 +17,9 @@ public class OnboardingEventsHandlerV2: OnboardingEventsHandling {
     }
 
     public init(
-        alwaysShowOnboarding: @escaping () -> Bool,
         getShownTips: () -> Set<ToolTipRoute>,
         setShownTips: @escaping (Set<ToolTipRoute>) -> Void
     ) {
-        self.alwaysShowOnboarding = alwaysShowOnboarding
         self.setShownTips = setShownTips
         self.shownTips = getShownTips()
     }
@@ -54,12 +50,6 @@ public class OnboardingEventsHandlerV2: OnboardingEventsHandling {
     }
 
     private func show(route: ToolTipRoute) {
-        #if DEBUG
-        if alwaysShowOnboarding() {
-            shownTips.remove(route)
-        }
-        #endif
-
         if !shownTips.contains(route) {
             self.route = route
             shownTips.insert(route)

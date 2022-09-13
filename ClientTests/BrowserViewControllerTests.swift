@@ -16,9 +16,6 @@ class BrowserViewControllerTests: XCTestCase {
     private let mockUserDefaults = MockUserDefaults()
     
     private lazy var onboardingEventsHandler = OnboardingEventsHandlerV1(
-        alwaysShowOnboarding: {
-            false
-        },
         getShownTips: {
             return []
         }, setShownTips: { _ in

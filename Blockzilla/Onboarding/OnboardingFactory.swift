@@ -6,8 +6,16 @@ import UIKit
 import Onboarding
 import SwiftUI
 
+class TestOnboarding: OnboardingEventsHandling {
+    @Published var route: Onboarding.ToolTipRoute? = nil
+    var routePublisher: Published<Onboarding.ToolTipRoute?>.Publisher { $route }
+    func send(_ action: Onboarding.Action) {}
+}
+
 class OnboardingFactory {
-    static func makeOnboardingEventsHandler(_ shouldShowNewOnboarding: () -> Bool) -> OnboardingEventsHandling {
+    static func makeOnboardingEventsHandler(_ shouldShowNewOnboarding: () -> Bool, isTesting: Bool) -> OnboardingEventsHandling {
+        guard !isTesting else { return TestOnboarding() }
+
         let getShownTips: () -> Set<ToolTipRoute> = {
             return UserDefaults
                 .standard
@@ -22,19 +30,13 @@ class OnboardingFactory {
             UserDefaults.standard.set(data, forKey: OnboardingConstants.shownTips)
         }
 
-        let alwaysShowOnboarding: () -> Bool = {
-            UserDefaults.standard.bool(forKey: OnboardingConstants.alwaysShowOnboarding)
-        }
-
         if shouldShowNewOnboarding() {
             return OnboardingEventsHandlerV2(
-                alwaysShowOnboarding: alwaysShowOnboarding,
                 getShownTips: getShownTips,
                 setShownTips: setShownTips
             )
         } else {
             return OnboardingEventsHandlerV1(
-                alwaysShowOnboarding: alwaysShowOnboarding,
                 getShownTips: getShownTips,
                 setShownTips: setShownTips
             )

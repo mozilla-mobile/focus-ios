@@ -61,9 +61,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private lazy var onboardingEventsHandler: OnboardingEventsHandling = {
         var shouldShowNewOnboarding: () -> Bool = { [unowned self] in
             #if DEBUG
-            if AppInfo.isTesting() {
-                return false
-            }
             if UserDefaults.standard.bool(forKey: OnboardingConstants.ignoreOnboardingExperiment) {
                 return !UserDefaults.standard.bool(forKey: OnboardingConstants.showOldOnboarding)
             } else {
@@ -73,7 +70,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return nimbus.shouldShowNewOnboarding
             #endif
     }
-        return OnboardingFactory.makeOnboardingEventsHandler(shouldShowNewOnboarding)
+        return OnboardingFactory.makeOnboardingEventsHandler(shouldShowNewOnboarding, isTesting: AppInfo.isTesting())
     }()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
