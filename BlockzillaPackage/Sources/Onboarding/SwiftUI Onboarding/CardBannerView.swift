@@ -31,7 +31,7 @@ public struct CardBannerView: View {
                     }
                 }
             }
-            .frame(height: 400)
+            .frame(maxWidth: .width, maxHeight: .height)
             .padding(.horizontal)
         }
     }
@@ -139,4 +139,6 @@ fileprivate extension CGFloat {
     static let verticalSpacing: CGFloat = 20.0
     static let searchWidgetSize: CGFloat = 135
     static let actionButtonPadding: CGFloat = 24.0
+    static let width: CGFloat = 350
+    static let height: CGFloat = 400
 }
