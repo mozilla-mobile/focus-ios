@@ -338,7 +338,7 @@ struct UIConstants {
         static let titleShowMeHowOnboardingV2 = NSLocalizedString("ShowMeHowOnboarding.Title.V2", value: "Turn on Sync", comment: "This is the title text that is displayed in the Show Me How Onboarding Screen")
         static let subtitleStepOneShowMeHowOnboardingV2 = NSLocalizedString("ShowMeHowOnboarding.SubtitleStepOne.V2", value: "Long press on the Home screen until the icons start to jiggle.", comment: "This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen")
         static let subtitleStepTwoShowMeHowOnboardingV2 = NSLocalizedString("ShowMeHowOnboarding.SubtitleStepTwo.V2", value: "Tap on the plus icon.", comment: "This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen")
-        static let subtitleStepThreeShowMeHowOnboardingV2 = NSLocalizedString("ShowMeHowOnboarding.SubtitleStepThree.V2", value: "Search for Firefox Focus. Then choose a widget.", comment: "This is the subtitle text for step three that is displayed in the Show Me How Onboarding Screen")
+        static let subtitleStepThreeShowMeHowOnboardingV2 = NSLocalizedString("ShowMeHowOnboarding.SubtitleStepThree.V2", value: "Search for %@. Then choose a widget.", comment: "This is the subtitle text for step three that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app(Focus/Klar)")
         static let buttonTextShowMeHowOnboardingV2 = NSLocalizedString("ShowMeHowOnboarding.ButtonText.V2", value: "Done", comment: "This is the button text that is displayed in the Show Me How Onboarding Screen")
 
         // Quick Action - Small Size - Gallery View
