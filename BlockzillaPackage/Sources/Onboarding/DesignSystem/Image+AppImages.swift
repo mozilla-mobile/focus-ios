@@ -11,6 +11,9 @@ public extension Image {
     static let jiggleModeImage = Image("jiggle_mode_image", bundle: Bundle.module)
     static let huggingFocus = Image("icon_hugging_focus", bundle: .module)
     static let magnifyingGlass = Image(systemName: "magnifyingglass")
+    static let stepOneImage = Image(systemName: "1.circle.fill")
+    static let stepTwoImage = Image(systemName: "2.circle.fill")
+    static let stepThreeImage = Image(systemName: "3.circle.fill")
 }
 
 extension Gradient {

@@ -18,7 +18,7 @@ struct ShowMeHowOnboardingView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: .verticalSpacing) {
                 HStack(alignment: .top, spacing: .horizontalSpacing) {
-                    Image(systemName: "1.circle.fill")
+                    Image.stepOneImage
                         .resizable()
                         .frame(width: .iconSize, height: .iconSize)
                         .foregroundColor(.gray)
@@ -28,7 +28,7 @@ struct ShowMeHowOnboardingView: View {
                 }
                 VStack(alignment: .leading, spacing: .horizontalSpacing) {
                     HStack(alignment: .top, spacing: .horizontalSpacing) {
-                        Image(systemName: "2.circle.fill")
+                        Image.stepTwoImage
                             .resizable()
                             .frame(width: .iconSize, height: .iconSize)
                             .foregroundColor(.gray)
@@ -44,7 +44,7 @@ struct ShowMeHowOnboardingView: View {
                 }
                 VStack(alignment: .leading, spacing: .horizontalSpacing) {
                     HStack(alignment: .top, spacing: .horizontalSpacing) {
-                        Image(systemName: "3.circle.fill")
+                        Image.stepThreeImage
                             .resizable()
                             .frame(width: .iconSize, height: .iconSize)
                             .foregroundColor(.gray)
