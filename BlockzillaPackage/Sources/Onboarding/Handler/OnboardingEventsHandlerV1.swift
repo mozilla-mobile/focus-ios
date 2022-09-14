@@ -49,10 +49,7 @@ public class OnboardingEventsHandlerV1: OnboardingEventsHandling {
         case .trackerBlocked:
             show(route: .trackingProtectionShield(.v1))
 
-        case .showTrash:
-            break
-
-        case .clearTapped:
+        default:
             break
         }
     }

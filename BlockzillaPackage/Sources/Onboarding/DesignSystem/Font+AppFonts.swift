@@ -6,6 +6,7 @@ import SwiftUI
 
 public extension Font {
     static let body16Bold = Font.system(size: 16).bold()
+    static let body16 = Font.system(size: 16)
     static let title20 = Font.system(size: 20)
     static let title28Bold = Font.system(size: 28).bold()
 }

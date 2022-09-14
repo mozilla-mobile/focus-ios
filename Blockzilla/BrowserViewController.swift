@@ -388,11 +388,15 @@ class BrowserViewController: UIViewController {
                 rootView: CardBannerView(
                     config: .init(
                         title: UIConstants.strings.widgetOnboardingCardTitle,
-                        subtitle: String(format: UIConstants.strings.widgetOnboardingCardSubtitle, AppInfo.shortProductName),
+                        subtitle: UIConstants.strings.widgetOnboardingCardSubtitle,
                         actionButtonTitle: UIConstants.strings.widgetOnboardingCardActionButton,
                         widget: .init(
-                            title: String(format: UIConstants.strings.searchInApp, AppInfo.shortProductName)
+                            title: UIConstants.strings.searchInApp
                         )),
+                    primaryAction: { [weak self] in
+                        self?.onboardingEventsHandler.route = nil
+                        self?.onboardingEventsHandler.send(.widgetDismissed)
+                    },
                     dismiss: { [weak self] in
                         self?.onboardingEventsHandler.route = nil
                         self?.urlBar.activateTextField()
@@ -408,6 +412,21 @@ class BrowserViewController: UIViewController {
                 body: UIConstants.strings.tootipBodyTextForContextMenuIcon,
                 dismiss: { self.onboardingEventsHandler.route = nil }
             )
+        case .widgetTutorial:
+            let controller = UINavigationController(
+                rootViewController: UIHostingController(
+                rootView: ShowMeHowOnboardingView(
+                    config: .init(
+                        title: UIConstants.strings.titleShowMeHowOnboardingV2,
+                        subtitleStep1: UIConstants.strings.subtitleStepOneShowMeHowOnboardingV2,
+                        subtitleStep2: UIConstants.strings.subtitleStepTwoShowMeHowOnboardingV2,
+                        subtitleStep3: UIConstants.strings.subtitleStepThreeShowMeHowOnboardingV2,
+                        buttonText: UIConstants.strings.buttonTextShowMeHowOnboardingV2,
+                        widgetText: UIConstants.strings.searchInApp),
+                    dismissAction: { self.onboardingEventsHandler.route = nil })))
+            controller.modalPresentationStyle = .formSheet
+            controller.isModalInPresentation = true
+            return controller
         }
     }
 
