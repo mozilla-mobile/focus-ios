@@ -7,10 +7,12 @@ import SwiftUI
 @available(iOS 14, *)
 public struct CardBannerView: View {
     let config: CardBannerViewConfig
+    let primaryAction: () -> Void
     let dismiss: () -> Void
 
-    public init(config: CardBannerViewConfig, dismiss: @escaping () -> Void) {
+    public init(config: CardBannerViewConfig, primaryAction: @escaping () -> Void, dismiss: @escaping () -> Void) {
         self.config = config
+        self.primaryAction = primaryAction
         self.dismiss = dismiss
     }
 
@@ -65,7 +67,7 @@ public struct CardBannerView: View {
     }
 
     var actionButton: some View {
-        Button(action: dismiss, label: {
+        Button(action: primaryAction, label: {
             Text(config.actionButtonTitle)
                 .foregroundColor(.white)
                 .font(.body16Bold)
@@ -103,6 +105,7 @@ struct CardBannerView_Previews: PreviewProvider {
                         widget: .init(
                             title: "Search in Focus"
                         )),
+                    primaryAction: {},
                     dismiss: {}
                 )
             }

@@ -31,7 +31,7 @@ struct FocusWidgetsEntryView : View {
     var entry: Provider.Entry
 
     var body: some View {
-        SearchWidgetView(title: String(format: UIConstants.strings.searchInApp, String.appNameForBundle))
+        SearchWidgetView(title: String(format: UIConstants.strings.searchInAppFormat, String.appNameForBundle))
     }
 }
 

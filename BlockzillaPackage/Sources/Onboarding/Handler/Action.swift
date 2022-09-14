@@ -12,4 +12,5 @@ public enum Action {
     case showTrash
     case clearTapped
     case startBrowsing
+    case widgetDismissed
 }

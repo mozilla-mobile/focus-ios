@@ -46,6 +46,9 @@ public class OnboardingEventsHandlerV2: OnboardingEventsHandling {
 
         case .startBrowsing:
             break
+
+        case .widgetDismissed:
+            show(route: .widgetTutorial)
         }
     }
 

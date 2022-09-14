@@ -11,5 +11,6 @@ public enum ToolTipRoute: Equatable, Hashable, Codable {
     case trash(OnboardingVersion)
     case searchBar
     case widget
+    case widgetTutorial
     case menu
 }

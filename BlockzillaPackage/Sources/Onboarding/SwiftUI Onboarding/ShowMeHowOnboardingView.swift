@@ -5,7 +5,7 @@
 import SwiftUI
 
 @available(iOS 14.0, *)
-struct ShowMeHowOnboardingView: View {
+public struct ShowMeHowOnboardingView: View {
     private let config: ShowMeHowOnboardingViewConfig
     private let dismissAction: () -> Void
 
@@ -14,7 +14,7 @@ struct ShowMeHowOnboardingView: View {
         self.dismissAction = dismissAction
     }
 
-    var body: some View {
+    public var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: .verticalSpacing) {
                 HStack(alignment: .top, spacing: .horizontalSpacing) {
