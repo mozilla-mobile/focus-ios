@@ -4,12 +4,12 @@
 
 import SwiftUI
 
-public struct FirstOnboardingView: View {
-    private let config: FirstOnboardingViewConfig
+public struct GetStartedOnboardingView: View {
+    private let config: GetStartedOnboardingViewConfig
     private let defaultBrowserConfig: DefaultBrowserViewConfig
     private let dismissAction: () -> Void
 
-    public init(config: FirstOnboardingViewConfig,
+    public init(config: GetStartedOnboardingViewConfig,
                 defaultBrowserConfig: DefaultBrowserViewConfig,
                 dismissAction: @escaping () -> Void) {
         self.config = config
@@ -82,7 +82,7 @@ public struct FirstOnboardingView: View {
     }
 }
 
-public struct FirstOnboardingViewConfig {
+public struct GetStartedOnboardingViewConfig {
     let title: String
     let subtitle: String
     let buttonTitle: String
@@ -96,8 +96,8 @@ public struct FirstOnboardingViewConfig {
 
 struct FirstOnboardingView_Previews: PreviewProvider {
     static var previews: some View {
-        FirstOnboardingView(
-            config: FirstOnboardingViewConfig(
+        GetStartedOnboardingView(
+            config: GetStartedOnboardingViewConfig(
                 title: "Welcome to Firefox Focus",
                 subtitle: "Fast. Private. No distractions.",
                 buttonTitle: "Get Started"),
