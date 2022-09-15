@@ -4,7 +4,6 @@
 
 import Foundation
 import Glean
-import Telemetry
 
 enum NavigationPath {
     case url(url: URL)
