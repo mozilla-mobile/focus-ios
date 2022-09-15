@@ -14,6 +14,7 @@
 		0BBBED411DD3823C00F9C565 /* BaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBBED401DD3823C00F9C565 /* BaseTestCase.swift */; };
 		0BBBED431DD3B78300F9C565 /* SettingAppearanceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBBED421DD3B78300F9C565 /* SettingAppearanceTest.swift */; };
 		0BC928CE1E366A6E004AC581 /* AsianLocaleTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */; };
+		1215EC0928D316B500AECC75 /* NavigationPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1215EC0828D316B500AECC75 /* NavigationPath.swift */; };
 		16074B6D2114364C003B671F /* PhotonActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16074B6C2114364C003B671F /* PhotonActionSheet.swift */; };
 		16180DBB212F563800AFE3C2 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 16180DBA212F563800AFE3C2 /* Intents.intentdefinition */; };
 		161D90312108085F00C2A74A /* HomeViewToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161D90302108085F00C2A74A /* HomeViewToolbar.swift */; };
@@ -309,6 +310,7 @@
 		0BBBED401DD3823C00F9C565 /* BaseTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTestCase.swift; sourceTree = "<group>"; };
 		0BBBED421DD3B78300F9C565 /* SettingAppearanceTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingAppearanceTest.swift; sourceTree = "<group>"; };
 		0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsianLocaleTest.swift; sourceTree = "<group>"; };
+		1215EC0828D316B500AECC75 /* NavigationPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationPath.swift; sourceTree = "<group>"; };
 		16074B6C2114364C003B671F /* PhotonActionSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotonActionSheet.swift; sourceTree = "<group>"; };
 		16180DBA212F563800AFE3C2 /* Intents.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = Intents.intentdefinition; sourceTree = "<group>"; };
 		161D90302108085F00C2A74A /* HomeViewToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewToolbar.swift; sourceTree = "<group>"; };
@@ -1737,6 +1739,7 @@
 				D343DCC41C44356500D7EEE8 /* Localizable.strings */,
 				D5D067FA252F945D00C35227 /* metrics.yaml */,
 				C82F45F8281A76EF000D7D84 /* ShortcutsPresenter.swift */,
+				1215EC0828D316B500AECC75 /* NavigationPath.swift */,
 			);
 			path = Blockzilla;
 			sourceTree = "<group>";
@@ -2326,6 +2329,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */,
+				1215EC0928D316B500AECC75 /* NavigationPath.swift in Sources */,
 				C89AA96E271720330089838F /* ThemeTableViewToggleCell.swift in Sources */,
 				C8337DF82710898800093D42 /* TrackingProtectionDelegate.swift in Sources */,
 				C8CE05072743FA89002057C6 /* UIAction+MenuAction.swift in Sources */,

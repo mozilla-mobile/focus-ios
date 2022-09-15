@@ -1,0 +1,97 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import Foundation
+import Glean
+import Telemetry
+
+enum NavigationPath {
+    case url(url: URL)
+    case text(text: String)
+    case glean(url: URL)
+
+    init?(url: URL) {
+        func sanitizedURL(for unsanitized: URL) -> URL {
+            guard var components = URLComponents(url: unsanitized, resolvingAgainstBaseURL: true),
+                  let scheme = components.scheme, !scheme.isEmpty
+            else { return unsanitized }
+
+            components.scheme = scheme.lowercased()
+            return components.url ?? unsanitized
+        }
+
+        func unescape(string: String?) -> String? {
+            guard let string = string else { return nil }
+            return CFURLCreateStringByReplacingPercentEscapes(
+                kCFAllocatorDefault,
+                string as CFString,
+                "" as CFString) as String
+        }
+
+        let url = sanitizedURL(for: url)
+
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              let urlTypes = Bundle.main.object(forInfoDictionaryKey: "CFBundleURLTypes") as? [AnyObject],
+              let urlSchemes = urlTypes.first?["CFBundleURLSchemes"] as? [String] else {
+            // Something very strange has happened; org.mozilla.Blockzilla should be the zeroeth URL type.
+            return nil
+        }
+
+        guard let scheme = components.scheme,
+              let host = url.host,
+              urlSchemes.contains(scheme) else { return nil }
+
+        let query = URL.getQuery(url: url)
+        let isHttpScheme = scheme == "http" || scheme == "https"
+
+        if isHttpScheme {
+            GleanMetrics.App.openedAsDefaultBrowser.add()
+            self = .url(url: url)
+        }
+        else if host == "open-url" {
+            let urlString = unescape(string: query["url"]) ?? ""
+            guard let url = URL(string: urlString) else { return nil }
+            self = .url(url: url)
+        } else if host == "open-text" || isHttpScheme {
+            let text = unescape(string: query["text"]) ?? ""
+            self = .text(text: text)
+        } else if host == "glean" {
+            self = .glean(url: url)
+        } else { return nil }
+    }
+
+    static func handle(_ application: UIApplication, navigation: NavigationPath, with bvc: BrowserViewController) -> Any? {
+        switch navigation {
+        case .url(let url): return NavigationPath.handleURL(application, url: url, with: bvc)
+        case .text(let text): return NavigationPath.handleText(application, text: text, with: bvc)
+        case .glean(let url): NavigationPath.handleGlean(url: url)
+        }
+        return nil
+    }
+
+    private static func handleURL(_ application: UIApplication, url: URL, with browserViewController: BrowserViewController) -> URL? {
+        if application.applicationState == .active {
+            browserViewController.submit(url: url)
+        }
+        else { return url }
+        return nil
+    }
+
+    private static func handleText(_ application: UIApplication, text: String, with browserViewController: BrowserViewController) -> String? {
+        if application.applicationState == .active {
+            if let fixedUrl = URIFixup.getURL(entry: text) {
+                browserViewController.submit(url: fixedUrl)
+            }
+            else {
+                browserViewController.submit(text: text)
+            }
+        }
+        else { return text }
+        return nil
+    }
+
+    private static func handleGlean(url: URL) {
+        Glean.shared.handleCustomUrl(url: url)
+    }
+}
