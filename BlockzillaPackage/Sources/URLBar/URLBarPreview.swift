@@ -51,7 +51,6 @@ public struct URLBarPreview: View {
     }
 }
 
-
 struct URLBarPreview_Previews: PreviewProvider {
     static var previews: some View {
         URLBarPreview()
