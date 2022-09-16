@@ -1177,11 +1177,7 @@ class BrowserViewController: UIViewController {
     }
 }
 
-extension BrowserViewController: MenuItemProvider {
-    var whatsNewItem: MenuAction {
-        MenuAction(title: "", image: "", action: {})
-    }
-}
+extension BrowserViewController: MenuItemProvider { }
 
 extension BrowserViewController: UIDropInteractionDelegate {
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
@@ -1914,7 +1910,7 @@ extension BrowserViewController {
 
 extension BrowserViewController: MenuActionable {
     func showWhatsNew() {
-
+        submit(url: URL(forSupportTopic: .whatsNew))
     }
 
     func openInFirefox(url: URL) {
