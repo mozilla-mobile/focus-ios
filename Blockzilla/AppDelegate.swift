@@ -21,7 +21,7 @@ enum AppPhase {
 }
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate {
     private lazy var authenticationManager = AuthenticationManager()
     @Published private var appPhase: AppPhase = .notRunning
 
@@ -48,27 +48,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
         shortcutManager: shortcutManager,
         authenticationManager: authenticationManager,
         onboardingEventsHandler: onboardingEventsHandler,
-        whatsNewEventsHandler: whatsNewEventsHandler,
         themeManager: themeManager
     )
 
     private let nimbus = NimbusWrapper.shared
     private var queuedUrl: URL?
     private var queuedString: String?
-    private let whatsNewEventsHandler = WhatsNewEventsHandler()
     private let themeManager = ThemeManager()
     private var cancellables = Set<AnyCancellable>()
     private lazy var shortcutManager: ShortcutsManager = .init()
 
-    private lazy var onboardingEventsHandler = OnboardingEventsHandler(
-        alwaysShowOnboarding: {
-            UserDefaults.standard.bool(forKey: OnboardingConstants.alwaysShowOnboarding)
-        },
-        shouldShowNewOnboarding: { [unowned self] in
+    private lazy var onboardingEventsHandler: OnboardingEventsHandling = {
+        var shouldShowNewOnboarding: () -> Bool = { [unowned self] in
             #if DEBUG
-            if AppInfo.isTesting() {
-                return false
-            }
             if UserDefaults.standard.bool(forKey: OnboardingConstants.ignoreOnboardingExperiment) {
                 return !UserDefaults.standard.bool(forKey: OnboardingConstants.showOldOnboarding)
             } else {
@@ -77,19 +69,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
             #else
             return nimbus.shouldShowNewOnboarding
             #endif
-        },
-        getShownTips: {
-            return UserDefaults
-                .standard
-                .data(forKey: OnboardingConstants.shownTips)
-                .flatMap {
-                    try? JSONDecoder().decode(Set<OnboardingEventsHandler.ToolTipRoute>.self, from: $0)
-                } ?? []
-        }, setShownTips: { tips in
-            let data = try? JSONEncoder().encode(tips)
-            UserDefaults.standard.set(data, forKey: OnboardingConstants.shownTips)
-        }
-    )
+    }
+        guard !AppInfo.isTesting() else { return TestOnboarding() }
+        return OnboardingFactory.makeOnboardingEventsHandler(shouldShowNewOnboarding)
+    }()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         appPhase = .didFinishLaunching
@@ -189,8 +172,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
         }
 
         onboardingEventsHandler.send(.applicationDidLaunch)
-        whatsNewEventsHandler.highlightWhatsNewButton()
-
         return true
     }
 
@@ -514,6 +495,12 @@ extension AppDelegate {
             NSLog("Failed to setup experimentation: \(error)")
         }
     }
+}
+
+extension AppDelegate: ModalDelegate {
+    func dismiss(animated: Bool = true) {
+        window?.rootViewController?.presentedViewController?.dismiss(animated: animated)
+    }
 
     func presentModal(viewController: UIViewController, animated: Bool) {
         window?.rootViewController?.present(viewController, animated: animated, completion: nil)
@@ -531,4 +518,5 @@ extension AppDelegate {
 protocol ModalDelegate {
     func presentModal(viewController: UIViewController, animated: Bool)
     func presentSheet(viewController: UIViewController)
+    func dismiss(animated: Bool)
 }

@@ -15,13 +15,7 @@ import AppShortcuts
 class BrowserViewControllerTests: XCTestCase {
     private let mockUserDefaults = MockUserDefaults()
     
-    private lazy var onboardingEventsHandler = OnboardingEventsHandler(
-        alwaysShowOnboarding: {
-            false
-        },
-        shouldShowNewOnboarding: { [unowned self] in
-            false
-        },
+    private lazy var onboardingEventsHandler = OnboardingEventsHandlerV1(
         getShownTips: {
             return []
         }, setShownTips: { _ in
@@ -29,7 +23,6 @@ class BrowserViewControllerTests: XCTestCase {
         }
     )
     
-    private lazy var whatsNewEventsHandler = WhatsNewEventsHandler()
     private lazy var themeManager = ThemeManager()
 
     func testRequestReviewThreshold() {
@@ -37,7 +30,6 @@ class BrowserViewControllerTests: XCTestCase {
             shortcutManager: ShortcutsManager(),
             authenticationManager: AuthenticationManager(),
             onboardingEventsHandler: onboardingEventsHandler,
-            whatsNewEventsHandler: whatsNewEventsHandler,
             themeManager: themeManager
         )
         mockUserDefaults.clear()

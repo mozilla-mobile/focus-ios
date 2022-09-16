@@ -15,6 +15,7 @@ public class URLBar: UIView {
     public var contextMenuButtonAnchor: UIView { contextMenuButton }
     public var deleteButtonAnchor: UIView { deleteButton }
     public var shieldIconButtonAnchor: UIView { shieldIconButton }
+    public var urlTextFieldAnchor: UIView { urlTextField }
 
     fileprivate var draggableUrlTextView: UIView { urlTextField }
 

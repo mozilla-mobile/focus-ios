@@ -26,6 +26,9 @@ let package = Package(
             name: "URLBar",
             targets: ["URLBar"])
     ],
+    dependencies: [
+        .package(url: "https://github.com/SnapKit/SnapKit.git", from: "5.0.1")
+    ],
     targets: [
         .target(
             name: "UIComponents",
@@ -43,7 +46,8 @@ let package = Package(
         .target(
             name: "Onboarding",
             dependencies: [
-                "DesignSystem"
+                "DesignSystem",
+                .product(name: "SnapKit", package: "SnapKit")
             ]
         ),
         .target(
