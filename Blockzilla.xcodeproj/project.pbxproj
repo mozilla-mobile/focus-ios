@@ -194,6 +194,7 @@
 		E4BF2DF51BACE92400DA9D68 /* ContentBlocker.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E4BF2DEC1BACE92400DA9D68 /* ContentBlocker.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E4BF2E111BAD8AC500DA9D68 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
 		E4BF2E121BAD8AC500DA9D68 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
+		E512909628D4A7E200781DEE /* Ads.js in Resources */ = {isa = PBXBuildFile; fileRef = E512909528D4A7E200781DEE /* Ads.js */; };
 		E53572E128A25D220075B196 /* URLBar in Frameworks */ = {isa = PBXBuildFile; productRef = E53572E028A25D220075B196 /* URLBar */; };
 		E5CB2ED9288E909800CE6428 /* UIAlertController+Rename.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CB2ED8288E909800CE6428 /* UIAlertController+Rename.swift */; };
 		E5CC975128D48DCF00BBD9A5 /* AdsTelemetryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CC975028D48DCF00BBD9A5 /* AdsTelemetryHelper.swift */; };
@@ -972,6 +973,7 @@
 		E4D0AB881E300EFE00DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E4D0AB891E300EFF00DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E4D0AB8A1E300F0000DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E512909528D4A7E200781DEE /* Ads.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Ads.js; sourceTree = "<group>"; };
 		E5CB2ED8288E909800CE6428 /* UIAlertController+Rename.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Rename.swift"; sourceTree = "<group>"; };
 		E5CC975028D48DCF00BBD9A5 /* AdsTelemetryHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdsTelemetryHelper.swift; sourceTree = "<group>"; };
 		EB84F96C2093799800BA6739 /* TrackingProtectionPageStats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionPageStats.swift; sourceTree = "<group>"; };
@@ -1665,6 +1667,7 @@
 				D3C047BC1DCBD8ED00402FFB /* SearchEngines.plist */,
 				D38EDB951DCA8A9400E28196 /* LaunchScreen.storyboard */,
 				1D3BEDF820C5E6C70019B722 /* FindInPage.js */,
+				E512909528D4A7E200781DEE /* Ads.js */,
 				C83FB7D1273AA13200B78CC5 /* MetadataHelper.js */,
 				846A23172668CC4500DB3C37 /* FullScreen.js */,
 				16180DBA212F563800AFE3C2 /* Intents.intentdefinition */,
@@ -2087,6 +2090,7 @@
 				D3E2C8FC1D9F17AC00DEBE3D /* disconnect-analytics.json in Resources */,
 				D3E2C8FD1D9F17AC00DEBE3D /* disconnect-content.json in Resources */,
 				D5D067FB252F945D00C35227 /* metrics.yaml in Resources */,
+				E512909628D4A7E200781DEE /* Ads.js in Resources */,
 				F8324CE6264EA223007E4BFA /* style.css in Resources */,
 				D3426AEF1DB846BB0016DA5A /* topdomains.txt in Resources */,
 				B3D23BEF1FA3A9E500D9C50F /* postload.js in Resources */,
