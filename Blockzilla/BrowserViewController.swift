@@ -1036,7 +1036,8 @@ class BrowserViewController: UIViewController {
         self.updateFindInPageVisibility(visible: true)
     }
 
-    private func toggleURLBarBackground(isBright: Bool) {
+    private func toggleURLBarBackground() {
+        urlBarContainer.alpha = urlBarViewModel.browsingState.isBrowsingMode ? 1 : 0
         urlBarContainer.backgroundColor = urlBarViewModel.browsingState.isBrowsingMode ? .foundation : .clear
     }
 
@@ -1350,10 +1351,8 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidDismiss(_ urlBar: URLBar) {
-
         guard !shortcutContextMenuIsOpenOnIpad() else { return }
         overlayView.dismiss()
-        toggleURLBarBackground(isBright: !webViewController.isLoading)
         shortcutsPresenter.shortcutsState = .dismissedURLBar
         webViewController.focus()
     }
@@ -1361,14 +1360,13 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidFocus(_ urlBar: URLBar) {
         let isOnHomeView = !urlBarViewModel.browsingState.isBrowsingMode
         overlayView.present(isOnHomeView: isOnHomeView)
-        toggleURLBarBackground(isBright: false)
     }
 
     func urlBarDidActivate(_ urlBar: URLBar) {
         shortcutsPresenter.shortcutsState = .activeURLBar
         homeViewController.updateUI(urlBarIsActive: true, isBrowsing: urlBarViewModel.browsingState.isBrowsingMode)
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
-            self.urlBarContainer.alpha = 1
+            self.toggleURLBarBackground()
             self.updateFindInPageVisibility(visible: false)
             self.view.layoutIfNeeded()
         })
@@ -1377,7 +1375,7 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidDeactivate(_ urlBar: URLBar) {
         homeViewController.updateUI(urlBarIsActive: false)
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
-            self.urlBarContainer.alpha = 0
+            self.toggleURLBarBackground()
             self.view.setNeedsLayout()
         }
     }
@@ -1669,15 +1667,15 @@ extension BrowserViewController: WebControllerDelegate {
         SearchHistoryUtils.isNavigating = false
         SearchHistoryUtils.isFromURLBar = false
         urlBarViewModel.isLoading = true
-        toggleURLBarBackground(isBright: false)
+        toggleURLBarBackground()
         updateURLBar()
     }
 
     func webControllerDidFinishNavigation(_ controller: WebController) {
         updateURLBar()
         urlBarViewModel.isLoading = false
-        toggleURLBarBackground(isBright: !urlBarViewModel.selectionState.isSelecting)
         urlBarViewModel.loadingProgres = 1
+        toggleURLBarBackground()
         GleanMetrics.Browser.totalUriCount.add()
         Task {
             let faviconURL = try? await webViewController.getMetadata().icon.flatMap(URL.init(string:))
@@ -1693,7 +1691,7 @@ extension BrowserViewController: WebControllerDelegate {
     func webController(_ controller: WebController, didFailNavigationWithError error: Error) {
         urlBarViewModel.url = webViewController.url
         urlBarViewModel.isLoading = false
-        toggleURLBarBackground(isBright: true)
+        toggleURLBarBackground()
         urlBarViewModel.loadingProgres = 1
     }
 
