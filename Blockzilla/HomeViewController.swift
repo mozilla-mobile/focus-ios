@@ -37,7 +37,7 @@ class HomeViewController: UIViewController {
         tapOutsideAction: dismissKeyboard
     )
 
-    var onboardingEventsHandler: OnboardingEventsHandler!
+    var onboardingEventsHandler: OnboardingEventsHandling!
     let toolbar: HomeViewToolbar = {
         let toolbar = HomeViewToolbar()
         toolbar.translatesAutoresizingMaskIntoConstraints = false
@@ -96,21 +96,16 @@ class HomeViewController: UIViewController {
     }
 
     func refreshTipsDisplay() {
-        if let tip = tipManager.fetchFirstTip(), !onboardingEventsHandler.shouldShowNewOnboarding() {
-            logTelemetry(for: tip)
-            tipsViewController.setupPageController(with: .showTips)
-        } else {
-            tipsViewController.setupPageController(
-                with: .showEmpty(
-                    controller: ShareTrackersViewController(
-                        trackerTitle: tipManager.shareTrackersDescription(),
-                        shareTap: { [weak self] sender in
-                            guard let self = self else { return }
-                            self.delegate?.homeViewControllerDidTapShareTrackers(self, sender: sender)
-                        }
-                    )))
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.trackerStatsShareButton)
-        }
+        tipsViewController.setupPageController(
+            with: .showEmpty(
+                controller: ShareTrackersViewController(
+                    trackerTitle: tipManager.shareTrackersDescription(),
+                    shareTap: { [weak self] sender in
+                        guard let self = self else { return }
+                        self.delegate?.homeViewControllerDidTapShareTrackers(self, sender: sender)
+                    }
+                )))
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.trackerStatsShareButton)
     }
 
     @objc private func rotated() {
