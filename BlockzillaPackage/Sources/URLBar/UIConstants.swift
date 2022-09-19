@@ -30,8 +30,8 @@ extension CGFloat {
     static let urlBarIconInset: CGFloat = 8
     static let progressBarHeight: CGFloat = 1.5
     static let contextMenuIconSize: CGFloat = 28
-    static var barButtonHeight: CGFloat = 44
-    static let urlBarHeight: CGFloat = 44
+    static var barButtonHeight: CGFloat = 36
+    static let urlBarHeight: CGFloat = 36
 }
 
 extension TimeInterval {

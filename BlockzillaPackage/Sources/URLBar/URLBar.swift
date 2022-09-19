@@ -111,8 +111,8 @@ public class URLBar: UIView {
         button.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
         button.accessibilityIdentifier = "URLBar.cancelButton"
         NSLayoutConstraint.activate([
-            button.widthAnchor.constraint(equalToConstant: .barButtonHeight - 8),
-            button.heightAnchor.constraint(equalToConstant: .barButtonHeight)
+            button.widthAnchor.constraint(equalToConstant: .urlBarHeight),
+            button.heightAnchor.constraint(equalToConstant: .urlBarHeight)
         ])
         return button
     }()
@@ -193,7 +193,7 @@ public class URLBar: UIView {
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
         button.setContentHuggingPriority(.required, for: .horizontal)
         NSLayoutConstraint.activate([
-            button.widthAnchor.constraint(equalToConstant: .barButtonHeight - 16),
+            button.widthAnchor.constraint(equalToConstant: .barButtonHeight - 8),
             button.heightAnchor.constraint(equalToConstant: .barButtonHeight)
         ])
         return button

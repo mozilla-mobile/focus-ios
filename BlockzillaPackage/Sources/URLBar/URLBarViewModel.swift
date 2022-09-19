@@ -73,7 +73,7 @@ public class URLBarViewModel {
         canGoForward = false
         canDelete = false
         isLoading = false
-        loadingProgres = 1
+        loadingProgres = 0
     }
 
     let strings: URLBarStrings
