@@ -6,8 +6,8 @@ import Foundation
 import Glean
 
 enum NavigationPath {
-    case url(url: URL)
-    case text(text: String)
+    case url(_ url: URL)
+    case text(_ text: String)
     case glean(url: URL)
 
     init?(url: URL) {
@@ -46,24 +46,24 @@ enum NavigationPath {
 
         if isHttpScheme {
             GleanMetrics.App.openedAsDefaultBrowser.add()
-            self = .url(url: url)
+            self = .url(url)
         }
         else if host == "open-url" {
             let urlString = unescape(string: query["url"]) ?? ""
             guard let url = URL(string: urlString) else { return nil }
-            self = .url(url: url)
+            self = .url(url)
         } else if host == "open-text" || isHttpScheme {
             let text = unescape(string: query["text"]) ?? ""
-            self = .text(text: text)
+            self = .text(text)
         } else if host == "glean" {
             self = .glean(url: url)
         } else { return nil }
     }
 
-    static func handle(_ application: UIApplication, navigation: NavigationPath, with bvc: BrowserViewController) -> Any? {
+    static func handle(_ application: UIApplication, navigation: NavigationPath, with browserViewController: BrowserViewController) -> Any? {
         switch navigation {
-        case .url(let url): return NavigationPath.handleURL(application, url: url, with: bvc)
-        case .text(let text): return NavigationPath.handleText(application, text: text, with: bvc)
+        case .url(let url): return NavigationPath.handleURL(application, url: url, with: browserViewController)
+        case .text(let text): return NavigationPath.handleText(application, text: text, with: browserViewController)
         case .glean(let url): NavigationPath.handleGlean(url: url)
         }
         return nil
@@ -92,5 +92,19 @@ enum NavigationPath {
 
     private static func handleGlean(url: URL) {
         Glean.shared.handleCustomUrl(url: url)
+    }
+}
+
+// MARK: - Extensions
+extension NavigationPath: Equatable {
+    static func == (lhs: NavigationPath, rhs: NavigationPath) -> Bool {
+        switch (lhs, rhs) {
+        case let (.url(lhsURL), .url(rhsURL)):
+            return lhsURL == rhsURL
+        case let (.text(lhsText), .text(text: rhsText)):
+            return lhsText == rhsText
+        default:
+            return false
+        }
     }
 }
