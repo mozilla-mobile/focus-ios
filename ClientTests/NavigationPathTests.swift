@@ -16,50 +16,42 @@ class NavigationPathTests: XCTestCase {
         AppInfo.isKlar ? "firefox-klar" : "firefox-focus"
     }
     
-    private var appURL: String!
-    private var navigation: NavigationPath!
-    private let url = "https://www.apple.com/"
-    private let badURL = "boomer"
-    
-    override func setUp() {
-        super.setUp()
-        appURL = ""
-        navigation = nil
-    }
+    private let address = "https://www.apple.com/"
+    private let badAddress = "boomer"
     
     func testOpenURLschemeGoodURL() {
-        appURL = "\(appScheme)://open-url?url=\(url)"
-        navigation = NavigationPath(url: URL(string: appURL)!)!
-        XCTAssertEqual(navigation,
-                       NavigationPath.url(URL(string: url)!))
+        let appAddress = "\(appScheme)://open-url?url=\(address)"
+        let sut = NavigationPath(url: URL(string: appAddress)!)!
+        XCTAssertEqual(sut,
+                       NavigationPath.url(URL(string: address)!))
     }
     
     func testOpenURLschemeBadURL() {
-        appURL = "\(appScheme)://open-url?url=\(badURL)"
-        navigation = NavigationPath(url: URL(string: appURL)!)
-        XCTAssertEqual(navigation,
-                       NavigationPath.url(URL(string: badURL)!))
+        let appAddress = "\(appScheme)://open-url?url=\(badAddress)"
+        let sut = NavigationPath(url: URL(string: appAddress)!)
+        XCTAssertEqual(sut,
+                       NavigationPath.url(URL(string: badAddress)!))
     }
     
     func testOpenTextSchemeGoodURL() {
-        appURL = "\(appScheme)://open-text?text=\(url)"
-        navigation = NavigationPath(url: URL(string: appURL)!)!
-        XCTAssertEqual(navigation,
-                       NavigationPath.text(url))
+        let appAddress = "\(appScheme)://open-text?text=\(address)"
+        let sut = NavigationPath(url: URL(string: appAddress)!)!
+        XCTAssertEqual(sut,
+                       NavigationPath.text(address))
     }
     
     func testOpenTextSchemeBadURL() {
-        appURL = "\(appScheme)://open-text?text=\(badURL)"
-        navigation = NavigationPath(url: URL(string: appURL)!)!
-        XCTAssertEqual(navigation,
-                       NavigationPath.text(badURL))
+        let appAddress = "\(appScheme)://open-text?text=\(badAddress)"
+        let sut = NavigationPath(url: URL(string: appAddress)!)!
+        XCTAssertEqual(sut,
+                       NavigationPath.text(badAddress))
     }
     
     func testCaseInsensitivity() {
         XCTAssertEqual(NavigationPath(url: URL(string: "HtTpS://www.apple.com")!),
                        NavigationPath.url(URL(string: "https://www.apple.com")!))
         
-        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme.uppercased())://open-url?url=\(url)")!),
-                       NavigationPath.url(URL(string: url)!))
+        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme.uppercased())://open-url?url=\(address)")!),
+                       NavigationPath.url(URL(string: address)!))
     }
 }
