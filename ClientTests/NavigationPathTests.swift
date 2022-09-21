@@ -19,35 +19,35 @@ class NavigationPathTests: XCTestCase {
     private let address = "https://www.apple.com/"
     private let badAddress = "boomer"
     
-    func testOpenURLschemeGoodURL() {
+    func testHostIsOpenURLAndTheAddressIsValid() {
         let appAddress = "\(appScheme)://open-url?url=\(address)"
         let sut = NavigationPath(url: URL(string: appAddress)!)!
         XCTAssertEqual(sut,
                        NavigationPath.url(URL(string: address)!))
     }
     
-    func testOpenURLschemeBadURL() {
+    func testHostIsOpenURLAndTheAddressIsNotValid() {
         let appAddress = "\(appScheme)://open-url?url=\(badAddress)"
         let sut = NavigationPath(url: URL(string: appAddress)!)
         XCTAssertEqual(sut,
                        NavigationPath.url(URL(string: badAddress)!))
     }
     
-    func testOpenTextSchemeGoodURL() {
+    func testHostIsOpenTextAndTheAddressIsValid() {
         let appAddress = "\(appScheme)://open-text?text=\(address)"
         let sut = NavigationPath(url: URL(string: appAddress)!)!
         XCTAssertEqual(sut,
                        NavigationPath.text(address))
     }
     
-    func testOpenTextSchemeBadURL() {
+    func testHostIsOpenTextAndTheAddressIsNotValid() {
         let appAddress = "\(appScheme)://open-text?text=\(badAddress)"
         let sut = NavigationPath(url: URL(string: appAddress)!)!
         XCTAssertEqual(sut,
                        NavigationPath.text(badAddress))
     }
     
-    func testCaseInsensitivity() {
+    func testSchemesAreCaseInsensitive() {
         XCTAssertEqual(NavigationPath(url: URL(string: "HtTpS://www.apple.com")!),
                        NavigationPath.url(URL(string: "https://www.apple.com")!))
         
