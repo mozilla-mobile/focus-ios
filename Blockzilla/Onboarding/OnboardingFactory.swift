@@ -54,7 +54,7 @@ class OnboardingFactory {
                     bottomButtonTitle: .defaultBrowserOnboardingViewBottomButtonTitleV2),
                 dismissAction: dismissAction))
 
-            controller.modalPresentationStyle = .fullScreen
+            controller.modalPresentationStyle = UIDevice.current.userInterfaceIdiom == .phone ? .overFullScreen : .formSheet
             return controller
 
         case .v1:
