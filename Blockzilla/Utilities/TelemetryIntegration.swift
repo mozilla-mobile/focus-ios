@@ -68,10 +68,4 @@ class TelemetryEventObject {
     public static let searchSuggestionsOff = "search_suggestions_off"
     public static let searchSuggestionSelected = "search_suggestion_selected"
     public static let searchSuggestionNotSelected = "search_suggestion_not_selected"
-    public static let onboardingFirstScreen = "ios_onboarding_v2_first_screen"
-    public static let onboardingFirstScreenGetStarted = "ios_onboarding_v2_get_started_button"
-    public static let onboardingSecondScreenSetToDefault = "ios_onboarding_v2_set_to_default_button"
-    public static let onboardingSecondScreenSkipped = "ios_onboarding_v2_skipped_button"
-    public static let onboardingSecondScreen = "ios_onboarding_v2_second_screen"
-    public static let onboardingWidgetTooltip = "ios_onboarding_v2_widget_screen"
 }
