@@ -384,7 +384,7 @@ class BrowserViewController: UIViewController {
 
         case .widget:
             urlBar.dismiss()
-            let cardBanner = UIHostingController(
+            let cardBanner = PortraitHostingController(
                 rootView: CardBannerView(
                     config: .init(
                         title: UIConstants.strings.widgetOnboardingCardTitle,
@@ -414,7 +414,7 @@ class BrowserViewController: UIViewController {
             )
         case .widgetTutorial:
             let controller = UINavigationController(
-                rootViewController: UIHostingController(
+                rootViewController: PortraitHostingController(
                 rootView: ShowMeHowOnboardingView(
                     config: .init(
                         title: UIConstants.strings.titleShowMeHowOnboardingV2,
