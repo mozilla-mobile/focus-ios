@@ -47,6 +47,7 @@ public struct GetStartedOnboardingView: View {
                         .padding(Constants.subtitlePadding)
 
                     NavigationLink {
+//                        NotificationCenter.default.post(name: .onboardingGetStartedButtonClicked, object: nil)
                         DefaultBrowserOnboardingView(config: defaultBrowserConfig, dismiss: dismissAction)
                     } label: {
                         Text(config.buttonTitle)

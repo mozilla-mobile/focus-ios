@@ -267,6 +267,7 @@ class BrowserViewController: UIViewController {
         }
 
         setupOnboardingEvents()
+        addObserversForOnboardingTelemetry()
         setupShortcutEvents()
 
         trackingProtectionManager
@@ -364,14 +365,19 @@ class BrowserViewController: UIViewController {
 
         case .onboarding(let onboardingType):
             let dismissOnboarding = { [unowned self] in
-                Telemetry
-                    .default
-                    .recordEvent(
-                        category: TelemetryEventCategory.action,
-                        method: TelemetryEventMethod.click,
-                        object: TelemetryEventObject.onboarding,
-                        value: "finish"
-                    )
+                switch onboardingType {
+                case .v1:
+                    Telemetry
+                        .default
+                        .recordEvent(
+                            category: TelemetryEventCategory.action,
+                            method: TelemetryEventMethod.click,
+                            object: TelemetryEventObject.onboarding,
+                            value: "finish"
+                        )
+                case .v2:
+                    OnboardingTelemetryHelper.onboardingFirstScreenDismiss()
+                }
                 UserDefaults.standard.set(true, forKey: OnboardingConstants.onboardingDidAppear)
                 urlBar.activateTextField()
                 onboardingEventsHandler.route = nil
@@ -396,10 +402,12 @@ class BrowserViewController: UIViewController {
                     primaryAction: { [weak self] in
                         self?.onboardingEventsHandler.route = nil
                         self?.onboardingEventsHandler.send(.widgetDismissed)
+                        OnboardingTelemetryHelper.onboardingWidgetPrimaryActionClicked()
                     },
                     dismiss: { [weak self] in
                         self?.onboardingEventsHandler.route = nil
                         self?.urlBar.activateTextField()
+                        OnboardingTelemetryHelper.onboardingWidgetScreenDismiss()
                     }))
             cardBanner.view.backgroundColor = .clear
             cardBanner.modalPresentationStyle = .overFullScreen
@@ -423,7 +431,9 @@ class BrowserViewController: UIViewController {
                         subtitleStep3: UIConstants.strings.subtitleStepThreeShowMeHowOnboardingV2,
                         buttonText: UIConstants.strings.buttonTextShowMeHowOnboardingV2,
                         widgetText: UIConstants.strings.searchInApp),
-                    dismissAction: { self.onboardingEventsHandler.route = nil })))
+                    dismissAction: { self.onboardingEventsHandler.route = nil
+                        
+                    })))
             controller.modalPresentationStyle = .formSheet
             controller.isModalInPresentation = true
             return controller
@@ -444,6 +454,15 @@ class BrowserViewController: UIViewController {
                     if let controller = controller(for: route) {
                         self.present(controller, animated: true)
                         presentedController = controller
+                        switch route {
+                        case .onboarding(let onboardingType):
+                            if onboardingType == .v2 {
+                                OnboardingTelemetryHelper.onboardingFirstScreenDisplayed()
+                            }
+                        case .widget:
+                            OnboardingTelemetryHelper.onboardingWidgetScreenDisplayed()
+                        default: break
+                        }
                     }
                 }
             }
@@ -2058,5 +2077,40 @@ extension BrowserViewController {
             subview.removeFromSuperview()
         }
         addShortcuts()
+    }
+}
+
+extension BrowserViewController {
+    private func addObserversForOnboardingTelemetry() {
+        NotificationCenter.default.addObserver(self, selector: #selector(skipButtonClickedTelemetry), name: .onboardingSkipButtonClicked, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(defaultBrowserViewControllerAppear), name: .onboardingDefaultBrowserAppear, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(setAsDefaultButtonClicked), name: .onboardingSetAsDefaultButtonClicked, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(getStartedButtonClicked), name: .onboardingGetStartedButtonClicked, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onboardingSecondScreenDismissed), name: .onboardingSecondScreenDismissed, object: nil)
+    }
+
+    @objc func setAsDefaultButtonClicked() {
+        OnboardingTelemetryHelper.onboardingSecondScreenSetToDefaultClicked()
+        NotificationCenter.default.removeObserver(self, name: .onboardingSetAsDefaultButtonClicked, object: nil)
+    }
+
+    @objc func skipButtonClickedTelemetry() {
+        OnboardingTelemetryHelper.onboardingSecondScreenSkipClicked()
+        NotificationCenter.default.removeObserver(self, name: .onboardingSkipButtonClicked, object: nil)
+    }
+
+    @objc func defaultBrowserViewControllerAppear() {
+        OnboardingTelemetryHelper.onboardingSecondScreenDisplayed()
+        NotificationCenter.default.removeObserver(self, name: .onboardingDefaultBrowserAppear, object: nil)
+    }
+    
+    @objc func getStartedButtonClicked() {
+        OnboardingTelemetryHelper.onboardingFirstScreenGetStartedClicked()
+        NotificationCenter.default.removeObserver(self, name: .onboardingGetStartedButtonClicked, object: nil)
+    }
+
+    @objc func onboardingSecondScreenDismissed() {
+        OnboardingTelemetryHelper.onboardingSecondScreenDismiss()
+        NotificationCenter.default.removeObserver(self, name: .onboardingSecondScreenDismissed, object: nil)
     }
 }

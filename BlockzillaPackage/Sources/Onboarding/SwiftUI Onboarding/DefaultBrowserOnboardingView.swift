@@ -19,6 +19,7 @@ struct DefaultBrowserOnboardingView: View {
                 Spacer()
                 Button(action: {
                     dismiss()
+                    NotificationCenter.default.post(name: .onboardingSecondScreenDismissed, object: nil)
                 }, label: {
                     Image.close
                 })
@@ -43,6 +44,7 @@ struct DefaultBrowserOnboardingView: View {
             Spacer()
             Button(action: {
                 UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                NotificationCenter.default.post(name: .onboardingSetAsDefaultButtonClicked, object: nil)
             }, label: {
                 Text(config.topButtonTitle)
                     .foregroundColor(.systemBackground)
@@ -54,6 +56,7 @@ struct DefaultBrowserOnboardingView: View {
             })
             Button(action: {
                 dismiss()
+                NotificationCenter.default.post(name: .onboardingSkipButtonClicked, object: nil)
             }, label: {
                 Text(config.bottomButtonTitle)
                     .foregroundColor(.black)
@@ -69,6 +72,9 @@ struct DefaultBrowserOnboardingView: View {
         .navigationBarHidden(true)
         .background(Color.secondOnboardingScreenBackground
             .edgesIgnoringSafeArea(.bottom))
+        .onAppear {
+            NotificationCenter.default.post(name: .onboardingDefaultBrowserAppear, object: nil)
+        }
     }
 }
 
