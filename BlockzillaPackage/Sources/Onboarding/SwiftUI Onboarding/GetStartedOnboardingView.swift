@@ -47,7 +47,6 @@ public struct GetStartedOnboardingView: View {
                         .padding(Constants.subtitlePadding)
 
                     NavigationLink {
-//                        NotificationCenter.default.post(name: .onboardingGetStartedButtonClicked, object: nil)
                         DefaultBrowserOnboardingView(config: defaultBrowserConfig, dismiss: dismissAction)
                     } label: {
                         Text(config.buttonTitle)
@@ -60,6 +59,9 @@ public struct GetStartedOnboardingView: View {
                             .padding(Constants.buttonPadding)
 
                     }
+                    .simultaneousGesture(TapGesture().onEnded({ _ in
+                        NotificationCenter.default.post(name: .onboardingGetStartedButtonClicked, object: nil)
+                    }))
                 }
                 Spacer()
             }

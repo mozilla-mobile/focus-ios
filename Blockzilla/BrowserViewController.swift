@@ -2089,27 +2089,27 @@ extension BrowserViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(onboardingSecondScreenDismissed), name: .onboardingSecondScreenDismissed, object: nil)
     }
 
-    @objc func setAsDefaultButtonClicked() {
+    @objc private func setAsDefaultButtonClicked() {
         OnboardingTelemetryHelper.onboardingSecondScreenSetToDefaultClicked()
         NotificationCenter.default.removeObserver(self, name: .onboardingSetAsDefaultButtonClicked, object: nil)
     }
 
-    @objc func skipButtonClickedTelemetry() {
+    @objc private func skipButtonClickedTelemetry() {
         OnboardingTelemetryHelper.onboardingSecondScreenSkipClicked()
         NotificationCenter.default.removeObserver(self, name: .onboardingSkipButtonClicked, object: nil)
     }
 
-    @objc func defaultBrowserViewControllerAppear() {
+    @objc private func defaultBrowserViewControllerAppear() {
         OnboardingTelemetryHelper.onboardingSecondScreenDisplayed()
         NotificationCenter.default.removeObserver(self, name: .onboardingDefaultBrowserAppear, object: nil)
     }
-    
-    @objc func getStartedButtonClicked() {
+
+    @objc private func getStartedButtonClicked() {
         OnboardingTelemetryHelper.onboardingFirstScreenGetStartedClicked()
         NotificationCenter.default.removeObserver(self, name: .onboardingGetStartedButtonClicked, object: nil)
     }
 
-    @objc func onboardingSecondScreenDismissed() {
+    @objc private func onboardingSecondScreenDismissed() {
         OnboardingTelemetryHelper.onboardingSecondScreenDismiss()
         NotificationCenter.default.removeObserver(self, name: .onboardingSecondScreenDismissed, object: nil)
     }
