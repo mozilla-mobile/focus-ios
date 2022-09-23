@@ -16,7 +16,6 @@ protocol BrowserToolsetDelegate: AnyObject {
 
 class BrowserToolset {
     weak var delegate: BrowserToolsetDelegate?
-    var shouldShowWhatsNew: Bool = false
     let backButton = InsetButton()
     let forwardButton = InsetButton()
     let stopReloadButton = InsetButton()
@@ -47,6 +46,7 @@ class BrowserToolset {
         deleteButton.accessibilityIdentifier = "URLBar.deleteButton"
         deleteButton.isEnabled = false
 
+        contextMenuButton.setImage(UIImage(named: "icon_hamburger_menu"), for: .normal)
         contextMenuButton.tintColor = .primaryText
         if #available(iOS 14.0, *) {
             contextMenuButton.showsMenuAsPrimaryAction = true
@@ -60,7 +60,6 @@ class BrowserToolset {
         contextMenuButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         contextMenuButton.imageView?.snp.makeConstraints { $0.size.equalTo(UIConstants.layout.contextMenuIconSize) }
 
-       setHighlightWhatsNew(shouldHighlight: shouldShowWhatsNew)
     }
 
     var canGoBack: Bool = false {
@@ -122,7 +121,4 @@ class BrowserToolset {
         delegate?.browserToolsetDidPressContextMenu(self, menuButton: sender)
     }
 
-    func setHighlightWhatsNew(shouldHighlight: Bool) {
-        contextMenuButton.setImage(UIImage(named: shouldHighlight ? "preferences_updated" : "icon_hamburger_menu"), for: .normal)
-    }
 }

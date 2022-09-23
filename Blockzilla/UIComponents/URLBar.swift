@@ -63,6 +63,7 @@ class URLBar: UIView {
 
     public var contextMenuButton: InsetButton { toolset.contextMenuButton }
     public var deleteButton: InsetButton { toolset.deleteButton }
+    public var textFieldAnchor: UIView { urlTextField }
 
     private let leftBarViewLayoutGuide = UILayoutGuide()
     private let rightBarViewLayoutGuide = UILayoutGuide()
@@ -441,10 +442,6 @@ class URLBar: UIView {
     public func dismissTextField() {
         urlTextField.isUserInteractionEnabled = false
         urlTextField.endEditing(true)
-    }
-
-    public func setHighlightWhatsNew(shouldHighlight: Bool) {
-        toolset.setHighlightWhatsNew(shouldHighlight: shouldHighlight)
     }
 
     @objc func addCustomURL() {
