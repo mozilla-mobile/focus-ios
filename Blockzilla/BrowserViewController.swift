@@ -52,6 +52,7 @@ class BrowserViewController: UIViewController {
     private var onboardingEventsHandler: OnboardingEventsHandling
     private var themeManager: ThemeManager
     private let shortcutsPresenter = ShortcutsPresenter()
+    private let onboardingTelmetry = OnboardingTelemetryHelper()
 
     private enum URLBarScrollState {
         case collapsed
@@ -267,7 +268,6 @@ class BrowserViewController: UIViewController {
         }
 
         setupOnboardingEvents()
-        addObserversForOnboardingTelemetry()
         setupShortcutEvents()
 
         trackingProtectionManager
@@ -383,7 +383,7 @@ class BrowserViewController: UIViewController {
                 onboardingEventsHandler.route = nil
                 onboardingEventsHandler.send(.enterHome)
             }
-            return OnboardingFactory.make(onboardingType: onboardingType, dismissAction: dismissOnboarding)
+                return OnboardingFactory.make(onboardingType: onboardingType, dismissAction: dismissOnboarding, telemetry: onboardingTelmetry.handle(event:))
 
         case .trackingProtection:
             return nil
@@ -2077,40 +2077,5 @@ extension BrowserViewController {
             subview.removeFromSuperview()
         }
         addShortcuts()
-    }
-}
-
-extension BrowserViewController {
-    private func addObserversForOnboardingTelemetry() {
-        NotificationCenter.default.addObserver(self, selector: #selector(skipButtonClickedTelemetry), name: .onboardingSkipButtonClicked, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(defaultBrowserViewControllerAppear), name: .onboardingDefaultBrowserAppear, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(setAsDefaultButtonClicked), name: .onboardingSetAsDefaultButtonClicked, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(getStartedButtonClicked), name: .onboardingGetStartedButtonClicked, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(onboardingSecondScreenDismissed), name: .onboardingSecondScreenDismissed, object: nil)
-    }
-
-    @objc private func setAsDefaultButtonClicked() {
-        OnboardingTelemetryHelper.onboardingSecondScreenSetToDefaultClicked()
-        NotificationCenter.default.removeObserver(self, name: .onboardingSetAsDefaultButtonClicked, object: nil)
-    }
-
-    @objc private func skipButtonClickedTelemetry() {
-        OnboardingTelemetryHelper.onboardingSecondScreenSkipClicked()
-        NotificationCenter.default.removeObserver(self, name: .onboardingSkipButtonClicked, object: nil)
-    }
-
-    @objc private func defaultBrowserViewControllerAppear() {
-        OnboardingTelemetryHelper.onboardingSecondScreenDisplayed()
-        NotificationCenter.default.removeObserver(self, name: .onboardingDefaultBrowserAppear, object: nil)
-    }
-
-    @objc private func getStartedButtonClicked() {
-        OnboardingTelemetryHelper.onboardingFirstScreenGetStartedClicked()
-        NotificationCenter.default.removeObserver(self, name: .onboardingGetStartedButtonClicked, object: nil)
-    }
-
-    @objc private func onboardingSecondScreenDismissed() {
-        OnboardingTelemetryHelper.onboardingSecondScreenDismiss()
-        NotificationCenter.default.removeObserver(self, name: .onboardingSecondScreenDismissed, object: nil)
     }
 }
