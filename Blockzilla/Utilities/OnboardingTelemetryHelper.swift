@@ -5,54 +5,58 @@
 import Foundation
 import Glean
 
+enum CardViewType: String {
+    case welcomeView = "welcome"
+    case defaultBrowserView = "default-browser"
+    case widgetTutorial = "widget-tutorial"
+}
+
 class OnboardingTelemetryHelper {
     static func onboardingFirstScreenDisplayed() {
-//        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.onboardingFirstScreen)
-        print("------------ Onboarding First Screen Displayed ------------")
+        let cardTypeExtra = GleanMetrics.Onboarding.CardViewExtra(cardType: CardViewType.welcomeView.rawValue)
+        GleanMetrics.Onboarding.cardView.record(cardTypeExtra)
     }
 
     static func onboardingFirstScreenGetStartedClicked() {
-//        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.onboardingFirstScreenGetStarted)
-        print("------------ Onboarding First Get Started Clicked ------------")
+        let cardTypeExtra = GleanMetrics.Onboarding.PrimaryButtonTapExtra(cardType: CardViewType.welcomeView.rawValue)
+        GleanMetrics.Onboarding.primaryButtonTap.record(cardTypeExtra)
     }
 
     static func onboardingFirstScreenDismiss() {
-//        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.close, object: TelemetryEventObject.onboardingFirstScreen)
-        print("------------ Onboarding First Screen Dismissed ------------")
+        let cardTypeExtra = GleanMetrics.Onboarding.CloseTapExtra(cardType: CardViewType.welcomeView.rawValue)
+        GleanMetrics.Onboarding.closeTap.record(cardTypeExtra)
     }
 
     static func onboardingSecondScreenDisplayed() {
-//        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.onboardingSecondScreen)
-        print("------------ Onboarding Second Screen Displayed ------------")
+        let cardTypeExtra = GleanMetrics.Onboarding.CardViewExtra(cardType: CardViewType.defaultBrowserView.rawValue)
+        GleanMetrics.Onboarding.cardView.record(cardTypeExtra)
     }
 
     static func onboardingSecondScreenSetToDefaultClicked() {
-//        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.onboardingSecondScreenSetToDefault)
-        print("------------ Onboarding Second Screen Set to Default Clicked ------------")
+        GleanMetrics.DefaultBrowserOnboarding.goToSettingsPressed.add()
     }
 
     static func onboardingSecondScreenSkipClicked() {
-//        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.onboardingSecondScreenSkipped)
-        print("------------ Onboarding Second Screen Skipped Clicked ------------")
+        GleanMetrics.DefaultBrowserOnboarding.skipButtonTapped.record()
     }
 
     static func onboardingSecondScreenDismiss() {
-//        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.close, object: TelemetryEventObject.onboardingSecondScreen)
-        print("------------ Onboarding Second Screen Dismissed ------------")
+        let cardTypeExtra = GleanMetrics.Onboarding.CloseTapExtra(cardType: CardViewType.defaultBrowserView.rawValue)
+        GleanMetrics.Onboarding.closeTap.record(cardTypeExtra)
     }
 
     static func onboardingWidgetScreenDisplayed() {
-//        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.onboardingWidgetTooltip)
-        print("------------ Onboarding Widget Card Displayed ------------")
+        let cardTypeExtra = GleanMetrics.Onboarding.CardViewExtra(cardType: CardViewType.widgetTutorial.rawValue)
+        GleanMetrics.Onboarding.cardView.record(cardTypeExtra)
     }
 
     static func onboardingWidgetPrimaryActionClicked() {
-//        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.onboardingWidgetTooltip)
-        print("------------ Onboarding Widget Primary Clicked ------------")
+        let cardTypeExtra = GleanMetrics.Onboarding.PrimaryButtonTapExtra(cardType: CardViewType.welcomeView.rawValue)
+        GleanMetrics.Onboarding.primaryButtonTap.record(cardTypeExtra)
     }
 
     static func onboardingWidgetScreenDismiss() {
-//        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.close, object: TelemetryEventObject.onboardingWidgetTooltip)
-        print("------------ Onboarding Widget Card Dismissed ------------")
+        let cardTypeExtra = GleanMetrics.Onboarding.CloseTapExtra(cardType: CardViewType.widgetTutorial.rawValue)
+        GleanMetrics.Onboarding.closeTap.record(cardTypeExtra)
     }
 }
