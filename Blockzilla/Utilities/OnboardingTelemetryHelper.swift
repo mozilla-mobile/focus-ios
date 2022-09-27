@@ -28,73 +28,33 @@ class OnboardingTelemetryHelper {
     func handle(event: Event) {
         switch event {
         case .getStartedAppeared:
-            onboardingGetStartedScreenDisplayed()
+            let cardTypeExtra = GleanMetrics.Onboarding.CardViewExtra(cardType: CardViewType.welcomeView.rawValue)
+            GleanMetrics.Onboarding.cardView.record(cardTypeExtra)
         case .getStartedCloseTapped:
-            onboardingGetStartedScreenDismiss()
+            let cardTypeExtra = GleanMetrics.Onboarding.CloseTapExtra(cardType: CardViewType.welcomeView.rawValue)
+            GleanMetrics.Onboarding.closeTap.record(cardTypeExtra)
         case .getStartedButtonTapped:
-            onboardingGetStartedScreenButtonTapped()
+            let cardTypeExtra = GleanMetrics.Onboarding.PrimaryButtonTapExtra(cardType: CardViewType.welcomeView.rawValue)
+            GleanMetrics.Onboarding.primaryButtonTap.record(cardTypeExtra)
         case .defaultBrowserCloseTapped:
-            onboardingDefaultBrowserScreenDismiss()
+            let cardTypeExtra = GleanMetrics.Onboarding.CloseTapExtra(cardType: CardViewType.defaultBrowserView.rawValue)
+            GleanMetrics.Onboarding.closeTap.record(cardTypeExtra)
         case .defaultBrowserSettingsTapped:
-            onboardingDefaultBrowserScreenButtonTapped()
+            GleanMetrics.DefaultBrowserOnboarding.goToSettingsPressed.add()
         case .defaultBrowserSkip:
-            onboardingDefaultBrowserScreenSkipTapped()
+            GleanMetrics.DefaultBrowserOnboarding.skipButtonTapped.record()
         case .defaultBrowserAppeared:
-            onboardingDefaultBrowserScreenDisplayed()
+            let cardTypeExtra = GleanMetrics.Onboarding.CardViewExtra(cardType: CardViewType.defaultBrowserView.rawValue)
+            GleanMetrics.Onboarding.cardView.record(cardTypeExtra)
         case .widgetCardAppeared:
-            onboardingWidgetScreenDisplayed()
+            let cardTypeExtra = GleanMetrics.Onboarding.CardViewExtra(cardType: CardViewType.widgetTutorial.rawValue)
+            GleanMetrics.Onboarding.cardView.record(cardTypeExtra)
         case .widgetPrimaryButtonTapped:
-            onboardingWidgetPrimaryActionClicked()
+            let cardTypeExtra = GleanMetrics.Onboarding.PrimaryButtonTapExtra(cardType: CardViewType.welcomeView.rawValue)
+            GleanMetrics.Onboarding.primaryButtonTap.record(cardTypeExtra)
         case .widgetCloseTapped:
-            onboardingWidgetScreenDismiss()
+            let cardTypeExtra = GleanMetrics.Onboarding.CloseTapExtra(cardType: CardViewType.widgetTutorial.rawValue)
+            GleanMetrics.Onboarding.closeTap.record(cardTypeExtra)
         }
-    }
-
-    func onboardingGetStartedScreenButtonTapped() {
-        let cardTypeExtra = GleanMetrics.Onboarding.PrimaryButtonTapExtra(cardType: CardViewType.welcomeView.rawValue)
-        GleanMetrics.Onboarding.primaryButtonTap.record(cardTypeExtra)
-    }
-
-    func onboardingDefaultBrowserScreenDismiss() {
-        let cardTypeExtra = GleanMetrics.Onboarding.CloseTapExtra(cardType: CardViewType.defaultBrowserView.rawValue)
-        GleanMetrics.Onboarding.closeTap.record(cardTypeExtra)
-    }
-
-    func onboardingDefaultBrowserScreenButtonTapped() {
-        GleanMetrics.DefaultBrowserOnboarding.goToSettingsPressed.add()
-    }
-
-    func onboardingDefaultBrowserScreenSkipTapped() {
-        GleanMetrics.DefaultBrowserOnboarding.skipButtonTapped.record()
-    }
-
-    func onboardingDefaultBrowserScreenDisplayed() {
-        let cardTypeExtra = GleanMetrics.Onboarding.CardViewExtra(cardType: CardViewType.defaultBrowserView.rawValue)
-        GleanMetrics.Onboarding.cardView.record(cardTypeExtra)
-    }
-
-    func onboardingGetStartedScreenDisplayed() {
-        let cardTypeExtra = GleanMetrics.Onboarding.CardViewExtra(cardType: CardViewType.welcomeView.rawValue)
-        GleanMetrics.Onboarding.cardView.record(cardTypeExtra)
-    }
-
-    func onboardingGetStartedScreenDismiss() {
-        let cardTypeExtra = GleanMetrics.Onboarding.CloseTapExtra(cardType: CardViewType.welcomeView.rawValue)
-        GleanMetrics.Onboarding.closeTap.record(cardTypeExtra)
-    }
-
-    func onboardingWidgetScreenDisplayed() {
-        let cardTypeExtra = GleanMetrics.Onboarding.CardViewExtra(cardType: CardViewType.widgetTutorial.rawValue)
-        GleanMetrics.Onboarding.cardView.record(cardTypeExtra)
-    }
-
-    func onboardingWidgetPrimaryActionClicked() {
-        let cardTypeExtra = GleanMetrics.Onboarding.PrimaryButtonTapExtra(cardType: CardViewType.welcomeView.rawValue)
-        GleanMetrics.Onboarding.primaryButtonTap.record(cardTypeExtra)
-    }
-
-    func onboardingWidgetScreenDismiss() {
-        let cardTypeExtra = GleanMetrics.Onboarding.CloseTapExtra(cardType: CardViewType.widgetTutorial.rawValue)
-        GleanMetrics.Onboarding.closeTap.record(cardTypeExtra)
     }
 }

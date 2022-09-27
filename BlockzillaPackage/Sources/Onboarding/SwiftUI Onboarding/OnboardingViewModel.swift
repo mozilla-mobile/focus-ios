@@ -31,11 +31,11 @@ public class OnboardingViewModel: ObservableObject {
         telemetry(action)
         switch action {
             case .getStartedAppeared:
-                ()
+                break
             case .getStartedCloseTapped:
                 dismissAction()
             case .getStartedButtonTapped:
-                ()
+                break
             case .defaultBrowserCloseTapped:
                 dismissAction()
             case .defaultBrowserSettingsTapped:
@@ -43,7 +43,7 @@ public class OnboardingViewModel: ObservableObject {
             case .defaultBrowserSkip:
                 dismissAction()
             case .defaultBrowserAppeared:
-                ()
+                break
         }
     }
 }
