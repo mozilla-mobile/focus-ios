@@ -563,7 +563,7 @@ browser_search:
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/3478
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/7702
+      - https://github.com/mozilla-mobile/focus-ios/pull/3492
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
     expires: "2023-03-25"
