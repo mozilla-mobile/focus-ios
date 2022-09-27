@@ -52,7 +52,7 @@ class BrowserViewController: UIViewController {
     private var onboardingEventsHandler: OnboardingEventsHandling
     private var themeManager: ThemeManager
     private let shortcutsPresenter = ShortcutsPresenter()
-    private let onboardingTelmetry = OnboardingTelemetryHelper()
+    private let onboardingTelemetry = OnboardingTelemetryHelper()
 
     private enum URLBarScrollState {
         case collapsed
@@ -365,25 +365,20 @@ class BrowserViewController: UIViewController {
 
         case .onboarding(let onboardingType):
             let dismissOnboarding = { [unowned self] in
-                switch onboardingType {
-                case .v1:
-                    Telemetry
-                        .default
-                        .recordEvent(
-                            category: TelemetryEventCategory.action,
-                            method: TelemetryEventMethod.click,
-                            object: TelemetryEventObject.onboarding,
-                            value: "finish"
-                        )
-                case .v2:
-                    OnboardingTelemetryHelper.onboardingFirstScreenDismiss()
-                }
+                Telemetry
+                    .default
+                    .recordEvent(
+                        category: TelemetryEventCategory.action,
+                        method: TelemetryEventMethod.click,
+                        object: TelemetryEventObject.onboarding,
+                        value: "finish"
+                    )
                 UserDefaults.standard.set(true, forKey: OnboardingConstants.onboardingDidAppear)
                 urlBar.activateTextField()
                 onboardingEventsHandler.route = nil
                 onboardingEventsHandler.send(.enterHome)
             }
-                return OnboardingFactory.make(onboardingType: onboardingType, dismissAction: dismissOnboarding, telemetry: onboardingTelmetry.handle(event:))
+                return OnboardingFactory.make(onboardingType: onboardingType, dismissAction: dismissOnboarding, telemetry: onboardingTelemetry.handle(event:))
 
         case .trackingProtection:
             return nil
@@ -402,12 +397,12 @@ class BrowserViewController: UIViewController {
                     primaryAction: { [weak self] in
                         self?.onboardingEventsHandler.route = nil
                         self?.onboardingEventsHandler.send(.widgetDismissed)
-                        OnboardingTelemetryHelper.onboardingWidgetPrimaryActionClicked()
+                        self?.onboardingTelemetry.handle(event: .widgetPrimaryButtonTapped)
                     },
                     dismiss: { [weak self] in
                         self?.onboardingEventsHandler.route = nil
                         self?.urlBar.activateTextField()
-                        OnboardingTelemetryHelper.onboardingWidgetScreenDismiss()
+                        self?.onboardingTelemetry.handle(event: .widgetCloseTapped)
                     }))
             cardBanner.view.backgroundColor = .clear
             cardBanner.modalPresentationStyle = .overFullScreen
@@ -454,10 +449,10 @@ class BrowserViewController: UIViewController {
                         switch route {
                         case .onboarding(let onboardingType):
                             if onboardingType == .v2 {
-                                OnboardingTelemetryHelper.onboardingFirstScreenDisplayed()
+                                onboardingTelemetry.handle(event: .getStartedAppeared)
                             }
                         case .widget:
-                            OnboardingTelemetryHelper.onboardingWidgetScreenDisplayed()
+                            onboardingTelemetry.handle(event: .widgetCardAppeared)
                         default: break
                         }
                     }

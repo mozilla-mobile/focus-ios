@@ -13,75 +13,87 @@ enum CardViewType: String {
 
 class OnboardingTelemetryHelper {
     public enum Event {
+        case getStartedAppeared
         case getStartedCloseTapped
         case getStartedButtonTapped
         case defaultBrowserCloseTapped
         case defaultBrowserSettingsTapped
         case defaultBrowserSkip
         case defaultBrowserAppeared
+        case widgetCardAppeared
+        case widgetPrimaryButtonTapped
+        case widgetCloseTapped
     }
 
     func handle(event: Event) {
         switch event {
-            case .getStartedCloseTapped:
-                ()
-            case .getStartedButtonTapped:
-                onboardingFirstScreenGetStartedClicked()
-            case .defaultBrowserCloseTapped:
-                onboardingSecondScreenDismiss()
-            case .defaultBrowserSettingsTapped:
-                onboardingSecondScreenSetToDefaultClicked()
-            case .defaultBrowserSkip:
-                onboardingSecondScreenSkipClicked()
-            case .defaultBrowserAppeared:
-                onboardingSecondScreenDisplayed()
+        case .getStartedAppeared:
+            onboardingGetStartedScreenDisplayed()
+        case .getStartedCloseTapped:
+            onboardingGetStartedScreenDismiss()
+        case .getStartedButtonTapped:
+            onboardingGetStartedScreenButtonTapped()
+        case .defaultBrowserCloseTapped:
+            onboardingDefaultBrowserScreenDismiss()
+        case .defaultBrowserSettingsTapped:
+            onboardingDefaultBrowserScreenButtonTapped()
+        case .defaultBrowserSkip:
+            onboardingDefaultBrowserScreenSkipTapped()
+        case .defaultBrowserAppeared:
+            onboardingDefaultBrowserScreenDisplayed()
+        case .widgetCardAppeared:
+            onboardingWidgetScreenDisplayed()
+        case .widgetPrimaryButtonTapped:
+            onboardingWidgetPrimaryActionClicked()
+        case .widgetCloseTapped:
+            onboardingWidgetScreenDismiss()
         }
     }
 
-    func onboardingFirstScreenGetStartedClicked() {
+    func onboardingGetStartedScreenButtonTapped() {
         let cardTypeExtra = GleanMetrics.Onboarding.PrimaryButtonTapExtra(cardType: CardViewType.welcomeView.rawValue)
         GleanMetrics.Onboarding.primaryButtonTap.record(cardTypeExtra)
     }
 
-    func onboardingSecondScreenDismiss() {
+    func onboardingDefaultBrowserScreenDismiss() {
         let cardTypeExtra = GleanMetrics.Onboarding.CloseTapExtra(cardType: CardViewType.defaultBrowserView.rawValue)
         GleanMetrics.Onboarding.closeTap.record(cardTypeExtra)
     }
 
-    func onboardingSecondScreenSetToDefaultClicked() {
+    func onboardingDefaultBrowserScreenButtonTapped() {
         GleanMetrics.DefaultBrowserOnboarding.goToSettingsPressed.add()
     }
 
-    func onboardingSecondScreenSkipClicked() {
+    func onboardingDefaultBrowserScreenSkipTapped() {
         GleanMetrics.DefaultBrowserOnboarding.skipButtonTapped.record()
     }
 
-    func onboardingSecondScreenDisplayed() {
+    func onboardingDefaultBrowserScreenDisplayed() {
         let cardTypeExtra = GleanMetrics.Onboarding.CardViewExtra(cardType: CardViewType.defaultBrowserView.rawValue)
         GleanMetrics.Onboarding.cardView.record(cardTypeExtra)
     }
 
-    static func onboardingFirstScreenDisplayed() {
+    func onboardingGetStartedScreenDisplayed() {
         let cardTypeExtra = GleanMetrics.Onboarding.CardViewExtra(cardType: CardViewType.welcomeView.rawValue)
         GleanMetrics.Onboarding.cardView.record(cardTypeExtra)
     }
 
-    static func onboardingFirstScreenDismiss() {
+    func onboardingGetStartedScreenDismiss() {
         let cardTypeExtra = GleanMetrics.Onboarding.CloseTapExtra(cardType: CardViewType.welcomeView.rawValue)
         GleanMetrics.Onboarding.closeTap.record(cardTypeExtra)
     }
 
-    static func onboardingWidgetScreenDisplayed() {
+    func onboardingWidgetScreenDisplayed() {
         let cardTypeExtra = GleanMetrics.Onboarding.CardViewExtra(cardType: CardViewType.widgetTutorial.rawValue)
         GleanMetrics.Onboarding.cardView.record(cardTypeExtra)
     }
 
-    static func onboardingWidgetPrimaryActionClicked() {
+    func onboardingWidgetPrimaryActionClicked() {
         let cardTypeExtra = GleanMetrics.Onboarding.PrimaryButtonTapExtra(cardType: CardViewType.welcomeView.rawValue)
         GleanMetrics.Onboarding.primaryButtonTap.record(cardTypeExtra)
     }
 
-    static func onboardingWidgetScreenDismiss() {
+    func onboardingWidgetScreenDismiss() {
         let cardTypeExtra = GleanMetrics.Onboarding.CloseTapExtra(cardType: CardViewType.widgetTutorial.rawValue)
         GleanMetrics.Onboarding.closeTap.record(cardTypeExtra)
     }

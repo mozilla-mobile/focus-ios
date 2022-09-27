@@ -55,6 +55,8 @@ class OnboardingFactory {
                     dismissAction: dismissAction,
                     telemetry: { action in
                         switch action {
+                            case .getStartedAppeared:
+                                telemetry(.getStartedAppeared)
                             case .getStartedCloseTapped:
                                 telemetry(.getStartedCloseTapped)
                             case .getStartedButtonTapped:

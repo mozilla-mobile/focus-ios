@@ -63,6 +63,9 @@ public struct GetStartedOnboardingView: View {
             )
             .navigationBarHidden(true)
         }
+        .onAppear {
+            viewModel.send(.getStartedAppeared)
+        }
         .navigationViewStyle(StackNavigationViewStyle())
     }
 

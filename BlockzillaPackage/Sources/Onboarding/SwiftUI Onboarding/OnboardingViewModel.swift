@@ -13,6 +13,7 @@ public class OnboardingViewModel: ObservableObject {
     }
 
     public enum Action {
+        case getStartedAppeared
         case getStartedCloseTapped
         case getStartedButtonTapped
         case defaultBrowserCloseTapped
@@ -29,6 +30,8 @@ public class OnboardingViewModel: ObservableObject {
     public func send(_ action: Action) {
         telemetry(action)
         switch action {
+            case .getStartedAppeared:
+                ()
             case .getStartedCloseTapped:
                 dismissAction()
             case .getStartedButtonTapped:
