@@ -44,7 +44,7 @@ class OnboardingFactory {
     static func make(onboardingType: OnboardingVersion, dismissAction: @escaping () -> Void, telemetry: @escaping (OnboardingTelemetryHelper.Event) -> Void) -> UIViewController {
         switch onboardingType {
             case .v2:
-                let controller = UIHostingController(rootView: GetStartedOnboardingView(viewModel: OnboardingViewModel(
+                let controller = PortraitHostingController(rootView: GetStartedOnboardingView(viewModel: OnboardingViewModel(
                     config: .init(title: .onboardingTitle, subtitle: .onboardingSubtitleV2, buttonTitle: .onboardingButtonTitleV2),
                     defaultBrowserConfig: .init(
                         title: .defaultBrowserOnboardingViewTitleV2,
