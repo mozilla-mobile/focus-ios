@@ -573,7 +573,7 @@ onboarding:
       - https://github.com/mozilla-mobile/focus-ios/pull/3487
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2023-08-20"
+    expires: "2023-09-26"
   primary_button_tap:
     type: event
     description: |
@@ -589,7 +589,7 @@ onboarding:
       - https://github.com/mozilla-mobile/focus-ios/pull/3487
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2023-08-20"
+    expires: "2023-09-26"
   secondary_button_tap:
     type: event
     description: |
@@ -605,7 +605,7 @@ onboarding:
       - https://github.com/mozilla-mobile/focus-ios/pull/3487
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2023-08-20"
+    expires: "2023-09-26"
   close_tap:
     type: event
     description: |
@@ -621,7 +621,7 @@ onboarding:
       - https://github.com/mozilla-mobile/focus-ios/pull/3487
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2023-08-20"
+    expires: "2023-09-26"
 
 default_browser_onboarding:
   dismiss_pressed:
@@ -634,7 +634,7 @@ default_browser_onboarding:
       - https://github.com/mozilla-mobile/focus-ios/pull/3487
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2023-08-20"
+    expires: "2023-09-26"
   go_to_settings_pressed:
     type: counter
     description: |
@@ -646,7 +646,7 @@ default_browser_onboarding:
       - https://github.com/mozilla-mobile/focus-ios/pull/3487
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2023-08-20"
+    expires: "2023-09-26"
   skip_button_tapped:
     type: event
     description: The user has tapped to skip onboarding.
@@ -658,7 +658,7 @@ default_browser_onboarding:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2023-08-20"
+    expires: "2023-09-26"
     extra_keys:
       current_item:
         description: The curent displayed item position.
