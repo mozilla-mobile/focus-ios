@@ -4,10 +4,14 @@
 
 import SwiftUI
 
-struct DefaultBrowserOnboardingView: View {
+public struct DefaultBrowserOnboardingView: View {
     @ObservedObject var viewModel: OnboardingViewModel
 
-    var body: some View {
+    public init(viewModel: OnboardingViewModel) {
+        self.viewModel = viewModel
+    }
+
+    public var body: some View {
         VStack {
             HStack {
                 Spacer()
@@ -42,7 +46,7 @@ struct DefaultBrowserOnboardingView: View {
                     .foregroundColor(.systemBackground)
                     .font(.body16Bold)
                     .frame(maxWidth: .infinity)
-                    .frame(height: .navigationLinkViewHeight)
+                    .frame(height: .buttonHeight)
                     .background(Color.secondOnboardingScreenTopButton)
                     .cornerRadius(.radius)
             })
@@ -53,13 +57,13 @@ struct DefaultBrowserOnboardingView: View {
                     .foregroundColor(.black)
                     .font(.body16Bold)
                     .frame(maxWidth: .infinity)
-                    .frame(height: .navigationLinkViewHeight)
+                    .frame(height: .buttonHeight)
                     .background(Color.secondOnboardingScreenBottomButton)
                     .cornerRadius(.radius)
             })
             .padding(.bottom, .skipButtonPadding)
         }
-        .padding([.top, .leading, .trailing], .viewPadding)
+        .padding([.leading, .trailing], .viewPadding)
         .navigationBarHidden(true)
         .background(Color.secondOnboardingScreenBackground
         .edgesIgnoringSafeArea([.top, .bottom]))
@@ -73,11 +77,11 @@ fileprivate extension CGFloat {
     static let imageSize: CGFloat = 30
     static let titleSize: CGFloat = 26
     static let titleBottomPadding: CGFloat = 12
-    static let skipButtonPadding: CGFloat = 12
+    static let skipButtonPadding: CGFloat = 20
     static let firstSubtitleBottomPadding: CGFloat = 14
     static let viewPadding: CGFloat = 26
     static let radius: CGFloat = 12
-    static let navigationLinkViewHeight: CGFloat = 44
+    static let buttonHeight: CGFloat = 44
     static let imageMaxHeight: CGFloat = 300
 }
 

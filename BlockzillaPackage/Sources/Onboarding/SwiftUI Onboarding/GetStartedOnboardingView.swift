@@ -10,15 +10,17 @@ public struct GetStartedOnboardingView: View {
     }
 
     @ObservedObject var viewModel: OnboardingViewModel
+    @EnvironmentObject private var screenController: ScreenController
 
     public var body: some View {
-        NavigationView {
-
             VStack {
                 HStack {
                     Spacer()
                     Button { viewModel.send(.getStartedCloseTapped) } label: { Image.close }
-                    .padding(Constants.buttonPadding)
+                    .padding(EdgeInsets(top: 0,
+                                        leading: Constants.buttonPadding,
+                                        bottom: Constants.buttonPadding,
+                                        trailing: Constants.buttonPadding))
                 }
 
                 Spacer()
@@ -36,8 +38,8 @@ public struct GetStartedOnboardingView: View {
                         .multilineTextAlignment(.center)
                         .padding(Constants.subtitlePadding)
 
-                    NavigationLink {
-                        DefaultBrowserOnboardingView(viewModel: viewModel)
+                    Button {
+                        withAnimation { screenController.open(.default) }
                     } label: {
                         Text(viewModel.config.buttonTitle)
                             .font(.body16Bold)
@@ -62,11 +64,9 @@ public struct GetStartedOnboardingView: View {
                     .edgesIgnoringSafeArea(.all)
             )
             .navigationBarHidden(true)
-        }
-        .onAppear {
-            viewModel.send(.getStartedAppeared)
-        }
-        .navigationViewStyle(StackNavigationViewStyle())
+            .onAppear {
+                viewModel.send(.getStartedAppeared)
+            }
     }
 
     private struct Constants {
