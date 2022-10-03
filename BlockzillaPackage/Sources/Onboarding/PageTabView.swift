@@ -5,21 +5,19 @@
 import SwiftUI
 
 @available(iOS 14.0, *)
-public struct PageTabView: View {
+public struct PageTabView<Page: View>: View {
 
-    let pages: [AnyView]
+    let content: () -> Page
     @StateObject private var screenController = ScreenController()
 
-    public init(pages: [AnyView]) {
-        self.pages = pages
+    public init(@ViewBuilder content: @escaping () -> Page) {
+        self.content = content
         stylePageControl()
     }
 
     public var body: some View {
         TabView(selection: $screenController.activeScreen) {
-            ForEach(pages.indices, id: \.self) { index in
-                pages[index].tag(Screen.allCases[index])
-            }
+            content()
         }
         .environmentObject(screenController)
         .tabViewStyle(.page(indexDisplayMode: .always))
@@ -35,6 +33,11 @@ public struct PageTabView: View {
 @available(iOS 14.0, *)
 struct PageViewStyle_Previews: PreviewProvider {
     static var previews: some View {
-        PageTabView(pages: [AnyView]())
+        PageTabView {
+            Text("Get Started Screen")
+                .tag(Screen.getStarted)
+            Text("Default Screen")
+                .tag(Screen.default)
+        }
     }
 }

@@ -4,7 +4,7 @@
 
 import SwiftUI
 
-enum Screen: CaseIterable {
+public enum Screen: CaseIterable {
     case getStarted
     case `default`
 }
