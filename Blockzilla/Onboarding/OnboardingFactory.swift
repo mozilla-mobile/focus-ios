@@ -71,12 +71,7 @@ class OnboardingFactory {
                         telemetry(.defaultBrowserAppeared)
                     }
                 })
-            let controller = PortraitHostingController(rootView: PageTabView {
-                GetStartedOnboardingView(viewModel: onboardingViewModel)
-                    .tag(Screen.getStarted)
-                DefaultBrowserOnboardingView(viewModel: onboardingViewModel)
-                    .tag(Screen.default)
-            })
+            let controller = PortraitHostingController(rootView: OnboardingView(viewModel: onboardingViewModel))
             controller.modalPresentationStyle = UIDevice.current.userInterfaceIdiom == .phone ? .overFullScreen : .formSheet
             controller.isModalInPresentation = true
             return controller

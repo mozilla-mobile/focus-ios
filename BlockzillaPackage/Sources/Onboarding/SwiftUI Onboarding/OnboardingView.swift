@@ -5,21 +5,21 @@
 import SwiftUI
 
 @available(iOS 14.0, *)
-public struct PageTabView<Page: View>: View {
+public struct OnboardingView: View {
+    @ObservedObject var viewModel: OnboardingViewModel
 
-    let content: () -> Page
-    @StateObject private var screenController = ScreenController()
-
-    public init(@ViewBuilder content: @escaping () -> Page) {
-        self.content = content
+    public init(viewModel: OnboardingViewModel) {
+        self.viewModel = viewModel
         stylePageControl()
     }
 
     public var body: some View {
-        TabView(selection: $screenController.activeScreen) {
-            content()
+        TabView(selection: $viewModel.activeScreen) {
+            GetStartedOnboardingView(viewModel: viewModel)
+                .tag(Screen.getStarted)
+            DefaultBrowserOnboardingView(viewModel: viewModel)
+                .tag(Screen.default)
         }
-        .environmentObject(screenController)
         .tabViewStyle(.page(indexDisplayMode: .always))
         .ignoresSafeArea()
     }
@@ -31,13 +31,8 @@ public struct PageTabView<Page: View>: View {
 }
 
 @available(iOS 14.0, *)
-struct PageViewStyle_Previews: PreviewProvider {
+struct OnboardingView_Previews: PreviewProvider {
     static var previews: some View {
-        PageTabView {
-            Text("Get Started Screen")
-                .tag(Screen.getStarted)
-            Text("Default Screen")
-                .tag(Screen.default)
-        }
+        OnboardingView(viewModel: .dummy)
     }
 }

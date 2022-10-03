@@ -4,15 +4,14 @@
 
 import SwiftUI
 
-public struct GetStartedOnboardingView: View {
+struct GetStartedOnboardingView: View {
+    @ObservedObject var viewModel: OnboardingViewModel
+
     public init(viewModel: OnboardingViewModel) {
         self.viewModel = viewModel
     }
 
-    @ObservedObject var viewModel: OnboardingViewModel
-    @EnvironmentObject private var screenController: ScreenController
-
-    public var body: some View {
+    var body: some View {
             VStack {
                 HStack {
                     Spacer()
@@ -39,7 +38,7 @@ public struct GetStartedOnboardingView: View {
                         .padding(Constants.subtitlePadding)
 
                     Button {
-                        withAnimation { screenController.open(.default) }
+                        withAnimation { viewModel.open(.default) }
                     } label: {
                         Text(viewModel.config.buttonTitle)
                             .font(.body16Bold)

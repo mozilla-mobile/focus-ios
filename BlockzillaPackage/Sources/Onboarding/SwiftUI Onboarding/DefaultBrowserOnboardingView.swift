@@ -4,14 +4,14 @@
 
 import SwiftUI
 
-public struct DefaultBrowserOnboardingView: View {
+struct DefaultBrowserOnboardingView: View {
     @ObservedObject var viewModel: OnboardingViewModel
 
-    public init(viewModel: OnboardingViewModel) {
+    init(viewModel: OnboardingViewModel) {
         self.viewModel = viewModel
     }
 
-    public var body: some View {
+    var body: some View {
         VStack {
             HStack {
                 Spacer()
