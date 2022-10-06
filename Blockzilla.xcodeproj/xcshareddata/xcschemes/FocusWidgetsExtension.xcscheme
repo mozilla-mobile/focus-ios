@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1340"
+   LastUpgradeVersion = "1400"
    wasCreatedForAppExtension = "YES"
    version = "2.0">
    <BuildAction
@@ -15,7 +15,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E56FB76B28C0DF96005CF1B9"
+               BlueprintIdentifier = "C824D2D428EEBF9000DEA5DE"
                BuildableName = "FocusWidgetsExtension.appex"
                BlueprintName = "FocusWidgetsExtension"
                ReferencedContainer = "container:Blockzilla.xcodeproj">
@@ -38,7 +38,7 @@
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "FocusDebug"
+      buildConfiguration = "FocusRelease"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
@@ -46,7 +46,7 @@
       </Testables>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "FocusDebug"
+      buildConfiguration = "FocusRelease"
       selectedDebuggerIdentifier = ""
       selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
       launchStyle = "0"
@@ -62,7 +62,7 @@
          BundleIdentifier = "com.apple.springboard">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E56FB76B28C0DF96005CF1B9"
+            BlueprintIdentifier = "C824D2D428EEBF9000DEA5DE"
             BuildableName = "FocusWidgetsExtension.appex"
             BlueprintName = "FocusWidgetsExtension"
             ReferencedContainer = "container:Blockzilla.xcodeproj">
@@ -96,12 +96,11 @@
       </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "FocusDebug"
+      buildConfiguration = "FocusRelease"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES"
-      askForAppToLaunch = "Yes"
       launchAutomaticallySubstyle = "2">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
@@ -115,7 +114,7 @@
       </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "FocusDebug">
+      buildConfiguration = "FocusRelease">
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "FocusRelease"
