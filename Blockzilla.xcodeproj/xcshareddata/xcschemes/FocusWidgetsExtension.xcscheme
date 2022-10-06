@@ -16,8 +16,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C824D2D428EEBF9000DEA5DE"
-               BuildableName = "FocusWidgetsExtension.appex"
-               BlueprintName = "FocusWidgetsExtension"
+               BuildableName = "WidgetsExtension.appex"
+               BlueprintName = "WidgetsExtension"
                ReferencedContainer = "container:Blockzilla.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -38,7 +38,7 @@
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "FocusRelease"
+      buildConfiguration = "FocusDebug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
@@ -46,7 +46,7 @@
       </Testables>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "FocusRelease"
+      buildConfiguration = "FocusDebug"
       selectedDebuggerIdentifier = ""
       selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
       launchStyle = "0"
@@ -63,8 +63,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C824D2D428EEBF9000DEA5DE"
-            BuildableName = "FocusWidgetsExtension.appex"
-            BlueprintName = "FocusWidgetsExtension"
+            BuildableName = "WidgetsExtension.appex"
+            BlueprintName = "WidgetsExtension"
             ReferencedContainer = "container:Blockzilla.xcodeproj">
          </BuildableReference>
       </RemoteRunnable>

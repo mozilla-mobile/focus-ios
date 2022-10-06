@@ -36,8 +36,8 @@ struct FocusWidgetsEntryView : View {
 }
 
 @main
-struct FocusWidgets: Widget {
-    let kind: String = "FocusWidgets"
+struct Widgets: Widget {
+    let kind: String = "Widgets"
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in

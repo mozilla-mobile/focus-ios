@@ -80,9 +80,9 @@
 		C817A35922CE73B4002529FF /* LockProtected.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35622CE73B4002529FF /* LockProtected.swift */; };
 		C824D2D628EEBF9100DEA5DE /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E56FB76D28C0DF96005CF1B9 /* WidgetKit.framework */; };
 		C824D2D728EEBF9100DEA5DE /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E56FB76F28C0DF96005CF1B9 /* SwiftUI.framework */; };
-		C824D2DA28EEBF9B00DEA5DE /* FocusWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = C824D2D928EEBF9B00DEA5DE /* FocusWidgets.swift */; };
+		C824D2DA28EEBF9B00DEA5DE /* Widgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = C824D2D928EEBF9B00DEA5DE /* Widgets.swift */; };
 		C824D2DC28EEBF9D00DEA5DE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C824D2DB28EEBF9D00DEA5DE /* Assets.xcassets */; };
-		C824D2E028EEBF9D00DEA5DE /* FocusWidgetsExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = C824D2D528EEBF9100DEA5DE /* FocusWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C824D2E028EEBF9D00DEA5DE /* WidgetsExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = C824D2D528EEBF9100DEA5DE /* WidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C824D2E828EEC75400DEA5DE /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D392887E1BC5E47E0016A9A0 /* UIConstants.swift */; };
 		C824D2E928EEC77500DEA5DE /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E251FA1DAF0668005918DC /* AppInfo.swift */; };
 		C824D2EA28EEC79000DEA5DE /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35C11461E04AADA005FFFEF /* AppConfig.swift */; };
@@ -307,7 +307,7 @@
 				745DC5E41F39221100661635 /* ShareExtension.appex in Embed App Extensions */,
 				166E4C0721347D150029E2A5 /* FocusIntentExtension.appex in Embed App Extensions */,
 				E4BF2DF51BACE92400DA9D68 /* ContentBlocker.appex in Embed App Extensions */,
-				C824D2E028EEBF9D00DEA5DE /* FocusWidgetsExtension.appex in Embed App Extensions */,
+				C824D2E028EEBF9D00DEA5DE /* WidgetsExtension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -649,8 +649,8 @@
 		C817A35422CE73B4002529FF /* Deferred.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Deferred.h; sourceTree = "<group>"; };
 		C817A35522CE73B4002529FF /* ReadWriteLock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadWriteLock.swift; sourceTree = "<group>"; };
 		C817A35622CE73B4002529FF /* LockProtected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockProtected.swift; sourceTree = "<group>"; };
-		C824D2D528EEBF9100DEA5DE /* FocusWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FocusWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		C824D2D928EEBF9B00DEA5DE /* FocusWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusWidgets.swift; sourceTree = "<group>"; };
+		C824D2D528EEBF9100DEA5DE /* WidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		C824D2D928EEBF9B00DEA5DE /* Widgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Widgets.swift; sourceTree = "<group>"; };
 		C824D2DB28EEBF9D00DEA5DE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C824D2DD28EEBF9D00DEA5DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C82F45F228193628000D7D84 /* TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
@@ -1281,14 +1281,14 @@
 			path = Deferred;
 			sourceTree = "<group>";
 		};
-		C824D2D828EEBF9B00DEA5DE /* FocusWidgets */ = {
+		C824D2D828EEBF9B00DEA5DE /* Widgets */ = {
 			isa = PBXGroup;
 			children = (
-				C824D2D928EEBF9B00DEA5DE /* FocusWidgets.swift */,
+				C824D2D928EEBF9B00DEA5DE /* Widgets.swift */,
 				C824D2DB28EEBF9D00DEA5DE /* Assets.xcassets */,
 				C824D2DD28EEBF9D00DEA5DE /* Info.plist */,
 			);
-			path = FocusWidgets;
+			path = Widgets;
 			sourceTree = "<group>";
 		};
 		C8337DE32710898800093D42 /* Tracking Protection */ = {
@@ -1698,7 +1698,7 @@
 				745DC5DB1F39221100661635 /* OpenInFocus */,
 				D8E0155D1FCF409F00CA3B9F /* ClientTests */,
 				166E4C0121347D150029E2A5 /* FocusIntentExtension */,
-				C824D2D828EEBF9B00DEA5DE /* FocusWidgets */,
+				C824D2D828EEBF9B00DEA5DE /* Widgets */,
 				D77FE464056F274978E025ED /* Frameworks */,
 				E4BF2DD41BACE8CA00DA9D68 /* Products */,
 				D33A1A391BC476D40003D929 /* Shared */,
@@ -1717,7 +1717,7 @@
 				745DC5DA1F39221100661635 /* ShareExtension.appex */,
 				D8E0155C1FCF409F00CA3B9F /* ClientTests.xctest */,
 				166E4C0021347D150029E2A5 /* FocusIntentExtension.appex */,
-				C824D2D528EEBF9100DEA5DE /* FocusWidgetsExtension.appex */,
+				C824D2D528EEBF9100DEA5DE /* WidgetsExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1847,9 +1847,9 @@
 			productReference = 745DC5DA1F39221100661635 /* ShareExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
-		C824D2D428EEBF9000DEA5DE /* FocusWidgetsExtension */ = {
+		C824D2D428EEBF9000DEA5DE /* WidgetsExtension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C824D2E728EEBFA700DEA5DE /* Build configuration list for PBXNativeTarget "FocusWidgetsExtension" */;
+			buildConfigurationList = C824D2E728EEBFA700DEA5DE /* Build configuration list for PBXNativeTarget "WidgetsExtension" */;
 			buildPhases = (
 				C824D2D128EEBF9000DEA5DE /* Sources */,
 				C824D2D228EEBF9000DEA5DE /* Frameworks */,
@@ -1859,12 +1859,12 @@
 			);
 			dependencies = (
 			);
-			name = FocusWidgetsExtension;
+			name = WidgetsExtension;
 			packageProductDependencies = (
 				C824D2EB28EECADB00DEA5DE /* Onboarding */,
 			);
 			productName = FocusWidgetsExtension;
-			productReference = C824D2D528EEBF9100DEA5DE /* FocusWidgetsExtension.appex */;
+			productReference = C824D2D528EEBF9100DEA5DE /* WidgetsExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		D8E0155B1FCF409F00CA3B9F /* ClientTests */ = {
@@ -2133,7 +2133,7 @@
 				745DC5D91F39221100661635 /* ShareExtension */,
 				D8E0155B1FCF409F00CA3B9F /* ClientTests */,
 				166E4BFF21347D150029E2A5 /* FocusIntentExtension */,
-				C824D2D428EEBF9000DEA5DE /* FocusWidgetsExtension */,
+				C824D2D428EEBF9000DEA5DE /* WidgetsExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -2349,7 +2349,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C824D2DA28EEBF9B00DEA5DE /* FocusWidgets.swift in Sources */,
+				C824D2DA28EEBF9B00DEA5DE /* Widgets.swift in Sources */,
 				C824D2EA28EEC79000DEA5DE /* AppConfig.swift in Sources */,
 				C824D2E828EEC75400DEA5DE /* UIConstants.swift in Sources */,
 				C824D2E928EEC77500DEA5DE /* AppInfo.swift in Sources */,
@@ -2548,7 +2548,7 @@
 		};
 		C824D2DF28EEBF9D00DEA5DE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = C824D2D428EEBF9000DEA5DE /* FocusWidgetsExtension */;
+			target = C824D2D428EEBF9000DEA5DE /* WidgetsExtension */;
 			targetProxy = C824D2DE28EEBF9D00DEA5DE /* PBXContainerItemProxy */;
 		};
 		D8E015621FCF409F00CA3B9F /* PBXTargetDependency */ = {
@@ -4263,8 +4263,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FocusWidgets/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FocusWidgets;
+				INFOPLIST_FILE = Widgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Widgets;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 Mozilla. All rights reserved.";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -4276,7 +4276,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.FocusWidgets;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.Widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4338,8 +4338,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FocusWidgets/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FocusWidgets;
+				INFOPLIST_FILE = Widgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Widgets;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 Mozilla. All rights reserved.";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -4350,7 +4350,7 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.FocusWidgets;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.Widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4415,8 +4415,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FocusWidgets/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FocusWidgets;
+				INFOPLIST_FILE = Widgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Widgets;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 Mozilla. All rights reserved.";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -4427,7 +4427,7 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.iOS.Klar.FocusWidgets;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.Widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.Klar.FocusWidgets";
 				SDKROOT = iphoneos;
@@ -4493,8 +4493,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FocusWidgets/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FocusWidgets;
+				INFOPLIST_FILE = Widgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Widgets;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 Mozilla. All rights reserved.";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -4505,7 +4505,7 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.iOS.Focus.FocusWidgets;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.Widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.Focus.FocusWidgets";
 				SDKROOT = iphoneos;
@@ -4570,8 +4570,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FocusWidgets/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FocusWidgets;
+				INFOPLIST_FILE = Widgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Widgets;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 Mozilla. All rights reserved.";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -4582,7 +4582,7 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.FocusWidgets;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.Widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
@@ -4647,8 +4647,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FocusWidgets/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FocusWidgets;
+				INFOPLIST_FILE = Widgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Widgets;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 Mozilla. All rights reserved.";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -4659,7 +4659,7 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.FocusWidgets;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.Widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
@@ -6118,7 +6118,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = FocusRelease;
 		};
-		C824D2E728EEBFA700DEA5DE /* Build configuration list for PBXNativeTarget "FocusWidgetsExtension" */ = {
+		C824D2E728EEBFA700DEA5DE /* Build configuration list for PBXNativeTarget "WidgetsExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C824D2E128EEBFA700DEA5DE /* KlarDebug */,
