@@ -69,7 +69,7 @@ public struct CardBannerView: View {
     var actionButton: some View {
         Button(action: primaryAction, label: {
             Text(config.actionButtonTitle)
-                .foregroundColor(.white)
+                .foregroundColor(.systemBackground)
                 .font(.body16Bold)
                 .frame(maxWidth: .infinity)
                 .frame(height: .instructionButtonHeight)

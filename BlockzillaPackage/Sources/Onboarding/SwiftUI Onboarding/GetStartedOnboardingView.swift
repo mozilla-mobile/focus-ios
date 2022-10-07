@@ -50,10 +50,10 @@ public struct GetStartedOnboardingView: View {
                         DefaultBrowserOnboardingView(config: defaultBrowserConfig, dismiss: dismissAction)
                     } label: {
                         Text(config.buttonTitle)
+                            .foregroundColor(.systemBackground)
                             .font(.body16Bold)
                             .frame(maxWidth: .infinity)
                             .frame(height: Constants.navigationLinkViewHeight)
-                            .foregroundColor(.white)
                             .background(Color.actionButton)
                             .cornerRadius(Constants.navigationLinkViewCornerRadius)
                             .padding(Constants.buttonPadding)
