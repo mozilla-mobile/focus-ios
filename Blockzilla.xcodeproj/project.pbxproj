@@ -4429,7 +4429,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.Widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.Klar.FocusWidgets";
+				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.Klar.Widgets";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -4507,7 +4507,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.Widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.Focus.FocusWidgets";
+				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.Focus.Widgets";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
