@@ -5,12 +5,10 @@
 import SwiftUI
 
 struct DefaultBrowserOnboardingView: View {
-    private let config: DefaultBrowserViewConfig
-    private let dismiss: () -> Void
+    @ObservedObject var viewModel: OnboardingViewModel
 
-    init(config: DefaultBrowserViewConfig, dismiss: @escaping () -> Void) {
-        self.dismiss = dismiss
-        self.config = config
+    init(viewModel: OnboardingViewModel) {
+        self.viewModel = viewModel
     }
 
     var body: some View {
@@ -18,7 +16,7 @@ struct DefaultBrowserOnboardingView: View {
             HStack {
                 Spacer()
                 Button(action: {
-                    dismiss()
+                    viewModel.send(.defaultBrowserCloseTapped)
                 }, label: {
                     Image.close
                 })
@@ -28,47 +26,50 @@ struct DefaultBrowserOnboardingView: View {
                 .scaledToFit()
                 .frame(maxHeight: .imageMaxHeight)
             VStack {
-                Text(config.title)
+                Text(viewModel.defaultBrowserConfig.title)
                     .bold()
                     .font(.system(size: .titleSize))
                     .multilineTextAlignment(.center)
                     .padding(.bottom, .titleBottomPadding)
                 VStack(alignment: .leading) {
-                    Text(config.firstSubtitle)
+                    Text(viewModel.defaultBrowserConfig.firstSubtitle)
                         .padding(.bottom, .firstSubtitleBottomPadding)
-                    Text(config.secondSubtitle)
+                    Text(viewModel.defaultBrowserConfig.secondSubtitle)
                 }
             }
             .foregroundColor(.secondOnboardingScreenText)
             Spacer()
             Button(action: {
-                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                viewModel.send(.defaultBrowserSettingsTapped)
             }, label: {
-                Text(config.topButtonTitle)
+                Text(viewModel.defaultBrowserConfig.topButtonTitle)
                     .foregroundColor(.systemBackground)
                     .font(.body16Bold)
                     .frame(maxWidth: .infinity)
-                    .frame(height: .navigationLinkViewHeight)
+                    .frame(height: .buttonHeight)
                     .background(Color.secondOnboardingScreenTopButton)
                     .cornerRadius(.radius)
             })
             Button(action: {
-                dismiss()
+                viewModel.send(.defaultBrowserSkip)
             }, label: {
-                Text(config.bottomButtonTitle)
+                Text(viewModel.defaultBrowserConfig.bottomButtonTitle)
                     .foregroundColor(.black)
                     .font(.body16Bold)
                     .frame(maxWidth: .infinity)
-                    .frame(height: .navigationLinkViewHeight)
+                    .frame(height: .buttonHeight)
                     .background(Color.secondOnboardingScreenBottomButton)
                     .cornerRadius(.radius)
             })
             .padding(.bottom, .skipButtonPadding)
         }
-        .padding([.top, .leading, .trailing], .viewPadding)
+        .padding([.leading, .trailing], .viewPadding)
         .navigationBarHidden(true)
         .background(Color.secondOnboardingScreenBackground
-            .edgesIgnoringSafeArea([.top, .bottom]))
+        .edgesIgnoringSafeArea([.top, .bottom]))
+        .onAppear {
+            viewModel.send(.defaultBrowserAppeared)
+        }
     }
 }
 
@@ -76,11 +77,11 @@ fileprivate extension CGFloat {
     static let imageSize: CGFloat = 30
     static let titleSize: CGFloat = 26
     static let titleBottomPadding: CGFloat = 12
-    static let skipButtonPadding: CGFloat = 12
+    static let skipButtonPadding: CGFloat = 20
     static let firstSubtitleBottomPadding: CGFloat = 14
     static let viewPadding: CGFloat = 26
     static let radius: CGFloat = 12
-    static let navigationLinkViewHeight: CGFloat = 44
+    static let buttonHeight: CGFloat = 44
     static let imageMaxHeight: CGFloat = 300
 }
 
@@ -102,12 +103,6 @@ public struct DefaultBrowserViewConfig {
 
 struct SecondOnboardingView_Previews: PreviewProvider {
     static var previews: some View {
-        DefaultBrowserOnboardingView(config: DefaultBrowserViewConfig(
-            title: "Focus isn't like other browsers",
-            firstSubtitle: "We clear your history when you close the app for extra privacy",
-            secondSubtitle: "Make Focus your default to protect your data with every link you open.",
-            topButtonTitle: "Set as Default Browser",
-            bottomButtonTitle: "Skip"),
-            dismiss: {})
+        DefaultBrowserOnboardingView(viewModel: .dummy)
     }
 }
