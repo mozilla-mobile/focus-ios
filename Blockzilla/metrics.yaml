@@ -566,7 +566,7 @@ browser_search:
       - https://github.com/mozilla-mobile/focus-ios/pull/3492
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2023-04-06"
+    expires: "2023-10-06"
 
 onboarding:
   card_view:
