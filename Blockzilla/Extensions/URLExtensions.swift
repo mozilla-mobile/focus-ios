@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Network
 
 private struct ETLDEntry: CustomStringConvertible {
     let entry: String
@@ -302,13 +303,11 @@ extension URL {
     }
 
     public var isIPv4: Bool {
-        let ipv4Pattern = #"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"#
-
-        return host?.range(of: ipv4Pattern, options: .regularExpression) != nil
+        IPv4Address(absoluteString) != nil
     }
 
     public var isIPv6: Bool {
-        return host?.contains(":") ?? false
+        IPv6Address(absoluteString) != nil
     }
 
     /**
