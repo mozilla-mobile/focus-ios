@@ -66,6 +66,24 @@ class SearchInContentTelemetry {
         GleanMetrics.BrowserSearch.inContent["\(provider).organic.none"].add()
     }
 
+    func isFollowOnSearch(clientValue: String?, code: String) -> Bool {
+        if (urlType == .search || urlType == .followOnSearch)
+            && clientValue == code { return true }
+        return false
+    }
+
+    func isOrganicSearch(sClientValue: String?, provider: DefaultSearchEngine) -> Bool {
+        if provider == .google && sClientValue != nil { return true }
+        return false
+    }
+
+    func getClientsValue(url: URL) -> (clientValue: String?, sClientValue: String?) {
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+        let clientValue = components.valueForQuery("client")
+        let sClientValue = components.valueForQuery("sclient")
+        return (clientValue, sClientValue)
+    }
+
     func setSearchType(webView: WKWebView) {
         let provider = DefaultSearchEngine.getProviderForUrl(webView: webView)
         let code = DefaultSearchEngine.getCode(searchEngine: provider, region:
@@ -81,15 +99,12 @@ class SearchInContentTelemetry {
             trackSAP()
         }
         else if let url = webView.url {
-            let components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-            let clientValue = components.valueForQuery("client")
-            let sClientValue = components.valueForQuery("sclient")
-
-            if (urlType == .search || urlType == .followOnSearch) && clientValue == code {
+            let clients = getClientsValue(url: url)
+            if isFollowOnSearch(clientValue: clients.clientValue, code: code) {
                 urlType = .followOnSearch
                 trackSAPFollowOn()
             }
-            else if provider == .google && sClientValue != nil {
+            else if isOrganicSearch(sClientValue: clients.sClientValue, provider: provider) {
                 urlType = .organicSearch
                 trackOrganicSearch()
             }
