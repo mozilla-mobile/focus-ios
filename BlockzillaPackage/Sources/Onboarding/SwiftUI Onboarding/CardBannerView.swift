@@ -65,6 +65,7 @@ public struct CardBannerView: View {
         SearchWidgetView(title: config.widget.title)
             .frame(width: .searchWidgetSize, height: .searchWidgetSize)
             .clipShape(RoundedRectangle(cornerRadius: 20))
+            .colorScheme(.light)
     }
 
     var actionButton: some View {

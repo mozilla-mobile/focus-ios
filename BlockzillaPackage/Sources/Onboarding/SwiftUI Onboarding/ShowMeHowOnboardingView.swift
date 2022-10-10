@@ -56,8 +56,10 @@ public struct ShowMeHowOnboardingView: View {
                         }
                         HStack {
                             Spacer()
-                            SearchWidgetView(title: config.widgetText).frame(width: .searchWidgetSize, height: .searchWidgetSize)
+                            SearchWidgetView(title: config.widgetText)
+                                .frame(width: .searchWidgetSize, height: .searchWidgetSize)
                                 .clipShape(RoundedRectangle(cornerRadius: 20))
+                                .colorScheme(.light)
                             Spacer()
                         }
                     }
