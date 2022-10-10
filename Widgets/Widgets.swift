@@ -5,7 +5,7 @@
 import WidgetKit
 import SwiftUI
 import Intents
-import Onboarding
+import Widget
 
 struct Provider: TimelineProvider {
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> Void) {
