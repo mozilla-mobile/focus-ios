@@ -4,31 +4,22 @@
 
 import SwiftUI
 
-public struct GetStartedOnboardingView: View {
-    private let config: GetStartedOnboardingViewConfig
-    private let defaultBrowserConfig: DefaultBrowserViewConfig
-    private let dismissAction: () -> Void
+struct GetStartedOnboardingView: View {
+    @ObservedObject var viewModel: OnboardingViewModel
 
-    public init(config: GetStartedOnboardingViewConfig,
-                defaultBrowserConfig: DefaultBrowserViewConfig,
-                dismissAction: @escaping () -> Void) {
-        self.config = config
-        self.defaultBrowserConfig = defaultBrowserConfig
-        self.dismissAction = dismissAction
+    public init(viewModel: OnboardingViewModel) {
+        self.viewModel = viewModel
     }
 
-    public var body: some View {
-        NavigationView {
-
+    var body: some View {
             VStack {
                 HStack {
                     Spacer()
-                    Button {
-                        dismissAction()
-                    } label: {
-                        Image.close
-                    }
-                    .padding(Constants.buttonPadding)
+                    Button { viewModel.send(.getStartedCloseTapped) } label: { Image.close }
+                    .padding(EdgeInsets(top: 0,
+                                        leading: Constants.buttonPadding,
+                                        bottom: Constants.buttonPadding,
+                                        trailing: Constants.buttonPadding))
                 }
 
                 Spacer()
@@ -36,29 +27,32 @@ public struct GetStartedOnboardingView: View {
                 VStack {
                     Image.logo
 
-                    Text(config.title)
+                    Text(viewModel.config.title)
                         .font(.title28Bold)
                         .multilineTextAlignment(.center)
                         .padding(Constants.titlePadding)
 
-                    Text(config.subtitle)
+                    Text(viewModel.config.subtitle)
                         .font(.title20)
                         .multilineTextAlignment(.center)
                         .padding(Constants.subtitlePadding)
 
-                    NavigationLink {
-                        DefaultBrowserOnboardingView(config: defaultBrowserConfig, dismiss: dismissAction)
+                    Button {
+                        withAnimation { viewModel.open(.default) }
                     } label: {
-                        Text(config.buttonTitle)
+                        Text(viewModel.config.buttonTitle)
+                            .foregroundColor(.systemBackground)
                             .font(.body16Bold)
                             .frame(maxWidth: .infinity)
                             .frame(height: Constants.navigationLinkViewHeight)
-                            .foregroundColor(.white)
                             .background(Color.actionButton)
                             .cornerRadius(Constants.navigationLinkViewCornerRadius)
                             .padding(Constants.buttonPadding)
 
                     }
+                    .simultaneousGesture(TapGesture().onEnded({ _ in
+                        viewModel.send(.getStartedButtonTapped)
+                    }))
                 }
                 Spacer()
             }
@@ -69,8 +63,9 @@ public struct GetStartedOnboardingView: View {
                     .edgesIgnoringSafeArea(.all)
             )
             .navigationBarHidden(true)
-        }
-        .navigationViewStyle(StackNavigationViewStyle())
+            .onAppear {
+                viewModel.send(.getStartedAppeared)
+            }
     }
 
     private struct Constants {
@@ -96,17 +91,20 @@ public struct GetStartedOnboardingViewConfig {
 
 struct FirstOnboardingView_Previews: PreviewProvider {
     static var previews: some View {
-        GetStartedOnboardingView(
-            config: GetStartedOnboardingViewConfig(
-                title: "Welcome to Firefox Focus",
-                subtitle: "Fast. Private. No distractions.",
-                buttonTitle: "Get Started"),
-            defaultBrowserConfig: DefaultBrowserViewConfig(
-                title: "Focus isn't like other browsers",
-                firstSubtitle: "We clear your history when you close the app for extra privacy",
-                secondSubtitle: "Make Focus your default to protect your data with every link you open.",
-                topButtonTitle: "Set as Default Browser",
-                bottomButtonTitle: "Skip"),
-            dismissAction: {})
+        GetStartedOnboardingView(viewModel: .dummy)
     }
+}
+
+internal extension OnboardingViewModel {
+    static let dummy: OnboardingViewModel = .init(
+        config: GetStartedOnboardingViewConfig(
+            title: "Welcome to Firefox Focus",
+            subtitle: "Fast. Private. No distractions.",
+            buttonTitle: "Get Started"),
+        defaultBrowserConfig: DefaultBrowserViewConfig(
+            title: "Focus isn't like other browsers",
+            firstSubtitle: "We clear your history when you close the app for extra privacy",
+            secondSubtitle: "Make Focus your default to protect your data with every link you open.",
+            topButtonTitle: "Set as Default Browser",
+            bottomButtonTitle: "Skip"), dismissAction: {}, telemetry: { _ in })
 }

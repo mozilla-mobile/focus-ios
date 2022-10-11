@@ -58,6 +58,7 @@ class BrowserViewController: UIViewController {
     private var onboardingEventsHandler: OnboardingEventsHandling
     private var themeManager: ThemeManager
     private let shortcutsPresenter = ShortcutsPresenter()
+    private let onboardingTelemetry = OnboardingTelemetryHelper()
 
     private enum URLBarScrollState {
         case collapsed
@@ -394,14 +395,14 @@ class BrowserViewController: UIViewController {
                 onboardingEventsHandler.route = nil
                 onboardingEventsHandler.send(.enterHome)
             }
-            return OnboardingFactory.make(onboardingType: onboardingType, dismissAction: dismissOnboarding)
+                return OnboardingFactory.make(onboardingType: onboardingType, dismissAction: dismissOnboarding, telemetry: onboardingTelemetry.handle(event:))
 
         case .trackingProtection:
             return nil
 
         case .widget:
             urlBar.dismiss()
-            let cardBanner = UIHostingController(
+            let cardBanner = PortraitHostingController(
                 rootView: CardBannerView(
                     config: .init(
                         title: UIConstants.strings.widgetOnboardingCardTitle,
@@ -413,10 +414,12 @@ class BrowserViewController: UIViewController {
                     primaryAction: { [weak self] in
                         self?.onboardingEventsHandler.route = nil
                         self?.onboardingEventsHandler.send(.widgetDismissed)
+                        self?.onboardingTelemetry.handle(event: .widgetPrimaryButtonTapped)
                     },
                     dismiss: { [weak self] in
                         self?.onboardingEventsHandler.route = nil
                         self?.urlBarViewModel.selectionState = .selected
+                        self?.onboardingTelemetry.handle(event: .widgetCloseTapped)
                     }))
             cardBanner.view.backgroundColor = .clear
             cardBanner.modalPresentationStyle = .overFullScreen
@@ -430,8 +433,7 @@ class BrowserViewController: UIViewController {
                 dismiss: { self.onboardingEventsHandler.route = nil }
             )
         case .widgetTutorial:
-            let controller = UINavigationController(
-                rootViewController: UIHostingController(
+            let controller = PortraitHostingController(
                 rootView: ShowMeHowOnboardingView(
                     config: .init(
                         title: UIConstants.strings.titleShowMeHowOnboardingV2,
@@ -440,8 +442,8 @@ class BrowserViewController: UIViewController {
                         subtitleStep3: UIConstants.strings.subtitleStepThreeShowMeHowOnboardingV2,
                         buttonText: UIConstants.strings.buttonTextShowMeHowOnboardingV2,
                         widgetText: UIConstants.strings.searchInApp),
-                    dismissAction: { self.onboardingEventsHandler.route = nil })))
-            controller.modalPresentationStyle = .formSheet
+                    dismissAction: { self.onboardingEventsHandler.route = nil }))
+            controller.modalPresentationStyle = UIDevice.current.userInterfaceIdiom == .phone ? .overFullScreen : .formSheet
             controller.isModalInPresentation = true
             return controller
         }
@@ -461,6 +463,15 @@ class BrowserViewController: UIViewController {
                     if let controller = controller(for: route) {
                         self.present(controller, animated: true)
                         presentedController = controller
+                        switch route {
+                        case .onboarding(let onboardingType):
+                            if onboardingType == .v2 {
+                                onboardingTelemetry.handle(event: .getStartedAppeared)
+                            }
+                        case .widget:
+                            onboardingTelemetry.handle(event: .widgetCardAppeared)
+                        default: break
+                        }
                     }
                 }
             }
@@ -919,8 +930,9 @@ class BrowserViewController: UIViewController {
     func submit(url: URL) {
         // If this is the first navigation, show the browser and the toolbar.
         guard isViewLoaded else { initialUrl = url; return }
+        GleanMetrics.BrowserSearch.searchCount["action"].add()
         shortcutsPresenter.shortcutsState = .none
-
+        SearchInContentTelemetry.shouldSetUrlTypeSearch = true
         if isIPadRegularDimensions {
             urlBar.snp.makeConstraints { make in
                 make.width.equalTo(view)
@@ -1178,7 +1190,7 @@ class BrowserViewController: UIViewController {
     }
 }
 
-extension BrowserViewController: MenuItemProvider { }
+extension BrowserViewController: MenuItemProvider {}
 
 extension BrowserViewController: UIDropInteractionDelegate {
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
