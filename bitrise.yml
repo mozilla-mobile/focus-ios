@@ -80,8 +80,7 @@ workflows:
         - content: |
             set -euxo pipefail
             echo "-- build-for-testing --"
-            mkdir DerivedDataKlar
-            xcodebuild "-project" "/Users/vagrant/git/Blockzilla.xcodeproj" "-scheme" "Klar" -configuration "KlarDebug" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 14,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedDataKlar" | xcpretty | tee xcodebuild_test.log
+            xcodebuild "-project" "/Users/vagrant/git/Blockzilla.xcodeproj" "-scheme" "Klar" -configuration "KlarDebug" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 14,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_test.log
     - script@1.1:
         title: Compress Derived Data
         is_always_run: true
@@ -104,18 +103,15 @@ workflows:
             "$BITRISE_SOURCE_DIR/Blockzilla/" \
             "$BITRISE_SOURCE_DIR/XCUITest" \
             "$BITRISE_SOURCE_DIR/ClientTests" \
-            "$BITRISE_SOURCE_DIR/DerivedDataKlar/Build/Products/KlarDebug-iphonesimulator/Firefox\ Klar.app" \
-            "$BITRISE_SOURCE_DIR/DerivedDataKlar/Build/Products/KlarDebug-iphonesimulator/XCUITest-Runner.app" \
-            "$BITRISE_SOURCE_DIR/DerivedDataKlar/Build/Products/Klar_FullFunctionalTests_iphonesimulator16.0-arm64" \
-            "$BITRISE_SOURCE_DIR/DerivedDataKlar/Build/Products/Klar_SmokeTest_iphonesimulator16.0-arm64" \
-            "$BITRISE_SOURCE_DIR/DerivedDataKlar/Build/Products/Klar_UnitTest_iphonesimulator16.0-arm64" \
-            "$BITRISE_SOURCE_DIR/DerivedDataKlar/Build/Products/KlarDebug-iphonesimulator/" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/KlarDebug-iphonesimulator/Firefox\ Klar.app" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/KlarDebug-iphonesimulator/XCUITest-Runner.app" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Klar_FullFunctionalTests_iphonesimulator16.0-arm64" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Klar_SmokeTest_iphonesimulator16.0-arm64" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Klar_UnitTest_iphonesimulator16.0-arm64" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/KlarDebug-iphonesimulator/" \
     - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
-    - deploy-to-bitrise-io@2:
-        inputs:
-        - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedDataKlar.zip"
     meta:
       bitrise.io:
         stack: osx-xcode-14.0.x
