@@ -17,7 +17,7 @@ class BaseTestCaseL10n: XCTestCase {
             let key = String(parts[1])
             if testRunningFirstRun.contains(key) {
             // for the current test name, add the db fixture used
-                app.launchArguments = ["testMode"]
+            // Do nothing and Run Onboarding
             } else {
                 app.launchArguments = ["testMode", "disableFirstRunUI"]
             }
@@ -150,7 +150,7 @@ class BaseTestCaseL10n: XCTestCase {
 
     func openSettings() {
         app.buttons["HomeView.settingsButton"].tap()
-        app.collectionViews.buttons.element(boundBy: 1).tap()
+        app.collectionViews.buttons.element(boundBy: 2).tap()
     }
 }
 

@@ -21,7 +21,7 @@ enum AppPhase {
 }
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate {
     private lazy var authenticationManager = AuthenticationManager()
     @Published private var appPhase: AppPhase = .notRunning
 
@@ -58,15 +58,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
     private var cancellables = Set<AnyCancellable>()
     private lazy var shortcutManager: ShortcutsManager = .init()
 
-    private lazy var onboardingEventsHandler = OnboardingEventsHandler(
-        alwaysShowOnboarding: {
-            UserDefaults.standard.bool(forKey: OnboardingConstants.alwaysShowOnboarding)
-        },
-        shouldShowNewOnboarding: { [unowned self] in
+    private lazy var onboardingEventsHandler: OnboardingEventsHandling = {
+        var shouldShowNewOnboarding: () -> Bool = { [unowned self] in
             #if DEBUG
-            if AppInfo.isTesting() {
-                return false
-            }
             if UserDefaults.standard.bool(forKey: OnboardingConstants.ignoreOnboardingExperiment) {
                 return !UserDefaults.standard.bool(forKey: OnboardingConstants.showOldOnboarding)
             } else {
@@ -75,19 +69,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
             #else
             return nimbus.shouldShowNewOnboarding
             #endif
-        },
-        getShownTips: {
-            return UserDefaults
-                .standard
-                .data(forKey: OnboardingConstants.shownTips)
-                .flatMap {
-                    try? JSONDecoder().decode(Set<OnboardingEventsHandler.ToolTipRoute>.self, from: $0)
-                } ?? []
-        }, setShownTips: { tips in
-            let data = try? JSONEncoder().encode(tips)
-            UserDefaults.standard.set(data, forKey: OnboardingConstants.shownTips)
-        }
-    )
+    }
+        guard !AppInfo.isTesting() else { return TestOnboarding() }
+        return OnboardingFactory.makeOnboardingEventsHandler(shouldShowNewOnboarding)
+    }()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         appPhase = .didFinishLaunching
@@ -191,60 +176,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
-            return false
+        guard let navigation = NavigationPath(url: url) else { return false }
+        let navigationHandler = NavigationPath.handle(application, navigation: navigation, with: browserViewController)
+
+        if case .text = navigation {
+            queuedString = navigationHandler as? String
         }
-
-        guard let urlTypes = Bundle.main.object(forInfoDictionaryKey: "CFBundleURLTypes") as? [AnyObject],
-            let urlSchemes = urlTypes.first?["CFBundleURLSchemes"] as? [String] else {
-                // Something very strange has happened; org.mozilla.Blockzilla should be the zeroeth URL type.
-                return false
-        }
-
-        guard let scheme = components.scheme,
-            let host = url.host,
-            urlSchemes.contains(scheme) else {
-            return false
-        }
-
-        let query = getQuery(url: url)
-        let isHttpScheme = scheme == "http" || scheme == "https"
-
-        if isHttpScheme {
-            if application.applicationState == .active {
-                // If we are active then we can ask the BVC to open the new tab right away.
-                // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
-                browserViewController.submit(url: url)
-            } else {
-                queuedUrl = url
-            }
-        } else if host == "open-url" {
-            let urlString = unescape(string: query["url"]) ?? ""
-            guard let url = URL(string: urlString) else { return false }
-
-            if application.applicationState == .active {
-                // If we are active then we can ask the BVC to open the new tab right away.
-                // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
-                browserViewController.submit(url: url)
-            } else {
-                queuedUrl = url
-            }
-        } else if host == "open-text" || isHttpScheme {
-            let text = unescape(string: query["text"]) ?? ""
-
-            // If we are active then we can ask the BVC to open the new tab right away.
-            // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
-            if application.applicationState == .active {
-                if let fixedUrl = URIFixup.getURL(entry: text) {
-                    browserViewController.submit(url: fixedUrl)
-                } else {
-                    browserViewController.submit(text: text)
-                }
-            } else {
-                queuedString = text
-            }
-        } else if host == "glean" {
-            Glean.shared.handleCustomUrl(url: url)
+        else if case .url = navigation {
+            queuedUrl = navigationHandler as? URL
         }
 
         return true
@@ -268,32 +207,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
             browserViewController.resetBrowser(hidePreviousSession: true)
         }
         return true
-    }
-
-    public func getQuery(url: URL) -> [String: String] {
-        var results = [String: String]()
-        let keyValues =  url.query?.components(separatedBy: "&")
-
-        if keyValues?.count ?? 0 > 0 {
-            for pair in keyValues! {
-                let kv = pair.components(separatedBy: "=")
-                if kv.count > 1 {
-                    results[kv[0]] = kv[1]
-                }
-            }
-        }
-
-        return results
-    }
-
-    public func unescape(string: String?) -> String? {
-        guard let string = string else {
-            return nil
-        }
-        return CFURLCreateStringByReplacingPercentEscapes(
-            kCFAllocatorDefault,
-            string as CFString,
-            "" as CFString) as String
     }
 
     private func authenticateWithBiometrics() {
@@ -448,6 +361,8 @@ extension AppDelegate {
         let defaultSearchEngineProvider = activeSearchEngine.isCustom ? "custom" : activeSearchEngine.name
         telemetryConfig.defaultSearchEngineProvider = defaultSearchEngineProvider
 
+        GleanMetrics.Search.defaultEngine.set(defaultSearchEngineProvider)
+
         telemetryConfig.measureUserDefaultsSetting(forKey: SearchEngineManager.prefKeyEngine, withDefaultValue: defaultSearchEngineProvider)
         telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockAds, withDefaultValue: Settings.getToggle(.blockAds))
         telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockAnalytics, withDefaultValue: Settings.getToggle(.blockAnalytics))
@@ -510,6 +425,12 @@ extension AppDelegate {
             NSLog("Failed to setup experimentation: \(error)")
         }
     }
+}
+
+extension AppDelegate: ModalDelegate {
+    func dismiss(animated: Bool = true) {
+        window?.rootViewController?.presentedViewController?.dismiss(animated: animated)
+    }
 
     func presentModal(viewController: UIViewController, animated: Bool) {
         window?.rootViewController?.present(viewController, animated: animated, completion: nil)
@@ -527,4 +448,5 @@ extension AppDelegate {
 protocol ModalDelegate {
     func presentModal(viewController: UIViewController, animated: Bool)
     func presentSheet(viewController: UIViewController)
+    func dismiss(animated: Bool)
 }
