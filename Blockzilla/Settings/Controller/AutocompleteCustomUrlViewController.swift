@@ -26,7 +26,7 @@ class AutocompleteCustomUrlViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
+
     private let emptyStateView = UIView()
 
     private let customAutocompleteSource: CustomAutocompleteSource
