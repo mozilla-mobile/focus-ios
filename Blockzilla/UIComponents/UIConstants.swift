@@ -338,7 +338,7 @@ struct UIConstants {
 
         // Quick Action - Small Size - Gallery View
         static let quickActionGalleryDescription = NSLocalizedString(
-                "TodayWidget.QuickActionGalleryDescription",
+                "TodayWidget.QuickActionGallery.Description",
                 value: "Start a private search in %@ with your default search engine.",
                 comment: "Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar).")
 
