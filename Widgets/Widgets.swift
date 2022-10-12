@@ -44,7 +44,7 @@ struct Widgets: Widget {
             FocusWidgetsEntryView(entry: entry)
         }
         .configurationDisplayName(UIConstants.strings.quickActionsGalleryTitle)
-        .description(String(format: UIConstants.strings.quickActionGalleryDescriptionV2, String.appNameForBundle))
+        .description(String(format: UIConstants.strings.quickActionGalleryDescription, String.appNameForBundle))
         .supportedFamilies([.systemSmall])
     }
 }
