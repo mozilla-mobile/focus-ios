@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import SwiftUI
+import Widget
 
 @available(iOS 14, *)
 public struct CardBannerView: View {
@@ -51,12 +52,10 @@ public struct CardBannerView: View {
     var header: some View {
         VStack(spacing: .verticalSpacing) {
             Text(config.title)
-                .foregroundColor(.black)
                 .font(.title3)
                 .fontWeight(.bold)
 
             Text(config.subtitle)
-                .foregroundColor(.black)
                 .multilineTextAlignment(.center)
         }
         .padding(.horizontal)
@@ -66,12 +65,13 @@ public struct CardBannerView: View {
         SearchWidgetView(title: config.widget.title)
             .frame(width: .searchWidgetSize, height: .searchWidgetSize)
             .clipShape(RoundedRectangle(cornerRadius: 20))
+            .colorScheme(.light)
     }
 
     var actionButton: some View {
         Button(action: primaryAction, label: {
             Text(config.actionButtonTitle)
-                .foregroundColor(.white)
+                .foregroundColor(.systemBackground)
                 .font(.body16Bold)
                 .frame(maxWidth: .infinity)
                 .frame(height: .instructionButtonHeight)
@@ -83,7 +83,7 @@ public struct CardBannerView: View {
 
     var cardBackground: some View {
         RoundedRectangle(cornerRadius: 16)
-            .foregroundColor(.white)
+            .foregroundColor(Color.secondOnboardingScreenBackground)
             .shadow(radius: .cardShadowRadius)
     }
 
