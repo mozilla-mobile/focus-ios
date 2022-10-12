@@ -6,14 +6,19 @@ import UIKit
 
 class SafariInstructionsViewController: UIViewController {
     private let detector = BlockerEnabledDetector()
-    private let disabledStateView = DisabledStateView()
+
+    private lazy var disabledStateView: DisabledStateView = {
+        let disabledStateView = DisabledStateView()
+        disabledStateView.translatesAutoresizingMaskIntoConstraints = false
+        return disabledStateView
+    }()
 
     override func viewDidLoad() {
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.tintColor = .accent
 
         view.addSubview(disabledStateView)
-        disabledStateView.translatesAutoresizingMaskIntoConstraints = false
+
         NSLayoutConstraint.activate([
             disabledStateView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             disabledStateView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -33,24 +38,34 @@ class SafariInstructionsViewController: UIViewController {
 }
 
 private class DisabledStateView: UIView {
-    init() {
-        super.init(frame: CGRect.zero)
 
+    private lazy var label: SmartLabel = {
         let label = SmartLabel()
         label.text = UIConstants.strings.safariInstructionsNotEnabled
         label.textColor = .red
-        label.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .vertical)
-        addSubview(label)
-
-        let instructionsView = InstructionsView()
-        addSubview(instructionsView)
-
-        let image = UIImageView(image: #imageLiteral(resourceName: "enabled-no"))
-        addSubview(image)
-
-        image.translatesAutoresizingMaskIntoConstraints = false
+        label.setContentCompressionResistancePriority(.required, for: .vertical)
         label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private lazy var instructionsView: InstructionsView = {
+        let instructionsView = InstructionsView()
         instructionsView.translatesAutoresizingMaskIntoConstraints = false
+        return instructionsView
+    }()
+
+    private lazy var image: UIImageView = {
+        let image = UIImageView(image: #imageLiteral(resourceName: "enabled-no"))
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }()
+
+    init() {
+        super.init(frame: CGRect.zero)
+
+        addSubview(label)
+        addSubview(instructionsView)
+        addSubview(image)
 
         NSLayoutConstraint.activate([
             image.centerXAnchor.constraint(equalTo: self.centerXAnchor),

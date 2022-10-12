@@ -71,6 +71,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = .systemGroupedBackground
         tableView.estimatedRowHeight = 44
         tableView.separatorStyle = .singleLine
@@ -94,8 +95,6 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
     private func configureTableView() {
         view.addSubview(tableView)
         view.backgroundColor = .systemGroupedBackground
-
-        tableView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -190,6 +189,7 @@ private class AboutHeaderView: UIView {
 
     private lazy var logo: UIImageView = {
         let logo = UIImageView(image: AppInfo.config.wordmark)
+        logo.translatesAutoresizingMaskIntoConstraints = false
         return logo
     }()
 
@@ -220,6 +220,7 @@ private class AboutHeaderView: UIView {
         aboutParagraph.textColor = .secondaryLabel
         aboutParagraph.font = .footnote14
         aboutParagraph.numberOfLines = 0
+        aboutParagraph.translatesAutoresizingMaskIntoConstraints = false
         return aboutParagraph
     }()
 
@@ -228,6 +229,7 @@ private class AboutHeaderView: UIView {
         label.text = "\(AppInfo.shortVersion) (\(AppInfo.buildNumber)) / \(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
         label.font = .footnote14
         label.textColor = .secondaryLabel
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
@@ -238,6 +240,7 @@ private class AboutHeaderView: UIView {
         learnMoreButton.setTitleColor(.accent, for: .highlighted)
         learnMoreButton.titleLabel?.font = .footnote14
         learnMoreButton.addTarget(self, action: #selector(didPressLearnMore), for: .touchUpInside)
+        learnMoreButton.translatesAutoresizingMaskIntoConstraints = false
         return learnMoreButton
     }()
 
@@ -260,11 +263,6 @@ private class AboutHeaderView: UIView {
     }
 
     private func configureConstraints() {
-
-        logo.translatesAutoresizingMaskIntoConstraints = false
-        versionNumber.translatesAutoresizingMaskIntoConstraints = false
-        aboutParagraph.translatesAutoresizingMaskIntoConstraints = false
-        learnMoreButton.translatesAutoresizingMaskIntoConstraints = false
 
         let learnMoreButtonTopConstraint = learnMoreButton.topAnchor.constraint(greaterThanOrEqualTo: aboutParagraph.bottomAnchor)
         learnMoreButtonTopConstraint.priority = .required

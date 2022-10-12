@@ -19,11 +19,108 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     private let leftMargin = UIConstants.layout.settingsItemOffset
     private let rowHeight = UIConstants.layout.addSearchEngineInputHeight
 
-    private var nameInput = UITextField()
-    private var templateInput = UITextView()
-    private var templatePlaceholderLabel = UITextView()
-    private var scrollView =  UIScrollView()
-    private var container = UIView()
+    private lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.showsVerticalScrollIndicator = false
+        return scrollView
+    }()
+
+    private lazy var container: UIView = {
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        return container
+    }()
+
+    private lazy var nameLabel: SmartLabel = {
+        let nameLabel = SmartLabel()
+        nameLabel.text = UIConstants.strings.NameToDisplay
+        nameLabel.textColor = .primaryText
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        return nameLabel
+    }()
+
+    private lazy var nameInput: UITextField = {
+        let nameInput = UITextField()
+        nameInput.attributedPlaceholder = NSAttributedString(string: UIConstants.strings.AddSearchEngineName, attributes: [.foregroundColor: UIColor.primaryText.withAlphaComponent(0.65)])
+        nameInput.backgroundColor = .secondarySystemGroupedBackground
+        nameInput.textColor = .primaryText
+        nameInput.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: rowHeight))
+        nameInput.leftViewMode = .always
+        nameInput.font = .body15
+        nameInput.accessibilityIdentifier = "nameInput"
+        nameInput.autocorrectionType = .no
+        nameInput.tintColor = .accent
+        nameInput.layer.cornerRadius = UIConstants.layout.settingsCellCornerRadius
+        nameInput.translatesAutoresizingMaskIntoConstraints = false
+        return nameInput
+    }()
+
+    private lazy var templateContainer: UIView = {
+        let templateContainer = UIView()
+        templateContainer.backgroundColor = .systemGroupedBackground
+        templateContainer.translatesAutoresizingMaskIntoConstraints = false
+        return templateContainer
+    }()
+
+    private lazy var templatePlaceholderLabel: UITextView = {
+        let templatePlaceholderLabel = UITextView()
+        templatePlaceholderLabel.backgroundColor = .secondarySystemGroupedBackground
+        templatePlaceholderLabel.textColor = .primaryText.withAlphaComponent(0.65)
+        templatePlaceholderLabel.text = UIConstants.strings.AddSearchEngineTemplatePlaceholder
+        templatePlaceholderLabel.font = .body15
+        templatePlaceholderLabel.contentInset = UIEdgeInsets(top: -2, left: 3, bottom: 0, right: 0)
+        templatePlaceholderLabel.isEditable = false
+        templatePlaceholderLabel.layer.cornerRadius = UIConstants.layout.settingsCellCornerRadius
+        templatePlaceholderLabel.layer.masksToBounds = true
+        templatePlaceholderLabel.translatesAutoresizingMaskIntoConstraints = false
+        return templatePlaceholderLabel
+    }()
+
+    private lazy var templateLabel: SmartLabel = {
+        let templateLabel = SmartLabel()
+        templateLabel.text = UIConstants.strings.AddSearchEngineTemplate
+        templateLabel.textColor = .primaryText
+        templateLabel.translatesAutoresizingMaskIntoConstraints = false
+        return templateLabel
+    }()
+
+    private lazy var templateInput: UITextView = {
+        let templateInput = UITextView()
+        templateInput.backgroundColor = .clear
+        templateInput.textColor = .primaryText
+        templateInput.keyboardType = .URL
+        templateInput.font = .body15
+        templateInput.accessibilityIdentifier = "templateInput"
+        templateInput.autocapitalizationType = .none
+        templateInput.keyboardAppearance = .dark
+        templateInput.autocorrectionType = .no
+        templateInput.tintColor = .accent
+        templateInput.textContainerInset = UIEdgeInsets(top: 5, left: 5, bottom: 0, right: 0)
+        templateInput.layer.cornerRadius = UIConstants.layout.settingsCellCornerRadius
+        templateInput.translatesAutoresizingMaskIntoConstraints = false
+        return templateInput
+    }()
+
+    private lazy var exampleLabel: SmartLabel = {
+        let exampleLabel = SmartLabel()
+        let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor: UIColor.accent])
+        let subtitle = NSMutableAttributedString(string: UIConstants.strings.AddSearchEngineTemplateExample2, attributes: [.foregroundColor: UIColor.secondaryText])
+        let space = NSAttributedString(string: " ", attributes: [:])
+        subtitle.append(space)
+        subtitle.append(learnMore)
+        exampleLabel.numberOfLines = 1
+        exampleLabel.attributedText = subtitle
+        exampleLabel.font = .footnote12
+        exampleLabel.adjustsFontSizeToFitWidth = true
+        exampleLabel.minimumScaleFactor = 0.5
+        exampleLabel.isUserInteractionEnabled = true
+        exampleLabel.translatesAutoresizingMaskIntoConstraints = false
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(learnMoreTapped))
+        exampleLabel.addGestureRecognizer(tapGesture)
+        return exampleLabel
+    }()
+
     private var containerBottomConstraint = NSLayoutConstraint()
 
     init(delegate: AddSearchEngineDelegate, searchEngineManager: SearchEngineManager) {
@@ -49,93 +146,17 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
 
     private func setupUI() {
         view.backgroundColor = .systemGroupedBackground
+
         view.addSubview(scrollView)
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
-        ])
-
-        scrollView.showsVerticalScrollIndicator = false
-
-        let nameLabel = SmartLabel()
-        nameLabel.text = UIConstants.strings.NameToDisplay
-        nameLabel.textColor = .primaryText
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(container)
         container.addSubview(nameLabel)
-
-        nameInput.attributedPlaceholder = NSAttributedString(string: UIConstants.strings.AddSearchEngineName, attributes: [.foregroundColor: UIColor.primaryText.withAlphaComponent(0.65)])
-        nameInput.backgroundColor = .secondarySystemGroupedBackground
-        nameInput.textColor = .primaryText
-        nameInput.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: rowHeight))
-        nameInput.leftViewMode = .always
-        nameInput.font = .body15
-        nameInput.accessibilityIdentifier = "nameInput"
-        nameInput.autocorrectionType = .no
-        nameInput.tintColor = .accent
-        nameInput.layer.cornerRadius = UIConstants.layout.settingsCellCornerRadius
-        nameInput.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(nameInput)
-
-        let templateContainer = UIView()
-        templateContainer.backgroundColor = .systemGroupedBackground
-        templateContainer.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(templateContainer)
-
-        templatePlaceholderLabel.backgroundColor = .secondarySystemGroupedBackground
-        templatePlaceholderLabel.textColor = .primaryText.withAlphaComponent(0.65)
-        templatePlaceholderLabel.text = UIConstants.strings.AddSearchEngineTemplatePlaceholder
-        templatePlaceholderLabel.font = .body15
-        templatePlaceholderLabel.contentInset = UIEdgeInsets(top: -2, left: 3, bottom: 0, right: 0)
-        templatePlaceholderLabel.isEditable = false
-        templatePlaceholderLabel.layer.cornerRadius = UIConstants.layout.settingsCellCornerRadius
-        templatePlaceholderLabel.layer.masksToBounds = true
-        templatePlaceholderLabel.translatesAutoresizingMaskIntoConstraints = false
         templateContainer.addSubview(templatePlaceholderLabel)
-
-        let templateLabel = SmartLabel()
-        templateLabel.text = UIConstants.strings.AddSearchEngineTemplate
-        templateLabel.textColor = .primaryText
-        templateLabel.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(templateLabel)
-
-        templateInput.backgroundColor = .clear
-        templateInput.textColor = .primaryText
-        templateInput.keyboardType = .URL
-        templateInput.font = .body15
-        templateInput.accessibilityIdentifier = "templateInput"
-        templateInput.autocapitalizationType = .none
-        templateInput.keyboardAppearance = .dark
-        templateInput.autocorrectionType = .no
-        templateInput.tintColor = .accent
-        templateInput.textContainerInset = UIEdgeInsets(top: 5, left: 5, bottom: 0, right: 0)
-        templateInput.layer.cornerRadius = UIConstants.layout.settingsCellCornerRadius
-        templateInput.translatesAutoresizingMaskIntoConstraints = false
         templateContainer.addSubview(templateInput)
-
-        let exampleLabel = SmartLabel()
-        let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor: UIColor.accent])
-        let subtitle = NSMutableAttributedString(string: UIConstants.strings.AddSearchEngineTemplateExample2, attributes: [.foregroundColor: UIColor.secondaryText])
-        let space = NSAttributedString(string: " ", attributes: [:])
-        subtitle.append(space)
-        subtitle.append(learnMore)
-
-        exampleLabel.numberOfLines = 1
-        exampleLabel.attributedText = subtitle
-        exampleLabel.font = .footnote12
-        exampleLabel.adjustsFontSizeToFitWidth = true
-        exampleLabel.minimumScaleFactor = 0.5
-        exampleLabel.isUserInteractionEnabled = true
-        exampleLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(learnMoreTapped))
-        exampleLabel.addGestureRecognizer(tapGesture)
         container.addSubview(exampleLabel)
 
-        scrollView.addSubview(container)
-        container.translatesAutoresizingMaskIntoConstraints = false
         containerBottomConstraint = container.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
 
         NSLayoutConstraint.activate([
@@ -145,6 +166,11 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
             container.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             container.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             container.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
+
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
 
             nameLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: UIConstants.layout.addSearchEngineInputOffset),
             nameLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: leftMargin),

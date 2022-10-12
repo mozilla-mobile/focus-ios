@@ -13,6 +13,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         tableView.separatorStyle = .singleLine
         tableView.allowsSelection = true
         tableView.estimatedRowHeight = UITableView.automaticDimension
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
 
@@ -34,7 +35,6 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         navigationController?.navigationBar.tintColor = .accent
 
         view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),

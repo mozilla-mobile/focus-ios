@@ -49,6 +49,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.separatorStyle = .singleLine
         tableView.allowsSelection = true
         tableView.estimatedRowHeight = UITableView.automaticDimension
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
 
@@ -165,7 +166,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         navigationItem.rightBarButtonItem = doneButton
 
         view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),

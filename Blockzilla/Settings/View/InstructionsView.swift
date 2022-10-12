@@ -5,34 +5,45 @@
 import UIKit
 
 class InstructionsView: UIView {
+
+    private lazy var settingsInstructionView: InstructionView = {
+        let instructionView = InstructionView(text: UIConstants.strings.safariInstructionsOpen, image: #imageLiteral(resourceName: "instructions-cog"))
+        instructionView.translatesAutoresizingMaskIntoConstraints = false
+        return instructionView
+    }()
+
+    private lazy var safariInstructionView: InstructionView = {
+        let safariInstructionView = InstructionView(text: UIConstants.strings.safariInstructionsContentBlockers, image: #imageLiteral(resourceName: "instructions-safari"))
+        safariInstructionView.translatesAutoresizingMaskIntoConstraints = false
+        return safariInstructionView
+    }()
+
+    private lazy var enableInstructionView: InstructionView = {
+        let enableInstructionView = InstructionView(text: String(format: UIConstants.strings.safariInstructionsEnable, AppInfo.productName), image: #imageLiteral(resourceName: "instructions-switch"))
+        enableInstructionView.translatesAutoresizingMaskIntoConstraints = false
+        return enableInstructionView
+    }()
+
     init() {
         super.init(frame: CGRect.zero)
 
-        let settingsInstruction = InstructionView(text: UIConstants.strings.safariInstructionsOpen, image: #imageLiteral(resourceName: "instructions-cog"))
-        let safariInstruction = InstructionView(text: UIConstants.strings.safariInstructionsContentBlockers, image: #imageLiteral(resourceName: "instructions-safari"))
-        let enableInstruction = InstructionView(text: String(format: UIConstants.strings.safariInstructionsEnable, AppInfo.productName), image: #imageLiteral(resourceName: "instructions-switch"))
-
-        settingsInstruction.translatesAutoresizingMaskIntoConstraints = false
-        safariInstruction.translatesAutoresizingMaskIntoConstraints = false
-        enableInstruction.translatesAutoresizingMaskIntoConstraints = false
-
-        addSubview(settingsInstruction)
-        addSubview(safariInstruction)
-        addSubview(enableInstruction)
+        addSubview(settingsInstructionView)
+        addSubview(safariInstructionView)
+        addSubview(enableInstructionView)
 
         NSLayoutConstraint.activate([
-            settingsInstruction.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            settingsInstruction.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            settingsInstruction.topAnchor.constraint(equalTo: self.topAnchor),
+            settingsInstructionView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            settingsInstructionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            settingsInstructionView.topAnchor.constraint(equalTo: self.topAnchor),
 
-            safariInstruction.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            safariInstruction.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            safariInstruction.topAnchor.constraint(equalTo: settingsInstruction.bottomAnchor, constant: UIConstants.layout.settingsViewOffset),
+            safariInstructionView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            safariInstructionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            safariInstructionView.topAnchor.constraint(equalTo: settingsInstructionView.bottomAnchor, constant: UIConstants.layout.settingsViewOffset),
 
-            enableInstruction.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            enableInstruction.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            enableInstruction.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            enableInstruction.topAnchor.constraint(equalTo: safariInstruction.bottomAnchor, constant: UIConstants.layout.settingsViewOffset)
+            enableInstructionView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            enableInstructionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            enableInstructionView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            enableInstructionView.topAnchor.constraint(equalTo: safariInstructionView.bottomAnchor, constant: UIConstants.layout.settingsViewOffset)
 
         ])
     }
@@ -43,21 +54,30 @@ class InstructionsView: UIView {
 }
 
 private class InstructionView: UIView {
-    init(text: String, image: UIImage) {
-        super.init(frame: CGRect.zero)
 
+    private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = image
-        addSubview(imageView)
+        return imageView
+    }()
 
+    private lazy var label: SmartLabel = {
         let label = SmartLabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = text
         label.textColor = .defaultFont
         label.numberOfLines = 0
         label.font = .body16Medium
-        label.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .vertical)
+        label.setContentCompressionResistancePriority(.required, for: .vertical)
+        return label
+    }()
+
+    init(text: String, image: UIImage) {
+        super.init(frame: CGRect.zero)
+
+        imageView.image = image
+        addSubview(imageView)
+
+        label.text = text
         addSubview(label)
 
         NSLayoutConstraint.activate([

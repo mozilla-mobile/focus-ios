@@ -6,8 +6,28 @@ import UIKit
 import Telemetry
 
 class AutocompleteCustomUrlViewController: UIViewController {
+
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .insetGrouped)
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.backgroundView = emptyStateView
+        tableView.backgroundView?.isHidden = true
+        return tableView
+    }()
+
+    private lazy var label: SmartLabel = {
+        let label = SmartLabel()
+        label.text = UIConstants.strings.autocompleteEmptyState
+        label.font = .footnote12
+        label.textColor = .primaryText
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private let emptyStateView = UIView()
-    private let tableView = UITableView(frame: .zero, style: .insetGrouped)
 
     private let customAutocompleteSource: CustomAutocompleteSource
     private var domains: [String] { return customAutocompleteSource.getSuggestions() }
@@ -20,18 +40,7 @@ class AutocompleteCustomUrlViewController: UIViewController {
         navigationItem.rightBarButtonItem?.accessibilityIdentifier = "editButton"
 
         view.addSubview(tableView)
-
-        let label = SmartLabel()
-        label.text = UIConstants.strings.autocompleteEmptyState
-        label.font = .footnote12
-        label.textColor = .primaryText
-        label.textAlignment = .center
         emptyStateView.addSubview(label)
-        tableView.backgroundView = emptyStateView
-        tableView.backgroundView?.isHidden = true
-
-        label.translatesAutoresizingMaskIntoConstraints = false
-        tableView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
