@@ -80,7 +80,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         $appPhase.sink { [unowned self] phase in
             switch phase {
             case .didFinishLaunching, .willEnterForeground:
-                authenticateWithBiometrics()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+                    self.splashView.state = .default
+                    self.authenticateWithBiometrics()
+                })
 
             case .didBecomeActive:
                 if authenticationManager.authenticationState == .loggedin { hideSplashView() }
