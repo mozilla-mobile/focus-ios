@@ -55,7 +55,8 @@ private class DisabledStateView: UIView {
     }()
 
     private lazy var image: UIImageView = {
-        let image = UIImageView(image: #imageLiteral(resourceName: "enabled-no"))
+        let disableStateIcon = UIImage(named: "enabled-no")!
+        let image = UIImageView(image: disableStateIcon)
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()

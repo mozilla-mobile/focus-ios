@@ -7,19 +7,22 @@ import UIKit
 class InstructionsView: UIView {
 
     private lazy var settingsInstructionView: InstructionView = {
-        let instructionView = InstructionView(text: UIConstants.strings.instructionToOpenSafari, image: #imageLiteral(resourceName: "instructions-cog"))
+        let settingsIcon = UIImage(named: "instructions-cog")!
+        let instructionView = InstructionView(text: UIConstants.strings.instructionToOpenSafari, image: settingsIcon)
         instructionView.translatesAutoresizingMaskIntoConstraints = false
         return instructionView
     }()
 
     private lazy var safariInstructionView: InstructionView = {
-        let safariInstructionView = InstructionView(text: UIConstants.strings.safariInstructionsExtensions, image: #imageLiteral(resourceName: "instructions-safari"))
+        let safariIcon = UIImage(named: "instructions-safari")!
+        let safariInstructionView = InstructionView(text: UIConstants.strings.safariInstructionsExtensions, image: safariIcon)
         safariInstructionView.translatesAutoresizingMaskIntoConstraints = false
         return safariInstructionView
     }()
 
     private lazy var enableInstructionView: InstructionView = {
-        let enableInstructionView = InstructionView(text: String(format: UIConstants.strings.safariInstructionsEnable, AppInfo.productName), image: #imageLiteral(resourceName: "instructions-switch"))
+        let toggleIcon = UIImage(named: "instructions-switch")!
+        let enableInstructionView = InstructionView(text: String(format: UIConstants.strings.safariInstructionsEnable, AppInfo.productName), image: toggleIcon)
         enableInstructionView.translatesAutoresizingMaskIntoConstraints = false
         return enableInstructionView
     }()
