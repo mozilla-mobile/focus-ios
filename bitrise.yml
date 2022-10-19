@@ -6,7 +6,7 @@ project_type: ios
 
 trigger_map:
 - push_branch: main
-  workflow: runParallelTests
+  pipeline: pipeline_build_and_run_tests
 - pull_request_source_branch: "*"
   pipeline: pipeline_build_and_run_tests
 - tag: "*"
