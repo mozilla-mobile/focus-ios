@@ -76,6 +76,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 if authenticationManager.authenticationState == .loggedin { hidePrivacyProtectionWindow() }
 
             case .willResignActive:
+                guard privacyProtectionWindow == nil else { return }
                 showPrivacyProtectionWindow()
 
             case .didEnterBackgroundkground:
