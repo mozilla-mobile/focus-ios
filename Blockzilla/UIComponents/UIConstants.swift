@@ -43,7 +43,7 @@ struct UIConstants {
         static let urlBarIconInset: CGFloat = 8
         static let settingsItemInset: CGFloat = 16
         static let settingsItemOffset: CGFloat = 26
-        static let settingsPadding: CGFloat = 30
+        static let settingsPadding: CGFloat = 24
         static let settingsViewOffset: CGFloat = 50
         static let settingsVerticalOffset: CGFloat = 8
         static let settingsHorizontalOffset: CGFloat = 20
@@ -66,6 +66,8 @@ struct UIConstants {
         static let urlBarButtonImageSize: CGFloat = 20
         static let urlBarButtonTargetSize: CGFloat = 40
         static let settingsTextPadding: CGFloat = 10
+        static let settingsInstructionImageViewWidth: CGFloat = 40
+        static let settingsInstructionImageViewHeight: CGFloat = 30
         static let siriUrlSectionPadding: CGFloat = 40
         static let settingsSectionHeight: CGFloat = 44
         static let suggestionViewCornerRadius: CGFloat = 10
@@ -208,8 +210,10 @@ struct UIConstants {
         static let light = NSLocalizedString("Settings.lightTheme", value: "Light", comment: "Light theme option in settings menu")
         static let dark = NSLocalizedString("Settings.darkTheme", value: "Dark", comment: "Dark theme option in settings menu")
         static let safariInstructionsContentBlockers = NSLocalizedString("Safari.instructionsContentBlockers", value: "Tap Safari, then select Content Blockers", comment: "Label for instructions to enable Safari, shown when enabling Safari Integration in Settings")
+        static let safariInstructionsExtensions = NSLocalizedString("Safari.instructionsExtentions", value: "Select Safari, then select Extensions", comment: "Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings")
         static let safariInstructionsEnable = NSLocalizedString("Safari.instructionsEnable", value: "Enable %@", comment: "Label for instructions to enable Safari, shown when enabling Safari Integration in Settings")
         static let safariInstructionsOpen = NSLocalizedString("Safari.instructionsOpen", value: "Open Settings App", comment: "Label for instructions to enable Safari, shown when enabling Safari Integration in Settings")
+        static let instructionToOpenSafari = NSLocalizedString("Safari.openInstruction", value: "Open device settings", comment: "Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings")
         static let safariInstructionsNotEnabled = String(format: NSLocalizedString("Safari.instructionsNotEnabled", value: "%@ is not enabled.", comment: "Error label when the blocker is not enabled, shown in the intro and main app when disabled"), AppInfo.productName)
         static let searchButton = NSLocalizedString("URL.searchLabel", value: "Search for %@", comment: "Label displayed for search button when typing in the URL bar")
         static let findInPageButton = NSLocalizedString("URL.findOnPageLabel", value: "Find in page: %@", comment: "Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page.")
@@ -347,22 +351,11 @@ struct UIConstants {
         static let subtitleStepThreeShowMeHowOnboardingV2 = String(format: NSLocalizedString("ShowMeHowOnboarding.SubtitleStepThree.V2", value: "Search for %@. Then choose a widget.", comment: "This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar)"), AppInfo.shortProductName)
         static let buttonTextShowMeHowOnboardingV2 = NSLocalizedString("ShowMeHowOnboarding.ButtonText.V2", value: "Done", comment: "This is the button text that is displayed in the Show Me How Onboarding Screen")
 
-        // Quick Action - Small Size - Gallery View
-        static let quickActionGalleryDescription = NSLocalizedString(
-                "TodayWidget.QuickActionGalleryDescription",
-                value: "Start a private search in %@ with your default search engine.",
-                comment: "Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar).")
-
-        public static let quickActionsGalleryTitle = NSLocalizedString(
-                "TodayWidget.QuickActionsGalleryTitle",
-                value: "Quick Actions",
-                comment: "Quick Actions title when widget enters edit mode")
-
-        public static let searchInAppFormat = NSLocalizedString(
-                "TodayWidget.SearchInApp",
-                value: "Search in %@",
-                comment: "Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar).")
-        public static let searchInApp = String(format: searchInAppFormat, AppInfo.shortProductName)
+        static let searchInAppFormatInstruction = NSLocalizedString(
+            "TodayWidget.SearchInApp.Instruction",
+            value: "Search in %@",
+            comment: "Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar).")
+        static let searchInAppInstruction = String(format: searchInAppFormatInstruction, AppInfo.shortProductName)
 
         public static let widgetOnboardingCardTitle = NSLocalizedString(
                 "WidgetOnboardingCard.Title",

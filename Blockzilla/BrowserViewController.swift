@@ -392,7 +392,7 @@ class BrowserViewController: UIViewController {
                         subtitle: UIConstants.strings.widgetOnboardingCardSubtitle,
                         actionButtonTitle: UIConstants.strings.widgetOnboardingCardActionButton,
                         widget: .init(
-                            title: UIConstants.strings.searchInApp
+                            title: UIConstants.strings.searchInAppInstruction
                         )),
                     primaryAction: { [weak self] in
                         self?.onboardingEventsHandler.route = nil
@@ -424,7 +424,7 @@ class BrowserViewController: UIViewController {
                         subtitleStep2: UIConstants.strings.subtitleStepTwoShowMeHowOnboardingV2,
                         subtitleStep3: UIConstants.strings.subtitleStepThreeShowMeHowOnboardingV2,
                         buttonText: UIConstants.strings.buttonTextShowMeHowOnboardingV2,
-                        widgetText: UIConstants.strings.searchInApp),
+                        widgetText: UIConstants.strings.searchInAppInstruction),
                     dismissAction: { self.onboardingEventsHandler.route = nil }))
             controller.modalPresentationStyle = UIDevice.current.userInterfaceIdiom == .phone ? .overFullScreen : .formSheet
             controller.isModalInPresentation = true
@@ -1063,7 +1063,7 @@ class BrowserViewController: UIViewController {
             let actionMenu = UIMenu(options: .displayInline, children: actionItems)
             actions.append(actionMenu)
 
-            var shareItems: [UIMenuElement?] = [UIAction(copyItem)]
+            var shareItems: [UIMenuElement?] = [UIAction(copyItem(url: url))]
             shareItems.append(UIAction(sharePageItem(for: utils, sender: sender)))
             shareItems.append(openInFireFoxItem(for: url).map(UIAction.init))
             shareItems.append(openInChromeItem(for: url).map(UIAction.init))
@@ -1095,7 +1095,7 @@ class BrowserViewController: UIViewController {
                 : PhotonActionSheetItem(requestDesktopItem)
             )
 
-            var shareItems: [PhotonActionSheetItem?] = [PhotonActionSheetItem(copyItem)]
+            var shareItems: [PhotonActionSheetItem?] = [PhotonActionSheetItem(copyItem(url: url))]
             shareItems.append(PhotonActionSheetItem(sharePageItem(for: utils, sender: sender)))
             shareItems.append(openInFireFoxItem(for: url).map(PhotonActionSheetItem.init))
             shareItems.append(openInChromeItem(for: url).map(PhotonActionSheetItem.init))
@@ -1991,8 +1991,8 @@ extension BrowserViewController: MenuActionable {
         submit(url: URL(forSupportTopic: .whatsNew))
     }
 
-    func showCopy() {
-        urlBar.copyToClipboard()
+    func showCopy(url: URL) {
+        UIPasteboard.general.string = url.absoluteString
         Toast(text: UIConstants.strings.copyURLToast).show()
 
         GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "copy_url"))

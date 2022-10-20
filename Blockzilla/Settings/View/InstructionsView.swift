@@ -7,19 +7,22 @@ import UIKit
 class InstructionsView: UIView {
 
     private lazy var settingsInstructionView: InstructionView = {
-        let instructionView = InstructionView(text: UIConstants.strings.safariInstructionsOpen, image: #imageLiteral(resourceName: "instructions-cog"))
+        let settingsIcon = UIImage(named: "instructions-cog")!
+        let instructionView = InstructionView(text: UIConstants.strings.instructionToOpenSafari, image: settingsIcon)
         instructionView.translatesAutoresizingMaskIntoConstraints = false
         return instructionView
     }()
 
     private lazy var safariInstructionView: InstructionView = {
-        let safariInstructionView = InstructionView(text: UIConstants.strings.safariInstructionsContentBlockers, image: #imageLiteral(resourceName: "instructions-safari"))
+        let safariIcon = UIImage(named: "instructions-safari")!
+        let safariInstructionView = InstructionView(text: UIConstants.strings.safariInstructionsExtensions, image: safariIcon)
         safariInstructionView.translatesAutoresizingMaskIntoConstraints = false
         return safariInstructionView
     }()
 
     private lazy var enableInstructionView: InstructionView = {
-        let enableInstructionView = InstructionView(text: String(format: UIConstants.strings.safariInstructionsEnable, AppInfo.productName), image: #imageLiteral(resourceName: "instructions-switch"))
+        let toggleIcon = UIImage(named: "instructions-switch")!
+        let enableInstructionView = InstructionView(text: String(format: UIConstants.strings.safariInstructionsEnable, AppInfo.productName), image: toggleIcon)
         enableInstructionView.translatesAutoresizingMaskIntoConstraints = false
         return enableInstructionView
     }()
@@ -57,6 +60,7 @@ private class InstructionView: UIView {
 
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -64,9 +68,8 @@ private class InstructionView: UIView {
     private lazy var label: SmartLabel = {
         let label = SmartLabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .defaultFont
         label.numberOfLines = 0
-        label.font = .body16Medium
+        label.font = .body18
         label.setContentCompressionResistancePriority(.required, for: .vertical)
         return label
     }()
@@ -75,17 +78,16 @@ private class InstructionView: UIView {
         super.init(frame: CGRect.zero)
 
         imageView.image = image
-        addSubview(imageView)
-
         label.text = text
+        addSubview(imageView)
         addSubview(label)
 
         NSLayoutConstraint.activate([
             imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             imageView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            imageView.heightAnchor.constraint(equalToConstant: image.size.height),
-            imageView.widthAnchor.constraint(equalToConstant: image.size.width),
-
+            imageView.heightAnchor.constraint(equalToConstant: UIConstants.layout.settingsInstructionImageViewHeight),
+            imageView.widthAnchor.constraint(equalToConstant: UIConstants.layout.settingsInstructionImageViewWidth),
+            
             label.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: UIConstants.layout.settingsPadding),
             label.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             label.topAnchor.constraint(equalTo: self.topAnchor),

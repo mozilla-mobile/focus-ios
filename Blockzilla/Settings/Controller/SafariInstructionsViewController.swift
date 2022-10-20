@@ -20,7 +20,7 @@ class SafariInstructionsViewController: UIViewController {
         view.addSubview(disabledStateView)
 
         NSLayoutConstraint.activate([
-            disabledStateView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            disabledStateView.topAnchor.constraint(equalTo: view.topAnchor, constant: UIConstants.layout.settingsViewOffset),
             disabledStateView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             disabledStateView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
@@ -42,7 +42,8 @@ private class DisabledStateView: UIView {
     private lazy var label: SmartLabel = {
         let label = SmartLabel()
         label.text = UIConstants.strings.safariInstructionsNotEnabled
-        label.textColor = .red
+        label.textColor = UIColor.extensionNotEnabled
+        label.font = .body18Bold
         label.setContentCompressionResistancePriority(.required, for: .vertical)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -55,7 +56,8 @@ private class DisabledStateView: UIView {
     }()
 
     private lazy var image: UIImageView = {
-        let image = UIImageView(image: #imageLiteral(resourceName: "enabled-no"))
+        let disableStateIcon = UIImage(named: "enabled-no")!
+        let image = UIImageView(image: disableStateIcon)
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
