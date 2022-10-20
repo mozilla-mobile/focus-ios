@@ -52,6 +52,7 @@ class BrowserViewController: UIViewController {
     private var onboardingEventsHandler: OnboardingEventsHandling
     private var themeManager: ThemeManager
     private let shortcutsPresenter = ShortcutsPresenter()
+    private let onboardingTelemetry = OnboardingTelemetryHelper()
 
     private enum URLBarScrollState {
         case collapsed
@@ -377,7 +378,7 @@ class BrowserViewController: UIViewController {
                 onboardingEventsHandler.route = nil
                 onboardingEventsHandler.send(.enterHome)
             }
-            return OnboardingFactory.make(onboardingType: onboardingType, dismissAction: dismissOnboarding)
+                return OnboardingFactory.make(onboardingType: onboardingType, dismissAction: dismissOnboarding, telemetry: onboardingTelemetry.handle(event:))
 
         case .trackingProtection:
             return nil
@@ -391,15 +392,17 @@ class BrowserViewController: UIViewController {
                         subtitle: UIConstants.strings.widgetOnboardingCardSubtitle,
                         actionButtonTitle: UIConstants.strings.widgetOnboardingCardActionButton,
                         widget: .init(
-                            title: UIConstants.strings.searchInApp
+                            title: UIConstants.strings.searchInAppInstruction
                         )),
                     primaryAction: { [weak self] in
                         self?.onboardingEventsHandler.route = nil
                         self?.onboardingEventsHandler.send(.widgetDismissed)
+                        self?.onboardingTelemetry.handle(event: .widgetPrimaryButtonTapped)
                     },
                     dismiss: { [weak self] in
                         self?.onboardingEventsHandler.route = nil
                         self?.urlBar.activateTextField()
+                        self?.onboardingTelemetry.handle(event: .widgetCloseTapped)
                     }))
             cardBanner.view.backgroundColor = .clear
             cardBanner.modalPresentationStyle = .overFullScreen
@@ -421,7 +424,7 @@ class BrowserViewController: UIViewController {
                         subtitleStep2: UIConstants.strings.subtitleStepTwoShowMeHowOnboardingV2,
                         subtitleStep3: UIConstants.strings.subtitleStepThreeShowMeHowOnboardingV2,
                         buttonText: UIConstants.strings.buttonTextShowMeHowOnboardingV2,
-                        widgetText: UIConstants.strings.searchInApp),
+                        widgetText: UIConstants.strings.searchInAppInstruction),
                     dismissAction: { self.onboardingEventsHandler.route = nil }))
             controller.modalPresentationStyle = UIDevice.current.userInterfaceIdiom == .phone ? .overFullScreen : .formSheet
             controller.isModalInPresentation = true
@@ -443,6 +446,15 @@ class BrowserViewController: UIViewController {
                     if let controller = controller(for: route) {
                         self.present(controller, animated: true)
                         presentedController = controller
+                        switch route {
+                        case .onboarding(let onboardingType):
+                            if onboardingType == .v2 {
+                                onboardingTelemetry.handle(event: .getStartedAppeared)
+                            }
+                        case .widget:
+                            onboardingTelemetry.handle(event: .widgetCardAppeared)
+                        default: break
+                        }
                     }
                 }
             }
@@ -852,7 +864,7 @@ class BrowserViewController: UIViewController {
         guard isViewLoaded else { initialUrl = url; return }
         GleanMetrics.BrowserSearch.searchCount["action"].add()
         shortcutsPresenter.shortcutsState = .none
-
+        SearchInContentTelemetry.shouldSetUrlTypeSearch = true
         if isIPadRegularDimensions {
             urlBar.snp.makeConstraints { make in
                 make.width.equalTo(view)
@@ -1051,7 +1063,7 @@ class BrowserViewController: UIViewController {
             let actionMenu = UIMenu(options: .displayInline, children: actionItems)
             actions.append(actionMenu)
 
-            var shareItems: [UIMenuElement?] = [UIAction(copyItem)]
+            var shareItems: [UIMenuElement?] = [UIAction(copyItem(url: url))]
             shareItems.append(UIAction(sharePageItem(for: utils, sender: sender)))
             shareItems.append(openInFireFoxItem(for: url).map(UIAction.init))
             shareItems.append(openInChromeItem(for: url).map(UIAction.init))
@@ -1083,7 +1095,7 @@ class BrowserViewController: UIViewController {
                 : PhotonActionSheetItem(requestDesktopItem)
             )
 
-            var shareItems: [PhotonActionSheetItem?] = [PhotonActionSheetItem(copyItem)]
+            var shareItems: [PhotonActionSheetItem?] = [PhotonActionSheetItem(copyItem(url: url))]
             shareItems.append(PhotonActionSheetItem(sharePageItem(for: utils, sender: sender)))
             shareItems.append(openInFireFoxItem(for: url).map(PhotonActionSheetItem.init))
             shareItems.append(openInChromeItem(for: url).map(PhotonActionSheetItem.init))
@@ -1979,8 +1991,8 @@ extension BrowserViewController: MenuActionable {
         submit(url: URL(forSupportTopic: .whatsNew))
     }
 
-    func showCopy() {
-        urlBar.copyToClipboard()
+    func showCopy(url: URL) {
+        UIPasteboard.general.string = url.absoluteString
         Toast(text: UIConstants.strings.copyURLToast).show()
 
         GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "copy_url"))

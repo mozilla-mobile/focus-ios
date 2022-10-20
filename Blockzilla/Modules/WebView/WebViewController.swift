@@ -84,6 +84,7 @@ class WebViewController: UIViewController, WebController {
     var scrollView: UIScrollView { return browserView.scrollView }
 
     var adsTelemetryHelper = AdsTelemetryHelper()
+    var searchInContentTelemetry: SearchInContentTelemetry?
 
     init(trackingProtectionManager: TrackingProtectionManager) {
         self.trackingProtectionManager = trackingProtectionManager
@@ -298,6 +299,7 @@ class WebViewController: UIViewController, WebController {
 
     override func viewDidLoad() {
         self.browserView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
+        searchInContentTelemetry = SearchInContentTelemetry()
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
@@ -343,6 +345,7 @@ extension WebViewController: WKNavigationDelegate {
         delegate?.webControllerDidStartNavigation(self)
         trackingProtectionManager.trackingProtectionStatus.trackingInformation = TPPageStats()
         currentContentMode = navigation?.effectiveContentMode
+        searchInContentTelemetry?.setSearchType(webView: webView)
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
@@ -520,6 +523,58 @@ extension WebViewController: WKScriptMessageHandler {
                 let currentInfo = trackingProtectionManager.trackingProtectionStatus.trackingInformation
                 trackingProtectionManager.trackingProtectionStatus.trackingInformation = currentInfo.map { $0.create(byAddingListItem: listItem) }
             }
+        }
+    }
+}
+extension WebViewController: WebViewMenuActionable, WebViewItemProvider {
+    func openInDefaultBrowser(url: URL) {
+        UIApplication.shared.open(url, options: [:])
+    }
+
+    func showSharePage(for utils: OpenUtils, sender: UIView) {
+        let shareVC = utils.buildShareViewController()
+
+        // Exact frame dimensions taken from presentPhotonActionSheet
+        shareVC.popoverPresentationController?.sourceView = sender
+        shareVC.popoverPresentationController?.sourceRect =
+        CGRect(
+            x: sender.frame.width/2,
+            y: sender.frame.size.height,
+            width: 1,
+            height: 1
+        )
+
+        shareVC.becomeFirstResponder()
+        self.present(shareVC, animated: true, completion: nil)
+    }
+
+    func showCopy(url: URL) {
+        UIPasteboard.general.string = url.absoluteString
+        Toast(text: UIConstants.strings.copyURLToast).show()
+    }
+
+    func webView(_ webView: WKWebView, contextMenuConfigurationFor elementInfo: WKContextMenuElementInfo) async -> UIContextMenuConfiguration? {
+        guard let url = elementInfo.linkURL else { return nil }
+
+        return UIContextMenuConfiguration(identifier: nil) {
+            let previewViewController = UIViewController()
+            previewViewController.view.isUserInteractionEnabled = false
+            let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)
+
+            previewViewController.view.addSubview(clonedWebView)
+            clonedWebView.snp.makeConstraints { make in
+                make.edges.equalTo(previewViewController.view)
+            }
+
+            clonedWebView.load(URLRequest(url: url))
+
+            return previewViewController
+        } actionProvider: { menu in
+            UIMenu(title: url.absoluteString, children: [
+                UIAction(self.openInDefaultBrowserItem(for: url)),
+                UIAction(self.copyItem(url: url)),
+                UIAction(self.sharePageItem(for: .init(url: url, webViewController: self), sender: self.view))
+            ])
         }
     }
 }
