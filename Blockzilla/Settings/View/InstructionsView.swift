@@ -87,7 +87,7 @@ private class InstructionView: UIView {
             imageView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             imageView.heightAnchor.constraint(equalToConstant: UIConstants.layout.settingsInstructionImageViewHeight),
             imageView.widthAnchor.constraint(equalToConstant: UIConstants.layout.settingsInstructionImageViewWidth),
-            
+
             label.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: UIConstants.layout.settingsPadding),
             label.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             label.topAnchor.constraint(equalTo: self.topAnchor),
