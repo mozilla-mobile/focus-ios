@@ -422,6 +422,21 @@ extension AppDelegate {
         } catch {
             NSLog("Failed to setup experimentation: \(error)")
         }
+
+        guard let nimbus = NimbusWrapper.shared.nimbus else {
+            return
+        }
+
+        AppNimbus.shared.initialize {
+            nimbus
+        }
+
+        NotificationCenter.default.addObserver(
+            forName: Notification.Name.nimbusExperimentsApplied,
+            object: nil,
+            queue: OperationQueue.main) { _ in
+            AppNimbus.shared.invalidateCachedValues()
+        }
     }
 }
 

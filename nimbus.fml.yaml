@@ -1,0 +1,11 @@
+---
+about:
+  description: The root level Feature Manifest for Focus for iOS
+  ios:
+    class: AppNimbus
+    module: Blockzilla
+channels:
+  - developer
+  - beta
+  - release
+features: {}
