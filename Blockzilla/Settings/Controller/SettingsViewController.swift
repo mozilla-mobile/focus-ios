@@ -89,6 +89,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         return themeName
     }
 
+    lazy private var tableViewConstraints = [
+        tableView.topAnchor.constraint(equalTo: view.topAnchor),
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+    ]
+
     private func getSectionIndex(_ section: Section) -> Int? {
         return Section.getSections().firstIndex(where: { $0 == section })
     }
@@ -167,12 +174,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         view.addSubview(tableView)
 
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
+        NSLayoutConstraint.activate(tableViewConstraints)
 
         initializeToggles()
         for (sectionIndex, toggleArray) in toggles {
@@ -206,6 +208,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        tableView.removeConstraints(tableViewConstraints)
+        NSLayoutConstraint.activate(tableViewConstraints)
         DispatchQueue.main.async { [weak self] in
             self?.tableView.reloadData()
         }
