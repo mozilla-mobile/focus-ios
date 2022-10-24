@@ -24,7 +24,7 @@ class NimbusWrapper {
 
     var nimbus: NimbusApi?
 
-    func initialize(enabled: Bool) throws {
+    func initialize(enabled: Bool, isFirstRun: Bool = false) throws {
         let rustLogCallback: LogCallback = { level, tag, message in
             let log = OSLog(subsystem: "org.mozilla.nimbus", category: tag ?? "default")
             switch level {
@@ -51,19 +51,28 @@ class NimbusWrapper {
         let useStagingServer = UserDefaults.standard.bool(forKey: NimbusUseStagingServerDefault)
         let usePreviewCollection = UserDefaults.standard.bool(forKey: NimbusUsePreviewCollectionDefault)
 
-        guard let nimbusServerSettings = NimbusServerSettings.createFromInfoDictionary(useStagingServer: useStagingServer, usePreviewCollection: usePreviewCollection),
-              let nimbusAppSettings = NimbusAppSettings.createFromInfoDictionary() else {
+        guard let nimbusAppSettings = NimbusAppSettings.createFromInfoDictionary() else {
             throw "Failed to load Nimbus settings from Info.plist"
         }
+
+        let nimbusServerSettings = NimbusServerSettings.createFromInfoDictionary(useStagingServer: useStagingServer, usePreviewCollection: usePreviewCollection)
 
         guard let databasePath = Nimbus.defaultDatabasePath() else {
             throw "Failed to determine Nimbus database path"
         }
 
         self.nimbus = try Nimbus.create(nimbusServerSettings, appSettings: nimbusAppSettings, dbPath: databasePath, enabled: enabled)
-        self.nimbus?.initialize()
-        self.nimbus?.applyPendingExperiments()
-        self.nimbus?.fetchExperiments()
+
+        guard let nimbus = self.nimbus else {
+            return
+        }
+        if isFirstRun || nimbusServerSettings == nil {
+            if let fileURL = Bundle.main.url(forResource: "initial_experiments", withExtension: "json") {
+                nimbus.setExperimentsLocally(fileURL)
+            }
+        }
+        nimbus.applyPendingExperiments()
+        nimbus.fetchExperiments()
     }
 }
 
