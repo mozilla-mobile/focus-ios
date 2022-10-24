@@ -57,7 +57,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if UserDefaults.standard.bool(forKey: OnboardingConstants.ignoreOnboardingExperiment) {
                 return !UserDefaults.standard.bool(forKey: OnboardingConstants.showOldOnboarding)
             } else {
-                return nimbus.shouldShowNewOnboarding
+                let config = AppNimbus.shared.features.onboardingVariables.value()
+                return config.showNewOnboarding
             }
         }
         guard !AppInfo.isTesting() else { return TestOnboarding() }
