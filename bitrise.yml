@@ -120,7 +120,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-14.0.x
-        machine_type_id: g2.4core
+        machine_type_id: g2.8core
   
   ui_test_focus:
     steps:
