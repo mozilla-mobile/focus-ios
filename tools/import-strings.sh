@@ -33,6 +33,10 @@ fi
 echo "[*] Cloning mozilla-l10n/focusios-l10n"
 git clone https://github.com/mozilla-l10n/focusios-l10n.git
 
+echo "[*] Cloning mozilla-mobile/LocalizationTools"
+rm -rf tools/LocalizationTools
+(cd tools && git clone https://github.com/mozilla-mobile/LocalizationTools.git)
+
 echo "\n\n[*] Building tools/Localizations"
 (cd tools/Localizations && swift build)
 
