@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 #
 # This script imports strings into the project. It does this by checking
@@ -23,10 +23,15 @@
 #  https://github.com/mozilla-mobile/focus-ios/wiki/Importing-and-Exporting-Strings
 #
 
-set -e
+# -e: Exit immediately if a command exits with a non-zero status.
+# -u: Treat unset variables as an error when substituting.
+# -o pipefail: The return value of a pipeline is the status of the last command to exit with a non-zero status, or zero if no command exited with a non-zero status
+# -d: Print shell input lines as they are read.
+# -x: Print commands and their arguments as they are executed.
+set -euo pipefail
 
 if [ ! -d Blockzilla.xcodeproj ]; then
-  echo "[E] Run this script from the project root as tools/export-strings.sh"
+  echo "[E] Run this script from the project root as tools/import-strings.sh"
   exit 1
 fi
 
@@ -35,16 +40,15 @@ git clone https://github.com/mozilla-l10n/focusios-l10n.git
 
 echo "[*] Cloning mozilla-mobile/LocalizationTools"
 rm -rf tools/LocalizationTools
-(cd tools && git clone https://github.com/mozilla-mobile/LocalizationTools.git)
+(cd tools && git clone https://github.com/mozilla-mobile/LocalizationTools.git Localizations)
 
-echo "\n\n[*] Building tools/Localizations"
+printf "\n\n[*] Building tools/Localizations"
 (cd tools/Localizations && swift build)
 
-echo "\n\n[*] Importing Strings - takes a minute. (output in import-strings.log)"
-(cd tools/Localizations && swift run Localizations \
+printf "\n\n[*] Importing Strings - takes a minute. (output in import-strings.log)"
+(cd tools/Localizations && swift run LocalizationTools \
   --import \
   --project-path "$PWD/../../Blockzilla.xcodeproj" \
   --l10n-project-path "$PWD/../../focusios-l10n") > import-strings.log 2>&1
 
-echo "\n\n[!] Strings have been imported. You can now create a PR."
-
+printf "\n\n[!] Strings have been imported. You can now create a PR."
