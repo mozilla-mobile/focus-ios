@@ -49,6 +49,7 @@ printf "\n\n[*] Importing Strings - takes a minute. (output in import-strings.lo
 (cd tools/Localizations && swift run LocalizationTools \
   --import \
   --project-path "$PWD/../../Blockzilla.xcodeproj" \
-  --l10n-project-path "$PWD/../../focusios-l10n") > import-strings.log 2>&1
+  --l10n-project-path "$PWD/../../focusios-l10n" \
+  --client "focus-ios") > import-strings.log 2>&1
 
 printf "\n\n[!] Strings have been imported. You can now create a PR."
