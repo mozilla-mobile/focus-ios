@@ -36,20 +36,25 @@ if [ ! -d Blockzilla.xcodeproj ]; then
 fi
 
 echo "[*] Cloning mozilla-l10n/focusios-l10n"
+rm -rf focusios-l10n
 git clone https://github.com/mozilla-l10n/focusios-l10n.git
 
 echo "[*] Cloning mozilla-mobile/LocalizationTools"
-rm -rf tools/LocalizationTools
+rm -rf tools/Localizations
 (cd tools && git clone https://github.com/mozilla-mobile/LocalizationTools.git Localizations)
 
 printf "\n\n[*] Building tools/Localizations"
+
 (cd tools/Localizations && swift build)
+
+# Temporary workaround to replace firefox-ios with focus-ios in the Localizations tool
+printf "\n\n[*] Replacing Swift Tasks Firefox Target with Focus Target"
+(gsed -i 's/firefox/focus/g' tools/Localizations/Sources/LocalizationTools/tasks/ImportTask.swift)
 
 printf "\n\n[*] Importing Strings - takes a minute. (output in import-strings.log)"
 (cd tools/Localizations && swift run LocalizationTools \
   --import \
   --project-path "$PWD/../../Blockzilla.xcodeproj" \
-  --l10n-project-path "$PWD/../../focusios-l10n" \
-  --client "focus-ios") > import-strings.log 2>&1
+  --l10n-project-path "$PWD/../../focusios-l10n") > import-strings.log 2>&1
 
 printf "\n\n[!] Strings have been imported. You can now create a PR."
