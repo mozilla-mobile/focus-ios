@@ -2333,6 +2333,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"$(SRCROOT)/$(PROJECT)/Generated/AppNimbus.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
