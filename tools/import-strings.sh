@@ -37,14 +37,13 @@ fi
 
 echo "[*] Cloning mozilla-l10n/focusios-l10n"
 rm -rf focusios-l10n
-git clone https://github.com/mozilla-l10n/focusios-l10n.git
+git clone https://github.com/mozilla-l10n/focusios-l10n.git focusios-l10n
 
 echo "[*] Cloning mozilla-mobile/LocalizationTools"
 rm -rf tools/Localizations
 (cd tools && git clone https://github.com/mozilla-mobile/LocalizationTools.git Localizations)
 
 printf "\n\n[*] Building tools/Localizations"
-
 (cd tools/Localizations && swift build)
 
 # Temporary workaround to replace firefox-ios with focus-ios in the Localizations tool
