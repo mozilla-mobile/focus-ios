@@ -5,7 +5,7 @@
 <SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
 <ShortName>Amazon.com</ShortName>
 <InputEncoding>ISO-8859-1</InputEncoding>
-<Image width="16" height="16">https://searchfox.org/mozilla-central/source/browser/components/newtab/data/content/tippytop/images/amazon@2x.png</Image>
+<Image width="16" height="16">https://searchfox.org/mozilla-central/source/browser/components/newtab/data/content/tippytop/favicons/amazon.ico</Image>
 <Url type="application/x-suggestions+json" method="GET" template="https://completion.amazon.com/search/complete?q={searchTerms}&amp;search-alias=aps&amp;mkt=1"/>
 <Url type="text/html" method="GET" template="https://www.amazon.com/gp/aw/s">
   <Param name="k" value="{searchTerms}"/>

@@ -6,7 +6,7 @@
 <ShortName>Amazon.co.jp</ShortName>
 <Description>検索エンジン - Amazon.co.jp 検索</Description>
 <InputEncoding>UTF-8</InputEncoding>
-<Image width="16" height="16">https://searchfox.org/mozilla-central/source/browser/components/newtab/data/content/tippytop/images/amazon@2x.png</Image>
+<Image width="16" height="16">https://searchfox.org/mozilla-central/source/browser/components/newtab/data/content/tippytop/favicons/amazon.ico</Image>
 <Url type="text/html" method="GET" template="https://www.amazon.co.jp/exec/obidos/external-search/">
   <Param name="field-keywords" value="{searchTerms}"/>
   <Param name="mode" value="blended"/>
