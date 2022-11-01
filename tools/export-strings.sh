@@ -169,7 +169,21 @@ export_strings() {
   (cd "${localization_tools_dir}" && swift run LocalizationTools --export \
     --project-path "${root_dir}/Blockzilla.xcodeproj" \
     --l10n-project-path "${l10n_dir}") >> export-strings.log 2>&1 || die "Failed to export strings for ${target_client}"
-  msg "\t${GREEN}[+] Strings exported successfully. Moving on...${NOFORMAT}"
+  msg "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b        ${GREEN}[+] Strings exported successfully. Moving on...${NOFORMAT}"
+}
+
+progress_spinner() {
+  local pid spinner
+  pid=$1
+  spinner='- \ | /'
+  color=("${GREEN}" "${YELLOW}" "${RED}" "${BLUE}" "${PURPLE}" "${ORANGE}" "${CYAN}" "${NOFORMAT}")
+  sleep 1
+  while kill -0 "$pid" 2>/dev/null; do
+    for i in $spinner; do
+      printf "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b${color[$RANDOM % ${#color[@]}]}%s %s %s %s %s %s %s %s${NOFORMAT}" "$i" "$i" "$i" "$i" "$i" "$i" "$i" "$i"
+      sleep 0.25
+    done
+  done
 }
 
 main() {
@@ -191,9 +205,10 @@ main() {
   clone_repo "${focusios_l10n[@]}"
   build_localization_tools "${tmp_dirs[0]}"
   find_replace_file_text "${tmp_dirs[0]}/Sources/LocalizationTools/tasks/*.swift" "firefox-ios" "${target_client}"
-  export_strings "${tmp_dirs[0]}" "${tmp_dirs[1]}" "${target_client}"
+  export_strings "${tmp_dirs[0]}" "${tmp_dirs[1]}" "${target_client}" &
+  progress_spinner $!
 
-  msg "${BLUE}Read parameters:"
+  msg "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b${BLUE}Read parameters:"
   msg "- Client Target: ${target_client}${NOFORMAT}"
   msg "${GREEN}Hooray!! Strings have been succesfully exported."
   msg "You can create a PR in the focusios-l10n checkout.${NOFORMAT}"
