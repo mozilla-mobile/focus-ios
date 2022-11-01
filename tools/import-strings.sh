@@ -192,7 +192,7 @@ import_strings() {
   (cd "${localization_tools_dir}" && swift run LocalizationTools --import \
     --project-path "${root_dir}/Blockzilla.xcodeproj" \
     --l10n-project-path "${l10n_dir}") >> import-strings.log 2>&1 || die "Failed to import strings for ${target_client}"
-  msg "\n\t${GREEN}[+] Strings imported successfully. Moving on...${NOFORMAT}"
+  msg "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b        ${GREEN}[+] Strings imported successfully. Moving on...${NOFORMAT}"
 }
 
 progress_spinner() {
@@ -231,7 +231,7 @@ main() {
   import_strings "${tmp_dirs[0]}" "${tmp_dirs[1]}" "${target_client}" &
   progress_spinner $!
 
-  msg "\n${BLUE}Read parameters:"
+  msg "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b${BLUE}Read parameters:"
   msg "- Client Target: ${target_client}${NOFORMAT}"
   msg "${GREEN}Hooray!! Strings have been succesfully imported."
   msg "You can create a PR in the focusios-l10n checkout.${NOFORMAT}"
