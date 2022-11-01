@@ -10,6 +10,8 @@ struct DefaultBrowserOnboardingView: View {
     init(viewModel: OnboardingViewModel) {
         self.viewModel = viewModel
     }
+    
+    let bottomSafeAreaInset = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
 
     var body: some View {
         VStack {
@@ -61,7 +63,7 @@ struct DefaultBrowserOnboardingView: View {
                     .background(Color.secondOnboardingScreenBottomButton)
                     .cornerRadius(.radius)
             })
-            .padding(.bottom, .skipButtonPadding)
+            .padding(.bottom, bottomSafeAreaInset > 0 ? .skipButtonPadding : .skipButtonPaddingNoSafeArea)
         }
         .padding([.leading, .trailing], .viewPadding)
         .navigationBarHidden(true)
@@ -78,6 +80,7 @@ fileprivate extension CGFloat {
     static let titleSize: CGFloat = 26
     static let titleBottomPadding: CGFloat = 12
     static let skipButtonPadding: CGFloat = 20
+    static let skipButtonPaddingNoSafeArea: CGFloat = 40
     static let firstSubtitleBottomPadding: CGFloat = 14
     static let viewPadding: CGFloat = 26
     static let radius: CGFloat = 12
