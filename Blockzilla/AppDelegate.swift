@@ -38,12 +38,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    lazy var splashView: SplashView = {
-        let splashView = SplashView()
-        splashView.authenticationManager = authenticationManager
-        return splashView
-    }()
-
     private lazy var browserViewController = BrowserViewController(
         shortcutManager: shortcutManager,
         authenticationManager: authenticationManager,
@@ -63,7 +57,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if UserDefaults.standard.bool(forKey: OnboardingConstants.ignoreOnboardingExperiment) {
                 return !UserDefaults.standard.bool(forKey: OnboardingConstants.showOldOnboarding)
             } else {
-                return nimbus.shouldShowNewOnboarding
+                let config = AppNimbus.shared.features.onboardingVariables.value()
+                return config.showNewOnboarding
             }
         }
         guard !AppInfo.isTesting() else { return TestOnboarding() }
@@ -79,10 +74,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 authenticateWithBiometrics()
 
             case .didBecomeActive:
-                if authenticationManager.authenticationState == .loggedin { hideSplashView() }
+                if authenticationManager.authenticationState == .loggedin { hidePrivacyProtectionWindow() }
 
             case .willResignActive:
-                showSplashView()
+                guard privacyProtectionWindow == nil else { return }
+                showPrivacyProtectionWindow()
 
             case .didEnterBackgroundkground:
                 authenticationManager.logout()
@@ -99,14 +95,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             .sink { state in
                 switch state {
                 case .loggedin:
-                    self.hideSplashView()
+                    self.hidePrivacyProtectionWindow()
+                    break
 
                 case .loggedout:
-                    self.splashView.state = .default
-                    self.showSplashView()
+                    self.showPrivacyProtectionWindow()
+                    break
 
                 case .canceled:
-                    self.splashView.state = .needsAuth
+                    break
                 }
             }
             .store(in: &cancellables)
@@ -275,7 +272,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         browserViewController.photonActionSheetDidDismiss()
-        browserViewController.dismiss(animated: true, completion: nil)
         browserViewController.navigationController?.popViewController(animated: true)
 
         switch userActivity.activityType {
@@ -302,21 +298,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    func hideSplashView() {
-        browserViewController.activateUrlBarOnHomeView()
-        splashView.alpha = 0
-        splashView.isHidden = true
-        splashView.removeFromSuperview()
+    // MARK: Privacy Protection
+    private var privacyProtectionWindow: UIWindow?
+
+    private func showPrivacyProtectionWindow() {
+        browserViewController.deactivateUrlBarOnHomeView()
+        guard let windowScene = self.window?.windowScene else {
+            return
+        }
+
+        privacyProtectionWindow = UIWindow(windowScene: windowScene)
+        privacyProtectionWindow?.rootViewController = SplashViewController(authenticationManager: authenticationManager)
+        privacyProtectionWindow?.windowLevel = .alert + 1
+        privacyProtectionWindow?.makeKeyAndVisible()
     }
 
-    func showSplashView() {
-        browserViewController.deactivateUrlBarOnHomeView()
-        window!.addSubview(splashView)
-        splashView.snp.makeConstraints { make in
-            make.edges.equalTo(window!)
-        }
-        splashView.alpha = 1
-        splashView.isHidden = false
+    private func hidePrivacyProtectionWindow() {
+        privacyProtectionWindow?.isHidden = true
+        privacyProtectionWindow = nil
+        browserViewController.activateUrlBarOnHomeView()
     }
 }
 
@@ -414,11 +414,28 @@ extension AppDelegate {
     }
 
     func setupExperimentation() {
+        let isFirstRun = !UserDefaults.standard.bool(forKey: OnboardingConstants.onboardingDidAppear)
+
         do {
             // Enable nimbus when both Send Usage Data and Studies are enabled in the settings.
-            try NimbusWrapper.shared.initialize(enabled: Settings.getToggle(.sendAnonymousUsageData) && Settings.getToggle(.studies))
+            try NimbusWrapper.shared.initialize(enabled: true, isFirstRun: isFirstRun)
         } catch {
             NSLog("Failed to setup experimentation: \(error)")
+        }
+
+        guard let nimbus = NimbusWrapper.shared.nimbus else {
+            return
+        }
+
+        AppNimbus.shared.initialize {
+            nimbus
+        }
+
+        NotificationCenter.default.addObserver(
+            forName: Notification.Name.nimbusExperimentsApplied,
+            object: nil,
+            queue: OperationQueue.main) { _ in
+            AppNimbus.shared.invalidateCachedValues()
         }
     }
 }
