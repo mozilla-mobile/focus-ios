@@ -59,6 +59,8 @@ class SheetModalViewController: UIViewController {
         super.preferredContentSizeDidChange(forChildContentContainer: container)
         let height = min(container.preferredContentSize.height + metrics.closeButtonSize + metrics.closeButtonInset, metrics.maximumContainerHeight)
         animateContainerHeight(height)
+        closeButton.snp.removeConstraints()
+        setCloseButtonConstraints(isFullScreen: containerView.frame.height >= metrics.maximumContainerHeight)
     }
 
     override func viewDidLoad() {
@@ -91,8 +93,17 @@ class SheetModalViewController: UIViewController {
         }
 
         containerView.addSubview(closeButton)
+        setCloseButtonConstraints(isFullScreen: false)
+    }
+
+    private func setCloseButtonConstraints(isFullScreen: Bool) {
         closeButton.snp.makeConstraints { make in
-            make.trailing.top.equalToSuperview().inset(metrics.closeButtonInset)
+            if isFullScreen {
+                make.top.equalTo(view.safeAreaLayoutGuide)
+            } else {
+                make.top.equalToSuperview().inset(metrics.closeButtonInset)
+            }
+            make.trailing.equalToSuperview().inset(metrics.closeButtonInset)
             make.height.width.equalTo(metrics.closeButtonSize)
         }
     }

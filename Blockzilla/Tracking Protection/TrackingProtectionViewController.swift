@@ -303,7 +303,6 @@ class TrackingProtectionViewController: UIViewController {
            let baseDomain = browsingStatus.url.baseDomain {
             view.addSubview(header)
             header.snp.makeConstraints { make in
-                self.headerHeight = make.height.equalTo(72).constraint
                 make.top.leading.trailing.equalToSuperview()
             }
             if let publisher = favIconPublisher {
