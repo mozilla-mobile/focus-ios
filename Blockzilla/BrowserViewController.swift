@@ -2072,3 +2072,16 @@ extension BrowserViewController {
         addShortcuts()
     }
 }
+
+extension BrowserViewController {
+    func openFromWidget() {
+        guard !urlBar.isEditing else { return }
+
+        switch scrollBarState {
+        case .expanded:
+            urlBar.activateTextField()
+        case .collapsed: showToolbars()
+        default: break
+        }
+    }
+}

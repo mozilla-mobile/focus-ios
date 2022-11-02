@@ -51,6 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private let themeManager = ThemeManager()
     private var cancellables = Set<AnyCancellable>()
     private lazy var shortcutManager: ShortcutsManager = .init()
+    private lazy var openFromIdentifier: OpenFromIdentifier = .app
 
     private lazy var onboardingEventsHandler: OnboardingEventsHandling = {
         var shouldShowNewOnboarding: () -> Bool = { [unowned self] in
@@ -169,6 +170,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
+
+        setOpenFromIdentifier(from: url)
         guard let navigation = NavigationPath(url: url) else { return false }
         let navigationHandler = NavigationPath.handle(application, navigation: navigation, with: browserViewController)
 
@@ -253,6 +256,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
             queuedString = nil
         }
+        activateUrlBar(with: openFromIdentifier)
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -456,6 +460,30 @@ extension AppDelegate: ModalDelegate {
         // keep false
         // modal animation will be handled in VC itself
         window?.rootViewController?.present(vc, animated: false)
+    }
+}
+
+extension AppDelegate {
+    enum OpenFromIdentifier: String {
+        case widget
+        case app
+    }
+
+    func setOpenFromIdentifier(from url: URL) {
+        if url.scheme == "widget-deeplink" {
+            openFromIdentifier = .widget
+        } else {
+            openFromIdentifier = .app
+        }
+    }
+
+    func activateUrlBar(with openFromIdentifier: OpenFromIdentifier) {
+        switch openFromIdentifier {
+        case .widget:
+            browserViewController.openFromWidget()
+        case .app:
+            break
+        }
     }
 }
 
