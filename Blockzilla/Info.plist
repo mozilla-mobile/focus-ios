@@ -21,6 +21,8 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 			<key>CFBundleURLName</key>
 			<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 			<key>CFBundleURLSchemes</key>
@@ -28,6 +30,7 @@
 				<string>$(BLOCKZILLA_URL_SCHEME)</string>
 				<string>http</string>
 				<string>https</string>
+				<string>widget</string>
 			</array>
 		</dict>
 	</array>
