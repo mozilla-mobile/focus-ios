@@ -46,7 +46,7 @@ struct Widgets: Widget {
             FocusWidgetsEntryView(entry: entry)
         }
         .configurationDisplayName(String.quickActionsGalleryTitle)
-        .description(String(format: .quickActionGalleryDescription, String.appNameForBundle))
+        .description(String(format: .quickActionGalleryDescriptionV2, String.appNameForBundle))
         .supportedFamilies([.systemSmall])
     }
 }
