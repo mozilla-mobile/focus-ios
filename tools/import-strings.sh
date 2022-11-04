@@ -403,7 +403,7 @@ progress_spinner() {
 main() {
   trap '$(cleanup ${script_requirements[tmp_dirs]})' SIGINT SIGTERM ERR EXIT
   declare -A localization_tools focusios_l10n tmp_dirs
-  declare -A create_templates_task import_task edit_files
+  declare -A import_task edit_files
   declare dependencies
 
   dependencies=( git swift ed )
@@ -423,6 +423,7 @@ main() {
     [focusios_l10n]="${focusios_l10n[dir]}"
   )
 
+  # shellcheck disable=SC2034
   import_task=(
     [dir]="${localization_tools[dir]}/Sources/LocalizationTools/tasks/ImportTask.swift"
     [find]="firefox-ios.xliff"

@@ -399,12 +399,14 @@ main() {
     [focusios_l10n]="${focusios_l10n[dir]}"
   )
 
+  # shellcheck disable=SC2034
   create_templates_task=(
     [dir]="${localization_tools[dir]}/Sources/LocalizationTools/tasks/CreateTemplatesTask.swift"
     [find]="firefox-ios.xliff"
     [replace]="focus-ios.xliff"
   )
 
+  # shellcheck disable=SC2034
   export_task=(
     [dir]="${localization_tools[dir]}/Sources/LocalizationTools/tasks/ExportTask.swift"
     [find]="firefox-ios.xliff"
