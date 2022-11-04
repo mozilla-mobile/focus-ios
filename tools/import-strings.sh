@@ -334,7 +334,7 @@ build_localization_tools() {
 #   PURPLE
 #   NOFORMAT
 # Arguments:
-#   $1: Associative Array with name of file being editing, the string to
+#   $1: Associative Array with name of file being edited, the string to
 #     find, and the string to replace it with.
 # Outputs:
 #   Writes message to stderr
