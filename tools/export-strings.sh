@@ -47,8 +47,6 @@ usage() {
   cat <<EOF
 Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-d] -t
 
-Export
-
 Available options:
 
 -h, --help              Print this help and exit
@@ -71,10 +69,10 @@ EOF
 #   None
 #######################################
 cleanup() {
-  declare -n temp_dirs
-  temp_dirs=$1
   # ignore errors during cleanup to avoid recursively calling itself
   trap - SIGINT SIGTERM ERR EXIT
+  declare -n temp_dirs
+  temp_dirs=$1
   for dir in "${temp_dirs[@]}"; do
       rm -rf "${root_dir}$dir"
   done
