@@ -43,6 +43,13 @@ echo "\n\n[*] Building tools/Localizations"
 echo "[*] Replacing firefox with focus in swift task files"
 sed -i '' 's/firefox-ios.xliff/focus-ios.xliff/g' tools/Localizations/Sources/LocalizationTools/tasks/*.swift
 
+echo "[*] Removing es-ES locale mapping from swift import task"
+sed -i '' '/es-ES/d' tools/Localizations/Sources/LocalizationTools/tasks/ImportTask.swift
+
+echo "[*] Removing WidgetKit/en-US.lproj/WidgetIntents.strings from swift import task"
+# Match all text between a line containing 'ShortcutItemTitleQRCode' to ']' and delete them
+sed -ri '' '/ShortcutItemTitleQRCode/,/\]/{/ShortcutItemTitleQRCode/!{/\]/!d;};}' tools/Localizations/Sources/LocalizationTools/tasks/ImportTask.swift
+
 echo "\n\n[*] Importing Strings - takes a minute. (output in import-strings.log)"
 (cd tools/Localizations && swift run LocalizationTools \
   --import \
