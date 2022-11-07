@@ -67,6 +67,7 @@ class WebViewController: UIViewController, WebController {
     private var currentBackForwardItem: WKBackForwardListItem?
     private let trackingProtectionManager: TrackingProtectionManager
     private var cancellable: AnyCancellable?
+    private var menuAction: WebMenuAction
 
     var pageTitle: String? {
         return browserView.title
@@ -86,8 +87,9 @@ class WebViewController: UIViewController, WebController {
     var adsTelemetryHelper = AdsTelemetryHelper()
     var searchInContentTelemetry: SearchInContentTelemetry?
 
-    init(trackingProtectionManager: TrackingProtectionManager) {
+    init(trackingProtectionManager: TrackingProtectionManager, webMenuAction: WebMenuAction) {
         self.trackingProtectionManager = trackingProtectionManager
+        self.menuAction = webMenuAction
         super.init(nibName: nil, bundle: nil)
         cancellable = self.trackingProtectionManager.$trackingProtectionStatus.sink { [weak self] status in
             guard let self = self else { return }
@@ -158,8 +160,7 @@ class WebViewController: UIViewController, WebController {
         browserView.navigationDelegate = self
         browserView.uiDelegate = self
 
-        progressObserver = browserView.observe(\WKWebView.estimatedProgress) { [weak self] (webView, value) in
-            guard let self = self else { return }
+        progressObserver = browserView.observe(\WKWebView.estimatedProgress) { (webView, value) in
             self.delegate?.webController(self, didUpdateEstimatedProgress: webView.estimatedProgress)
         }
 
@@ -188,8 +189,7 @@ class WebViewController: UIViewController, WebController {
     }
 
     private func setupBlockLists() {
-        ContentBlockerHelper.shared.getBlockLists { [weak self] lists in
-            guard let self = self else { return }
+        ContentBlockerHelper.shared.getBlockLists { lists in
             self.reloadBlockers(lists)
         }
     }
@@ -258,7 +258,7 @@ class WebViewController: UIViewController, WebController {
     }
 
     /// Get the metadata out of the page-metadata-parser, and into a type safe struct as soon as possible.
-    /// 
+    ///
     func getMetadata(completion: @escaping (Swift.Result<Metadata, Error>) -> Void) {
         evaluate("__firefox__.metadata.getMetadata()") { result, error in
             let metadata = result
@@ -275,7 +275,7 @@ class WebViewController: UIViewController, WebController {
         }
     }
 
-    func getMetadata() -> Future<Metadata, Error> {
+    func getMetadata()  -> Future<Metadata, Error> {
         Future { promise in
             self.getMetadata { result in
                 promise(result)
@@ -376,8 +376,7 @@ extension WebViewController: WKNavigationDelegate {
             preferences.preferredContentMode = preferredContentMode
         }
 
-        let present: (UIViewController) -> Void = { [weak self] in
-            guard let self = self else { return }
+        let present: (UIViewController) -> Void = {
             self.present($0, animated: true) {
                 self.delegate?.webController(self, didUpdateEstimatedProgress: 1.0)
                 self.delegate?.webControllerDidFinishNavigation(self)
@@ -529,33 +528,8 @@ extension WebViewController: WKScriptMessageHandler {
         }
     }
 }
-extension WebViewController: WebViewMenuActionable, WebViewItemProvider {
-    func openInDefaultBrowser(url: URL) {
-        UIApplication.shared.open(url, options: [:])
-    }
 
-    func showSharePage(for utils: OpenUtils, sender: UIView) {
-        let shareVC = utils.buildShareViewController()
-
-        // Exact frame dimensions taken from presentPhotonActionSheet
-        shareVC.popoverPresentationController?.sourceView = sender
-        shareVC.popoverPresentationController?.sourceRect =
-        CGRect(
-            x: sender.frame.width/2,
-            y: sender.frame.size.height,
-            width: 1,
-            height: 1
-        )
-
-        shareVC.becomeFirstResponder()
-        self.present(shareVC, animated: true, completion: nil)
-    }
-
-    func showCopy(url: URL) {
-        UIPasteboard.general.string = url.absoluteString
-        Toast(text: UIConstants.strings.copyURLToast).show()
-    }
-
+extension WebViewController {
     func webView(_ webView: WKWebView, contextMenuConfigurationFor elementInfo: WKContextMenuElementInfo) async -> UIContextMenuConfiguration? {
         guard let url = elementInfo.linkURL else { return nil }
 
@@ -572,12 +546,12 @@ extension WebViewController: WebViewMenuActionable, WebViewItemProvider {
             clonedWebView.load(URLRequest(url: url))
 
             return previewViewController
-        } actionProvider: { [weak self] _ in
-            guard let self = self else { return nil }
-            return UIMenu(title: url.absoluteString, children: [
-                UIAction(self.openInDefaultBrowserItem(for: url)),
-                UIAction(self.copyItem(url: url)),
-                UIAction(self.sharePageItem(for: .init(url: url, webViewController: self), sender: self.view))
+        } actionProvider: { [unowned self] menu in
+            UIMenu(title: url.absoluteString, children: [
+                UIAction(self.menuAction.openLink(url: url)),
+                UIAction(self.menuAction.openInDefaultBrowserItem(for: url)),
+                UIAction(self.menuAction.copyItem(url: url)),
+                UIAction(self.menuAction.sharePageItem(for: .init(url: url, webViewController: self), sender: self.view, presenter: self))
             ])
         }
     }
