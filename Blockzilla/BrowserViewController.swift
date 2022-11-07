@@ -937,7 +937,8 @@ class BrowserViewController: UIViewController {
                                         UIConstants.layout.shortcutsContainerSpacingSmallestSplitView :
                                         (isIPadRegularDimensions ? UIConstants.layout.shortcutsContainerSpacingIPad : UIConstants.layout.shortcutsContainerSpacing)
 
-        coordinator.animate(alongsideTransition: { _ in
+        coordinator.animate(alongsideTransition: { [weak self] _ in
+            guard let self = self else { return }
             self.urlBar.shouldShowToolset = self.showsToolsetInURLBar
 
             if self.homeViewController == nil && self.scrollBarState != .expanded {
@@ -1219,7 +1220,8 @@ extension BrowserViewController: URLBarDelegate {
 
         if Settings.getToggle(.enableSearchSuggestions), !trimmedText.isEmpty {
             searchSuggestionsDebouncer.renewInterval()
-            searchSuggestionsDebouncer.completion = {
+            searchSuggestionsDebouncer.completion = { [weak self] in
+                guard let self = self else { return }
                 self.searchSuggestClient.getSuggestions(trimmedText, callback: { suggestions, error in
                     let userInputText = urlBar.userInputText?.trimmingCharacters(in: .whitespaces) ?? ""
 
@@ -2032,11 +2034,13 @@ extension BrowserViewController {
     func showRenameAlert(shortcut: Shortcut) {
         let alert = UIAlertController.renameAlertController(
             currentName: shortcut.name,
-            renameAction: { newName in
+            renameAction: { [weak self] newName in
+                guard let self = self else { return }
                 self.shortcutManager.rename(shortcut: shortcut, newName: newName)
                 self.urlBar.activateTextField()
 
-            }, cancelAction: {
+            }, cancelAction: { [weak self] in
+                guard let self = self else { return }
                 self.urlBar.activateTextField()
 
             })
