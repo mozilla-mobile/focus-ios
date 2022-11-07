@@ -25,6 +25,9 @@ echo "\n\n[*] Building tools/Localizations"
 echo "[*] Replacing firefox with focus in swift task files"
 sed -i '' 's/firefox-ios.xliff/focus-ios.xliff/g' tools/Localizations/Sources/LocalizationTools/tasks/*.swift
 
+echo "[*] Updating EXPORT_BASE_PATH with (getpid()) in swift export task"
+sed -ri '' 's/\/tmp\/ios-localization/\/tmp\/ios-localization-\\(getpid())/g' tools/Localizations/Sources/LocalizationTools/tasks/ExportTask.swift
+
 echo "\n\n[*] Exporting Strings (output in export-strings.log)"
 (cd tools/Localizations && swift run LocalizationTools \
   --export \
