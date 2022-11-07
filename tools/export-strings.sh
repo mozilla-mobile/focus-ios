@@ -396,7 +396,6 @@ main() {
 
   tmp_dirs=(
     [localization_tools]="${localization_tools[dir]}"
-    [focusios_l10n]="${focusios_l10n[dir]}"
   )
 
   # shellcheck disable=SC2034
