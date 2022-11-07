@@ -73,13 +73,19 @@ class SheetModalViewController: UIViewController {
         animatePresentContainer()
     }
 
+    private lazy var stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 0
+        stackView.alignment = .trailing
+        stackView.axis = .vertical
+        return stackView
+    }()
+
     func setupConstraints() {
         view.addSubview(dimmedView)
         view.addSubview(containerView)
         dimmedView.translatesAutoresizingMaskIntoConstraints = false
         containerView.translatesAutoresizingMaskIntoConstraints = false
-
-        install(containerViewController, on: containerView)
 
         dimmedView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -87,14 +93,28 @@ class SheetModalViewController: UIViewController {
         containerView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             containerViewHeightConstraint = make.height.equalTo(metrics.bufferHeight).constraint
-            containerViewBottomConstraint = make.bottom.equalTo(view).offset(metrics.bufferHeight).constraint
+            containerViewBottomConstraint = make.bottom.equalTo(self.view).offset(metrics.bufferHeight).constraint
         }
 
-        containerView.addSubview(closeButton)
+        containerView.addSubview(stackView)
+        stackView.snp.makeConstraints { make in
+            make.edges.equalTo(containerView.safeAreaLayoutGuide)
+        }
+        stackView.addArrangedSubview(closeButton)
         closeButton.snp.makeConstraints { make in
             make.trailing.top.equalTo(containerView.safeAreaLayoutGuide).inset(metrics.closeButtonInset)
             make.height.width.equalTo(metrics.closeButtonSize)
         }
+
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(view)
+        view.backgroundColor = .red
+
+        view.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+        }
+        install(containerViewController, on: view)
     }
 
     // MARK: Present and dismiss animation
