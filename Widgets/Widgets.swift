@@ -29,11 +29,10 @@ struct SimpleEntry: TimelineEntry {
 
 struct FocusWidgetsEntryView : View {
     var entry: Provider.Entry
-    let deeplinkURL: URL = URL(string: .widgetLink)!
 
     var body: some View {
         SearchWidgetView(title: String(format: .searchInAppFormat, String.appNameForBundle))
-            .widgetURL(deeplinkURL)
+            .widgetURL(.deepLinkURL)
     }
 }
 
@@ -84,5 +83,8 @@ fileprivate extension String {
         value: "Search in %@",
         comment: "Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar).")
     static let searchInApp = String(format: searchInAppFormat, AppInfo.shortProductName)
-    static let widgetLink = "firefox-focus://widget"
+}
+
+fileprivate extension URL {
+    static let deepLinkURL: URL = URL(string: "firefox-focus://widget")!
 }

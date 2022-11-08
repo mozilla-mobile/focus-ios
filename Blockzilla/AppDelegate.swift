@@ -169,7 +169,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-
         guard let navigation = NavigationPath(url: url) else { return false }
         let navigationHandler = NavigationPath.handle(application, navigation: navigation, with: browserViewController)
 
