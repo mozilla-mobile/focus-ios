@@ -30,7 +30,6 @@
 				<string>$(BLOCKZILLA_URL_SCHEME)</string>
 				<string>http</string>
 				<string>https</string>
-				<string>widget</string>
 			</array>
 		</dict>
 	</array>
