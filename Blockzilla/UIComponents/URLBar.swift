@@ -426,10 +426,19 @@ class URLBar: UIView {
         }
     }
 
+    private func identifyKeyboardNameTelemetry() {
+        enum Keyboard: String { case `default` = "Default Keyboard", custom = "Custom Keyboard" }
+        guard UIApplication.textInputMode?.responds(to: NSSelectorFromString("identifier")) == true else { return }
+        guard var identifier = UIApplication.textInputMode?.perform(NSSelectorFromString("identifier")).takeRetainedValue() as? String else { return }
+        identifier = identifier.contains("@sw=") ? Keyboard.default.rawValue + identifier : Keyboard.custom.rawValue + identifier
+        GleanMetrics.App.keyboardType.set(identifier)
+    }
+
     @objc public func activateTextField() {
         urlTextField.isUserInteractionEnabled = true
         urlTextField.becomeFirstResponder()
         isEditing = true
+        identifyKeyboardNameTelemetry()
     }
 
     private func displayClearButton(shouldDisplay: Bool, animated: Bool = true) {
