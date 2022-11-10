@@ -11,9 +11,8 @@ class TipViewController: UIViewController {
 
     private lazy var tipTitleLabel: UILabel = {
         let label = UILabel()
-        let config = AppNimbus.shared.features.nimbusValidation.value()
         label.textColor = .secondaryLabel
-        label.font = config.boldTipTitle ? .footnote14Bold : .footnote14Medium
+        label.font = nimbus.shouldHaveBoldTitle ? .footnote14Bold : .footnote14Medium
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
