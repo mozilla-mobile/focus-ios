@@ -68,7 +68,7 @@ browser:
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/3525
     data_reviews:
-      - https://github.com/mozilla-mobile/focus-ios/pull/3344
+      - https://github.com/mozilla-mobile/focus-ios/pull/3569
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
     data_sensitivity:
