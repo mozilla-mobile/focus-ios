@@ -44,7 +44,7 @@ app:
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/3526
     data_reviews:
-      - https://github.com/mozilla-mobile/focus-ios/pull/3031
+      - https://github.com/mozilla-mobile/focus-ios/pull/3572
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
     expires: "2023-11-10"
