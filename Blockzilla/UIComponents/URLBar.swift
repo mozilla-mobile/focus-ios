@@ -427,7 +427,7 @@ class URLBar: UIView {
     }
 
     private func identifyKeyboardNameTelemetry() {
-        enum Keyboard: String { case `default` = "Default Keyboard", custom = "Custom Keyboard" }
+        enum Keyboard: String { case `default` = "Default Keyboard:", custom = "Custom Keyboard:" }
         guard UIApplication.textInputMode?.responds(to: NSSelectorFromString("identifier")) == true else { return }
         guard var identifier = UIApplication.textInputMode?.perform(NSSelectorFromString("identifier")).takeRetainedValue() as? String else { return }
         identifier = identifier.contains("@sw=") ? Keyboard.default.rawValue + identifier : Keyboard.custom.rawValue + identifier
