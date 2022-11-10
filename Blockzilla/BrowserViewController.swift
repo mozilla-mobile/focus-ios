@@ -1658,6 +1658,9 @@ extension BrowserViewController: WebControllerDelegate {
         toggleURLBarBackground(isBright: !urlBar.isEditing)
         urlBar.progressBar.hideProgressBar()
         GleanMetrics.Browser.totalUriCount.add()
+        webViewController.evaluatePDFContentType {
+            if $0 { GleanMetrics.Browser.pdfViewerUsed.add() }
+        }
         Task {
             let faviconURL = try? await webViewController.getMetadata().icon.flatMap(URL.init(string:))
             guard let faviconURL = faviconURL, let url = urlBar.url else { return }

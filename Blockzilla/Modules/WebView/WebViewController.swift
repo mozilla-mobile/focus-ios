@@ -253,6 +253,12 @@ class WebViewController: UIViewController, WebController {
         browserView.evaluateJavaScript(javascript, completionHandler: completion)
     }
 
+    func evaluatePDFContentType(_ onCompletion: @escaping (Bool) -> Void) {
+        evaluate("document.contentType") { result, _ in
+            onCompletion(result is String && (result as? String) == "application/pdf")
+        }
+    }
+
     enum MetadataError: Swift.Error {
         case missingMetadata
         case missingURL
