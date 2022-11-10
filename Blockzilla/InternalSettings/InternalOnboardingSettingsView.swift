@@ -11,7 +11,7 @@ struct InternalOnboardingSettingsView {
 extension InternalOnboardingSettingsView: View {
     var body: some View {
         Form {
-            Section{
+            Section {
                 Toggle(isOn: $internalSettings.showOldOnboarding) {
                     Text(verbatim: "Show Old Onboarding")
                 }
