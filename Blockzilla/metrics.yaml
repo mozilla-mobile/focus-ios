@@ -571,7 +571,7 @@ browser_search:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2023-09-22"
   in_content:
     type: labeled_counter
     description: |
