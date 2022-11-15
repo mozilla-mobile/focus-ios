@@ -253,9 +253,9 @@ class WebViewController: UIViewController, WebController {
         browserView.evaluateJavaScript(javascript, completionHandler: completion)
     }
 
-    func evaluatePDFContentType(_ onCompletion: @escaping (Bool) -> Void) {
-        evaluate("document.contentType") { result, _ in
-            onCompletion(result is String && (result as? String) == "application/pdf")
+    func evaluateDocumentContentType(_ completion: @escaping (String?) -> Void) {
+        evaluate("document.contentType") { documentType, _ in
+            completion(documentType as? String)
         }
     }
 
