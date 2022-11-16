@@ -317,6 +317,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         privacyProtectionWindow?.isHidden = true
         privacyProtectionWindow = nil
         browserViewController.activateUrlBarOnHomeView()
+        KeyboardType.identifyKeyboardNameTelemetry()
     }
 }
 
