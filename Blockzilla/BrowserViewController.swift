@@ -24,7 +24,7 @@ class BrowserViewController: UIViewController {
     private lazy var webViewController: WebViewController = {
         var menuAction = WebMenuAction.live
         menuAction.openLink = { url in
-            self.submit(url: url)
+            self.submit(url: url, source: .action)
         }
         return WebViewController(trackingProtectionManager: trackingProtectionManager, webMenuAction: menuAction)
     }()
@@ -109,12 +109,12 @@ class BrowserViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
 
-        self.shortcutManager.onTap = self.shortcutTapped(url:)
-        self.shortcutManager.onDismiss = self.dismissShortcut
-        self.shortcutManager.onRemove = self.removeFromShortcuts
-        self.shortcutManager.onShowRenameAlert = self.showRenameAlert(shortcut:)
-        self.shortcutManager.shortcutsDidUpdate = self.shortcutsDidUpdate
-        self.shortcutManager.shortcutDidRemove = self.shortcutDidRemove(shortcut:)
+        self.shortcutManager.onTap = { [unowned self] in self.shortcutTapped(url: $0) }
+        self.shortcutManager.onDismiss = { [unowned self] in self.dismissShortcut() }
+        self.shortcutManager.onRemove = { [unowned self] in self.removeFromShortcuts() }
+        self.shortcutManager.onShowRenameAlert = { [unowned self] in self.showRenameAlert(shortcut: $0) }
+        self.shortcutManager.shortcutsDidUpdate = { [unowned self] in self.shortcutsDidUpdate() }
+        self.shortcutManager.shortcutDidRemove = { [unowned self] in self.shortcutDidRemove(shortcut: $0) }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -256,21 +256,21 @@ class BrowserViewController: UIViewController {
         }
 
         // Listen for request desktop site notifications
-        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification), object: nil, queue: nil) { _ in
-            self.webViewController.requestUserAgentChange()
+        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification), object: nil, queue: nil) { [weak self] _ in
+            self?.webViewController.requestUserAgentChange()
         }
 
         // Listen for request mobile site notifications
-        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestMobileNotification), object: nil, queue: nil) { _ in
-            self.webViewController.requestUserAgentChange()
+        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestMobileNotification), object: nil, queue: nil) { [weak self] _ in
+            self?.webViewController.requestUserAgentChange()
         }
 
         let dropInteraction = UIDropInteraction(delegate: self)
         view.addInteraction(dropInteraction)
 
         // Listen for find in page actvitiy notifications
-        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.findInPageNotification), object: nil, queue: nil) { _ in
-            self.updateFindInPageVisibility(visible: true, text: "")
+        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.findInPageNotification), object: nil, queue: nil) { [weak self] _ in
+            self?.updateFindInPageVisibility(visible: true, text: "")
         }
 
         setupOnboardingEvents()
@@ -286,7 +286,7 @@ class BrowserViewController: UIViewController {
         guard shouldEnsureBrowsingMode else { return }
         ensureBrowsingMode()
         guard let url = initialUrl else { return }
-        submit(url: url)
+        submit(url: url, source: .action)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -319,7 +319,7 @@ class BrowserViewController: UIViewController {
                     sourceRect: CGRect(x: self.urlBar.shieldIcon.bounds.midX, y: self.urlBar.shieldIcon.bounds.midY + 10, width: 0, height: 0),
                     body: UIConstants.strings.tooltipBodyTextForShieldIconV2,
                     dismiss: {
-                        self.onboardingEventsHandler.route = nil
+                        [unowned self] in self.onboardingEventsHandler.route = nil
                         self.onboardingEventsHandler.send(.showTrash)
                     }
                 )
@@ -329,7 +329,7 @@ class BrowserViewController: UIViewController {
                     anchoredBy: self.urlBar.shieldIcon,
                     sourceRect: CGRect(x: self.urlBar.shieldIcon.bounds.midX, y: self.urlBar.shieldIcon.bounds.midY + 10, width: 0, height: 0),
                     body: UIConstants.strings.tooltipBodyTextForShieldIcon,
-                    dismiss: { self.onboardingEventsHandler.route = nil }
+                    dismiss: { [unowned self] in self.onboardingEventsHandler.route = nil }
                 )
             }
 
@@ -343,7 +343,7 @@ class BrowserViewController: UIViewController {
                     anchoredBy: sourceButton,
                     sourceRect: sourceRect,
                     body: UIConstants.strings.tooltipBodyTextForTrashIconV2,
-                    dismiss: { self.onboardingEventsHandler.route = nil }
+                    dismiss: { [unowned self] in self.onboardingEventsHandler.route = nil }
                 )
 
             case .v1:
@@ -354,7 +354,7 @@ class BrowserViewController: UIViewController {
                     anchoredBy: sourceButton,
                     sourceRect: sourceRect,
                     body: UIConstants.strings.tooltipBodyTextForTrashIcon,
-                    dismiss: { self.onboardingEventsHandler.route = nil }
+                    dismiss: { [unowned self] in self.onboardingEventsHandler.route = nil }
                 )
             }
 
@@ -366,7 +366,7 @@ class BrowserViewController: UIViewController {
                     y: self.urlBar.textFieldAnchor.bounds.maxY, width: 0, height: 0
                 ),
                 body: UIConstants.strings.tooltipBodyTextStartPrivateBrowsing,
-                dismiss: { self.onboardingEventsHandler.route = nil }
+                dismiss: { [unowned self] in self.onboardingEventsHandler.route = nil }
             )
 
         case .onboarding(let onboardingType):
@@ -419,7 +419,7 @@ class BrowserViewController: UIViewController {
                 anchoredBy: self.urlBar.contextMenuButton,
                 sourceRect: CGRect(x: self.urlBar.contextMenuButton.bounds.maxX, y: self.urlBar.contextMenuButton.bounds.midY + 12, width: 0, height: 0),
                 body: UIConstants.strings.tootipBodyTextForContextMenuIcon,
-                dismiss: { self.onboardingEventsHandler.route = nil }
+                dismiss: { [unowned self] in self.onboardingEventsHandler.route = nil }
             )
         case .widgetTutorial:
             let controller = PortraitHostingController(
@@ -431,7 +431,7 @@ class BrowserViewController: UIViewController {
                         subtitleStep3: UIConstants.strings.subtitleStepThreeShowMeHowOnboardingV2,
                         buttonText: UIConstants.strings.buttonTextShowMeHowOnboardingV2,
                         widgetText: UIConstants.strings.searchInAppInstruction),
-                    dismissAction: { self.onboardingEventsHandler.route = nil }))
+                    dismissAction: { [unowned self] in self.onboardingEventsHandler.route = nil }))
             controller.modalPresentationStyle = UIDevice.current.userInterfaceIdiom == .phone ? .overFullScreen : .formSheet
             controller.isModalInPresentation = true
             return controller
@@ -850,7 +850,7 @@ class BrowserViewController: UIViewController {
         shouldEnsureBrowsingMode = false
     }
 
-    func submit(text: String) {
+    func submit(text: String, source: Source) {
         var url = URIFixup.getURL(entry: text)
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
@@ -861,14 +861,22 @@ class BrowserViewController: UIViewController {
         }
 
         if let url = url {
-            submit(url: url)
+            submit(url: url, source: source)
         }
     }
 
-    func submit(url: URL) {
+    fileprivate func recordSearchEvent(_ source: Source) {
+        let identifier = searchEngineManager.activeEngine.getNameOrCustom().lowercased()
+        let source = source.rawValue
+        GleanMetrics.BrowserSearch.searchCount["\(identifier).\(source)"].add()
+    }
+
+    func submit(url: URL, source: Source) {
         // If this is the first navigation, show the browser and the toolbar.
         guard isViewLoaded else { initialUrl = url; return }
-        GleanMetrics.BrowserSearch.searchCount["action"].add()
+
+        recordSearchEvent(source)
+
         shortcutsPresenter.shortcutsState = .none
         SearchInContentTelemetry.shouldSetUrlTypeSearch = true
         if isIPadRegularDimensions {
@@ -937,7 +945,8 @@ class BrowserViewController: UIViewController {
                                         UIConstants.layout.shortcutsContainerSpacingSmallestSplitView :
                                         (isIPadRegularDimensions ? UIConstants.layout.shortcutsContainerSpacingIPad : UIConstants.layout.shortcutsContainerSpacing)
 
-        coordinator.animate(alongsideTransition: { _ in
+        coordinator.animate(alongsideTransition: { [weak self] _ in
+            guard let self = self else { return }
             self.urlBar.shouldShowToolset = self.showsToolsetInURLBar
 
             if self.homeViewController == nil && self.scrollBarState != .expanded {
@@ -1148,7 +1157,7 @@ extension BrowserViewController: UIDropInteractionDelegate {
 
             self.ensureBrowsingMode()
             self.urlBar.fillUrlBar(text: url.absoluteString)
-            self.submit(url: url)
+            self.submit(url: url, source: .action)
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.drop, object: TelemetryEventObject.searchBar)
             GleanMetrics.UrlInteraction.dropEnded.record()
         }
@@ -1219,7 +1228,8 @@ extension BrowserViewController: URLBarDelegate {
 
         if Settings.getToggle(.enableSearchSuggestions), !trimmedText.isEmpty {
             searchSuggestionsDebouncer.renewInterval()
-            searchSuggestionsDebouncer.completion = {
+            searchSuggestionsDebouncer.completion = { [weak self] in
+                guard let self = self else { return }
                 self.searchSuggestClient.getSuggestions(trimmedText, callback: { suggestions, error in
                     let userInputText = urlBar.userInputText?.trimmingCharacters(in: .whitespaces) ?? ""
 
@@ -1265,7 +1275,7 @@ extension BrowserViewController: URLBarDelegate {
         }
     }
 
-    func urlBar(_ urlBar: URLBar, didSubmitText text: String) {
+    func urlBar(_ urlBar: URLBar, didSubmitText text: String, source: Source) {
         let text = text.trimmingCharacters(in: .whitespaces)
 
         guard !text.isEmpty else {
@@ -1285,7 +1295,7 @@ extension BrowserViewController: URLBarDelegate {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
         }
         if let urlBarURL = url {
-            submit(url: urlBarURL)
+            submit(url: urlBarURL, source: source)
             urlBar.url = urlBarURL
         }
 
@@ -1499,7 +1509,7 @@ extension BrowserViewController: HomeViewControllerDelegate {
         deactivateUrlBarOnHomeView()
         dismissSettings()
         dismissActionSheet()
-        submit(url: url)
+        submit(url: url, source: .action)
     }
 
     func homeViewControllerDidTapTip(_ controller: HomeViewController, tip: TipManager.Tip) {
@@ -1539,7 +1549,7 @@ extension BrowserViewController: OverlayViewDelegate {
         if searchEngineManager.activeEngine.urlForQuery(query) != nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.selectQuery, object: TelemetryEventObject.searchBar)
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
-            urlBar(urlBar, didSubmitText: query)
+            urlBar(urlBar, didSubmitText: query, source: .topsite)
         }
 
         urlBar.dismiss()
@@ -1582,7 +1592,7 @@ extension BrowserViewController: OverlayViewDelegate {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
         }
         if let overlayURL = url {
-            submit(url: overlayURL)
+            submit(url: overlayURL, source: .suggestion)
             urlBar.url = overlayURL
         }
         urlBar.dismiss()
@@ -1990,11 +2000,11 @@ extension BrowserViewController: MenuActionable {
     }
 
     func showHelp() {
-        submit(text: "https://support.mozilla.org/en-US/products/focus-firefox/Focus-ios")
+        submit(text: "https://support.mozilla.org/en-US/products/focus-firefox/Focus-ios", source: .action)
     }
 
     func showWhatsNew() {
-        submit(url: URL(forSupportTopic: .whatsNew))
+        submit(url: URL(forSupportTopic: .whatsNew), source: .action)
     }
 
     func showCopy(url: URL) {
@@ -2032,11 +2042,13 @@ extension BrowserViewController {
     func showRenameAlert(shortcut: Shortcut) {
         let alert = UIAlertController.renameAlertController(
             currentName: shortcut.name,
-            renameAction: { newName in
+            renameAction: { [weak self] newName in
+                guard let self = self else { return }
                 self.shortcutManager.rename(shortcut: shortcut, newName: newName)
                 self.urlBar.activateTextField()
 
-            }, cancelAction: {
+            }, cancelAction: { [weak self] in
+                guard let self = self else { return }
                 self.urlBar.activateTextField()
 
             })
@@ -2057,7 +2069,7 @@ extension BrowserViewController {
         ensureBrowsingMode()
         urlBar.url = url
         deactivateUrlBarOnHomeView()
-        submit(url: url)
+        submit(url: url, source: .shortcut)
         GleanMetrics.Shortcuts.shortcutOpenedCounter.add()
     }
 
@@ -2076,5 +2088,18 @@ extension BrowserViewController {
             subview.removeFromSuperview()
         }
         addShortcuts()
+    }
+}
+
+extension BrowserViewController {
+    func openFromWidget() {
+        guard !urlBar.isEditing else { return }
+
+        switch scrollBarState {
+        case .expanded:
+            urlBar.activateTextField()
+        case .collapsed: showToolbars()
+        default: break
+        }
     }
 }

@@ -8,6 +8,7 @@ import Glean
 enum NavigationPath {
     case url(_ url: URL)
     case text(_ text: String)
+    case widget
     case glean(url: URL)
 
     init?(url: URL) {
@@ -48,6 +49,9 @@ enum NavigationPath {
             GleanMetrics.App.openedAsDefaultBrowser.add()
             self = .url(url)
         }
+        else if host == "widget" {
+            self = .widget
+        }
         else if host == "open-url" {
             let urlString = unescape(string: query["url"]) ?? ""
             guard let url = URL(string: urlString) else { return nil }
@@ -65,13 +69,14 @@ enum NavigationPath {
         case .url(let url): return NavigationPath.handleURL(application, url: url, with: browserViewController)
         case .text(let text): return NavigationPath.handleText(application, text: text, with: browserViewController)
         case .glean(let url): NavigationPath.handleGlean(url: url)
+        case .widget: return NavigationPath.handleWidget(application, with: browserViewController)
         }
         return nil
     }
 
     private static func handleURL(_ application: UIApplication, url: URL, with browserViewController: BrowserViewController) -> URL? {
         if application.applicationState == .active {
-            browserViewController.submit(url: url)
+            browserViewController.submit(url: url, source: .action)
         }
         else { return url }
         return nil
@@ -80,10 +85,9 @@ enum NavigationPath {
     private static func handleText(_ application: UIApplication, text: String, with browserViewController: BrowserViewController) -> String? {
         if application.applicationState == .active {
             if let fixedUrl = URIFixup.getURL(entry: text) {
-                browserViewController.submit(url: fixedUrl)
-            }
-            else {
-                browserViewController.submit(text: text)
+                browserViewController.submit(url: fixedUrl, source: .action)
+            } else {
+                browserViewController.submit(text: text, source: .action)
             }
         }
         else { return text }
@@ -92,6 +96,10 @@ enum NavigationPath {
 
     private static func handleGlean(url: URL) {
         Glean.shared.handleCustomUrl(url: url)
+    }
+
+    private static func handleWidget(_ application: UIApplication, with browserViewController: BrowserViewController) {
+        browserViewController.openFromWidget()
     }
 }
 

@@ -16,7 +16,7 @@ enum AppPhase {
     case willEnterForeground
     case didBecomeActive
     case willResignActive
-    case didEnterBackgroundkground
+    case didEnterBackground
     case willTerminate
 }
 
@@ -54,12 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private lazy var onboardingEventsHandler: OnboardingEventsHandling = {
         var shouldShowNewOnboarding: () -> Bool = { [unowned self] in
-            if UserDefaults.standard.bool(forKey: OnboardingConstants.ignoreOnboardingExperiment) {
-                return !UserDefaults.standard.bool(forKey: OnboardingConstants.showOldOnboarding)
-            } else {
-                let config = AppNimbus.shared.features.onboardingVariables.value()
-                return config.showNewOnboarding
-            }
+            !UserDefaults.standard.bool(forKey: OnboardingConstants.showOldOnboarding)
         }
         guard !AppInfo.isTesting() else { return TestOnboarding() }
         return OnboardingFactory.makeOnboardingEventsHandler(shouldShowNewOnboarding)
@@ -80,7 +75,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 guard privacyProtectionWindow == nil else { return }
                 showPrivacyProtectionWindow()
 
-            case .didEnterBackgroundkground:
+            case .didEnterBackground:
                 authenticationManager.logout()
 
             case .notRunning, .willTerminate:
@@ -235,7 +230,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             browserViewController.deactivateUrlBarOnHomeView()
             browserViewController.dismissSettings()
             browserViewController.dismissActionSheet()
-            browserViewController.submit(url: url)
+            browserViewController.submit(url: url, source: .action)
             queuedUrl = nil
         } else if let text = queuedString {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openedFromExtension, object: TelemetryEventObject.app)
@@ -246,9 +241,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             browserViewController.dismissActionSheet()
 
             if let fixedUrl = URIFixup.getURL(entry: text) {
-                browserViewController.submit(url: fixedUrl)
+                browserViewController.submit(url: fixedUrl, source: .action)
             } else {
-                browserViewController.submit(text: text)
+                browserViewController.submit(text: text, source: .action)
             }
 
             queuedString = nil
@@ -264,7 +259,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // session. This gets called every time the app goes to background but should not get
         // called for *temporary* interruptions such as an incoming phone call until the user
         // takes action and we are officially backgrounded.
-        appPhase = .didEnterBackgroundkground
+        appPhase = .didEnterBackground
         let orientation = UIDevice.current.orientation.isPortrait ? "Portrait" : "Landscape"
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.background, object:
             TelemetryEventObject.app, value: nil, extras: ["orientation": orientation])
@@ -285,7 +280,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             browserViewController.resetBrowser(hidePreviousSession: true)
             browserViewController.ensureBrowsingMode()
             browserViewController.deactivateUrlBarOnHomeView()
-            browserViewController.submit(url: url)
+            browserViewController.submit(url: url, source: .action)
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.siri, object: TelemetryEventObject.openFavoriteSite)
             GleanMetrics.Siri.openFavoriteSite.record()
         case "EraseIntent":
