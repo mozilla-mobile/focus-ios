@@ -866,7 +866,7 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func recordSearchEvent(_ source: Source) {
-        let identifier = searchEngineManager.activeEngine.getNameOrCustom()
+        let identifier = searchEngineManager.activeEngine.getNameOrCustom().lowercased()
         let source = source.rawValue
         GleanMetrics.BrowserSearch.searchCount["\(identifier).\(source)"].add()
     }
@@ -1658,6 +1658,11 @@ extension BrowserViewController: WebControllerDelegate {
         toggleURLBarBackground(isBright: !urlBar.isEditing)
         urlBar.progressBar.hideProgressBar()
         GleanMetrics.Browser.totalUriCount.add()
+        webViewController.evaluateDocumentContentType { documentType in
+            if documentType == "application/pdf" {
+                GleanMetrics.Browser.pdfViewerUsed.add()
+            }
+        }
         Task {
             let faviconURL = try? await webViewController.getMetadata().icon.flatMap(URL.init(string:))
             guard let faviconURL = faviconURL, let url = urlBar.url else { return }
