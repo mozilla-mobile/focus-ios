@@ -33,8 +33,10 @@ struct DefaultBrowserOnboardingView: View {
                     .padding(.bottom, .titleBottomPadding)
                 VStack(alignment: .leading) {
                     Text(viewModel.defaultBrowserConfig.firstSubtitle)
+                        .font(.body16)
                         .padding(.bottom, .firstSubtitleBottomPadding)
                     Text(viewModel.defaultBrowserConfig.secondSubtitle)
+                        .font(.body16)
                 }
             }
             .foregroundColor(.secondOnboardingScreenText)
