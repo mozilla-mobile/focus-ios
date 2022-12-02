@@ -157,7 +157,7 @@ class URLBar: UIView {
         textAndLockContainer.addGestureRecognizer(longPress)
 
         let dragInteraction = UIDragInteraction(delegate: self)
-        textAndLockContainer.addInteraction(dragInteraction)
+        urlBarBackgroundView.addInteraction(dragInteraction)
 
         addSubview(toolset.backButton)
         addSubview(toolset.forwardButton)
