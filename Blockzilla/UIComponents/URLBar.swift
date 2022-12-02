@@ -944,24 +944,6 @@ extension URLBar: UIDragInteractionDelegate {
         GleanMetrics.UrlInteraction.dragStarted.record()
         return [dragItem]
     }
-
-    func dragInteraction(_ interaction: UIDragInteraction, previewForLifting item: UIDragItem, session: UIDragSession) -> UITargetedDragPreview? {
-        let params = UIDragPreviewParameters()
-        params.backgroundColor = UIColor.clear
-        return UITargetedDragPreview(view: draggableUrlTextView, parameters: params)
-    }
-
-    func dragInteraction(_ interaction: UIDragInteraction, sessionDidMove session: UIDragSession) {
-        for item in session.items {
-            item.previewProvider = {
-                guard let url = self.url else {
-                    return UIDragPreview(view: UIView())
-                }
-                return UIDragPreview(for: url)
-            }
-        }
-    }
-
 }
 
 private class URLTextField: AutocompleteTextField {
