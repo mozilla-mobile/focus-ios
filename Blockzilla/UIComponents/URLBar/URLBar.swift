@@ -11,19 +11,6 @@ enum Source: String {
    case action, shortcut, suggestion, topsite, widget, none
 }
 
-protocol URLBarDelegate: AnyObject {
-    func urlBar(_ urlBar: URLBar, didEnterText text: String)
-    func urlBar(_ urlBar: URLBar, didSubmitText text: String, source: Source)
-    func urlBar(_ urlBar: URLBar, didAddCustomURL url: URL)
-    func urlBarDidActivate(_ urlBar: URLBar)
-    func urlBarDidDeactivate(_ urlBar: URLBar)
-    func urlBarDidFocus(_ urlBar: URLBar)
-    func urlBarDidPressScrollTop(_: URLBar, tap: UITapGestureRecognizer)
-    func urlBarDidDismiss(_ urlBar: URLBar)
-    func urlBarDidTapShield(_ urlBar: URLBar)
-    func urlBarDidLongPress(_ urlBar: URLBar)
-}
-
 class URLBar: UIView {
     enum State {
         case `default`
@@ -83,7 +70,7 @@ class URLBar: UIView {
     private let urlBarBackgroundView = UIView()
     private let textAndLockContainer = UIView()
     private let collapsedUrlAndLockWrapper = UIView()
-    private let collapsedTrackingProtectionBadge = CollapsedTrackingProtectionBadge()
+//    private let collapsedTrackingProtectionBadge = CollapsedTrackingProtectionBadge()
 
     let shieldIcon = TrackingProtectionBadge()
 
@@ -210,13 +197,7 @@ class URLBar: UIView {
         truncatedUrlText.isScrollEnabled = false
         truncatedUrlText.accessibilityIdentifier = "Collapsed.truncatedUrlText"
 
-        collapsedTrackingProtectionBadge.alpha = 0
-        collapsedTrackingProtectionBadge.tintColor = .white
-        collapsedTrackingProtectionBadge.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-        collapsedTrackingProtectionBadge.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-
         collapsedUrlAndLockWrapper.addSubview(truncatedUrlText)
-        collapsedUrlAndLockWrapper.addSubview(collapsedTrackingProtectionBadge)
         addSubview(collapsedUrlAndLockWrapper)
 
         // UITextField doesn't allow customization of the clear button, so we create
@@ -368,12 +349,6 @@ class URLBar: UIView {
             make.leading.trailing.equalTo(self)
             make.bottom.equalTo(self).offset(UIConstants.layout.progressBarHeight)
             make.height.equalTo(UIConstants.layout.progressBarHeight)
-        }
-
-        collapsedTrackingProtectionBadge.snp.makeConstraints { make in
-            make.leading.equalTo(safeAreaLayoutGuide).offset(UIConstants.layout.collapsedProtectionBadgeOffset)
-            make.width.height.equalTo(10)
-            make.bottom.equalToSuperview()
         }
 
         truncatedUrlText.snp.makeConstraints { make in
@@ -850,7 +825,6 @@ class URLBar: UIView {
         toolset.deleteButton.alpha = shouldShowToolset ? expandAlpha : 0
         toolset.contextMenuButton.alpha = expandAlpha
 
-        collapsedTrackingProtectionBadge.alpha = 0
         if isEditing {
             shieldIcon.alpha = collapseAlpha
         } else {
@@ -862,7 +836,6 @@ class URLBar: UIView {
 
     func updateTrackingProtectionBadge(trackingStatus: TrackingProtectionStatus, shouldDisplayShieldIcon: Bool) {
         shieldIcon.updateState(trackingStatus: trackingStatus, shouldDisplayShieldIcon: shouldDisplayShieldIcon)
-        collapsedTrackingProtectionBadge.updateState(trackingStatus: trackingStatus, shouldDisplayShieldIcon: shouldDisplayShieldIcon)
     }
 }
 
@@ -990,117 +963,3 @@ private class URLTextField: AutocompleteTextField {
     }
 }
 
-class TrackingProtectionBadge: UIView {
-    let trackingProtectionOff = UIImageView(image: .trackingProtectionOff)
-    let trackingProtectionOn = UIImageView(image: .trackingProtectionOn)
-    let connectionNotSecure = UIImageView(image: .connectionNotSecure)
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setContentHuggingPriority(.defaultLow, for: .horizontal)
-        setupViews()
-    }
-
-    func setupViews() {
-        trackingProtectionOff.alpha = 0
-        connectionNotSecure.alpha = 0
-        trackingProtectionOn.contentMode = .scaleAspectFit
-        trackingProtectionOff.contentMode = .scaleAspectFit
-        connectionNotSecure.contentMode = .scaleAspectFit
-
-        addSubview(trackingProtectionOff)
-        addSubview(trackingProtectionOn)
-        addSubview(connectionNotSecure)
-
-        trackingProtectionOn.setContentHuggingPriority(.required, for: .horizontal)
-        trackingProtectionOn.snp.makeConstraints { make in
-            make.centerX.centerY.equalToSuperview()
-            make.width.equalTo(UIConstants.layout.urlButtonSize)
-        }
-
-        trackingProtectionOff.setContentHuggingPriority(.required, for: .horizontal)
-        trackingProtectionOff.snp.makeConstraints { make in
-            make.centerX.centerY.equalToSuperview()
-            make.width.equalTo(UIConstants.layout.urlButtonSize)
-        }
-
-        connectionNotSecure.setContentHuggingPriority(.required, for: .horizontal)
-        connectionNotSecure.snp.makeConstraints { make in
-            make.centerX.centerY.equalToSuperview()
-            make.width.equalTo(UIConstants.layout.urlButtonSize)
-        }
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func updateState(trackingStatus: TrackingProtectionStatus, shouldDisplayShieldIcon: Bool) {
-        guard shouldDisplayShieldIcon else {
-            trackingProtectionOn.alpha = 0
-            trackingProtectionOff.alpha = 0
-            connectionNotSecure.alpha = 1
-            return
-        }
-        switch trackingStatus {
-        case .on:
-            trackingProtectionOff.alpha = 0
-            trackingProtectionOn.alpha = 1
-            connectionNotSecure.alpha = 0
-        default:
-            trackingProtectionOff.alpha = 1
-            trackingProtectionOn.alpha = 0
-            connectionNotSecure.alpha = 0
-        }
-    }
-}
-
-class CollapsedTrackingProtectionBadge: TrackingProtectionBadge {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-
-    override func setupViews() {
-        addSubview(trackingProtectionOff)
-        addSubview(trackingProtectionOn)
-        addSubview(connectionNotSecure)
-
-        trackingProtectionOn.snp.makeConstraints { make in
-            make.leading.centerY.equalTo(self)
-            make.width.height.equalTo(UIConstants.layout.trackingProtectionHeight)
-        }
-
-        trackingProtectionOff.snp.makeConstraints { make in
-            make.leading.centerY.equalTo(self)
-            make.width.height.equalTo(UIConstants.layout.trackingProtectionHeight)
-        }
-
-        connectionNotSecure.snp.makeConstraints { make in
-            make.leading.centerY.equalTo(self)
-            make.width.height.equalTo(UIConstants.layout.trackingProtectionHeight)
-        }
-    }
-
-    override func updateState(trackingStatus: TrackingProtectionStatus, shouldDisplayShieldIcon: Bool) {
-        guard shouldDisplayShieldIcon else {
-            trackingProtectionOn.alpha = 0
-            trackingProtectionOff.alpha = 0
-            connectionNotSecure.alpha = 1
-            return
-        }
-        switch trackingStatus {
-        case .on:
-            trackingProtectionOff.alpha = 0
-            trackingProtectionOn.alpha = 1
-            connectionNotSecure.alpha = 0
-        default:
-            trackingProtectionOff.alpha = 1
-            trackingProtectionOn.alpha = 0
-            connectionNotSecure.alpha = 0
-        }
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
