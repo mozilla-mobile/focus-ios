@@ -58,8 +58,6 @@ class URLBar: UIView {
 
     private let leftBarViewLayoutGuide = UILayoutGuide()
     private let rightBarViewLayoutGuide = UILayoutGuide()
-
-    private let cancelButton = InsetButton()
     private let domainCompletion = DomainCompletion(completionSources: [TopDomainsCompletionSource(), CustomCompletionSource()])
 
     private let toolset = BrowserToolset()
@@ -70,9 +68,6 @@ class URLBar: UIView {
     private let urlBarBackgroundView = UIView()
     private let textAndLockContainer = UIView()
     private let collapsedUrlAndLockWrapper = UIView()
-//    private let collapsedTrackingProtectionBadge = CollapsedTrackingProtectionBadge()
-
-    let shieldIcon = TrackingProtectionBadge()
 
     var centerURLBar = false {
         didSet {
@@ -133,6 +128,36 @@ class URLBar: UIView {
         return true
     }
 
+    private lazy var cancelButton: InsetButton = {
+        let button = InsetButton()
+        button.isHidden = true
+        button.alpha = 0
+        button.setImage(#imageLiteral(resourceName: "icon_cancel"), for: .normal)
+        button.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        button.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
+        button.accessibilityIdentifier = "URLBar.cancelButton"
+        return button
+    }()
+
+    private lazy var gestureRecognizer: UITapGestureRecognizer = {
+        let gestureRecognizer = UITapGestureRecognizer()
+        gestureRecognizer.numberOfTapsRequired = 1
+        gestureRecognizer.cancelsTouchesInView = true
+        gestureRecognizer.addTarget(self, action: #selector(didTapShieldIcon))
+        return gestureRecognizer
+    }()
+
+    private lazy var shieldIcon: TrackingProtectionBadge = {
+        let shieldIcon = TrackingProtectionBadge()
+        shieldIcon.isUserInteractionEnabled = true
+        shieldIcon.addGestureRecognizer(gestureRecognizer)
+        shieldIcon.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        shieldIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        return shieldIcon
+    }()
+
+    public var shieldIconAnchor: UIView { shieldIcon }
+
     convenience init() {
         self.init(frame: CGRect.zero)
         isIPadRegularDimensions = traitCollection.horizontalSizeClass == .regular && traitCollection.verticalSizeClass == .regular
@@ -154,22 +179,6 @@ class URLBar: UIView {
         urlTextField.isUserInteractionEnabled = false
         urlBarBackgroundView.addSubview(textAndLockContainer)
 
-        let gestureRecognizer = UITapGestureRecognizer()
-        gestureRecognizer.numberOfTapsRequired = 1
-        gestureRecognizer.cancelsTouchesInView = true
-        gestureRecognizer.addTarget(self, action: #selector(didTapShieldIcon))
-        shieldIcon.isUserInteractionEnabled = true
-        shieldIcon.addGestureRecognizer(gestureRecognizer)
-        shieldIcon.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-        shieldIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-
-        cancelButton.isHidden = true
-        cancelButton.alpha = 0
-        cancelButton.setImage(#imageLiteral(resourceName: "icon_cancel"), for: .normal)
-
-        cancelButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-        cancelButton.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
-        cancelButton.accessibilityIdentifier = "URLBar.cancelButton"
         addSubview(cancelButton)
 
         textAndLockContainer.addSubview(toolset.stopReloadButton)
