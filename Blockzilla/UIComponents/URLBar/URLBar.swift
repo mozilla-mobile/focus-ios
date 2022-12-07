@@ -992,4 +992,3 @@ private class URLTextField: AutocompleteTextField {
         textField.layoutIfNeeded()
     }
 }
-
