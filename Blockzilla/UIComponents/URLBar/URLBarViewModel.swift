@@ -24,8 +24,19 @@ public enum ShieldIconStatus: Equatable {
 }
 
 public class URLBarViewModel {
+    @Published public var canGoBack: Bool = false
+    @Published public var canGoForward: Bool = false
+    @Published public var canDelete: Bool = false
+    @Published public var isLoading: Bool = false
     @Published public var connectionState: ShieldIconStatus = .on
+
     internal var viewActionSubject = PassthroughSubject<URLViewAction, Never>()
     public var viewActionPublisher: AnyPublisher<URLViewAction, Never> { viewActionSubject.eraseToAnyPublisher() }
 
+    public func resetToDefaults() {
+        isLoading = false
+        canGoBack = false
+        canGoForward = false
+        canDelete = false
+    }
 }
