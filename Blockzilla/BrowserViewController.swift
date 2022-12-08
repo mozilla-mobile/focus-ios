@@ -1372,6 +1372,19 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidLongPress(_ urlBar: URLBar) { }
+
+    func urlBarDisplayTextForURL(_ url: URL?) -> (String?, Bool) {
+        // use the initial value for the URL so we can do proper pattern matching with search URLs
+        var searchURL = urlBar.url
+        if let url = searchURL, InternalURL.isValid(url: url) {
+            searchURL = url
+        }
+        if let query = searchEngineManager.queryForSearchURL(searchURL as URL?) {
+            return (query, true)
+        } else {
+            return (url?.absoluteString, false)
+        }
+    }
 }
 
 extension BrowserViewController: PhotonActionSheetDelegate {
