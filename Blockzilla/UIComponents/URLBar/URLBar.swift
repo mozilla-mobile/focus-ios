@@ -12,14 +12,8 @@ enum Source: String {
    case action, shortcut, suggestion, topsite, widget, none
 }
 
-public enum ShieldIconStatus: Equatable {
-    case on
-    case off
-    case connectionNotSecure
-}
-
 class URLBar: UIView {
-    @Published public var connectionState: ShieldIconStatus = .on
+    fileprivate var viewModel: URLBarViewModel
     private var cancellables: Set<AnyCancellable> = []
 
     private lazy var cancelButton: InsetButton = {
@@ -237,8 +231,9 @@ class URLBar: UIView {
         return true
     }
 
-    convenience init() {
-        self.init(frame: CGRect.zero)
+    init(viewModel: URLBarViewModel) {
+        self.viewModel = viewModel
+        super.init(frame: CGRect.zero)
         isIPadRegularDimensions = traitCollection.horizontalSizeClass == .regular && traitCollection.verticalSizeClass == .regular
 
         let dragInteraction = UIDragInteraction(delegate: self)
@@ -409,7 +404,8 @@ class URLBar: UIView {
             }
             .store(in: &cancellables)
 
-        $connectionState
+        viewModel
+            .$connectionState
             .removeDuplicates()
             .map { trackingProtectionStatus -> UIImage in
                 switch trackingProtectionStatus {
@@ -430,6 +426,10 @@ class URLBar: UIView {
             .store(in: &cancellables)
     }
 
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     private func addShieldConstraints() {
         shieldIcon.snp.makeConstraints { (make) in
             make.top.bottom.equalToSuperview()

@@ -37,7 +37,10 @@ class BrowserViewController: UIViewController {
     private let overlayView = OverlayView()
     private let searchEngineManager = SearchEngineManager(prefs: UserDefaults.standard)
     private let urlBarContainer = UIView()
+
     private var urlBar: URLBar!
+    private lazy var urlBarViewModel = URLBarViewModel()
+
     private let searchSuggestClient = SearchSuggestClient()
     private var findInPageBar: FindInPageBar?
     private var fillerView: UIView?
@@ -565,7 +568,7 @@ class BrowserViewController: UIViewController {
         } else {
             shieldIconStatus = .connectionNotSecure
         }
-        urlBar.connectionState = shieldIconStatus
+        urlBarViewModel.connectionState = shieldIconStatus
     }
 
     // These functions are used to handle displaying and hiding the keyboard after the splash view is animated
@@ -626,8 +629,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func createURLBar() {
-
-        urlBar = URLBar()
+        urlBar = URLBar(viewModel: urlBarViewModel)
         urlBar.delegate = self
         urlBar.toolsetDelegate = self
         urlBar.isIPadRegularDimensions = isIPadRegularDimensions
@@ -635,7 +637,14 @@ class BrowserViewController: UIViewController {
         mainContainerView.insertSubview(urlBar, aboveSubview: urlBarContainer)
 
         addURLBarConstraints()
+    }
 
+    private func bindUrlBarViewModel() {
+        urlBarViewModel.viewActionPublisher
+            .sink { [weak self] action in
+                guard let self = self else { return }
+                
+            }.store(in: &cancellables)
     }
 
     private func addURLBarConstraints() {

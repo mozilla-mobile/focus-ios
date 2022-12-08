@@ -108,6 +108,7 @@
 		C8337E002710898800093D42 /* SheetMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DF32710898800093D42 /* SheetMetrics.swift */; };
 		C8337E05271089C200093D42 /* SectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337E02271089C200093D42 /* SectionItem.swift */; };
 		C8337E07271089C200093D42 /* DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337E04271089C200093D42 /* DataSource.swift */; };
+		C833ED152941D53D00C7DF8D /* URLBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C833ED142941D53D00C7DF8D /* URLBarViewModel.swift */; };
 		C83FB7D2273AA13300B78CC5 /* MetadataHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = C83FB7D1273AA13200B78CC5 /* MetadataHelper.js */; };
 		C83FB7DC273BE4BC00B78CC5 /* Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = C83FB7DB273BE4BC00B78CC5 /* Metadata.swift */; };
 		C847E956274BB7CC000F6D20 /* XCUIApplication+Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = C847E955274BB7C0000F6D20 /* XCUIApplication+Buttons.swift */; };
@@ -757,6 +758,7 @@
 		C8337DF32710898800093D42 /* SheetMetrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetMetrics.swift; sourceTree = "<group>"; };
 		C8337E02271089C200093D42 /* SectionItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionItem.swift; sourceTree = "<group>"; };
 		C8337E04271089C200093D42 /* DataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSource.swift; sourceTree = "<group>"; };
+		C833ED142941D53D00C7DF8D /* URLBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBarViewModel.swift; sourceTree = "<group>"; };
 		C83FB7D1273AA13200B78CC5 /* MetadataHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = MetadataHelper.js; sourceTree = "<group>"; };
 		C83FB7DB273BE4BC00B78CC5 /* Metadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metadata.swift; sourceTree = "<group>"; };
 		C847E955274BB7C0000F6D20 /* XCUIApplication+Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIApplication+Buttons.swift"; sourceTree = "<group>"; };
@@ -1888,6 +1890,7 @@
 				D364DC251DC4163700562991 /* BrowserToolset.swift */,
 				E5639E622940A1C100E55B9B /* BrowserToolsetDelegate.swift */,
 				E5639E642940B39200E55B9B /* Combine+UIControl.swift */,
+				C833ED142941D53D00C7DF8D /* URLBarViewModel.swift */,
 			);
 			path = URLBar;
 			sourceTree = "<group>";
@@ -2651,6 +2654,7 @@
 				C82F45F9281A76EF000D7D84 /* ShortcutsPresenter.swift in Sources */,
 				F8BC6A0727224B170026AB9F /* NimbusExtensions.swift in Sources */,
 				C89AA96F271720330089838F /* ThemeTableViewAccessoryCell.swift in Sources */,
+				C833ED152941D53D00C7DF8D /* URLBarViewModel.swift in Sources */,
 				D3E2C96D1DA3077400DEBE3D /* CharacterSetExtensions.swift in Sources */,
 				E5E4504D28CF4548005A01F1 /* TipViewController.swift in Sources */,
 				D3E2C96F1DA3093D00DEBE3D /* BrowserToolbar.swift in Sources */,
