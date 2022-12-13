@@ -6,26 +6,176 @@ import UIKit
 import SnapKit
 import Telemetry
 import Glean
+import Combine
 
 enum Source: String {
    case action, shortcut, suggestion, topsite, widget, none
 }
 
-protocol URLBarDelegate: AnyObject {
-    func urlBar(_ urlBar: URLBar, didEnterText text: String)
-    func urlBar(_ urlBar: URLBar, didSubmitText text: String, source: Source)
-    func urlBar(_ urlBar: URLBar, didAddCustomURL url: URL)
-    func urlBarDidActivate(_ urlBar: URLBar)
-    func urlBarDidDeactivate(_ urlBar: URLBar)
-    func urlBarDidFocus(_ urlBar: URLBar)
-    func urlBarDidPressScrollTop(_: URLBar, tap: UITapGestureRecognizer)
-    func urlBarDidDismiss(_ urlBar: URLBar)
-    func urlBarDidTapShield(_ urlBar: URLBar)
-    func urlBarDidLongPress(_ urlBar: URLBar)
-    func urlBarDisplayTextForURL(_ url: URL?) -> (String?, Bool)
-}
-
 class URLBar: UIView {
+    fileprivate var viewModel: URLBarViewModel
+    private var cancellables: Set<AnyCancellable> = []
+
+    private lazy var cancelButton: InsetButton = {
+        let button = InsetButton()
+        button.isHidden = true
+        button.alpha = 0
+        button.setImage(.cancel, for: .normal)
+        button.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        button.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
+        button.accessibilityIdentifier = "URLBar.cancelButton"
+        return button
+    }()
+
+    private lazy var shieldIcon: UIButton = {
+        let button = UIButton(type: .system)
+        button.tintColor = .primaryText
+        button.setImage(.trackingProtectionOn, for: .normal)
+        button.contentMode = .center
+        button.accessibilityIdentifier = "URLBar.trackingProtectionIcon"
+        button.setContentCompressionResistancePriority(.required, for: .horizontal)
+        button.setContentHuggingPriority(.required, for: .horizontal)
+        return button
+    }()
+
+    public var shieldIconAnchor: UIView { shieldIcon }
+
+    private lazy var urlBarBorderView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .secondaryButton
+        view.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
+        view.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        view.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        return view
+    }()
+
+    private lazy var urlBarBackgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .locationBar
+        view.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
+        view.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        view.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        return view
+    }()
+
+    private lazy var truncatedUrlText: UITextView = {
+        let textView = UITextView()
+        textView.alpha = 0
+        textView.isUserInteractionEnabled = false
+        textView.font = .footnote12
+        textView.tintColor = .primaryText
+        textView.textColor = .primaryText
+        textView.backgroundColor = UIColor.clear
+        textView.contentMode = .bottom
+        textView.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .vertical)
+        textView.isScrollEnabled = false
+        textView.accessibilityIdentifier = "Collapsed.truncatedUrlText"
+        return textView
+    }()
+
+    private lazy var urlTextField: URLTextField = {
+        // UITextField doesn't allow customization of the clear button, so we create
+        // our own so we can use it as the rightView.
+        let clearButton = UIButton(frame: CGRect(x: 0, y: 0, width: UIConstants.layout.urlBarClearButtonWidth, height: UIConstants.layout.urlBarClearButtonHeight))
+        clearButton.isHidden = true
+        clearButton.setImage(.clear, for: .normal)
+        clearButton.addTarget(self, action: #selector(didPressClear), for: .touchUpInside)
+
+        let textField = URLTextField()
+        textField.font = .body15
+        textField.tintColor = .primaryText
+        textField.textColor = .primaryText
+        textField.keyboardType = .webSearch
+        textField.autocapitalizationType = .none
+        textField.autocorrectionType = .no
+        textField.rightView = clearButton
+        textField.rightViewMode = .whileEditing
+        textField.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .vertical)
+        textField.autocompleteDelegate = self
+        textField.accessibilityIdentifier = "URLBar.urlText"
+        textField.placeholder = UIConstants.strings.urlTextPlaceholder
+        textField.isUserInteractionEnabled = false
+        return textField
+    }()
+
+    private lazy var deleteButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(.delete, for: .normal)
+        button.accessibilityIdentifier = "URLBar.deleteButton"
+        button.isEnabled = false
+        return button
+    }()
+
+    private lazy var contextMenuButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.tintColor = .label
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(.hamburgerMenu, for: .normal)
+        button.tintColor = .primaryText
+        if #available(iOS 14.0, *) {
+            button.showsMenuAsPrimaryAction = true
+            button.menu = UIMenu(children: [])
+        }
+        button.accessibilityLabel = UIConstants.strings.browserSettings
+        button.accessibilityIdentifier = "HomeView.settingsButton"
+        button.setContentCompressionResistancePriority(.required, for: .horizontal)
+        button.setContentHuggingPriority(.required, for: .horizontal)
+        return button
+    }()
+
+    private lazy var backButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(.backActive, for: .normal)
+        button.accessibilityLabel = UIConstants.strings.browserBack
+        button.isEnabled = false
+        return button
+    }()
+
+    private lazy var forwardButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(.forwardActive, for: .normal)
+        button.accessibilityLabel = UIConstants.strings.browserForward
+        button.isEnabled = false
+        return button
+    }()
+
+    private lazy var stopReloadButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.tintColor = .label
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(.refreshMenu, for: .normal)
+        button.accessibilityIdentifier = "BrowserToolset.stopReloadButton"
+        return button
+    }()
+
+    private lazy var textAndLockContainer: UIView = {
+        let textAndLockContainer = UIView()
+
+        let singleTap = UITapGestureRecognizer(target: self, action: #selector(didSingleTap(sender:)))
+        singleTap.numberOfTapsRequired = 1
+        textAndLockContainer.addGestureRecognizer(singleTap)
+
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(displayURLContextMenu))
+        textAndLockContainer.addGestureRecognizer(longPress)
+
+        return textAndLockContainer
+    }()
+
+    private lazy var collapsedUrlAndLockWrapper: UIView = {
+        let collapsedUrlAndLockWrapper = UIView()
+        return collapsedUrlAndLockWrapper
+    }()
+
+    lazy var progressBar: GradientProgressBar = {
+        let progressBar = GradientProgressBar(progressViewStyle: .bar)
+        progressBar.isHidden = true
+        progressBar.alpha = 0
+        return progressBar
+    }()
+
     enum State {
         case `default`
         case browsing
@@ -48,8 +198,6 @@ class URLBar: UIView {
 
     weak var delegate: URLBarDelegate?
     var userInputText: String?
-
-    let progressBar = GradientProgressBar(progressViewStyle: .bar)
     var inBrowsingMode: Bool = false {
         didSet {
             DispatchQueue.main.async {
@@ -66,27 +214,14 @@ class URLBar: UIView {
     }
     var shouldPresent = false
 
-    public var contextMenuButton: InsetButton { toolset.contextMenuButton }
-    public var deleteButton: InsetButton { toolset.deleteButton }
+    public var contextMenuButtonAnchor: UIView { contextMenuButton }
+    public var deleteButtonAnchor: UIView { deleteButton }
     public var textFieldAnchor: UIView { urlTextField }
 
     private let leftBarViewLayoutGuide = UILayoutGuide()
     private let rightBarViewLayoutGuide = UILayoutGuide()
-
-    private let cancelButton = InsetButton()
     private let domainCompletion = DomainCompletion(completionSources: [TopDomainsCompletionSource(), CustomCompletionSource()])
-
-    private let toolset = BrowserToolset()
-    private let urlTextField = URLTextField()
     var draggableUrlTextView: UIView { return urlTextField }
-    private let truncatedUrlText = UITextView()
-    private let urlBarBorderView = UIView()
-    private let urlBarBackgroundView = UIView()
-    private let textAndLockContainer = UIView()
-    private let collapsedUrlAndLockWrapper = UIView()
-    private let collapsedTrackingProtectionBadge = CollapsedTrackingProtectionBadge()
-
-    let shieldIcon = TrackingProtectionBadge()
 
     var centerURLBar = false {
         didSet {
@@ -147,107 +282,29 @@ class URLBar: UIView {
         return true
     }
 
-    convenience init() {
-        self.init(frame: CGRect.zero)
+    init(viewModel: URLBarViewModel) {
+        self.viewModel = viewModel
+        super.init(frame: CGRect.zero)
         isIPadRegularDimensions = traitCollection.horizontalSizeClass == .regular && traitCollection.verticalSizeClass == .regular
-        let singleTap = UITapGestureRecognizer(target: self, action: #selector(didSingleTap(sender:)))
-        singleTap.numberOfTapsRequired = 1
-        textAndLockContainer.addGestureRecognizer(singleTap)
-
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(displayURLContextMenu))
-        textAndLockContainer.addGestureRecognizer(longPress)
 
         let dragInteraction = UIDragInteraction(delegate: self)
-        textAndLockContainer.addInteraction(dragInteraction)
+        urlBarBackgroundView.addInteraction(dragInteraction)
 
-        addSubview(toolset.backButton)
-        addSubview(toolset.forwardButton)
-        addSubview(toolset.deleteButton)
-        addSubview(toolset.contextMenuButton)
+        addSubview(backButton)
+        addSubview(forwardButton)
+        addSubview(deleteButton)
+        addSubview(contextMenuButton)
 
-        urlTextField.isUserInteractionEnabled = false
         urlBarBackgroundView.addSubview(textAndLockContainer)
 
-        let gestureRecognizer = UITapGestureRecognizer()
-        gestureRecognizer.numberOfTapsRequired = 1
-        gestureRecognizer.cancelsTouchesInView = true
-        gestureRecognizer.addTarget(self, action: #selector(didTapShieldIcon))
-        shieldIcon.isUserInteractionEnabled = true
-        shieldIcon.addGestureRecognizer(gestureRecognizer)
-        shieldIcon.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-        shieldIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-
-        cancelButton.isHidden = true
-        cancelButton.alpha = 0
-        cancelButton.setImage(#imageLiteral(resourceName: "icon_cancel"), for: .normal)
-
-        cancelButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-        cancelButton.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
-        cancelButton.accessibilityIdentifier = "URLBar.cancelButton"
         addSubview(cancelButton)
-
-        textAndLockContainer.addSubview(toolset.stopReloadButton)
-
-        urlBarBorderView.backgroundColor = .secondaryButton
-        urlBarBorderView.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
-        urlBarBorderView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-        urlBarBorderView.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        textAndLockContainer.addSubview(stopReloadButton)
         addSubview(urlBarBorderView)
-
-        urlBarBackgroundView.backgroundColor = .locationBar
-        urlBarBackgroundView.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
-        urlBarBackgroundView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-        urlBarBackgroundView.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         urlBarBorderView.addSubview(urlBarBackgroundView)
-
-        truncatedUrlText.alpha = 0
-        truncatedUrlText.isUserInteractionEnabled = false
-        truncatedUrlText.font = .footnote12
-        truncatedUrlText.tintColor = .primaryText
-        truncatedUrlText.textColor = .primaryText
-        truncatedUrlText.backgroundColor = UIColor.clear
-        truncatedUrlText.contentMode = .bottom
-        truncatedUrlText.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .vertical)
-        truncatedUrlText.isScrollEnabled = false
-        truncatedUrlText.accessibilityIdentifier = "Collapsed.truncatedUrlText"
-
-        collapsedTrackingProtectionBadge.alpha = 0
-        collapsedTrackingProtectionBadge.tintColor = .white
-        collapsedTrackingProtectionBadge.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-        collapsedTrackingProtectionBadge.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-
         collapsedUrlAndLockWrapper.addSubview(truncatedUrlText)
-        collapsedUrlAndLockWrapper.addSubview(collapsedTrackingProtectionBadge)
         addSubview(collapsedUrlAndLockWrapper)
-
-        // UITextField doesn't allow customization of the clear button, so we create
-        // our own so we can use it as the rightView.
-        let clearButton = UIButton(frame: CGRect(x: 0, y: 0, width: UIConstants.layout.urlBarClearButtonWidth, height: UIConstants.layout.urlBarClearButtonHeight))
-        clearButton.isHidden = true
-        clearButton.setImage(#imageLiteral(resourceName: "icon_clear"), for: .normal)
-        clearButton.addTarget(self, action: #selector(didPressClear), for: .touchUpInside)
-
-        urlTextField.font = .body15
-        urlTextField.tintColor = .primaryText
-        urlTextField.textColor = .primaryText
-        urlTextField.keyboardType = .webSearch
-        urlTextField.autocapitalizationType = .none
-        urlTextField.autocorrectionType = .no
-        urlTextField.rightView = clearButton
-        urlTextField.rightViewMode = .whileEditing
-        urlTextField.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .vertical)
-        urlTextField.autocompleteDelegate = self
-        urlTextField.accessibilityIdentifier = "URLBar.urlText"
-        urlTextField.placeholder = UIConstants.strings.urlTextPlaceholder
         textAndLockContainer.addSubview(urlTextField)
-
-        shieldIcon.tintColor = .primaryText
-        shieldIcon.contentMode = .center
-        shieldIcon.accessibilityIdentifier = "URLBar.trackingProtectionIcon"
         addSubview(shieldIcon)
-
-        progressBar.isHidden = true
-        progressBar.alpha = 0
         addSubview(progressBar)
 
         var toolsetButtonWidthMultiplier: CGFloat {
@@ -266,7 +323,7 @@ class URLBar: UIView {
 
             hideToolsetConstraints.append(make.leading.equalTo(leftBarViewLayoutGuide).offset(UIConstants.layout.urlBarMargin).constraint)
 
-            showToolsetConstraints.append(make.leading.equalTo( toolset.forwardButton.snp.trailing).offset(UIConstants.layout.urlBarToolsetOffset).constraint)
+            showToolsetConstraints.append(make.leading.equalTo( forwardButton.snp.trailing).offset(UIConstants.layout.urlBarToolsetOffset).constraint)
         }
 
         addLayoutGuide(rightBarViewLayoutGuide)
@@ -274,24 +331,24 @@ class URLBar: UIView {
             make.centerY.equalToSuperview()
             make.height.equalTo(UIConstants.layout.urlBarButtonTargetSize)
 
-            hideToolsetConstraints.append(make.trailing.equalTo(toolset.contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarIPadToolsetOffset).constraint)
+            hideToolsetConstraints.append(make.trailing.equalTo(contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarIPadToolsetOffset).constraint)
 
-            showToolsetConstraints.append(make.trailing.equalTo(toolset.contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarIPadToolsetOffset).constraint)
+            showToolsetConstraints.append(make.trailing.equalTo(contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarIPadToolsetOffset).constraint)
         }
 
-        toolset.backButton.snp.makeConstraints { make in
+        backButton.snp.makeConstraints { make in
             make.leading.equalTo(safeAreaLayoutGuide).offset(UIConstants.layout.urlBarMargin)
             make.centerY.equalTo(self)
             make.width.equalTo(self).multipliedBy(toolsetButtonWidthMultiplier)
         }
 
-        toolset.forwardButton.snp.makeConstraints { make in
-            make.leading.equalTo(toolset.backButton.snp.trailing)
+        forwardButton.snp.makeConstraints { make in
+            make.leading.equalTo(backButton.snp.trailing)
             make.centerY.equalTo(self)
-            make.size.equalTo(toolset.backButton)
+            make.size.equalTo(backButton)
         }
 
-        toolset.contextMenuButton.snp.makeConstraints { make in
+        contextMenuButton.snp.makeConstraints { make in
             if inBrowsingMode {
                 make.trailing.equalTo(safeAreaLayoutGuide)
             } else {
@@ -301,10 +358,10 @@ class URLBar: UIView {
             make.size.equalTo(UIConstants.layout.contextMenuButtonSize)
         }
 
-        toolset.deleteButton.snp.makeConstraints { make in
-            make.trailing.equalTo(toolset.contextMenuButton.snp.leading).inset(isIPadRegularDimensions ? UIConstants.layout.deleteButtonOffset : UIConstants.layout.deleteButtonMarginContextMenu)
+        deleteButton.snp.makeConstraints { make in
+            make.trailing.equalTo(contextMenuButton.snp.leading).inset(isIPadRegularDimensions ? UIConstants.layout.deleteButtonOffset : UIConstants.layout.deleteButtonMarginContextMenu)
             make.centerY.equalTo(self)
-            make.size.equalTo(toolset.backButton)
+            make.size.equalTo(backButton)
         }
 
         urlBarBorderView.snp.makeConstraints { make in
@@ -349,7 +406,7 @@ class URLBar: UIView {
             centeredURLConstraints.append(make.centerX.equalToSuperview().constraint)
         }
 
-        toolset.stopReloadButton.snp.makeConstraints { make in
+        stopReloadButton.snp.makeConstraints { make in
             make.trailing.equalTo(urlBarBorderView)
             make.leading.equalTo(urlBarBorderView.snp.trailing).inset(UIConstants.layout.urlBarButtonTargetSize)
             make.center.equalToSuperview()
@@ -371,12 +428,6 @@ class URLBar: UIView {
             make.height.equalTo(UIConstants.layout.progressBarHeight)
         }
 
-        collapsedTrackingProtectionBadge.snp.makeConstraints { make in
-            make.leading.equalTo(safeAreaLayoutGuide).offset(UIConstants.layout.collapsedProtectionBadgeOffset)
-            make.width.height.equalTo(10)
-            make.bottom.equalToSuperview()
-        }
-
         truncatedUrlText.snp.makeConstraints { make in
             make.centerY.equalTo(self).offset(8)
             make.leading.trailing.equalToSuperview()
@@ -396,8 +447,140 @@ class URLBar: UIView {
         showToolsetConstraints.forEach { $0.deactivate() }
         expandedBarConstraints.forEach { $0.activate() }
         updateToolsetConstraints()
+
+        bindButtonActions()
+        bindViewModelEvents()
     }
 
+    fileprivate func bindButtonActions() {
+        shieldIcon
+            .publisher(event: .touchUpInside)
+            .sink { [unowned self] _ in
+                self.viewModel
+                    .viewActionSubject
+                    .send(.shieldIconButtonTap)
+            }
+            .store(in: &cancellables)
+
+        backButton
+            .publisher(event: .touchUpInside)
+            .sink { [unowned self] _ in
+                self.viewModel
+                    .viewActionSubject
+                    .send(.backButtonTap)
+            }
+            .store(in: &cancellables)
+
+        forwardButton
+            .publisher(event: .touchUpInside)
+            .sink { [unowned self] _ in
+                self.viewModel
+                    .viewActionSubject
+                    .send(.forwardButtonTap)
+            }
+            .store(in: &cancellables)
+
+        stopReloadButton
+            .publisher(event: .touchUpInside)
+            .sink { [unowned self] _ in
+                if viewModel.isLoading {
+                    self.viewModel
+                        .viewActionSubject
+                        .send(.stopButtonTap)
+                } else {
+                    self.viewModel
+                        .viewActionSubject
+                        .send(.reloadButtonTap)
+                }
+            }
+            .store(in: &cancellables)
+
+        deleteButton
+            .publisher(event: .touchUpInside)
+            .sink { [unowned self] _ in
+                self.viewModel
+                    .viewActionSubject
+                    .send(.deleteButtonTap)
+            }
+            .store(in: &cancellables)
+
+        let event: UIControl.Event
+        if #available(iOS 14.0, *) {
+            event = .menuActionTriggered
+        } else {
+            event = .touchUpInside
+        }
+        contextMenuButton.publisher(event: event)
+            .sink { [unowned self] _ in
+                self.viewModel.viewActionSubject.send(.contextMenuTap(anchor: self.contextMenuButton))
+            }
+            .store(in: &cancellables)
+
+    }
+
+    fileprivate func bindViewModelEvents() {
+        viewModel
+            .$connectionState
+            .removeDuplicates()
+            .map { trackingProtectionStatus -> UIImage in
+                switch trackingProtectionStatus {
+                    case .on: return .trackingProtectionOn
+                    case .off: return .trackingProtectionOff
+                    case .connectionNotSecure: return .connectionNotSecure
+                }
+            }
+            .sink(receiveValue: { [shieldIcon] image in
+                UIView.transition(
+                    with: shieldIcon,
+                    duration: 0.1,
+                    options: .transitionCrossDissolve,
+                    animations: {
+                        shieldIcon.setImage(image, for: .normal)
+                    })
+            })
+            .store(in: &cancellables)
+
+        viewModel
+            .$canGoBack
+            .sink { [backButton] in
+                backButton.isEnabled = $0
+                backButton.alpha = $0 ? 1 : UIConstants.layout.browserToolbarDisabledOpacity
+            }
+            .store(in: &cancellables)
+
+        viewModel
+            .$canGoForward
+            .sink { [forwardButton] in
+                forwardButton.isEnabled = $0
+                forwardButton.alpha = $0 ? 1 : UIConstants.layout.browserToolbarDisabledOpacity
+            }
+            .store(in: &cancellables)
+
+        viewModel
+            .$canDelete
+            .sink { [deleteButton] in
+                deleteButton.isEnabled = $0
+                deleteButton.alpha = $0 ? 1 : UIConstants.layout.browserToolbarDisabledOpacity
+            }
+            .store(in: &cancellables)
+
+        viewModel
+            .$isLoading
+            .sink { [stopReloadButton] in
+                if $0 {
+                    stopReloadButton.setImage(.stopMenu, for: .normal)
+                    stopReloadButton.accessibilityLabel = UIConstants.strings.browserStop
+                } else {
+                    stopReloadButton.setImage(.refreshMenu, for: .normal)
+                    stopReloadButton.accessibilityLabel = UIConstants.strings.browserReload
+                }
+            }
+            .store(in: &cancellables)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     private func addShieldConstraints() {
         shieldIcon.snp.makeConstraints { (make) in
             make.top.bottom.equalToSuperview()
@@ -413,7 +596,7 @@ class URLBar: UIView {
 
         if isIPadRegularDimensions {
             leftBarViewLayoutGuide.snp.remakeConstraints { (make) in
-                make.leading.equalTo(toolset.forwardButton.snp.trailing).offset(UIConstants.layout.urlBarToolsetOffset)
+                make.leading.equalTo(forwardButton.snp.trailing).offset(UIConstants.layout.urlBarToolsetOffset)
             }
         } else {
             leftBarViewLayoutGuide.snp.makeConstraints { make in
@@ -424,9 +607,9 @@ class URLBar: UIView {
 
         rightBarViewLayoutGuide.snp.makeConstraints { (make) in
             if  isIPadRegularDimensions {
-                make.trailing.equalTo(toolset.contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarIPadToolsetOffset)
+                make.trailing.equalTo(contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarIPadToolsetOffset)
             } else {
-                make.trailing.greaterThanOrEqualTo(toolset.contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarToolsetOffset)
+                make.trailing.greaterThanOrEqualTo(contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarToolsetOffset)
             }
         }
     }
@@ -512,35 +695,6 @@ class URLBar: UIView {
             }
         }
     }
-    weak var toolsetDelegate: BrowserToolsetDelegate? {
-        didSet {
-            toolset.delegate = toolsetDelegate
-        }
-    }
-
-    var canGoBack: Bool = false {
-        didSet {
-            toolset.canGoBack = canGoBack
-        }
-    }
-
-    var canGoForward: Bool = false {
-        didSet {
-            toolset.canGoForward = canGoForward
-        }
-    }
-
-    var canDelete: Bool = false {
-        didSet {
-            toolset.canDelete = canDelete
-        }
-    }
-
-    var isLoading: Bool = false {
-        didSet {
-            toolset.isLoading = isLoading
-        }
-    }
 
     var shouldShowToolset: Bool = false {
         didSet {
@@ -577,7 +731,7 @@ class URLBar: UIView {
         let visible = !isEditing && url != nil
         let duration = UIConstants.layout.urlBarTransitionAnimationDuration / 2
 
-        toolset.stopReloadButton.animateHidden(!visible, duration: duration)
+        stopReloadButton.animateHidden(!visible, duration: duration)
 
         self.layoutIfNeeded()
 
@@ -657,7 +811,7 @@ class URLBar: UIView {
                     editingURLTextConstrains.append(make.leading.equalTo(urlTextField).offset(-UIConstants.layout.urlTextOffset).constraint)
                 }
                 editingURLTextConstrains.forEach { $0.activate() }
-                toolset.stopReloadButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+                stopReloadButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
             }
             if !isIPadRegularDimensions {
                 leftBarViewLayoutGuide.snp.makeConstraints { make in
@@ -667,7 +821,7 @@ class URLBar: UIView {
 
             shieldIcon.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
             cancelButton.animateHidden(isIPadRegularDimensions ? true : false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
-            toolset.contextMenuButton.isEnabled = true
+            contextMenuButton.isEnabled = true
             borderColor = .foundation
             backgroundColor = .clear
         }
@@ -776,7 +930,7 @@ class URLBar: UIView {
         }
     }
 
-    /// Show the URL toolset buttons if we're on iPad/landscape and not editing; hide them otherwise.
+    /// Show the URL toolset buttons if we're on iPad/landscape; hide them otherwise.
     /// This method is intended to be called inside `UIView.animate` block.
     private func updateToolsetConstraints() {
         let isHidden: Bool
@@ -786,21 +940,16 @@ class URLBar: UIView {
             isHidden = true
             showToolset = false
             centerURLBar = false
-        case .browsing:
+        case .browsing, .editing:
             isHidden = !shouldShowToolset
-            showToolset = !isHidden
+            showToolset = !isHidden && inBrowsingMode
             centerURLBar = shouldShowToolset
-        case .editing:
-            let isiPadLayoutWhileBrowsing = isIPadRegularDimensions && inBrowsingMode
-            isHidden =  isiPadLayoutWhileBrowsing ? !shouldShowToolset : true
-            showToolset = isiPadLayoutWhileBrowsing ? !isHidden : false
-            centerURLBar = false
         }
 
-        toolset.backButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
-        toolset.forwardButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
-        toolset.deleteButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
-        toolset.contextMenuButton.animateHidden(!inBrowsingMode ? false : (isIPadRegularDimensions ? false : isHidden), duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+        backButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+        forwardButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+        deleteButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+        contextMenuButton.animateHidden(!inBrowsingMode ? false : (isIPadRegularDimensions ? false : isHidden), duration: UIConstants.layout.urlBarTransitionAnimationDuration)
 
     }
 
@@ -809,10 +958,6 @@ class URLBar: UIView {
         userInputText = nil
         displayClearButton(shouldDisplay: false)
         delegate?.urlBar(self, didEnterText: "")
-    }
-
-    @objc private func didTapShieldIcon() {
-        delegate?.urlBarDidTapShield(self)
     }
 
     @objc private func displayURLContextMenu(sender: UILongPressGestureRecognizer) {
@@ -889,12 +1034,11 @@ class URLBar: UIView {
         urlBarBackgroundView.alpha = expandAlpha
         truncatedUrlText.alpha = collapseAlpha
         collapsedUrlAndLockWrapper.alpha = collapseAlpha
-        toolset.backButton.alpha = shouldShowToolset ? expandAlpha : 0
-        toolset.forwardButton.alpha = shouldShowToolset ? expandAlpha : 0
-        toolset.deleteButton.alpha = shouldShowToolset ? expandAlpha : 0
-        toolset.contextMenuButton.alpha = expandAlpha
+        backButton.alpha = shouldShowToolset ? expandAlpha : 0
+        forwardButton.alpha = shouldShowToolset ? expandAlpha : 0
+        deleteButton.alpha = shouldShowToolset ? expandAlpha : 0
+        contextMenuButton.alpha = expandAlpha
 
-        collapsedTrackingProtectionBadge.alpha = 0
         if isEditing {
             shieldIcon.alpha = collapseAlpha
         } else {
@@ -902,11 +1046,6 @@ class URLBar: UIView {
         }
 
         self.layoutIfNeeded()
-    }
-
-    func updateTrackingProtectionBadge(trackingStatus: TrackingProtectionStatus, shouldDisplayShieldIcon: Bool) {
-        shieldIcon.updateState(trackingStatus: trackingStatus, shouldDisplayShieldIcon: shouldDisplayShieldIcon)
-        collapsedTrackingProtectionBadge.updateState(trackingStatus: trackingStatus, shouldDisplayShieldIcon: shouldDisplayShieldIcon)
     }
 }
 
@@ -988,24 +1127,6 @@ extension URLBar: UIDragInteractionDelegate {
         GleanMetrics.UrlInteraction.dragStarted.record()
         return [dragItem]
     }
-
-    func dragInteraction(_ interaction: UIDragInteraction, previewForLifting item: UIDragItem, session: UIDragSession) -> UITargetedDragPreview? {
-        let params = UIDragPreviewParameters()
-        params.backgroundColor = UIColor.clear
-        return UITargetedDragPreview(view: draggableUrlTextView, parameters: params)
-    }
-
-    func dragInteraction(_ interaction: UIDragInteraction, sessionDidMove session: UIDragSession) {
-        for item in session.items {
-            item.previewProvider = {
-                guard let url = self.url else {
-                    return UIDragPreview(view: UIView())
-                }
-                return UIDragPreview(for: url)
-            }
-        }
-    }
-
 }
 
 private class URLTextField: AutocompleteTextField {
@@ -1049,120 +1170,5 @@ private class URLTextField: AutocompleteTextField {
 
     private func textFieldDidEndEditing(_ textField: UITextField) {
         textField.layoutIfNeeded()
-    }
-}
-
-class TrackingProtectionBadge: UIView {
-    let trackingProtectionOff = UIImageView(image: .trackingProtectionOff)
-    let trackingProtectionOn = UIImageView(image: .trackingProtectionOn)
-    let connectionNotSecure = UIImageView(image: .connectionNotSecure)
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setContentHuggingPriority(.defaultLow, for: .horizontal)
-        setupViews()
-    }
-
-    func setupViews() {
-        trackingProtectionOff.alpha = 0
-        connectionNotSecure.alpha = 0
-        trackingProtectionOn.contentMode = .scaleAspectFit
-        trackingProtectionOff.contentMode = .scaleAspectFit
-        connectionNotSecure.contentMode = .scaleAspectFit
-
-        addSubview(trackingProtectionOff)
-        addSubview(trackingProtectionOn)
-        addSubview(connectionNotSecure)
-
-        trackingProtectionOn.setContentHuggingPriority(.required, for: .horizontal)
-        trackingProtectionOn.snp.makeConstraints { make in
-            make.centerX.centerY.equalToSuperview()
-            make.width.equalTo(UIConstants.layout.urlButtonSize)
-        }
-
-        trackingProtectionOff.setContentHuggingPriority(.required, for: .horizontal)
-        trackingProtectionOff.snp.makeConstraints { make in
-            make.centerX.centerY.equalToSuperview()
-            make.width.equalTo(UIConstants.layout.urlButtonSize)
-        }
-
-        connectionNotSecure.setContentHuggingPriority(.required, for: .horizontal)
-        connectionNotSecure.snp.makeConstraints { make in
-            make.centerX.centerY.equalToSuperview()
-            make.width.equalTo(UIConstants.layout.urlButtonSize)
-        }
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func updateState(trackingStatus: TrackingProtectionStatus, shouldDisplayShieldIcon: Bool) {
-        guard shouldDisplayShieldIcon else {
-            trackingProtectionOn.alpha = 0
-            trackingProtectionOff.alpha = 0
-            connectionNotSecure.alpha = 1
-            return
-        }
-        switch trackingStatus {
-        case .on:
-            trackingProtectionOff.alpha = 0
-            trackingProtectionOn.alpha = 1
-            connectionNotSecure.alpha = 0
-        default:
-            trackingProtectionOff.alpha = 1
-            trackingProtectionOn.alpha = 0
-            connectionNotSecure.alpha = 0
-        }
-    }
-}
-
-class CollapsedTrackingProtectionBadge: TrackingProtectionBadge {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-
-    override func setupViews() {
-        addSubview(trackingProtectionOff)
-        addSubview(trackingProtectionOn)
-        addSubview(connectionNotSecure)
-
-        trackingProtectionOn.snp.makeConstraints { make in
-            make.leading.centerY.equalTo(self)
-            make.width.height.equalTo(UIConstants.layout.trackingProtectionHeight)
-        }
-
-        trackingProtectionOff.snp.makeConstraints { make in
-            make.leading.centerY.equalTo(self)
-            make.width.height.equalTo(UIConstants.layout.trackingProtectionHeight)
-        }
-
-        connectionNotSecure.snp.makeConstraints { make in
-            make.leading.centerY.equalTo(self)
-            make.width.height.equalTo(UIConstants.layout.trackingProtectionHeight)
-        }
-    }
-
-    override func updateState(trackingStatus: TrackingProtectionStatus, shouldDisplayShieldIcon: Bool) {
-        guard shouldDisplayShieldIcon else {
-            trackingProtectionOn.alpha = 0
-            trackingProtectionOff.alpha = 0
-            connectionNotSecure.alpha = 1
-            return
-        }
-        switch trackingStatus {
-        case .on:
-            trackingProtectionOff.alpha = 0
-            trackingProtectionOn.alpha = 1
-            connectionNotSecure.alpha = 0
-        default:
-            trackingProtectionOff.alpha = 1
-            trackingProtectionOn.alpha = 0
-            connectionNotSecure.alpha = 0
-        }
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
