@@ -332,7 +332,7 @@ extension URL {
         }
         return self
     }
-    
+
     /**
      * Returns a shorter displayable string for a domain
      *
