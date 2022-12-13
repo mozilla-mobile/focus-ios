@@ -277,7 +277,6 @@ class BrowserViewController: UIViewController {
 
         setupOnboardingEvents()
         setupShortcutEvents()
-        configureRefreshControl()
 
         trackingProtectionManager
             .$trackingProtectionStatus
@@ -508,16 +507,6 @@ class BrowserViewController: UIViewController {
                 }
             }
             .store(in: &cancellables)
-    }
-
-    private func configureRefreshControl() {
-        webViewController.scrollView.refreshControl = UIRefreshControl()
-        webViewController.scrollView.refreshControl?.addTarget(self, action: #selector(reloadPage), for: .valueChanged)
-    }
-
-    @objc private func reloadPage() {
-        reload()
-        webViewController.scrollView.refreshControl?.endRefreshing()
     }
 
     private func addShortcuts() {
