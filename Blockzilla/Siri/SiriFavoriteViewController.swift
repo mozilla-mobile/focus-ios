@@ -147,8 +147,8 @@ class SiriFavoriteViewController: UIViewController {
     }
 
     private func setUpEditUI() {
-        view.addSubview(editView)
 
+        view.addSubview(editView)
         editView.addSubview(topBorder)
         editView.addSubview(editLabel)
         editView.addSubview(bottomBorder)
