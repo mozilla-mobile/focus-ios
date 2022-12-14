@@ -40,7 +40,7 @@ class ThemeViewController: UIViewController {
         tableView.delegate = self
         return tableView
     }()
-    
+
     lazy private var tableViewConstraints = [
         tableView.topAnchor.constraint(equalTo: view.topAnchor),
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
