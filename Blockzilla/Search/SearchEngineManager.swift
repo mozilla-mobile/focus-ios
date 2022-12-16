@@ -194,7 +194,7 @@ class SearchEngineManager {
         prefs.set(engines, forKey: SearchEngineManager.prefKeyDisabledEngines)
     }
 
-    func queryForSearchURL(_ url: URL?) -> String? {
+    func queryForSearchURL(_ url: URL) -> String? {
         for engine in engines {
             guard let searchTerm = engine.queryForSearchURL(url) else { continue }
             return searchTerm

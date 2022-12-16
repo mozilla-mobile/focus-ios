@@ -142,10 +142,10 @@ class SearchEngine: NSObject, NSCoding {
         return nil
     }
     fileprivate func getURLFromTemplate(_ searchTemplate: String, query: String) -> URL? {
-        if let escapedQuery = query.addingPercentEncoding(withAllowedCharacters: .SearchTermsAllowed) {
+        if let escapedQuery = query.addingPercentEncoding(withAllowedCharacters: .searchTermsAllowed) {
             // Escape the search template as well in case it contains not-safe characters like symbols
             let templateAllowedSet = NSMutableCharacterSet()
-            templateAllowedSet.formUnion(with: .URLAllowed)
+            templateAllowedSet.formUnion(with: .urlAllowed)
 
             // Allow brackets since we use them in our template as our insertion point
             templateAllowedSet.formUnion(with: CharacterSet(charactersIn: "{}"))
@@ -193,6 +193,5 @@ class SearchEngine: NSObject, NSCoding {
 }
 
 extension CharacterSet {
-    public static let URLAllowed = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=%")
-    public static let SearchTermsAllowed = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789*-_.")
+    public static let searchTermsAllowed = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789*-_.")
 }

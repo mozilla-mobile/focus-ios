@@ -4,14 +4,22 @@
 
 import Foundation
 
-private let base = 36
-private let tMin = 1
-private let tMax = 26
-private let initialBias = 72
-private let initialN: Int = 128 // 0x80
-private let delimiter: Character = "-"
-private let prefixPunycode = "xn--"
-private let asciiPunycode = Array("abcdefghijklmnopqrstuvwxyz0123456789")
+fileprivate extension Int {
+    static let base = 36
+    static let tMin = 1
+    static let tMax = 26
+    static let initialBias = 72
+    static let initialN: Int = 128 // 0x80
+}
+
+fileprivate extension Character {
+    static let delimiter: Character = "-"
+}
+
+fileprivate extension String {
+    static let prefixPunycode = "xn--"
+    static let asciiPunycode = Array("abcdefghijklmnopqrstuvwxyz0123456789")
+}
 
 extension String {
 
@@ -25,11 +33,11 @@ extension String {
     }
 
     fileprivate func toValue(_ index: Int) -> Character {
-        return asciiPunycode[index]
+        return String.asciiPunycode[index]
     }
 
     fileprivate func toIndex(_ value: Character) -> Int {
-        return asciiPunycode.firstIndex(of: value)!
+        return String.asciiPunycode.firstIndex(of: value)!
     }
 
     fileprivate func adapt(_ delta: Int, numPoints: Int, firstTime: Bool) -> Int {
@@ -39,11 +47,11 @@ extension String {
         delta = delta / damp
         delta += delta / numPoints
         var k = 0
-        while delta > ((base - tMin) * tMax) / 2 {
-            delta /= (base - tMin)
-            k += base
+        while delta > ((Int.base - Int.tMin) * Int.tMax) / 2 {
+            delta /= (Int.base - Int.tMin)
+            k += Int.base
         }
-        return k + ((base - tMin + 1) * delta) / (delta + skew)
+        return k + ((Int.base - Int.tMin + 1) * delta) / (delta + skew)
     }
 
     fileprivate func encode(_ input: String) -> String {
@@ -51,7 +59,7 @@ extension String {
         var d: Int = 0
         var extendedChars = [Int]()
         for c in input.unicodeScalars {
-            if Int(c.value) < initialN {
+            if Int(c.value) < Int.initialN {
                 d += 1
                 output.append(String(c))
             } else {
@@ -62,12 +70,12 @@ extension String {
             return output
         }
         if d > 0 {
-            output.append(delimiter)
+            output.append(Character.delimiter)
         }
 
-        var n = initialN
+        var n = Int.initialN
         var delta = 0
-        var bias = initialBias
+        var bias = Int.initialBias
         var h: Int = 0
         var b: Int = 0
 
@@ -96,7 +104,7 @@ extension String {
             n = char
             for c in input.unicodeScalars {
                 let ci = Int(c.value)
-                if ci < n || ci < initialN {
+                if ci < n || ci < Int.initialN {
                     delta += 1
                     continue
                 }
@@ -104,16 +112,16 @@ extension String {
                     continue
                 }
                 var q = delta
-                var k = base
+                var k = Int.base
                 while true {
-                    let t = max(min(k - bias, tMax), tMin)
+                    let t = max(min(k - bias, Int.tMax), Int.tMin)
                     if q < t {
                         break
                     }
-                    let code = t + ((q - t) % (base - t))
+                    let code = t + ((q - t) % (Int.base - t))
                     output.append(toValue(code))
-                    q = (q - t) / (base - t)
-                    k += base
+                    q = (q - t) / (Int.base - t)
+                    k += Int.base
                 }
                 output.append(toValue(q))
                 bias = self.adapt(delta, numPoints: h + 1, firstTime: h == b)
@@ -130,10 +138,10 @@ extension String {
         let input = Array(punycode)
         var output = [Character]()
         var i = 0
-        var n = initialN
-        var bias = initialBias
+        var n = Int.initialN
+        var bias = Int.initialBias
         var pos = 0
-        if let ipos = input.lastIndex(of: delimiter) {
+        if let ipos = input.lastIndex(of: Character.delimiter) {
             pos = ipos
             output.append(contentsOf: input[0 ..< pos])
             pos += 1
@@ -143,17 +151,17 @@ extension String {
         while pos < inputLength {
             let oldi = i
             var w = 1
-            var k = base
+            var k = Int.base
             while true {
                 let digit = toIndex(input[pos])
                 pos += 1
                 i += digit * w
-                let t = max(min(k - bias, tMax), tMin)
+                let t = max(min(k - bias, Int.tMax), Int.tMin)
                 if digit < t {
                     break
                 }
-                w = w * (base - t)
-                k += base
+                w = w * (Int.base - t)
+                k += Int.base
             }
             outputLength += 1
             bias = adapt(i - oldi, numPoints: outputLength, firstTime: (oldi == 0))
@@ -168,7 +176,7 @@ extension String {
     fileprivate func isValidUnicodeScala(_ s: String) -> Bool {
         for c in s.unicodeScalars {
             let ci = Int(c.value)
-            if ci >= initialN {
+            if ci >= Int.initialN {
                 return false
             }
         }
@@ -176,7 +184,7 @@ extension String {
     }
 
     fileprivate func isValidPunycodeScala(_ s: String) -> Bool {
-        return s.hasPrefix(prefixPunycode)
+        return s.hasPrefix(String.prefixPunycode)
     }
 
     public func utf8HostToAscii() -> String {
@@ -187,7 +195,7 @@ extension String {
         for (i, part) in labels.enumerated() {
             if !isValidUnicodeScala(part) {
                 let a = encode(part)
-                labels[i] = prefixPunycode + a
+                labels[i] = String.prefixPunycode + a
             }
         }
         let resultString = labels.joined(separator: ".")
