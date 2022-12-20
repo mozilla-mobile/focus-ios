@@ -16,14 +16,15 @@ class URLBar: UIView {
     fileprivate var viewModel: URLBarViewModel
     private var cancellables: Set<AnyCancellable> = []
 
-    private lazy var cancelButton: InsetButton = {
-        let button = InsetButton()
+    private lazy var cancelButton: UIButton = {
+        let button = UIButton()
         button.isHidden = true
         button.alpha = 0
         button.setImage(.cancel, for: .normal)
         button.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         button.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
         button.accessibilityIdentifier = "URLBar.cancelButton"
+        button.isPointerInteractionEnabled = true
         return button
     }()
 
@@ -35,6 +36,7 @@ class URLBar: UIView {
         button.accessibilityIdentifier = "URLBar.trackingProtectionIcon"
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
         button.setContentHuggingPriority(.required, for: .horizontal)
+        button.isPointerInteractionEnabled = true
         return button
     }()
 
@@ -104,6 +106,7 @@ class URLBar: UIView {
         button.setImage(.delete, for: .normal)
         button.accessibilityIdentifier = "URLBar.deleteButton"
         button.isEnabled = false
+        button.isPointerInteractionEnabled = true
         return button
     }()
 
@@ -121,6 +124,7 @@ class URLBar: UIView {
         button.accessibilityIdentifier = "HomeView.settingsButton"
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
         button.setContentHuggingPriority(.required, for: .horizontal)
+        button.isPointerInteractionEnabled = true
         return button
     }()
 
@@ -130,6 +134,7 @@ class URLBar: UIView {
         button.setImage(.backActive, for: .normal)
         button.accessibilityLabel = UIConstants.strings.browserBack
         button.isEnabled = false
+        button.isPointerInteractionEnabled = true
         return button
     }()
 
@@ -139,6 +144,7 @@ class URLBar: UIView {
         button.setImage(.forwardActive, for: .normal)
         button.accessibilityLabel = UIConstants.strings.browserForward
         button.isEnabled = false
+        button.isPointerInteractionEnabled = true
         return button
     }()
 
@@ -148,6 +154,7 @@ class URLBar: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(.refreshMenu, for: .normal)
         button.accessibilityIdentifier = "BrowserToolset.stopReloadButton"
+        button.isPointerInteractionEnabled = true
         return button
     }()
 
@@ -169,7 +176,7 @@ class URLBar: UIView {
         return collapsedUrlAndLockWrapper
     }()
 
-    lazy var progressBar: GradientProgressBar = {
+    private lazy var progressBar: GradientProgressBar = {
         let progressBar = GradientProgressBar(progressViewStyle: .bar)
         progressBar.isHidden = true
         progressBar.alpha = 0
@@ -220,7 +227,6 @@ class URLBar: UIView {
 
     private let leftBarViewLayoutGuide = UILayoutGuide()
     private let rightBarViewLayoutGuide = UILayoutGuide()
-    private let domainCompletion = DomainCompletion(completionSources: [TopDomainsCompletionSource(), CustomCompletionSource()])
     var draggableUrlTextView: UIView { return urlTextField }
 
     var centerURLBar = false {
@@ -574,6 +580,18 @@ class URLBar: UIView {
                     stopReloadButton.setImage(.refreshMenu, for: .normal)
                     stopReloadButton.accessibilityLabel = UIConstants.strings.browserReload
                 }
+            }
+            .store(in: &cancellables)
+
+        viewModel
+            .$loadingProgres
+            .dropFirst()
+            .map(Float.init)
+            .filter { 0 <= $0 && $0 <= 1 }
+            .sink { [progressBar] in
+                progressBar.alpha = 1
+                progressBar.isHidden = false
+                progressBar.setProgress($0, animated: true)
             }
             .store(in: &cancellables)
     }
@@ -1099,7 +1117,7 @@ extension URLBar: AutocompleteTextFieldDelegate {
 
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didEnterText text: String) {
         if let oldValue = userInputText, oldValue.count < text.count {
-            let completion = domainCompletion.autocompleteTextFieldCompletionSource(autocompleteTextField, forText: text)
+            let completion = viewModel.domainCompletion.autocompleteTextFieldCompletionSource(autocompleteTextField, forText: text)
             autocompleteTextField.setAutocompleteSuggestion(completion)
         }
 

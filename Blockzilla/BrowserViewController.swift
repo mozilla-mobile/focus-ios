@@ -39,7 +39,12 @@ class BrowserViewController: UIViewController {
 
     private var urlBar: URLBar!
     private lazy var browserToolbar = BrowserToolbar(viewModel: urlBarViewModel)
-    private lazy var urlBarViewModel = URLBarViewModel()
+    private lazy var urlBarViewModel = URLBarViewModel(
+        enableCustomDomainAutocomplete: { Settings.getToggle(.enableCustomDomainAutocomplete) },
+        getCustomDomainSetting: { Settings.getCustomDomainSetting() },
+        setCustomDomainSetting: { Settings.setCustomDomainSetting(domains: $0) },
+        enableDomainAutocomplete: { Settings.getToggle(.enableDomainAutocomplete) }
+    )
 
     private let searchSuggestClient = SearchSuggestClient()
     private var findInPageBar: FindInPageBar?
@@ -655,8 +660,8 @@ class BrowserViewController: UIViewController {
 
                     case .deleteButtonTap:
                         self.updateFindInPageVisibility(visible: false)
-                        self.urlBarViewModel.resetToDefaults()
                         self.resetBrowser()
+                        self.urlBarViewModel.resetToDefaults()
 
                     case .shieldIconButtonTap:
                         self.urlBarDidTapShield(self.urlBar)
@@ -1253,7 +1258,11 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBar(_ urlBar: URLBar, didAddCustomURL url: URL) {
         // Add the URL to the autocomplete list:
-        let autocompleteSource = CustomCompletionSource()
+        let autocompleteSource = CustomCompletionSource(
+            enableCustomDomainAutocomplete: { Settings.getToggle(.enableCustomDomainAutocomplete) },
+            getCustomDomainSetting: { Settings.getCustomDomainSetting() },
+            setCustomDomainSetting: { Settings.setCustomDomainSetting(domains: $0) }
+        )
 
         switch autocompleteSource.add(suggestion: url.absoluteString) {
         case .failure(.duplicateDomain):
@@ -1568,7 +1577,11 @@ extension BrowserViewController: OverlayViewDelegate {
     func overlayView(_ overlayView: OverlayView, didAddToAutocomplete query: String) {
         urlBar.dismiss()
 
-        let autocompleteSource = CustomCompletionSource()
+        let autocompleteSource = CustomCompletionSource(
+            enableCustomDomainAutocomplete: { Settings.getToggle(.enableCustomDomainAutocomplete) },
+            getCustomDomainSetting: { Settings.getCustomDomainSetting() },
+            setCustomDomainSetting: { Settings.setCustomDomainSetting(domains: $0) }
+        )
         switch autocompleteSource.add(suggestion: query) {
         case .failure(.duplicateDomain):
             Toast(text: UIConstants.strings.autocompleteCustomURLDuplicate).show()
@@ -1660,8 +1673,8 @@ extension BrowserViewController: WebControllerDelegate {
     func webControllerDidFinishNavigation(_ controller: WebController) {
         updateURLBar()
         urlBarViewModel.isLoading = false
+        urlBarViewModel.loadingProgres = 1
         toggleURLBarBackground(isBright: !urlBar.isEditing)
-        urlBar.progressBar.hideProgressBar()
         GleanMetrics.Browser.totalUriCount.add()
         webViewController.evaluateDocumentContentType { documentType in
             if documentType == "application/pdf" {
@@ -1681,9 +1694,9 @@ extension BrowserViewController: WebControllerDelegate {
 
     func webController(_ controller: WebController, didFailNavigationWithError error: Error) {
         urlBar.url = webViewController.url
-        urlBarViewModel.isLoading = false
         toggleURLBarBackground(isBright: true)
-        urlBar.progressBar.hideProgressBar()
+        urlBarViewModel.isLoading = false
+        urlBarViewModel.loadingProgres = 1
     }
 
     func webController(_ controller: WebController, didUpdateCanGoBack canGoBack: Bool) {
@@ -1699,9 +1712,7 @@ extension BrowserViewController: WebControllerDelegate {
         // from catching the global progress events.
         guard urlBar.inBrowsingMode else { return }
 
-        urlBar.progressBar.alpha = 1
-        urlBar.progressBar.isHidden = false
-        urlBar.progressBar.setProgress(Float(estimatedProgress), animated: true)
+        urlBarViewModel.loadingProgres = estimatedProgress
     }
 
     func webController(_ controller: WebController, scrollViewWillBeginDragging scrollView: UIScrollView) {
