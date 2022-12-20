@@ -64,18 +64,6 @@ class BrowserViewControllerTests: XCTestCase {
         bvc.requestReviewIfNecessary()
         XCTAssert(mockUserDefaults.integer(forKey: UIConstants.strings.userDefaultsLaunchThresholdKey) == 114)
     }
-
-//    func testURLToProvideQuery() {
-//        let bvc = BrowserViewController(shortcutManager: ShortcutsManager(), authenticationManager: AuthenticationManager(), onboardingEventsHandler: onboardingEventsHandler, themeManager: themeManager)
-//        let urls = [URL(string: "https://www.google.com/search?q=test&rlz=1C5CHFA_enRO979RO979&oq=test&aqs=chrome..69i57j0i512l3j69i65j69i61l3.779j0j9&sourceid=chrome&ie=UTF-8"),
-//                   URL(string: "https://duckduckgo.com/?q=test&t=h_&ia=definition"),
-//                   URL(string: "https://www.amazon.com/s?k=test&crid=28Q4LOFU9OV84&sprefix=te%2Caps%2C180&ref=nb_sb_noss_2")
-//        ]
-//        XCTAssertEqual(bvc.urlBarDisplayTextForURL(urls[0]), ("test",true))
-//        for url in urls {
-//            XCTAssertEqual(bvc.urlBarDisplayTextForURL(url), ("test",true))
-//        }
-//    }
 }
 
 private class MockUserDefaults: UserDefaults {
