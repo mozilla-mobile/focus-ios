@@ -139,7 +139,6 @@ class SearchProviderTest: BaseTestCase {
         app.buttons["OverlayView.searchButton"].firstMatch.tap()
         waitForWebPageLoad()
 
-        urlbarUrltextTextField.tap()
 		// Check the correct site is reached
 		switch provider {
 			case "Google":
@@ -162,8 +161,5 @@ class SearchProviderTest: BaseTestCase {
 			default:
 				XCTFail("Invalid Search Provider")
 		}
-        if !iPad() {
-            cancelButton.tap()
-        }
 	}
 }
