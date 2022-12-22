@@ -11,6 +11,7 @@ public class BrowserToolbar: UIView {
     private let backgroundDark = UIView()
     private let backgroundBright = UIView()
     private let stackView = UIStackView()
+    weak var delegate: BrowserToolbarDelegate?
 
     private lazy var backButton: UIButton = {
         let backButton = UIButton()
@@ -18,6 +19,8 @@ public class BrowserToolbar: UIView {
         backButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         backButton.accessibilityLabel = UIConstants.strings.browserBack
         backButton.isEnabled = false
+        backButton.menu = UIMenu(children: [])
+        backButton.addTarget(self, action: #selector(didPressBack), for: .touchDown)
         return backButton
     }()
 
@@ -27,6 +30,8 @@ public class BrowserToolbar: UIView {
         forwardButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         forwardButton.accessibilityLabel = UIConstants.strings.browserForward
         forwardButton.isEnabled = false
+        forwardButton.menu = UIMenu(children: [])
+        forwardButton.addTarget(self, action: #selector(didPressForward), for: .touchDown)
         return forwardButton
     }()
 
@@ -99,6 +104,14 @@ public class BrowserToolbar: UIView {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    @objc private func didPressBack(_ sender: UIButton) {
+        delegate?.browserToolbarDidPressBack(self, button: backButton)
+    }
+
+    @objc private func didPressForward(_ sender: UIButton) {
+        delegate?.browserToolbarDidPressForward(self, button: forwardButton)
     }
 
     private func bindButtonActions() {

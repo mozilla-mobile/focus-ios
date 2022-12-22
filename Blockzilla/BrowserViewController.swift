@@ -204,6 +204,7 @@ class BrowserViewController: UIViewController {
         browserToolbar.isHidden = true
         browserToolbar.alpha = 0
         browserToolbar.translatesAutoresizingMaskIntoConstraints = false
+        browserToolbar.delegate = self
         mainContainerView.addSubview(browserToolbar)
 
         overlayView.isHidden = true
@@ -1428,6 +1429,18 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidLongPress(_ urlBar: URLBar) { }
+}
+
+extension BrowserViewController: BrowserToolbarDelegate {
+    func browserToolbarDidPressBack(_ browserToolbar: BrowserToolbar, button: UIButton) {
+        let actions = webViewController.generateActions(from: webViewController.backList)
+        button.menu = button.menu?.replacingChildren(actions)
+    }
+
+    func browserToolbarDidPressForward(_ browserToolbar: BrowserToolbar, button: UIButton) {
+        let actions = webViewController.generateActions(from: webViewController.forwardList)
+        button.menu = button.menu?.replacingChildren(actions)
+    }
 }
 
 extension BrowserViewController: PhotonActionSheetDelegate {

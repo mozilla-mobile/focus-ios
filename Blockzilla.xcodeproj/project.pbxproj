@@ -79,6 +79,7 @@
 		B3CD41CC1FD1CAF000AEBD58 /* PaddedSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3CD41CB1FD1CAF000AEBD58 /* PaddedSwitch.swift */; };
 		B3D23BEF1FA3A9E500D9C50F /* postload.js in Resources */ = {isa = PBXBuildFile; fileRef = B3D23BEE1FA3A9E500D9C50F /* postload.js */; };
 		B3F4A3171FA136E70029A6F2 /* preload.js in Resources */ = {isa = PBXBuildFile; fileRef = B3F4A3161FA136E60029A6F2 /* preload.js */; };
+		BD2497B02951099100CE0F1C /* BrowserToolbarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD2497AF2951099100CE0F1C /* BrowserToolbarDelegate.swift */; };
 		BD4B1EB629250AA500065AAD /* KeyboardType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4B1EB529250AA500065AAD /* KeyboardType.swift */; };
 		C80F901C26C554B800F5112B /* PhotonActionSheetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80F901B26C554B800F5112B /* PhotonActionSheetCell.swift */; };
 		C817A35722CE73B4002529FF /* Deferred.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35322CE73B4002529FF /* Deferred.swift */; };
@@ -730,6 +731,7 @@
 		B3D23BEE1FA3A9E500D9C50F /* postload.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = postload.js; sourceTree = "<group>"; };
 		B3F4A3161FA136E60029A6F2 /* preload.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = preload.js; sourceTree = "<group>"; };
 		BC16C41C8D4A74C79A493D42 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		BD2497AF2951099100CE0F1C /* BrowserToolbarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserToolbarDelegate.swift; sourceTree = "<group>"; };
 		BD4B1EB529250AA500065AAD /* KeyboardType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardType.swift; sourceTree = "<group>"; };
 		C652A61E213D254A86DF5736 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		C80F901B26C554B800F5112B /* PhotonActionSheetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetCell.swift; sourceTree = "<group>"; };
@@ -1567,6 +1569,7 @@
 				D30DF93D1DC1634F0064736C /* Toast.swift */,
 				C82F45F428193DA5000D7D84 /* ShortcutView+UIContextMenuInteractionDelegate.swift */,
 				E5CB2ED8288E909800CE6428 /* UIAlertController+Rename.swift */,
+				BD2497AF2951099100CE0F1C /* BrowserToolbarDelegate.swift */,
 			);
 			path = UIComponents;
 			sourceTree = "<group>";
@@ -2604,6 +2607,7 @@
 				C8EADCD22742A00300E76AE6 /* MenuActionable.swift in Sources */,
 				1D3BEDFB20C5E76B0019B722 /* FindInPageBar.swift in Sources */,
 				E5639E5F2940997700E55B9B /* URLBarDelegate.swift in Sources */,
+				BD2497B02951099100CE0F1C /* BrowserToolbarDelegate.swift in Sources */,
 				D30DF93E1DC1634F0064736C /* Toast.swift in Sources */,
 				F861799F27961F4200CFD324 /* InternalSettings.swift in Sources */,
 				D33A1AB11BC48FAC0003D929 /* SettingsViewController.swift in Sources */,

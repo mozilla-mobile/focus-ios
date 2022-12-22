@@ -123,6 +123,7 @@ class WebViewController: UIViewController, WebController {
     func goBack() { browserView.goBack() }
     func goForward() { browserView.goForward() }
     func reload() { browserView.reload() }
+    func goToBackForwardListItem(_ item: WKBackForwardListItem) { browserView.go(to: item) }
 
     func requestUserAgentChange() {
         if let hostName = browserView.url?.host {
@@ -323,6 +324,21 @@ class WebViewController: UIViewController, WebController {
         browserView.scrollView.setZoomScale(1.0, animated: true)
     }
 
+    func generateActions(from backForwardList: [WKBackForwardListItem]) -> [UIAction] {
+        let list = backForwardList == backList ? backList : forwardList
+        return list.map { backForwardListItem in
+            let actionTitle = backForwardListItem.title != nil ?
+            backForwardListItem.title! + "\n" + backForwardListItem.initialURL.description :
+            backForwardListItem.initialURL.description
+            if #available(iOS 15.0, *) {
+                return UIAction(title: backForwardListItem.title ?? "", subtitle: backForwardListItem.initialURL.description) { _ in
+                    self.goToBackForwardListItem(backForwardListItem)
+                }
+            }
+            else { return UIAction(title: actionTitle) { _ in self.goToBackForwardListItem(backForwardListItem) } }
+        }
+    }
+
     override func viewDidLoad() {
         self.browserView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
         searchInContentTelemetry = SearchInContentTelemetry()
@@ -498,6 +514,8 @@ extension WebViewController: BrowserState {
     var estimatedProgress: Double { return browserView.estimatedProgress }
     var isLoading: Bool { return browserView.isLoading }
     var url: URL? { return browserView.url }
+    var backList: [WKBackForwardListItem] { return browserView.backForwardList.backList }
+    var forwardList: [WKBackForwardListItem] { return browserView.backForwardList.forwardList }
 }
 
 extension WebViewController: WKUIDelegate {
