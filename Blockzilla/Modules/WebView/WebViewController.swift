@@ -328,10 +328,10 @@ class WebViewController: UIViewController, WebController {
         let list = backForwardList == backList ? backList : forwardList
         return list.map { backForwardListItem in
             let actionTitle = backForwardListItem.title != nil ?
-            backForwardListItem.title! + "\n" + backForwardListItem.initialURL.description :
-            backForwardListItem.initialURL.description
+            backForwardListItem.title! + "\n" + backForwardListItem.url.description :
+            backForwardListItem.url.description
             if #available(iOS 15.0, *) {
-                return UIAction(title: backForwardListItem.title ?? "", subtitle: backForwardListItem.initialURL.description) { _ in
+                return UIAction(title: backForwardListItem.title ?? "", subtitle: backForwardListItem.url.description) { _ in
                     self.goToBackForwardListItem(backForwardListItem)
                 }
             }
