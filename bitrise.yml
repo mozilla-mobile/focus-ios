@@ -167,11 +167,12 @@ workflows:
             #!/usr/bin/env bash
             set -ex
             ls ./Users/vagrant/git/XCUITest/
+            ls ./Users/vagrant/git/DerivedData/Build/Products
             cp -r ./Users/vagrant/git/XCUITest/* .
             mv ./Users/vagrant/git/* .
             ls -la
             echo "-- test-without-building --"
-            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" test-without-building -xctestrun DerivedData/Build/Products/Focus_SmokeTest_iphonesimulator16.0-arm64.xctestrun
+            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Focus_SmokeTest_iphonesimulator16.0-arm64.xctestrun"
     - custom-test-results-export@0:
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
