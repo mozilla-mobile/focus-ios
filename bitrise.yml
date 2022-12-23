@@ -72,6 +72,7 @@ workflows:
             set -euxo pipefail
             echo "-- build-for-testing --"
             mkdir DerivedData
+            xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
             xcodebuild "-project" "/Users/vagrant/git/Blockzilla.xcodeproj" "-scheme" "Focus" -configuration "FocusDebug" "CODE_SIGNING_ALLOWED=NO" "-destination" "platform=iOS Simulator,name=iPhone 14,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_test.log
     - script@1.1:
         title: Build for Testing Klar
@@ -170,7 +171,7 @@ workflows:
             mv ./Users/vagrant/git/* .
             ls -la
             echo "-- test-without-building --"
-            xcodebuild -project "Blockzilla.xcodeproj" -scheme "Focus" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan $TEST_PLAN_NAME -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" test-without-building
+            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" test-without-building -xctestrun DerivedData/Build/Products/Focus_SmokeTest_iphonesimulator16.0-arm64.xctestrun
     - custom-test-results-export@0:
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
