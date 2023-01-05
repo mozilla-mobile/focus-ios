@@ -24,8 +24,10 @@ class Utils {
     ]
 
     static func getEnabledLists() -> [String] {
-        return lists.compactMap { (toggle, list) -> String? in
+        var list = lists.compactMap { (toggle, list) -> String? in
             return Settings.getToggle(toggle) ? list : nil
         }
+        list.append("disconnect-cookiebanner")
+        return list
     }
 }

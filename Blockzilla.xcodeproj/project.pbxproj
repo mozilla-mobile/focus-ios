@@ -115,6 +115,8 @@
 		C871586027FB29AC006224BB /* Onboarding in Frameworks */ = {isa = PBXBuildFile; productRef = C871585F27FB29AC006224BB /* Onboarding */; };
 		C871586227FC276D006224BB /* OnboardingFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C871586127FC276D006224BB /* OnboardingFactory.swift */; };
 		C88A5D3B26EF9245009A135D /* ShareTrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C88A5D3A26EF9245009A135D /* ShareTrackersViewController.swift */; };
+		C890F93829670B4000E50CDA /* disconnect-cookiebanner.json in Resources */ = {isa = PBXBuildFile; fileRef = C890F93729670B4000E50CDA /* disconnect-cookiebanner.json */; };
+		C890F93929670B4000E50CDA /* disconnect-cookiebanner.json in Resources */ = {isa = PBXBuildFile; fileRef = C890F93729670B4000E50CDA /* disconnect-cookiebanner.json */; };
 		C8958C51280D84EE0064BDF8 /* AutocompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8958C50280D84EE0064BDF8 /* AutocompleteTextField.swift */; };
 		C89AA96C271720330089838F /* ThemeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89AA966271720330089838F /* ThemeViewController.swift */; };
 		C89AA96D271720330089838F /* SystemThemeDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89AA967271720330089838F /* SystemThemeDelegate.swift */; };
@@ -763,6 +765,7 @@
 		C847E955274BB7C0000F6D20 /* XCUIApplication+Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIApplication+Buttons.swift"; sourceTree = "<group>"; };
 		C871586127FC276D006224BB /* OnboardingFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFactory.swift; sourceTree = "<group>"; };
 		C88A5D3A26EF9245009A135D /* ShareTrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareTrackersViewController.swift; sourceTree = "<group>"; };
+		C890F93729670B4000E50CDA /* disconnect-cookiebanner.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-cookiebanner.json"; path = "Lists/disconnect-cookiebanner.json"; sourceTree = "<group>"; };
 		C8958C50280D84EE0064BDF8 /* AutocompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteTextField.swift; sourceTree = "<group>"; };
 		C89AA966271720330089838F /* ThemeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeViewController.swift; sourceTree = "<group>"; };
 		C89AA967271720330089838F /* SystemThemeDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemThemeDelegate.swift; sourceTree = "<group>"; };
@@ -1701,6 +1704,7 @@
 		D3E2C9001D9F17C600DEBE3D /* Blocklists */ = {
 			isa = PBXGroup;
 			children = (
+				C890F93729670B4000E50CDA /* disconnect-cookiebanner.json */,
 				D328171E1BD0689800185845 /* disconnect-advertising.json */,
 				D328171F1BD0689800185845 /* disconnect-analytics.json */,
 				D32817201BD0689800185845 /* disconnect-content.json */,
@@ -2316,6 +2320,7 @@
 				846A23182668CC4500DB3C37 /* FullScreen.js in Resources */,
 				D3DA778C1DC2C60E009C114E /* errorPage.html in Resources */,
 				D38EDB961DCA8A9400E28196 /* LaunchScreen.storyboard in Resources */,
+				C890F93829670B4000E50CDA /* disconnect-cookiebanner.json in Resources */,
 				E40AFC741DDDE96D00DA5651 /* InfoPlist.strings in Resources */,
 				F8324CE5264EA223007E4BFA /* licenses.html in Resources */,
 				D343DCC21C44356500D7EEE8 /* Localizable.strings in Resources */,
@@ -2343,6 +2348,7 @@
 				D32817251BD0689800185845 /* disconnect-social.json in Resources */,
 				E4BC84FB1E2A862700833B45 /* InfoPlist.strings in Resources */,
 				D32817231BD0689800185845 /* disconnect-analytics.json in Resources */,
+				C890F93929670B4000E50CDA /* disconnect-cookiebanner.json in Resources */,
 				D3BBC9ED1D7F81CB00D1751B /* enabled-detector.json in Resources */,
 				D32817221BD0689800185845 /* disconnect-advertising.json in Resources */,
 				D32817241BD0689800185845 /* disconnect-content.json in Resources */,

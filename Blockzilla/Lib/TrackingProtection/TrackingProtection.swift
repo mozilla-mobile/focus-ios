@@ -36,6 +36,7 @@ enum BlocklistName: String {
     case analytics = "disconnect-analytics"
     case content = "disconnect-content"
     case social = "disconnect-social"
+    case cookie = "disconnect-cookie"
 
     var filename: String { return self.rawValue }
 
