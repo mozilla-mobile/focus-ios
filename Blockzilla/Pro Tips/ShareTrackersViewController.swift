@@ -77,7 +77,9 @@ class ShareTrackersViewController: UIViewController {
             shieldLogo.widthAnchor.constraint(equalToConstant: .shieldLogoSize),
 
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            stackView.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: .shareTrackersLeadingTrailingOffset),
+            stackView.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -(.shareTrackersLeadingTrailingOffset))
         ])
     }
 
@@ -90,6 +92,7 @@ fileprivate extension CGFloat {
     static let shieldLogoSize: CGFloat = 20
     static let trackerStatsShareButtonTopBottomPadding: CGFloat = 10
     static let trackerStatsShareButtonLeadingTrailingPadding: CGFloat = 8
+    static let shareTrackersLeadingTrailingOffset: CGFloat = 16
     static let shareTrackerStackViewSpacing: CGFloat = 16
 }
 
