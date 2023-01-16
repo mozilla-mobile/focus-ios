@@ -99,7 +99,7 @@ enum NavigationPath {
     }
 
     private static func handleWidget(_ application: UIApplication, with browserViewController: BrowserViewController) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { browserViewController.openFromWidget() }
+         browserViewController.openFromWidget()
     }
 }
 
