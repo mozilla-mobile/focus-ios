@@ -99,7 +99,7 @@ enum NavigationPath {
     }
 
     private static func handleWidget(_ application: UIApplication, with browserViewController: BrowserViewController) {
-         browserViewController.openFromWidget()
+        browserViewController.openFromWidget()
     }
 }
 
