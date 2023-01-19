@@ -65,8 +65,9 @@ class SplashViewController: UIViewController {
             authButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             authButton.topAnchor.constraint(equalTo: logoImage.topAnchor, constant: .authButtonTop),
             authButton.heightAnchor.constraint(equalToConstant: .authButtonHeight),
-            authButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: .authButtonInset),
-            authButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -.authButtonInset),
+            authButton.widthAnchor.constraint(equalToConstant: .authButtonWidth)
+            authButton.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: .authButtonInset),
+            authButton.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -.authButtonInset),
         ])
 
         updateUI()
@@ -107,6 +108,7 @@ fileprivate extension UIColor {
 fileprivate extension CGFloat {
     static let cornerRadius: CGFloat = 12
     static let authButtonHeight: CGFloat = 44
+    static let authButtonWidth: CGFloat = 500
     static let authButtonTop: CGFloat = 80
     static let authButtonInset: CGFloat = 16
 }
