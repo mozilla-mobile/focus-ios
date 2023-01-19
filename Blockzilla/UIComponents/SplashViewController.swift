@@ -65,9 +65,9 @@ class SplashViewController: UIViewController {
             authButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             authButton.topAnchor.constraint(equalTo: logoImage.topAnchor, constant: .authButtonTop),
             authButton.heightAnchor.constraint(equalToConstant: .authButtonHeight),
-            authButton.widthAnchor.constraint(equalToConstant: .authButtonWidth)
+            authButton.widthAnchor.constraint(equalToConstant: .authButtonWidth),
             authButton.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: .authButtonInset),
-            authButton.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -.authButtonInset),
+            authButton.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -.authButtonInset)
         ])
 
         updateUI()
