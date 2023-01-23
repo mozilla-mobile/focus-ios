@@ -91,7 +91,7 @@ class SheetModalViewController: UIViewController {
 
         containerViewHeightConstraint = containerView.heightAnchor.constraint(equalToConstant: metrics.bufferHeight)
         containerViewBottomConstraint = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: metrics.bufferHeight)
-        
+
         NSLayoutConstraint.activate([
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
