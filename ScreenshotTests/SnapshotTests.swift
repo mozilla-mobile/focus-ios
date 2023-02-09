@@ -7,7 +7,7 @@ import XCTest
 class SnapshotTests: BaseTestCaseL10n {
 
     func test01FirstRunScreens() {
-        waitForExistence(app.buttons["IntroViewController.startBrowsingButton"], timeout: 10)
+        waitForExistence(app.buttons["Get Started"], timeout: 10)
         snapshot("00FirstRun")
     }
 
