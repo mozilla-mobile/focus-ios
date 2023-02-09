@@ -18,7 +18,6 @@ class BaseTestCaseL10n: XCTestCase {
             if testRunningFirstRun.contains(key) {
             // for the current test name, add the db fixture used
             // Do nothing and Run Onboarding
-                app.launchArguments = ["testMode"]
             } else {
                 app.launchArguments = ["testMode", "disableFirstRunUI"]
             }
