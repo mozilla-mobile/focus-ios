@@ -46,7 +46,6 @@ class OnboardingTest: XCTestCase {
         XCTAssert(app.images["icon_background"].exists)
         XCTAssert(app.buttons["Get Started"].isEnabled)
         XCTAssert(app.buttons["icon_close"].isEnabled)
-        XCTAssert(app.buttons["Get Started"].isEnabled)
         pageIndicatorButton.tap()
 
         XCTAssertEqual(pageIndicatorButton.value as? String, "page 2 of 2")
