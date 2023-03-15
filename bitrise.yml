@@ -44,7 +44,7 @@ workflows:
             cd Blockzilla.xcodeproj
             sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Developer"/' project.pbxproj
             cd -
-        title: Set xcodeproj code_sign_identity  
+        title: Set xcodeproj code_sign_identity
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - script@1:
@@ -73,14 +73,13 @@ workflows:
         - scheme: Focus
         - configuration: FocusDebug
         - project_path: "$BITRISE_PROJECT_PATH"
-    #- xcode-build-for-test@2:
-    #    inputs:
-    #    - test_plan: SmokeTest
-    #    - scheme: Focus
-    #    - configuration: FocusDebug
-    #- virtual-device-testing-for-ios@1:
-    #    inputs:
-    #    - test_devices: iphone13pro,15.2,en,portrait  
+    - xcode-build-for-test@2:
+        inputs:
+        - test_plan: SmokeTest
+        - scheme: Focus
+    - virtual-device-testing-for-ios@1:
+        inputs:
+        - test_devices: iphone13pro,15.2,en,portrait  
   configure_build:
     steps:
     - git-clone@6.2: {}
