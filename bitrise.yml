@@ -6,9 +6,9 @@ project_type: ios
 
 trigger_map:
 - push_branch: main
-  pipeline: pipeline_build_and_run_tests
+  workflow: physical-device
 - pull_request_source_branch: "*"
-  pipeline: pipeline_build_and_run_tests
+  workflow: physical-device
 - tag: "*"
   workflow: release
 
@@ -30,6 +30,34 @@ stages:
     - unit_test_focus: {}
 
 workflows:
+  physical-device:
+    steps:
+    - git-clone@6.2: {}
+    - cache-pull@2: {}
+    - certificate-and-profile-installer@1: {}
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - script@1:
+        title: Set Default Web Browser Entitlement
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Focus.entitlements
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            ./checkout.sh
+        title: ContentBlockerGen
+    - xcode-build-for-test@2:
+        inputs:
+        - test_plan: SmokeTest
+        - scheme: Focus
+    - virtual-device-testing-for-ios@1:
+        inputs:
+        - test_devices: iphone13pro,15.2,en,portrait  
   configure_build:
     steps:
     - git-clone@6.2: {}
