@@ -77,6 +77,7 @@ workflows:
         inputs:
         - test_plan: SmokeTest
         - scheme: Focus
+        - configuration: FocusDebug
     - virtual-device-testing-for-ios@1:
         inputs:
         - test_devices: iphone13pro,15.2,en,portrait  
