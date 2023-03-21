@@ -35,6 +35,16 @@ workflows:
     - git-clone@6.2: {}
     - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+            cd Blockzilla.xcodeproj
+            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
+            cd -
+        title: Set xcodeproj code_sign_identity  
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - script@1:
@@ -55,6 +65,7 @@ workflows:
         inputs:
         - test_plan: SmokeTest
         - scheme: Focus
+        - configuration: FocusDebug
     - virtual-device-testing-for-ios@1:
         inputs:
         - test_devices: iphone13pro,15.2,en,portrait  
