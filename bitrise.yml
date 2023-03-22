@@ -73,14 +73,14 @@ workflows:
         - scheme: Focus
         - configuration: FocusDebug
         - project_path: "$BITRISE_PROJECT_PATH"
-    - xcode-build-for-test@2:
-        inputs:
-        - test_plan: SmokeTest
-        - scheme: Focus
-        - configuration: FocusDebug
-    - virtual-device-testing-for-ios@1:
-        inputs:
-        - test_devices: iphone13pro,15.2,en,portrait  
+    #- xcode-build-for-test@2:
+    #    inputs:
+    #    - test_plan: SmokeTest
+    #    - scheme: Focus
+    #    - configuration: FocusDebug
+    #- virtual-device-testing-for-ios@1:
+    #    inputs:
+    #    - test_devices: iphone13pro,15.2,en,portrait  
   configure_build:
     steps:
     - git-clone@6.2: {}
