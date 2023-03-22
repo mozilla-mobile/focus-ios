@@ -42,7 +42,7 @@ workflows:
             set -e
             set -x
             cd Blockzilla.xcodeproj
-            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
+            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Developer"/' project.pbxproj
             cd -
         title: Set xcodeproj code_sign_identity
     - activate-ssh-key@4:
@@ -66,7 +66,7 @@ workflows:
         - compile_bitcode: 'no'
         - upload_bitcode: 'no'
         - team_id: 43AQ936H96
-        - export_method: development
+        - export_method: developer-id
         #- distribution_method: development
         - export_development_team: 43AQ936H96
         - output_tool: xcodebuild
