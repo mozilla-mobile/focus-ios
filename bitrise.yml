@@ -80,7 +80,8 @@ workflows:
     #    - configuration: FocusDebug
     #- virtual-device-testing-for-ios@1:
     #    inputs:
-    #    - test_devices: iphone13pro,15.2,en,portrait  
+    #    - test_devices: iphone13pro,15.2,en,portrait
+    - deploy-to-bitrise-io@2: {}
   configure_build:
     steps:
     - git-clone@6.2: {}
