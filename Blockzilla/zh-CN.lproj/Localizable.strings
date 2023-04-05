@@ -32,7 +32,7 @@
 "About.safariBullet2" = "拦截网络字体，减少网页大小";
 
 /* Label on About screen */
-"About.safariBulletHeader" = "用作 Safari 扩展，可以：";
+"About.safariBulletHeader" = "用作 Safari 浏览器扩展，可以：";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "关于 %@";
@@ -102,6 +102,9 @@
 
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "常用网站";
+
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "解锁";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "新会话";
@@ -224,13 +227,13 @@
 "Onboarding.Title" = "欢迎使用 Firefox %@！";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsContentBlockers" = "点按 Safari，然后选择“内容拦截器”";
+"Safari.instructionsContentBlockers" = "轻点“Safari 浏览器”，然后选择“内容拦截器”";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsEnable" = "启用 %@";
 
 /* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsExtentions" = "选择 Safari，然后选择“扩展”";
+"Safari.instructionsExtentions" = "选择“Safari 浏览器”，然后选择“扩展”";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
 "Safari.instructionsNotEnabled" = "%@ 未启用。";
@@ -296,7 +299,7 @@
 "Settings.rate" = "为 %@ 打分";
 
 /* Label for Safari integration section */
-"Settings.safariTitle" = "Safari 整合";
+"Settings.safariTitle" = "Safari 浏览器整合";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "设置";
@@ -386,7 +389,7 @@
 "Settings.toggleHomeScreenTips" = "显示主屏幕提示";
 
 /* Safari toggle label on settings screen */
-"Settings.toggleSafari" = "Safari";
+"Settings.toggleSafari" = "Safari 浏览器";
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "发送使用统计";
@@ -482,7 +485,7 @@
 "ShowMeHowOnboarding.SubtitleStepThree.V2" = "搜索 %@ 然后选择小组件。";
 
 /* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
-"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "点按加号（+）图标。";
+"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "轻点加号（+）图标。";
 
 /* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
 "ShowMeHowOnboarding.Title.V2" = "添加 %@ 小组件";
@@ -575,16 +578,16 @@
 "TooltipBodyText.SearchBar" = "进入隐私浏览模式，我们会在您上网时拦截跟踪器和其他脏东西。";
 
 /* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
-"TooltipBodyText.ShieldIcon" = "%@ 已阻止此网站跟踪您，点按盾牌可了解已拦截的内容。";
+"TooltipBodyText.ShieldIcon" = "%@ 已阻止此网站跟踪您，轻点盾牌可了解已拦截的内容。";
 
 /* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
-"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "抓到了！我们已阻止此网站的跟踪，您可随时点按盾牌了解已拦截哪些内容。";
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "抓到了！我们已阻止此网站的跟踪，您可随时轻点盾牌了解已拦截哪些内容。";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
-"TooltipBodyText.TrashIcon" = "随时点按垃圾桶，清除当前会话的全部痕迹。";
+"TooltipBodyText.TrashIcon" = "随时轻点垃圾桶，清除当前会话的全部痕迹。";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
-"TooltipBodyText.TrashIcon.V2" = "点按此处即可删除浏览记录、Cookie 等所有数据，并新建一个全新标签页。";
+"TooltipBodyText.TrashIcon.V2" = "轻点此处即可删除浏览记录、Cookie 等所有数据，并新建一个全新标签页。";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "保护您是我的首要职责";

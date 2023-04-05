@@ -103,6 +103,9 @@
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "Nejcesćej woglědane sedła";
 
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "Wótwóriś";
+
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Nowe pósejźenje";
 
@@ -186,6 +189,12 @@
 
 /* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
 "Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Pśeskócyś";
+
+/* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "Lašujomy wašu historiju, gaž nałoženje za pśidatnu priwatnosć zacynjaśo.";
+
+/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "Cyńśo %@ k swójomu standardnemu wobglědowakoju, aby swóje daty z kuždym wótkazom, kótaryž wócynjaśo, šćitał.";
 
 /* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
 "Onboarding.DefaultBrowser.Title.V2" = "%@ njejo ako druge wobglědowaki";
@@ -445,6 +454,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "We Firefox wócyniś";
 
+/* Text for the share menu option when a user wants to open the current website inside the app. */
+"ShareMenu.ShareOpenLink" = "Wótkaz wócyniś";
+
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Bok źěliś z…";
 
@@ -465,6 +477,9 @@
 
 /* This is the button text that is displayed in the Show Me How Onboarding Screen */
 "ShowMeHowOnboarding.ButtonText.V2" = "Gótowo";
+
+/* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepOne.V2" = "Tłocćo dłujko na startowu wobrazowku, daniž symbole njezachopinaju se tśěsć.";
 
 /* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
 "ShowMeHowOnboarding.SubtitleStepThree.V2" = "Pytanje za %@. Wubjeŕśo pón asistent.";
@@ -630,6 +645,9 @@
 
 /* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
 "WidgetOnboardingCard.ActionButton" = "Pokažćo mě kak";
+
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+"WidgetOnboardingCard.Subtitle" = "Pśewóstajijomy wašomu priwatnemu modusoju, ale startujśo pśiducy raz malsnjej z asistentom %@ na swójej startowej wobrazowce.";
 
 /* Title shown on card view explaining the app has a widget option */
 "WidgetOnboardingCard.Title" = "Pśeglědowańska historija jo se wulašowała! 🎉";

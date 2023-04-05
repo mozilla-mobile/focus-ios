@@ -103,6 +103,9 @@
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "Mest besøkte nettsteder";
 
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "Lås opp";
+
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Ny programøkt";
 
@@ -197,7 +200,7 @@
 "Onboarding.DefaultBrowser.Title.V2" = "%@ er ikke som andre nettlesere";
 
 /* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
-"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Sett som standard nettleser";
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Bruk som standard nettleser";
 
 /* Text for a label that indicates the description of history section from onboarding screen. */
 "Onboarding.History.Description" = "Slett nettleserhistorikken, passordene, infokapslene og hindre uønskede annonser fra å følge deg med et enkelt klikk!";
@@ -347,7 +350,7 @@
 "Settings.sectionPrivacy" = "PERSONVERN";
 
 /* Label title for set as default browser row */
-"Settings.setAsDefaultBrowser" = "Sett som standard nettleser";
+"Settings.setAsDefaultBrowser" = "Bruk som standard nettleser";
 
 /* %@ is the name of the app. Description for set as default browser option */
 "Settings.setAsDefaultBrowserDescription" = "Angi at lenker fra nettsteder, e-postmeldinger og meldinger skal åpnes automatisk i %@.";

@@ -254,6 +254,7 @@ class BrowserViewController: UIViewController {
         containWebView()
         createHomeView()
         createURLBar()
+        bindUrlBarViewModel()
         updateViewConstraints()
 
         overlayView.snp.makeConstraints { make in
@@ -614,6 +615,11 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    public func exitFullScreenVideo() {
+        let js = "closeFullScreen()"
+        webViewController.evaluate(js, completion: nil)
+    }
+
     private func containWebView() {
         addChild(webViewController)
         webViewContainer.addSubview(webViewController.view)
@@ -633,7 +639,6 @@ class BrowserViewController: UIViewController {
 
     private func createURLBar() {
         urlBar = URLBar(viewModel: urlBarViewModel)
-        bindUrlBarViewModel()
         urlBar.delegate = self
         urlBar.isIPadRegularDimensions = isIPadRegularDimensions
         urlBar.shouldShowToolset = showsToolsetInURLBar
@@ -908,6 +913,7 @@ class BrowserViewController: UIViewController {
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
+            recordSearchEvent(source)
             url = searchEngineManager.activeEngine.urlForQuery(text)
         } else {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
@@ -927,8 +933,6 @@ class BrowserViewController: UIViewController {
     func submit(url: URL, source: Source) {
         // If this is the first navigation, show the browser and the toolbar.
         guard isViewLoaded else { initialUrl = url; return }
-
-        recordSearchEvent(source)
 
         shortcutsPresenter.shortcutsState = .none
         SearchInContentTelemetry.shouldSetUrlTypeSearch = true
@@ -1346,6 +1350,7 @@ extension BrowserViewController: URLBarDelegate {
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
+            recordSearchEvent(source)
             url = searchEngineManager.activeEngine.urlForQuery(text)
         } else {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
@@ -1428,6 +1433,19 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidLongPress(_ urlBar: URLBar) { }
+
+    func urlBarDisplayTextForURL(_ url: URL?) -> (String?, Bool) {
+        // use the initial value for the URL so we can do proper pattern matching with search URLs
+        var searchURL = urlBar.url
+        if let url = searchURL, InternalURL.isValid(url: url) {
+            searchURL = url
+        }
+        if let searchURL = searchURL, let query = searchEngineManager.queryForSearchURL(searchURL as URL) {
+            return (query, true)
+        } else {
+            return (url?.absoluteString, false)
+        }
+    }
 }
 
 extension BrowserViewController: PhotonActionSheetDelegate {
@@ -1550,7 +1568,7 @@ extension BrowserViewController: OverlayViewDelegate {
         if searchEngineManager.activeEngine.urlForQuery(query) != nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.selectQuery, object: TelemetryEventObject.searchBar)
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
-            urlBar(urlBar, didSubmitText: query, source: .topsite)
+            urlBar(urlBar, didSubmitText: query, source: .suggestion)
         }
 
         urlBar.dismiss()
@@ -1592,6 +1610,7 @@ extension BrowserViewController: OverlayViewDelegate {
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
+            recordSearchEvent(.suggestion)
             url = searchEngineManager.activeEngine.urlForQuery(text)
         } else {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)

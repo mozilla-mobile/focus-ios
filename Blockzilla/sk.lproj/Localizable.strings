@@ -20,7 +20,7 @@
 "About.rowHelp" = "Pomocník";
 
 /* Link to Privacy Notice in the About screen */
-"About.rowPrivacy" = "Zásady ochrany súkromia";
+"About.rowPrivacy" = "Vyhlásenie o ochrane osobných údajov";
 
 /* Label for row in About screen */
 "About.rowRights" = "Vaše práva";
@@ -102,6 +102,9 @@
 
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "Top stránky";
+
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "Odomknúť";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Nová relácia";

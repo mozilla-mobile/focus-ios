@@ -3,8 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import SnapKit
-import DesignSystem
 import Combine
 
 class SplashViewController: UIViewController {
@@ -35,37 +33,42 @@ class SplashViewController: UIViewController {
 
     var authenticationManager: AuthenticationManager
 
-    private let logoImage = UIImageView(image: AppInfo.config.wordmark)
+    private lazy var logoImage: UIImageView = {
+        let logoImage = UIImageView(image: AppInfo.config.wordmark)
+        logoImage.translatesAutoresizingMaskIntoConstraints = false
+        return logoImage
+    }()
 
     private lazy var authButton: UIButton = {
         let button = UIButton(type: .system)
-        button.tintColor = .black
-        button.contentHorizontalAlignment = .fill
-        button.contentVerticalAlignment = .fill
-        button.addBackgroundView(color: .authButtonBackground, cornerRadius: .cornerRadius, padding: .padding)
+        button.tintColor = .systemBackground
+        button.setTitle(UIConstants.strings.unlockWithBiometricsActionButton, for: .normal)
+        button.titleLabel?.textAlignment = .center
+        button.addBackgroundView(color: .authButtonBackground, cornerRadius: .cornerRadius)
         button.addTarget(self, action:#selector(self.showAuth), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
     var cancellable: AnyCancellable?
 
     private func commonInit() {
-        authButton.setImage(
-            authenticationManager.biometricType == .faceID ? .faceid : .touchid,
-            for: .normal
-        )
         view.backgroundColor = .launchScreenBackground
-        view.addSubview(logoImage)
-        logoImage.snp.makeConstraints { make in
-            make.center.equalTo(self.view)
-        }
-
         view.addSubview(authButton)
-        authButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(logoImage).inset(100)
-            make.height.width.equalTo(CGFloat.authButtonSize)
-        }
+        view.addSubview(logoImage)
+
+        logoImage.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            logoImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            logoImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+
+            authButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            authButton.topAnchor.constraint(equalTo: logoImage.topAnchor, constant: .authButtonTop),
+            authButton.heightAnchor.constraint(equalToConstant: .authButtonHeight),
+            authButton.widthAnchor.constraint(equalToConstant: .authButtonWidth),
+            authButton.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: .authButtonInset),
+            authButton.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -.authButtonInset)
+        ])
 
         updateUI()
 
@@ -74,14 +77,14 @@ class SplashViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { state in
                 switch state {
-                case .loggedin:
-                    break
+                    case .loggedin:
+                        break
 
-                case .loggedout:
-                    self.state = .default
+                    case .loggedout:
+                        self.state = .default
 
-                case .canceled:
-                    self.state = .needsAuth
+                    case .canceled:
+                        self.state = .needsAuth
                 }
             }
     }
@@ -99,13 +102,15 @@ class SplashViewController: UIViewController {
 }
 
 fileprivate extension UIColor {
-    static let authButtonBackground = UIColor.white.withAlphaComponent(0.5)
+    static let authButtonBackground = UIColor.actionButton
 }
 
 fileprivate extension CGFloat {
-    static let cornerRadius: CGFloat = 22
-    static let padding: CGFloat = 8
-    static let authButtonSize = 44
+    static let cornerRadius: CGFloat = 12
+    static let authButtonHeight: CGFloat = 44
+    static let authButtonWidth: CGFloat = 500
+    static let authButtonTop: CGFloat = 80
+    static let authButtonInset: CGFloat = 16
 }
 
 fileprivate extension CATransform3D {

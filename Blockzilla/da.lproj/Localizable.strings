@@ -20,7 +20,7 @@
 "About.rowHelp" = "Hjælp";
 
 /* Link to Privacy Notice in the About screen */
-"About.rowPrivacy" = "Privatlivspolitik";
+"About.rowPrivacy" = "Privatlivserklæring";
 
 /* Label for row in About screen */
 "About.rowRights" = "Dine rettigheder";
@@ -102,6 +102,9 @@
 
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "Mest besøgte websider";
+
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "Lås op";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Ny session";

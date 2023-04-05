@@ -1,6 +1,4 @@
-/* Verb to erase history */
-"Erase" = "Erase";
+/* Title of the Erase intent. */
+"Intents.Erase.Title" = "Erase";
 
-/* (No Comment) */
-"Erase browsing session" = "Erase browsing session";
-
+"Intents.Erase.Description" = "Erase browsing session";
