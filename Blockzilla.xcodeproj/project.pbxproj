@@ -127,6 +127,7 @@
 		C8CE050E2743FEC5002057C6 /* MenuAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE050D2743FEC5002057C6 /* MenuAction.swift */; };
 		C8D0306E27E9B03D000664DA /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D392887E1BC5E47E0016A9A0 /* UIConstants.swift */; };
 		C8DB37C6294B27ED00F2B0EB /* DomainCompletion+ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DB37C5294B27ED00F2B0EB /* DomainCompletion+ErrorMessage.swift */; };
+		C8DE875E2A0551D100FF0DA0 /* Licenses in Frameworks */ = {isa = PBXBuildFile; productRef = C8DE875D2A0551D100FF0DA0 /* Licenses */; };
 		C8EADCD22742A00300E76AE6 /* MenuActionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EADCD12742A00300E76AE6 /* MenuActionable.swift */; };
 		C8EADCD42742A0AB00E76AE6 /* MenuItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EADCD32742A0AB00E76AE6 /* MenuItemProvider.swift */; };
 		C8FB1E6427F59D9C00C60DC6 /* UIHelpers in Frameworks */ = {isa = PBXBuildFile; productRef = C8FB1E6327F59D9C00C60DC6 /* UIHelpers */; };
@@ -1242,6 +1243,7 @@
 				C82F45F728193EE8000D7D84 /* AppShortcuts in Frameworks */,
 				F85F7A2B2655AD5800395515 /* Fuzi in Frameworks */,
 				C871586027FB29AC006224BB /* Onboarding in Frameworks */,
+				C8DE875E2A0551D100FF0DA0 /* Licenses in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2062,6 +2064,7 @@
 				C871585F27FB29AC006224BB /* Onboarding */,
 				45E8FFE62828DE4A0027A8F5 /* FocusAppServices */,
 				C82F45F628193EE8000D7D84 /* AppShortcuts */,
+				C8DE875D2A0551D100FF0DA0 /* Licenses */,
 			);
 			productName = Blockzilla;
 			productReference = E4BF2DD31BACE8CA00DA9D68 /* Firefox Klar.app */;
@@ -2101,9 +2104,7 @@
 					};
 					166E4BFF21347D150029E2A5 = {
 						CreatedOnToolsVersion = 10.0;
-						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 1300;
-						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -3802,10 +3803,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_ENTITLEMENTS = FocusIntentExtension/FocusIntentExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -3826,6 +3828,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.FocusIntentExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -4009,7 +4012,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_ENTITLEMENTS = FocusIntentExtension/FocusIntentExtension.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -4034,6 +4037,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.FocusIntentExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -6521,6 +6525,10 @@
 		C871585F27FB29AC006224BB /* Onboarding */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Onboarding;
+		};
+		C8DE875D2A0551D100FF0DA0 /* Licenses */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Licenses;
 		};
 		C8FB1E6327F59D9C00C60DC6 /* UIHelpers */ = {
 			isa = XCSwiftPackageProductDependency;
