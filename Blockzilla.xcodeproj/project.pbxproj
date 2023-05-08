@@ -78,6 +78,7 @@
 		B3F4A3171FA136E70029A6F2 /* preload.js in Resources */ = {isa = PBXBuildFile; fileRef = B3F4A3161FA136E60029A6F2 /* preload.js */; };
 		BD4B1EB629250AA500065AAD /* KeyboardType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4B1EB529250AA500065AAD /* KeyboardType.swift */; };
 		BDEEF249297AC0D500D43345 /* RequestHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDEEF248297AC0D500D43345 /* RequestHandlerTests.swift */; };
+		C809130E2A08F245000889B0 /* Licenses in Frameworks */ = {isa = PBXBuildFile; productRef = C809130D2A08F245000889B0 /* Licenses */; };
 		C80F901C26C554B800F5112B /* PhotonActionSheetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80F901B26C554B800F5112B /* PhotonActionSheetCell.swift */; };
 		C817A35722CE73B4002529FF /* Deferred.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35322CE73B4002529FF /* Deferred.swift */; };
 		C817A35822CE73B4002529FF /* ReadWriteLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35522CE73B4002529FF /* ReadWriteLock.swift */; };
@@ -1242,6 +1243,7 @@
 				C82F45F728193EE8000D7D84 /* AppShortcuts in Frameworks */,
 				F85F7A2B2655AD5800395515 /* Fuzi in Frameworks */,
 				C871586027FB29AC006224BB /* Onboarding in Frameworks */,
+				C809130E2A08F245000889B0 /* Licenses in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2062,6 +2064,7 @@
 				C871585F27FB29AC006224BB /* Onboarding */,
 				45E8FFE62828DE4A0027A8F5 /* FocusAppServices */,
 				C82F45F628193EE8000D7D84 /* AppShortcuts */,
+				C809130D2A08F245000889B0 /* Licenses */,
 			);
 			productName = Blockzilla;
 			productReference = E4BF2DD31BACE8CA00DA9D68 /* Firefox Klar.app */;
@@ -6513,6 +6516,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 45E8FFE52828DE4A0027A8F5 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
 			productName = FocusAppServices;
+		};
+		C809130D2A08F245000889B0 /* Licenses */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Licenses;
 		};
 		C82F45F628193EE8000D7D84 /* AppShortcuts */ = {
 			isa = XCSwiftPackageProductDependency;
