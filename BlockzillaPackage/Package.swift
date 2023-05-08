@@ -24,10 +24,7 @@ let package = Package(
             targets: ["UIComponents"]),
         .library(
             name: "Widget",
-            targets: ["Widget"]),
-        .library(
-            name: "Licenses",
-            targets: ["Licenses"])
+            targets: ["Widget"])
     ],
     dependencies: [
         .package(url: "https://github.com/SnapKit/SnapKit.git", from: "5.0.1")
@@ -62,13 +59,6 @@ let package = Package(
         ),
         .target(
             name: "Widget"
-        ),
-        .target(
-            name: "Licenses",
-            resources: [
-                .copy("license-list.plist"),
-                .copy("focus-ios.plist")
-            ]
         ),
         .testTarget(
             name: "BlockzillaPackageTests",

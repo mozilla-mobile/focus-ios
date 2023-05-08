@@ -4,7 +4,6 @@
 
 import Foundation
 import UIKit
-import SwiftUI
 
 public extension UIColor {
     convenience init?(named name: String) {
@@ -64,8 +63,4 @@ public extension UIColor {
             alpha: CGFloat(alpha))
     }
 
-}
-
-public extension Color {
-    static let accent = Color("Accent", bundle: .module)
 }

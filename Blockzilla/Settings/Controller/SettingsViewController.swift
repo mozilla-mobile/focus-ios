@@ -10,8 +10,6 @@ import Glean
 import SwiftUI
 import Onboarding
 import Combine
-import Licenses
-import DesignSystem
 
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
@@ -342,14 +340,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
                 cell.textLabel?.text = String(format: UIConstants.strings.aboutTitle, AppInfo.productName)
                 cell.accessibilityIdentifier = "settingsViewController.about"
-            } else if indexPath.row == 1 {
+            } else {
                 cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "ratingCell")
                 cell.textLabel?.text = String(format: UIConstants.strings.ratingSetting, AppInfo.productName)
                 cell.accessibilityIdentifier = "settingsViewController.rateFocus"
-            } else {
-                cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "licensesCell")
-                cell.textLabel?.text = UIConstants.strings.licenses
-                cell.accessibilityIdentifier = "settingsViewController.licenses"
             }
         case .secret:
             cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "secretSettingsCell")
@@ -375,7 +369,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case .search: return 3
         case .siri: return 3
         case .integration: return 1
-        case .mozilla: return 3
+        case .mozilla: return 2
         case .secret: return 1
         }
     }
@@ -463,13 +457,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case .mozilla:
             if indexPath.row == 0 {
                 aboutClicked()
-            } else if indexPath.row == 1 {
+            } else {
                 let appId = AppInfo.config.appId
                 if let reviewURL = URL(string: "https://itunes.apple.com/app/id\(appId)?action=write-review"), UIApplication.shared.canOpenURL(reviewURL) {
                     UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
                 }
-            } else {
-                navigationController?.pushViewController(UIHostingController(rootView: LicenseListView().navigationBarTitle(UIConstants.strings.licenses)), animated: true)
             }
         case .secret:
             if indexPath.row == 0 {
