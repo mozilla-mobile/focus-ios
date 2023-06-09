@@ -1,4 +1,6 @@
-/* Title of the Erase intent. */
+/* (No Comment) */
+"Intents.Erase.Description" = "Sfeḍ tiɣimit n tunigin";
+
+/* (No Comment) */
 "Intents.Erase.Title" = "Sfeḍ";
 
-"Intents.Erase.Description" = "Erase browsing session";

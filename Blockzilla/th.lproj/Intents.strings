@@ -1,4 +1,6 @@
-/* Title of the Erase intent. */
+/* (No Comment) */
+"Intents.Erase.Description" = "ลบวาระการเรียกดูเว็บ";
+
+/* (No Comment) */
 "Intents.Erase.Title" = "ล้าง";
 
-"Intents.Erase.Description" = "Erase browsing session";

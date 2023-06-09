@@ -20,7 +20,7 @@
 "About.rowHelp" = "Hjælp";
 
 /* Link to Privacy Notice in the About screen */
-"About.rowPrivacy" = "Privatlivspolitik";
+"About.rowPrivacy" = "Privatlivserklæring";
 
 /* Label for row in About screen */
 "About.rowRights" = "Dine rettigheder";
@@ -102,6 +102,9 @@
 
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "Mest besøgte websider";
+
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "Lås op";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Ny session";
@@ -289,6 +292,9 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Læs mere.";
 
+/* Lincese option in settings menu. Tapping the cell will take the user to a list of licences for the 3rd parties used in the app. */
+"Settings.licenses" = "Licenser";
+
 /* Light theme option in settings menu */
 "Settings.lightTheme" = "Lyst";
 
@@ -409,9 +415,6 @@
 /* Value for theme toggle in settings menu */
 "Settings.useSystemTheme" = "Brug systemets lys-/mørk-tilstand";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "Nyheder";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI-GENVEJE";
 
@@ -519,12 +522,6 @@
 
 /* Text for a label that indicates the description for biometric Touch ID tip. */
 "Tip.BiometricTouchId.Description" = "Deaktiver Face ID";
-
-/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
-"Tip.Release.Description" = "Læs mere om denne og andre opdateringer til %@.";
-
-/* Text for a label that indicates the title for release tip. */
-"Tip.Release.Title" = "Vi har fået et friskt, nyt udseende!";
 
 /* Text for a label that indicates the description for request desktop tip. */
 "Tip.RequestDesktop.Description" = "Sidehandlinger > Bed om desktop-version";

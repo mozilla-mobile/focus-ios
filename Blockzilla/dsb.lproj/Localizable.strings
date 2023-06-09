@@ -103,6 +103,9 @@
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "Nejcesćej woglědane sedła";
 
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "Wótwóriś";
+
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Nowe pósejźenje";
 
@@ -186,6 +189,12 @@
 
 /* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
 "Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Pśeskócyś";
+
+/* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "Lašujomy wašu historiju, gaž nałoženje za pśidatnu priwatnosć zacynjaśo.";
+
+/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "Cyńśo %@ k swójomu standardnemu wobglědowakoju, aby swóje daty z kuždym wótkazom, kótaryž wócynjaśo, šćitał.";
 
 /* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
 "Onboarding.DefaultBrowser.Title.V2" = "%@ njejo ako druge wobglědowaki";
@@ -282,6 +291,9 @@
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Dalšne informacije.";
+
+/* Lincese option in settings menu. Tapping the cell will take the user to a list of licences for the 3rd parties used in the app. */
+"Settings.licenses" = "Licence";
 
 /* Light theme option in settings menu */
 "Settings.lightTheme" = "Swětły";
@@ -403,9 +415,6 @@
 /* Value for theme toggle in settings menu */
 "Settings.useSystemTheme" = "Swětły/śamny systemowy modus wužywaś";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "Nowe funkcije a změny";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "TASTOWE SKROTCONKI SIRI";
 
@@ -469,6 +478,9 @@
 /* This is the button text that is displayed in the Show Me How Onboarding Screen */
 "ShowMeHowOnboarding.ButtonText.V2" = "Gótowo";
 
+/* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepOne.V2" = "Tłocćo dłujko na startowu wobrazowku, daniž symbole njezachopinaju se tśěsć.";
+
 /* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
 "ShowMeHowOnboarding.SubtitleStepThree.V2" = "Pytanje za %@. Wubjeŕśo pón asistent.";
 
@@ -510,12 +522,6 @@
 
 /* Text for a label that indicates the description for biometric Touch ID tip. */
 "Tip.BiometricTouchId.Description" = "Touch ID zmóžniś";
-
-/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
-"Tip.Release.Description" = "Cytajśo wěcej wó tom a drugich aktualizacijach za %@.";
-
-/* Text for a label that indicates the title for release tip. */
-"Tip.Release.Title" = "Zawěsće mamy moderny nowy naglěd!";
 
 /* Text for a label that indicates the description for request desktop tip. */
 "Tip.RequestDesktop.Description" = "Akcije boka > Desktopowe sedło pominaś";
@@ -633,6 +639,9 @@
 
 /* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
 "WidgetOnboardingCard.ActionButton" = "Pokažćo mě kak";
+
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+"WidgetOnboardingCard.Subtitle" = "Pśewóstajijomy wašomu priwatnemu modusoju, ale startujśo pśiducy raz malsnjej z asistentom %@ na swójej startowej wobrazowce.";
 
 /* Title shown on card view explaining the app has a widget option */
 "WidgetOnboardingCard.Title" = "Pśeglědowańska historija jo se wulašowała! 🎉";

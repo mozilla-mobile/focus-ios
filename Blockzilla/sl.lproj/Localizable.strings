@@ -103,6 +103,9 @@
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "Glavne strani";
 
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "Odkleni";
+
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Nova seja";
 
@@ -289,6 +292,9 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Več o tem.";
 
+/* Lincese option in settings menu. Tapping the cell will take the user to a list of licences for the 3rd parties used in the app. */
+"Settings.licenses" = "Licence";
+
 /* Light theme option in settings menu */
 "Settings.lightTheme" = "Svetla";
 
@@ -409,9 +415,6 @@
 /* Value for theme toggle in settings menu */
 "Settings.useSystemTheme" = "Uporabi svetli/temni način sistema";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "Novosti";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "BLIŽNJICE ZA SIRI";
 
@@ -519,12 +522,6 @@
 
 /* Text for a label that indicates the description for biometric Touch ID tip. */
 "Tip.BiometricTouchId.Description" = "Vklopi Touch ID";
-
-/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
-"Tip.Release.Description" = "Preberite več o tej in o drugih posodobitvah %@a.";
-
-/* Text for a label that indicates the title for release tip. */
-"Tip.Release.Title" = "Res je – imamo nov videz!";
 
 /* Text for a label that indicates the description for request desktop tip. */
 "Tip.RequestDesktop.Description" = "Dejanja strani > Zahtevaj stran za namizja";

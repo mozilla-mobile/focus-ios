@@ -15,8 +15,8 @@
         "repositoryURL": "https://github.com/mozilla/glean-swift",
         "state": {
           "branch": null,
-          "revision": "b2f10c97dcc18c219f7488b22214e962fa9f33e3",
-          "version": "51.8.3"
+          "revision": "a3fb726ae0c4c10c1a1b7314b21d0a845107bb10",
+          "version": "52.5.0"
         }
       },
       {
@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/mozilla/rust-components-swift",
         "state": {
           "branch": null,
-          "revision": "d86f85a1b1ff42c535424d200775bc8638fdb1bf",
-          "version": "94.0.0"
+          "revision": "99e7e5dfca9d82ef810c8dc8503dbe5139ac7bc6",
+          "version": "115.0.20230604050337"
         }
       },
       {
@@ -33,8 +33,8 @@
         "repositoryURL": "https://github.com/getsentry/sentry-cocoa",
         "state": {
           "branch": null,
-          "revision": "c3c19e29f775ee95b77aa3168f3e2fd6c20deba6",
-          "version": "7.31.3"
+          "revision": "e6dcfba32f2861438b82c7ad34e058b23c83daf6",
+          "version": "8.6.0"
         }
       },
       {
@@ -42,8 +42,8 @@
         "repositoryURL": "https://github.com/SnapKit/SnapKit",
         "state": {
           "branch": null,
-          "revision": "d458564516e5676af9c70b4f4b2a9178294f1bc6",
-          "version": "5.0.1"
+          "revision": "f222cbdf325885926566172f6f5f06af95473158",
+          "version": "5.6.0"
         }
       },
       {

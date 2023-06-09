@@ -1,4 +1,6 @@
-/* Title of the Erase intent. */
+/* (No Comment) */
+"Intents.Erase.Description" = "Izbriši sejo brskanja";
+
+/* (No Comment) */
 "Intents.Erase.Title" = "Izbriši";
 
-"Intents.Erase.Description" = "Erase browsing session";

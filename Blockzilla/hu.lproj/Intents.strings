@@ -1,4 +1,6 @@
-/* Title of the Erase intent. */
+/* (No Comment) */
+"Intents.Erase.Description" = "Böngészési munkamenet törlése";
+
+/* (No Comment) */
 "Intents.Erase.Title" = "Törlés";
 
-"Intents.Erase.Description" = "Erase browsing session";

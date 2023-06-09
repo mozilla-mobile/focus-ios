@@ -103,6 +103,9 @@
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "Top stránky";
 
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "Odemknout";
+
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Nová relace";
 
@@ -187,6 +190,12 @@
 /* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
 "Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Přeskočit";
 
+/* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "Pro zvýšení vašeho soukromí vymažeme při zavření aplikace vaši historii.";
+
+/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "Nastavte si aplikaci %@ jako výchozí a chraňte tak svá data při každém otevření odkazu.";
+
 /* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
 "Onboarding.DefaultBrowser.Title.V2" = "%@ není jako ostatní prohlížeče";
 
@@ -222,6 +231,9 @@
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsEnable" = "Povolte %@";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsExtentions" = "Zvolte Safari, a poté Rozšíření";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
 "Safari.instructionsNotEnabled" = "%@ není povolen.";
@@ -279,6 +291,9 @@
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Zjistit více.";
+
+/* Lincese option in settings menu. Tapping the cell will take the user to a list of licences for the 3rd parties used in the app. */
+"Settings.licenses" = "Licence";
 
 /* Light theme option in settings menu */
 "Settings.lightTheme" = "Světlý";
@@ -400,9 +415,6 @@
 /* Value for theme toggle in settings menu */
 "Settings.useSystemTheme" = "Použít motiv vzhledu podle systému";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "Co je nového";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "ZKRATKY PRO SIRI";
 
@@ -466,6 +478,12 @@
 /* This is the button text that is displayed in the Show Me How Onboarding Screen */
 "ShowMeHowOnboarding.ButtonText.V2" = "Hotovo";
 
+/* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepOne.V2" = "Podržte prst na domovské obrazovce dokud se ikony nezačnou třást.";
+
+/* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "Klepněte na ikonu plus.";
+
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Přidat";
 
@@ -498,12 +516,6 @@
 
 /* Text for a label that indicates the description for biometric Touch ID tip. */
 "Tip.BiometricTouchId.Description" = "Zapnout Touch ID";
-
-/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
-"Tip.Release.Description" = "Zjistěte více o této i dalších novinkách aplikace %@.";
-
-/* Text for a label that indicates the title for release tip. */
-"Tip.Release.Title" = "Ovšem, máme nový a svěží vzhled!";
 
 /* Text for a label that indicates the description for request desktop tip. */
 "Tip.RequestDesktop.Description" = "Akce stránky > Verze stránky pro počítač";
@@ -541,17 +553,29 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Chybí na stránce obsah nebo se chová podivně?";
 
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp.Instruction" = "Hledat v aplikaci %@";
+
 /* This is the body text that is displayed for the Context Menu icon tooltip */
 "TooltipBodyText.ContextMenu" = "Všechny možnosti zabezpečení a ochrany soukromí najdete v nastavení.";
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Tato výchozí nastavení poskytují silnou ochranu. Můžete je ale jednoduše nastavit podle vlastních potřeb.";
 
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "Začněte svou relaci anonymního prohlížení a my budeme průběžně blokovat sledovací prvky a jiné zlé věci.";
+
 /* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
 "TooltipBodyText.ShieldIcon" = "Aplikace %@ zabránila tomuto serveru ve vašem sledování. Klepnutím na ikonu štítu se dozvíte, co bylo zablokováno.";
 
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "Máme je! Tomuto serveru jsme zabránili ve vašem sledování. Klepnutím na ikonu štítu se dozvíte, co bylo zablokováno.";
+
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Klepnutím na ikonu koše kdykoliv zahladíte všechny stopy po vašem prohlížení.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon.V2" = "Klepnutím sem vše vyhodíte do koše – historii, cookies, prostě vše – a začnete znovu v novém panelu.";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Jste chráněni!";

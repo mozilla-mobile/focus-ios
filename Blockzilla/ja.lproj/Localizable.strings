@@ -103,6 +103,9 @@
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "トップサイト";
 
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "ロック解除";
+
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "新規セッション";
 
@@ -289,6 +292,9 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "詳細情報。";
 
+/* Lincese option in settings menu. Tapping the cell will take the user to a list of licences for the 3rd parties used in the app. */
+"Settings.licenses" = "ライセンス";
+
 /* Light theme option in settings menu */
 "Settings.lightTheme" = "Light";
 
@@ -409,9 +415,6 @@
 /* Value for theme toggle in settings menu */
 "Settings.useSystemTheme" = "システムの Light/Dark モードを使用";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "新機能";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI ショートカット";
 
@@ -519,12 +522,6 @@
 
 /* Text for a label that indicates the description for biometric Touch ID tip. */
 "Tip.BiometricTouchId.Description" = "Touch ID をオンにする";
-
-/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
-"Tip.Release.Description" = "これと %@ の他の更新についてさらに読む。";
-
-/* Text for a label that indicates the title for release tip. */
-"Tip.Release.Title" = "ご覧のとおり、外観が新しくなりました！";
 
 /* Text for a label that indicates the description for request desktop tip. */
 "Tip.RequestDesktop.Description" = "ページ操作 > デスクトップ版を見る";

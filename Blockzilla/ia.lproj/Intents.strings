@@ -1,4 +1,6 @@
-/* Title of the Erase intent. */
+/* (No Comment) */
+"Intents.Erase.Description" = "Cancellar le session de navigation";
+
+/* (No Comment) */
 "Intents.Erase.Title" = "Rader";
 
-"Intents.Erase.Description" = "Erase browsing session";

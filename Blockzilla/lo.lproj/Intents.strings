@@ -1,4 +1,6 @@
-/* Title of the Erase intent. */
+/* (No Comment) */
+"Intents.Erase.Description" = "ລຶບເຊດຊັນການທ່ອງເວັບ";
+
+/* (No Comment) */
 "Intents.Erase.Title" = "ລຶບ";
 
-"Intents.Erase.Description" = "Erase browsing session";

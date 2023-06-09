@@ -103,6 +103,9 @@
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "ไซต์เด่น";
 
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "ปลดล็อก";
+
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "วาระใหม่";
 
@@ -289,6 +292,9 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "เรียนรู้เพิ่มเติม";
 
+/* Lincese option in settings menu. Tapping the cell will take the user to a list of licences for the 3rd parties used in the app. */
+"Settings.licenses" = "สัญญาอนุญาต";
+
 /* Light theme option in settings menu */
 "Settings.lightTheme" = "สว่าง";
 
@@ -409,9 +415,6 @@
 /* Value for theme toggle in settings menu */
 "Settings.useSystemTheme" = "ใช้โหมดสว่าง/มืดของระบบ";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "มีอะไรใหม่";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "คำสั่งลัด SIRI";
 
@@ -520,12 +523,6 @@
 /* Text for a label that indicates the description for biometric Touch ID tip. */
 "Tip.BiometricTouchId.Description" = "เปิด Touch ID";
 
-/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
-"Tip.Release.Description" = "อ่านเพิ่มเติมเกี่ยวกับสิ่งนี้และการอัปเดตอื่นๆ ของ %@";
-
-/* Text for a label that indicates the title for release tip. */
-"Tip.Release.Title" = "ใช่ เรามีรูปลักษณ์ใหม่!";
-
 /* Text for a label that indicates the description for request desktop tip. */
 "Tip.RequestDesktop.Description" = "การกระทำหน้า > ขอไซต์สำหรับเดสก์ท็อป";
 
@@ -605,7 +602,7 @@
 "trackingProtection.statusOn" = "การป้องกันถูก เปิด สำหรับวาระนี้";
 
 /* Text for the toggle that enables/disables tracking protection. */
-"trackingProtection.toggleLabel2" = "การป้องกันการติดตามที่มากขึ้น";
+"trackingProtection.toggleLabel2" = "การป้องกันการติดตามแบบพิเศษ";
 
 /* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
 "trackingProtection.trackersBlockedLabel" = "ตัวติดตามถูกปิดกั้นตั้งแต่ %@";

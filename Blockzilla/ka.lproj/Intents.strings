@@ -1,4 +1,6 @@
-/* Title of the Erase intent. */
+/* (No Comment) */
+"Intents.Erase.Description" = "დათვალიერების მონაცემების გასუფთავება";
+
+/* (No Comment) */
 "Intents.Erase.Title" = "გასუფთავება";
 
-"Intents.Erase.Description" = "Erase browsing session";

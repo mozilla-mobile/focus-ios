@@ -103,6 +103,9 @@
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "Meistbesuchte Seiten";
 
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "Entsperren";
+
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Neue Sitzung";
 
@@ -289,6 +292,9 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Weitere Informationen";
 
+/* Lincese option in settings menu. Tapping the cell will take the user to a list of licences for the 3rd parties used in the app. */
+"Settings.licenses" = "Lizenzen";
+
 /* Light theme option in settings menu */
 "Settings.lightTheme" = "Hell";
 
@@ -409,9 +415,6 @@
 /* Value for theme toggle in settings menu */
 "Settings.useSystemTheme" = "Hell-/Dunkel-Modus des Systems übernehmen";
 
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "Was ist neu";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI-TASTATURKÜRZEL";
 
@@ -519,12 +522,6 @@
 
 /* Text for a label that indicates the description for biometric Touch ID tip. */
 "Tip.BiometricTouchId.Description" = "Touch ID aktivieren";
-
-/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
-"Tip.Release.Description" = "Lesen Sie mehr über dieses und andere Updates zu %@.";
-
-/* Text for a label that indicates the title for release tip. */
-"Tip.Release.Title" = "Natürlich haben wir unser Aussehen verändert!";
 
 /* Text for a label that indicates the description for request desktop tip. */
 "Tip.RequestDesktop.Description" = "Aktionen für Seite → Desktop-Website anfordern";

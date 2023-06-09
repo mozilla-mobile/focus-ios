@@ -62,6 +62,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        setupCrashReporting()
+        setupTelemetry()
+        setupExperimentation()
+
         appPhase = .didFinishLaunching
 
         $appPhase.sink { [unowned self] phase in
@@ -111,10 +115,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UserDefaults.standard.removePersistentDomain(forName: AppInfo.sharedContainerIdentifier)
         }
 
-        setupCrashReporting()
-        setupTelemetry()
-        setupExperimentation()
-
         TPStatsBlocklistChecker.shared.startup()
 
         // Fix transparent navigation bar issue in iOS 15
@@ -126,6 +126,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             appearance.shadowColor = .clear
             UINavigationBar.appearance().standardAppearance = appearance
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
+            let backItemAppearance = UIBarButtonItemAppearance()
+            backItemAppearance.normal.titleTextAttributes = [.foregroundColor : UIColor.accent]
+            let image = UIImage(systemName: "chevron.backward")?.withTintColor(.accent, renderingMode: .alwaysOriginal) // fix indicator color
+            appearance.setBackIndicatorImage(image, transitionMaskImage: image)
+            appearance.backButtonAppearance = backItemAppearance
         }
 
         // Count number of app launches for requesting a review
@@ -212,6 +217,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         appPhase = .willResignActive
         browserViewController.dismissActionSheet()
         browserViewController.deactivateUrlBar()
+        browserViewController.exitFullScreenVideo()
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -420,28 +426,11 @@ extension AppDelegate {
     }
 
     func setupExperimentation() {
-        let isFirstRun = !UserDefaults.standard.bool(forKey: OnboardingConstants.onboardingDidAppear)
-
         do {
             // Enable nimbus when both Send Usage Data and Studies are enabled in the settings.
-            try NimbusWrapper.shared.initialize(enabled: true, isFirstRun: isFirstRun)
+            try NimbusWrapper.shared.initialize()
         } catch {
             NSLog("Failed to setup experimentation: \(error)")
-        }
-
-        guard let nimbus = NimbusWrapper.shared.nimbus else {
-            return
-        }
-
-        AppNimbus.shared.initialize {
-            nimbus
-        }
-
-        NotificationCenter.default.addObserver(
-            forName: Notification.Name.nimbusExperimentsApplied,
-            object: nil,
-            queue: OperationQueue.main) { _ in
-            AppNimbus.shared.invalidateCachedValues()
         }
     }
 }
