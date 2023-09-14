@@ -34,7 +34,7 @@ app:
       - https://github.com/mozilla-mobile/focus-ios/pull/3465
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2023-03-14"
+    expires: never
 
   keyboard_type:
     type: string
@@ -103,7 +103,7 @@ mozilla_products:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2022-09-01"
+    expires: never
 
 settings_screen:
   set_as_default_browser_pressed:
@@ -119,7 +119,7 @@ settings_screen:
       - focus-ios-data-stewards@mozilla.com
     data_sensitivity:
       - interaction
-    expires: "2023-07-20"
+    expires: never
 
   autocomplete_domain_added:
     type: counter
@@ -364,7 +364,7 @@ browser_menu:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2023-02-02"
+    expires: never
     extra_keys:
       item:
         description: |
@@ -386,7 +386,7 @@ show_search_suggestions:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2023-02-14"
+    expires: never
   disabled_from_panel:
     type: event
     description: The "no"" option from the suggestion panel has been tapped.
@@ -398,7 +398,7 @@ show_search_suggestions:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2023-02-14"
+    expires: never
   changed_from_settings:
     type: event
     description: The enabled state has been changed from the settings screen.
@@ -410,7 +410,7 @@ show_search_suggestions:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2023-02-14"
+    expires: never
     extra_keys:
       is_enabled:
         description: The new setting value, true for ON, false for OFF
@@ -428,7 +428,7 @@ search_suggestions:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2023-02-14"
+    expires: never
     extra_keys:
       engine_name:
         description: The name of the engine used to perform the search.
@@ -444,7 +444,7 @@ search_suggestions:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2023-02-14"
+    expires: never
     extra_keys:
       engine_name:
         description: The name of the engine used to perform the search.
@@ -460,7 +460,7 @@ search_suggestions:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2023-02-14"
+    expires: never
 
 url_interaction:
   drag_started:
