@@ -23,7 +23,9 @@ class SearchProviderTest: BaseTestCase {
     
     func testSearchQuery() {
         searchQuery("test", provider: "Google")
+        app.buttons["icon delete"].tap()
         searchQuery("test", provider: "Amazon.com")
+        app.buttons["icon delete"].tap()
         searchQuery("test", provider: "DuckDuckGo")
     }
     
@@ -84,8 +86,8 @@ class SearchProviderTest: BaseTestCase {
 
         // enter edit mode
         app.navigationBars.buttons["edit"].tap()
-        waitForExistence(app.tables.cells["MDN"].buttons["Delete MDN"])
-        app.tables.cells["MDN"].buttons["Delete MDN"].tap()
+        waitForExistence(app.tables.cells["MDN"].buttons["Remove MDN"])
+        app.tables.cells["MDN"].buttons["Remove MDN"].tap()
         waitForExistence(app.tables.cells["MDN"].buttons["Delete"])
         app.tables.cells["MDN"].buttons["Delete"].tap()
 
