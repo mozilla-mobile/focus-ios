@@ -23,9 +23,7 @@ class SearchProviderTest: BaseTestCase {
     
     func testSearchQuery() {
         searchQuery("test", provider: "Google")
-        app.buttons["icon delete"].tap()
         searchQuery("test", provider: "Amazon.com")
-        app.buttons["icon delete"].tap()
         searchQuery("test", provider: "DuckDuckGo")
     }
     
@@ -54,6 +52,7 @@ class SearchProviderTest: BaseTestCase {
         
         urlbarUrltextTextField.tap()
         waitForValueContains(urlbarUrltextTextField, value: query)
+        app.buttons["icon delete"].tap()
     }
 
     func testAddRemoveCustomSearchProvider() {
