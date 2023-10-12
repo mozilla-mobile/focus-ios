@@ -52,7 +52,6 @@ class SearchProviderTest: BaseTestCase {
         
         urlbarUrltextTextField.tap()
         waitForValueContains(urlbarUrltextTextField, value: query)
-        print(app.debugDescription)
         if iPad() {
             app.buttons["icon delete"].tap()
         } else {
