@@ -52,7 +52,12 @@ class SearchProviderTest: BaseTestCase {
         
         urlbarUrltextTextField.tap()
         waitForValueContains(urlbarUrltextTextField, value: query)
-        app.buttons["icon delete"].tap()
+        print(app.debugDescription)
+        if iPad() {
+            app.buttons["icon delete"].tap()
+        } else {
+            app.buttons["icon cancel"].tap()
+        }
     }
 
     func testAddRemoveCustomSearchProvider() {
