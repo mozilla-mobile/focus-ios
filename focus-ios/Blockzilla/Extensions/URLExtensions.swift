@@ -311,11 +311,18 @@ extension URL {
     }
 
     public var isIPv4: Bool {
-        return IPv4Address(host) != nil;
+        print("checking \(String(describing: host))")
+        guard let host else {
+            return false
+        }
+        return IPv4Address(host) != nil
     }
 
     public var isIPv6: Bool {
-        return IPv6Address(host) != nil;
+        guard let host else {
+            return false
+        }
+        return IPv6Address(host) != nil
     }
 
     /**
