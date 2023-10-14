@@ -311,7 +311,6 @@ extension URL {
     }
 
     public var isIPv4: Bool {
-        print("checking \(String(describing: host))")
         guard let host else {
             return false
         }
