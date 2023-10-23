@@ -73,7 +73,7 @@ class URIFixupTests: XCTestCase {
         }
     }
     
-    func testValidURLsForNoSchemes() throws {
+    func testValidURLsForNoSchemes() {
         httpSchemeURLs.forEach {
             let noSchemeURL = $0.replacingOccurrences(of: "http", with: "")
             XCTAssertNotNil(URIFixup.getURL(entry: noSchemeURL), "\(noSchemeURL) is not a valid URL")
@@ -86,7 +86,7 @@ class URIFixupTests: XCTestCase {
         }
     }
     
-    func testInvalidURLs() throws {
+    func testInvalidURLs() {
         invalidURLs.forEach {
             XCTAssertNil(URIFixup.getURL(entry: $0), "\($0) is a valid URL")
         }
