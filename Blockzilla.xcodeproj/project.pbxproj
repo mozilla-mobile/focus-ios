@@ -2383,13 +2383,14 @@
 /* Begin PBXShellScriptBuildPhase section */
 		394C36CB2906DC5900B9845E /* Nimbus Feature Manifest Generator Script */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/nimbus.fml.yaml",
+				"$(SOURCE_ROOT)/nimbus.fml.yaml",
 			);
 			name = "Nimbus Feature Manifest Generator Script";
 			outputFileListPaths = (
