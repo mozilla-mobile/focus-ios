@@ -82,6 +82,7 @@ class FindInPageBar: UIView {
         previousButton.accessibilityLabel = UIConstants.strings.findInPagePreviousLabel
         previousButton.addTarget(self, action: #selector(didFindPrevious), for: .touchUpInside)
         previousButton.accessibilityIdentifier = "FindInPage.find_previous"
+        previousButton.isEnabled = false
         addSubview(previousButton)
 
         nextButton.setImage(.findNext, for: [])
@@ -89,6 +90,7 @@ class FindInPageBar: UIView {
         nextButton.accessibilityLabel = UIConstants.strings.findInPageNextLabel
         nextButton.addTarget(self, action: #selector(didFindNext), for: .touchUpInside)
         nextButton.accessibilityIdentifier = "FindInPage.find_next"
+        nextButton.isEnabled = false
         addSubview(nextButton)
 
         let closeButton = UIButton()
