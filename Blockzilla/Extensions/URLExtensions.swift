@@ -64,7 +64,7 @@ extension URL {
             self.init(string: string)
         }
     }
-    
+
     public func allocatedFileSize() -> Int64 {
         // First try to get the total allocated size and in failing that, get the file allocated size
         return getResourceLongLongForKey(URLResourceKey.totalFileAllocatedSizeKey.rawValue)

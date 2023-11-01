@@ -963,7 +963,7 @@ class BrowserViewController: UIViewController {
 
         urlBarViewModel.canDelete = true
         guard let savedUrl = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return }
-        if let currentDomain = url.baseDomain, 
+        if let currentDomain = url.baseDomain,
             let savedDomain = URL(string: savedUrl, invalidCharacters: false)?.baseDomain,
             currentDomain == savedDomain {
             userActivity = SiriShortcuts().getActivity(for: .openURL)

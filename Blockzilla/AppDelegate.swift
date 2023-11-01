@@ -403,15 +403,13 @@ extension AppDelegate {
         }
 
         if UserDefaults.standard.bool(forKey: GleanLogPingsToConsole) {
-            let url = URL(string: "focus-glean-settings://glean?logPings=true", 
-                          invalidCharacters: false)!
+            let url = URL(string: "focus-glean-settings://glean?logPings=true", invalidCharacters: false)!
             Glean.shared.handleCustomUrl(url: url)
         }
 
         if UserDefaults.standard.bool(forKey: GleanEnableDebugView) {
             if let tag = UserDefaults.standard.string(forKey: GleanDebugViewTag), !tag.isEmpty, let encodedTag = tag.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed) {
-                let url = URL(string: "focus-glean-settings://glean?debugViewTag=\(encodedTag)", 
-                              invalidCharacters: false)!
+                let url = URL(string: "focus-glean-settings://glean?debugViewTag=\(encodedTag)", invalidCharacters: false)!
                 Glean.shared.handleCustomUrl(url: url)
             }
         }
