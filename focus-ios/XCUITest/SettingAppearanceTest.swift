@@ -129,7 +129,7 @@ class SettingAppearanceTest: BaseTestCase {
 
         // Now in Safari
         let safariLabel = safariapp.otherElements["Address"]
-        if #unavailable(iOS 15.0, *) {
+        if #unavailable(iOS 15.0) {
             waitForValueContains(safariLabel, value: "google")
         }
 
