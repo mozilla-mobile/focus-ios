@@ -157,7 +157,7 @@ class BaseTestCase: XCTestCase {
         mozTap(settingsButton)
         mozTap(settingsViewControllerSearchCell)
     }
-    
+
     func setDefaultSearchEngine(searchEngine: String) {
         let searchEngineSelection = app.staticTexts[searchEngine]
         let settingsViewControllerDoneButton = app.settingsViewControllerDoneButton
