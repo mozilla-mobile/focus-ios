@@ -61,7 +61,6 @@ workflows:
         - target: Blockzilla
         - shards: '2'
         - scheme: Focus
-        - test_plan: focus-ios/SmokeTest.xctestplan
         - debug_mode: 'true'
         - test_path: ''
         - file_type: ".swift"
