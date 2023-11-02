@@ -1741,6 +1741,8 @@
 		D446C1802AF3B6EE00A230DF /* focus-ios */ = {
 			isa = PBXGroup;
 			children = (
+				D43A61BD26B4627100814232 /* SmokeTest.xctestplan */,
+				D4341F802669342A00294A15 /* FullFunctionalTests.xctestplan */,
 				E44A34681E0A18C100BFD777 /* SnapshotTests */,
 				0BA39A841DD2B8E4005F970A /* XCUITest */,
 			);
@@ -1823,8 +1825,6 @@
 				D446C1802AF3B6EE00A230DF /* focus-ios */,
 				C8FB1E6227F59BC600C60DC6 /* BlockzillaPackage */,
 				D411AE7B27BD12C000F4BE12 /* UnitTests.xctestplan */,
-				D43A61BD26B4627100814232 /* SmokeTest.xctestplan */,
-				D4341F802669342A00294A15 /* FullFunctionalTests.xctestplan */,
 				C817A35222CE73B4002529FF /* Deferred */,
 				D3E3CA801DA83FAF0079C94B /* Focus.entitlements */,
 				D3E3CA811DA83FAF0079C94B /* FocusEnterprise.entitlements */,
@@ -5877,7 +5877,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = focus-ios/ScreenshotTests/Info.plist;
+				INFOPLIST_FILE = "focus-ios/ScreenshotTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -5930,7 +5930,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = focus-ios/ScreenshotTests/Info.plist;
+				INFOPLIST_FILE = "focus-ios/ScreenshotTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -5983,7 +5983,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = focus-ios/ScreenshotTests/Info.plist;
+				INFOPLIST_FILE = "focus-ios/ScreenshotTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -6036,7 +6036,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = focus-ios/ScreenshotTests/Info.plist;
+				INFOPLIST_FILE = "focus-ios/ScreenshotTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -6090,7 +6090,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = focus-ios/ScreenshotTests/Info.plist;
+				INFOPLIST_FILE = "focus-ios/ScreenshotTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -6142,7 +6142,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = focus-ios/ScreenshotTests/Info.plist;
+				INFOPLIST_FILE = "focus-ios/ScreenshotTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
