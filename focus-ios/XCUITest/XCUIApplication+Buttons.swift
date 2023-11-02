@@ -41,7 +41,7 @@ extension XCUIApplication {
     var settingsBackButton: XCUIElement {
         return self.navigationBars.buttons["Settings"]
     }
-    
+
     var settingsDoneButton: XCUIElement {
         return self.buttons["SettingsViewController.doneButton"]
     }
