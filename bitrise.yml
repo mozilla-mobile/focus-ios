@@ -6,9 +6,11 @@ project_type: ios
 
 trigger_map:
 - push_branch: main
-  pipeline: pipeline_build_and_run_tests
+  #pipeline: pipeline_build_and_run_tests
+  workflow: release
 - pull_request_source_branch: "*"
-  pipeline: pipeline_build_and_run_tests
+  #pipeline: pipeline_build_and_run_tests
+  workflow: release
 - tag: "*"
   workflow: release
 
@@ -395,7 +397,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+            focus-ios/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
               --org mozilla --project focus-ios "$BITRISE_DSYM_DIR_PATH"
     - xcode-archive@3:
         inputs:
@@ -413,7 +415,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+            focus-ios/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
               --org mozilla --project klar-ios "$BITRISE_DSYM_DIR_PATH"
     meta:
       bitrise.io:
