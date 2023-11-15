@@ -780,10 +780,10 @@
 		D43A61BD26B4627100814232 /* SmokeTest.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = SmokeTest.xctestplan; sourceTree = "<group>"; };
 		D440BC17276B3535003FD9B1 /* ShortcutsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsTest.swift; sourceTree = "<group>"; };
 		D47396DB270F634800A03A69 /* BaseTestCaseL10n.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTestCaseL10n.swift; sourceTree = "<group>"; };
-		D4E052882B050B9D0074DB97 /* FocusEnterprise.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FocusEnterprise.entitlements; sourceTree = "<group>"; };
-		D4E052892B050B9D0074DB97 /* Focus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Focus.entitlements; sourceTree = "<group>"; };
-		D4E0528A2B050B9D0074DB97 /* Klar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Klar.entitlements; sourceTree = "<group>"; };
-		D4E0528B2B050B9D0074DB97 /* KlarEnterprise.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = KlarEnterprise.entitlements; sourceTree = "<group>"; };
+		D4E0142E2B053972006759D7 /* Focus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Focus.entitlements; sourceTree = "<group>"; };
+		D4E0142F2B053972006759D7 /* KlarEnterprise.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = KlarEnterprise.entitlements; sourceTree = "<group>"; };
+		D4E014302B053972006759D7 /* FocusEnterprise.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FocusEnterprise.entitlements; sourceTree = "<group>"; };
+		D4E014312B053973006759D7 /* Klar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Klar.entitlements; sourceTree = "<group>"; };
 		D597608B1F9FEFB300A2D212 /* TrackingProtection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtection.swift; sourceTree = "<group>"; };
 		D5ABA3D71FCC846800D5C060 /* AddCustomDomainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCustomDomainViewController.swift; sourceTree = "<group>"; };
 		D5ABA3D81FCC846800D5C060 /* AutocompleteSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteSettingViewController.swift; sourceTree = "<group>"; };
@@ -1738,13 +1738,9 @@
 			name = Blocklists;
 			sourceTree = "<group>";
 		};
-		D446C1802AF3B6EE00A230DF /* focus-ios */ = {
+		D446C1802AF3B6EE00A230DF /* focus-ios-tests */ = {
 			isa = PBXGroup;
 			children = (
-				D4E052892B050B9D0074DB97 /* Focus.entitlements */,
-				D4E052882B050B9D0074DB97 /* FocusEnterprise.entitlements */,
-				D4E0528A2B050B9D0074DB97 /* Klar.entitlements */,
-				D4E0528B2B050B9D0074DB97 /* KlarEnterprise.entitlements */,
 				D8E0155D1FCF409F00CA3B9F /* ClientTests */,
 				D43A61BD26B4627100814232 /* SmokeTest.xctestplan */,
 				D4341F802669342A00294A15 /* FullFunctionalTests.xctestplan */,
@@ -1752,7 +1748,7 @@
 				E44A34681E0A18C100BFD777 /* SnapshotTests */,
 				0BA39A841DD2B8E4005F970A /* XCUITest */,
 			);
-			path = "focus-ios";
+			path = "focus-ios-tests";
 			sourceTree = "<group>";
 		};
 		D597608A1F9FEF7100A2D212 /* TrackingProtection */ = {
@@ -1828,7 +1824,11 @@
 		E4BF2DCA1BACE8CA00DA9D68 = {
 			isa = PBXGroup;
 			children = (
-				D446C1802AF3B6EE00A230DF /* focus-ios */,
+				D4E0142E2B053972006759D7 /* Focus.entitlements */,
+				D4E014302B053972006759D7 /* FocusEnterprise.entitlements */,
+				D4E014312B053973006759D7 /* Klar.entitlements */,
+				D4E0142F2B053972006759D7 /* KlarEnterprise.entitlements */,
+				D446C1802AF3B6EE00A230DF /* focus-ios-tests */,
 				C8FB1E6227F59BC600C60DC6 /* BlockzillaPackage */,
 				C817A35222CE73B4002529FF /* Deferred */,
 				D3E2C9001D9F17C600DEBE3D /* Blocklists */,
@@ -3487,7 +3487,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "focus-ios/XCUITest/Info.plist";
+				INFOPLIST_FILE = "focus-ios-tests/XCUITest/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3500,7 +3500,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "KLAR DEBUG";
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/focus-ios/XCUITest/XCUITests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/focus-ios-tests/XCUITest/XCUITests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = Blockzilla;
@@ -3544,7 +3544,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "focus-ios/XCUITest/Info.plist";
+				INFOPLIST_FILE = "focus-ios-tests/XCUITest/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3557,7 +3557,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "FOCUS DEBUG";
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/focus-ios/XCUITest/XCUITests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/focus-ios-tests/XCUITest/XCUITests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = Blockzilla;
@@ -3600,7 +3600,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "focus-ios/XCUITest/Info.plist";
+				INFOPLIST_FILE = "focus-ios-tests/XCUITest/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3611,7 +3611,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/focus-ios/XCUITest/XCUITests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/focus-ios-tests/XCUITest/XCUITests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = Blockzilla;
@@ -3655,7 +3655,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "focus-ios/XCUITest/Info.plist";
+				INFOPLIST_FILE = "focus-ios-tests/XCUITest/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3668,7 +3668,7 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/focus-ios/XCUITest/XCUITests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/focus-ios-tests/XCUITest/XCUITests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = Blockzilla;
@@ -3711,7 +3711,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "focus-ios/XCUITest/Info.plist";
+				INFOPLIST_FILE = "focus-ios-tests/XCUITest/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3722,7 +3722,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/focus-ios/XCUITest/XCUITests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/focus-ios-tests/XCUITest/XCUITests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = Blockzilla;
@@ -5027,7 +5027,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon${BUNDLE_ID_SUFFIX}";
 				BUNDLE_ID_SUFFIX = .beta;
-				CODE_SIGN_ENTITLEMENTS = "focus-ios/FocusEnterprise.entitlements";
+				CODE_SIGN_ENTITLEMENTS = FocusEnterprise.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
@@ -5049,7 +5049,7 @@
 		D316DB131DA705FF006FA26B /* FocusEnterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "focus-ios/FocusEnterprise.entitlements";
+				CODE_SIGN_ENTITLEMENTS = FocusEnterprise.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = ContentBlocker/Info.plist;
@@ -5127,7 +5127,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon${BUNDLE_ID_SUFFIX}";
 				BUNDLE_ID_SUFFIX = .beta;
-				CODE_SIGN_ENTITLEMENTS = "focus-ios/KlarEnterprise.entitlements";
+				CODE_SIGN_ENTITLEMENTS = KlarEnterprise.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
@@ -5149,7 +5149,7 @@
 		D3C70C6F1DDFC48100CEE458 /* KlarEnterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "focus-ios/KlarEnterprise.entitlements";
+				CODE_SIGN_ENTITLEMENTS = KlarEnterprise.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = ContentBlocker/Info.plist;
@@ -5201,7 +5201,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "focus-ios/XCUITest/Info.plist";
+				INFOPLIST_FILE = "focus-ios-tests/XCUITest/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -5212,7 +5212,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/focus-ios/XCUITest/XCUITests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/focus-ios-tests/XCUITest/XCUITests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = Blockzilla;
@@ -5286,7 +5286,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon${BUNDLE_ID_SUFFIX}";
 				BUNDLE_ID_SUFFIX = .dev;
-				CODE_SIGN_ENTITLEMENTS = "focus-ios/Focus.entitlements";
+				CODE_SIGN_ENTITLEMENTS = Focus.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_BITCODE = NO;
@@ -5307,7 +5307,7 @@
 		D3E872AD1C471F7900BF4DE4 /* FocusDebug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "focus-ios/Focus.entitlements";
+				CODE_SIGN_ENTITLEMENTS = Focus.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				INFOPLIST_FILE = ContentBlocker/Info.plist;
@@ -5386,7 +5386,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon${BUNDLE_ID_SUFFIX}";
 				BUNDLE_ID_SUFFIX = "";
-				CODE_SIGN_ENTITLEMENTS = "focus-ios/Focus.entitlements";
+				CODE_SIGN_ENTITLEMENTS = Focus.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
@@ -5410,7 +5410,7 @@
 		D3E872B01C471F7F00BF4DE4 /* FocusRelease */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "focus-ios/Focus.entitlements";
+				CODE_SIGN_ENTITLEMENTS = Focus.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
@@ -5484,7 +5484,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
-				INFOPLIST_FILE = "focus-ios/ClientTests/Info.plist";
+				INFOPLIST_FILE = "focus-ios-tests/ClientTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -5550,7 +5550,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
-				INFOPLIST_FILE = "focus-ios/ClientTests/Info.plist";
+				INFOPLIST_FILE = "focus-ios-tests/ClientTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -5616,7 +5616,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
-				INFOPLIST_FILE = "focus-ios/ClientTests/Info.plist";
+				INFOPLIST_FILE = "focus-ios-tests/ClientTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -5682,7 +5682,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
-				INFOPLIST_FILE = "focus-ios/ClientTests/Info.plist";
+				INFOPLIST_FILE = "focus-ios-tests/ClientTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -5748,7 +5748,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
-				INFOPLIST_FILE = "focus-ios/ClientTests/Info.plist";
+				INFOPLIST_FILE = "focus-ios-tests/ClientTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -5814,7 +5814,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
-				INFOPLIST_FILE = "focus-ios/ClientTests/Info.plist";
+				INFOPLIST_FILE = "focus-ios-tests/ClientTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -5878,7 +5878,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "focus-ios/ScreenshotTests/Info.plist";
+				INFOPLIST_FILE = "focus-ios-tests/ScreenshotTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -5931,7 +5931,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "focus-ios/ScreenshotTests/Info.plist";
+				INFOPLIST_FILE = "focus-ios-tests/ScreenshotTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -5984,7 +5984,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "focus-ios/ScreenshotTests/Info.plist";
+				INFOPLIST_FILE = "focus-ios-tests/ScreenshotTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -6037,7 +6037,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "focus-ios/ScreenshotTests/Info.plist";
+				INFOPLIST_FILE = "focus-ios-tests/ScreenshotTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -6091,7 +6091,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "focus-ios/ScreenshotTests/Info.plist";
+				INFOPLIST_FILE = "focus-ios-tests/ScreenshotTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -6143,7 +6143,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "focus-ios/ScreenshotTests/Info.plist";
+				INFOPLIST_FILE = "focus-ios-tests/ScreenshotTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -6281,7 +6281,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon${BUNDLE_ID_SUFFIX}";
 				BUNDLE_ID_SUFFIX = .dev;
-				CODE_SIGN_ENTITLEMENTS = "focus-ios/Klar.entitlements";
+				CODE_SIGN_ENTITLEMENTS = Klar.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_BITCODE = NO;
@@ -6305,7 +6305,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon${BUNDLE_ID_SUFFIX}";
 				BUNDLE_ID_SUFFIX = "";
-				CODE_SIGN_ENTITLEMENTS = "focus-ios/Klar.entitlements";
+				CODE_SIGN_ENTITLEMENTS = Klar.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEVELOPMENT_TEAM = 43AQ936H96;
@@ -6328,7 +6328,7 @@
 		E4BF2DF71BACE92400DA9D68 /* KlarDebug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "focus-ios/Klar.entitlements";
+				CODE_SIGN_ENTITLEMENTS = Klar.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				INFOPLIST_FILE = ContentBlocker/Info.plist;
@@ -6349,7 +6349,7 @@
 		E4BF2DF81BACE92400DA9D68 /* KlarRelease */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "focus-ios/Klar.entitlements";
+				CODE_SIGN_ENTITLEMENTS = Klar.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEVELOPMENT_TEAM = 43AQ936H96;
