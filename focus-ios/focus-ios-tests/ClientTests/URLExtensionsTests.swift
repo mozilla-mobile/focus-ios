@@ -6,7 +6,7 @@ import XCTest
 import Foundation
 
 class URLExtensionsTests: XCTestCase {
-    
+
     private let validURLwithIPv4Address = [
         "http://0.0.0.0",
         "http://255.255.255.255",
@@ -15,7 +15,7 @@ class URLExtensionsTests: XCTestCase {
         "http://user:password@127.0.0.1:80",
         "http://127.0.0.1:80/a/path",
         "http://127.0.0.1:80/a/path?q=aquery",
-        "telnet://192.0.2.16:80/",
+        "telnet://192.0.2.16:80/"
     ]
 
     private let invalidURLwithIPv4Address = [
@@ -25,7 +25,7 @@ class URLExtensionsTests: XCTestCase {
         "http://256.256.256.256", // Number too big
         "http://256.0.0.1:80", // Number too big
         "http://256.0.0.1:80/a/path", // Number too big
-        "http://256.0.0.1:80/a/path?q=aquery", // Number too big
+        "http://256.0.0.1:80/a/path?q=aquery" // Number too big
     ]
 
     private let validURLwithIPv6Address = [
@@ -47,7 +47,7 @@ class URLExtensionsTests: XCTestCase {
         "http://[64:ff9b::192.0.2.128]",
         "http://[::1]:80",
         "http://[::1]:80/a/path",
-        "ldap://[2001:db8::7]/c=GB?objectClass?one",
+        "ldap://[2001:db8::7]/c=GB?objectClass?one"
     ]
 
     private let invalidURLwithIPv6Address = [
@@ -58,7 +58,7 @@ class URLExtensionsTests: XCTestCase {
         "http://[1::3::8]", // Two '0' blocks
         "http://[1:2:3:4:5:6:7:8:9]", // Too many segments
         "http://[fe80::7:8en0]", // % missing before interface
-        "http://[2001:0db8:0000:0000::0000:ff00:0042:8329]", // :: even though all 0 written
+        "http://[2001:0db8:0000:0000::0000:ff00:0042:8329]" // :: even though all 0 written
     ]
 
     func testValidIPv4Addresses() throws {
