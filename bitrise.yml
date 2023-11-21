@@ -6,9 +6,11 @@ project_type: ios
 
 trigger_map:
 - push_branch: main
-  pipeline: pipeline_build_and_run_tests
+  #pipeline: pipeline_build_and_run_tests
+  workflow: L10nBuild
 - pull_request_source_branch: "*"
-  pipeline: pipeline_build_and_run_tests
+  #pipeline: pipeline_build_and_run_tests
+  workflow: L10nBuild
 - tag: "*"
   workflow: release
 
