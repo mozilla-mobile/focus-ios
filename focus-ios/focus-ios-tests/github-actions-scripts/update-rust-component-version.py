@@ -33,8 +33,6 @@ def read_rust_components_tag_version():
     f.close()
 
     # Return the current version and commit
-    print(json_new_version["version"])
-    print(json_new_version["revision"])
     return json_new_version["version"], json_new_version["revision"]
 
 def read_project_min_version():
