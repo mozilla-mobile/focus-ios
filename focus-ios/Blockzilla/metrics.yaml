@@ -763,7 +763,7 @@ webview:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/17716
     data_reviews:
-      - https://github.com/mozilla-mobile/focus-ios/pull/TODO
+      - https://github.com/mozilla-mobile/focus-ios/pull/3968
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -774,7 +774,7 @@ webview:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/17716
     data_reviews:
-      - https://github.com/mozilla-mobile/focus-ios/pull/TODO
+      - https://github.com/mozilla-mobile/focus-ios/pull/3968
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
