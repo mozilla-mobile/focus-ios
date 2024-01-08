@@ -6505,7 +6505,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 123.0.20231229050340;
+				version = 123.0.20240106050300;
 			};
 		};
 		CDFA746D27ABD43D0055FE55 /* XCRemoteSwiftPackageReference "glean-swift" */ = {
@@ -6545,7 +6545,7 @@
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
 			requirement = {
 				kind = exactVersion;
-				version = 8.17.1;
+				version = 8.18.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
