@@ -250,25 +250,21 @@ workflows:
     steps:
     - set-xcode-build-number@1:
         inputs:
-        - build_version_offset: '3250'
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: focus-ios/Blockzilla/Info.plist
         title: Set Blockzilla version numbers
     - set-xcode-build-number@1:
         inputs:
-        - build_version_offset: '3250'
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: focus-ios/ContentBlocker/Info.plist
         title: Set ContentBlocker version numbers
     - set-xcode-build-number@1:
         inputs:
-        - build_version_offset: '3250'
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: focus-ios/FocusIntentExtension/Info.plist
         title: Set FocusIntentExtension version numbers
     - set-xcode-build-number@1:
         inputs:
-        - build_version_offset: '3250'
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: focus-ios/OpenInFocus/Info.plist
         title: Set OpenInFocus version numbers
@@ -310,25 +306,21 @@ workflows:
     steps:
     - set-xcode-build-number@1:
         inputs:
-        - build_version_offset: '3250'
         - build_short_version_string: "$BITRISE_BETA_VERSION"
         - plist_path: focus-ios/Blockzilla/Info.plist
         title: Set Blockzilla version numbers
     - set-xcode-build-number@1:
         inputs:
-        - build_version_offset: '3250'
         - build_short_version_string: "$BITRISE_BETA_VERSION"
         - plist_path: focus-ios/ContentBlocker/Info.plist
         title: Set ContentBlocker version numbers
     - set-xcode-build-number@1:
         inputs:
-        - build_version_offset: '3250'
         - build_short_version_string: "$BITRISE_BETA_VERSION"
         - plist_path: focus-ios/FocusIntentExtension/Info.plist
         title: Set FocusIntentExtension version numbers
     - set-xcode-build-number@1:
         inputs:
-        - build_version_offset: '3250'
         - build_short_version_string: "$BITRISE_BETA_VERSION"
         - plist_path: focus-ios/OpenInFocus/Info.plist
         title: Set OpenInFocus version numbers
@@ -383,25 +375,21 @@ workflows:
     steps:
     - set-xcode-build-number@1:
         inputs:
-        - build_version_offset: '3250'
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
         - plist_path: focus-ios/Blockzilla/Info.plist
         title: Set Blockzilla version numbers
     - set-xcode-build-number@1:
         inputs:
-        - build_version_offset: '3250'
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
         - plist_path: focus-ios/ContentBlocker/Info.plist
         title: Set ContentBlocker version numbers
     - set-xcode-build-number@1:
         inputs:
-        - build_version_offset: '3250'
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
         - plist_path: focus-ios/FocusIntentExtension/Info.plist
         title: Set FocusIntentExtension version numbers
     - set-xcode-build-number@1:
         inputs:
-        - build_version_offset: '3250'
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
         - plist_path: focus-ios/OpenInFocus/Info.plist
         title: Set OpenInFocus version numbers
