@@ -44,16 +44,6 @@ workflows:
             set -x
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Focus.entitlements
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
-    - git::https://github.com/DamienBitrise/bitrise-test-plan-sharder.git@master:
-        title: Bitrise Test Plan Sharder
-        inputs:
-        - xcode_project: Blockzilla.xcodeproj
-        - target: Blockzilla
-        - shards: '2'
-        - scheme: Focus
-        - debug_mode: 'true'
-        - test_path: ''
-        - file_type: ".swift"
     - script@1.1:
         title: Build for Testing Focus
         inputs:
@@ -132,21 +122,6 @@ workflows:
                 envman add --key TEST_PLAN_NAME --value SmokeTest
             fi
         - title: Check if build is scheduled or regular to set the test plan
-    - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
-        title: Pull artifacts
-        inputs:
-        - verbose: true
-        - artifact_sources: stage_1.*
-    - script@1.1:
-        title: Unzip
-        inputs:
-        - content: |
-            set -euxo pipefail
-            echo "$BITRISE_ARTIFACT_PATHS"
-            echo "-- unzip -- "
-            exec unzip "${BITRISE_ARTIFACT_PATHS}"
-            echo "show dir"
-            ls
     - script@1.1:
         title: Test without Building
         inputs:
@@ -174,24 +149,11 @@ workflows:
         - channel: "#mobile-alerts-ios"
         - message: "The build run the Focus testPlan: $TEST_PLAN_NAME"
         - webhook_url: "$SLACK_WEBHOOK"
+    before_run:
+        - pull-and-unzip-dependencies
 
   unit_test_klar:
     steps:
-    - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
-        title: Pull artifacts
-        inputs:
-        - verbose: true
-        - artifact_sources: stage_1.*
-    - script@1.1:
-        title: Unzip
-        inputs:
-        - content: |
-            set -euxo pipefail
-            echo "$BITRISE_ARTIFACT_PATHS"
-            echo "-- unzip -- "
-            exec unzip "${BITRISE_ARTIFACT_PATHS}"
-            echo "show dir"
-            ls
     - script@1.1:
         title: Test without Building
         inputs:
@@ -215,24 +177,11 @@ workflows:
         - channel: "#mobile-alerts-ios"
         - message: "The build run the Klar testPlan: UnitTests"
         - webhook_url: "$SLACK_WEBHOOK"
+    before_run:
+        - pull-and-unzip-dependencies
 
   unit_test_focus:
     steps:
-    - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
-        title: Pull artifacts
-        inputs:
-        - verbose: true
-        - artifact_sources: stage_1.*
-    - script@1.1:
-        title: Unzip
-        inputs:
-        - content: |
-            set -euxo pipefail
-            echo "$BITRISE_ARTIFACT_PATHS"
-            echo "-- unzip -- "
-            exec unzip "${BITRISE_ARTIFACT_PATHS}"
-            echo "show dir"
-            ls
     - script@1.1:
         title: Test without Building
         inputs:
@@ -256,6 +205,27 @@ workflows:
         - channel: "#mobile-alerts-ios"
         - message: "The build run the Focus testPlan: UnitTests"
         - webhook_url: "$SLACK_WEBHOOK"
+    before_run:
+        - pull-and-unzip-dependencies
+
+  pull-and-unzip-dependencies:
+    description: Pulls and unzip the dependencis from previous stage_1_focus 
+    steps:
+    - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
+        title: Pull artifacts
+        inputs:
+        - verbose: true
+        - artifact_sources: stage_1_focus.*
+    - script@1.1:
+        title: Unzip
+        inputs:
+        - content: |
+            set -euxo pipefail
+            echo "$BITRISE_ARTIFACT_PATHS"
+            echo "-- unzip -- "
+            exec unzip "${BITRISE_ARTIFACT_PATHS}"
+            echo "show dir"
+            ls
 
   clone-and-build-dependencies:
     description: Clones the repo and builds dependencies
@@ -433,17 +403,6 @@ workflows:
 
   L10nBuild:
     steps:
-    - activate-ssh-key@4:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6.2: {}
-    - cache-pull@2: {}
-    - certificate-and-profile-installer@1: {}
-    - script@1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            ./checkout.sh
-        title: ContentBlockerGen
     - script@1:
         title: Set Default Web Browser Entitlement
         inputs:
@@ -469,6 +428,8 @@ workflows:
         inputs:
         - deploy_path: l10n-screenshots/en-US/en-US
         - is_compress: 'true'
+    before_run:
+        - clone-and-build-dependencies
 app:
   envs:
   - opts:
