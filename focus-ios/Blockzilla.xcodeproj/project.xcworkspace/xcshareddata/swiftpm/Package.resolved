@@ -15,8 +15,8 @@
         "repositoryURL": "https://github.com/mozilla/glean-swift",
         "state": {
           "branch": null,
-          "revision": "24ed58dcc11c35460edf98975b19cce55e39790a",
-          "version": "55.0.0"
+          "revision": "aa9172bfe715a9f918dd95bf49d8f1b2363500a0",
+          "version": "56.0.0"
         }
       },
       {
@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/mozilla/rust-components-swift",
         "state": {
           "branch": null,
-          "revision": "ba5a72cf17c7ff0854171f11599a7407bc2723f4",
-          "version": "122.0.20231123050305"
+          "revision": "958262fbcfa74593d884761b38402c67decaa513",
+          "version": "123.0.20240120050328"
         }
       },
       {
@@ -33,8 +33,8 @@
         "repositoryURL": "https://github.com/getsentry/sentry-cocoa",
         "state": {
           "branch": null,
-          "revision": "7b0d185631a6d4b7756468efa464a68725c061d2",
-          "version": "8.13.1"
+          "revision": "3b9a8e69ca296bd8cd0e317ad7a448e5daf4a342",
+          "version": "8.18.0"
         }
       },
       {
@@ -44,15 +44,6 @@
           "branch": null,
           "revision": "f222cbdf325885926566172f6f5f06af95473158",
           "version": "5.6.0"
-        }
-      },
-      {
-        "package": "Telemetry",
-        "repositoryURL": "https://github.com/mozilla-mobile/telemetry-ios",
-        "state": {
-          "branch": "main",
-          "revision": "68f2d813320c9fda2fb4aee4548c64293500200a",
-          "version": null
         }
       }
     ]

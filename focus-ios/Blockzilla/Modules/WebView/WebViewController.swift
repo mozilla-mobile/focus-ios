@@ -4,9 +4,9 @@
 
 import UIKit
 import WebKit
-import Telemetry
 import PassKit
 import Combine
+import Glean
 
 protocol BrowserState {
     var url: URL? { get }
@@ -119,10 +119,21 @@ class WebViewController: UIViewController, WebController {
     }
 
     // Browser proxy methods
-    func load(_ request: URLRequest) { browserView.load(request) }
-    func goBack() { browserView.goBack() }
-    func goForward() { browserView.goForward() }
-    func reload() { browserView.reload() }
+    func load(_ request: URLRequest) {
+        browserView.load(request)
+    }
+
+    func goBack() {
+        browserView.goBack()
+    }
+
+    func goForward() {
+        browserView.goForward()
+    }
+
+    func reload() {
+        browserView.reload()
+    }
 
     func requestUserAgentChange() {
         if let hostName = browserView.url?.host {
@@ -367,6 +378,16 @@ extension WebViewController: UIScrollViewDelegate {
 }
 
 extension WebViewController: WKNavigationDelegate {
+    func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
+        // validate the URL using URIFixup
+        guard let urlString = webView.url?.absoluteString,
+              URIFixup.getURL(entry: urlString) != nil else {
+            // URL failed validation, prevent loading
+            stop()
+            return
+        }
+    }
+
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         delegate?.webControllerDidStartNavigation(self)
         trackingProtectionManager.trackingProtectionStatus.trackingInformation = TPPageStats()
@@ -379,10 +400,14 @@ extension WebViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        GleanMetrics.Webview.fail.record()
+
         delegate?.webController(self, didFailNavigationWithError: error)
     }
 
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        GleanMetrics.Webview.failProvisional.record()
+
         let error = error as NSError
         guard error.code != Int(CFNetworkErrors.cfurlErrorCancelled.rawValue), let errorUrl = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL else { return }
         let errorPageData = ErrorPage(error: error).data
@@ -427,9 +452,6 @@ extension WebViewController: WKNavigationDelegate {
         let allowDecision = WKNavigationActionPolicy(rawValue: WKNavigationActionPolicy.allow.rawValue + 2) ?? .allow
 
         let decision: WKNavigationActionPolicy = RequestHandler().handle(request: navigationAction.request, alertCallback: present) ? allowDecision : .cancel
-        if navigationAction.navigationType == .linkActivated && browserView.url != navigationAction.request.url {
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.websiteLink)
-        }
 
         decisionHandler(decision, preferences)
     }
@@ -505,10 +527,20 @@ extension WebViewController: BrowserState {
 
 extension WebViewController: WKUIDelegate {
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
-        if navigationAction.targetFrame == nil {
-            browserView.load(navigationAction.request)
+        // check if this is a new frame / window
+        guard navigationAction.targetFrame == nil else { return nil }
+
+        // validate the URL using URIFixup
+        guard let urlString = navigationAction.request.url?.absoluteString,
+              URIFixup.getURL(entry: urlString) != nil else {
+            // URL failed validation, prevent loading
+            return nil
         }
 
+        // load validated URLs
+        browserView.load(navigationAction.request)
+
+        // we return nil to not open new window
         return nil
     }
 }
