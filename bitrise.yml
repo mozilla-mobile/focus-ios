@@ -16,7 +16,7 @@ trigger_map:
 - pull_request_source_branch: "*"
   pipeline: pipeline_build_and_run_tests_focus
 - tag: "*"
-  worklow: release
+  workflow: release
 
 pipelines:
   pipeline_build_and_run_tests_focus:
