@@ -31,7 +31,7 @@ struct FocusWidgetsEntryView : View {
     var entry: Provider.Entry
 
     var body: some View {
-        SearchWidgetView(title: String(format: .searchInAppFormat, String.appNameForBundle), background: false)
+        SearchWidgetView(title: String(format: .searchInAppFormat, String.appNameForBundle), padding: !Bool.isIOS17OrLater, background: false)
             .widgetURL(.deepLinkURL)
             .widgetBackground(backgroundView:
                                 LinearGradient(
@@ -92,6 +92,16 @@ fileprivate extension String {
         value: "Search in %@",
         comment: "Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar).")
     static let searchInApp = String(format: searchInAppFormat, AppInfo.shortProductName)
+}
+
+fileprivate extension Bool {
+    static var isIOS17OrLater: Bool {
+        if #available(iOS 17, *) {
+            return true
+        } else {
+            return false
+        }
+    }
 }
 
 fileprivate extension URL {
