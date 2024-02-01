@@ -48,7 +48,7 @@ app:
       - https://github.com/mozilla-mobile/focus-ios/pull/3572
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2023-11-10"
+    expires: "2024-07-10"
 
 browser:
   total_uri_count:
@@ -87,7 +87,7 @@ browser:
       - focus-ios-data-stewards@mozilla.com
     data_sensitivity:
       - interaction
-    expires: "2023-11-10"
+    expires: "2024-07-10"
 
 mozilla_products:
   has_firefox_installed:
@@ -137,7 +137,7 @@ settings_screen:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2022-08-17"
+    expires: "2024-07-17"
 
 tracking_protection:
   toolbar_shield_clicked:
@@ -153,7 +153,7 @@ tracking_protection:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2022-08-17"
+    expires: "2024-07-17"
 
   tracking_protection_changed:
     type: event
@@ -167,7 +167,7 @@ tracking_protection:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2022-08-17"
+    expires: "2024-07-17"
     extra_keys:
       is_enabled:
         description: The new setting for ETP, true for ON, false for OFF
@@ -202,7 +202,7 @@ tracking_protection:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2022-08-17"
+    expires: "2024-07-17"
     extra_keys:
       source_of_change:
         description: The source of interaction, "Panel" or "Settings"
@@ -228,7 +228,7 @@ tracking_protection:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2022-08-17"
+    expires: "2024-07-17"
 
   has_advertising_blocked:
     type: boolean
@@ -243,7 +243,7 @@ tracking_protection:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2022-08-17"
+    expires: "2024-07-17"
 
   has_analytics_blocked:
     type: boolean
@@ -258,7 +258,7 @@ tracking_protection:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2022-08-17"
+    expires: "2024-07-17"
 
   has_content_blocked:
     type: boolean
@@ -273,7 +273,7 @@ tracking_protection:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2022-08-17"
+    expires: "2024-07-17"
 
 shortcuts:
   shortcuts_on_home_number:
@@ -289,7 +289,7 @@ shortcuts:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2022-08-20"
+    expires: "2024-07-20"
     unit: shortcut(s)
   shortcut_opened_counter:
     type: counter
@@ -304,7 +304,7 @@ shortcuts:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2022-08-20"
+    expires: "2024-07-20"
   shortcut_added_counter:
     type: counter
     description: |
@@ -318,7 +318,7 @@ shortcuts:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2022-08-20"
+    expires: "2024-07-20"
   shortcut_removed_counter:
     type: labeled_counter
     description: |
@@ -333,7 +333,7 @@ shortcuts:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2022-08-20"
+    expires: "2024-07-20"
     labels:
       - removed_from_browser_menu
       - removed_from_home_screen
@@ -353,7 +353,7 @@ preferences:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2022-10-01"
+    expires: "2024-07-01"
 
 browser_menu:
   browser_menu_action:
