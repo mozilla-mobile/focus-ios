@@ -46,6 +46,7 @@ app:
       - https://github.com/mozilla-mobile/focus-ios/issues/3526
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/3572
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
     expires: "2024-07-10"
@@ -83,6 +84,7 @@ browser:
       - https://github.com/mozilla-mobile/focus-ios/issues/3525
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/3569
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
     data_sensitivity:
@@ -133,6 +135,7 @@ settings_screen:
       - https://github.com/mozilla-mobile/focus-ios/issues/2094
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/2283
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
     data_sensitivity:
       - interaction
     notification_emails:
@@ -149,6 +152,7 @@ tracking_protection:
       - https://github.com/mozilla-mobile/focus-ios/issues/2093
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/2265
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
     data_sensitivity:
       - interaction
     notification_emails:
@@ -163,6 +167,7 @@ tracking_protection:
       - https://github.com/mozilla-mobile/focus-ios/issues/2093
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/2265
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
     data_sensitivity:
       - interaction
     notification_emails:
@@ -198,6 +203,7 @@ tracking_protection:
       - https://github.com/mozilla-mobile/focus-ios/issues/2093
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/2265
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
     data_sensitivity:
       - interaction
     notification_emails:
@@ -224,6 +230,7 @@ tracking_protection:
       - https://github.com/mozilla-mobile/focus-ios/issues/2093
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/2265
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
     data_sensitivity:
       - interaction
     notification_emails:
@@ -239,6 +246,7 @@ tracking_protection:
       - https://github.com/mozilla-mobile/focus-ios/issues/2093
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/2265
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
     data_sensitivity:
       - interaction
     notification_emails:
@@ -254,6 +262,7 @@ tracking_protection:
       - https://github.com/mozilla-mobile/focus-ios/issues/2093
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/2265
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
     data_sensitivity:
       - interaction
     notification_emails:
@@ -269,6 +278,7 @@ tracking_protection:
       - https://github.com/mozilla-mobile/focus-ios/issues/2093
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/2265
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
     data_sensitivity:
       - interaction
     notification_emails:
@@ -285,6 +295,7 @@ shortcuts:
       - https://github.com/mozilla-mobile/focus-ios/issues/2092
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/2232
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
     data_sensitivity:
       - interaction
     notification_emails:
@@ -300,6 +311,7 @@ shortcuts:
       - https://github.com/mozilla-mobile/focus-ios/issues/2092
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/2232
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
     data_sensitivity:
       - interaction
     notification_emails:
@@ -314,6 +326,7 @@ shortcuts:
       - https://github.com/mozilla-mobile/focus-ios/issues/2092
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/2232
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
     data_sensitivity:
       - interaction
     notification_emails:
@@ -329,6 +342,7 @@ shortcuts:
       - https://github.com/mozilla-mobile/focus-ios/issues/2092
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/2232
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
     data_sensitivity:
       - interaction
     notification_emails:
@@ -349,6 +363,7 @@ preferences:
       - https://github.com/mozilla-mobile/focus-ios/issues/2496
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/2621
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
     data_sensitivity:
       - interaction
     notification_emails:
