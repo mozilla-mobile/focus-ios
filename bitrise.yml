@@ -16,7 +16,7 @@ trigger_map:
 - pull_request_source_branch: "*"
   pipeline: pipeline_build_and_run_tests_focus
 - tag: "*"
-  workflow: release
+  workflow: focus_release
 
 pipelines:
   pipeline_build_and_run_tests_focus:
@@ -274,6 +274,7 @@ workflows:
             /usr/libexec/PlistBuddy -c "Add :NimbusStagingServerURL string ${NIMBUS_STAGING_SERVER_URL}" focus-ios/Blockzilla/Info.plist
             /usr/libexec/PlistBuddy -c "Set :NimbusAppName ${NIMBUS_APP_NAME}" focus-ios/Blockzilla/Info.plist
             /usr/libexec/PlistBuddy -c "Set :NimbusAppChannel ${NIMBUS_APP_CHANNEL}" focus-ios/Blockzilla/Info.plist
+
   focus-configure-sentry:
     steps:
     - script@1:
