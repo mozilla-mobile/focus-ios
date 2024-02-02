@@ -238,19 +238,6 @@ workflows:
             exec unzip "${BITRISE_ARTIFACT_PATHS}"
             echo "show dir"
             ls
-  focus-clone-and-build-dependencies:
-    description: Clones the repo and builds dependencies
-    steps:
-    - activate-ssh-key@4:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6.2: {}
-    - certificate-and-profile-installer@1: {}
-    - script@1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            ./checkout.sh
-        title: ContentBlockerGen
 
   focus-set-project-version:
     steps:
