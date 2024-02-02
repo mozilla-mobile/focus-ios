@@ -31,9 +31,9 @@ stages:
 
   stage_2_focus:
     workflows:
-    - ui_test_focus: {}
-    - unit_test_klar: {}
-    - unit_test_focus: {}
+    - focus_ui_test: {}
+    - klar_unit_test: {}
+    - focus_unit_test: {}
 
 workflows:
   configure_build_focus:
