@@ -57,7 +57,6 @@ workflows:
             set -euxo pipefail
             echo "-- build-for-testing --"
             mkdir DerivedData
-            #xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
             xcodebuild "-project" "/Users/vagrant/git/focus-ios/Blockzilla.xcodeproj" "-scheme" "Focus" -configuration "FocusDebug" "CODE_SIGNING_ALLOWED=NO" "-destination" "platform=iOS Simulator,name=iPhone 15,OS=17.2" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_test.log
     - script@1.1:
         title: Build for Testing Klar
@@ -73,27 +72,18 @@ workflows:
         - content: |
             set -euxo pipefail
             echo "-- compress --"
+            # Add FocusDebug-iphonesimulator folder
+            # Add All .xctestrun files
+            # Add focuos-ios-test files and test plans
+            # Add KlarDebug-iphonesimulator folder
             exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" \
             "${BITRISE_SOURCE_DIR}/focus-ios/Blockzilla.xcodeproj" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/FocusDebug-iphonesimulator/Firefox\ Focus.app" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/FocusDebug-iphonesimulator/XCUITest-Runner.app" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Focus_FullFunctionalTests_iphonesimulator17.2-arm64.xctestrun" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Focus_SmokeTest_iphonesimulator17.2-arm64.xctestrun" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Focus_UnitTests_iphonesimulator17.2-arm64.xctestrun" \
-            "$BITRISE_SOURCE_DIR/focus-ios/focus-ios-tests/SmokeTest.xctestplan" \
-            "$BITRISE_SOURCE_DIR/focus-ios/focus-ios-tests/FullFunctionalTests.xctestplan" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/FocusDebug-iphonesimulator/*" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/*" \
+            "$BITRISE_SOURCE_DIR/focus-ios/focus-ios-tests/*" \
             "$BITRISE_SOURCE_DIR/focus-ios/xcodebuild.log" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/FocusDebug-iphonesimulator/" \
-            "$BITRISE_SOURCE_DIR/focus-ios/focus-ios-tests/UnitTests.xctestplan" \
             "$BITRISE_SOURCE_DIR/focus-ios/Blockzilla/" \
-            "$BITRISE_SOURCE_DIR/focus-ios/focus-ios-tests/XCUITest" \
-            "$BITRISE_SOURCE_DIR/focus-ios/focus-ios-tests/ClientTests" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/KlarDebug-iphonesimulator/Firefox\ Klar.app" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/KlarDebug-iphonesimulator/XCUITest-Runner.app" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Klar_FullFunctionalTests_iphonesimulator17.2-arm64.xctestrun" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Klar_SmokeTest_iphonesimulator17.2-arm64.xctestrun" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Klar_UnitTests_iphonesimulator17.2-arm64.xctestrun" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/KlarDebug-iphonesimulator/" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/KlarDebug-iphonesimulator/*"
     - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
