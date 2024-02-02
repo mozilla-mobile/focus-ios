@@ -78,12 +78,12 @@ workflows:
             # Add KlarDebug-iphonesimulator folder
             exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" \
             "${BITRISE_SOURCE_DIR}/focus-ios/Blockzilla.xcodeproj" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/FocusDebug-iphonesimulator/*" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/*" \
-            "$BITRISE_SOURCE_DIR/focus-ios/focus-ios-tests/*" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/FocusDebug-iphonesimulator/" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/" \
+            "$BITRISE_SOURCE_DIR/focus-ios/focus-ios-tests/" \
             "$BITRISE_SOURCE_DIR/focus-ios/xcodebuild.log" \
             "$BITRISE_SOURCE_DIR/focus-ios/Blockzilla/" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/KlarDebug-iphonesimulator/*"
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/KlarDebug-iphonesimulator/"
     - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
